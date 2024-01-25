@@ -26,7 +26,7 @@ jobs:
             doxyfile-path: './docs/Doxyfile'
 
       - name: Test
-        run : "ls ${{ github.workspace }}/docs/html"
+        run : "ls ${{ github.workspace }}/docs"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
