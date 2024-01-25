@@ -23,10 +23,11 @@ jobs:
       - name: Setup doxygen
         uses: mattnotmitt/doxygen-action@v1.9.5
         with:
+            working-directory: ${{ github.workspace }}
             doxyfile-path: 'docs/Doxyfile'
 
       - name: Test
-        run : "ls ./docs/html"
+        run : "ls ${{ github.workspace }}/docs/html"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
@@ -36,4 +37,4 @@ jobs:
         # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/af/doxgen'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: "docs/html"
+          publish_dir: "${{ github.workspace }}/docs/html"
