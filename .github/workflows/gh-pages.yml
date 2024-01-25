@@ -25,6 +25,9 @@ jobs:
         with:
             doxyfile-path: 'docs/Doxyfile'
 
+      - name: Test
+        run : "ls ./docs/html"
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         # If you're changing the branch from main,
