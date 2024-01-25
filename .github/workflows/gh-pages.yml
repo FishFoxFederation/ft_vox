@@ -23,7 +23,7 @@ jobs:
       - name: Setup doxygen
         uses: mattnotmitt/doxygen-action@v1.9.5
         with:
-            doxyfile-path: './docs/Doxyfile'
+            doxyfile-path: './Doxyfile'
 
       - name: Test
         run : "ls ${{ github.workspace }}/docs"
