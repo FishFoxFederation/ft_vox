@@ -2,10 +2,17 @@
 
 #include <iostream>
 
-Renderer::Renderer()
+Renderer::Renderer(GLFWwindow *glfwWindow):
+	renderAPI(glfwWindow)
 {
 }
 
 Renderer::~Renderer()
 {
+}
+
+void Renderer::draw()
+{
+	renderAPI.startDraw();
+	renderAPI.endDraw();
 }

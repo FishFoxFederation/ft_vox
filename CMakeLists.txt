@@ -35,6 +35,7 @@ target_sources(${PROJECT_NAME}
 		src/app/render/renderer.cpp
 )
 
+# include directories (equivalent to -I)
 target_include_directories(${PROJECT_NAME}
 	PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -42,6 +43,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render
 )
 
+# link libraries
 add_subdirectory(external/cppVulkanAPI)
 target_link_libraries(${PROJECT_NAME}
 	PRIVATE
