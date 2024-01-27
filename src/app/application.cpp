@@ -1,10 +1,11 @@
 #include "application.hpp"
+#include "logger.hpp"
 
 #include <iostream>
 
 Application::Application()
 {
-	std::cout << "Application::Application()" << std::endl;
+	LOG_INFO("Application::Application()");
 
 	glfwInit();
 
@@ -21,7 +22,7 @@ Application::Application()
 
 Application::~Application()
 {
-	std::cout << "Application::~Application()" << std::endl;
+	LOG_INFO("Application::~Application()");
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -29,7 +30,7 @@ Application::~Application()
 
 void Application::run()
 {
-	std::cout << "Application::run()" << std::endl;
+	LOG_INFO("Application::run()");
 
 	Renderer renderer(window);
 
