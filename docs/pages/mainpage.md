@@ -1,3 +1,3 @@
 # Index {#index}
 
--[Style guide](#styleguide)
+- [Style guide](#styleguide)
