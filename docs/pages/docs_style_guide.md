@@ -1,8 +1,6 @@
 # Docs Style guide {#docstyleguide}
 
-- [Intro](#intro)
-- [How to create a page](#how-to-create-a-page)
-- [How to document code](#how-to-document-code)
+[TOC]
 
 ## Intro {#intro}
 
