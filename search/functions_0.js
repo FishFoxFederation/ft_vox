@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['renderer_0',['Renderer',['../classRenderer.html#ae49a05eeb7f542bda7398de43747fe76',1,'Renderer']]]
+  ['configure_0',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]]
 ];
