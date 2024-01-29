@@ -28,6 +28,8 @@ target_sources(${PROJECT_NAME}
 		
 		src/app/application.cpp
 		src/app/render/renderer.cpp
+		src/app/window/window.cpp
+		src/app/window/input.cpp
 )
 
 # include directories (equivalent to -I)
@@ -37,6 +39,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/utils
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 )
 
 # link libraries

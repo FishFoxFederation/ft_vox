@@ -2,6 +2,7 @@
 
 #include "define.hpp"
 #include "renderer.hpp"
+#include "window.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -17,5 +18,5 @@ public:
 
 private:
 
-	GLFWwindow* window;
+	Window m_window;
 };

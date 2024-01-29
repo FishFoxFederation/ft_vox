@@ -3,38 +3,24 @@
 
 #include <iostream>
 
-Application::Application()
+Application::Application():
+	m_window("Vox", 800, 600)
 {
 	LOG_INFO("Application::Application()");
-
-	glfwInit();
-
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-	window = glfwCreateWindow(800, 600, "vox", nullptr, nullptr);
-
-	if (!window)
-	{
-		throw std::runtime_error("failed to create window.");
-	}
-
 }
 
 Application::~Application()
 {
 	LOG_INFO("Application::~Application()");
-
-	glfwDestroyWindow(window);
-	glfwTerminate();
 }
 
 void Application::run()
 {
 	LOG_INFO("Application::run()");
 
-	Renderer renderer(window);
+	Renderer renderer(m_window.getGLFWwindow());
 
-	while (!glfwWindowShouldClose(window))
+	while (!m_window.shouldClose())
 	{
 		glfwWaitEvents();
 		renderer.draw();
