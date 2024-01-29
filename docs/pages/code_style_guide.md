@@ -4,32 +4,44 @@
 
 ## General naming rules
 
+### Variables
+
+**Snake case**
+
+```cpp
+int my_var_in_degrees_c;
+```
+
 ### Classes
 
-Pascal case: each word starts by an uppercase including the first letter
+**Pascal case**: each word starts by an uppercase including the first letter
 ~~~cpp
 class MyClass;
 class MyOtherClass;
 struct MyStruct;
 ~~~
 
-### Functions
-
-Mixed case with a cap at every word start except the first word
-
-Function params use the same case
+Private Data members always start with m_
 ~~~cpp
-void myFunction(int param1, int param2);
-void myOtherFunction(int param1, int myOtherParam);
+class MyClass
+{
+private:
+	int m_my_int;
+};
 ~~~
 
-### Variables
+### Functions
 
-Snake case
+**Camel case** : each word starts by an uppercase except the first one
 
-```cpp
-int my_var_in_degrees_c;
-```
+~~~cpp
+void myFunction(int param1, int param2);
+~~~
+
+Function params use the same case as variables
+~~~cpp
+void myOtherFunction(int param1, int my_other_param);
+~~~
 
 ## Class guidelines
 
