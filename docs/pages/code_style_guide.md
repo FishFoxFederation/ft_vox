@@ -6,7 +6,7 @@
 
 ### Classes
 
-Mixed case with a cap at every word start
+Pascal case: each word starts by an uppercase including the first letter
 ~~~cpp
 class MyClass;
 class MyOtherClass;
