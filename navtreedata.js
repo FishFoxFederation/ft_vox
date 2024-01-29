@@ -25,7 +25,27 @@
 var NAVTREE =
 [
   [ "VOX", "index.html", [
-    [ "page1", "page1.html", null ],
+    [ "Index", "index.html", null ],
+    [ "Code style guide", "codestyleguide.html", [
+      [ "General naming rules", "codestyleguide.html#autotoc_md0", [
+        [ "Variables", "codestyleguide.html#autotoc_md1", null ],
+        [ "Classes", "codestyleguide.html#autotoc_md2", null ],
+        [ "Functions", "codestyleguide.html#autotoc_md3", null ]
+      ] ],
+      [ "Class guidelines", "codestyleguide.html#autotoc_md4", null ]
+    ] ],
+    [ "Docs Style guide", "docstyleguide.html", [
+      [ "Intro", "docstyleguide.html#intro", null ],
+      [ "How to create a page", "docstyleguide.html#autotoc_md5", [
+        [ "Useful Links", "docstyleguide.html#autotoc_md6", null ],
+        [ "File creation", "docstyleguide.html#autotoc_md7", null ],
+        [ "Code blocks", "docstyleguide.html#autotoc_md8", null ]
+      ] ],
+      [ "How to document code", "docstyleguide.html#autotoc_md9", [
+        [ "Useful links", "docstyleguide.html#autotoc_md10", null ]
+      ] ]
+    ] ],
+    [ "Style guide", "styleguide.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -37,7 +57,11 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
+      [ "File List", "files.html", "files_dup" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Functions", "globals_func.html", null ]
+      ] ]
     ] ]
   ] ]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vox_0',['VOX',['../index.html',1,'']]]
+  ['renderer_0',['Renderer',['../classRenderer.html',1,'Renderer'],['../classRenderer.html#ae49a05eeb7f542bda7398de43747fe76',1,'Renderer::Renderer()']]]
 ];

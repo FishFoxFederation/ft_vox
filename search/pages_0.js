@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['page1_0',['page1',['../page1.html',1,'']]]
+  ['code_20style_20guide_0',['Code style guide',['../codestyleguide.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vox_0',['VOX',['../index.html',1,'']]]
+  ['docs_20style_20guide_0',['Docs Style guide',['../docstyleguide.html',1,'']]]
 ];
