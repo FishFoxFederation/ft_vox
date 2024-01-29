@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['operator_3c_3c_0',['operator&lt;&lt;',['../classLogger.html#a620c2c7038b6d73402a6b64cdb3ea8ad',1,'Logger::operator&lt;&lt;(Level level)'],['../classLogger.html#a8fe02104f0954471b1788b0ecf346933',1,'Logger::operator&lt;&lt;(std::ostream &amp;(*manipulator)(std::ostream &amp;))'],['../classLogger.html#a4fdec383dd7fbd734ecd1d447e762971',1,'Logger::operator&lt;&lt;(T const &amp;arg)']]]
+  ['level_0',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
+  ['logger_1',['Logger',['../classLogger.html#abc41bfb031d896170c7675fa96a6b30c',1,'Logger::Logger()'],['../classLogger.html#ae588fefbe500d9061e2ca2b314aa325f',1,'Logger::Logger(const std::filesystem::path &amp;path)']]]
 ];

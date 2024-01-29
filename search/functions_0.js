@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['configure_0',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]]
+  ['application_0',['Application',['../classApplication.html#afa8cc05ce6b6092be5ecdfdae44e05f8',1,'Application']]]
 ];

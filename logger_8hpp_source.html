@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
   <div class="headertitle"><div class="title">logger.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="logger_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;fstream&gt;</span></div>
@@ -117,12 +117,12 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;iomanip&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define LOG_CRITICAL(...) logger &lt;&lt; Logger::Level::CRITICAL &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define LOG_ERROR(...) logger &lt;&lt; Logger::Level::ERROR &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define LOG_WARNING(...) logger &lt;&lt; Logger::Level::WARNING &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define LOG_INFO(...) logger &lt;&lt; Logger::Level::INFO &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#define LOG_DEBUG(...) logger &lt;&lt; Logger::Level::DEBUG &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#define LOG_TRACE(...) logger &lt;&lt; Logger::Level::TRACE &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="logger_8hpp.html#a4091a2d7d849a8b5eded40d8723b8768">   10</a></span><span class="preprocessor">#define LOG_CRITICAL(...) logger &lt;&lt; Logger::Level::CRITICAL &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="logger_8hpp.html#ad4a9117ce894e3319e903142347a0f63">   11</a></span><span class="preprocessor">#define LOG_ERROR(...) logger &lt;&lt; Logger::Level::ERROR &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="logger_8hpp.html#afef5ff03ea272d388345cf47148953d4">   12</a></span><span class="preprocessor">#define LOG_WARNING(...) logger &lt;&lt; Logger::Level::WARNING &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="logger_8hpp.html#a378e28bfcb78d17285210d6bbb70a083">   13</a></span><span class="preprocessor">#define LOG_INFO(...) logger &lt;&lt; Logger::Level::INFO &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="logger_8hpp.html#a754b3d074e0af4ad3c7b918dd77ecb2d">   14</a></span><span class="preprocessor">#define LOG_DEBUG(...) logger &lt;&lt; Logger::Level::DEBUG &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="logger_8hpp.html#a58c994180e09d2f6400133b19b1d7036">   15</a></span><span class="preprocessor">#define LOG_TRACE(...) logger &lt;&lt; Logger::Level::TRACE &lt;&lt; __VA_ARGS__ &lt;&lt; std::endl</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classFileOutput.html">   20</a></span><span class="keyword">class </span><a class="code hl_class" href="classFileOutput.html">FileOutput</a>: <span class="keyword">public</span> std::ofstream</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>{</div>
@@ -146,14 +146,14 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">   59</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">Level</a></div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        CRITICAL = 0,</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        ERROR = 1,</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        WARNING = 2,</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        INFO = 3,</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        DEBUG = 4,</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        TRACE = 5,</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        MAX = 6</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    };</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9">   61</a></span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9">CRITICAL</a> = 0,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa3ce1bbeb15a3d8e29e4c5e75492a781b">   62</a></span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa3ce1bbeb15a3d8e29e4c5e75492a781b">ERROR</a> = 1,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca">   63</a></span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca">WARNING</a> = 2,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa61a9b6fc1e9babc448984b8a34ca2ed2">   64</a></span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa61a9b6fc1e9babc448984b8a34ca2ed2">INFO</a> = 3,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e">   65</a></span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e">DEBUG</a> = 4,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90">   66</a></span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90">TRACE</a> = 5,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12">MAX</a> = 6</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12">   68</a></span>    };</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <a class="code hl_function" href="classLogger.html#abc41bfb031d896170c7675fa96a6b30c">Logger</a>();</div>
@@ -185,15 +185,15 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    std::stringstream m_current_msg;</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    std::unique_ptr&lt;FileOutput&gt; m_log_files[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Level::MAX)];</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    std::unique_ptr&lt;FileOutput&gt; m_log_files[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12">Level::MAX</a>)];</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <a class="code hl_enumeration" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">Level</a> m_min_console_level = Level::TRACE;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <a class="code hl_enumeration" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">Level</a> m_min_console_level = <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90">Level::TRACE</a>;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <a class="code hl_enumeration" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">Level</a> m_next_msg_level = Level::INFO;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <a class="code hl_enumeration" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">Level</a> m_next_msg_level = <a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa61a9b6fc1e9babc448984b8a34ca2ed2">Level::INFO</a>;</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keywordtype">bool</span> m_timestamp_enabled = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keyword">inline</span> <span class="keyword">static</span> std::string <span class="keyword">const</span> m_level_to_string[<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(MAX)] =</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keyword">inline</span> <span class="keyword">static</span> std::string <span class="keyword">const</span> m_level_to_string[<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(<a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12">MAX</a>)] =</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    {</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="stringliteral">&quot;[CRITICAL]:&quot;</span>,</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <span class="stringliteral">&quot;[ERROR]   :&quot;</span>,</div>
@@ -203,7 +203,7 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        <span class="stringliteral">&quot;[TRACE]   :&quot;</span></div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    };</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keyword">inline</span> <span class="keyword">static</span> std::string <span class="keyword">const</span> m_level_to_color[<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(MAX)] =</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keyword">inline</span> <span class="keyword">static</span> std::string <span class="keyword">const</span> m_level_to_color[<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(<a class="code hl_enumvalue" href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12">MAX</a>)] =</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    {</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <span class="stringliteral">&quot;\033[33;41;1m&quot;</span>,</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <span class="stringliteral">&quot;\033[31m&quot;</span>,</div>
@@ -227,7 +227,7 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>};</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="keyword">extern</span> <a class="code hl_class" href="classLogger.html">Logger</a> logger;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="keyword">extern</span> <a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_variable" href="logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5">logger</a>;</div>
 <div class="ttc" id="aclassFileOutput_html"><div class="ttname"><a href="classFileOutput.html">FileOutput</a></div><div class="ttdoc">A class that represents a file used for output with RAII.</div><div class="ttdef"><b>Definition:</b> logger.hpp:21</div></div>
 <div class="ttc" id="aclassFileOutput_html_a2cdf9b229a5b82b722728fdddad8503b"><div class="ttname"><a href="classFileOutput.html#a2cdf9b229a5b82b722728fdddad8503b">FileOutput::~FileOutput</a></div><div class="ttdeci">~FileOutput()</div><div class="ttdoc">Destroy the FileOutput object and close the file.</div><div class="ttdef"><b>Definition:</b> logger.cpp:23</div></div>
 <div class="ttc" id="aclassLogger_html"><div class="ttname"><a href="classLogger.html">Logger</a></div><div class="ttdoc">A class for logging messages to the console and to files.</div><div class="ttdef"><b>Definition:</b> logger.hpp:52</div></div>
@@ -238,13 +238,21 @@ $(document).ready(function(){initNavTree('logger_8hpp_source.html',''); initResi
 <div class="ttc" id="aclassLogger_html_ab138ded838fa6698b7e6f74f5fc57efc"><div class="ttname"><a href="classLogger.html#ab138ded838fa6698b7e6f74f5fc57efc">Logger::setLevel</a></div><div class="ttdeci">void setLevel(Level level)</div><div class="ttdoc">Set the minimum level of messages to log to the console.</div><div class="ttdef"><b>Definition:</b> logger.cpp:55</div></div>
 <div class="ttc" id="aclassLogger_html_abc41bfb031d896170c7675fa96a6b30c"><div class="ttname"><a href="classLogger.html#abc41bfb031d896170c7675fa96a6b30c">Logger::Logger</a></div><div class="ttdeci">Logger()</div><div class="ttdoc">Construct a new Logger object.</div><div class="ttdef"><b>Definition:</b> logger.cpp:37</div></div>
 <div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8f"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f">Logger::Level</a></div><div class="ttdeci">Level</div><div class="ttdoc">The different levels of logging.</div><div class="ttdef"><b>Definition:</b> logger.hpp:60</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fa3ce1bbeb15a3d8e29e4c5e75492a781b"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa3ce1bbeb15a3d8e29e4c5e75492a781b">Logger::ERROR</a></div><div class="ttdeci">@ ERROR</div><div class="ttdef"><b>Definition:</b> logger.hpp:62</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9">Logger::CRITICAL</a></div><div class="ttdeci">@ CRITICAL</div><div class="ttdef"><b>Definition:</b> logger.hpp:61</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fa61a9b6fc1e9babc448984b8a34ca2ed2"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa61a9b6fc1e9babc448984b8a34ca2ed2">Logger::INFO</a></div><div class="ttdeci">@ INFO</div><div class="ttdef"><b>Definition:</b> logger.hpp:64</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90">Logger::TRACE</a></div><div class="ttdeci">@ TRACE</div><div class="ttdef"><b>Definition:</b> logger.hpp:66</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12">Logger::MAX</a></div><div class="ttdeci">@ MAX</div><div class="ttdef"><b>Definition:</b> logger.hpp:67</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e">Logger::DEBUG</a></div><div class="ttdeci">@ DEBUG</div><div class="ttdef"><b>Definition:</b> logger.hpp:65</div></div>
+<div class="ttc" id="aclassLogger_html_ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca"><div class="ttname"><a href="classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca">Logger::WARNING</a></div><div class="ttdeci">@ WARNING</div><div class="ttdef"><b>Definition:</b> logger.hpp:63</div></div>
 <div class="ttc" id="aclassLogger_html_ae5d3b0c1fbbb73f7155fb4b682ac5f87"><div class="ttname"><a href="classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87">Logger::level</a></div><div class="ttdeci">Level level() const</div><div class="ttdoc">Return the minimum level of messages to log to the console.</div><div class="ttdef"><b>Definition:</b> logger.cpp:60</div></div>
+<div class="ttc" id="alogger_8hpp_html_a5b27630dbcf231bfda3a7d79e1eefce5"><div class="ttname"><a href="logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5">logger</a></div><div class="ttdeci">Logger logger</div><div class="ttdef"><b>Definition:</b> logger.cpp:35</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_313caf1132e152dd9b58bea13a4052ca.html">utils</a></li><li class="navelem"><b>logger.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_313caf1132e152dd9b58bea13a4052ca.html">utils</a></li><li class="navelem"><a class="el" href="logger_8hpp.html">logger.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

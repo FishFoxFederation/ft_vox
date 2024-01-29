@@ -1,6 +1,6 @@
 var annotated_dup =
 [
-    [ "Application", "classApplication.html", null ],
+    [ "Application", "classApplication.html", "classApplication" ],
     [ "FileOutput", "classFileOutput.html", "classFileOutput" ],
     [ "Input", "classInput.html", "classInput" ],
     [ "Logger", "classLogger.html", "classLogger" ],

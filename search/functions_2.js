@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getglfwwindow_0',['getGLFWwindow',['../classWindow.html#aa7ec3835991fe2e00b6a6ab8c3c6d20f',1,'Window']]]
+  ['draw_0',['draw',['../classRenderer.html#a9a0a5f207e3d9f60c6372a9c79b25df9',1,'Renderer']]]
 ];
