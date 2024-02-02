@@ -1,10 +1,12 @@
 #pragma once
 
 #include "define.hpp"
-#include "renderer.hpp"
+#include "RenderThread.hpp"
 #include "window.hpp"
 
 #include <GLFW/glfw3.h>
+#define VULKAN_INCLUDE_GLFW
+#include <cppVulkanAPI.hpp>
 
 class Application
 {
@@ -19,4 +21,5 @@ public:
 private:
 
 	Window m_window;
+	vk::RenderAPI m_renderAPI;
 };
