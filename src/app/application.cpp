@@ -4,7 +4,7 @@
 #include <iostream>
 
 Application::Application():
-	m_window("Vox", 800, 600)
+	m_window("Vox", 800, 600), m_renderAPI(m_window.getGLFWwindow())
 {
 	LOG_INFO("Application::Application()");
 }
@@ -18,11 +18,10 @@ void Application::run()
 {
 	LOG_INFO("Application::run()");
 
-	Renderer renderer(m_window.getGLFWwindow());
+	RenderThread renderer(m_renderAPI);
 
 	while (!m_window.shouldClose())
 	{
 		glfwWaitEvents();
-		renderer.draw();
 	}
 }
