@@ -16,7 +16,14 @@ public:
 	UpdateThread& operator=(UpdateThread& other) = delete;
 
 private:
+
+	/**
+	 * @brief WIP
+	 */
 	void init() override;
 
+	/**
+	 * @brief WIP
+	 */
 	void loop() override;
 };

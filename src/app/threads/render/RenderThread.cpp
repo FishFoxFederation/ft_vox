@@ -19,6 +19,7 @@ void RenderThread::draw()
 
 void RenderThread::init()
 {
+
 }
 
 void RenderThread::loop()

@@ -35,7 +35,6 @@ public:
 	RenderThread(RenderThread&& renderer) = delete;
 	RenderThread& operator=(RenderThread& renderer) = delete;
 
-	void draw();
 
 private:
 	vk::RenderAPI & m_renderAPI;
@@ -51,4 +50,6 @@ private:
 	 * 
 	 */
 	void loop() override;
+
+	void draw();
 };

@@ -28,12 +28,12 @@ public:
 private:
 
 	/**
-	 * @brief this will be empty for now
+	 * @brief WIP
 	 */
 	void init() override;
 
 	/**
-	 * @brief the main loop of the thread
+	 * @brief WIP
 	 */
 	void loop() override;
 };

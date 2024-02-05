@@ -3,8 +3,10 @@
 
 #include "define.hpp"
 
+#include <thread>
+
 /**
- * @brief A RAII compliant wrapper fro std::jthread
+ * @brief A RAII compliant wrapper for std::jthread
  * 
  * @details the objective here is to guarantee a standard way to
  * handle threads throughout the projet
@@ -13,7 +15,7 @@
  * and the loop function that will be called at every iteration of the thread loop
  * DOT NOT make an infinite loop inside the loop function
  * 
- * If you want to stop a thread use the request_stop function
+ * If you want to stop a thread use the request_stop function (see : https://en.cppreference.com/w/cpp/thread/jthread/request_stop )
  * 
  * Of course every function called from the implemented functions MUST be thread safe
  * 
