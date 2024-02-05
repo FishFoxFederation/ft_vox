@@ -1,9 +1,10 @@
 # Threads Architecture {#threads}
 
-Our design is the fruit of a lot of discussions and headaches. \
-It is based on 4 "control" threads + a thread pool for parallel tasking.
-
 [TOC]
+
+Our design is the fruit of a lot of discussions and headaches.  
+It is based on 4 "control" threads + a thread pool for parallel tasking.  
+All of the control threads inherit the AThreadWrapper class
 
 
 
@@ -46,4 +47,13 @@ The render threads interacts with the renderAPI to render frames using the scene
 	- from the file save if possible
 	- or generates new chunk
 - unloads chunks once the player gets too far
+- calculates new meshes if a change occured in a chunk
 
+## Thread pool
+
+**For every calculations that can be done in parallel**
+- AI pathfinding
+- Calculating new meshes etc...
+
+We use [std::async](https://en.cppreference.com/w/cpp/thread/async).  
+Wich uses a thread pool internally
