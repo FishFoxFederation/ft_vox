@@ -1,7 +1,8 @@
 #include "AThreadWrapper.hpp"
+#include "logger.hpp"
 
-AThreadWrapper::AThreadWrapper()
-	:m_thread(&AThreadWrapper::launch)
+AThreadWrapper::AThreadWrapper():
+	m_thread(&AThreadWrapper::launch, this)
 {
 
 }
@@ -10,7 +11,7 @@ void AThreadWrapper::launch()
 {
 	init();
 
-	while (!m_thread.request_stop())
+	while (!m_thread.get_stop_token().stop_requested())
 	{
 		loop();
 	}
