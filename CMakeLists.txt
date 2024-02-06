@@ -25,9 +25,10 @@ target_sources(${PROJECT_NAME}
 		src/main.cpp
 
 		src/utils/logger.cpp
-		
+
 		src/app/application.cpp
-		src/app/render/renderer.cpp
+		src/app/threads/AThreadWrapper.cpp
+		src/app/threads/render/RenderThread.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 )
@@ -38,7 +39,10 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 		${CMAKE_CURRENT_SOURCE_DIR}/src/utils
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/render
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 )
 
