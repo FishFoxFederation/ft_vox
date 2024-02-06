@@ -37,7 +37,11 @@ private:
 	vk::RenderAPI & m_renderAPI;
 
 	/**
-	 * @brief this will be empty for now
+	 * @brief function used to initialize the vulkan ressources via the renderAPI
+	 *
+	 * @details will be initialized here:
+	 * - the textures
+	 * - the pipelines
 	 *
 	 */
 	void init() override;
@@ -48,5 +52,11 @@ private:
 	 */
 	void loop() override;
 
+	/**
+	 * @brief function used to draw the scene
+	 *
+	 * @details this function will be called at every iteration of the loop
+	 *
+	 */
 	void draw();
 };
