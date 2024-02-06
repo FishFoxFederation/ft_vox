@@ -13,12 +13,6 @@ RenderThread::~RenderThread()
 {
 }
 
-void RenderThread::draw()
-{
-	m_renderAPI.startDraw();
-	m_renderAPI.endDraw();
-}
-
 void RenderThread::init()
 {
 
@@ -27,4 +21,10 @@ void RenderThread::init()
 void RenderThread::loop()
 {
 	draw();
+}
+
+void RenderThread::draw()
+{
+	m_renderAPI.startDraw();
+	m_renderAPI.endDraw();
 }
