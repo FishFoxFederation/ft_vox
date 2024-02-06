@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['renderer_0',['Renderer',['../classRenderer.html',1,'']]]
+  ['logger_0',['Logger',['../classLogger.html',1,'']]]
 ];

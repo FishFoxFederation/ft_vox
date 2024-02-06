@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['debug_0',['DEBUG',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e',1,'Logger']]],
-  ['define_2ehpp_1',['define.hpp',['../define_8hpp.html',1,'']]],
-  ['docs_20style_20guide_2',['Docs Style guide',['../docstyleguide.html',1,'']]],
-  ['docs_5fstyle_5fguide_2emd_3',['docs_style_guide.md',['../docs__style__guide_8md.html',1,'']]],
-  ['draw_4',['draw',['../classRenderer.html#a9a0a5f207e3d9f60c6372a9c79b25df9',1,'Renderer']]]
+  ['class_5farchitecture_0',['class_architecture',['../md_docs_pages_class_architecture.html',1,'']]],
+  ['class_5farchitecture_2emd_1',['class_architecture.md',['../class__architecture_8md.html',1,'']]],
+  ['code_20style_20guide_2',['Code style guide',['../codestyleguide.html',1,'']]],
+  ['code_5fstyle_5fguide_2emd_3',['code_style_guide.md',['../code__style__guide_8md.html',1,'']]],
+  ['configure_4',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]],
+  ['critical_5',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]]
 ];

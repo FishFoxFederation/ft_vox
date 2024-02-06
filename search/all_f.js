@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['warning_0',['WARNING',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca',1,'Logger']]],
-  ['window_1',['Window',['../classWindow.html',1,'Window'],['../classWindow.html#ad7cd97b52e2a93c394402f2f084fcb1b',1,'Window::Window()']]],
-  ['window_2ecpp_2',['window.cpp',['../window_8cpp.html',1,'']]],
-  ['window_2ehpp_3',['window.hpp',['../window_8hpp.html',1,'']]]
+  ['updatethread_0',['UpdateThread',['../classUpdateThread.html',1,'UpdateThread'],['../classUpdateThread.html#a9932533cd65d866fa6a8838cee8ef8b9',1,'UpdateThread::UpdateThread()'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]],
+  ['updatethread_2ecpp_1',['UpdateThread.cpp',['../UpdateThread_8cpp.html',1,'']]],
+  ['updatethread_2ehpp_2',['UpdateThread.hpp',['../UpdateThread_8hpp.html',1,'']]]
 ];

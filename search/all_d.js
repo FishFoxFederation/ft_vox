@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['trace_0',['TRACE',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90',1,'Logger']]]
+  ['setlevel_0',['setLevel',['../classLogger.html#ab138ded838fa6698b7e6f74f5fc57efc',1,'Logger']]],
+  ['settimestamp_1',['setTimestamp',['../classLogger.html#a9556d57fb4b693911149599a8724b2b0',1,'Logger']]],
+  ['shouldclose_2',['shouldClose',['../classWindow.html#ae779be3a5327f62c5e86a3e3d8a37289',1,'Window']]],
+  ['style_20guide_3',['Style guide',['../styleguide.html',1,'']]],
+  ['style_5fguide_2emd_4',['style_guide.md',['../style__guide_8md.html',1,'']]]
 ];

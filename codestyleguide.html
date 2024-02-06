@@ -109,22 +109,22 @@ $(document).ready(function(){initNavTree('codestyleguide.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md0">General naming rules</a><ul><li class="level2"><a href="#autotoc_md1">Variables</a></li>
-<li class="level2"><a href="#autotoc_md2">Classes</a></li>
-<li class="level2"><a href="#autotoc_md3">Functions</a></li>
+<ul><li class="level1"><a href="#autotoc_md3">General naming rules</a><ul><li class="level2"><a href="#autotoc_md4">Variables</a></li>
+<li class="level2"><a href="#autotoc_md5">Classes</a></li>
+<li class="level2"><a href="#autotoc_md6">Functions</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md4">Class guidelines</a></li>
+<li class="level1"><a href="#autotoc_md7">Class guidelines</a></li>
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_docs_pages_code_style_guide"></a></p>
-<h1><a class="anchor" id="autotoc_md0"></a>
+<h1><a class="anchor" id="autotoc_md3"></a>
 General naming rules</h1>
-<h2><a class="anchor" id="autotoc_md1"></a>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Variables</h2>
 <p ><b>Snake case</b></p>
 <div class="fragment"><div class="line"><span class="keywordtype">int</span> my_var_in_degrees_c;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md2"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
 Classes</h2>
 <p ><b>Pascal case</b>: each word starts by an uppercase including the first letter </p><div class="fragment"><div class="line"><span class="keyword">class </span>MyClass;</div>
 <div class="line"><span class="keyword">class </span>MyOtherClass;</div>
@@ -134,12 +134,12 @@ Classes</h2>
 <div class="line"><span class="keyword">private</span>:</div>
 <div class="line">    <span class="keywordtype">int</span> m_my_int;</div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
 Functions</h2>
 <p ><b>Camel case</b> : each word starts by an uppercase except the first one</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> myFunction(<span class="keywordtype">int</span> param1, <span class="keywordtype">int</span> param2);</div>
 </div><!-- fragment --><p >Function params use the same case as variables </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> myOtherFunction(<span class="keywordtype">int</span> param1, <span class="keywordtype">int</span> my_other_param);</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md4"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md7"></a>
 Class guidelines</h1>
 <ul>
 <li>Every non static data member of a class should be private</li>

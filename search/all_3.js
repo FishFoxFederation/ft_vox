@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['error_0',['ERROR',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa3ce1bbeb15a3d8e29e4c5e75492a781b',1,'Logger']]],
-  ['example_2ecpp_1',['example.cpp',['../example_8cpp.html',1,'']]]
+  ['debug_0',['DEBUG',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e',1,'Logger']]],
+  ['define_2ehpp_1',['define.hpp',['../define_8hpp.html',1,'']]],
+  ['docs_20style_20guide_2',['Docs Style guide',['../docstyleguide.html',1,'']]],
+  ['docs_5fstyle_5fguide_2emd_3',['docs_style_guide.md',['../docs__style__guide_8md.html',1,'']]]
 ];

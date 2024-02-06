@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['draw_0',['draw',['../classRenderer.html#a9a0a5f207e3d9f60c6372a9c79b25df9',1,'Renderer']]]
+  ['configure_0',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]]
 ];

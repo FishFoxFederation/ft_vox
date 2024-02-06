@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['window_2ecpp_0',['window.cpp',['../window_8cpp.html',1,'']]],
-  ['window_2ehpp_1',['window.hpp',['../window_8hpp.html',1,'']]]
+  ['style_5fguide_2emd_0',['style_guide.md',['../style__guide_8md.html',1,'']]]
 ];

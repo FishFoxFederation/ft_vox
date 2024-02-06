@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['setlevel_0',['setLevel',['../classLogger.html#ab138ded838fa6698b7e6f74f5fc57efc',1,'Logger']]],
-  ['settimestamp_1',['setTimestamp',['../classLogger.html#a9556d57fb4b693911149599a8724b2b0',1,'Logger']]],
-  ['shouldclose_2',['shouldClose',['../classWindow.html#ae779be3a5327f62c5e86a3e3d8a37289',1,'Window']]],
-  ['style_20guide_3',['Style guide',['../styleguide.html',1,'']]],
-  ['style_5fguide_2emd_4',['style_guide.md',['../style__guide_8md.html',1,'']]]
+  ['renderthread_0',['RenderThread',['../classRenderThread.html',1,'RenderThread'],['../classRenderThread.html#aad0b088859cde2424e401abb183c087c',1,'RenderThread::RenderThread(vk::RenderAPI &amp;renderAPI)'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete'],['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread(RenderThread &amp;&amp;renderer)=delete']]],
+  ['renderthread_2ecpp_1',['RenderThread.cpp',['../RenderThread_8cpp.html',1,'']]],
+  ['renderthread_2ehpp_2',['RenderThread.hpp',['../RenderThread_8hpp.html',1,'']]],
+  ['run_3',['run',['../classApplication.html#a68965449404743bf1add056784d6cf81',1,'Application']]]
 ];

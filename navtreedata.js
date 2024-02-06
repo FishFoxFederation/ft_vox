@@ -26,26 +26,38 @@ var NAVTREE =
 [
   [ "VOX", "index.html", [
     [ "Index", "index.html", null ],
+    [ "Our Architecture", "md_docs_pages_architecture.html", [
+      [ "[About threads]()", "md_docs_pages_architecture.html#autotoc_md1", null ],
+      [ "[About RAII]()", "md_docs_pages_architecture.html#autotoc_md2", null ]
+    ] ],
+    [ "class_architecture", "md_docs_pages_class_architecture.html", null ],
     [ "Code style guide", "codestyleguide.html", [
-      [ "General naming rules", "codestyleguide.html#autotoc_md0", [
-        [ "Variables", "codestyleguide.html#autotoc_md1", null ],
-        [ "Classes", "codestyleguide.html#autotoc_md2", null ],
-        [ "Functions", "codestyleguide.html#autotoc_md3", null ]
+      [ "General naming rules", "codestyleguide.html#autotoc_md3", [
+        [ "Variables", "codestyleguide.html#autotoc_md4", null ],
+        [ "Classes", "codestyleguide.html#autotoc_md5", null ],
+        [ "Functions", "codestyleguide.html#autotoc_md6", null ]
       ] ],
-      [ "Class guidelines", "codestyleguide.html#autotoc_md4", null ]
+      [ "Class guidelines", "codestyleguide.html#autotoc_md7", null ]
     ] ],
     [ "Docs Style guide", "docstyleguide.html", [
       [ "Intro", "docstyleguide.html#intro", null ],
-      [ "How to create a page", "docstyleguide.html#autotoc_md5", [
-        [ "Useful Links", "docstyleguide.html#autotoc_md6", null ],
-        [ "File creation", "docstyleguide.html#autotoc_md7", null ],
-        [ "Code blocks", "docstyleguide.html#autotoc_md8", null ]
+      [ "How to create a page", "docstyleguide.html#autotoc_md8", [
+        [ "Useful Links", "docstyleguide.html#autotoc_md9", null ],
+        [ "File creation", "docstyleguide.html#autotoc_md10", null ],
+        [ "Code blocks", "docstyleguide.html#autotoc_md11", null ]
       ] ],
-      [ "How to document code", "docstyleguide.html#autotoc_md9", [
-        [ "Useful links", "docstyleguide.html#autotoc_md10", null ]
+      [ "How to document code", "docstyleguide.html#autotoc_md12", [
+        [ "Useful links", "docstyleguide.html#autotoc_md13", null ]
       ] ]
     ] ],
     [ "Style guide", "styleguide.html", null ],
+    [ "Threads Architecture", "threads.html", [
+      [ "Main thread", "threads.html#autotoc_md14", null ],
+      [ "Update Thread", "threads.html#autotoc_md15", null ],
+      [ "Render Thread", "threads.html#autotoc_md16", null ],
+      [ "Block Update Thread", "threads.html#autotoc_md17", null ],
+      [ "Thread pool", "threads.html#autotoc_md18", null ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -53,6 +65,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ]
       ] ]
@@ -71,7 +84,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"AThreadWrapper_8cpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

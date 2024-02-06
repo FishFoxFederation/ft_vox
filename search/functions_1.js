@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['configure_0',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]]
+  ['blockupdatethread_0',['BlockUpdateThread',['../classBlockUpdateThread.html#aa49554d940a712ad1166ff5127499e13',1,'BlockUpdateThread::BlockUpdateThread()'],['../classBlockUpdateThread.html#ac5e8f510884616c75e89bac2ee17b75c',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;other)=delete'],['../classBlockUpdateThread.html#afc8b69c912bcadcac529322cdd24a8cb',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;&amp;other)=delete']]]
 ];

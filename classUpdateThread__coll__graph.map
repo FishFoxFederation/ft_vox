@@ -1,0 +1,4 @@
+<map id="UpdateThread" name="UpdateThread">
+<area shape="rect" id="node1" title=" " alt="" coords="13,181,143,295"/>
+<area shape="rect" id="node2" href="$classAThreadWrapper.html" title="A RAII compliant wrapper for std::jthread." alt="" coords="5,5,151,133"/>
+</map>
