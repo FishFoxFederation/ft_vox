@@ -4,8 +4,6 @@
 #include "RenderThread.hpp"
 #include "window.hpp"
 
-#include <GLFW/glfw3.h>
-#define VULKAN_INCLUDE_GLFW
 #include <cppVulkanAPI.hpp>
 
 class Application
@@ -22,4 +20,5 @@ private:
 
 	Window m_window;
 	vk::RenderAPI m_renderAPI;
+	RenderThread m_render_thread;
 };

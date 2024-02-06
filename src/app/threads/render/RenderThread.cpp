@@ -1,9 +1,11 @@
 #include "RenderThread.hpp"
+#include "logger.hpp"
 
 #include <iostream>
 
-RenderThread::RenderThread(vk::RenderAPI& renderAPI)
-	:m_renderAPI(renderAPI)
+RenderThread::RenderThread(vk::RenderAPI& renderAPI):
+	AThreadWrapper(),
+	m_renderAPI(renderAPI)
 {
 }
 

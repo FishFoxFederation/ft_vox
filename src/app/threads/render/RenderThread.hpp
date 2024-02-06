@@ -1,17 +1,14 @@
 #pragma once
 
 #include "define.hpp"
-
-#include <thread>
-#define VULKAN_INCLUDE_GLFW
-#include <cppVulkanAPI.hpp>
-
 #include "AThreadWrapper.hpp"
+
+#include <cppVulkanAPI.hpp>
 
 
 /**
  * @brief A wrapper for the thread that handles rendering
- * 
+ *
  * This thread will run at max framerate possible
  * Interacts with the vk::RenderAPI to draw the Scene
  * Every function called from this class MUST be thread safe
@@ -41,13 +38,13 @@ private:
 
 	/**
 	 * @brief this will be empty for now
-	 * 
+	 *
 	 */
 	void init() override;
 
 	/**
 	 * @brief the main loop of the thread
-	 * 
+	 *
 	 */
 	void loop() override;
 
