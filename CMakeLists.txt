@@ -27,6 +27,7 @@ target_sources(${PROJECT_NAME}
 		src/utils/logger.cpp
 
 		src/app/application.cpp
+		src/app/scenes/WorldScene.cpp
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/window/window.cpp
@@ -39,6 +40,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 		${CMAKE_CURRENT_SOURCE_DIR}/src/utils
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/scenes
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/render
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
