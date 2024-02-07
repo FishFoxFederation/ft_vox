@@ -1,8 +1,9 @@
 #pragma once
 
 #include "define.hpp"
-#include "RenderThread.hpp"
 #include "window.hpp"
+#include "RenderThread.hpp"
+#include "WorldScene.hpp"
 
 #include <cppVulkanAPI.hpp>
 
