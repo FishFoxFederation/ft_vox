@@ -52,11 +52,4 @@ private:
 	 */
 	void loop() override;
 
-	/**
-	 * @brief function used to draw the scene
-	 *
-	 * @details this function will be called at every iteration of the loop
-	 *
-	 */
-	void draw();
 };
