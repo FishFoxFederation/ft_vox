@@ -19,6 +19,7 @@ public:
 
 private:
 
+	WorldScene m_worldScene;
 	Window m_window;
 	vk::RenderAPI m_renderAPI;
 	RenderThread m_render_thread;

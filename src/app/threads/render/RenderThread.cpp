@@ -3,9 +3,13 @@
 
 #include <iostream>
 
-RenderThread::RenderThread(vk::RenderAPI& renderAPI):
+RenderThread::RenderThread(
+	vk::RenderAPI & renderAPI,
+	const WorldScene & worldScene
+):
 	AThreadWrapper(),
-	m_renderAPI(renderAPI)
+	m_renderAPI(renderAPI),
+	m_worldScene(worldScene)
 {
 }
 
