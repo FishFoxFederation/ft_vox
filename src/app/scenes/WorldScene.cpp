@@ -34,32 +34,52 @@ std::vector<WorldScene::MeshRenderData> WorldScene::getMeshRenderData()
 
 
 
-void WorldScene::moveCameraForward(float distance)
+glm::mat4 WorldScene::Camera::getViewMatrix() const
 {
-	std::unique_lock<std::mutex> lock(m_camera_mutex);
-	m_camera.moveForward(distance);
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return glm::lookAt(position, position + direction(), up);
 }
 
-void WorldScene::moveCameraRight(float distance)
+glm::mat4 WorldScene::Camera::getProjectionMatrix(float aspect_ratio) const
 {
-	std::unique_lock<std::mutex> lock(m_camera_mutex);
-	m_camera.moveRight(distance);
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return glm::perspective(glm::radians(fov), aspect_ratio, 0.1f, 100.0f);
 }
 
-void WorldScene::moveCameraUp(float distance)
+void WorldScene::Camera::moveForward(float distance)
 {
-	std::unique_lock<std::mutex> lock(m_camera_mutex);
-	m_camera.moveUp(distance);
+	std::lock_guard<std::mutex> lock(m_mutex);
+	position += distance * glm::normalize(glm::vec3(direction().x, 0.0f, direction().z));
 }
 
-void WorldScene::moveCameraDirection(float x, float y)
+void WorldScene::Camera::moveRight(float distance)
 {
-	std::unique_lock<std::mutex> lock(m_camera_mutex);
-	m_camera.moveDirection(x, y);
+	std::lock_guard<std::mutex> lock(m_mutex);
+	position += distance * glm::normalize(glm::cross(direction(), up));
 }
 
-WorldScene::Camera WorldScene::getCamera()
+void WorldScene::Camera::moveUp(float distance)
 {
-	std::unique_lock<std::mutex> lock(m_camera_mutex);
-	return m_camera;
+	std::lock_guard<std::mutex> lock(m_mutex);
+	position += distance * up;
+}
+
+void WorldScene::Camera::moveDirection(float x_offset, float y_offset)
+{
+	float sensitivity = 0.2f;
+
+	std::lock_guard<std::mutex> lock(m_mutex);
+
+	// update the pitch and yaw
+	pitch += -y_offset * sensitivity;
+	yaw += x_offset * sensitivity;
+}
+
+glm::vec3 WorldScene::Camera::direction() const
+{
+	return glm::vec3(
+		cos(glm::radians(pitch)) * cos(glm::radians(yaw)),
+		sin(glm::radians(pitch)),
+		cos(glm::radians(pitch)) * sin(glm::radians(yaw))
+	);
 }

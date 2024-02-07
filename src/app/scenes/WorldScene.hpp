@@ -30,71 +30,57 @@ public:
 	
 	public:
 
+		Camera() = default;
+		~Camera() = default;
+
+		Camera(Camera& camera) = delete;
+		Camera(Camera&& camera) = delete;
+		Camera& operator=(Camera& camera) = delete;
+		Camera& operator=(Camera&& camera) = delete;
+
 		/**
 		 * @brief Get the view matrix of the camera.
 		 * 
-		 * @return glm::mat4 
+		 * @return The view matrix.
 		 */
-		glm::mat4 getViewMatrix() const
-		{
-			return glm::lookAt(position, position + direction(), up);
-		}
+		glm::mat4 getViewMatrix() const;
 
 		/**
 		 * @brief Get the projection matrix of the camera.
 		 * 
 		 * @param aspect_ratio 
-		 * @return glm::mat4 
+		 * @return The projection matrix.
 		 */
-		glm::mat4 getProjectionMatrix(float aspect_ratio) const
-		{
-			return glm::perspective(glm::radians(fov), aspect_ratio, 0.1f, 100.0f);
-		}
+		glm::mat4 getProjectionMatrix(float aspect_ratio) const;
 
 		/**
 		 * @brief Move the camera forward/backward on the xz plane.
 		 * 
 		 * @param distance 
 		 */
-		void moveForward(float distance)
-		{
-			position += distance * glm::normalize(glm::vec3(direction().x, 0.0f, direction().z));
-		}
+		void moveForward(float distance);
 
 		/**
 		 * @brief Move the camera right/left on the xz plane.
 		 * 
 		 * @param distance 
 		 */
-		void moveRight(float distance)
-		{
-			position += distance * glm::normalize(glm::cross(direction(), up));
-		}
+		void moveRight(float distance);
 
 		/**
 		 * @brief Move the camera up/down on the y axis.
 		 * 
 		 * @param distance 
 		 */
-		void moveUp(float distance)
-		{
-			position += distance * up;
-		}
+		void moveUp(float distance);
 
 		/**
 		 * @brief Move the camera rotation from the cursor movement.
 		 * 
-		 * @param x_offset
-		 * @param y_offset
+		 * @param x_offset x movement of the cursor.
+		 * @param y_offset y movement of the cursor.
 		 */
-		void moveDirection(float x_offset, float y_offset)
-		{
-			float sensitivity = 0.2f;
-
-			// update the pitch and yaw
-			pitch += -y_offset * sensitivity;
-			yaw += x_offset * sensitivity;
-		}
+		void moveDirection(float x_offset, float y_offset);
 	
 	private:
 
@@ -104,14 +90,9 @@ public:
 		glm::vec3 up{ 0.0f, 1.0f, 0.0f };
 		float fov{ 45.0f };
 
-		glm::vec3 direction() const
-		{
-			return glm::vec3(
-				cos(glm::radians(pitch)) * cos(glm::radians(yaw)),
-				sin(glm::radians(pitch)),
-				cos(glm::radians(pitch)) * sin(glm::radians(yaw))
-			);
-		}
+		mutable std::mutex m_mutex;
+
+		glm::vec3 direction() const;
 	};
 
 	/**
@@ -151,40 +132,19 @@ public:
 	std::vector<MeshRenderData> getMeshRenderData();
 
 	/**
-	 * @brief Function to move the camera forward/backward on the xz plane.
-	 * 
-	 * @param distance 
-	 */
-	void moveCameraForward(float distance);
-
-	/**
-	 * @brief Function to move the camera right/left on the xz plane.
-	 * 
-	 * @param distance 
-	 */
-	void moveCameraRight(float distance);
-
-	/**
-	 * @brief Function to move the camera up/down on the y axis.
-	 * 
-	 * @param distance 
-	 */
-	void moveCameraUp(float distance);
-
-	/**
-	 * @brief Function to move the camera rotation from the cursor movement.
-	 * 
-	 * @param x 
-	 * @param y 
-	 */
-	void moveCameraDirection(float x, float y);
-
-	/**
 	 * @brief Function to get the camera.
 	 * 
-	 * @return Camera A copy of the camera.
+	 * @return A reference to the camera.
 	 */
-	Camera getCamera();
+	Camera& camera() { return m_camera; }
+
+	/**
+	 * @brief Function const to get the camera.
+	 * 
+	 * @return A const reference to the camera.
+	 * 
+	 */
+	const Camera& camera() const { return m_camera; }
 
 private:
 
@@ -192,5 +152,4 @@ private:
 	std::mutex m_mesh_render_data_mutex;
 
 	Camera m_camera;
-	std::mutex m_camera_mutex;
 };
