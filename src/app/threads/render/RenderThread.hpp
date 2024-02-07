@@ -2,6 +2,7 @@
 
 #include "define.hpp"
 #include "AThreadWrapper.hpp"
+#include "WorldScene.hpp"
 
 #include <cppVulkanAPI.hpp>
 
@@ -21,7 +22,10 @@ public:
 	/**
 	 * @brief Construct a new RenderThread object
 	*/
-	RenderThread(vk::RenderAPI & renderAPI);
+	RenderThread(
+		vk::RenderAPI & renderAPI,
+		const WorldScene & worldScene
+	);
 
 	/**
 	 * @brief Destroy the RenderThread object
@@ -34,7 +38,10 @@ public:
 
 
 private:
+
 	vk::RenderAPI & m_renderAPI;
+
+	const WorldScene & m_worldScene;
 
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
