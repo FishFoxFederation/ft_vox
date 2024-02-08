@@ -31,8 +31,12 @@
 *.out
 *.app
 
+# Compiled Shaders
+*.spv
+
 .vscode
 
 latex
 html
 build
+glslc

@@ -5,6 +5,9 @@
 # Download the necessary external libraries
 ./scripts/download_cppVulkanAPI.sh
 
+# Compile shaders
+./scripts/compile_shaders.sh
+
 # create build directory
 mkdir -p build
 
