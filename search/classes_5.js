@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['renderthread_0',['RenderThread',['../classRenderThread.html',1,'']]]
+  ['logger_0',['Logger',['../classLogger.html',1,'']]]
 ];

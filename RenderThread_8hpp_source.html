@@ -111,44 +111,49 @@ $(document).ready(function(){initNavTree('RenderThread_8hpp_source.html',''); in
 <a href="RenderThread_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="define_8hpp.html">define.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;thread&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno"><a class="line" href="RenderThread_8hpp.html#a9470dede418d6787eb34b6dfc0d35ffa">    6</a></span><span class="preprocessor">#define VULKAN_INCLUDE_GLFW</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="AThreadWrapper_8hpp.html">AThreadWrapper.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="WorldScene_8hpp.html">WorldScene.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;cppVulkanAPI.hpp&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="AThreadWrapper_8hpp.html">AThreadWrapper.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classRenderThread.html">   19</a></span><span class="keyword">class </span><a class="code hl_class" href="classRenderThread.html">RenderThread</a> : <span class="keyword">public</span> <a class="code hl_class" href="classAThreadWrapper.html">AThreadWrapper</a></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>{</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classRenderThread.html">   17</a></span><span class="keyword">class </span><a class="code hl_class" href="classRenderThread.html">RenderThread</a> : <span class="keyword">public</span> <a class="code hl_class" href="classAThreadWrapper.html">AThreadWrapper</a></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>{</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">public</span>:</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <a class="code hl_class" href="classRenderThread.html">RenderThread</a>(vk::RenderAPI &amp; renderAPI);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_function" href="classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4">~RenderThread</a>();</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1">   34</a></span>    <a class="code hl_function" href="classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1">RenderThread</a>(<a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp; renderer) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7">   35</a></span>    <a class="code hl_function" href="classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7">RenderThread</a>(<a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp;&amp; renderer) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classRenderThread.html#a735f6f69afad2704b0119683ea474a96">   36</a></span>    <a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp; <a class="code hl_function" href="classRenderThread.html#a735f6f69afad2704b0119683ea474a96">operator=</a>(<a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp; renderer) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <a class="code hl_class" href="classRenderThread.html">RenderThread</a>(</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        vk::RenderAPI &amp; renderAPI,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">const</span> <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp; worldScene</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    );</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_function" href="classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4">~RenderThread</a>();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1">   35</a></span>    <a class="code hl_function" href="classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1">RenderThread</a>(<a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp; renderer) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7">   36</a></span>    <a class="code hl_function" href="classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7">RenderThread</a>(<a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp;&amp; renderer) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classRenderThread.html#a735f6f69afad2704b0119683ea474a96">   37</a></span>    <a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp; <a class="code hl_function" href="classRenderThread.html#a735f6f69afad2704b0119683ea474a96">operator=</a>(<a class="code hl_class" href="classRenderThread.html">RenderThread</a>&amp; renderer) = <span class="keyword">delete</span>;</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    vk::RenderAPI &amp; m_renderAPI;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> init() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> loop() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">void</span> draw();</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>};</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    vk::RenderAPI &amp; m_renderAPI;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">const</span> <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp; m_worldScene;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">void</span> init() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">void</span> loop() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
 <div class="ttc" id="aAThreadWrapper_8hpp_html"><div class="ttname"><a href="AThreadWrapper_8hpp.html">AThreadWrapper.hpp</a></div></div>
+<div class="ttc" id="aWorldScene_8hpp_html"><div class="ttname"><a href="WorldScene_8hpp.html">WorldScene.hpp</a></div></div>
 <div class="ttc" id="aclassAThreadWrapper_html"><div class="ttname"><a href="classAThreadWrapper.html">AThreadWrapper</a></div><div class="ttdoc">A RAII compliant wrapper for std::jthread.</div><div class="ttdef"><b>Definition:</b> AThreadWrapper.hpp:24</div></div>
-<div class="ttc" id="aclassRenderThread_html"><div class="ttname"><a href="classRenderThread.html">RenderThread</a></div><div class="ttdoc">A wrapper for the thread that handles rendering.</div><div class="ttdef"><b>Definition:</b> RenderThread.hpp:20</div></div>
+<div class="ttc" id="aclassRenderThread_html"><div class="ttname"><a href="classRenderThread.html">RenderThread</a></div><div class="ttdoc">A wrapper for the thread that handles rendering.</div><div class="ttdef"><b>Definition:</b> RenderThread.hpp:18</div></div>
 <div class="ttc" id="aclassRenderThread_html_a53eb51bf51003e9aae33a74102d1e6e7"><div class="ttname"><a href="classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7">RenderThread::RenderThread</a></div><div class="ttdeci">RenderThread(RenderThread &amp;&amp;renderer)=delete</div></div>
 <div class="ttc" id="aclassRenderThread_html_a735f6f69afad2704b0119683ea474a96"><div class="ttname"><a href="classRenderThread.html#a735f6f69afad2704b0119683ea474a96">RenderThread::operator=</a></div><div class="ttdeci">RenderThread &amp; operator=(RenderThread &amp;renderer)=delete</div></div>
 <div class="ttc" id="aclassRenderThread_html_a9b8dfb3f2d80db4e6c4d9009367e8cb1"><div class="ttname"><a href="classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1">RenderThread::RenderThread</a></div><div class="ttdeci">RenderThread(RenderThread &amp;renderer)=delete</div></div>
-<div class="ttc" id="aclassRenderThread_html_ac9a968ad63349a9eb1109d615406afd4"><div class="ttname"><a href="classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4">RenderThread::~RenderThread</a></div><div class="ttdeci">~RenderThread()</div><div class="ttdoc">Destroy the RenderThread object.</div><div class="ttdef"><b>Definition:</b> RenderThread.cpp:10</div></div>
+<div class="ttc" id="aclassRenderThread_html_ac9a968ad63349a9eb1109d615406afd4"><div class="ttname"><a href="classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4">RenderThread::~RenderThread</a></div><div class="ttdeci">~RenderThread()</div><div class="ttdoc">Destroy the RenderThread object.</div><div class="ttdef"><b>Definition:</b> RenderThread.cpp:16</div></div>
+<div class="ttc" id="aclassWorldScene_html"><div class="ttname"><a href="classWorldScene.html">WorldScene</a></div><div class="ttdoc">Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ...</div><div class="ttdef"><b>Definition:</b> WorldScene.hpp:18</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

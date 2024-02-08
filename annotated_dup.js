@@ -9,5 +9,6 @@ var annotated_dup =
     [ "RenderThread", "classRenderThread.html", "classRenderThread" ],
     [ "UpdateThread", "classUpdateThread.html", "classUpdateThread" ],
     [ "Window", "classWindow.html", "classWindow" ],
-    [ "World", "classWorld.html", null ]
+    [ "World", "classWorld.html", null ],
+    [ "WorldScene", "classWorldScene.html", "classWorldScene" ]
 ];

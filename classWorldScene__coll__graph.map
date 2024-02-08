@@ -1,0 +1,3 @@
+<map id="WorldScene" name="WorldScene">
+<area shape="rect" id="node1" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="5,5,164,192"/>
+</map>

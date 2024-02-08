@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['m_5fthread_0',['m_thread',['../classAThreadWrapper.html#a03340402fabcbb0f4b3e85948b461f6b',1,'AThreadWrapper']]]
+  ['logger_0',['logger',['../logger_8cpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp'],['../logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp']]]
 ];

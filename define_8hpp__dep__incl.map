@@ -1,15 +1,17 @@
 <map id="src/define.hpp" name="src/define.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="561,5,663,31"/>
-<area shape="rect" id="node2" href="$application_8hpp.html" title=" " alt="" coords="80,247,235,273"/>
-<area shape="rect" id="node5" href="$AThreadWrapper_8hpp.html" title=" " alt="" coords="416,79,653,104"/>
-<area shape="rect" id="node7" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="632,152,843,192"/>
-<area shape="rect" id="node9" href="$RenderThread_8hpp.html" title=" " alt="" coords="195,152,347,192"/>
-<area shape="rect" id="node11" href="$UpdateThread_8hpp.html" title=" " alt="" coords="867,152,1021,192"/>
-<area shape="rect" id="node13" href="$World_8hpp.html" title=" " alt="" coords="779,79,941,104"/>
-<area shape="rect" id="node3" href="$application_8cpp.html" title=" " alt="" coords="5,328,160,353"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title=" " alt="" coords="184,328,280,353"/>
-<area shape="rect" id="node6" href="$AThreadWrapper_8cpp.html" title=" " alt="" coords="371,159,608,185"/>
-<area shape="rect" id="node8" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="632,240,843,280"/>
-<area shape="rect" id="node10" href="$RenderThread_8cpp.html" title=" " alt="" coords="259,240,411,280"/>
-<area shape="rect" id="node12" href="$UpdateThread_8cpp.html" title=" " alt="" coords="867,240,1021,280"/>
+<area shape="rect" id="node1" title=" " alt="" coords="555,5,657,31"/>
+<area shape="rect" id="node2" href="$application_8hpp.html" title=" " alt="" coords="165,247,319,273"/>
+<area shape="rect" id="node5" href="$WorldScene_8hpp.html" title=" " alt="" coords="177,79,387,104"/>
+<area shape="rect" id="node7" href="$RenderThread_8hpp.html" title=" " alt="" coords="311,152,463,192"/>
+<area shape="rect" id="node9" href="$AThreadWrapper_8hpp.html" title=" " alt="" coords="487,79,725,104"/>
+<area shape="rect" id="node11" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="749,152,959,192"/>
+<area shape="rect" id="node13" href="$UpdateThread_8hpp.html" title=" " alt="" coords="983,152,1138,192"/>
+<area shape="rect" id="node15" href="$World_8hpp.html" title=" " alt="" coords="851,79,1012,104"/>
+<area shape="rect" id="node3" href="$application_8cpp.html" title=" " alt="" coords="90,328,245,353"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title=" " alt="" coords="269,328,365,353"/>
+<area shape="rect" id="node6" href="$WorldScene_8cpp.html" title=" " alt="" coords="27,159,236,185"/>
+<area shape="rect" id="node8" href="$RenderThread_8cpp.html" title=" " alt="" coords="343,240,495,280"/>
+<area shape="rect" id="node10" href="$AThreadWrapper_8cpp.html" title=" " alt="" coords="487,159,725,185"/>
+<area shape="rect" id="node12" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="749,240,959,280"/>
+<area shape="rect" id="node14" href="$UpdateThread_8cpp.html" title=" " alt="" coords="983,240,1138,280"/>
 </map>
