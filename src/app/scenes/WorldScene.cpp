@@ -26,7 +26,7 @@ void WorldScene::removeMesh(uint32_t meshID)
 	});
 }
 
-std::vector<WorldScene::MeshRenderData> WorldScene::getMeshRenderData()
+std::vector<WorldScene::MeshRenderData> WorldScene::getMeshRenderData() const
 {
 	std::unique_lock<std::mutex> lock(m_mesh_render_data_mutex);
 	return m_mesh_render_data;
@@ -73,6 +73,12 @@ void WorldScene::Camera::moveDirection(float x_offset, float y_offset)
 	// update the pitch and yaw
 	pitch += -y_offset * sensitivity;
 	yaw += x_offset * sensitivity;
+}
+
+void WorldScene::Camera::setPosition(const glm::vec3& position)
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	this->position = position;
 }
 
 glm::vec3 WorldScene::Camera::direction() const

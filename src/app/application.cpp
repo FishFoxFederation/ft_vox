@@ -4,12 +4,16 @@
 #include <iostream>
 
 Application::Application():
-	m_worldScene(),
+	m_world_scene(),
 	m_window("Vox", 800, 600),
 	m_renderAPI(m_window.getGLFWwindow()),
-	m_render_thread(m_renderAPI, m_worldScene)
+	m_render_thread(m_renderAPI, m_world_scene)
 {
 	LOG_INFO("Application::Application()");
+
+	m_world_scene.camera().setPosition(glm::vec3(-2.0f, 0.5f, 0.5f));
+
+	m_world_scene.addMeshData(0, glm::mat4(1.0f));
 }
 
 Application::~Application()

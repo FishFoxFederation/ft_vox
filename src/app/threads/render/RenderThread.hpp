@@ -6,6 +6,14 @@
 
 #include <cppVulkanAPI.hpp>
 
+/**
+ * @brief The push constant for the model matrix.
+ */
+struct ModelMatrix_push_constant
+{
+	glm::mat4 model;
+};
+
 
 /**
  * @brief A wrapper for the thread that handles rendering
@@ -34,14 +42,18 @@ public:
 
 	RenderThread(RenderThread& renderer) = delete;
 	RenderThread(RenderThread&& renderer) = delete;
-	RenderThread& operator=(RenderThread& renderer) = delete;
-
+	RenderThread & operator=(RenderThread& renderer) = delete;
+	RenderThread & operator=(RenderThread&& renderer) = delete;
 
 private:
 
 	vk::RenderAPI & m_renderAPI;
 
-	const WorldScene & m_worldScene;
+	const WorldScene & m_world_scene;
+
+	vk::UniformBuffer::ID m_proj_view_ubo_id;
+	vk::Texture::ID m_texture_id;
+	vk::Pipeline::ID m_simple_shader_pipeline_id;
 
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
