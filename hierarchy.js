@@ -10,6 +10,7 @@ var hierarchy =
     [ "Input", "classInput.html", null ],
     [ "Logger", "classLogger.html", null ],
     [ "WorldScene::MeshRenderData", "structWorldScene_1_1MeshRenderData.html", null ],
+    [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
     [ "std::ofstream", null, [
       [ "FileOutput", "classFileOutput.html", null ]
     ] ],

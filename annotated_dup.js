@@ -6,6 +6,7 @@ var annotated_dup =
     [ "FileOutput", "classFileOutput.html", "classFileOutput" ],
     [ "Input", "classInput.html", "classInput" ],
     [ "Logger", "classLogger.html", "classLogger" ],
+    [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", "structModelMatrix__push__constant" ],
     [ "RenderThread", "classRenderThread.html", "classRenderThread" ],
     [ "UpdateThread", "classUpdateThread.html", "classUpdateThread" ],
     [ "Window", "classWindow.html", "classWindow" ],

@@ -11,5 +11,6 @@ var classWorldScene_1_1Camera =
     [ "moveRight", "classWorldScene_1_1Camera.html#ab88c46b90986ea4c977fee8916c651f7", null ],
     [ "moveUp", "classWorldScene_1_1Camera.html#a79345bcbd88424510b9d2ff9deb7d6c1", null ],
     [ "operator=", "classWorldScene_1_1Camera.html#a125975d67492eaa19fbadeef068518fd", null ],
-    [ "operator=", "classWorldScene_1_1Camera.html#a72909fd1fbd89f38e9f37259b420b413", null ]
+    [ "operator=", "classWorldScene_1_1Camera.html#a72909fd1fbd89f38e9f37259b420b413", null ],
+    [ "setPosition", "classWorldScene_1_1Camera.html#abbcb4a82584f2e443144ec2a99f319fc", null ]
 ];
