@@ -1,7 +1,9 @@
 <map id="src/app/window/window.hpp" name="src/app/window/window.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="53,5,239,31"/>
+<area shape="rect" id="node1" title=" " alt="" coords="96,5,281,31"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,152,92,177"/>
-<area shape="rect" id="node3" href="$input_8hpp.html" title=" " alt="" coords="71,79,146,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="123,152,228,177"/>
-<area shape="rect" id="node5" title=" " alt="" coords="221,79,276,104"/>
+<area shape="rect" id="node3" href="$input_8hpp.html" title=" " alt="" coords="189,79,263,104"/>
+<area shape="rect" id="node4" title=" " alt="" coords="116,152,221,177"/>
+<area shape="rect" id="node7" title=" " alt="" coords="288,79,343,104"/>
+<area shape="rect" id="node5" title=" " alt="" coords="245,152,303,177"/>
+<area shape="rect" id="node6" title=" " alt="" coords="327,152,384,177"/>
 </map>
