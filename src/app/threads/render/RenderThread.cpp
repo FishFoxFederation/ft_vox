@@ -41,7 +41,7 @@ void RenderThread::init()
 	pipeline_create_info.vertexShaderPath = "shaders/simple_shader.vert.spv";
 	pipeline_create_info.fragmentShaderPath = "shaders/simple_shader.frag.spv";
 	pipeline_create_info.descriptorSetLayouts = {
-		m_renderAPI.getUniformBuffer(m_proj_view_ubo_id)->descriptor()->layout(),
+		m_renderAPI.getUniformBuffer(m_proj_view_ubo_id).descriptor()->layout(),
 		m_renderAPI.getTexture(m_texture_id)->descriptor()->layout()
 	};
 	pipeline_create_info.pushConstantRanges = {
@@ -68,14 +68,14 @@ void RenderThread::loop()
 	ubo.proj = m_world_scene.camera().getProjectionMatrix(width / (float) height);
 	ubo.proj[1][1] *= -1;
 
-	m_renderAPI.getUniformBuffer(m_proj_view_ubo_id)->buffer(m_renderAPI.currentFrame())->write(&ubo, sizeof(ubo));
+	m_renderAPI.getUniformBuffer(m_proj_view_ubo_id).buffer(m_renderAPI.currentFrame())->write(&ubo, sizeof(ubo));
 
 	m_renderAPI.bindPipeline(m_simple_shader_pipeline_id);
 
 	m_renderAPI.bindDescriptor(
 		m_simple_shader_pipeline_id,
 		0, 1,
-		m_renderAPI.getUniformBuffer(m_proj_view_ubo_id)->descriptor()->pSet(m_renderAPI.currentFrame())
+		m_renderAPI.getUniformBuffer(m_proj_view_ubo_id).descriptor()->pSet(m_renderAPI.currentFrame())
 	);
 
 	m_renderAPI.bindDescriptor(
