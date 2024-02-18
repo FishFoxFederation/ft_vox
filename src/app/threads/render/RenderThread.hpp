@@ -54,7 +54,7 @@ private:
 	// vk::UniformBuffer::ID m_proj_view_ubo_id;
 	uint64_t m_proj_view_ubo_id;
 	vk::Texture::ID m_texture_id;
-	vk::Pipeline::ID m_simple_shader_pipeline_id;
+	uint64_t m_simple_shader_pipeline_id;
 
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
