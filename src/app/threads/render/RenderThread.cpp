@@ -19,7 +19,7 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
-	vk::Mesh::ID mesh_id = m_renderAPI.loadModel("assets/models/cube.obj");
+	uint64_t mesh_id = m_renderAPI.loadModel("assets/models/cube.obj");
 	LOG_DEBUG("Mesh ID: " << mesh_id);
 
 
@@ -42,7 +42,7 @@ void RenderThread::init()
 	pipeline_create_info.fragmentShaderPath = "shaders/simple_shader.frag.spv";
 	pipeline_create_info.descriptorSetLayouts = {
 		m_renderAPI.getUniformBuffer(m_proj_view_ubo_id).descriptor()->layout(),
-		m_renderAPI.getTexture(m_texture_id)->descriptor()->layout()
+		m_renderAPI.getTexture(m_texture_id).descriptor()->layout()
 	};
 	pipeline_create_info.pushConstantRanges = {
 		{VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrix_push_constant)}
@@ -81,7 +81,7 @@ void RenderThread::loop()
 	m_renderAPI.bindDescriptor(
 		m_simple_shader_pipeline_id,
 		1, 1,
-		m_renderAPI.getTexture(m_texture_id)->descriptor()->pSet(m_renderAPI.currentFrame())
+		m_renderAPI.getTexture(m_texture_id).descriptor()->pSet(m_renderAPI.currentFrame())
 	);
 
 
