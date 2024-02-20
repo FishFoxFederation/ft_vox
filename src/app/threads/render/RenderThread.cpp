@@ -27,7 +27,7 @@ void RenderThread::init()
 	uniform_buffer_info.size = sizeof(ViewProj_UBO);
 	uniform_buffer_info.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-	m_proj_view_ubo_id = m_renderAPI.createUniformBuffer(uniform_buffer_info);
+	m_proj_view_ubo_id = m_renderAPI.newUniformBuffer(uniform_buffer_info);
 
 	vk::Texture::CreateInfo texture_info{};
 	texture_info.filepath = "assets/textures/grass.jpg";
@@ -37,26 +37,41 @@ void RenderThread::init()
 	m_texture_id = m_renderAPI.loadTexture(texture_info);
 
 
+	m_texture_color_target_id = m_renderAPI.newColorTarget();
+	m_normal_color_target_id = m_renderAPI.newColorTarget();
+	m_depth_target_id = m_renderAPI.newDepthTarget();
+
+
 	vk::Pipeline::CreateInfo pipeline_create_info{};
-	pipeline_create_info.vertexShaderPath = "shaders/simple_shader.vert.spv";
-	pipeline_create_info.fragmentShaderPath = "shaders/simple_shader.frag.spv";
-	pipeline_create_info.descriptorSetLayouts = {
+	pipeline_create_info.vertex_shader_path = "shaders/simple_shader.vert.spv";
+	pipeline_create_info.fragment_shader_path = "shaders/simple_shader.frag.spv";
+	pipeline_create_info.descriptor_set_layouts = {
 		m_renderAPI.getUniformBuffer(m_proj_view_ubo_id).descriptor()->layout(),
 		m_renderAPI.getTexture(m_texture_id).descriptor()->layout()
 	};
-	pipeline_create_info.pushConstantRanges = {
+	pipeline_create_info.push_constant_ranges = {
 		{VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrix_push_constant)}
 	};
+	pipeline_create_info.color_target_ids = {m_texture_color_target_id, m_normal_color_target_id};
+	pipeline_create_info.depth_target_id = m_depth_target_id;
 
-	m_simple_shader_pipeline_id = m_renderAPI.createPipeline(pipeline_create_info);
+	m_simple_shader_pipeline_id = m_renderAPI.newPipeline(pipeline_create_info);
 }
 
 void RenderThread::loop()
 {
+	static auto startTime = std::chrono::high_resolution_clock::now();
+
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	auto time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
 	std::vector<WorldScene::MeshRenderData> mesh_render_data = m_world_scene.getMeshRenderData();
 
 	m_renderAPI.startDraw();
-	m_renderAPI.startRendering();
+	m_renderAPI.startRendering(
+		{m_texture_color_target_id, m_normal_color_target_id},
+		m_depth_target_id
+	);
 
 	//############################################################################
 
@@ -102,7 +117,7 @@ void RenderThread::loop()
 	for (auto& data : mesh_render_data)
 	{
 		ModelMatrix_push_constant pushConstant{};
-		pushConstant.model = data.model;
+		pushConstant.model = data.model * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		m_renderAPI.pushConstant(
 			m_simple_shader_pipeline_id,
 			VK_SHADER_STAGE_VERTEX_BIT,
@@ -116,5 +131,6 @@ void RenderThread::loop()
 	//############################################################################
 
 	m_renderAPI.endRendering();
-	m_renderAPI.endDraw();
+	// m_renderAPI.endDraw(m_texture_color_target_id);
+	m_renderAPI.endDraw(m_normal_color_target_id);
 }
