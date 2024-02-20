@@ -19,10 +19,50 @@ class WorldScene
 
 public:
 
+	class Transform
+	{
+	public:
+		Transform(
+			const glm::vec3 & position = glm::vec3(0.0f, 0.0f, 0.0f),
+			const glm::vec3 & rotation = glm::vec3(0.0f, 0.0f, 0.0f),
+			const glm::vec3 & scale = glm::vec3(1.0f, 1.0f, 1.0f)
+		):
+			m_position(position), m_rotation(rotation), m_scale(scale)
+		{
+		}
+
+		glm::vec3 & position() { return m_position; }
+		const glm::vec3 & position() const { return m_position; }
+
+		glm::vec3 & rotation() { return m_rotation; }
+		const glm::vec3 & rotation() const { return m_rotation; }
+
+		glm::vec3 & scale() { return m_scale; }
+		const glm::vec3 & scale() const { return m_scale; }
+
+		glm::mat4 model() const
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, m_position);
+			model = glm::rotate(model, m_rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, m_rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+			model = glm::scale(model, m_scale);
+			return model;
+		}
+
+	private:
+
+		glm::vec3 m_position;
+		glm::vec3 m_rotation;
+		glm::vec3 m_scale;
+	
+	};
+
 	struct MeshRenderData
 	{
 		uint64_t id;
-		glm::mat4 model;
+		Transform transform;
 	};
 
 	class Camera
@@ -87,7 +127,14 @@ public:
 		 *
 		 * @param position
 		 */
-		void setPosition(const glm::vec3& position);
+		void setPosition(const glm::vec3 & position);
+
+		/**
+		 * @brief Set the pitch and yaw of the camera to look at a target.
+		 *
+		 * @param target
+		 */
+		void lookAt(const glm::vec3 & target);
 
 	private:
 
@@ -96,6 +143,7 @@ public:
 		float yaw{ 0.0f };
 		glm::vec3 up{ 0.0f, 1.0f, 0.0f };
 		float fov{ 45.0f };
+		float far_plane{ 300.0f };
 
 		mutable std::mutex m_mutex;
 
@@ -115,6 +163,7 @@ public:
 	WorldScene(WorldScene& scene) = delete;
 	WorldScene(WorldScene&& scene) = delete;
 	WorldScene& operator=(WorldScene& scene) = delete;
+	WorldScene& operator=(WorldScene&& scene) = delete;
 
 	/**
 	 * @brief Function to add a mesh to the scene.
@@ -122,14 +171,14 @@ public:
 	 * @param meshID The mesh ID.
 	 * @param model The model matrix of the mesh.
 	 */
-	void addMeshData(uint32_t meshID, glm::mat4 model);
+	void addMeshData(uint64_t meshID, const Transform & transform);
 
 	/**
 	 * @brief Function to remove a mesh from the scene.
 	 *
 	 * @param meshID The mesh ID to remove.
 	 */
-	void removeMesh(uint32_t meshID);
+	void removeMesh(uint64_t meshID);
 
 	/**
 	 * @brief Function to get the mesh data.
