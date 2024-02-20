@@ -11,10 +11,19 @@ Application::Application():
 {
 	LOG_INFO("Application::Application()");
 
-	m_world_scene.camera().setPosition(glm::vec3(-2.0f, 2.0f, 2.0f));
-	m_world_scene.camera().moveDirection(-150.0f, 150.0f);
+	m_world_scene.camera().setPosition(glm::vec3(20.0f, 20.0f, 20.0f));
+	m_world_scene.camera().lookAt(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	m_world_scene.addMeshData(1, glm::mat4(1.0f));
+	int size = 10;
+	for (int x = -size; x < size; x++)
+	{
+		for (int z = -size; z < size; z++)
+		{
+			// 2d circular sine wave
+			int y = 3 * sin(0.4 * sqrt(x * x + z * z));
+			m_world_scene.addMeshData(1, WorldScene::Transform(glm::vec3(x, y, z)));
+		}
+	}
 }
 
 Application::~Application()

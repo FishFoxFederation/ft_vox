@@ -52,7 +52,10 @@ void RenderThread::init()
 	pipeline_create_info.push_constant_ranges = {
 		{VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrix_push_constant)}
 	};
-	pipeline_create_info.color_target_ids = {m_texture_color_target_id, m_normal_color_target_id};
+	pipeline_create_info.color_target_ids = {
+		m_texture_color_target_id,
+		m_normal_color_target_id
+	};
 	pipeline_create_info.depth_target_id = m_depth_target_id;
 
 	m_simple_shader_pipeline_id = m_renderAPI.newPipeline(pipeline_create_info);
@@ -64,6 +67,7 @@ void RenderThread::loop()
 
 	auto currentTime = std::chrono::high_resolution_clock::now();
 	auto time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	(void)time;
 
 	std::vector<WorldScene::MeshRenderData> mesh_render_data = m_world_scene.getMeshRenderData();
 
@@ -114,10 +118,12 @@ void RenderThread::loop()
 	scissor.extent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
 	m_renderAPI.setScissor(scissor);
 
-	for (auto& data : mesh_render_data)
+	for (auto& mesh_data : mesh_render_data)
 	{
 		ModelMatrix_push_constant pushConstant{};
-		pushConstant.model = data.model * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		pushConstant.model = mesh_data.transform.model()
+			* glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+			* glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		m_renderAPI.pushConstant(
 			m_simple_shader_pipeline_id,
 			VK_SHADER_STAGE_VERTEX_BIT,
@@ -125,7 +131,7 @@ void RenderThread::loop()
 			&pushConstant
 		);
 
-		m_renderAPI.drawMesh(data.id);
+		m_renderAPI.drawMesh(mesh_data.id);
 	}
 
 	//############################################################################
