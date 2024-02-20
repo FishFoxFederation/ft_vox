@@ -51,9 +51,11 @@ private:
 
 	const WorldScene & m_world_scene;
 
-	// vk::UniformBuffer::ID m_proj_view_ubo_id;
 	uint64_t m_proj_view_ubo_id;
-	vk::Texture::ID m_texture_id;
+	uint64_t m_texture_id;
+	uint64_t m_texture_color_target_id;
+	uint64_t m_normal_color_target_id;
+	uint64_t m_depth_target_id;
 	uint64_t m_simple_shader_pipeline_id;
 
 	/**

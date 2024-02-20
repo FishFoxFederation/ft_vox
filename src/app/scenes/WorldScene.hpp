@@ -21,7 +21,7 @@ public:
 
 	struct MeshRenderData
 	{
-		vk::Mesh::ID id;
+		uint64_t id;
 		glm::mat4 model;
 	};
 
