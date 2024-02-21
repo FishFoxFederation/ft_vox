@@ -4,6 +4,7 @@
 #include "window.hpp"
 #include "RenderThread.hpp"
 #include "WorldScene.hpp"
+#include "UpdateThread.hpp"
 
 #include <cppVulkanAPI.hpp>
 
@@ -23,4 +24,5 @@ private:
 	Window m_window;
 	vk::RenderAPI m_renderAPI;
 	RenderThread m_render_thread;
+	UpdateThread m_update_thread;
 };
