@@ -30,6 +30,7 @@ target_sources(${PROJECT_NAME}
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp
+		src/app/threads/update/UpdateThread.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 )
