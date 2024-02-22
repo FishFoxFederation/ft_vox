@@ -9,6 +9,7 @@ var classWorldScene_1_1Camera =
     [ "lookAt", "classWorldScene_1_1Camera.html#aea31563228100aab4ab8da71df2fb511", null ],
     [ "moveDirection", "classWorldScene_1_1Camera.html#a5afa21c618a7a6445a5794a710095a05", null ],
     [ "moveForward", "classWorldScene_1_1Camera.html#a746bdef18c9dc1e683337350a3f902b2", null ],
+    [ "movePosition", "classWorldScene_1_1Camera.html#ae98c060b2fbbbb2c8f106878d6c8f7a0", null ],
     [ "moveRight", "classWorldScene_1_1Camera.html#ab88c46b90986ea4c977fee8916c651f7", null ],
     [ "moveUp", "classWorldScene_1_1Camera.html#a79345bcbd88424510b9d2ff9deb7d6c1", null ],
     [ "operator=", "classWorldScene_1_1Camera.html#a125975d67492eaa19fbadeef068518fd", null ],

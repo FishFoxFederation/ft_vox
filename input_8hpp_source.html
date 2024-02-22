@@ -132,18 +132,21 @@ $(document).ready(function(){initNavTree('input_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classInput.html#af27940a5ccc50e41923999fc859033cb">getCursorPos</a>(<span class="keywordtype">double</span>&amp; xpos, <span class="keywordtype">double</span>&amp; ypos);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda">   51</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda">isCursorCaptured</a>() { <span class="keywordflow">return</span> m_cursor_captured; }</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    std::queue&lt;int&gt; m_key_state[GLFW_KEY_LAST];</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    std::mutex m_key_state_mutex;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::queue&lt;int&gt; m_mouse_button_state[GLFW_MOUSE_BUTTON_LAST];</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    std::mutex m_mouse_button_state_mutex;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">double</span> m_cursor_x;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">double</span> m_cursor_y;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    std::mutex m_cursor_pos_mutex;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    std::queue&lt;int&gt; m_key_state[GLFW_KEY_LAST];</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::mutex m_key_state_mutex;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    std::queue&lt;int&gt; m_mouse_button_state[GLFW_MOUSE_BUTTON_LAST];</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::mutex m_mouse_button_state_mutex;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">double</span> m_cursor_x;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">double</span> m_cursor_y;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    std::mutex m_cursor_pos_mutex;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">bool</span> m_cursor_captured = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    GLFWwindow* m_window;</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> keyCallback(GLFWwindow* window, <span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
@@ -154,10 +157,11 @@ $(document).ready(function(){initNavTree('input_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>};</div>
 <div class="ttc" id="aclassInput_html"><div class="ttname"><a href="classInput.html">Input</a></div><div class="ttdef"><b>Definition:</b> input.hpp:11</div></div>
-<div class="ttc" id="aclassInput_html_abf93d666dffe5ebb03ab37e036c2f687"><div class="ttname"><a href="classInput.html#abf93d666dffe5ebb03ab37e036c2f687">Input::getKeyState</a></div><div class="ttdeci">int getKeyState(int key)</div><div class="ttdoc">Get the key state.</div><div class="ttdef"><b>Definition:</b> input.cpp:20</div></div>
-<div class="ttc" id="aclassInput_html_ae381b13fabd937f971f55f91ad248c58"><div class="ttname"><a href="classInput.html#ae381b13fabd937f971f55f91ad248c58">Input::getMouseButtonState</a></div><div class="ttdeci">int getMouseButtonState(int button)</div><div class="ttdoc">Get the mouse button state.</div><div class="ttdef"><b>Definition:</b> input.cpp:39</div></div>
-<div class="ttc" id="aclassInput_html_af27940a5ccc50e41923999fc859033cb"><div class="ttname"><a href="classInput.html#af27940a5ccc50e41923999fc859033cb">Input::getCursorPos</a></div><div class="ttdeci">void getCursorPos(double &amp;xpos, double &amp;ypos)</div><div class="ttdoc">Get the cursor position.</div><div class="ttdef"><b>Definition:</b> input.cpp:58</div></div>
-<div class="ttc" id="aclassInput_html_af2db35ba67c8a8ccd23bef6a482fc291"><div class="ttname"><a href="classInput.html#af2db35ba67c8a8ccd23bef6a482fc291">Input::~Input</a></div><div class="ttdeci">~Input()</div><div class="ttdoc">Destroy the Input object.</div><div class="ttdef"><b>Definition:</b> input.cpp:15</div></div>
+<div class="ttc" id="aclassInput_html_abc3e0e7f94a824fbdc65957d51fe6eda"><div class="ttname"><a href="classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda">Input::isCursorCaptured</a></div><div class="ttdeci">bool isCursorCaptured()</div><div class="ttdef"><b>Definition:</b> input.hpp:51</div></div>
+<div class="ttc" id="aclassInput_html_abf93d666dffe5ebb03ab37e036c2f687"><div class="ttname"><a href="classInput.html#abf93d666dffe5ebb03ab37e036c2f687">Input::getKeyState</a></div><div class="ttdeci">int getKeyState(int key)</div><div class="ttdoc">Get the key state.</div><div class="ttdef"><b>Definition:</b> input.cpp:22</div></div>
+<div class="ttc" id="aclassInput_html_ae381b13fabd937f971f55f91ad248c58"><div class="ttname"><a href="classInput.html#ae381b13fabd937f971f55f91ad248c58">Input::getMouseButtonState</a></div><div class="ttdeci">int getMouseButtonState(int button)</div><div class="ttdoc">Get the mouse button state.</div><div class="ttdef"><b>Definition:</b> input.cpp:41</div></div>
+<div class="ttc" id="aclassInput_html_af27940a5ccc50e41923999fc859033cb"><div class="ttname"><a href="classInput.html#af27940a5ccc50e41923999fc859033cb">Input::getCursorPos</a></div><div class="ttdeci">void getCursorPos(double &amp;xpos, double &amp;ypos)</div><div class="ttdoc">Get the cursor position.</div><div class="ttdef"><b>Definition:</b> input.cpp:60</div></div>
+<div class="ttc" id="aclassInput_html_af2db35ba67c8a8ccd23bef6a482fc291"><div class="ttname"><a href="classInput.html#af2db35ba67c8a8ccd23bef6a482fc291">Input::~Input</a></div><div class="ttdeci">~Input()</div><div class="ttdoc">Destroy the Input object.</div><div class="ttdef"><b>Definition:</b> input.cpp:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

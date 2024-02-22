@@ -4,5 +4,6 @@ var classInput =
     [ "~Input", "classInput.html#af2db35ba67c8a8ccd23bef6a482fc291", null ],
     [ "getCursorPos", "classInput.html#af27940a5ccc50e41923999fc859033cb", null ],
     [ "getKeyState", "classInput.html#abf93d666dffe5ebb03ab37e036c2f687", null ],
-    [ "getMouseButtonState", "classInput.html#ae381b13fabd937f971f55f91ad248c58", null ]
+    [ "getMouseButtonState", "classInput.html#ae381b13fabd937f971f55f91ad248c58", null ],
+    [ "isCursorCaptured", "classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda", null ]
 ];

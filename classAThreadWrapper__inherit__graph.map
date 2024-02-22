@@ -2,5 +2,5 @@
 <area shape="rect" id="node1" title="A RAII compliant wrapper for std::jthread." alt="" coords="185,5,330,133"/>
 <area shape="rect" id="node2" href="$classBlockUpdateThread.html" title="An implementation of the thread wrapper for the thread that handles block updates." alt="" coords="5,189,168,302"/>
 <area shape="rect" id="node3" href="$classRenderThread.html" title="A wrapper for the thread that handles rendering." alt="" coords="193,181,322,309"/>
-<area shape="rect" id="node4" href="$classUpdateThread.html" title=" " alt="" coords="347,189,477,302"/>
+<area shape="rect" id="node4" href="$classUpdateThread.html" title=" " alt="" coords="347,181,477,309"/>
 </map>

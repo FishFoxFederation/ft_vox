@@ -118,7 +118,7 @@ Collaboration diagram for WorldScene::Camera:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldScene_1_1Camera__coll__graph.png" border="0" usemap="#aWorldScene_1_1Camera_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_1_1Camera_coll__map" id="aWorldScene_1_1Camera_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,157,251"/>
+<area shape="rect" title=" " alt="" coords="5,5,157,265"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -151,6 +151,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a79345bcbd88424510b9d2ff9deb7d6c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Camera.html#a79345bcbd88424510b9d2ff9deb7d6c1">moveUp</a> (float distance)</td></tr>
 <tr class="memdesc:a79345bcbd88424510b9d2ff9deb7d6c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the camera up/down on the y axis.  <a href="classWorldScene_1_1Camera.html#a79345bcbd88424510b9d2ff9deb7d6c1">More...</a><br /></td></tr>
 <tr class="separator:a79345bcbd88424510b9d2ff9deb7d6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae98c060b2fbbbb2c8f106878d6c8f7a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Camera.html#ae98c060b2fbbbb2c8f106878d6c8f7a0">movePosition</a> (const glm::vec3 &amp;move)</td></tr>
+<tr class="memdesc:ae98c060b2fbbbb2c8f106878d6c8f7a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the camera with a vector. x = right, y = up, z = forward.  <a href="classWorldScene_1_1Camera.html#ae98c060b2fbbbb2c8f106878d6c8f7a0">More...</a><br /></td></tr>
+<tr class="separator:ae98c060b2fbbbb2c8f106878d6c8f7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5afa21c618a7a6445a5794a710095a05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Camera.html#a5afa21c618a7a6445a5794a710095a05">moveDirection</a> (float x_offset, float y_offset)</td></tr>
 <tr class="memdesc:a5afa21c618a7a6445a5794a710095a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the camera rotation from the cursor movement.  <a href="classWorldScene_1_1Camera.html#a5afa21c618a7a6445a5794a710095a05">More...</a><br /></td></tr>
 <tr class="separator:a5afa21c618a7a6445a5794a710095a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -395,6 +398,32 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">distance</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae98c060b2fbbbb2c8f106878d6c8f7a0" name="ae98c060b2fbbbb2c8f106878d6c8f7a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae98c060b2fbbbb2c8f106878d6c8f7a0">&#9670;&#160;</a></span>movePosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WorldScene::Camera::movePosition </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>move</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Move the camera with a vector. x = right, y = up, z = forward. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">move</td><td></td></tr>
   </table>
   </dd>
 </dl>
