@@ -74,13 +74,11 @@ void WorldScene::Camera::movePosition(const glm::vec3 & move)
 
 void WorldScene::Camera::moveDirection(float x_offset, float y_offset)
 {
-	float sensitivity = 0.2f;
-
 	std::lock_guard<std::mutex> lock(m_mutex);
 
 	// update the pitch and yaw
-	pitch += -y_offset * sensitivity;
-	yaw += x_offset * sensitivity;
+	pitch += -y_offset;
+	yaw += x_offset;
 }
 
 void WorldScene::Camera::setPosition(const glm::vec3& position)

@@ -42,10 +42,10 @@ public:
 	*/
 	~RenderThread();
 
-	RenderThread(RenderThread& renderer) = delete;
-	RenderThread(RenderThread&& renderer) = delete;
-	RenderThread & operator=(RenderThread& renderer) = delete;
-	RenderThread & operator=(RenderThread&& renderer) = delete;
+	RenderThread(RenderThread & renderer) = delete;
+	RenderThread(RenderThread && renderer) = delete;
+	RenderThread & operator=(RenderThread & renderer) = delete;
+	RenderThread & operator=(RenderThread && renderer) = delete;
 
 private:
 
