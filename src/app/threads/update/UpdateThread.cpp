@@ -18,12 +18,10 @@ UpdateThread::UpdateThread(
 
 UpdateThread::~UpdateThread()
 {
-	LOG_INFO("UpdateThread::~UpdateThread()");
 }
 
 void UpdateThread::init()
 {
-	LOG_INFO("UpdateThread::init()");
 }
 
 void UpdateThread::loop()

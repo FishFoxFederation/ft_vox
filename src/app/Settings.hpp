@@ -2,7 +2,7 @@
 
 #include "define.hpp"
 
-#include <mutex>
+#include <shared_mutex>
 
 /**
  * @brief Class to hold the settings of the application.
@@ -27,7 +27,7 @@ public:
 
 private:
 
-	mutable std::mutex m_mutex;
+	mutable std::shared_mutex m_mutex;
 
 	double m_mouse_sensitivity{0.2};
 
