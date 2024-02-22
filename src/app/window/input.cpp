@@ -80,12 +80,21 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		case GLFW_KEY_ESCAPE:
 		{
 			if (action == GLFW_PRESS)
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
+			{
+				if (input->m_cursor_captured)
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+					input->m_cursor_captured = false;
+				}
+				else
+				{
+					glfwSetWindowShouldClose(window, GLFW_TRUE);
+				}
+			}
 			break;
 		}
 		default:
 		{
-			std::cout << "Key: " << key << std::endl;
 			break;
 		}
 	}
@@ -99,6 +108,12 @@ void Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 
 	std::lock_guard<std::mutex> lock(input->m_mouse_button_state_mutex);
 	input->m_mouse_button_state[button].push(action);
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !input->m_cursor_captured)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		input->m_cursor_captured = true;
+	}
 }
 
 void Input::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)

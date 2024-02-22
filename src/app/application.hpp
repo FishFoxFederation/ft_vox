@@ -8,6 +8,8 @@
 
 #include <cppVulkanAPI.hpp>
 
+#include <chrono>
+
 class Application
 {
 
@@ -19,6 +21,8 @@ public:
 	void run();
 
 private:
+
+	std::chrono::nanoseconds m_start_time;
 
 	WorldScene m_world_scene;
 	Window m_window;

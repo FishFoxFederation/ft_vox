@@ -64,6 +64,14 @@ void WorldScene::Camera::moveUp(float distance)
 	position += distance * up;
 }
 
+void WorldScene::Camera::movePosition(const glm::vec3 & move)
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	position += move.z * glm::normalize(glm::vec3(direction().x, 0.0f, direction().z));
+	position += move.x * glm::normalize(glm::cross(direction(), up));
+	position += move.y * up;
+}
+
 void WorldScene::Camera::moveDirection(float x_offset, float y_offset)
 {
 	float sensitivity = 0.2f;

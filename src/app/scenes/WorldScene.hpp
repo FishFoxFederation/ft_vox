@@ -115,6 +115,13 @@ public:
 		void moveUp(float distance);
 
 		/**
+		 * @brief Move the camera with a vector. x = right, y = up, z = forward.
+		 *
+		 * @param move
+		 */
+		void movePosition(const glm::vec3 & move);
+
+		/**
 		 * @brief Move the camera rotation from the cursor movement.
 		 *
 		 * @param x_offset x movement of the cursor.
