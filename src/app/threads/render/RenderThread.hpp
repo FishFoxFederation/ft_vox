@@ -3,6 +3,7 @@
 #include "define.hpp"
 #include "AThreadWrapper.hpp"
 #include "WorldScene.hpp"
+#include "Settings.hpp"
 
 #include <cppVulkanAPI.hpp>
 
@@ -31,6 +32,7 @@ public:
 	 * @brief Construct a new RenderThread object
 	*/
 	RenderThread(
+		const Settings & settings,
 		vk::RenderAPI & renderAPI,
 		const WorldScene & worldScene
 	);
@@ -47,8 +49,8 @@ public:
 
 private:
 
+	const Settings & m_settings;
 	vk::RenderAPI & m_renderAPI;
-
 	const WorldScene & m_world_scene;
 
 	uint64_t m_proj_view_ubo_id;

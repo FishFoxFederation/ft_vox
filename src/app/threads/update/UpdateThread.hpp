@@ -4,6 +4,7 @@
 #include "AThreadWrapper.hpp"
 #include "window.hpp"
 #include "WorldScene.hpp"
+#include "Settings.hpp"
 
 #include <chrono>
 
@@ -12,6 +13,7 @@ class UpdateThread : public AThreadWrapper
 public:
 
 	UpdateThread(
+		const Settings & settings,
 		Window & window,
 		WorldScene & world_scene,
 		std::chrono::nanoseconds start_time
@@ -25,6 +27,7 @@ public:
 
 private:
 
+	const Settings & m_settings;
 	Window & m_window;
 	WorldScene & m_world_scene;
 
