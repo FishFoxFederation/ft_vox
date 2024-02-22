@@ -21,7 +21,11 @@ public:
 	Settings & operator=(Settings & other) = delete;
 	Settings & operator=(Settings && other) = delete;
 
+	double & mouseSensitivity() { return m_mouse_sensitivity; }
+	const double & mouseSensitivity() const { return m_mouse_sensitivity; }
+
 private:
 
+	double m_mouse_sensitivity{0.2};
 
 };

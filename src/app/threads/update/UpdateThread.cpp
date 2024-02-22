@@ -31,6 +31,7 @@ void UpdateThread::loop()
 	updateTime();
 	readInput();
 	moveCamera();
+	rotateCamera();
 }
 
 void UpdateThread::updateTime()
@@ -84,7 +85,10 @@ void UpdateThread::moveCamera()
 		move = glm::normalize(move) * m_camera_speed * static_cast<float>(m_delta_time.count()) / 1e8f;
 		m_world_scene.camera().movePosition(move);
 	}
+}
 
+void UpdateThread::rotateCamera()
+{
 	double x_offset = m_mouse_x - m_last_mouse_x;
 	double y_offset = m_last_mouse_y - m_mouse_y;
 	m_last_mouse_x = m_mouse_x;
@@ -92,7 +96,10 @@ void UpdateThread::moveCamera()
 
 	if (m_window.input().isCursorCaptured() && (x_offset != 0.0 || y_offset != 0.0))
 	{
-
-		m_world_scene.camera().moveDirection(x_offset, -y_offset);
+		double sensitivity = m_settings.mouseSensitivity();
+		m_world_scene.camera().moveDirection(
+			x_offset * sensitivity,
+			-y_offset * sensitivity
+		);
 	}
 }
