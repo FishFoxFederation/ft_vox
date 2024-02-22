@@ -122,7 +122,7 @@ Collaboration diagram for WorldScene:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldScene__coll__graph.png" border="0" usemap="#aWorldScene_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_coll__map" id="aWorldScene_coll__map">
-<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="5,5,164,192"/>
+<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="5,5,164,207"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -131,6 +131,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Camera.html">Camera</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1MeshRenderData.html">MeshRenderData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Transform.html">Transform</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -147,12 +149,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5066dc9503636b3dce03f2e1a0342c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac514b789cf4d4195c3b0f0852a1a2b7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorldScene.html">WorldScene</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#ac514b789cf4d4195c3b0f0852a1a2b7b">operator=</a> (<a class="el" href="classWorldScene.html">WorldScene</a> &amp;scene)=delete</td></tr>
 <tr class="separator:ac514b789cf4d4195c3b0f0852a1a2b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a668d3938bcbaf856890049e012d73258"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a668d3938bcbaf856890049e012d73258">addMeshData</a> (uint32_t meshID, glm::mat4 model)</td></tr>
-<tr class="memdesc:a668d3938bcbaf856890049e012d73258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to add a mesh to the scene.  <a href="classWorldScene.html#a668d3938bcbaf856890049e012d73258">More...</a><br /></td></tr>
-<tr class="separator:a668d3938bcbaf856890049e012d73258"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60edbfcc6e992f81f3cfd0da7db387bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a60edbfcc6e992f81f3cfd0da7db387bb">removeMesh</a> (uint32_t meshID)</td></tr>
-<tr class="memdesc:a60edbfcc6e992f81f3cfd0da7db387bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to remove a mesh from the scene.  <a href="classWorldScene.html#a60edbfcc6e992f81f3cfd0da7db387bb">More...</a><br /></td></tr>
-<tr class="separator:a60edbfcc6e992f81f3cfd0da7db387bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ef2cb8d38726a515ec3042619b0ab5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorldScene.html">WorldScene</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#ab1ef2cb8d38726a515ec3042619b0ab5">operator=</a> (<a class="el" href="classWorldScene.html">WorldScene</a> &amp;&amp;scene)=delete</td></tr>
+<tr class="separator:ab1ef2cb8d38726a515ec3042619b0ab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb2f5adfccf441133d0109895adb44a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#abb2f5adfccf441133d0109895adb44a0">addMeshData</a> (uint64_t meshID, const <a class="el" href="classWorldScene_1_1Transform.html">Transform</a> &amp;transform)</td></tr>
+<tr class="memdesc:abb2f5adfccf441133d0109895adb44a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to add a mesh to the scene.  <a href="classWorldScene.html#abb2f5adfccf441133d0109895adb44a0">More...</a><br /></td></tr>
+<tr class="separator:abb2f5adfccf441133d0109895adb44a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bcfa949f6e093c9794ace6f199742c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a8bcfa949f6e093c9794ace6f199742c0">removeMesh</a> (uint64_t meshID)</td></tr>
+<tr class="memdesc:a8bcfa949f6e093c9794ace6f199742c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to remove a mesh from the scene.  <a href="classWorldScene.html#a8bcfa949f6e093c9794ace6f199742c0">More...</a><br /></td></tr>
+<tr class="separator:a8bcfa949f6e093c9794ace6f199742c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31291b76be40ac58d2a7fbebdf7963e8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structWorldScene_1_1MeshRenderData.html">MeshRenderData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a31291b76be40ac58d2a7fbebdf7963e8">getMeshRenderData</a> () const</td></tr>
 <tr class="memdesc:a31291b76be40ac58d2a7fbebdf7963e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get the mesh data.  <a href="classWorldScene.html#a31291b76be40ac58d2a7fbebdf7963e8">More...</a><br /></td></tr>
 <tr class="separator:a31291b76be40ac58d2a7fbebdf7963e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,8 +262,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a668d3938bcbaf856890049e012d73258" name="a668d3938bcbaf856890049e012d73258"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a668d3938bcbaf856890049e012d73258">&#9670;&#160;</a></span>addMeshData()</h2>
+<a id="abb2f5adfccf441133d0109895adb44a0" name="abb2f5adfccf441133d0109895adb44a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb2f5adfccf441133d0109895adb44a0">&#9670;&#160;</a></span>addMeshData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,14 +271,14 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void WorldScene::addMeshData </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>meshID</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">glm::mat4&#160;</td>
-          <td class="paramname"><em>model</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classWorldScene_1_1Transform.html">Transform</a> &amp;&#160;</td>
+          <td class="paramname"><em>transform</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -371,8 +375,34 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ab1ef2cb8d38726a515ec3042619b0ab5" name="ab1ef2cb8d38726a515ec3042619b0ab5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1ef2cb8d38726a515ec3042619b0ab5">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classWorldScene.html">WorldScene</a> &amp; WorldScene::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classWorldScene.html">WorldScene</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>scene</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac514b789cf4d4195c3b0f0852a1a2b7b" name="ac514b789cf4d4195c3b0f0852a1a2b7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac514b789cf4d4195c3b0f0852a1a2b7b">&#9670;&#160;</a></span>operator=()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac514b789cf4d4195c3b0f0852a1a2b7b">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -397,8 +427,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a60edbfcc6e992f81f3cfd0da7db387bb" name="a60edbfcc6e992f81f3cfd0da7db387bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60edbfcc6e992f81f3cfd0da7db387bb">&#9670;&#160;</a></span>removeMesh()</h2>
+<a id="a8bcfa949f6e093c9794ace6f199742c0" name="a8bcfa949f6e093c9794ace6f199742c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bcfa949f6e093c9794ace6f199742c0">&#9670;&#160;</a></span>removeMesh()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -406,7 +436,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void WorldScene::removeMesh </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>meshID</em></td><td>)</td>
           <td></td>
         </tr>

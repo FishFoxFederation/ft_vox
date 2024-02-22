@@ -118,7 +118,7 @@ Collaboration diagram for WorldScene::Camera:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldScene_1_1Camera__coll__graph.png" border="0" usemap="#aWorldScene_1_1Camera_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_1_1Camera_coll__map" id="aWorldScene_1_1Camera_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,157,236"/>
+<area shape="rect" title=" " alt="" coords="5,5,157,251"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -157,6 +157,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abbcb4a82584f2e443144ec2a99f319fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Camera.html#abbcb4a82584f2e443144ec2a99f319fc">setPosition</a> (const glm::vec3 &amp;position)</td></tr>
 <tr class="memdesc:abbcb4a82584f2e443144ec2a99f319fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the position of the camera.  <a href="classWorldScene_1_1Camera.html#abbcb4a82584f2e443144ec2a99f319fc">More...</a><br /></td></tr>
 <tr class="separator:abbcb4a82584f2e443144ec2a99f319fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea31563228100aab4ab8da71df2fb511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1Camera.html#aea31563228100aab4ab8da71df2fb511">lookAt</a> (const glm::vec3 &amp;target)</td></tr>
+<tr class="memdesc:aea31563228100aab4ab8da71df2fb511"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pitch and yaw of the camera to look at a target.  <a href="classWorldScene_1_1Camera.html#aea31563228100aab4ab8da71df2fb511">More...</a><br /></td></tr>
+<tr class="separator:aea31563228100aab4ab8da71df2fb511"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a78fab9922b38df0f9e06407d947022ec" name="a78fab9922b38df0f9e06407d947022ec"></a>
@@ -306,6 +309,32 @@ Public Member Functions</h2></td></tr>
 
 <p>Get the view matrix of the camera. </p>
 <dl class="section return"><dt>Returns</dt><dd>The view matrix. </dd></dl>
+
+</div>
+</div>
+<a id="aea31563228100aab4ab8da71df2fb511" name="aea31563228100aab4ab8da71df2fb511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea31563228100aab4ab8da71df2fb511">&#9670;&#160;</a></span>lookAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WorldScene::Camera::lookAt </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the pitch and yaw of the camera to look at a target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
