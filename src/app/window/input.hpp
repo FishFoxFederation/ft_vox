@@ -48,6 +48,8 @@ public:
 	 */
 	void getCursorPos(double& xpos, double& ypos);
 
+	bool isCursorCaptured() { return m_cursor_captured; }
+
 private:
 
 	std::queue<int> m_key_state[GLFW_KEY_LAST];
@@ -59,10 +61,8 @@ private:
 	double m_cursor_x;
 	double m_cursor_y;
 	std::mutex m_cursor_pos_mutex;
+	bool m_cursor_captured = false;
 
-	/**
-	 * @brief The GLFWwindow object
-	*/
 	GLFWwindow* m_window;
 
 	/**

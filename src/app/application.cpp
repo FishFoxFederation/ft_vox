@@ -4,11 +4,12 @@
 #include <iostream>
 
 Application::Application():
+	m_start_time(std::chrono::steady_clock::now().time_since_epoch()),
 	m_world_scene(),
 	m_window("Vox", 800, 600),
 	m_renderAPI(m_window.getGLFWwindow()),
 	m_render_thread(m_renderAPI, m_world_scene),
-	m_update_thread(m_window, m_world_scene)
+	m_update_thread(m_window, m_world_scene, m_start_time)
 {
 	LOG_INFO("Application::Application()");
 

@@ -38,6 +38,13 @@ public:
 	*/
 	bool shouldClose();
 
+	/**
+	 * @brief Get the Input object for the window
+	 * 
+	 * @return Input The Input object for the window
+	*/
+	Input & input() { return m_input; }
+
 private:
 
 	/**
