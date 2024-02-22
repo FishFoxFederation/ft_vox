@@ -2,11 +2,13 @@
 #include "logger.hpp"
 
 UpdateThread::UpdateThread(
+	const Settings & settings,
 	Window & window,
 	WorldScene & world_scene,
 	std::chrono::nanoseconds start_time
 ):
 	AThreadWrapper(),
+	m_settings(settings),
 	m_window(window),
 	m_world_scene(world_scene),
 	m_start_time(start_time),

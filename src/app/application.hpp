@@ -2,6 +2,7 @@
 
 #include "define.hpp"
 #include "window.hpp"
+#include "Settings.hpp"
 #include "RenderThread.hpp"
 #include "WorldScene.hpp"
 #include "UpdateThread.hpp"
@@ -24,6 +25,7 @@ private:
 
 	std::chrono::nanoseconds m_start_time;
 
+	Settings m_settings;
 	WorldScene m_world_scene;
 	Window m_window;
 	vk::RenderAPI m_renderAPI;

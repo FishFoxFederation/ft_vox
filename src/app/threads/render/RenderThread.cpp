@@ -4,10 +4,12 @@
 #include <iostream>
 
 RenderThread::RenderThread(
+	const Settings & settings,
 	vk::RenderAPI & renderAPI,
 	const WorldScene & worldScene
 ):
 	AThreadWrapper(),
+	m_settings(settings),
 	m_renderAPI(renderAPI),
 	m_world_scene(worldScene)
 {
