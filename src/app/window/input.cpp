@@ -10,6 +10,8 @@ Input::Input(GLFWwindow* glfwWindow):
 	glfwSetKeyCallback(m_window, keyCallback);
 	glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 	glfwSetCursorPosCallback(m_window, cursorPosCallback);
+
+	glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 }
 
 Input::~Input()

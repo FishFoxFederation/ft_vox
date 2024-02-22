@@ -41,7 +41,7 @@ private:
 	int m_left_shift_key;
 
 	float m_camera_speed = 1.0f;
-	float m_camera_sensitivity = 0.1f;
+	float m_camera_sensitivity = 0.05f;
 	double m_mouse_x;
 	double m_mouse_y;
 	double m_last_mouse_x;
