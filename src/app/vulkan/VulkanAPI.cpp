@@ -22,6 +22,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createPipeline();
 
 	createDrawImage();
+	createMesh();
 
 	LOG_INFO("VulkanAPI initialized");
 }
@@ -29,6 +30,9 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 VulkanAPI::~VulkanAPI()
 {
 	vkDeviceWaitIdle(device);
+
+	vkDestroyBuffer(device, mesh.buffer, nullptr);
+	vkFreeMemory(device, mesh.buffer_memory, nullptr);
 
 	vkDestroyImage(device, draw_image, nullptr);
 	vkUnmapMemory(device, draw_image_memory);
@@ -698,12 +702,15 @@ void VulkanAPI::createPipeline()
 	VkPipelineShaderStageCreateInfo shader_stages[] = {vert_shader_stage_info, frag_shader_stage_info};
 
 
+	VkVertexInputBindingDescription binding_description = Vertex::getBindingDescription();
+	std::array<VkVertexInputAttributeDescription, 3> attribute_descriptions = Vertex::getAttributeDescriptions();
+
 	VkPipelineVertexInputStateCreateInfo vertex_input_info = {};
 	vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	vertex_input_info.vertexBindingDescriptionCount = 0;
-	vertex_input_info.pVertexBindingDescriptions = nullptr;
-	vertex_input_info.vertexAttributeDescriptionCount = 0;
-	vertex_input_info.pVertexAttributeDescriptions = nullptr;
+	vertex_input_info.vertexBindingDescriptionCount = 1;
+	vertex_input_info.pVertexBindingDescriptions = &binding_description;
+	vertex_input_info.vertexAttributeDescriptionCount = static_cast<uint32_t>(attribute_descriptions.size());
+	vertex_input_info.pVertexAttributeDescriptions = attribute_descriptions.data();
 
 
 	VkPipelineInputAssemblyStateCreateInfo input_assembly = {};
@@ -880,6 +887,47 @@ void VulkanAPI::createDrawImage()
 	vkMapMemory(device, draw_image_memory, 0, VK_WHOLE_SIZE, 0, &draw_image_mapped_memory);
 }
 
+void VulkanAPI::createMesh()
+{
+	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
+	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
+	VkDeviceSize buffer_size = vertex_size + index_size;
+
+	VkBuffer staging_buffer;
+	VkDeviceMemory staging_buffer_memory;
+	createBuffer(
+		buffer_size,
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		staging_buffer,
+		staging_buffer_memory
+	);
+
+	void * data;
+	vkMapMemory(device, staging_buffer_memory, 0, buffer_size, 0, &data);
+	std::memcpy(data, vertices.data(), static_cast<size_t>(vertex_size));
+	std::memcpy(static_cast<char *>(data) + vertex_size, indices.data(), static_cast<size_t>(index_size));
+	vkUnmapMemory(device, staging_buffer_memory);
+
+	createBuffer(
+		buffer_size,
+		VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+		mesh.buffer,
+		mesh.buffer_memory
+	);
+
+	copyBuffer(staging_buffer, mesh.buffer, buffer_size);
+
+	vkDestroyBuffer(device, staging_buffer, nullptr);
+	vkFreeMemory(device, staging_buffer_memory, nullptr);
+
+	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
+	mesh.index_offset = vertex_size;
+	mesh.index_count = static_cast<uint32_t>(indices.size());
+}
+
+
 void VulkanAPI::clearPixels()
 {
 	std::memset(draw_image_mapped_memory, 0, draw_image_extent.width * draw_image_extent.height * 4);
@@ -1053,6 +1101,96 @@ void VulkanAPI::transitionImageLayout(
 		1,
 		&barrier
 	);
+
+	VK_CHECK(
+		vkEndCommandBuffer(command_buffer),
+		"Failed to end recording command buffer"
+	);
+
+	VkSubmitInfo submit_info = {};
+	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submit_info.commandBufferCount = 1;
+	submit_info.pCommandBuffers = &command_buffer;
+
+	VK_CHECK(
+		vkQueueSubmit(graphics_queue, 1, &submit_info, VK_NULL_HANDLE),
+		"Failed to submit queue"
+	);
+
+	VK_CHECK(
+		vkQueueWaitIdle(graphics_queue),
+		"Failed to wait for queue"
+	);
+
+	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
+}
+
+void VulkanAPI::createBuffer(
+	VkDeviceSize size,
+	VkBufferUsageFlags usage,
+	VkMemoryPropertyFlags properties,
+	VkBuffer & buffer,
+	VkDeviceMemory & buffer_memory
+)
+{
+	VkBufferCreateInfo buffer_info = {};
+	buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	buffer_info.size = size;
+	buffer_info.usage = usage;
+	buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+	VK_CHECK(
+		vkCreateBuffer(device, &buffer_info, nullptr, &buffer),
+		"Failed to create buffer"
+	);
+
+	VkMemoryRequirements mem_requirements;
+	vkGetBufferMemoryRequirements(device, buffer, &mem_requirements);
+
+	VkMemoryAllocateInfo alloc_info = {};
+	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	alloc_info.allocationSize = mem_requirements.size;
+	alloc_info.memoryTypeIndex = findMemoryType(mem_requirements.memoryTypeBits, properties);
+
+	VK_CHECK(
+		vkAllocateMemory(device, &alloc_info, nullptr, &buffer_memory),
+		"Failed to allocate buffer memory"
+	);
+
+	vkBindBufferMemory(device, buffer, buffer_memory, 0);
+}
+
+void VulkanAPI::copyBuffer(
+	VkBuffer src_buffer,
+	VkBuffer dst_buffer,
+	VkDeviceSize size
+)
+{
+	VkCommandBufferAllocateInfo alloc_info = {};
+	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	alloc_info.commandPool = command_pool;
+	alloc_info.commandBufferCount = 1;
+
+	VkCommandBuffer command_buffer;
+	VK_CHECK(
+		vkAllocateCommandBuffers(device, &alloc_info, &command_buffer),
+		"Failed to allocate command buffers"
+	);
+
+	VkCommandBufferBeginInfo begin_info = {};
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	VK_CHECK(
+		vkBeginCommandBuffer(command_buffer, &begin_info),
+		"Failed to begin recording command buffer"
+	);
+
+	VkBufferCopy copy_region = {};
+	copy_region.size = size;
+
+	vkCmdCopyBuffer(command_buffer, src_buffer, dst_buffer, 1, &copy_region);
 
 	VK_CHECK(
 		vkEndCommandBuffer(command_buffer),

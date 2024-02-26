@@ -6,6 +6,10 @@
 // #include <vulkan/vulkan.h>
 #include <vulkan/vk_enum_string_helper.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+#include <glm/gtx/hash.hpp>
+
 #include <stdexcept>
 #include <vector>
 #include <optional>
@@ -38,6 +42,72 @@ struct SwapChainSupportDetails
 	VkSurfaceCapabilitiesKHR capabilities;
 	std::vector<VkSurfaceFormatKHR> formats;
 	std::vector<VkPresentModeKHR> present_modes;
+};
+
+struct Vertex {
+	glm::vec3 pos;
+	glm::vec3 normal;
+	glm::vec2 texCoord;
+
+	static VkVertexInputBindingDescription getBindingDescription()
+	{
+		VkVertexInputBindingDescription bindingDescription{};
+		bindingDescription.binding = 0;
+		bindingDescription.stride = sizeof(Vertex);
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return bindingDescription;
+	}
+
+	static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions()
+	{
+		std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+
+		attributeDescriptions[0].binding = 0;
+		attributeDescriptions[0].location = 0;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[0].offset = offsetof(Vertex, pos);
+
+		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].location = 1;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[1].offset = offsetof(Vertex, normal);
+
+		attributeDescriptions[2].binding = 0;
+		attributeDescriptions[2].location = 2;
+		attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+
+		return attributeDescriptions;
+	}
+
+	bool operator==(const Vertex& other) const
+	{
+		return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
+	}
+};
+
+namespace std
+{
+	template<> struct hash<Vertex>
+	{
+		size_t operator()(const Vertex & vertex) const
+		{
+			return ((hash<glm::vec3>()(vertex.pos) ^
+				(hash<glm::vec3>()(vertex.normal) << 1)) >> 1) ^
+				(hash<glm::vec2>()(vertex.texCoord) << 1);
+		}
+	};
+}
+
+
+struct Mesh
+{
+	VkBuffer buffer;
+	VkDeviceMemory buffer_memory;
+	uint32_t vertex_count;
+	VkDeviceSize index_offset;
+	uint32_t index_count;
 };
 
 
@@ -116,6 +186,17 @@ public:
 	VkFormat draw_image_format;
 	VkExtent2D draw_image_extent;
 
+	const std::vector<Vertex> vertices = {
+		{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+		{{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+		{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}
+	};
+	const std::vector<uint32_t> indices = {
+		0, 1, 2, 2, 3, 0
+	};
+	Mesh mesh;
+
 	const int max_frames_in_flight = 2;
 	int current_frame = 0;
 
@@ -184,6 +265,8 @@ private:
 
 	void createDrawImage();
 
+	void createMesh();
+
 
 	uint32_t findMemoryType(
 		uint32_t type_filter,
@@ -205,6 +288,18 @@ private:
 		VkFormat format,
 		VkImageAspectFlags aspect_flags,
 		VkImageView & image_view
+	);
+	void createBuffer(
+		VkDeviceSize size,
+		VkBufferUsageFlags usage,
+		VkMemoryPropertyFlags properties,
+		VkBuffer & buffer,
+		VkDeviceMemory & buffer_memory
+	);
+	void copyBuffer(
+		VkBuffer src_buffer,
+		VkBuffer dst_buffer,
+		VkDeviceSize size
 	);
 	
 };
