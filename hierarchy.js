@@ -14,6 +14,7 @@ var hierarchy =
     [ "std::ofstream", null, [
       [ "FileOutput", "classFileOutput.html", null ]
     ] ],
+    [ "Settings", "classSettings.html", null ],
     [ "WorldScene::Transform", "classWorldScene_1_1Transform.html", null ],
     [ "Window", "classWindow.html", null ],
     [ "World", "classWorld.html", null ],

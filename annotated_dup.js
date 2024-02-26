@@ -8,6 +8,7 @@ var annotated_dup =
     [ "Logger", "classLogger.html", "classLogger" ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", "structModelMatrix__push__constant" ],
     [ "RenderThread", "classRenderThread.html", "classRenderThread" ],
+    [ "Settings", "classSettings.html", "classSettings" ],
     [ "UpdateThread", "classUpdateThread.html", "classUpdateThread" ],
     [ "Window", "classWindow.html", "classWindow" ],
     [ "World", "classWorld.html", null ],

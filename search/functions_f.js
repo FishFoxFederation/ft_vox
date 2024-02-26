@@ -7,7 +7,8 @@ var searchData=
   ['_7efileoutput_4',['~FileOutput',['../classFileOutput.html#a2cdf9b229a5b82b722728fdddad8503b',1,'FileOutput']]],
   ['_7einput_5',['~Input',['../classInput.html#af2db35ba67c8a8ccd23bef6a482fc291',1,'Input']]],
   ['_7erenderthread_6',['~RenderThread',['../classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4',1,'RenderThread']]],
-  ['_7eupdatethread_7',['~UpdateThread',['../classUpdateThread.html#a6b0329b5ce1c37b523ca25276d180cbb',1,'UpdateThread']]],
-  ['_7ewindow_8',['~Window',['../classWindow.html#a245d821e6016fa1f6970ccbbedd635f6',1,'Window']]],
-  ['_7eworldscene_9',['~WorldScene',['../classWorldScene.html#a96919a2cba5b6b6e544cc9b749e13ac8',1,'WorldScene']]]
+  ['_7esettings_7',['~Settings',['../classSettings.html#a4a65be5921dfc9fddc476e5320541d89',1,'Settings']]],
+  ['_7eupdatethread_8',['~UpdateThread',['../classUpdateThread.html#a6b0329b5ce1c37b523ca25276d180cbb',1,'UpdateThread']]],
+  ['_7ewindow_9',['~Window',['../classWindow.html#a245d821e6016fa1f6970ccbbedd635f6',1,'Window']]],
+  ['_7eworldscene_10',['~WorldScene',['../classWorldScene.html#a96919a2cba5b6b6e544cc9b749e13ac8',1,'WorldScene']]]
 ];
