@@ -6,8 +6,7 @@
 #include "RenderThread.hpp"
 #include "WorldScene.hpp"
 #include "UpdateThread.hpp"
-
-#include <cppVulkanAPI.hpp>
+#include "VulkanAPI.hpp"
 
 #include <chrono>
 
@@ -28,7 +27,7 @@ private:
 	Settings m_settings;
 	WorldScene m_world_scene;
 	Window m_window;
-	vk::RenderAPI m_renderAPI;
+	VulkanAPI m_vulkan_api;
 	RenderThread m_render_thread;
 	UpdateThread m_update_thread;
 };
