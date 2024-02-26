@@ -2,8 +2,8 @@
 
 # Sript to build the project
 
-# Download the necessary external libraries
-./scripts/download_cppVulkanAPI.sh
+# Download dependencies
+./scripts/download_glm.sh
 
 # Compile shaders
 ./scripts/compile_shaders.sh

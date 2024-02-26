@@ -32,6 +32,7 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp
+		src/app/vulkan/VulkanAPI.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 )
@@ -47,12 +48,9 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/render
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 )
 
-# link libraries
-add_subdirectory(external/cppVulkanAPI)
-target_link_libraries(${PROJECT_NAME}
-	PRIVATE
-		cppVulkanAPI
-)
+target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
+

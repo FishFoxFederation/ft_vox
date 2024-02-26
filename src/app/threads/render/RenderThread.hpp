@@ -4,8 +4,7 @@
 #include "AThreadWrapper.hpp"
 #include "WorldScene.hpp"
 #include "Settings.hpp"
-
-#include <cppVulkanAPI.hpp>
+#include "VulkanAPI.hpp"
 
 /**
  * @brief The push constant for the model matrix.
@@ -33,7 +32,7 @@ public:
 	*/
 	RenderThread(
 		const Settings & settings,
-		vk::RenderAPI & renderAPI,
+		VulkanAPI & vulkanAPI,
 		const WorldScene & worldScene
 	);
 
@@ -50,15 +49,8 @@ public:
 private:
 
 	const Settings & m_settings;
-	vk::RenderAPI & m_renderAPI;
+	VulkanAPI & vk;
 	const WorldScene & m_world_scene;
-
-	uint64_t m_proj_view_ubo_id;
-	uint64_t m_texture_id;
-	uint64_t m_texture_color_target_id;
-	uint64_t m_normal_color_target_id;
-	uint64_t m_depth_target_id;
-	uint64_t m_simple_shader_pipeline_id;
 
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
