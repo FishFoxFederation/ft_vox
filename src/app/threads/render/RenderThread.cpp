@@ -69,7 +69,13 @@ void RenderThread::loop()
 
 	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
 
-	vkCmdDraw(vk.render_command_buffers[vk.current_frame], 3, 1, 0, 0);
+	VkBuffer vertex_buffers[] = { vk.mesh.buffer };
+	VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
+
+	vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.mesh.buffer, vk.mesh.index_offset, VK_INDEX_TYPE_UINT32);
+
+	vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.mesh.index_count), 1, 0, 0, 0);
 
 
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
@@ -211,10 +217,10 @@ void RenderThread::loop()
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
 	blit.srcOffsets[1] = {
-		// static_cast<int32_t>(vk.color_attachement_extent.width),
-		// static_cast<int32_t>(vk.color_attachement_extent.height),
-		static_cast<int32_t>(vk.draw_image_extent.width),
-		static_cast<int32_t>(vk.draw_image_extent.height),
+		static_cast<int32_t>(vk.color_attachement_extent.width),
+		static_cast<int32_t>(vk.color_attachement_extent.height),
+		// static_cast<int32_t>(vk.draw_image_extent.width),
+		// static_cast<int32_t>(vk.draw_image_extent.height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -234,10 +240,10 @@ void RenderThread::loop()
 
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		// vk.color_attachement_image,
-		// VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		vk.draw_image,
-		VK_IMAGE_LAYOUT_GENERAL,
+		vk.color_attachement_image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		// vk.draw_image,
+		// VK_IMAGE_LAYOUT_GENERAL,
 		vk.swap_chain_images[image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		1,
