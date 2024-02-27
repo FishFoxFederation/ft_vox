@@ -155,7 +155,7 @@ public:
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debug_messenger;
 	VkPhysicalDevice physical_device = VK_NULL_HANDLE;
-	
+
 	VkSurfaceKHR surface;
 
 	VkDevice device;
@@ -195,6 +195,14 @@ public:
 	std::vector<VkBuffer> uniform_buffers;
 	std::vector<VkDeviceMemory> uniform_buffers_memory;
 	std::vector<void *> uniform_buffers_mapped_memory;
+
+	VkImage texture_image;
+	VkDeviceMemory texture_image_memory;
+	VkImageView texture_image_view;
+	VkSampler texture_sampler;
+	uint32_t texture_width;
+	uint32_t texture_height;
+	uint32_t mip_levels;
 
 	VkDescriptorSetLayout descriptor_set_layout;
 	VkDescriptorPool descriptor_pool;
@@ -277,6 +285,7 @@ private:
 	void createDrawImage();
 
 	void createUniformBuffers();
+	void createImageTexture(const std::string & file_path);
 
 	void createDescriptors();
 
@@ -321,5 +330,11 @@ private:
 		VkBuffer dst_buffer,
 		VkDeviceSize size
 	);
-	
+	void copyBufferToImage(
+		VkBuffer buffer,
+		VkImage image,
+		uint32_t width,
+		uint32_t height
+	);
+
 };
