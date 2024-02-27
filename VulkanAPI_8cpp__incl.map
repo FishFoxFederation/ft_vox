@@ -1,9 +1,10 @@
 <map id="src/app/vulkan/VulkanAPI.cpp" name="src/app/vulkan/VulkanAPI.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="762,5,959,31"/>
+<area shape="rect" id="node1" title=" " alt="" coords="810,5,1007,31"/>
 <area shape="rect" id="node2" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="347,79,455,104"/>
 <area shape="rect" id="node8" href="$logger_8hpp.html" title=" " alt="" coords="772,79,853,104"/>
 <area shape="rect" id="node15" title=" " alt="" coords="878,79,939,104"/>
 <area shape="rect" id="node16" title=" " alt="" coords="963,79,1003,104"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1027,79,1102,104"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,159,111,185"/>
 <area shape="rect" id="node4" title=" " alt="" coords="135,152,291,192"/>
 <area shape="rect" id="node5" title=" " alt="" coords="315,159,393,185"/>
