@@ -14,7 +14,7 @@ Application::Application():
 {
 	LOG_INFO("Application::Application()");
 
-	m_world_scene.camera().setPosition(glm::vec3(20.0f, 20.0f, 20.0f));
+	m_world_scene.camera().setPosition(glm::vec3(3.0f, 3.0f, 3.0f));
 	m_world_scene.camera().lookAt(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	int size = 10;
