@@ -1,6 +1,8 @@
 #include "WorldScene.hpp"
 #include "logger.hpp"
 
+#include <algorithm>
+
 WorldScene::WorldScene()
 {
 }

@@ -2,6 +2,8 @@
 #include "logger.hpp"
 
 #include <iostream>
+#include <array>
+#include <algorithm>
 
 RenderThread::RenderThread(
 	const Settings & settings,
@@ -13,6 +15,8 @@ RenderThread::RenderThread(
 	vk(vulkanAPI),
 	m_world_scene(worldScene)
 {
+	(void)m_settings;
+	(void)m_world_scene;
 }
 
 RenderThread::~RenderThread()

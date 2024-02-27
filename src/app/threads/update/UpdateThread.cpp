@@ -14,6 +14,7 @@ UpdateThread::UpdateThread(
 	m_start_time(start_time),
 	m_last_frame_time(start_time)
 {
+	(void)m_start_time;
 }
 
 UpdateThread::~UpdateThread()

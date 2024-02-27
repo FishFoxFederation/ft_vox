@@ -50,6 +50,8 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
+
+		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 )
 
 target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
