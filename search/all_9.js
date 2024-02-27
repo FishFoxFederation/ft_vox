@@ -1,18 +1,16 @@
 var searchData=
 [
-  ['m_5fthread_0',['m_thread',['../classAThreadWrapper.html#a03340402fabcbb0f4b3e85948b461f6b',1,'AThreadWrapper']]],
-  ['main_1',['main',['../main_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main.cpp']]],
-  ['main_2ecpp_2',['main.cpp',['../main_8cpp.html',1,'']]],
-  ['mainpage_2emd_3',['mainpage.md',['../mainpage_8md.html',1,'']]],
-  ['max_4',['MAX',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12',1,'Logger']]],
-  ['meshrenderdata_5',['MeshRenderData',['../structWorldScene_1_1MeshRenderData.html',1,'WorldScene']]],
-  ['model_6',['model',['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../classWorldScene_1_1Transform.html#a98b67cb3eea5e74ac801c2daecad4d6e',1,'WorldScene::Transform::model()']]],
-  ['modelmatrix_5fpush_5fconstant_7',['ModelMatrix_push_constant',['../structModelMatrix__push__constant.html',1,'']]],
-  ['mousesensitivity_8',['mouseSensitivity',['../classSettings.html#a01967d720dac441bb8d40f6f062abccf',1,'Settings']]],
-  ['movedirection_9',['moveDirection',['../classWorldScene_1_1Camera.html#a5afa21c618a7a6445a5794a710095a05',1,'WorldScene::Camera']]],
-  ['moveforward_10',['moveForward',['../classWorldScene_1_1Camera.html#a746bdef18c9dc1e683337350a3f902b2',1,'WorldScene::Camera']]],
-  ['moveposition_11',['movePosition',['../classWorldScene_1_1Camera.html#ae98c060b2fbbbb2c8f106878d6c8f7a0',1,'WorldScene::Camera']]],
-  ['moveright_12',['moveRight',['../classWorldScene_1_1Camera.html#ab88c46b90986ea4c977fee8916c651f7',1,'WorldScene::Camera']]],
-  ['moveup_13',['moveUp',['../classWorldScene_1_1Camera.html#a79345bcbd88424510b9d2ff9deb7d6c1',1,'WorldScene::Camera']]],
-  ['myintfunction_14',['myIntFunction',['../example_8cpp.html#a6a70aecb0c57b266c13dbf5447ec498e',1,'example.cpp']]]
+  ['level_0',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]],
+  ['level_1',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
+  ['log_5fcritical_2',['LOG_CRITICAL',['../logger_8hpp.html#a4091a2d7d849a8b5eded40d8723b8768',1,'logger.hpp']]],
+  ['log_5fdebug_3',['LOG_DEBUG',['../logger_8hpp.html#a754b3d074e0af4ad3c7b918dd77ecb2d',1,'logger.hpp']]],
+  ['log_5ferror_4',['LOG_ERROR',['../logger_8hpp.html#ad4a9117ce894e3319e903142347a0f63',1,'logger.hpp']]],
+  ['log_5finfo_5',['LOG_INFO',['../logger_8hpp.html#a378e28bfcb78d17285210d6bbb70a083',1,'logger.hpp']]],
+  ['log_5ftrace_6',['LOG_TRACE',['../logger_8hpp.html#a58c994180e09d2f6400133b19b1d7036',1,'logger.hpp']]],
+  ['log_5fwarning_7',['LOG_WARNING',['../logger_8hpp.html#afef5ff03ea272d388345cf47148953d4',1,'logger.hpp']]],
+  ['logger_8',['Logger',['../classLogger.html',1,'Logger'],['../classLogger.html#abc41bfb031d896170c7675fa96a6b30c',1,'Logger::Logger()'],['../classLogger.html#ae588fefbe500d9061e2ca2b314aa325f',1,'Logger::Logger(const std::filesystem::path &amp;path)']]],
+  ['logger_9',['logger',['../logger_8cpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp'],['../logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp']]],
+  ['logger_2ecpp_10',['logger.cpp',['../logger_8cpp.html',1,'']]],
+  ['logger_2ehpp_11',['logger.hpp',['../logger_8hpp.html',1,'']]],
+  ['lookat_12',['lookAt',['../classWorldScene_1_1Camera.html#aea31563228100aab4ab8da71df2fb511',1,'WorldScene::Camera']]]
 ];

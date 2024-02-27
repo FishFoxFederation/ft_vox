@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['updatethread_0',['UpdateThread',['../classUpdateThread.html#a08240b38796935e4760e82b929b2fb52',1,'UpdateThread::UpdateThread(const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]]
+  ['transform_0',['Transform',['../classWorldScene_1_1Transform.html#a25c42b8296eb24b147b51442a68671ed',1,'WorldScene::Transform']]],
+  ['transitionimagelayout_1',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]]
 ];

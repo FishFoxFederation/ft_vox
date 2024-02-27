@@ -14,8 +14,11 @@ var hierarchy =
     [ "std::ofstream", null, [
       [ "FileOutput", "classFileOutput.html", null ]
     ] ],
+    [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
     [ "Settings", "classSettings.html", null ],
+    [ "SwapChainSupportDetails", "structSwapChainSupportDetails.html", null ],
     [ "WorldScene::Transform", "classWorldScene_1_1Transform.html", null ],
+    [ "VulkanAPI", "classVulkanAPI.html", null ],
     [ "Window", "classWindow.html", null ],
     [ "World", "classWorld.html", null ],
     [ "WorldScene", "classWorldScene.html", null ]

@@ -1,6 +1,19 @@
 var searchData=
 [
-  ['operator_3c_3c_0',['operator&lt;&lt;',['../classLogger.html#a620c2c7038b6d73402a6b64cdb3ea8ad',1,'Logger::operator&lt;&lt;(Level level)'],['../classLogger.html#a8fe02104f0954471b1788b0ecf346933',1,'Logger::operator&lt;&lt;(std::ostream &amp;(*manipulator)(std::ostream &amp;))'],['../classLogger.html#a4fdec383dd7fbd734ecd1d447e762971',1,'Logger::operator&lt;&lt;(T const &amp;arg)']]],
-  ['operator_3d_1',['operator=',['../classWorldScene_1_1Camera.html#a72909fd1fbd89f38e9f37259b420b413',1,'WorldScene::Camera::operator=(Camera &amp;camera)=delete'],['../classWorldScene_1_1Camera.html#a125975d67492eaa19fbadeef068518fd',1,'WorldScene::Camera::operator=(Camera &amp;&amp;camera)=delete'],['../classWorldScene.html#ac514b789cf4d4195c3b0f0852a1a2b7b',1,'WorldScene::operator=(WorldScene &amp;scene)=delete'],['../classWorldScene.html#ab1ef2cb8d38726a515ec3042619b0ab5',1,'WorldScene::operator=(WorldScene &amp;&amp;scene)=delete'],['../classSettings.html#abe4e035636130733f548184c6229728b',1,'Settings::operator=(Settings &amp;other)=delete'],['../classSettings.html#af49cf008dab98c8ea484422fb7c5989b',1,'Settings::operator=(Settings &amp;&amp;other)=delete'],['../classAThreadWrapper.html#a5d2b879467e5dc2e3deafd80375f9d95',1,'AThreadWrapper::operator=()'],['../classBlockUpdateThread.html#ad02f49ca1f95b8f1d60e4bcdd890746b',1,'BlockUpdateThread::operator=()'],['../classRenderThread.html#a735f6f69afad2704b0119683ea474a96',1,'RenderThread::operator=(RenderThread &amp;renderer)=delete'],['../classRenderThread.html#aad762f76aa79f3c247731133aeca68b3',1,'RenderThread::operator=(RenderThread &amp;&amp;renderer)=delete'],['../classUpdateThread.html#a5379199617c6f252e5d850755f887b1f',1,'UpdateThread::operator=(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#abb79f362ecbec1a4c878739bafe974de',1,'UpdateThread::operator=(UpdateThread &amp;&amp;other)=delete']]],
-  ['our_20architecture_2',['Our Architecture',['../md_docs_pages_architecture.html',1,'']]]
+  ['m_5fthread_0',['m_thread',['../classAThreadWrapper.html#a03340402fabcbb0f4b3e85948b461f6b',1,'AThreadWrapper']]],
+  ['main_1',['main',['../main_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main.cpp']]],
+  ['main_2ecpp_2',['main.cpp',['../main_8cpp.html',1,'']]],
+  ['mainpage_2emd_3',['mainpage.md',['../mainpage_8md.html',1,'']]],
+  ['max_4',['MAX',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12',1,'Logger']]],
+  ['max_5fframes_5fin_5fflight_5',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
+  ['meshrenderdata_6',['MeshRenderData',['../structWorldScene_1_1MeshRenderData.html',1,'WorldScene']]],
+  ['model_7',['model',['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../classWorldScene_1_1Transform.html#a98b67cb3eea5e74ac801c2daecad4d6e',1,'WorldScene::Transform::model()']]],
+  ['modelmatrix_5fpush_5fconstant_8',['ModelMatrix_push_constant',['../structModelMatrix__push__constant.html',1,'']]],
+  ['mousesensitivity_9',['mouseSensitivity',['../classSettings.html#a01967d720dac441bb8d40f6f062abccf',1,'Settings']]],
+  ['movedirection_10',['moveDirection',['../classWorldScene_1_1Camera.html#a5afa21c618a7a6445a5794a710095a05',1,'WorldScene::Camera']]],
+  ['moveforward_11',['moveForward',['../classWorldScene_1_1Camera.html#a746bdef18c9dc1e683337350a3f902b2',1,'WorldScene::Camera']]],
+  ['moveposition_12',['movePosition',['../classWorldScene_1_1Camera.html#ae98c060b2fbbbb2c8f106878d6c8f7a0',1,'WorldScene::Camera']]],
+  ['moveright_13',['moveRight',['../classWorldScene_1_1Camera.html#ab88c46b90986ea4c977fee8916c651f7',1,'WorldScene::Camera']]],
+  ['moveup_14',['moveUp',['../classWorldScene_1_1Camera.html#a79345bcbd88424510b9d2ff9deb7d6c1',1,'WorldScene::Camera']]],
+  ['myintfunction_15',['myIntFunction',['../example_8cpp.html#a6a70aecb0c57b266c13dbf5447ec498e',1,'example.cpp']]]
 ];
