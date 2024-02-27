@@ -1,5 +1,6 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
+#include "Perlin.hpp"
 
 #include <iostream>
 #include <array>
@@ -33,7 +34,6 @@ void RenderThread::loop()
 
 	auto currentTime = std::chrono::high_resolution_clock::now();
 	auto time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-	(void)time;
 
 
 	vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max());
@@ -87,24 +87,30 @@ void RenderThread::loop()
 	 * vk.putPixel(x, y, r, g, b, a = 255) = put a pixel at the position (x, y) with the color (r, g, b, a)
 	 */
 
+	static Perlin perlin_pinpin(0, 5, 1, 0.5, 2.0);
+
+	(void)time;
 	vk.clearPixels();
+	// int nope;
+	// std::cin >> nope; std::cin.clear();
 
-	// Draw a green rectangle
-	for (uint32_t x = vk.width() / 4; x < vk.width() / 2; x++)
+	for(size_t i = 0; i < vk.height(); i++)
 	{
-		for (uint32_t y = vk.height() / 4; y < vk.height() / 2; y++)
+		for(size_t j = 0; j < vk.width(); j++)
 		{
-			vk.putPixel(x, y, 0, 255, 0);
-		}
-	}
+			float value = perlin_pinpin.noise(glm::vec2(j * 0.01f, i * 0.01f));
 
-	// Draw a red rectangle
-	for (uint32_t x = 100; x < 200; x++)
-	{
-		for (uint32_t y = 100; y < 200; y++)
-		{
-			vk.putPixel(x, y, 255, 0, 0);
+			//normalize to range [0, 1]
+			value += 1;
+			value /= 2;
+
+			int light = value * 255;
+			light &= 0xFF;
+
+			vk.putPixel(j, i, light, light, light);
+			// std::cout << std::setw(3) << light << " ";
 		}
+		// std::cout << std::endl;
 	}
 
 	//############################################################################################################
