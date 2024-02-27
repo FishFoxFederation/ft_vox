@@ -110,6 +110,12 @@ struct Mesh
 	uint32_t index_count;
 };
 
+struct CameraMatrices
+{
+	glm::mat4 view;
+	glm::mat4 proj;
+};
+
 
 class VulkanAPI
 {
@@ -162,9 +168,6 @@ public:
 	VkFormat swap_chain_image_format;
 	VkExtent2D swap_chain_extent;
 
-	VkPipelineLayout pipeline_layout;
-	VkPipeline graphics_pipeline;
-
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> render_command_buffers;
 	std::vector<VkCommandBuffer> copy_command_buffers;
@@ -173,6 +176,9 @@ public:
 	std::vector<VkSemaphore> render_finished_semaphores;
 	std::vector<VkSemaphore> swap_chain_updated_semaphores;
 	std::vector<VkFence> in_flight_fences;
+
+	const int max_frames_in_flight = 2;
+	int current_frame = 0;
 
 	VkImage color_attachement_image;
 	VkDeviceMemory color_attachement_memory;
@@ -186,6 +192,18 @@ public:
 	VkFormat draw_image_format;
 	VkExtent2D draw_image_extent;
 
+	std::vector<VkBuffer> uniform_buffers;
+	std::vector<VkDeviceMemory> uniform_buffers_memory;
+	std::vector<void *> uniform_buffers_mapped_memory;
+
+	VkDescriptorSetLayout descriptor_set_layout;
+	VkDescriptorPool descriptor_pool;
+	VkDescriptorSet descriptor_set;
+
+	VkPipelineLayout pipeline_layout;
+	VkPipeline graphics_pipeline;
+
+
 	const std::vector<Vertex> vertices = {
 		{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
 		{{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
@@ -197,8 +215,6 @@ public:
 	};
 	Mesh mesh;
 
-	const int max_frames_in_flight = 2;
-	int current_frame = 0;
 
 private:
 
@@ -258,12 +274,16 @@ private:
 	void createSyncObjects();
 
 	void createColorResources();
+	void createDrawImage();
+
+	void createUniformBuffers();
+
+	void createDescriptors();
 
 	void createPipeline();
 	static std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
 
-	void createDrawImage();
 
 	void createMesh();
 

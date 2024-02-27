@@ -5,6 +5,8 @@
 #include <iostream>
 #include <array>
 #include <algorithm>
+#include <chrono>
+#include <cstring>
 
 RenderThread::RenderThread(
 	const Settings & settings,
@@ -30,11 +32,30 @@ void RenderThread::init()
 
 void RenderThread::loop()
 {
+	//############################################################################################################
+	//                     																                         #
+	//                            Do independent logic from the vulkan rendering here                            #
+	//                     																                         #
+	//############################################################################################################
+
 	static auto startTime = std::chrono::high_resolution_clock::now();
 
 	auto currentTime = std::chrono::high_resolution_clock::now();
 	auto time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
+	int width, height;
+	glfwGetFramebufferSize(vk.window, &width, &height);
+
+	CameraMatrices camera_matrices = {};
+	camera_matrices.view = m_world_scene.camera().getViewMatrix();
+	camera_matrices.proj = m_world_scene.camera().getProjectionMatrix(static_cast<float>(width) / static_cast<float>(height));
+	camera_matrices.proj[1][1] *= -1;
+
+	//############################################################################################################
+	//                     																                         #
+	//                                  Start the vulkan rendering process here                                  #
+	//                     																                         #
+	//############################################################################################################
 
 	vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
@@ -68,6 +89,18 @@ void RenderThread::loop()
 
 
 	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
+
+	memcpy(vk.uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
+	vkCmdBindDescriptorSets(
+		vk.render_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.pipeline_layout,
+		0,
+		1,
+		&vk.descriptor_set,
+		0,
+		nullptr
+	);
 
 	VkBuffer vertex_buffers[] = { vk.mesh.buffer };
 	VkDeviceSize offsets[] = { 0 };
