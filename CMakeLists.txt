@@ -60,6 +60,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
+		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
 )
 
 target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
