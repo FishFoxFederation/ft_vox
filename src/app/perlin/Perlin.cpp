@@ -72,6 +72,35 @@ unsigned int Perlin::hash(glm::uvec3 v, unsigned int seed) const
 	return hash;
 }
 
+glm::vec2 Perlin::getAngleGradient(glm::uvec2 v, unsigned int seed) const
+{
+	static const unsigned int m = 0x5bd1e995U;
+
+	unsigned int hash = seed;
+	unsigned int k = v.x;
+
+	//first vector element
+	k *= m;
+	k ^= k >> 24;
+	k *= m;
+	hash *= m;
+	hash ^= k;
+	//second vector element
+	k = v.y;
+	k *= m;
+	k ^= k >> 24;
+	k *= m;
+	hash *= m;
+	hash ^= k;
+
+	hash ^= hash >> 13;
+	hash *= m;
+	hash ^= hash >> 15;
+
+	float angle = (hash % 360) * (M_PI / 180);
+	return glm::vec2(glm::cos(angle), glm::sin(angle));
+}
+
 glm::vec3 Perlin::getHashedGradient(glm::uvec3 v, unsigned int seed) const
 {
 	unsigned int h = hash(v, seed);
@@ -115,7 +144,16 @@ glm::vec3 Perlin::getHashedGradient(glm::uvec3 v, unsigned int seed) const
 	return glm::vec3(0);
 }
 
-float Perlin::interpolate(float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8, glm::vec3 t) const
+float Perlin::interpolate(
+	const float & v1,
+	const float & v2,
+	const float & v3,
+	const float & v4,
+	const float & v5,
+	const float & v6,
+	const float & v7,
+	const float & v8,
+	const glm::vec3 & t) const
 {
 	float x1 = glm::mix(v1, v2, t.x);
 	float x2 = glm::mix(v3, v4, t.x);
@@ -143,18 +181,17 @@ float Perlin::insideNoise(glm::vec3 v, unsigned int seed) const
 	float value7 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 1, 1), seed), unit_position - glm::vec3(0, 1, 1));
 	float value8 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 1, 1), seed), unit_position - glm::vec3(1, 1, 1));
 
-	return interpolate(value1, value2, value3, value4, value5, value6, value7, value8, unit_position);
+	return interpolate(value1, value2, value3, value4, value5, value6, value7, value8, smoothstep(unit_position));
 }
-
 
 float Perlin::noise(float x) const
 {
-	return noise(glm::vec3(x, 0.1f, 0.1f));
+	return noise(glm::vec3(x, 0.5f, 0.5f));
 }
 
 float Perlin::noise(glm::vec2 v) const
 {
-	return noise(glm::vec3(v, 0.1f));
+	return noise(glm::vec3(v, 0.5f));
 }
 
 float Perlin::noise(glm::vec3 v) const
