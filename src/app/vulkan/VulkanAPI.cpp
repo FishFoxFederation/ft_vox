@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <set>
+#include <algorithm>
 
 VulkanAPI::VulkanAPI(GLFWwindow * window):
 	window(window)
@@ -91,7 +92,7 @@ void VulkanAPI::createInstance()
 
 	create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 	create_info.ppEnabledExtensionNames = extensions.data();
-	
+
 	VkDebugUtilsMessengerCreateInfoEXT debug_create_info;
 	populateDebugMessengerCreateInfo(debug_create_info);
 	#ifndef NDEBUG
