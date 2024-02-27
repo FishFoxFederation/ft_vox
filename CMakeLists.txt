@@ -26,6 +26,8 @@ target_sources(${PROJECT_NAME}
 
 		src/utils/logger.cpp
 
+		src/app/perlin/Perlin.cpp
+
 		src/app/application.cpp
 		src/app/Settings.cpp
 		src/app/scenes/WorldScene.cpp
@@ -50,6 +52,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 )
