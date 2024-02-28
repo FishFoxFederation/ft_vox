@@ -116,6 +116,11 @@ struct CameraMatrices
 	glm::mat4 proj;
 };
 
+struct ModelMatrice
+{
+	glm::mat4 model;
+};
+
 
 class VulkanAPI
 {
