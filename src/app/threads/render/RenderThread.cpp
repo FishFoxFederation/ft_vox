@@ -102,6 +102,17 @@ void RenderThread::loop()
 		nullptr
 	);
 
+	ModelMatrice model_matrice = {};
+	model_matrice.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	vkCmdPushConstants(
+		vk.render_command_buffers[vk.current_frame],
+		vk.pipeline_layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(ModelMatrice),
+		&model_matrice
+	);
+
 	VkBuffer vertex_buffers[] = { vk.mesh.buffer };
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
