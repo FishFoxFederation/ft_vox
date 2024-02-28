@@ -1,21 +1,12 @@
 var searchData=
 [
-  ['scale_0',['scale',['../classWorldScene_1_1Transform.html#ab27580e8cf5b61590e405a38ea84396b',1,'WorldScene::Transform::scale()'],['../classWorldScene_1_1Transform.html#a521c9e222875de6fffeae597ecafafc3',1,'WorldScene::Transform::scale() const']]],
-  ['setlevel_1',['setLevel',['../classLogger.html#ab138ded838fa6698b7e6f74f5fc57efc',1,'Logger']]],
-  ['setmousesensitivity_2',['setMouseSensitivity',['../classSettings.html#a7c476b3924dbd1e3a2e0d9c9ba1d22b0',1,'Settings']]],
-  ['setposition_3',['setPosition',['../classWorldScene_1_1Camera.html#abbcb4a82584f2e443144ec2a99f319fc',1,'WorldScene::Camera']]],
-  ['settimestamp_4',['setTimestamp',['../classLogger.html#a9556d57fb4b693911149599a8724b2b0',1,'Logger']]],
-  ['settings_5',['Settings',['../classSettings.html',1,'Settings'],['../classSettings.html#ab7169a6eefce79566dd07db3b1e5e967',1,'Settings::Settings()'],['../classSettings.html#ae25bcc96acb95e2bab23f2df682c9803',1,'Settings::Settings(Settings &amp;other)=delete'],['../classSettings.html#a3235cc319f2ca06193bc5f709a3387c3',1,'Settings::Settings(Settings &amp;&amp;other)=delete']]],
-  ['settings_2ecpp_6',['Settings.cpp',['../Settings_8cpp.html',1,'']]],
-  ['settings_2ehpp_7',['Settings.hpp',['../Settings_8hpp.html',1,'']]],
-  ['shouldclose_8',['shouldClose',['../classWindow.html#ae779be3a5327f62c5e86a3e3d8a37289',1,'Window']]],
-  ['style_20guide_9',['Style guide',['../styleguide.html',1,'']]],
-  ['style_5fguide_2emd_10',['style_guide.md',['../style__guide_8md.html',1,'']]],
-  ['surface_11',['surface',['../classVulkanAPI.html#afe362f2320ed6115d2eb627efed9d530',1,'VulkanAPI']]],
-  ['swap_5fchain_12',['swap_chain',['../classVulkanAPI.html#a75d2106f595f453d38c3fd067142152d',1,'VulkanAPI']]],
-  ['swap_5fchain_5fextent_13',['swap_chain_extent',['../classVulkanAPI.html#a493c029a5d6e84944b10aba3e127f8d2',1,'VulkanAPI']]],
-  ['swap_5fchain_5fimage_5fformat_14',['swap_chain_image_format',['../classVulkanAPI.html#a4d925a6136031c943dcf6817afdd5972',1,'VulkanAPI']]],
-  ['swap_5fchain_5fimages_15',['swap_chain_images',['../classVulkanAPI.html#a855ed7c27abb119c4e892921c5068f16',1,'VulkanAPI']]],
-  ['swap_5fchain_5fupdated_5fsemaphores_16',['swap_chain_updated_semaphores',['../classVulkanAPI.html#a0c5478aa2b9c956fd32d8adb97dcde8f',1,'VulkanAPI']]],
-  ['swapchainsupportdetails_17',['SwapChainSupportDetails',['../structSwapChainSupportDetails.html',1,'']]]
+  ['recreateswapchain_0',['recreateSwapChain',['../classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581',1,'VulkanAPI']]],
+  ['removemesh_1',['removeMesh',['../classWorldScene.html#a8bcfa949f6e093c9794ace6f199742c0',1,'WorldScene']]],
+  ['render_5fcommand_5fbuffers_2',['render_command_buffers',['../classVulkanAPI.html#a8b73b1224307608f291d38e747dbb0b0',1,'VulkanAPI']]],
+  ['render_5ffinished_5fsemaphores_3',['render_finished_semaphores',['../classVulkanAPI.html#a78fde0e5cdd0b5a9155dc38e50200ea4',1,'VulkanAPI']]],
+  ['renderthread_4',['RenderThread',['../classRenderThread.html',1,'RenderThread'],['../classRenderThread.html#a62170fe3ddb0d20b13ba61a02316afe5',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, const WorldScene &amp;worldScene)'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete'],['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread(RenderThread &amp;&amp;renderer)=delete']]],
+  ['renderthread_2ecpp_5',['RenderThread.cpp',['../RenderThread_8cpp.html',1,'']]],
+  ['renderthread_2ehpp_6',['RenderThread.hpp',['../RenderThread_8hpp.html',1,'']]],
+  ['rotation_7',['rotation',['../classWorldScene_1_1Transform.html#a818966c733727ca71dbf4e0b93033125',1,'WorldScene::Transform::rotation()'],['../classWorldScene_1_1Transform.html#a6db8363e55b4a8bb8d19562b219dfe00',1,'WorldScene::Transform::rotation() const']]],
+  ['run_8',['run',['../classApplication.html#a68965449404743bf1add056784d6cf81',1,'Application']]]
 ];

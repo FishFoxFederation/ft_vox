@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['settings_0',['Settings',['../classSettings.html',1,'']]],
-  ['swapchainsupportdetails_1',['SwapChainSupportDetails',['../structSwapChainSupportDetails.html',1,'']]]
+  ['renderthread_0',['RenderThread',['../classRenderThread.html',1,'']]]
 ];

@@ -14,6 +14,7 @@ var hierarchy =
     [ "std::ofstream", null, [
       [ "FileOutput", "classFileOutput.html", null ]
     ] ],
+    [ "Perlin", "classPerlin.html", null ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
     [ "Settings", "classSettings.html", null ],
     [ "SwapChainSupportDetails", "structSwapChainSupportDetails.html", null ],

@@ -1,15 +1,16 @@
 <map id="src/app/threads/render/RenderThread.cpp" name="src/app/threads/render/RenderThread.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1361,5,1513,45"/>
-<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="363,93,490,119"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1416,5,1568,45"/>
+<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="325,93,451,119"/>
 <area shape="rect" id="node7" href="$logger_8hpp.html" title=" " alt="" coords="731,247,813,273"/>
 <area shape="rect" id="node8" title=" " alt="" coords="1211,328,1283,353"/>
-<area shape="rect" id="node25" title=" " alt="" coords="1475,93,1525,119"/>
-<area shape="rect" id="node26" title=" " alt="" coords="1549,93,1624,119"/>
+<area shape="rect" id="node25" href="$Perlin_8hpp.html" title=" " alt="" coords="1582,93,1661,119"/>
+<area shape="rect" id="node31" title=" " alt="" coords="1685,93,1736,119"/>
+<area shape="rect" id="node32" title=" " alt="" coords="1760,93,1835,119"/>
 <area shape="rect" id="node3" href="$define_8hpp.html" title=" " alt="" coords="88,247,168,273"/>
-<area shape="rect" id="node4" href="$AThreadWrapper_8hpp.html" title=" " alt="" coords="18,167,161,192"/>
+<area shape="rect" id="node4" href="$AThreadWrapper_8hpp.html" title=" " alt="" coords="17,167,159,192"/>
 <area shape="rect" id="node6" href="$WorldScene_8hpp.html" title=" " alt="" coords="473,167,589,192"/>
-<area shape="rect" id="node18" href="$Settings_8hpp.html" title=" " alt="" coords="237,167,331,192"/>
-<area shape="rect" id="node20" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="1009,167,1117,192"/>
+<area shape="rect" id="node18" href="$Settings_8hpp.html" title=" " alt="" coords="235,167,330,192"/>
+<area shape="rect" id="node20" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="997,167,1105,192"/>
 <area shape="rect" id="node5" title=" " alt="" coords="5,247,64,273"/>
 <area shape="rect" id="node14" title=" " alt="" coords="319,247,411,273"/>
 <area shape="rect" id="node15" title=" " alt="" coords="435,247,626,273"/>
@@ -25,4 +26,9 @@
 <area shape="rect" id="node22" title=" " alt="" coords="1050,240,1206,280"/>
 <area shape="rect" id="node23" title=" " alt="" coords="1230,247,1309,273"/>
 <area shape="rect" id="node24" title=" " alt="" coords="1333,247,1400,273"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1645,167,1744,192"/>
+<area shape="rect" id="node27" title=" " alt="" coords="1768,167,1867,192"/>
+<area shape="rect" id="node28" title=" " alt="" coords="1891,167,2013,192"/>
+<area shape="rect" id="node29" title=" " alt="" coords="2037,167,2165,192"/>
+<area shape="rect" id="node30" title=" " alt="" coords="1475,167,1621,192"/>
 </map>

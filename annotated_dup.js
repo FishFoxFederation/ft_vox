@@ -7,6 +7,7 @@ var annotated_dup =
     [ "Input", "classInput.html", "classInput" ],
     [ "Logger", "classLogger.html", "classLogger" ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", "structModelMatrix__push__constant" ],
+    [ "Perlin", "classPerlin.html", "classPerlin" ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", "structQueueFamilyIndices" ],
     [ "RenderThread", "classRenderThread.html", "classRenderThread" ],
     [ "Settings", "classSettings.html", "classSettings" ],

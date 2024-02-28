@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['transform_0',['Transform',['../classWorldScene_1_1Transform.html',1,'WorldScene']]]
+  ['settings_0',['Settings',['../classSettings.html',1,'']]],
+  ['swapchainsupportdetails_1',['SwapChainSupportDetails',['../structSwapChainSupportDetails.html',1,'']]]
 ];

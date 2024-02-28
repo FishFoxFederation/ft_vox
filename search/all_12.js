@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['vk_5fcheck_0',['VK_CHECK',['../VulkanAPI_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b',1,'VulkanAPI.hpp']]],
-  ['vulkanapi_1',['VulkanAPI',['../classVulkanAPI.html',1,'VulkanAPI'],['../classVulkanAPI.html#a0847afa3a3335e05c44922686174d17b',1,'VulkanAPI::VulkanAPI(GLFWwindow *window)'],['../classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad',1,'VulkanAPI::VulkanAPI(const VulkanAPI &amp;)=delete'],['../classVulkanAPI.html#af0178da68566ea2136a91746e686efdf',1,'VulkanAPI::VulkanAPI(VulkanAPI &amp;&amp;)=delete']]],
-  ['vulkanapi_2ecpp_2',['VulkanAPI.cpp',['../VulkanAPI_8cpp.html',1,'']]],
-  ['vulkanapi_2ehpp_3',['VulkanAPI.hpp',['../VulkanAPI_8hpp.html',1,'']]]
+  ['updatethread_0',['UpdateThread',['../classUpdateThread.html',1,'UpdateThread'],['../classUpdateThread.html#a08240b38796935e4760e82b929b2fb52',1,'UpdateThread::UpdateThread(const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]],
+  ['updatethread_2ecpp_1',['UpdateThread.cpp',['../UpdateThread_8cpp.html',1,'']]],
+  ['updatethread_2ehpp_2',['UpdateThread.hpp',['../UpdateThread_8hpp.html',1,'']]]
 ];
