@@ -340,19 +340,6 @@ void RenderThread::loop()
 		"Failed to wait for queue to become idle"
 	);
 
-	// Transition the swap chain image from transfer destination to present
-	vk.transitionImageLayout(
-		vk.swap_chain_images[image_index],
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-	);
-
 	// Transition the color image from transfer source to color attachment
 	vk.transitionImageLayout(
 		vk.color_attachement_image,
@@ -368,14 +355,120 @@ void RenderThread::loop()
 
 	//############################################################################################################
 	//                     																                         #
+	//                                        Do the ImGui rendering here                                        #
+	//                     																                         #
+	//############################################################################################################
+
+	// Transition the swap chain image from transfer destination to color attachment
+	vk.transitionImageLayout(
+		vk.swap_chain_images[image_index],
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_ASPECT_COLOR_BIT,
+		1,
+		0,
+		0,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+	);
+
+	ImGui_ImplVulkan_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::ShowDemoWindow();
+
+	ImGui::Render();
+
+	VkCommandBuffer imgui_command_buffer;
+	VkCommandBufferAllocateInfo imgui_command_buffer_info = {};
+	imgui_command_buffer_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	imgui_command_buffer_info.commandPool = vk.command_pool;
+	imgui_command_buffer_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	imgui_command_buffer_info.commandBufferCount = 1;
+
+	VK_CHECK(
+		vkAllocateCommandBuffers(vk.device, &imgui_command_buffer_info, &imgui_command_buffer),
+		"Failed to allocate command buffer"
+	);
+
+	VkCommandBufferBeginInfo imgui_begin_info = {};
+	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+	VK_CHECK(
+		vkBeginCommandBuffer(imgui_command_buffer, &imgui_begin_info),
+		"Failed to begin recording command buffer"
+	);
+
+	VkRenderingAttachmentInfo imgui_color_attachment = {};
+	imgui_color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	imgui_color_attachment.imageView = vk.swap_chain_image_views[image_index];
+	imgui_color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	imgui_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	imgui_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+	VkRenderingInfo imgui_render_info = {};
+	imgui_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+	imgui_render_info.renderArea = { 0, 0, vk.swap_chain_extent.width, vk.swap_chain_extent.height };
+	imgui_render_info.layerCount = 1;
+	imgui_render_info.colorAttachmentCount = 1;
+	imgui_render_info.pColorAttachments = &imgui_color_attachment;
+
+	vkCmdBeginRendering(imgui_command_buffer, &imgui_render_info);
+
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), imgui_command_buffer);
+
+	vkCmdEndRendering(imgui_command_buffer);
+
+	VK_CHECK(
+		vkEndCommandBuffer(imgui_command_buffer),
+		"Failed to record command buffer"
+	);
+
+	VkSubmitInfo imgui_submit_info = {};
+	imgui_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	imgui_submit_info.commandBufferCount = 1;
+	imgui_submit_info.pCommandBuffers = &imgui_command_buffer;
+	imgui_submit_info.waitSemaphoreCount = 1;
+	imgui_submit_info.pWaitSemaphores = &vk.swap_chain_updated_semaphores[vk.current_frame];
+	VkPipelineStageFlags vk_pipeline_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	imgui_submit_info.pWaitDstStageMask = &vk_pipeline_stage_flags;
+	imgui_submit_info.signalSemaphoreCount = 1;
+	imgui_submit_info.pSignalSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
+
+	VK_CHECK(
+		vkQueueSubmit(vk.graphics_queue, 1, &imgui_submit_info, VK_NULL_HANDLE),
+		"Failed to submit command buffer"
+	);
+
+	VK_CHECK(
+		vkQueueWaitIdle(vk.graphics_queue),
+		"Failed to wait for queue to become idle"
+	);
+
+	//############################################################################################################
+	//                     																                         #
 	//                             Present the swap chain image to the present queue                             #
 	//                     																                         #
 	//############################################################################################################
 
+	// Transition the swap chain image from transfer destination to present
+	vk.transitionImageLayout(
+		vk.swap_chain_images[image_index],
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+		VK_IMAGE_ASPECT_COLOR_BIT,
+		1,
+		0,
+		0,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+	);
+
 	VkPresentInfoKHR present_info = {};
 	present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	present_info.waitSemaphoreCount = 1;
-	present_info.pWaitSemaphores = &vk.swap_chain_updated_semaphores[vk.current_frame];
+	present_info.pWaitSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
 	present_info.swapchainCount = 1;
 	present_info.pSwapchains = &vk.swap_chain;
 	present_info.pImageIndices = &image_index;

@@ -4,6 +4,7 @@
 
 # Download dependencies
 ./scripts/download_glm.sh
+./scripts/download_imgui.sh
 
 # Compile shaders
 ./scripts/compile_shaders.sh

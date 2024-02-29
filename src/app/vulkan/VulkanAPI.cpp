@@ -29,6 +29,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createDescriptors();
 	createPipeline();
 
+	setupImgui();
+
 	storeMesh(cube_vertices, cube_indices);
 
 	LOG_INFO("VulkanAPI initialized");
@@ -37,6 +39,10 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 VulkanAPI::~VulkanAPI()
 {
 	vkDeviceWaitIdle(device);
+
+	ImGui_ImplVulkan_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	vkDestroyBuffer(device, mesh.buffer, nullptr);
 	vkFreeMemory(device, mesh.buffer_memory, nullptr);
@@ -65,8 +71,10 @@ VulkanAPI::~VulkanAPI()
 		vkDestroySemaphore(device, image_available_semaphores[i], nullptr);
 		vkDestroySemaphore(device, render_finished_semaphores[i], nullptr);
 		vkDestroySemaphore(device, swap_chain_updated_semaphores[i], nullptr);
+		vkDestroySemaphore(device, imgui_render_finished_semaphores[i], nullptr);
 		vkDestroyFence(device, in_flight_fences[i], nullptr);
 	}
+	vkDestroyFence(device, single_time_command_fence, nullptr);
 
 	vkDestroyImageView(device, color_attachement_view, nullptr);
 	vkFreeMemory(device, color_attachement_memory, nullptr);
@@ -83,6 +91,10 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyPipeline(device, graphics_pipeline, nullptr);
 	vkDestroyPipelineLayout(device, pipeline_layout, nullptr);
 
+	for (size_t i = 0; i < swap_chain_image_views.size(); i++)
+	{
+		vkDestroyImageView(device, swap_chain_image_views[i], nullptr);
+	}
 	vkDestroySwapchainKHR(device, swap_chain, nullptr);
 
 	vkDestroyDevice(device, nullptr);
@@ -486,7 +498,7 @@ void VulkanAPI::createSwapChain(GLFWwindow * window)
 	create_info.imageColorSpace = surface_format.colorSpace;
 	create_info.imageExtent = extent;
 	create_info.imageArrayLayers = 1;
-	create_info.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+	create_info.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
 	uint32_t indices[] = {
 		queue_family_indices.graphics_family.value(),
@@ -523,6 +535,17 @@ void VulkanAPI::createSwapChain(GLFWwindow * window)
 
 	swap_chain_image_format = surface_format.format;
 	swap_chain_extent = extent;
+
+	swap_chain_image_views.resize(image_count);
+	for (size_t i = 0; i < image_count; i++)
+	{
+		createImageView(
+			swap_chain_images[i],
+			swap_chain_image_format,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			swap_chain_image_views[i]
+		);
+	}
 }
 
 void VulkanAPI::recreateSwapChain(GLFWwindow * window)
@@ -537,6 +560,10 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 
 	vkDeviceWaitIdle(device);
 
+	ImGui_ImplVulkan_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
 	vkDestroyImage(device, draw_image, nullptr);
 	vkUnmapMemory(device, draw_image_memory);
 	vkFreeMemory(device, draw_image_memory, nullptr);
@@ -545,16 +572,26 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	vkFreeMemory(device, color_attachement_memory, nullptr);
 	vkDestroyImage(device, color_attachement_image, nullptr);
 
+	vkDestroyImageView(device, depth_attachement_view, nullptr);
+	vkFreeMemory(device, depth_attachement_memory, nullptr);
+	vkDestroyImage(device, depth_attachement_image, nullptr);
+
 	vkDestroyPipeline(device, graphics_pipeline, nullptr);
 	vkDestroyPipelineLayout(device, pipeline_layout, nullptr);
 
+	for (size_t i = 0; i < swap_chain_image_views.size(); i++)
+	{
+		vkDestroyImageView(device, swap_chain_image_views[i], nullptr);
+	}
 	vkDestroySwapchainKHR(device, swap_chain, nullptr);
 
 
 	createSwapChain(window);
 	createColorResources();
+	createDepthResources();
 	createPipeline();
 	createDrawImage();
+	setupImgui();
 }
 
 VkSurfaceFormatKHR VulkanAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
@@ -647,6 +684,7 @@ void VulkanAPI::createSyncObjects()
 	image_available_semaphores.resize(max_frames_in_flight);
 	render_finished_semaphores.resize(max_frames_in_flight);
 	swap_chain_updated_semaphores.resize(max_frames_in_flight);
+	imgui_render_finished_semaphores.resize(max_frames_in_flight);
 	in_flight_fences.resize(max_frames_in_flight);
 
 	VkSemaphoreCreateInfo semaphore_info = {};
@@ -671,10 +709,19 @@ void VulkanAPI::createSyncObjects()
 			"Failed to create semaphores"
 		);
 		VK_CHECK(
+			vkCreateSemaphore(device, &semaphore_info, nullptr, &imgui_render_finished_semaphores[i]),
+			"Failed to create semaphores"
+		);
+		VK_CHECK(
 			vkCreateFence(device, &fence_info, nullptr, &in_flight_fences[i]),
 			"Failed to create fences"
 		);
 	}
+
+	VK_CHECK(
+		vkCreateFence(device, &fence_info, nullptr, &single_time_command_fence),
+		"Failed to create fences"
+	);
 }
 
 void VulkanAPI::createColorResources()
@@ -1257,6 +1304,63 @@ uint64_t VulkanAPI::storeMesh(const std::vector<Vertex> & vertices, const std::v
 }
 
 
+void VulkanAPI::setupImgui()
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO & io = ImGui::GetIO();
+	(void)io;
+
+	ImGui::StyleColorsDark();
+
+	std::vector<VkDescriptorPoolSize> pool_sizes =
+	{
+		{VK_DESCRIPTOR_TYPE_SAMPLER, 1000},
+		{VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000},
+		{VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000},
+		{VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000},
+		{VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000},
+		{VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000},
+		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000},
+		{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000},
+		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000},
+		{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000},
+		{VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000}
+	};
+
+	VkDescriptorPoolCreateInfo pool_info = {};
+	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+	pool_info.poolSizeCount = static_cast<uint32_t>(pool_sizes.size());
+	pool_info.pPoolSizes = pool_sizes.data();
+	pool_info.maxSets = 1000;
+
+	VK_CHECK(
+		vkCreateDescriptorPool(device, &pool_info, nullptr, &imgui_descriptor_pool),
+		"Failed to create imgui descriptor pool"
+	);
+
+	ImGui_ImplGlfw_InitForVulkan(window, true);
+	ImGui_ImplVulkan_InitInfo init_info = {};
+	init_info.Instance = instance;
+	init_info.PhysicalDevice = physical_device;
+	init_info.Device = device;
+	init_info.QueueFamily = queue_family_indices.graphics_family.value();
+	init_info.Queue = graphics_queue;
+	init_info.PipelineCache = VK_NULL_HANDLE;
+	init_info.DescriptorPool = imgui_descriptor_pool;
+	init_info.Allocator = nullptr;
+	init_info.MinImageCount = 2;
+	init_info.ImageCount = static_cast<uint32_t>(swap_chain_images.size());
+	init_info.UseDynamicRendering = VK_TRUE;
+	init_info.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
+	init_info.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+	init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &swap_chain_image_format;
+
+	ImGui_ImplVulkan_Init(&init_info);
+}
+
+
 void VulkanAPI::clearPixels()
 {
 	std::memset(draw_image_mapped_memory, 0, draw_image_extent.width * draw_image_extent.height * 4);
@@ -1278,6 +1382,43 @@ void VulkanAPI::putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b
 
 }
 
+
+VkCommandBuffer VulkanAPI::beginSingleTimeCommands()
+{
+	vkResetFences(device, 1, &single_time_command_fence);
+
+	VkCommandBufferAllocateInfo alloc_info = {};
+	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	alloc_info.commandPool = command_pool;
+	alloc_info.commandBufferCount = 1;
+
+	VkCommandBuffer command_buffer;
+	vkAllocateCommandBuffers(device, &alloc_info, &command_buffer);
+
+	VkCommandBufferBeginInfo begin_info = {};
+	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	vkBeginCommandBuffer(command_buffer, &begin_info);
+
+	return command_buffer;
+}
+
+void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
+{
+	vkEndCommandBuffer(command_buffer);
+
+	VkSubmitInfo submit_info = {};
+	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submit_info.commandBufferCount = 1;
+	submit_info.pCommandBuffers = &command_buffer;
+
+	vkQueueSubmit(graphics_queue, 1, &submit_info, single_time_command_fence);
+	vkWaitForFences(device, 1, &single_time_command_fence, VK_TRUE, UINT64_MAX);
+
+	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
+}
 
 uint32_t VulkanAPI::findMemoryType(
 	uint32_t type_filter,
