@@ -154,6 +154,8 @@ public:
 	void clearPixels();
 	void putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 
+	uint64_t storeMesh(const std::vector<Vertex> & vertices, const std::vector<uint32_t> & indices);
+
 
 	GLFWwindow * window;
 
@@ -227,6 +229,8 @@ public:
 		0, 1, 2, 2, 3, 0
 	};
 	Mesh mesh;
+	uint64_t next_mesh_id = 0;
+	std::unordered_map<uint64_t, Mesh> meshes;
 
 
 private:
@@ -297,9 +301,6 @@ private:
 	void createPipeline();
 	static std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
-
-
-	void createMesh();
 
 
 	uint32_t findMemoryType(

@@ -28,7 +28,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createDescriptors();
 	createPipeline();
 
-	createMesh();
+	storeMesh(vertices, indices);
 
 	LOG_INFO("VulkanAPI initialized");
 }
@@ -1155,8 +1155,9 @@ void VulkanAPI::createDrawImage()
 	vkMapMemory(device, draw_image_memory, 0, VK_WHOLE_SIZE, 0, &draw_image_mapped_memory);
 }
 
-void VulkanAPI::createMesh()
+uint64_t VulkanAPI::storeMesh(const std::vector<Vertex> & vertices, const std::vector<uint32_t> & indices)
 {
+	Mesh mesh;
 	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
 	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
 	VkDeviceSize buffer_size = vertex_size + index_size;
@@ -1193,6 +1194,11 @@ void VulkanAPI::createMesh()
 	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
 	mesh.index_offset = vertex_size;
 	mesh.index_count = static_cast<uint32_t>(indices.size());
+
+	this->mesh = mesh;
+
+	meshes.emplace(next_mesh_id, mesh);
+	return next_mesh_id++;
 }
 
 
