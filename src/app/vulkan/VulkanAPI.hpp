@@ -121,6 +121,53 @@ struct ModelMatrice
 	glm::mat4 model;
 };
 
+const std::vector<Vertex> cube_vertices = {
+
+	// Front face
+	{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+	{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+	{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+	{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+
+	// Back face
+	{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+	{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
+	{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
+	{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
+
+	// Right face
+	{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+	{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+	{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+	{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+
+	// Left face
+	{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+	{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+	{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+	{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+
+	// Top face
+	{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},
+	{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}},
+	{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+	{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+
+	// Bottom face
+	{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}},
+	{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}},
+	{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
+	{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}}
+};
+
+const std::vector<uint32_t> cube_indices = {
+	0, 1, 2, 2, 3, 0,
+	4, 5, 6, 6, 7, 4,
+	8, 9, 10, 10, 11, 8,
+	12, 13, 14, 14, 15, 12,
+	16, 17, 18, 18, 19, 16,
+	20, 21, 22, 22, 23, 20
+};
 
 class VulkanAPI
 {
@@ -193,6 +240,12 @@ public:
 	VkFormat color_attachement_format;
 	VkExtent2D color_attachement_extent;
 
+	VkImage depth_attachement_image;
+	VkDeviceMemory depth_attachement_memory;
+	VkImageView depth_attachement_view;
+	VkFormat depth_attachement_format;
+	VkExtent2D depth_attachement_extent;
+
 	VkImage draw_image;
 	VkDeviceMemory draw_image_memory;
 	void * draw_image_mapped_memory;
@@ -219,15 +272,6 @@ public:
 	VkPipeline graphics_pipeline;
 
 
-	const std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
-		{{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
-		{{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-		{{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}
-	};
-	const std::vector<uint32_t> indices = {
-		0, 1, 2, 2, 3, 0
-	};
 	Mesh mesh;
 	uint64_t next_mesh_id = 0;
 	std::unordered_map<uint64_t, Mesh> meshes;
@@ -291,6 +335,7 @@ private:
 	void createSyncObjects();
 
 	void createColorResources();
+	void createDepthResources();
 	void createDrawImage();
 
 	void createUniformBuffers();
@@ -306,6 +351,11 @@ private:
 	uint32_t findMemoryType(
 		uint32_t type_filter,
 		VkMemoryPropertyFlags properties
+	);
+	VkFormat findSupportedFormat(
+		const std::vector<VkFormat> & candidates,
+		VkImageTiling tiling,
+		VkFormatFeatureFlags features
 	);
 	void createImage(
 		uint32_t width,

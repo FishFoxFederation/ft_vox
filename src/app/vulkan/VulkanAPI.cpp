@@ -23,12 +23,13 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	createDrawImage();
 	createColorResources();
+	createDepthResources();
 	createUniformBuffers();
 	createImageTexture("assets/textures/grass.jpg");
 	createDescriptors();
 	createPipeline();
 
-	storeMesh(vertices, indices);
+	storeMesh(cube_vertices, cube_indices);
 
 	LOG_INFO("VulkanAPI initialized");
 }
@@ -70,6 +71,10 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyImageView(device, color_attachement_view, nullptr);
 	vkFreeMemory(device, color_attachement_memory, nullptr);
 	vkDestroyImage(device, color_attachement_image, nullptr);
+
+	vkDestroyImageView(device, depth_attachement_view, nullptr);
+	vkFreeMemory(device, depth_attachement_memory, nullptr);
+	vkDestroyImage(device, depth_attachement_image, nullptr);
 
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(render_command_buffers.size()), render_command_buffers.data());
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(copy_command_buffers.size()), copy_command_buffers.data());
@@ -708,6 +713,46 @@ void VulkanAPI::createColorResources()
 	);
 }
 
+void VulkanAPI::createDepthResources()
+{
+	depth_attachement_format = findSupportedFormat(
+		{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
+		VK_IMAGE_TILING_OPTIMAL,
+		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+	);
+	depth_attachement_extent = swap_chain_extent;
+
+	createImage(
+		depth_attachement_extent.width,
+		depth_attachement_extent.height,
+		1,
+		depth_attachement_format,
+		VK_IMAGE_TILING_OPTIMAL,
+		VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+		depth_attachement_image,
+		depth_attachement_memory
+	);
+	createImageView(
+		depth_attachement_image,
+		depth_attachement_format,
+		VK_IMAGE_ASPECT_DEPTH_BIT,
+		depth_attachement_view
+	);
+
+	transitionImageLayout(
+		depth_attachement_image,
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_ASPECT_DEPTH_BIT,
+		1,
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+	);
+}
+
 void VulkanAPI::createUniformBuffers()
 {
 	VkDeviceSize buffer_size = sizeof(CameraMatrices);
@@ -1033,13 +1078,22 @@ void VulkanAPI::createPipeline()
 	color_blending.pAttachments = &color_blend_attachment;
 
 
-	std::vector<VkFormat> formats = {color_attachement_format};
+	VkPipelineDepthStencilStateCreateInfo depth_stencil = {};
+	depth_stencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depth_stencil.depthTestEnable = VK_TRUE;
+	depth_stencil.depthWriteEnable = VK_TRUE;
+	depth_stencil.depthCompareOp = VK_COMPARE_OP_LESS;
+	depth_stencil.depthBoundsTestEnable = VK_FALSE;
+	depth_stencil.stencilTestEnable = VK_FALSE;
+
+
+	std::vector<VkFormat> color_formats = {color_attachement_format};
 
 	VkPipelineRenderingCreateInfo rendering_info = {};
 	rendering_info.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-	rendering_info.colorAttachmentCount = static_cast<uint32_t>(formats.size());
-	rendering_info.pColorAttachmentFormats = formats.data();
-	// rendering_info.depthAttachmentFormat = VK_FORMAT_D32_SFLOAT;
+	rendering_info.colorAttachmentCount = static_cast<uint32_t>(color_formats.size());
+	rendering_info.pColorAttachmentFormats = color_formats.data();
+	rendering_info.depthAttachmentFormat = depth_attachement_format;
 
 
 
@@ -1071,6 +1125,7 @@ void VulkanAPI::createPipeline()
 	pipeline_info.pRasterizationState = &rasterizer;
 	pipeline_info.pMultisampleState = &multisampling;
 	pipeline_info.pColorBlendState = &color_blending;
+	pipeline_info.pDepthStencilState = &depth_stencil;
 	pipeline_info.layout = pipeline_layout;
 	pipeline_info.pNext = &rendering_info;
 
@@ -1241,6 +1296,30 @@ uint32_t VulkanAPI::findMemoryType(
 	}
 
 	throw std::runtime_error("Failed to find suitable memory type");
+}
+
+VkFormat VulkanAPI::findSupportedFormat(
+	const std::vector<VkFormat> & candidates,
+	VkImageTiling tiling,
+	VkFormatFeatureFlags features
+)
+{
+	for (VkFormat format : candidates)
+	{
+		VkFormatProperties props;
+		vkGetPhysicalDeviceFormatProperties(physical_device, format, &props);
+
+		if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
+		{
+			return format;
+		}
+		else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+		{
+			return format;
+		}
+	}
+
+	throw std::runtime_error("Failed to find supported format");
 }
 
 void VulkanAPI::createImage(
