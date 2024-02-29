@@ -3,12 +3,16 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-// #include <vulkan/vulkan.h>
+#include <vulkan/vulkan.h>
 #include <vulkan/vk_enum_string_helper.h>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtx/hash.hpp>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_vulkan.h"
 
 #include <stdexcept>
 #include <vector>
@@ -219,6 +223,7 @@ public:
 
 	VkSwapchainKHR swap_chain;
 	std::vector<VkImage> swap_chain_images;
+	std::vector<VkImageView> swap_chain_image_views;
 	VkFormat swap_chain_image_format;
 	VkExtent2D swap_chain_extent;
 
@@ -229,7 +234,9 @@ public:
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> render_finished_semaphores;
 	std::vector<VkSemaphore> swap_chain_updated_semaphores;
+	std::vector<VkSemaphore> imgui_render_finished_semaphores;
 	std::vector<VkFence> in_flight_fences;
+	VkFence single_time_command_fence;
 
 	const int max_frames_in_flight = 2;
 	int current_frame = 0;
@@ -270,6 +277,8 @@ public:
 
 	VkPipelineLayout pipeline_layout;
 	VkPipeline graphics_pipeline;
+
+	VkDescriptorPool imgui_descriptor_pool;
 
 
 	Mesh mesh;
@@ -347,6 +356,11 @@ private:
 	static std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
 
+
+	void setupImgui();
+
+	VkCommandBuffer beginSingleTimeCommands();
+	void endSingleTimeCommands(VkCommandBuffer command_buffer);
 
 	uint32_t findMemoryType(
 		uint32_t type_filter,

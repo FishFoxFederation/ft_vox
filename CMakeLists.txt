@@ -41,6 +41,14 @@ target_sources(${PROJECT_NAME}
 		src/app/world/Chunk.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
+
+		external/imgui/imgui.cpp
+		external/imgui/imgui_draw.cpp
+		external/imgui/imgui_widgets.cpp
+		external/imgui/imgui_tables.cpp
+		external/imgui/imgui_demo.cpp
+		external/imgui/backends/imgui_impl_glfw.cpp
+		external/imgui/backends/imgui_impl_vulkan.cpp
 )
 
 # include directories (equivalent to -I)
@@ -61,6 +69,8 @@ target_include_directories(${PROJECT_NAME}
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
+		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
+		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
 )
 
 target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
