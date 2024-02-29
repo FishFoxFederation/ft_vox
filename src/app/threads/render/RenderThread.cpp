@@ -78,12 +78,21 @@ void RenderThread::loop()
 	color_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	color_attachments[0].clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	VkRenderingAttachmentInfo depth_attachment = {};
+	depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	depth_attachment.imageView = vk.depth_attachement_view;
+	depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	depth_attachment.clearValue = { 1.0f, 0 };
+
 	VkRenderingInfo render_info = {};
 	render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
 	render_info.renderArea = { 0, 0, vk.color_attachement_extent.width, vk.color_attachement_extent.height };
 	render_info.layerCount = 1;
 	render_info.colorAttachmentCount = static_cast<uint32_t>(color_attachments.size());
 	render_info.pColorAttachments = color_attachments.data();
+	render_info.pDepthAttachment = &depth_attachment;
 
 	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
 
@@ -103,7 +112,8 @@ void RenderThread::loop()
 	);
 
 	ModelMatrice model_matrice = {};
-	model_matrice.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	// model_matrice.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	model_matrice.model = glm::mat4(1.0f);
 	vkCmdPushConstants(
 		vk.render_command_buffers[vk.current_frame],
 		vk.pipeline_layout,
