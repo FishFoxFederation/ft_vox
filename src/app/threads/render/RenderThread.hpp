@@ -6,6 +6,8 @@
 #include "Settings.hpp"
 #include "VulkanAPI.hpp"
 
+#include <chrono>
+
 /**
  * @brief The push constant for the model matrix.
  */
@@ -33,7 +35,8 @@ public:
 	RenderThread(
 		const Settings & settings,
 		VulkanAPI & vulkanAPI,
-		const WorldScene & worldScene
+		const WorldScene & worldScene,
+		std::chrono::nanoseconds start_time
 	);
 
 	/**
@@ -52,6 +55,15 @@ private:
 	VulkanAPI & vk;
 	const WorldScene & m_world_scene;
 
+	std::chrono::nanoseconds m_start_time;
+	std::chrono::nanoseconds m_current_time;
+	std::chrono::nanoseconds m_last_frame_time;
+	std::chrono::nanoseconds m_delta_time;
+
+	int m_frame_count;
+	float m_fps;
+	std::chrono::nanoseconds m_start_time_counting_fps;
+
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
 	 *
@@ -67,5 +79,11 @@ private:
 	 *
 	 */
 	void loop() override;
+
+	/**
+	 * @brief update the time
+	 *
+	 */
+	void updateTime();
 
 };

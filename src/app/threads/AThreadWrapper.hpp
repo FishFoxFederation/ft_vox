@@ -45,11 +45,11 @@ private:
 	 * @brief function used to initialize the thread data if needed
 	 * 
 	 */
-	virtual void init() = 0;
+	virtual void init() {};
 
 	/**
 	 * @brief this function will be called everytime the thread loops
 	 * 
 	 */
-	virtual void loop() = 0;
+	virtual void loop() {};
 };
