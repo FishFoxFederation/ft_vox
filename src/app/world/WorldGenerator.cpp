@@ -10,7 +10,7 @@ WorldGenerator::~WorldGenerator()
 
 }
 
-Chunk && WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
+Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 {
 	Chunk chunk(glm::ivec3(x, y, z));
 	(void)x, (void)y;
@@ -30,5 +30,5 @@ Chunk && WorldGenerator::generateChunk(const int & x, const int & y, const int &
 			}
 		}
 	}
-	return std::move(chunk);
+	return chunk;
 }
