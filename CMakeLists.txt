@@ -34,9 +34,13 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp
+		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
+		src/app/world/Chunk.cpp
+		src/app/world/World.cpp
+		src/app/world/WorldGenerator.cpp
 )
 
 # include directories (equivalent to -I)
@@ -53,6 +57,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 )
