@@ -4,7 +4,7 @@
 Chunk::Chunk(glm::ivec3 position)
 : m_position(position)
 {
-	LOG_INFO("Chunk created at position: " << m_position.x << " " << m_position.y << " " << m_position.z);
+	// LOG_INFO("Chunk created at position: " << m_position.x << " " << m_position.y << " " << m_position.z);
 	for(auto & block : m_blocks)
 		block = Block::Air;
 }

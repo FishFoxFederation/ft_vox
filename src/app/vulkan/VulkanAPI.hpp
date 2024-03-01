@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Chunk.hpp"
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
@@ -48,8 +50,8 @@ struct SwapChainSupportDetails
 	std::vector<VkPresentModeKHR> present_modes;
 };
 
-struct Vertex {
-	glm::vec3 pos;
+struct BlockVertex {
+	glm::ivec3 pos;
 	glm::vec3 normal;
 	glm::vec2 texCoord;
 
@@ -57,7 +59,7 @@ struct Vertex {
 	{
 		VkVertexInputBindingDescription bindingDescription{};
 		bindingDescription.binding = 0;
-		bindingDescription.stride = sizeof(Vertex);
+		bindingDescription.stride = sizeof(BlockVertex);
 		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
 		return bindingDescription;
@@ -69,23 +71,23 @@ struct Vertex {
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
-		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-		attributeDescriptions[0].offset = offsetof(Vertex, pos);
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SINT;
+		attributeDescriptions[0].offset = offsetof(BlockVertex, pos);
 
 		attributeDescriptions[1].binding = 0;
 		attributeDescriptions[1].location = 1;
 		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		attributeDescriptions[1].offset = offsetof(Vertex, normal);
+		attributeDescriptions[1].offset = offsetof(BlockVertex, normal);
 
 		attributeDescriptions[2].binding = 0;
 		attributeDescriptions[2].location = 2;
 		attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-		attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+		attributeDescriptions[2].offset = offsetof(BlockVertex, texCoord);
 
 		return attributeDescriptions;
 	}
 
-	bool operator==(const Vertex& other) const
+	bool operator==(const BlockVertex& other) const
 	{
 		return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
 	}
@@ -93,9 +95,9 @@ struct Vertex {
 
 namespace std
 {
-	template<> struct hash<Vertex>
+	template<> struct hash<BlockVertex>
 	{
-		size_t operator()(const Vertex & vertex) const
+		size_t operator()(const BlockVertex & vertex) const
 		{
 			return ((hash<glm::vec3>()(vertex.pos) ^
 				(hash<glm::vec3>()(vertex.normal) << 1)) >> 1) ^
@@ -125,7 +127,7 @@ struct ModelMatrice
 	glm::mat4 model;
 };
 
-const std::vector<Vertex> cube_vertices = {
+const std::vector<BlockVertex> cube_vertices = {
 
 	// Front face
 	{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
@@ -205,7 +207,8 @@ public:
 	void clearPixels();
 	void putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 
-	uint64_t storeMesh(const std::vector<Vertex> & vertices, const std::vector<uint32_t> & indices);
+	uint64_t createMesh(const Chunk & chunk);
+	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
 
 
 	GLFWwindow * window;
