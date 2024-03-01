@@ -12,6 +12,8 @@ class Chunk
 {
 public:
 	Chunk(glm::ivec3 position);
+	~Chunk();
+
 	typedef std::array<Block, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE> BlockArray;
 
 	Block	getBlock(const int & x, const int & y, const int & z) const;
