@@ -565,6 +565,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
 	vkDestroyImage(device, draw_image, nullptr);
 	vkUnmapMemory(device, draw_image_memory);

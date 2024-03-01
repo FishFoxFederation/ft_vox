@@ -105,6 +105,7 @@ void RenderThread::loop()
 	render_info.pDepthAttachment = &depth_attachment;
 
 	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
+	auto start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
 
 	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
@@ -121,27 +122,45 @@ void RenderThread::loop()
 		nullptr
 	);
 
-	ModelMatrice model_matrice = {};
-	// model_matrice.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	model_matrice.model = glm::mat4(1.0f);
-	vkCmdPushConstants(
-		vk.render_command_buffers[vk.current_frame],
-		vk.pipeline_layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(ModelMatrice),
-		&model_matrice
-	);
-
 	VkBuffer vertex_buffers[] = { vk.mesh.buffer };
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
 
 	vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.mesh.buffer, vk.mesh.index_offset, VK_INDEX_TYPE_UINT32);
 
-	vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.mesh.index_count), 1, 0, 0, 0);
+	triangle_count = 0;
 
+	int size = 20;
+	for (int x = -size; x < size; x++)
+	{
+		for (int z = -size; z < size; z++)
+		{
+			for (int y = -size; y < size; y++)
+			{
+				if (sqrt(x * x + y * y + z * z) > size)
+				{
+					continue;
+				}
 
+				ModelMatrice model_matrice = {};
+				model_matrice.model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+				vkCmdPushConstants(
+					vk.render_command_buffers[vk.current_frame],
+					vk.pipeline_layout,
+					VK_SHADER_STAGE_VERTEX_BIT,
+					0,
+					sizeof(ModelMatrice),
+					&model_matrice
+				);
+
+				vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.mesh.index_count), 1, 0, 0, 0);
+
+				triangle_count += static_cast<int>(vk.mesh.index_count) / 3;
+			}
+		}
+	}
+
+	auto end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -390,7 +409,11 @@ void RenderThread::loop()
 
 	ImGui::Begin("Debug");
 	ImGui::Text("Frame time: %f ms", m_delta_time.count() / 1e6);
+	ImGui::Text("CPU rendering time: %ld ms",
+		std::chrono::duration_cast<std::chrono::milliseconds>(end_cpu_rendering_time - start_cpu_rendering_time).count()
+	);
 	ImGui::Text("FPS: %f", m_fps);
+	ImGui::Text("Triangle count: %d", triangle_count);
 	ImGui::End();
 
 	ImGui::Render();

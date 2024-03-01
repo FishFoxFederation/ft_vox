@@ -64,6 +64,8 @@ private:
 	float m_fps;
 	std::chrono::nanoseconds m_start_time_counting_fps;
 
+	int triangle_count;
+
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
 	 *

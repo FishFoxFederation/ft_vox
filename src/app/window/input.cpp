@@ -95,6 +95,23 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 			}
 			break;
 		}
+		case GLFW_KEY_C:
+		{
+			if (action == GLFW_PRESS)
+			{
+				if (input->m_cursor_captured)
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+					input->m_cursor_captured = false;
+				}
+				else
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					input->m_cursor_captured = true;
+				}
+			}
+			break;
+		}
 		default:
 		{
 			break;
