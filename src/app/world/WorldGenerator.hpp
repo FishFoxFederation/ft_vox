@@ -11,7 +11,7 @@ public:
 	WorldGenerator();
 	~WorldGenerator();
 
-	Chunk && generateChunk(const int & x, const int & y, const int & z);
+	Chunk generateChunk(const int & x, const int & y, const int & z);
 private:
 	
 };
