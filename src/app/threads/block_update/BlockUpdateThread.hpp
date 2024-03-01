@@ -2,6 +2,7 @@
 
 #include "define.hpp"
 #include "AThreadWrapper.hpp"
+#include "World.hpp"
 
 /**
  * @brief An implementation of the thread wrapper for the thread that handles block updates
@@ -24,8 +25,9 @@ public:
 	BlockUpdateThread(BlockUpdateThread&& other) = delete;
 	BlockUpdateThread& operator=(BlockUpdateThread& other) = delete;
 
-
 private:
+
+	World	m_world;
 
 	/**
 	 * @brief WIP
