@@ -5,3 +5,5 @@
  * 
  */
 #define PROJECT_NAME "my_project"
+
+#define WORLD_Y_MAX 256

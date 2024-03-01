@@ -10,7 +10,6 @@ BlockUpdateThread::~BlockUpdateThread()
 
 void BlockUpdateThread::init()
 {
-
 }
 
 void BlockUpdateThread::loop()
