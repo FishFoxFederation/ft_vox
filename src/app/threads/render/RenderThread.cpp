@@ -11,12 +11,17 @@
 RenderThread::RenderThread(
 	const Settings & settings,
 	VulkanAPI & vulkanAPI,
-	const WorldScene & worldScene
+	const WorldScene & worldScene,
+	std::chrono::nanoseconds start_time
 ):
 	AThreadWrapper(),
 	m_settings(settings),
 	vk(vulkanAPI),
-	m_world_scene(worldScene)
+	m_world_scene(worldScene),
+	m_start_time(start_time),
+	m_last_frame_time(start_time),
+	m_frame_count(0),
+	m_start_time_counting_fps(start_time)
 {
 	(void)m_settings;
 	(void)m_world_scene;
@@ -38,10 +43,7 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	static auto startTime = std::chrono::high_resolution_clock::now();
-
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	auto time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	updateTime();
 
 	int width, height;
 	glfwGetFramebufferSize(vk.window, &width, &height);
@@ -50,6 +52,14 @@ void RenderThread::loop()
 	camera_matrices.view = m_world_scene.camera().getViewMatrix();
 	camera_matrices.proj = m_world_scene.camera().getProjectionMatrix(static_cast<float>(width) / static_cast<float>(height));
 	camera_matrices.proj[1][1] *= -1;
+
+	m_frame_count++;
+	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
+	{
+		m_fps = static_cast<float>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
+		m_frame_count = 0;
+		m_start_time_counting_fps = m_current_time;
+	}
 
 	//############################################################################################################
 	//                     																                         #
@@ -376,7 +386,12 @@ void RenderThread::loop()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow();
+	// ImGui::ShowDemoWindow();
+
+	ImGui::Begin("Debug");
+	ImGui::Text("Frame time: %f ms", m_delta_time.count() / 1e6);
+	ImGui::Text("FPS: %f", m_fps);
+	ImGui::End();
 
 	ImGui::Render();
 
@@ -486,4 +501,11 @@ void RenderThread::loop()
 
 	// Increment the current frame
 	vk.current_frame = (vk.current_frame + 1) % vk.max_frames_in_flight;
+}
+
+void RenderThread::updateTime()
+{
+	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
+	m_delta_time = m_current_time - m_last_frame_time;
+	m_last_frame_time = m_current_time;
 }

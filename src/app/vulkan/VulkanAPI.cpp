@@ -63,6 +63,8 @@ VulkanAPI::~VulkanAPI()
 		vkDestroyBuffer(device, uniform_buffers[i], nullptr);
 	}
 
+	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
+
 	vkDestroyDescriptorPool(device, descriptor_pool, nullptr);
 	vkDestroyDescriptorSetLayout(device, descriptor_set_layout, nullptr);
 
