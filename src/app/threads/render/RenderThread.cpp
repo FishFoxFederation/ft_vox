@@ -130,7 +130,7 @@ void RenderThread::loop()
 
 	triangle_count = 0;
 
-	int size = 20;
+	int size = 10;
 	for (int x = -size; x < size; x++)
 	{
 		for (int z = -size; z < size; z++)
@@ -176,31 +176,31 @@ void RenderThread::loop()
 	 * vk.putPixel(x, y, r, g, b, a = 255) = put a pixel at the position (x, y) with the color (r, g, b, a)
 	 */
 
-	static Perlin perlin_pinpin(0, 5, 1, 0.5, 2.0);
+	// static Perlin perlin_pinpin(0, 5, 1, 0.5, 2.0);
 
-	(void)time;
-	vk.clearPixels();
-	// int nope;
-	// std::cin >> nope; std::cin.clear();
+	// (void)time;
+	// vk.clearPixels();
+	// // int nope;
+	// // std::cin >> nope; std::cin.clear();
 
-	for(size_t i = 0; i < vk.height(); i++)
-	{
-		for(size_t j = 0; j < vk.width(); j++)
-		{
-			float value = perlin_pinpin.noise(glm::vec2(j * 0.01f, i * 0.01f));
+	// for(size_t i = 0; i < vk.height(); i++)
+	// {
+	// 	for(size_t j = 0; j < vk.width(); j++)
+	// 	{
+	// 		float value = perlin_pinpin.noise(glm::vec2(j * 0.01f, i * 0.01f));
 
-			//normalize to range [0, 1]
-			value += 1;
-			value /= 2;
+	// 		//normalize to range [0, 1]
+	// 		value += 1;
+	// 		value /= 2;
 
-			int light = value * 255;
-			light &= 0xFF;
+	// 		int light = value * 255;
+	// 		light &= 0xFF;
 
-			vk.putPixel(j, i, light, light, light);
-			// std::cout << std::setw(3) << light << " ";
-		}
-		// std::cout << std::endl;
-	}
+	// 		vk.putPixel(j, i, light, light, light);
+	// 		// std::cout << std::setw(3) << light << " ";
+	// 	}
+	// 	// std::cout << std::endl;
+	// }
 
 	//############################################################################################################
 	//                     																                         #

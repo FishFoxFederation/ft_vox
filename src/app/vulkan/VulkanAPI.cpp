@@ -1059,8 +1059,8 @@ void VulkanAPI::createPipeline()
 	VkPipelineShaderStageCreateInfo shader_stages[] = {vert_shader_stage_info, frag_shader_stage_info};
 
 
-	VkVertexInputBindingDescription binding_description = Vertex::getBindingDescription();
-	std::array<VkVertexInputAttributeDescription, 3> attribute_descriptions = Vertex::getAttributeDescriptions();
+	VkVertexInputBindingDescription binding_description = BlockVertex::getBindingDescription();
+	std::array<VkVertexInputAttributeDescription, 3> attribute_descriptions = BlockVertex::getAttributeDescriptions();
 
 	VkPipelineVertexInputStateCreateInfo vertex_input_info = {};
 	vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -1260,7 +1260,94 @@ void VulkanAPI::createDrawImage()
 	vkMapMemory(device, draw_image_memory, 0, VK_WHOLE_SIZE, 0, &draw_image_mapped_memory);
 }
 
-uint64_t VulkanAPI::storeMesh(const std::vector<Vertex> & vertices, const std::vector<uint32_t> & indices)
+uint64_t VulkanAPI::createMesh(const Chunk & chunk)
+{
+#define ADD_INDEX \
+	indices.push_back(vertices.size() - 4); \
+	indices.push_back(vertices.size() - 3); \
+	indices.push_back(vertices.size() - 2); \
+	indices.push_back(vertices.size() - 4); \
+	indices.push_back(vertices.size() - 2); \
+	indices.push_back(vertices.size() - 1);
+
+	std::vector<BlockVertex> vertices;
+	std::vector<uint32_t> indices;
+
+	for (int x = 0; x < CHUNK_SIZE; x++)
+	{
+		for (int y = 0; y < CHUNK_SIZE; y++)
+		{
+			for (int z = 0; z < CHUNK_SIZE; z++)
+			{
+				Block block = chunk.getBlock(x, y, z);
+
+				if (block != Block::Air)
+				{
+					// check top neighbor
+					if (y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == Block::Air)
+					{
+						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}});
+						ADD_INDEX
+					}
+					// check bottom neighbor
+					if (y > 0 && chunk.getBlock(x, y - 1, z) == Block::Air)
+					{
+						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}});
+						ADD_INDEX
+					}
+					// check left neighbor
+					if (x > 0 && chunk.getBlock(x - 1, y, z) == Block::Air)
+					{
+						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}});
+						ADD_INDEX
+					}
+					// check right neighbor
+					if (x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == Block::Air)
+					{
+						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}});
+						ADD_INDEX
+					}
+					// check front neighbor
+					if (z > 0 && chunk.getBlock(x, y, z - 1) == Block::Air)
+					{
+						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}});
+						ADD_INDEX
+					}
+					// check back neighbor
+					if (z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == Block::Air)
+					{
+						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}});
+						ADD_INDEX
+					}
+				}
+			}
+		}
+	}
+
+#undef ADD_INDEX
+
+	return storeMesh(vertices, indices);
+}
+
+uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
 {
 	Mesh mesh;
 	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
