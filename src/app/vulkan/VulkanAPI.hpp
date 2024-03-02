@@ -129,52 +129,29 @@ struct ModelMatrice
 	glm::mat4 model;
 };
 
-const std::vector<BlockVertex> cube_vertices = {
 
-	// Front face
-	{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
-	{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
-	{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-	{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+struct ImGuiTexture
+{
+	VkImage image;
+	VkDeviceMemory memory;
+	VkImageView view;
+	VkSampler sampler;
 
-	// Back face
-	{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
-	{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
-	{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
-	{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
+	void * mapped_memory;
 
-	// Right face
-	{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-	{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-	{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-	{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+	VkDescriptorSet descriptor_set;
 
-	// Left face
-	{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-	{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-	{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-	{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+	VkFormat format;
+	VkExtent2D extent;
 
-	// Top face
-	{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},
-	{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}},
-	{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-	{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-
-	// Bottom face
-	{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}},
-	{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}},
-	{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
-	{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}}
-};
-
-const std::vector<uint32_t> cube_indices = {
-	0, 1, 2, 2, 3, 0,
-	4, 5, 6, 6, 7, 4,
-	8, 9, 10, 10, 11, 8,
-	12, 13, 14, 14, 15, 12,
-	16, 17, 18, 18, 19, 16,
-	20, 21, 22, 22, 23, 20
+	void putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
+	{
+		uint8_t * pixel = (uint8_t *)mapped_memory + (y * extent.width + x) * 4;
+		pixel[0] = r;
+		pixel[1] = g;
+		pixel[2] = b;
+		pixel[3] = a;
+	}
 };
 
 class VulkanAPI
@@ -211,6 +188,8 @@ public:
 
 	uint64_t createMesh(const Chunk & chunk);
 	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
+
+	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 
 
 	GLFWwindow * window;
@@ -283,10 +262,11 @@ public:
 	VkPipelineLayout pipeline_layout;
 	VkPipeline graphics_pipeline;
 
+	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
+	ImGuiTexture imgui_texture;
 
 
-	Mesh mesh;
 	uint64_t next_mesh_id = 1;
 	static const uint64_t no_mesh_id = 0;
 	std::unordered_map<uint64_t, Mesh> meshes;
@@ -366,6 +346,7 @@ private:
 
 
 	void setupImgui();
+	void destroyImGuiTexture(ImGuiTexture & imgui_texture);
 
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);
