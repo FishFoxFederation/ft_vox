@@ -5,8 +5,11 @@
 #include "WorldScene.hpp"
 #include "Settings.hpp"
 #include "VulkanAPI.hpp"
+#include "Chunk.hpp"
+#include "WorldGenerator.hpp"
 
 #include <chrono>
+#include <map>
 
 /**
  * @brief The push constant for the model matrix.
@@ -55,6 +58,17 @@ private:
 	VulkanAPI & vk;
 	const WorldScene & m_world_scene;
 
+	struct ChunkData
+	{
+		glm::vec3 position;
+		uint64_t mesh_id;
+	};
+
+	WorldGenerator world_generator;
+	std::vector<std::pair<glm::vec3, Chunk>> m_chunks;
+	std::vector<ChunkData> m_chunks_to_draw;
+
+
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;
 	std::chrono::nanoseconds m_last_frame_time;
@@ -64,7 +78,7 @@ private:
 	float m_fps;
 	std::chrono::nanoseconds m_start_time_counting_fps;
 
-	int triangle_count;
+	int m_triangle_count;
 
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
