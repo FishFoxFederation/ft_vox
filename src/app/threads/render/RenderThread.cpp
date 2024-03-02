@@ -25,6 +25,7 @@ RenderThread::RenderThread(
 {
 	(void)m_settings;
 	(void)m_world_scene;
+
 }
 
 RenderThread::~RenderThread()
@@ -33,6 +34,30 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
+	for (int x = 0; x < 10; x++)
+	{
+		for (int z = 0; z < 10; z++)
+		{
+			for (int y = 0; y < 10; y++)
+			{
+				m_chunks.emplace_back(
+					std::make_pair(
+						glm::vec3(x, y, z),
+						world_generator.generateChunk(x, y, z)
+					)
+				);
+			}
+		}
+	}
+
+	for (auto & [position, chunk] : m_chunks)
+	{
+		uint64_t mesh_id = vk.createMesh(chunk);
+		if (mesh_id != VulkanAPI::no_mesh_id)
+		{
+			m_chunks_to_draw.push_back({ position, mesh_id });
+		}
+	}
 }
 
 void RenderThread::loop()
@@ -122,42 +147,31 @@ void RenderThread::loop()
 		nullptr
 	);
 
-	VkBuffer vertex_buffers[] = { vk.mesh.buffer };
-	VkDeviceSize offsets[] = { 0 };
-	vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
-
-	vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.mesh.buffer, vk.mesh.index_offset, VK_INDEX_TYPE_UINT32);
-
-	triangle_count = 0;
-
-	int size = 10;
-	for (int x = -size; x < size; x++)
+	m_triangle_count = 0;
+	
+	for (auto & [position, mesh_id] : m_chunks_to_draw)
 	{
-		for (int z = -size; z < size; z++)
-		{
-			for (int y = -size; y < size; y++)
-			{
-				if (sqrt(x * x + y * y + z * z) > size)
-				{
-					continue;
-				}
+		VkBuffer vertex_buffers[] = { vk.meshes[mesh_id].buffer };
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
 
-				ModelMatrice model_matrice = {};
-				model_matrice.model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
-				vkCmdPushConstants(
-					vk.render_command_buffers[vk.current_frame],
-					vk.pipeline_layout,
-					VK_SHADER_STAGE_VERTEX_BIT,
-					0,
-					sizeof(ModelMatrice),
-					&model_matrice
-				);
+		vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.meshes[mesh_id].buffer, vk.meshes[mesh_id].index_offset, VK_INDEX_TYPE_UINT32);
 
-				vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.mesh.index_count), 1, 0, 0, 0);
+		// LOG_DEBUG("Drawing chunk at position: " << position.x << " " << position.y << " " << position.z);
+		ModelMatrice model_matrice = {};
+		model_matrice.model = glm::translate(glm::mat4(1.0f), position * static_cast<float>(CHUNK_SIZE));
+		vkCmdPushConstants(
+			vk.render_command_buffers[vk.current_frame],
+			vk.pipeline_layout,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			0,
+			sizeof(ModelMatrice),
+			&model_matrice
+		);
 
-				triangle_count += static_cast<int>(vk.mesh.index_count) / 3;
-			}
-		}
+		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.mesh.index_count), 1, 0, 0, 0);
+
+		m_triangle_count += static_cast<int>(vk.mesh.index_count) / 3;
 	}
 
 	auto end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
@@ -413,7 +427,7 @@ void RenderThread::loop()
 		std::chrono::duration_cast<std::chrono::milliseconds>(end_cpu_rendering_time - start_cpu_rendering_time).count()
 	);
 	ImGui::Text("FPS: %f", m_fps);
-	ImGui::Text("Triangle count: %d", triangle_count);
+	ImGui::Text("Triangle count: %d", m_triangle_count);
 	ImGui::End();
 
 	ImGui::Render();

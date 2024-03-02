@@ -285,7 +285,8 @@ public:
 
 
 	Mesh mesh;
-	uint64_t next_mesh_id = 0;
+	uint64_t next_mesh_id = 1;
+	static const uint64_t no_mesh_id = 0;
 	std::unordered_map<uint64_t, Mesh> meshes;
 
 

@@ -44,8 +44,14 @@ VulkanAPI::~VulkanAPI()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
-	vkDestroyBuffer(device, mesh.buffer, nullptr);
-	vkFreeMemory(device, mesh.buffer_memory, nullptr);
+	// vkDestroyBuffer(device, mesh.buffer, nullptr);
+	// vkFreeMemory(device, mesh.buffer_memory, nullptr);
+
+	for (auto & [key, mesh] : meshes)
+	{
+		vkDestroyBuffer(device, mesh.buffer, nullptr);
+		vkFreeMemory(device, mesh.buffer_memory, nullptr);
+	}
 
 	vkDestroyImage(device, texture_image, nullptr);
 	vkFreeMemory(device, texture_image_memory, nullptr);
@@ -1283,17 +1289,8 @@ uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 
 				if (block != Block::Air)
 				{
-					// check top neighbor
-					if (y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == Block::Air)
-					{
-						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}});
-						ADD_INDEX
-					}
 					// check bottom neighbor
-					if (y > 0 && chunk.getBlock(x, y - 1, z) == Block::Air)
+					if (y == 0 || chunk.getBlock(x, y - 1, z) == Block::Air)
 					{
 						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}});
@@ -1301,8 +1298,17 @@ uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}});
 						ADD_INDEX
 					}
+					// check top neighbor
+					if (y == CHUNK_SIZE - 1 || chunk.getBlock(x, y + 1, z) == Block::Air)
+					{
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}});
+						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}});
+						ADD_INDEX
+					}
 					// check left neighbor
-					if (x > 0 && chunk.getBlock(x - 1, y, z) == Block::Air)
+					if (x == 0 || chunk.getBlock(x - 1, y, z) == Block::Air)
 					{
 						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}});
@@ -1311,25 +1317,25 @@ uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 						ADD_INDEX
 					}
 					// check right neighbor
-					if (x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == Block::Air)
+					if (x == CHUNK_SIZE - 1 || chunk.getBlock(x + 1, y, z) == Block::Air)
 					{
-						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}});
 						ADD_INDEX
 					}
 					// check front neighbor
-					if (z > 0 && chunk.getBlock(x, y, z - 1) == Block::Air)
+					if (z == 0 || chunk.getBlock(x, y, z - 1) == Block::Air)
 					{
-						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}});
 						ADD_INDEX
 					}
 					// check back neighbor
-					if (z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == Block::Air)
+					if (z == CHUNK_SIZE - 1 || chunk.getBlock(x, y, z + 1) == Block::Air)
 					{
 						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}});
 						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}});
@@ -1343,6 +1349,11 @@ uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 	}
 
 #undef ADD_INDEX
+
+	if (vertices.empty())
+	{
+		return no_mesh_id;
+	}
 
 	return storeMesh(vertices, indices);
 }
