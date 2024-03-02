@@ -159,52 +159,6 @@ void RenderThread::loop()
 
 	//############################################################################################################
 	//                     																                         #
-	//                                          Auguste tu commence ici                                          #
-	//                     																                         #
-	//############################################################################################################
-
-	/*
-	 * vk.width() = the width of the image
-	 * vk.height() = the height of the image
-	 * vk.clearPixels() = clear the draw image
-	 * vk.putPixel(x, y, r, g, b, a = 255) = put a pixel at the position (x, y) with the color (r, g, b, a)
-	 */
-
-	// static Perlin perlin_pinpin(0, 5, 1, 0.5, 2.0);
-
-	// (void)time;
-	// vk.clearPixels();
-	// // int nope;
-	// // std::cin >> nope; std::cin.clear();
-
-	// for(size_t i = 0; i < vk.height(); i++)
-	// {
-	// 	for(size_t j = 0; j < vk.width(); j++)
-	// 	{
-	// 		float value = perlin_pinpin.noise(glm::vec2(j * 0.01f, i * 0.01f));
-
-	// 		//normalize to range [0, 1]
-	// 		value += 1;
-	// 		value /= 2;
-
-	// 		int light = value * 255;
-	// 		light &= 0xFF;
-
-	// 		vk.putPixel(j, i, light, light, light);
-	// 		// std::cout << std::setw(3) << light << " ";
-	// 	}
-	// 	// std::cout << std::endl;
-	// }
-
-	//############################################################################################################
-	//                     																                         #
-	//                                           Et tu t'arrêtes la :)                                           #
-	//                     																                         #
-	//############################################################################################################
-
-
-	//############################################################################################################
-	//                     																                         #
 	//                              Submit the command buffer to the graphics queue                              #
 	//                     																                         #
 	//############################################################################################################
