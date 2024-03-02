@@ -21,7 +21,6 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createCommandBuffer();
 	createSyncObjects();
 
-	createDrawImage();
 	createColorResources();
 	createDepthResources();
 	createUniformBuffers();
@@ -55,10 +54,6 @@ VulkanAPI::~VulkanAPI()
 	vkFreeMemory(device, texture_image_memory, nullptr);
 	vkDestroyImageView(device, texture_image_view, nullptr);
 	vkDestroySampler(device, texture_sampler, nullptr);
-
-	vkDestroyImage(device, draw_image, nullptr);
-	vkUnmapMemory(device, draw_image_memory);
-	vkFreeMemory(device, draw_image_memory, nullptr);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -565,14 +560,12 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 
 	vkDeviceWaitIdle(device);
 
+	destroyImGuiTexture(imgui_texture);
+
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
-
-	vkDestroyImage(device, draw_image, nullptr);
-	vkUnmapMemory(device, draw_image_memory);
-	vkFreeMemory(device, draw_image_memory, nullptr);
 
 	vkDestroyImageView(device, color_attachement_view, nullptr);
 	vkFreeMemory(device, color_attachement_memory, nullptr);
@@ -596,8 +589,8 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	createColorResources();
 	createDepthResources();
 	createPipeline();
-	createDrawImage();
 	setupImgui();
+	createImGuiTexture(100, 100);
 }
 
 VkSurfaceFormatKHR VulkanAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
@@ -1230,39 +1223,6 @@ VkShaderModule VulkanAPI::createShaderModule(const std::vector<char> & code)
 	return shader_module;
 }
 
-void VulkanAPI::createDrawImage()
-{
-	draw_image_format = VK_FORMAT_R8G8B8A8_SRGB;
-	draw_image_extent = swap_chain_extent;
-
-	createImage(
-		draw_image_extent.width,
-		draw_image_extent.height,
-		1,
-		draw_image_format,
-		VK_IMAGE_TILING_LINEAR,
-		VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		draw_image,
-		draw_image_memory
-	);
-
-	transitionImageLayout(
-		draw_image,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	// map memory
-	vkMapMemory(device, draw_image_memory, 0, VK_WHOLE_SIZE, 0, &draw_image_mapped_memory);
-}
-
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
 {
 	imgui_texture.extent = { width, height };
@@ -1535,28 +1495,6 @@ void VulkanAPI::setupImgui()
 	init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &swap_chain_image_format;
 
 	ImGui_ImplVulkan_Init(&init_info);
-}
-
-
-void VulkanAPI::clearPixels()
-{
-	std::memset(draw_image_mapped_memory, 0, draw_image_extent.width * draw_image_extent.height * 4);
-}
-
-void VulkanAPI::putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-{
-	if (x >= draw_image_extent.width || y >= draw_image_extent.height)
-	{
-		throw std::runtime_error("Pixel coordinates out of range");
-	}
-
-	uint8_t * pixel = reinterpret_cast<uint8_t *>(draw_image_mapped_memory);
-	pixel += (y * draw_image_extent.width + x) * 4;
-	pixel[0] = r;
-	pixel[1] = g;
-	pixel[2] = b;
-	pixel[3] = a;
-
 }
 
 

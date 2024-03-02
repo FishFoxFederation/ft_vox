@@ -144,6 +144,14 @@ struct ImGuiTexture
 	VkFormat format;
 	VkExtent2D extent;
 
+	uint32_t width() const { return extent.width; }
+	uint32_t height() const { return extent.height; }
+
+	void clear()
+	{
+		memset(mapped_memory, 0, extent.width * extent.height * 4);
+	}
+
 	void putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
 	{
 		uint8_t * pixel = (uint8_t *)mapped_memory + (y * extent.width + x) * 4;
@@ -180,11 +188,6 @@ public:
 	);
 
 	void recreateSwapChain(GLFWwindow * window);
-
-	uint32_t width() const { return draw_image_extent.width; }
-	uint32_t height() const { return draw_image_extent.height; }
-	void clearPixels();
-	void putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 
 	uint64_t createMesh(const Chunk & chunk);
 	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
@@ -236,12 +239,6 @@ public:
 	VkImageView depth_attachement_view;
 	VkFormat depth_attachement_format;
 	VkExtent2D depth_attachement_extent;
-
-	VkImage draw_image;
-	VkDeviceMemory draw_image_memory;
-	void * draw_image_mapped_memory;
-	VkFormat draw_image_format;
-	VkExtent2D draw_image_extent;
 
 	std::vector<VkBuffer> uniform_buffers;
 	std::vector<VkDeviceMemory> uniform_buffers_memory;
@@ -333,7 +330,6 @@ private:
 
 	void createColorResources();
 	void createDepthResources();
-	void createDrawImage();
 
 	void createUniformBuffers();
 	void createImageTexture(const std::string & file_path);
