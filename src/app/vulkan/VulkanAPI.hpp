@@ -19,6 +19,8 @@
 #include <stdexcept>
 #include <vector>
 #include <optional>
+#include <unordered_map>
+#include <mutex>
 
 // #define NDEBUG
 
@@ -288,6 +290,8 @@ public:
 	uint64_t next_mesh_id = 1;
 	static const uint64_t no_mesh_id = 0;
 	std::unordered_map<uint64_t, Mesh> meshes;
+
+	std::mutex global_mutex;
 
 
 private:

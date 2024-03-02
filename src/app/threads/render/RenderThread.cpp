@@ -34,30 +34,30 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
-	for (int x = 0; x < 10; x++)
-	{
-		for (int z = 0; z < 10; z++)
-		{
-			for (int y = 0; y < 10; y++)
-			{
-				m_chunks.emplace_back(
-					std::make_pair(
-						glm::vec3(x, y, z),
-						world_generator.generateChunk(x, y, z)
-					)
-				);
-			}
-		}
-	}
+	// for (int x = 0; x < 10; x++)
+	// {
+	// 	for (int z = 0; z < 10; z++)
+	// 	{
+	// 		for (int y = 0; y < 10; y++)
+	// 		{
+	// 			m_chunks.emplace_back(
+	// 				std::make_pair(
+	// 					glm::vec3(x, y, z),
+	// 					world_generator.generateChunk(x, y, z)
+	// 				)
+	// 			);
+	// 		}
+	// 	}
+	// }
 
-	for (auto & [position, chunk] : m_chunks)
-	{
-		uint64_t mesh_id = vk.createMesh(chunk);
-		if (mesh_id != VulkanAPI::no_mesh_id)
-		{
-			m_chunks_to_draw.push_back({ position, mesh_id });
-		}
-	}
+	// for (auto & [position, chunk] : m_chunks)
+	// {
+	// 	uint64_t mesh_id = vk.createMesh(chunk);
+	// 	if (mesh_id != VulkanAPI::no_mesh_id)
+	// 	{
+	// 		m_chunks_to_draw.push_back({ position, mesh_id });
+	// 	}
+	// }
 }
 
 void RenderThread::loop()
@@ -91,6 +91,8 @@ void RenderThread::loop()
 	//                                  Start the vulkan rendering process here                                  #
 	//                     																                         #
 	//############################################################################################################
+
+	std::lock_guard<std::mutex> lock(vk.global_mutex);
 
 	vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
@@ -148,18 +150,21 @@ void RenderThread::loop()
 	);
 
 	m_triangle_count = 0;
+
+	auto mesh_render_data = m_world_scene.getMeshRenderData();
 	
-	for (auto & [position, mesh_id] : m_chunks_to_draw)
+	for (auto & mesh_data : mesh_render_data)
 	{
-		VkBuffer vertex_buffers[] = { vk.meshes[mesh_id].buffer };
+		VkBuffer vertex_buffers[] = { vk.meshes[mesh_data.id].buffer };
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
 
-		vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.meshes[mesh_id].buffer, vk.meshes[mesh_id].index_offset, VK_INDEX_TYPE_UINT32);
+		vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.meshes[mesh_data.id].buffer, vk.meshes[mesh_data.id].index_offset, VK_INDEX_TYPE_UINT32);
 
 		// LOG_DEBUG("Drawing chunk at position: " << position.x << " " << position.y << " " << position.z);
 		ModelMatrice model_matrice = {};
-		model_matrice.model = glm::translate(glm::mat4(1.0f), position * static_cast<float>(CHUNK_SIZE));
+		// model_matrice.model = glm::translate(glm::mat4(1.0f), position * static_cast<float>(CHUNK_SIZE));
+		model_matrice.model = mesh_data.transform.model();
 		vkCmdPushConstants(
 			vk.render_command_buffers[vk.current_frame],
 			vk.pipeline_layout,

@@ -3,6 +3,8 @@
 #include "define.hpp"
 #include "AThreadWrapper.hpp"
 #include "World.hpp"
+#include "WorldScene.hpp"
+#include "VulkanAPI.hpp"
 
 /**
  * @brief An implementation of the thread wrapper for the thread that handles block updates
@@ -18,7 +20,10 @@ class BlockUpdateThread : public AThreadWrapper
 {
 public:
 
-	BlockUpdateThread();
+	BlockUpdateThread(
+		WorldScene & worldScene,
+		VulkanAPI & vulkanAPI
+	);
 	~BlockUpdateThread();
 
 	BlockUpdateThread(BlockUpdateThread& other) = delete;
@@ -28,6 +33,8 @@ public:
 private:
 
 	World	m_world;
+	WorldScene & m_worldScene;
+	VulkanAPI & m_vulkanAPI;
 
 	/**
 	 * @brief WIP

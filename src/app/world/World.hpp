@@ -24,8 +24,11 @@ public:
 	~World();
 
 	void update(glm::vec3 playerPosition);
-private:
+
+	std::unordered_map<glm::ivec3, Chunk> & chunks() { return m_chunks; }
+
 	WorldGenerator m_worldGenerator;
+private:
 	std::unordered_map<glm::ivec3, Chunk>	m_chunks;
 	std::unordered_set<glm::ivec3>			m_visible_chunks;
 };

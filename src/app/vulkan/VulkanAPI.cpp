@@ -1268,6 +1268,7 @@ void VulkanAPI::createDrawImage()
 
 uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 {
+	std::lock_guard<std::mutex> lock(global_mutex);
 #define ADD_INDEX \
 	indices.push_back(vertices.size() - 4); \
 	indices.push_back(vertices.size() - 3); \
