@@ -1,10 +1,14 @@
 var searchData=
 [
-  ['debug_5fmessenger_0',['debug_messenger',['../classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e',1,'VulkanAPI']]],
-  ['device_1',['device',['../classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669',1,'VulkanAPI']]],
-  ['draw_5fimage_2',['draw_image',['../classVulkanAPI.html#aef64369b7f35961d23ea3a9fa6255b2a',1,'VulkanAPI']]],
-  ['draw_5fimage_5fextent_3',['draw_image_extent',['../classVulkanAPI.html#a8bc1073a8e87590d2e69436fe1fa01a7',1,'VulkanAPI']]],
-  ['draw_5fimage_5fformat_4',['draw_image_format',['../classVulkanAPI.html#a0e496c340e0c690268ca69186cc78a68',1,'VulkanAPI']]],
-  ['draw_5fimage_5fmapped_5fmemory_5',['draw_image_mapped_memory',['../classVulkanAPI.html#afee8894b5a16b5ee9f2718b30b5d4d63',1,'VulkanAPI']]],
-  ['draw_5fimage_5fmemory_6',['draw_image_memory',['../classVulkanAPI.html#a16dd975fbae165e02696c9f3cc0ad2c8',1,'VulkanAPI']]]
+  ['capabilities_0',['capabilities',['../structSwapChainSupportDetails.html#a8918f9f5496b29a701e8d094aa455b2a',1,'SwapChainSupportDetails']]],
+  ['color_5fattachement_5fextent_1',['color_attachement_extent',['../classVulkanAPI.html#ad6577a4ae85f6aa01f3eb4b6228ecc72',1,'VulkanAPI']]],
+  ['color_5fattachement_5fformat_2',['color_attachement_format',['../classVulkanAPI.html#a7bce636eaec69f85724222f82aeac75b',1,'VulkanAPI']]],
+  ['color_5fattachement_5fimage_3',['color_attachement_image',['../classVulkanAPI.html#a17c5eed7bbc49913937242992e9c765a',1,'VulkanAPI']]],
+  ['color_5fattachement_5fmemory_4',['color_attachement_memory',['../classVulkanAPI.html#af68a817c10f287c3dee239ac9b4416f5',1,'VulkanAPI']]],
+  ['color_5fattachement_5fview_5',['color_attachement_view',['../classVulkanAPI.html#a020cc17b115d7997fea46c36ce50ed4a',1,'VulkanAPI']]],
+  ['command_5fpool_6',['command_pool',['../classVulkanAPI.html#a512711a2bf5f70765279aca5f1e6c5dd',1,'VulkanAPI']]],
+  ['copy_5fcommand_5fbuffers_7',['copy_command_buffers',['../classVulkanAPI.html#a6e36af29d838a6599ddb213ca74a7edf',1,'VulkanAPI']]],
+  ['cube_5findices_8',['cube_indices',['../VulkanAPI_8hpp.html#ad1b9afa4126d4c070079dca645f3f494',1,'VulkanAPI.hpp']]],
+  ['cube_5fvertices_9',['cube_vertices',['../VulkanAPI_8hpp.html#a5756c2944ec048140f0faf4d54a8082f',1,'VulkanAPI.hpp']]],
+  ['current_5fframe_10',['current_frame',['../classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202',1,'VulkanAPI']]]
 ];

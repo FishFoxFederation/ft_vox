@@ -1,4 +1,12 @@
 <map id="src/app/world/World.hpp" name="src/app/world/World.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,167,31"/>
-<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="46,79,126,104"/>
+<area shape="rect" id="node1" title=" " alt="" coords="259,5,420,31"/>
+<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="150,299,230,324"/>
+<area shape="rect" id="node3" title=" " alt="" coords="429,225,528,251"/>
+<area shape="rect" id="node4" title=" " alt="" coords="330,152,440,177"/>
+<area shape="rect" id="node5" title=" " alt="" coords="244,79,348,104"/>
+<area shape="rect" id="node6" href="$Block_8hpp.html" title=" " alt="" coords="11,225,90,251"/>
+<area shape="rect" id="node7" href="$Chunk_8hpp.html" title=" " alt="" coords="165,152,248,177"/>
+<area shape="rect" id="node9" href="$WorldGenerator_8hpp.html" title=" " alt="" coords="33,79,169,104"/>
+<area shape="rect" id="node10" href="$hashes_8hpp.html" title=" " alt="" coords="422,79,510,104"/>
+<area shape="rect" id="node8" title=" " alt="" coords="165,225,216,251"/>
 </map>

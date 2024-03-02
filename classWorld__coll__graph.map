@@ -1,3 +1,4 @@
 <map id="World" name="World">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,64,45"/>
+<area shape="rect" id="node1" title=" " alt="" coords="33,152,116,251"/>
+<area shape="rect" id="node2" href="$classWorldGenerator.html" title=" " alt="" coords="5,5,144,89"/>
 </map>

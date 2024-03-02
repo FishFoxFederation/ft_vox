@@ -112,12 +112,44 @@ $(document).ready(function(){initNavTree('World_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="define_8hpp.html">define.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="classWorld.html">    9</a></span><span class="keyword">class </span><a class="code hl_class" href="classWorld.html">World</a></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>};</div>
-<div class="ttc" id="aclassWorld_html"><div class="ttname"><a href="classWorld.html">World</a></div><div class="ttdef"><b>Definition:</b> World.hpp:10</div></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;glm/vec3.hpp&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="Block_8hpp.html">Block.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="Chunk_8hpp.html">Chunk.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="WorldGenerator_8hpp.html">WorldGenerator.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="hashes_8hpp.html">hashes.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="World_8hpp.html#a8a7b3d7c895c64b2272c412c87450791">   14</a></span><span class="preprocessor">#define CHUNKS_PER_WORLD 16</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classWorld.html">   20</a></span><span class="keyword">class </span><a class="code hl_class" href="classWorld.html">World</a></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>{</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_function" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a>();</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <a class="code hl_function" href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">~World</a>();</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classWorld.html#a1a38fd2011e5ed3c00cfe83a4d10c39c">update</a>(glm::vec3 playerPosition);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classWorld.html#ac3a32cfb8f5a69a60c7bf4e03a837539">   28</a></span>    std::unordered_map&lt;glm::ivec3, Chunk&gt; &amp; <a class="code hl_function" href="classWorld.html#ac3a32cfb8f5a69a60c7bf4e03a837539">chunks</a>() { <span class="keywordflow">return</span> m_chunks; }</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classWorld.html#a27e7781b2b2b2be832a4fccd7faaf1ec">   30</a></span>    <a class="code hl_class" href="classWorldGenerator.html">WorldGenerator</a> <a class="code hl_variable" href="classWorld.html#a27e7781b2b2b2be832a4fccd7faaf1ec">m_worldGenerator</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    std::unordered_map&lt;glm::ivec3, Chunk&gt;   m_chunks;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    std::unordered_set&lt;glm::ivec3&gt;          m_visible_chunks;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>};</div>
+<div class="ttc" id="aBlock_8hpp_html"><div class="ttname"><a href="Block_8hpp.html">Block.hpp</a></div></div>
+<div class="ttc" id="aChunk_8hpp_html"><div class="ttname"><a href="Chunk_8hpp.html">Chunk.hpp</a></div></div>
+<div class="ttc" id="aWorldGenerator_8hpp_html"><div class="ttname"><a href="WorldGenerator_8hpp.html">WorldGenerator.hpp</a></div></div>
+<div class="ttc" id="aclassWorldGenerator_html"><div class="ttname"><a href="classWorldGenerator.html">WorldGenerator</a></div><div class="ttdef"><b>Definition:</b> WorldGenerator.hpp:9</div></div>
+<div class="ttc" id="aclassWorld_html"><div class="ttname"><a href="classWorld.html">World</a></div><div class="ttdef"><b>Definition:</b> World.hpp:21</div></div>
+<div class="ttc" id="aclassWorld_html_a1a38fd2011e5ed3c00cfe83a4d10c39c"><div class="ttname"><a href="classWorld.html#a1a38fd2011e5ed3c00cfe83a4d10c39c">World::update</a></div><div class="ttdeci">void update(glm::vec3 playerPosition)</div><div class="ttdef"><b>Definition:</b> World.cpp:23</div></div>
+<div class="ttc" id="aclassWorld_html_a27e7781b2b2b2be832a4fccd7faaf1ec"><div class="ttname"><a href="classWorld.html#a27e7781b2b2b2be832a4fccd7faaf1ec">World::m_worldGenerator</a></div><div class="ttdeci">WorldGenerator m_worldGenerator</div><div class="ttdef"><b>Definition:</b> World.hpp:30</div></div>
+<div class="ttc" id="aclassWorld_html_a8c73fba541a5817fff65147ba47cd827"><div class="ttname"><a href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">World::~World</a></div><div class="ttdeci">~World()</div><div class="ttdef"><b>Definition:</b> World.cpp:19</div></div>
+<div class="ttc" id="aclassWorld_html_ac3a32cfb8f5a69a60c7bf4e03a837539"><div class="ttname"><a href="classWorld.html#ac3a32cfb8f5a69a60c7bf4e03a837539">World::chunks</a></div><div class="ttdeci">std::unordered_map&lt; glm::ivec3, Chunk &gt; &amp; chunks()</div><div class="ttdef"><b>Definition:</b> World.hpp:28</div></div>
+<div class="ttc" id="aclassWorld_html_afa39d4e6f714a7a3691ac0c656f5e8a8"><div class="ttname"><a href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World::World</a></div><div class="ttdeci">World()</div><div class="ttdef"><b>Definition:</b> World.cpp:3</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
+<div class="ttc" id="ahashes_8hpp_html"><div class="ttname"><a href="hashes_8hpp.html">hashes.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
