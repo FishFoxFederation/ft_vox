@@ -25,6 +25,7 @@ RenderThread::RenderThread(
 {
 	(void)m_settings;
 	(void)m_world_scene;
+	(void)m_start_time;
 
 }
 
