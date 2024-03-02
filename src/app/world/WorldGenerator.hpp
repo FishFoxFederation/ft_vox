@@ -2,6 +2,7 @@
 
 #include "define.hpp"
 
+#include "Perlin.hpp"
 #include "Chunk.hpp"
 #include "Block.hpp"
 
@@ -13,5 +14,5 @@ public:
 
 	Chunk generateChunk(const int & x, const int & y, const int & z);
 private:
-	
+	Perlin m_relief_perlin;	
 };

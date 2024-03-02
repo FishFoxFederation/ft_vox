@@ -3,6 +3,7 @@
 #include <cmath>
 
 WorldGenerator::WorldGenerator()
+: m_relief_perlin(0, 1, 1, 1, 2)
 {
 
 }
@@ -23,18 +24,13 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 		{
 			for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
 			{
-				// if (blockZ + z * CHUNK_SIZE < 128)
-				// 	chunk.setBlock(blockX, blockY, blockZ, Block::Grass);
-				// else if (blockZ + z * CHUNK_SIZE < 64)
-				// 	chunk.setBlock(blockX, blockY, blockZ, Block::Stone);
-				// else
-				// 	chunk.setBlock(blockX, blockY, blockZ, Block::Air);
-				Block block_type = y * CHUNK_SIZE + blockY < 50 ? Block::Stone : Block::Grass;
-				int _x = blockX - 8;
-				int _y = blockY - 8;
-				int _z = blockZ - 8;
-				if (sqrt(_x*_x + _y*_y + _z*_z) < 8.0f)
-					chunk.setBlock(blockX, blockY, blockZ, block_type);
+				float value = m_relief_perlin.noise(glm::vec2(
+					(blockX + x * CHUNK_SIZE) * 0.01f,
+					(blockZ + z * CHUNK_SIZE) * 0.01f
+				));
+				value = ((value + 1) / 2) * 256;
+				if (blockY + y * CHUNK_SIZE < value)
+					chunk.setBlock(blockX, blockY, blockZ, Block::Grass);
 				else
 					chunk.setBlock(blockX, blockY, blockZ, Block::Air);
 			}
