@@ -34,30 +34,7 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
-	// for (int x = 0; x < 10; x++)
-	// {
-	// 	for (int z = 0; z < 10; z++)
-	// 	{
-	// 		for (int y = 0; y < 10; y++)
-	// 		{
-	// 			m_chunks.emplace_back(
-	// 				std::make_pair(
-	// 					glm::vec3(x, y, z),
-	// 					world_generator.generateChunk(x, y, z)
-	// 				)
-	// 			);
-	// 		}
-	// 	}
-	// }
-
-	// for (auto & [position, chunk] : m_chunks)
-	// {
-	// 	uint64_t mesh_id = vk.createMesh(chunk);
-	// 	if (mesh_id != VulkanAPI::no_mesh_id)
-	// 	{
-	// 		m_chunks_to_draw.push_back({ position, mesh_id });
-	// 	}
-	// }
+	
 }
 
 void RenderThread::loop()
@@ -132,7 +109,7 @@ void RenderThread::loop()
 	render_info.pDepthAttachment = &depth_attachment;
 
 	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
-	auto start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	m_start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
 
 	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
@@ -161,9 +138,7 @@ void RenderThread::loop()
 
 		vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.meshes[mesh_data.id].buffer, vk.meshes[mesh_data.id].index_offset, VK_INDEX_TYPE_UINT32);
 
-		// LOG_DEBUG("Drawing chunk at position: " << position.x << " " << position.y << " " << position.z);
 		ModelMatrice model_matrice = {};
-		// model_matrice.model = glm::translate(glm::mat4(1.0f), position * static_cast<float>(CHUNK_SIZE));
 		model_matrice.model = mesh_data.transform.model();
 		vkCmdPushConstants(
 			vk.render_command_buffers[vk.current_frame],
@@ -174,12 +149,12 @@ void RenderThread::loop()
 			&model_matrice
 		);
 
-		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.mesh.index_count), 1, 0, 0, 0);
+		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.meshes[mesh_data.id].index_count), 1, 0, 0, 0);
 
-		m_triangle_count += static_cast<int>(vk.mesh.index_count) / 3;
+		m_triangle_count += static_cast<int>(vk.meshes[mesh_data.id].index_count) / 3;
 	}
 
-	auto end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	m_end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -420,20 +395,24 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 	);
 
+	// Transition the imgui texture from general to shader read only optimal
+	vk.transitionImageLayout(
+		vk.imgui_texture.image,
+		VK_IMAGE_LAYOUT_GENERAL,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		VK_IMAGE_ASPECT_COLOR_BIT,
+		1,
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+	);
+
 	ImGui_ImplVulkan_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	// ImGui::ShowDemoWindow();
-
-	ImGui::Begin("Debug");
-	ImGui::Text("Frame time: %f ms", m_delta_time.count() / 1e6);
-	ImGui::Text("CPU rendering time: %ld ms",
-		std::chrono::duration_cast<std::chrono::milliseconds>(end_cpu_rendering_time - start_cpu_rendering_time).count()
-	);
-	ImGui::Text("FPS: %f", m_fps);
-	ImGui::Text("Triangle count: %d", m_triangle_count);
-	ImGui::End();
+	updateImGui();
 
 	ImGui::Render();
 
@@ -501,6 +480,19 @@ void RenderThread::loop()
 	VK_CHECK(
 		vkQueueWaitIdle(vk.graphics_queue),
 		"Failed to wait for queue to become idle"
+	);
+
+	// Transition the imgui texture from shader read only optimal to general
+	vk.transitionImageLayout(
+		vk.imgui_texture.image,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		VK_IMAGE_LAYOUT_GENERAL,
+		VK_IMAGE_ASPECT_COLOR_BIT,
+		1,
+		0,
+		0,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 	);
 
 	//############################################################################################################

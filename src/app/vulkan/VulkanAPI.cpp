@@ -30,8 +30,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createPipeline();
 
 	setupImgui();
-
-	storeMesh(cube_vertices, cube_indices);
+	createImGuiTexture(100, 100);
 
 	LOG_INFO("VulkanAPI initialized");
 }
@@ -40,12 +39,11 @@ VulkanAPI::~VulkanAPI()
 {
 	vkDeviceWaitIdle(device);
 
+	destroyImGuiTexture(imgui_texture);
+
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-
-	// vkDestroyBuffer(device, mesh.buffer, nullptr);
-	// vkFreeMemory(device, mesh.buffer_memory, nullptr);
 
 	for (auto & [key, mesh] : meshes)
 	{
@@ -114,7 +112,6 @@ VulkanAPI::~VulkanAPI()
 	vkDestroySurfaceKHR(instance, surface, nullptr);
 
 	vkDestroyInstance(instance, nullptr);
-
 }
 
 void VulkanAPI::createInstance()
@@ -1266,6 +1263,86 @@ void VulkanAPI::createDrawImage()
 	vkMapMemory(device, draw_image_memory, 0, VK_WHOLE_SIZE, 0, &draw_image_mapped_memory);
 }
 
+uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
+{
+	imgui_texture.extent = { width, height };
+	imgui_texture.format = VK_FORMAT_R8G8B8A8_SRGB;
+
+	createImage(
+		imgui_texture.extent.width,
+		imgui_texture.extent.height,
+		1,
+		imgui_texture.format,
+		VK_IMAGE_TILING_LINEAR,
+		VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		imgui_texture.image,
+		imgui_texture.memory
+	);
+
+	createImageView(
+		imgui_texture.image,
+		imgui_texture.format,
+		VK_IMAGE_ASPECT_COLOR_BIT,
+		imgui_texture.view
+	);
+
+	VkSamplerCreateInfo sampler_info = {};
+	sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	sampler_info.magFilter = VK_FILTER_LINEAR;
+	sampler_info.minFilter = VK_FILTER_LINEAR;
+	sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	sampler_info.anisotropyEnable = VK_FALSE;
+	sampler_info.maxAnisotropy = 1.0f;
+	sampler_info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+	sampler_info.unnormalizedCoordinates = VK_FALSE;
+	sampler_info.compareEnable = VK_FALSE;
+	sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
+	sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	sampler_info.mipLodBias = 0.0f;
+	sampler_info.minLod = 0.0f;
+	sampler_info.maxLod = 0.0f;
+
+	VK_CHECK(
+		vkCreateSampler(device, &sampler_info, nullptr, &imgui_texture.sampler),
+		"Failed to create imgui texture sampler"
+	);
+
+	imgui_texture.descriptor_set = ImGui_ImplVulkan_AddTexture(
+		imgui_texture.sampler,
+		imgui_texture.view,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+	);
+
+	transitionImageLayout(
+		imgui_texture.image,
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_GENERAL,
+		VK_IMAGE_ASPECT_COLOR_BIT,
+		1,
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT
+	);
+
+	vkMapMemory(device, imgui_texture.memory, 0, VK_WHOLE_SIZE, 0, &imgui_texture.mapped_memory);
+
+	return 0;
+}
+
+void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
+{
+	vkUnmapMemory(device, imgui_texture.memory);
+	ImGui_ImplVulkan_RemoveTexture(imgui_texture.descriptor_set);
+	vkDestroySampler(device, imgui_texture.sampler, nullptr);
+	vkDestroyImageView(device, imgui_texture.view, nullptr);
+	vkFreeMemory(device, imgui_texture.memory, nullptr);
+	vkDestroyImage(device, imgui_texture.image, nullptr);
+}
+
 uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 {
 	std::lock_guard<std::mutex> lock(global_mutex);
@@ -1398,8 +1475,6 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
 	mesh.index_offset = vertex_size;
 	mesh.index_count = static_cast<uint32_t>(indices.size());
-
-	this->mesh = mesh;
 
 	meshes.emplace(next_mesh_id, mesh);
 	return next_mesh_id++;
