@@ -15,20 +15,20 @@ void RenderThread::updateImGui()
 	ImGui::Text("Triangle count: %d", m_triangle_count);
 
 	// write to texture
-	vk.imgui_texture.clear();
-	for (uint32_t x = 0; x < vk.imgui_texture.width(); x++)
-	{
-		for (uint32_t y = 0; y < vk.imgui_texture.height(); y++)
-		{
-			vk.imgui_texture.putPixel(x, y, 255, 0, 0, 255);
-		}
-	}
+	// vk.imgui_texture.clear();
+	// for (uint32_t x = 0; x < vk.imgui_texture.width(); x++)
+	// {
+	// 	for (uint32_t y = 0; y < vk.imgui_texture.height(); y++)
+	// 	{
+	// 		vk.imgui_texture.putPixel(x, y, 255, 0, 0, 255);
+	// 	}
+	// }
 
 	// display image
-	ImGui::Image(
-		(void *)vk.imgui_texture.descriptor_set,
-		ImVec2(vk.imgui_texture.extent.width, vk.imgui_texture.extent.height)
-	);
+	// ImGui::Image(
+	// 	(void *)vk.imgui_texture.descriptor_set,
+	// 	ImVec2(vk.imgui_texture.extent.width, vk.imgui_texture.extent.height)
+	// );
 
 	ImGui::End();
 }
