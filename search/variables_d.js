@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['texcoord_0',['texCoord',['../structBlockVertex.html#aec5cb6ca90dedfedbcff21e4c4ad9be2',1,'BlockVertex']]],
-  ['texture_5fheight_1',['texture_height',['../classVulkanAPI.html#a2906d95c8dda5d91b17d097a9a2e72c1',1,'VulkanAPI']]],
-  ['texture_5fimage_2',['texture_image',['../classVulkanAPI.html#a1c50e0ce6f166c863baa64d51c63e2a3',1,'VulkanAPI']]],
-  ['texture_5fimage_5fmemory_3',['texture_image_memory',['../classVulkanAPI.html#a2eb8575f66a5e8b59e2235747fb7e251',1,'VulkanAPI']]],
-  ['texture_5fimage_5fview_4',['texture_image_view',['../classVulkanAPI.html#a87835257243729988dad6a3e68d02057',1,'VulkanAPI']]],
-  ['texture_5fsampler_5',['texture_sampler',['../classVulkanAPI.html#ac1510a2e17946e8c0bf20f96c51985d9',1,'VulkanAPI']]],
-  ['texture_5fwidth_6',['texture_width',['../classVulkanAPI.html#a475f78bf767b1865d34489022c6c6b12',1,'VulkanAPI']]],
-  ['transform_7',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]]
+  ['sampler_0',['sampler',['../structImGuiTexture.html#aa70bee2839855d694ceae741d40e33c5',1,'ImGuiTexture']]],
+  ['single_5ftime_5fcommand_5ffence_1',['single_time_command_fence',['../classVulkanAPI.html#a10a2d2c305087b878e1518437fd6ca4e',1,'VulkanAPI']]],
+  ['surface_2',['surface',['../classVulkanAPI.html#afe362f2320ed6115d2eb627efed9d530',1,'VulkanAPI']]],
+  ['swap_5fchain_3',['swap_chain',['../classVulkanAPI.html#a75d2106f595f453d38c3fd067142152d',1,'VulkanAPI']]],
+  ['swap_5fchain_5fextent_4',['swap_chain_extent',['../classVulkanAPI.html#a493c029a5d6e84944b10aba3e127f8d2',1,'VulkanAPI']]],
+  ['swap_5fchain_5fimage_5fformat_5',['swap_chain_image_format',['../classVulkanAPI.html#a4d925a6136031c943dcf6817afdd5972',1,'VulkanAPI']]],
+  ['swap_5fchain_5fimage_5fviews_6',['swap_chain_image_views',['../classVulkanAPI.html#a85de254ff8aa9e6e8058f355de03cbce',1,'VulkanAPI']]],
+  ['swap_5fchain_5fimages_7',['swap_chain_images',['../classVulkanAPI.html#a855ed7c27abb119c4e892921c5068f16',1,'VulkanAPI']]],
+  ['swap_5fchain_5fupdated_5fsemaphores_8',['swap_chain_updated_semaphores',['../classVulkanAPI.html#a0c5478aa2b9c956fd32d8adb97dcde8f',1,'VulkanAPI']]]
 ];

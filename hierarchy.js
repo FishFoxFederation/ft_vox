@@ -12,6 +12,7 @@ var hierarchy =
     [ "Chunk", "classChunk.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
     [ "std::hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", null ],
+    [ "ImGuiTexture", "structImGuiTexture.html", null ],
     [ "Input", "classInput.html", null ],
     [ "Logger", "classLogger.html", null ],
     [ "Mesh", "structMesh.html", null ],

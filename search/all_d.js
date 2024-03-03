@@ -12,5 +12,5 @@ var searchData=
   ['present_5fqueue_9',['present_queue',['../classVulkanAPI.html#acd95a2f7af31d3ccba7de8553aeed384',1,'VulkanAPI']]],
   ['proj_10',['proj',['../structCameraMatrices.html#af9e5017feb665d41afb30606defdf483',1,'CameraMatrices']]],
   ['project_5fname_11',['PROJECT_NAME',['../define_8hpp.html#ae73053051efbb45c3a39751f5ce9fb36',1,'define.hpp']]],
-  ['putpixel_12',['putPixel',['../classVulkanAPI.html#ab8984029ac369dcc8d76ac09decf8250',1,'VulkanAPI']]]
+  ['putpixel_12',['putPixel',['../structImGuiTexture.html#a29c8bb2dd69d795fcfc075325c0ab8b8',1,'ImGuiTexture']]]
 ];

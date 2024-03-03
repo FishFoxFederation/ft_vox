@@ -7,12 +7,7 @@ var searchData=
   ['depth_5fattachement_5fmemory_4',['depth_attachement_memory',['../classVulkanAPI.html#aac57ff46f9532f6a76df44bc015146ce',1,'VulkanAPI']]],
   ['depth_5fattachement_5fview_5',['depth_attachement_view',['../classVulkanAPI.html#a27efab2bad4ba04f438d9be074a11adf',1,'VulkanAPI']]],
   ['descriptor_5fpool_6',['descriptor_pool',['../classVulkanAPI.html#adccdc3daae3df430b1c7c2dd682a3e32',1,'VulkanAPI']]],
-  ['descriptor_5fset_7',['descriptor_set',['../classVulkanAPI.html#ac47fb1911c5f42dac2963dcaaba6a619',1,'VulkanAPI']]],
+  ['descriptor_5fset_7',['descriptor_set',['../structImGuiTexture.html#a59b9c69a62d0c0dc053ece9fd54bd3af',1,'ImGuiTexture::descriptor_set()'],['../classVulkanAPI.html#ac47fb1911c5f42dac2963dcaaba6a619',1,'VulkanAPI::descriptor_set()']]],
   ['descriptor_5fset_5flayout_8',['descriptor_set_layout',['../classVulkanAPI.html#ab83318885fe7e22dbc5a4d9b23384d4b',1,'VulkanAPI']]],
-  ['device_9',['device',['../classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669',1,'VulkanAPI']]],
-  ['draw_5fimage_10',['draw_image',['../classVulkanAPI.html#aef64369b7f35961d23ea3a9fa6255b2a',1,'VulkanAPI']]],
-  ['draw_5fimage_5fextent_11',['draw_image_extent',['../classVulkanAPI.html#a8bc1073a8e87590d2e69436fe1fa01a7',1,'VulkanAPI']]],
-  ['draw_5fimage_5fformat_12',['draw_image_format',['../classVulkanAPI.html#a0e496c340e0c690268ca69186cc78a68',1,'VulkanAPI']]],
-  ['draw_5fimage_5fmapped_5fmemory_13',['draw_image_mapped_memory',['../classVulkanAPI.html#afee8894b5a16b5ee9f2718b30b5d4d63',1,'VulkanAPI']]],
-  ['draw_5fimage_5fmemory_14',['draw_image_memory',['../classVulkanAPI.html#a16dd975fbae165e02696c9f3cc0ad2c8',1,'VulkanAPI']]]
+  ['device_9',['device',['../classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669',1,'VulkanAPI']]]
 ];

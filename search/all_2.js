@@ -12,7 +12,7 @@ var searchData=
   ['chunks_5fper_5fworld_9',['CHUNKS_PER_WORLD',['../World_8hpp.html#a8a7b3d7c895c64b2272c412c87450791',1,'World.hpp']]],
   ['class_5farchitecture_10',['class_architecture',['../md_docs_pages_class_architecture.html',1,'']]],
   ['class_5farchitecture_2emd_11',['class_architecture.md',['../class__architecture_8md.html',1,'']]],
-  ['clearpixels_12',['clearPixels',['../classVulkanAPI.html#a415e09717d3d71f6cd288b926b8797bd',1,'VulkanAPI']]],
+  ['clear_12',['clear',['../structImGuiTexture.html#a9f8a1d9d9d6086444732b94e59074375',1,'ImGuiTexture']]],
   ['code_20style_20guide_13',['Code style guide',['../codestyleguide.html',1,'']]],
   ['code_5fstyle_5fguide_2emd_14',['code_style_guide.md',['../code__style__guide_8md.html',1,'']]],
   ['color_5fattachement_5fextent_15',['color_attachement_extent',['../classVulkanAPI.html#ad6577a4ae85f6aa01f3eb4b6228ecc72',1,'VulkanAPI']]],
@@ -23,9 +23,8 @@ var searchData=
   ['command_5fpool_20',['command_pool',['../classVulkanAPI.html#a512711a2bf5f70765279aca5f1e6c5dd',1,'VulkanAPI']]],
   ['configure_21',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]],
   ['copy_5fcommand_5fbuffers_22',['copy_command_buffers',['../classVulkanAPI.html#a6e36af29d838a6599ddb213ca74a7edf',1,'VulkanAPI']]],
-  ['createmesh_23',['createMesh',['../classVulkanAPI.html#a50595bdee3df594193c92357af304cd5',1,'VulkanAPI']]],
-  ['critical_24',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]],
-  ['cube_5findices_25',['cube_indices',['../VulkanAPI_8hpp.html#ad1b9afa4126d4c070079dca645f3f494',1,'VulkanAPI.hpp']]],
-  ['cube_5fvertices_26',['cube_vertices',['../VulkanAPI_8hpp.html#a5756c2944ec048140f0faf4d54a8082f',1,'VulkanAPI.hpp']]],
-  ['current_5fframe_27',['current_frame',['../classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202',1,'VulkanAPI']]]
+  ['createimguitexture_23',['createImGuiTexture',['../classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323',1,'VulkanAPI']]],
+  ['createmesh_24',['createMesh',['../classVulkanAPI.html#a50595bdee3df594193c92357af304cd5',1,'VulkanAPI']]],
+  ['critical_25',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]],
+  ['current_5fframe_26',['current_frame',['../classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202',1,'VulkanAPI']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['window_0',['window',['../classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1',1,'VulkanAPI']]]
+  ['vertex_5fcount_0',['vertex_count',['../structMesh.html#a21d4053e57ef0a7c7022de6301adb92a',1,'Mesh']]],
+  ['view_1',['view',['../structCameraMatrices.html#a94b76bdb27f4bbb757c56fb861cf8a03',1,'CameraMatrices::view()'],['../structImGuiTexture.html#a411e55284d8214522f76d218545d4433',1,'ImGuiTexture::view()']]]
 ];

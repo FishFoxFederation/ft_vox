@@ -1,5 +1,5 @@
 <map id="VulkanAPI" name="VulkanAPI">
-<area shape="rect" id="node1" title=" " alt="" coords="75,181,245,603"/>
-<area shape="rect" id="node2" href="$structQueueFamilyIndices.html" title=" " alt="" coords="5,20,149,104"/>
-<area shape="rect" id="node3" href="$structMesh.html" title=" " alt="" coords="185,5,303,119"/>
+<area shape="rect" id="node1" title=" " alt="" coords="75,284,245,661"/>
+<area shape="rect" id="node2" href="$structQueueFamilyIndices.html" title=" " alt="" coords="5,71,149,155"/>
+<area shape="rect" id="node3" href="$structImGuiTexture.html" title=" " alt="" coords="178,5,310,221"/>
 </map>

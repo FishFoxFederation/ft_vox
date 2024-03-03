@@ -108,8 +108,7 @@ $(document).ready(function(){initNavTree('VulkanAPI_8hpp.html',''); initResizabl
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle"><div class="title">VulkanAPI.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -158,15 +157,16 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="VulkanAPI_8hpp__dep__incl.png" border="0" usemap="#asrc_2app_2vulkan_2VulkanAPI_8hppdep" alt=""/></div>
 <map name="asrc_2app_2vulkan_2VulkanAPI_8hppdep" id="asrc_2app_2vulkan_2VulkanAPI_8hppdep">
-<area shape="rect" title=" " alt="" coords="275,5,472,31"/>
+<area shape="rect" title=" " alt="" coords="307,5,504,31"/>
 <area shape="rect" href="application_8hpp.html" title=" " alt="" coords="240,174,395,199"/>
-<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="69,79,280,119"/>
-<area shape="rect" href="RenderThread_8hpp.html" title=" " alt="" coords="355,79,507,119"/>
-<area shape="rect" href="VulkanAPI_8cpp.html" title=" " alt="" coords="531,86,728,111"/>
+<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="101,79,312,119"/>
+<area shape="rect" href="RenderThread_8hpp.html" title=" " alt="" coords="387,79,539,119"/>
+<area shape="rect" href="VulkanAPI_8cpp.html" title=" " alt="" coords="563,86,760,111"/>
 <area shape="rect" href="application_8cpp.html" title=" " alt="" coords="165,255,320,280"/>
 <area shape="rect" href="main_8cpp.html" title=" " alt="" coords="344,255,440,280"/>
 <area shape="rect" href="BlockUpdateThread_8cpp.html" title=" " alt="" coords="5,167,216,207"/>
 <area shape="rect" href="RenderThread_8cpp.html" title=" " alt="" coords="419,167,571,207"/>
+<area shape="rect" href="imgui__windows_8cpp.html" title=" " alt="" coords="595,167,747,207"/>
 </map>
 </div>
 </div>
@@ -188,6 +188,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structModelMatrice.html">ModelMatrice</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structImGuiTexture.html">ImGuiTexture</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html">VulkanAPI</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -204,13 +206,6 @@ Macros</h2></td></tr>
 <tr class="separator:abd75661fe7969e19439052a5f69ba5d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8186c9a5b158ad95a5eab216d66b2a4b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b">VK_CHECK</a>(function,  message)</td></tr>
 <tr class="separator:a8186c9a5b158ad95a5eab216d66b2a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a5756c2944ec048140f0faf4d54a8082f"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8hpp.html#a5756c2944ec048140f0faf4d54a8082f">cube_vertices</a></td></tr>
-<tr class="separator:a5756c2944ec048140f0faf4d54a8082f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1b9afa4126d4c070079dca645f3f494"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8hpp.html#ad1b9afa4126d4c070079dca645f3f494">cube_indices</a></td></tr>
-<tr class="separator:ad1b9afa4126d4c070079dca645f3f494"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ab91f325a54d3e35fe831a86d6382c2a9" name="ab91f325a54d3e35fe831a86d6382c2a9"></a>
@@ -274,43 +269,6 @@ Variables</h2></td></tr>
 <div class="line">        } \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="ad1b9afa4126d4c070079dca645f3f494" name="ad1b9afa4126d4c070079dca645f3f494"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1b9afa4126d4c070079dca645f3f494">&#9670;&#160;</a></span>cube_indices</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt;uint32_t&gt; cube_indices</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">    0, 1, 2, 2, 3, 0,</div>
-<div class="line">    4, 5, 6, 6, 7, 4,</div>
-<div class="line">    8, 9, 10, 10, 11, 8,</div>
-<div class="line">    12, 13, 14, 14, 15, 12,</div>
-<div class="line">    16, 17, 18, 18, 19, 16,</div>
-<div class="line">    20, 21, 22, 22, 23, 20</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a5756c2944ec048140f0faf4d54a8082f" name="a5756c2944ec048140f0faf4d54a8082f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5756c2944ec048140f0faf4d54a8082f">&#9670;&#160;</a></span>cube_vertices</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt;<a class="el" href="structBlockVertex.html">BlockVertex</a>&gt; cube_vertices</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
 </div>
 </div>
 </div><!-- contents -->
