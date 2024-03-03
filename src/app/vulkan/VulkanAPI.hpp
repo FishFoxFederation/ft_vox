@@ -252,6 +252,13 @@ public:
 	uint32_t texture_height;
 	uint32_t mip_levels;
 
+	VkImage textures_image;
+	VkDeviceMemory textures_image_memory;
+	VkImageView textures_image_view;
+	VkSampler textures_sampler;
+	uint32_t textures_size;
+	uint32_t textures_mip_levels;
+
 	VkDescriptorSetLayout descriptor_set_layout;
 	VkDescriptorPool descriptor_pool;
 	VkDescriptorSet descriptor_set;
@@ -333,6 +340,7 @@ private:
 
 	void createUniformBuffers();
 	void createImageTexture(const std::string & file_path);
+	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 
 	void createDescriptors();
 

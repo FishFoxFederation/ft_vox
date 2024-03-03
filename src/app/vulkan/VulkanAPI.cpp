@@ -25,6 +25,9 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createDepthResources();
 	createUniformBuffers();
 	createImageTexture("assets/textures/grass.jpg");
+	createTextureArray({
+		"assets/textures/grass.jpg"
+	}, 64);
 	createDescriptors();
 	createPipeline();
 
@@ -54,6 +57,9 @@ VulkanAPI::~VulkanAPI()
 	vkFreeMemory(device, texture_image_memory, nullptr);
 	vkDestroyImageView(device, texture_image_view, nullptr);
 	vkDestroySampler(device, texture_sampler, nullptr);
+
+	vkDestroyImage(device, textures_image, nullptr);
+	vkFreeMemory(device, textures_image_memory, nullptr);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -936,6 +942,189 @@ void VulkanAPI::createImageTexture(const std::string & file_path)
 	);
 
 }
+
+void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, uint32_t size)
+{
+	uint32_t layers_count = static_cast<uint32_t>(file_paths.size());
+	std::vector<stbi_uc *> pixels;
+	std::vector<VkDeviceSize> image_sizes;
+	std::vector<VkBuffer> staging_buffers;
+	std::vector<VkDeviceMemory> staging_buffers_memory;
+
+	for (const auto & file_path : file_paths)
+	{
+		int tex_width, tex_height, tex_channels;
+		stbi_uc * pixel = stbi_load(
+			file_path.c_str(),
+			(int*)&tex_width,
+			(int*)&tex_height,
+			&tex_channels,
+			STBI_rgb_alpha
+		);
+		VkDeviceSize image_size = tex_width * tex_height * 4;
+
+		if (!pixel)
+		{
+			throw std::runtime_error("Failed to load texture image");
+		}
+
+		pixels.push_back(pixel);
+		image_sizes.push_back(image_size);
+
+		VkBuffer staging_buffer;
+		VkDeviceMemory staging_buffer_memory;
+		createBuffer(
+			image_size,
+			VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+			staging_buffer,
+			staging_buffer_memory
+		);
+
+		void * data;
+		vkMapMemory(device, staging_buffer_memory, 0, image_size, 0, &data);
+		memcpy(data, pixel, static_cast<size_t>(image_size));
+		vkUnmapMemory(device, staging_buffer_memory);
+
+		staging_buffers.push_back(staging_buffer);
+		staging_buffers_memory.push_back(staging_buffer_memory);
+	}
+
+	textures_mip_levels = 1;
+
+	VkImageCreateInfo image_info = {};
+	image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	image_info.imageType = VK_IMAGE_TYPE_2D;
+	image_info.extent = {size, size, 1};
+	image_info.mipLevels = textures_mip_levels;
+	image_info.arrayLayers = layers_count;
+	image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+	image_info.tiling = VK_IMAGE_TILING_OPTIMAL;
+	image_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	image_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	image_info.samples = VK_SAMPLE_COUNT_1_BIT;
+
+	VK_CHECK(
+		vkCreateImage(device, &image_info, nullptr, &textures_image),
+		"Failed to create image"
+	);
+
+	VkMemoryRequirements memory_requirements;
+	vkGetImageMemoryRequirements(device, textures_image, &memory_requirements);
+
+	VkMemoryAllocateInfo alloc_info = {};
+	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	alloc_info.allocationSize = memory_requirements.size;
+	alloc_info.memoryTypeIndex = findMemoryType(
+		memory_requirements.memoryTypeBits,
+		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+	);
+
+	VK_CHECK(
+		vkAllocateMemory(device, &alloc_info, nullptr, &textures_image_memory),
+		"Failed to allocate image memory"
+	);
+
+	vkBindImageMemory(device, textures_image, textures_image_memory, 0);
+
+	// Transition image layout
+	LOG_DEBUG("First layout transition");
+	VkCommandBuffer command_buffer = beginSingleTimeCommands();
+
+	VkImageMemoryBarrier first_barrier = {};
+	first_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	first_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	first_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+	first_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	first_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	first_barrier.image = textures_image;
+	first_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	first_barrier.subresourceRange.baseMipLevel = 0;
+	first_barrier.subresourceRange.levelCount = textures_mip_levels;
+	first_barrier.subresourceRange.baseArrayLayer = 0;
+	first_barrier.subresourceRange.layerCount = layers_count;
+	first_barrier.srcAccessMask = 0;
+	first_barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(
+		command_buffer,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		0,
+		0, nullptr,
+		0, nullptr,
+		1, &first_barrier
+	);
+
+	endSingleTimeCommands(command_buffer);
+	LOG_DEBUG("Copy images to texture array");
+	command_buffer = beginSingleTimeCommands();
+
+	// Copy images to texture array
+	VkBufferImageCopy region = {};
+	region.bufferOffset = 0;
+	region.bufferRowLength = 0;
+	region.bufferImageHeight = 0;
+	region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	region.imageSubresource.mipLevel = 0;
+	region.imageSubresource.baseArrayLayer = 0;
+	region.imageSubresource.layerCount = 1;
+	region.imageOffset = {0, 0, 0};
+	region.imageExtent = {size, size, 1};
+
+	for (uint32_t i = 0; i < layers_count; i++)
+	{
+		region.imageSubresource.baseArrayLayer = i;
+		vkCmdCopyBufferToImage(
+			command_buffer,
+			staging_buffers[i],
+			texture_image,
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			1,
+			&region
+		);
+	}
+
+	endSingleTimeCommands(command_buffer);
+	LOG_DEBUG("Second layout transition");
+	// command_buffer = beginSingleTimeCommands();
+
+	// // Transition image layout
+	// VkImageMemoryBarrier second_barrier = {};
+	// second_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	// second_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+	// second_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	// second_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	// second_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	// second_barrier.image = textures_image;
+	// second_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	// second_barrier.subresourceRange.baseMipLevel = 0;
+	// second_barrier.subresourceRange.levelCount = textures_mip_levels;
+	// second_barrier.subresourceRange.baseArrayLayer = 0;
+	// second_barrier.subresourceRange.layerCount = layers_count;
+	// second_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	// second_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+	// vkCmdPipelineBarrier(
+	// 	command_buffer,
+	// 	VK_PIPELINE_STAGE_TRANSFER_BIT,
+	// 	VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+	// 	0,
+	// 	0, nullptr,
+	// 	0, nullptr,
+	// 	1, &second_barrier
+	// );
+
+	// endSingleTimeCommands(command_buffer);
+	
+	for (size_t i = 0; i < layers_count; i++)
+	{
+		vkDestroyBuffer(device, staging_buffers[i], nullptr);
+		vkFreeMemory(device, staging_buffers_memory[i], nullptr);
+		stbi_image_free(pixels[i]);
+	}
+}	
 
 void VulkanAPI::createDescriptors()
 {
