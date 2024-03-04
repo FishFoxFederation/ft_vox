@@ -1028,10 +1028,10 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 	vkBindImageMemory(device, textures_image, textures_image_memory, 0);
 
-	// Transition image layout
-	LOG_DEBUG("First layout transition");
 	VkCommandBuffer command_buffer = beginSingleTimeCommands();
 
+	// Transition image layout
+	LOG_DEBUG("First layout transition");
 	VkImageMemoryBarrier first_barrier = {};
 	first_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	first_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -1057,10 +1057,6 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		1, &first_barrier
 	);
 
-	endSingleTimeCommands(command_buffer);
-	LOG_DEBUG("Copy images to texture array");
-	command_buffer = beginSingleTimeCommands();
-
 	// Copy images to texture array
 	VkBufferImageCopy region = {};
 	region.bufferOffset = 0;
@@ -1075,56 +1071,55 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 	for (uint32_t i = 0; i < layers_count; i++)
 	{
+		LOG_DEBUG("Copy image " << i << " to texture array");
 		region.imageSubresource.baseArrayLayer = i;
 		vkCmdCopyBufferToImage(
 			command_buffer,
 			staging_buffers[i],
-			texture_image,
+			textures_image,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			1,
 			&region
 		);
 	}
 
-	endSingleTimeCommands(command_buffer);
 	LOG_DEBUG("Second layout transition");
-	// command_buffer = beginSingleTimeCommands();
 
 	// // Transition image layout
-	// VkImageMemoryBarrier second_barrier = {};
-	// second_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-	// second_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-	// second_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-	// second_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-	// second_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-	// second_barrier.image = textures_image;
-	// second_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	// second_barrier.subresourceRange.baseMipLevel = 0;
-	// second_barrier.subresourceRange.levelCount = textures_mip_levels;
-	// second_barrier.subresourceRange.baseArrayLayer = 0;
-	// second_barrier.subresourceRange.layerCount = layers_count;
-	// second_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-	// second_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	VkImageMemoryBarrier second_barrier = {};
+	second_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	second_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+	second_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	second_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	second_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	second_barrier.image = textures_image;
+	second_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	second_barrier.subresourceRange.baseMipLevel = 0;
+	second_barrier.subresourceRange.levelCount = textures_mip_levels;
+	second_barrier.subresourceRange.baseArrayLayer = 0;
+	second_barrier.subresourceRange.layerCount = layers_count;
+	second_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	second_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
-	// vkCmdPipelineBarrier(
-	// 	command_buffer,
-	// 	VK_PIPELINE_STAGE_TRANSFER_BIT,
-	// 	VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-	// 	0,
-	// 	0, nullptr,
-	// 	0, nullptr,
-	// 	1, &second_barrier
-	// );
+	vkCmdPipelineBarrier(
+		command_buffer,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		0,
+		0, nullptr,
+		0, nullptr,
+		1, &second_barrier
+	);
 
-	// endSingleTimeCommands(command_buffer);
-	
+	endSingleTimeCommands(command_buffer);
+
 	for (size_t i = 0; i < layers_count; i++)
 	{
 		vkDestroyBuffer(device, staging_buffers[i], nullptr);
 		vkFreeMemory(device, staging_buffers_memory[i], nullptr);
 		stbi_image_free(pixels[i]);
 	}
-}	
+}
 
 void VulkanAPI::createDescriptors()
 {
