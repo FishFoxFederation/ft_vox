@@ -52,10 +52,12 @@ struct SwapChainSupportDetails
 	std::vector<VkPresentModeKHR> present_modes;
 };
 
-struct BlockVertex {
+struct BlockVertex
+{
 	glm::ivec3 pos;
 	glm::vec3 normal;
 	glm::vec2 texCoord;
+	uint32_t texLayer;
 
 	static VkVertexInputBindingDescription getBindingDescription()
 	{
@@ -67,9 +69,9 @@ struct BlockVertex {
 		return bindingDescription;
 	}
 
-	static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions()
+	static std::array<VkVertexInputAttributeDescription, 4> getAttributeDescriptions()
 	{
-		std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+		std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions{};
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
@@ -85,6 +87,11 @@ struct BlockVertex {
 		attributeDescriptions[2].location = 2;
 		attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
 		attributeDescriptions[2].offset = offsetof(BlockVertex, texCoord);
+
+		attributeDescriptions[3].binding = 0;
+		attributeDescriptions[3].location = 3;
+		attributeDescriptions[3].format = VK_FORMAT_R32_UINT;
+		attributeDescriptions[3].offset = offsetof(BlockVertex, texLayer);
 
 		return attributeDescriptions;
 	}
@@ -244,13 +251,13 @@ public:
 	std::vector<VkDeviceMemory> uniform_buffers_memory;
 	std::vector<void *> uniform_buffers_mapped_memory;
 
-	VkImage texture_image;
-	VkDeviceMemory texture_image_memory;
-	VkImageView texture_image_view;
-	VkSampler texture_sampler;
-	uint32_t texture_width;
-	uint32_t texture_height;
-	uint32_t mip_levels;
+	// VkImage texture_image;
+	// VkDeviceMemory texture_image_memory;
+	// VkImageView texture_image_view;
+	// VkSampler texture_sampler;
+	// uint32_t texture_width;
+	// uint32_t texture_height;
+	// uint32_t mip_levels;
 
 	VkImage textures_image;
 	VkDeviceMemory textures_image_memory;

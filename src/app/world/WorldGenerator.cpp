@@ -29,11 +29,12 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 				// 	chunk.setBlock(blockX, blockY, blockZ, Block::Stone);
 				// else
 				// 	chunk.setBlock(blockX, blockY, blockZ, Block::Air);
-				int x = blockX - 8;
-				int y = blockY - 8;
-				int z = blockZ - 8;
-				if (sqrt(x*x + y*y + z*z) < 8.0f)
-					chunk.setBlock(blockX, blockY, blockZ, Block::Grass);
+				Block block_type = y * CHUNK_SIZE + blockY < 50 ? Block::Stone : Block::Grass;
+				int _x = blockX - 8;
+				int _y = blockY - 8;
+				int _z = blockZ - 8;
+				if (sqrt(_x*_x + _y*_y + _z*_z) < 8.0f)
+					chunk.setBlock(blockX, blockY, blockZ, block_type);
 				else
 					chunk.setBlock(blockX, blockY, blockZ, Block::Air);
 			}

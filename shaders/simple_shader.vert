@@ -14,13 +14,14 @@ layout(push_constant) uniform PushConstants
 layout(location = 0) in ivec3 positions;
 layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
+layout(location = 3) in uint texLayer;
 
 layout(location = 0) out vec3 fragNormal;
-layout(location = 1) out vec2 fragTexCoords;
+layout(location = 1) out vec3 fragTexCoords;
 
 void main()
 {
     gl_Position = cm.projection * cm.view * pc.model * vec4(positions, 1.0);
     fragNormal = normal;
-	fragTexCoords = texCoords;
+	fragTexCoords = vec3(texCoords, texLayer);
 }
