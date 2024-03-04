@@ -26,7 +26,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createUniformBuffers();
 	createImageTexture("assets/textures/grass.jpg");
 	createTextureArray({
-		"assets/textures/grass.jpg"
+		"assets/textures/grass.jpg",
+		"assets/textures/stone.jpg"
 	}, 64);
 	createDescriptors();
 	createPipeline();
@@ -53,13 +54,15 @@ VulkanAPI::~VulkanAPI()
 		vkFreeMemory(device, mesh.buffer_memory, nullptr);
 	}
 
-	vkDestroyImage(device, texture_image, nullptr);
-	vkFreeMemory(device, texture_image_memory, nullptr);
-	vkDestroyImageView(device, texture_image_view, nullptr);
-	vkDestroySampler(device, texture_sampler, nullptr);
+	// vkDestroyImage(device, texture_image, nullptr);
+	// vkFreeMemory(device, texture_image_memory, nullptr);
+	// vkDestroyImageView(device, texture_image_view, nullptr);
+	// vkDestroySampler(device, texture_sampler, nullptr);
 
 	vkDestroyImage(device, textures_image, nullptr);
 	vkFreeMemory(device, textures_image_memory, nullptr);
+	vkDestroyImageView(device, textures_image_view, nullptr);
+	vkDestroySampler(device, textures_sampler, nullptr);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -830,116 +833,117 @@ void VulkanAPI::createUniformBuffers()
 
 void VulkanAPI::createImageTexture(const std::string & file_path)
 {
-	int tex_channels;
-	stbi_uc * pixels = stbi_load(
-		file_path.c_str(),
-		(int*)&texture_width,
-		(int*)&texture_height,
-		&tex_channels,
-		STBI_rgb_alpha
-	);
-	VkDeviceSize image_size = texture_width * texture_height * 4;
+	(void)file_path;
+	// int tex_channels;
+	// stbi_uc * pixels = stbi_load(
+	// 	file_path.c_str(),
+	// 	(int*)&texture_width,
+	// 	(int*)&texture_height,
+	// 	&tex_channels,
+	// 	STBI_rgb_alpha
+	// );
+	// VkDeviceSize image_size = texture_width * texture_height * 4;
 
-	if (!pixels)
-	{
-		throw std::runtime_error("Failed to load texture image");
-	}
+	// if (!pixels)
+	// {
+	// 	throw std::runtime_error("Failed to load texture image");
+	// }
 
-	VkBuffer staging_buffer;
-	VkDeviceMemory staging_buffer_memory;
-	createBuffer(
-		image_size,
-		VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		staging_buffer,
-		staging_buffer_memory
-	);
+	// VkBuffer staging_buffer;
+	// VkDeviceMemory staging_buffer_memory;
+	// createBuffer(
+	// 	image_size,
+	// 	VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+	// 	VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+	// 	staging_buffer,
+	// 	staging_buffer_memory
+	// );
 
-	void * data;
-	vkMapMemory(device, staging_buffer_memory, 0, image_size, 0, &data);
-	memcpy(data, pixels, static_cast<size_t>(image_size));
-	vkUnmapMemory(device, staging_buffer_memory);
+	// void * data;
+	// vkMapMemory(device, staging_buffer_memory, 0, image_size, 0, &data);
+	// memcpy(data, pixels, static_cast<size_t>(image_size));
+	// vkUnmapMemory(device, staging_buffer_memory);
 
-	stbi_image_free(pixels);
+	// stbi_image_free(pixels);
 
-	createImage(
-		texture_width,
-		texture_height,
-		1,
-		VK_FORMAT_R8G8B8A8_SRGB,
-		VK_IMAGE_TILING_OPTIMAL,
-		VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-		texture_image,
-		texture_image_memory
-	);
+	// createImage(
+	// 	texture_width,
+	// 	texture_height,
+	// 	1,
+	// 	VK_FORMAT_R8G8B8A8_SRGB,
+	// 	VK_IMAGE_TILING_OPTIMAL,
+	// 	VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+	// 	VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+	// 	texture_image,
+	// 	texture_image_memory
+	// );
 
-	transitionImageLayout(
-		texture_image,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
+	// transitionImageLayout(
+	// 	texture_image,
+	// 	VK_IMAGE_LAYOUT_UNDEFINED,
+	// 	VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+	// 	VK_IMAGE_ASPECT_COLOR_BIT,
+	// 	1,
+	// 	0,
+	// 	0,
+	// 	VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+	// 	VK_PIPELINE_STAGE_TRANSFER_BIT
+	// );
 
-	copyBufferToImage(
-		staging_buffer,
-		texture_image,
-		static_cast<uint32_t>(texture_width),
-		static_cast<uint32_t>(texture_height)
-	);
+	// copyBufferToImage(
+	// 	staging_buffer,
+	// 	texture_image,
+	// 	static_cast<uint32_t>(texture_width),
+	// 	static_cast<uint32_t>(texture_height)
+	// );
 
-	transitionImageLayout(
-		texture_image,
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
+	// transitionImageLayout(
+	// 	texture_image,
+	// 	VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+	// 	VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+	// 	VK_IMAGE_ASPECT_COLOR_BIT,
+	// 	1,
+	// 	0,
+	// 	0,
+	// 	VK_PIPELINE_STAGE_TRANSFER_BIT,
+	// 	VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+	// );
 
-	vkDestroyBuffer(device, staging_buffer, nullptr);
-	vkFreeMemory(device, staging_buffer_memory, nullptr);
+	// vkDestroyBuffer(device, staging_buffer, nullptr);
+	// vkFreeMemory(device, staging_buffer_memory, nullptr);
 
-	createImageView(
-		texture_image,
-		VK_FORMAT_R8G8B8A8_SRGB,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		texture_image_view
-	);
+	// createImageView(
+	// 	texture_image,
+	// 	VK_FORMAT_R8G8B8A8_SRGB,
+	// 	VK_IMAGE_ASPECT_COLOR_BIT,
+	// 	texture_image_view
+	// );
 
-	VkPhysicalDeviceProperties properties{};
-	vkGetPhysicalDeviceProperties(physical_device, &properties);
+	// VkPhysicalDeviceProperties properties{};
+	// vkGetPhysicalDeviceProperties(physical_device, &properties);
 
-	VkSamplerCreateInfo sampler_info = {};
-	sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	sampler_info.magFilter = VK_FILTER_LINEAR;
-	sampler_info.minFilter = VK_FILTER_LINEAR;
-	sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	sampler_info.anisotropyEnable = VK_TRUE;
-	sampler_info.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
-	sampler_info.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-	sampler_info.unnormalizedCoordinates = VK_FALSE;
-	sampler_info.compareEnable = VK_FALSE;
-	sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
-	sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	sampler_info.mipLodBias = 0.0f;
-	sampler_info.minLod = 0.0f;
-	sampler_info.maxLod = 0.0f;
+	// VkSamplerCreateInfo sampler_info = {};
+	// sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	// sampler_info.magFilter = VK_FILTER_LINEAR;
+	// sampler_info.minFilter = VK_FILTER_LINEAR;
+	// sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	// sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	// sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	// sampler_info.anisotropyEnable = VK_TRUE;
+	// sampler_info.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
+	// sampler_info.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	// sampler_info.unnormalizedCoordinates = VK_FALSE;
+	// sampler_info.compareEnable = VK_FALSE;
+	// sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
+	// sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	// sampler_info.mipLodBias = 0.0f;
+	// sampler_info.minLod = 0.0f;
+	// sampler_info.maxLod = 0.0f;
 
-	VK_CHECK(
-		vkCreateSampler(device, &sampler_info, nullptr, &texture_sampler),
-		"Failed to create texture sampler"
-	);
+	// VK_CHECK(
+	// 	vkCreateSampler(device, &sampler_info, nullptr, &texture_sampler),
+	// 	"Failed to create texture sampler"
+	// );
 
 }
 
@@ -948,8 +952,10 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	uint32_t layers_count = static_cast<uint32_t>(file_paths.size());
 	std::vector<stbi_uc *> pixels;
 	std::vector<VkDeviceSize> image_sizes;
-	std::vector<VkBuffer> staging_buffers;
-	std::vector<VkDeviceMemory> staging_buffers_memory;
+	std::vector<VkImage> staging_images;
+	std::vector<VkDeviceMemory> staging_images_memory;
+	std::vector<VkExtent2D> staging_images_extents;
+
 
 	for (const auto & file_path : file_paths)
 	{
@@ -971,23 +977,44 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		pixels.push_back(pixel);
 		image_sizes.push_back(image_size);
 
-		VkBuffer staging_buffer;
-		VkDeviceMemory staging_buffer_memory;
-		createBuffer(
-			image_size,
-			VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+		VkImage staging_image;
+		VkDeviceMemory staging_image_memory;
+
+		createImage(
+			tex_width,
+			tex_height,
+			1,
+			VK_FORMAT_R8G8B8A8_SRGB,
+			VK_IMAGE_TILING_LINEAR,
+			VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-			staging_buffer,
-			staging_buffer_memory
+			staging_image,
+			staging_image_memory
+		);
+
+		transitionImageLayout(
+			staging_image,
+			VK_IMAGE_LAYOUT_UNDEFINED,
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			1,
+			0,
+			0,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_TRANSFER_BIT
 		);
 
 		void * data;
-		vkMapMemory(device, staging_buffer_memory, 0, image_size, 0, &data);
+		vkMapMemory(device, staging_image_memory, 0, image_size, 0, &data);
 		memcpy(data, pixel, static_cast<size_t>(image_size));
-		vkUnmapMemory(device, staging_buffer_memory);
+		vkUnmapMemory(device, staging_image_memory);
 
-		staging_buffers.push_back(staging_buffer);
-		staging_buffers_memory.push_back(staging_buffer_memory);
+		staging_images.push_back(staging_image);
+		staging_images_memory.push_back(staging_image_memory);
+		staging_images_extents.push_back({
+			static_cast<uint32_t>(tex_width),
+			static_cast<uint32_t>(tex_height)
+		});
 	}
 
 	textures_mip_levels = 1;
@@ -1031,7 +1058,6 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	VkCommandBuffer command_buffer = beginSingleTimeCommands();
 
 	// Transition image layout
-	LOG_DEBUG("First layout transition");
 	VkImageMemoryBarrier first_barrier = {};
 	first_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	first_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -1057,35 +1083,46 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		1, &first_barrier
 	);
 
-	// Copy images to texture array
-	VkBufferImageCopy region = {};
-	region.bufferOffset = 0;
-	region.bufferRowLength = 0;
-	region.bufferImageHeight = 0;
-	region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	region.imageSubresource.mipLevel = 0;
-	region.imageSubresource.baseArrayLayer = 0;
-	region.imageSubresource.layerCount = 1;
-	region.imageOffset = {0, 0, 0};
-	region.imageExtent = {size, size, 1};
+	// Blit images to texture array
+	VkImageBlit blit = {};
+	blit.srcOffsets[0] = { 0, 0, 0 };
+	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.srcSubresource.mipLevel = 0;
+	blit.srcSubresource.baseArrayLayer = 0;
+	blit.srcSubresource.layerCount = 1;
+
+	blit.dstOffsets[0] = { 0, 0, 0 };
+	blit.dstOffsets[1] = {
+		static_cast<int32_t>(size),
+		static_cast<int32_t>(size),
+		1
+	};
+	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.dstSubresource.mipLevel = 0;
+	blit.dstSubresource.baseArrayLayer = 0;
+	blit.dstSubresource.layerCount = 1;
 
 	for (uint32_t i = 0; i < layers_count; i++)
 	{
-		LOG_DEBUG("Copy image " << i << " to texture array");
-		region.imageSubresource.baseArrayLayer = i;
-		vkCmdCopyBufferToImage(
+		blit.srcOffsets[1] = {
+			static_cast<int32_t>(staging_images_extents[i].width),
+			static_cast<int32_t>(staging_images_extents[i].height),
+			1
+		};
+		blit.dstSubresource.baseArrayLayer = i;
+		vkCmdBlitImage(
 			command_buffer,
-			staging_buffers[i],
+			staging_images[i],
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 			textures_image,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			1,
-			&region
+			&blit,
+			VK_FILTER_LINEAR
 		);
 	}
 
-	LOG_DEBUG("Second layout transition");
-
-	// // Transition image layout
+	// Transition image layout
 	VkImageMemoryBarrier second_barrier = {};
 	second_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	second_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -1115,10 +1152,53 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 	for (size_t i = 0; i < layers_count; i++)
 	{
-		vkDestroyBuffer(device, staging_buffers[i], nullptr);
-		vkFreeMemory(device, staging_buffers_memory[i], nullptr);
+		vkDestroyImage(device, staging_images[i], nullptr);
+		vkFreeMemory(device, staging_images_memory[i], nullptr);
 		stbi_image_free(pixels[i]);
 	}
+
+	VkImageViewCreateInfo view_info = {};
+	view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	view_info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+	view_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+	view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	view_info.subresourceRange.baseMipLevel = 0;
+	view_info.subresourceRange.levelCount = textures_mip_levels;
+	view_info.subresourceRange.baseArrayLayer = 0;
+	view_info.subresourceRange.layerCount = layers_count;
+	view_info.image = textures_image;
+
+	VK_CHECK(
+		vkCreateImageView(device, &view_info, nullptr, &textures_image_view),
+		"Failed to create image view"
+	);
+
+
+	VkPhysicalDeviceProperties properties{};
+	vkGetPhysicalDeviceProperties(physical_device, &properties);
+
+	VkSamplerCreateInfo sampler_info = {};
+	sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	sampler_info.magFilter = VK_FILTER_NEAREST;
+	sampler_info.minFilter = VK_FILTER_NEAREST;
+	sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	sampler_info.anisotropyEnable = VK_FALSE;
+	sampler_info.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
+	sampler_info.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	sampler_info.unnormalizedCoordinates = VK_FALSE;
+	sampler_info.compareEnable = VK_FALSE;
+	sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
+	sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	sampler_info.mipLodBias = 0.0f;
+	sampler_info.minLod = 0.0f;
+	sampler_info.maxLod = 0.0f;
+
+	VK_CHECK(
+		vkCreateSampler(device, &sampler_info, nullptr, &textures_sampler),
+		"Failed to create sampler"
+	);
 }
 
 void VulkanAPI::createDescriptors()
@@ -1186,8 +1266,8 @@ void VulkanAPI::createDescriptors()
 
 		VkDescriptorImageInfo image_info = {};
 		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = texture_image_view;
-		image_info.sampler = texture_sampler;
+		image_info.imageView = textures_image_view;
+		image_info.sampler = textures_sampler;
 
 		std::array<VkWriteDescriptorSet, 2> descriptor_writes = {};
 		descriptor_writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -1240,7 +1320,7 @@ void VulkanAPI::createPipeline()
 
 
 	VkVertexInputBindingDescription binding_description = BlockVertex::getBindingDescription();
-	std::array<VkVertexInputAttributeDescription, 3> attribute_descriptions = BlockVertex::getAttributeDescriptions();
+	std::array<VkVertexInputAttributeDescription, 4> attribute_descriptions = BlockVertex::getAttributeDescriptions();
 
 	VkPipelineVertexInputStateCreateInfo vertex_input_info = {};
 	vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -1511,58 +1591,66 @@ uint64_t VulkanAPI::createMesh(const Chunk & chunk)
 
 				if (block != Block::Air)
 				{
+					uint32_t texture_index = 0;
+					switch (block)
+					{
+					case Block::Grass: texture_index = 0; break;
+					case Block::Stone: texture_index = 1; break;
+					default:
+						break;
+					}
 					// check bottom neighbor
 					if (y == 0 || chunk.getBlock(x, y - 1, z) == Block::Air)
 					{
-						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}});
-						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}});
+						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
+						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
+						vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
+						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
 						ADD_INDEX
 					}
 					// check top neighbor
 					if (y == CHUNK_SIZE - 1 || chunk.getBlock(x, y + 1, z) == Block::Air)
 					{
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
+						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
 						ADD_INDEX
 					}
 					// check left neighbor
 					if (x == 0 || chunk.getBlock(x - 1, y, z) == Block::Air)
 					{
-						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}});
-						vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}});
+						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
+						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
+						vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
+						vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
 						ADD_INDEX
 					}
 					// check right neighbor
 					if (x == CHUNK_SIZE - 1 || chunk.getBlock(x + 1, y, z) == Block::Air)
 					{
-						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
+						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
+						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
 						ADD_INDEX
 					}
 					// check front neighbor
 					if (z == 0 || chunk.getBlock(x, y, z - 1) == Block::Air)
 					{
-						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}});
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}});
+						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, texture_index});
+						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, texture_index});
+						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, texture_index});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, texture_index});
 						ADD_INDEX
 					}
 					// check back neighbor
 					if (z == CHUNK_SIZE - 1 || chunk.getBlock(x, y, z + 1) == Block::Air)
 					{
-						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}});
-						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}});
+						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, texture_index});
+						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, texture_index});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, texture_index});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, texture_index});
 						ADD_INDEX
 					}
 				}

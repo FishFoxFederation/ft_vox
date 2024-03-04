@@ -34,7 +34,7 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
-	
+
 }
 
 void RenderThread::loop()
@@ -129,7 +129,7 @@ void RenderThread::loop()
 	m_triangle_count = 0;
 
 	auto mesh_render_data = m_world_scene.getMeshRenderData();
-	
+
 	for (auto & mesh_data : mesh_render_data)
 	{
 		VkBuffer vertex_buffers[] = { vk.meshes[mesh_data.id].buffer };
@@ -250,8 +250,6 @@ void RenderThread::loop()
 	blit.srcOffsets[1] = {
 		static_cast<int32_t>(vk.color_attachement_extent.width),
 		static_cast<int32_t>(vk.color_attachement_extent.height),
-		// static_cast<int32_t>(vk.draw_image_extent.width),
-		// static_cast<int32_t>(vk.draw_image_extent.height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -273,8 +271,6 @@ void RenderThread::loop()
 		vk.copy_command_buffers[vk.current_frame],
 		vk.color_attachement_image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		// vk.draw_image,
-		// VK_IMAGE_LAYOUT_GENERAL,
 		vk.swap_chain_images[image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		1,
