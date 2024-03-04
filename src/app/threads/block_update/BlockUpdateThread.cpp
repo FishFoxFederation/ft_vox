@@ -20,7 +20,7 @@ void BlockUpdateThread::init()
 	{
 		for (int z = 0; z < 10; z++)
 		{
-			for (int y = 0; y < 10; y++)
+			for (int y = 0; y < 16; y++)
 			{
 				m_world.chunks().insert(
 					std::make_pair(
@@ -31,6 +31,9 @@ void BlockUpdateThread::init()
 			}
 		}
 	}
+	LOG_DEBUG("AVG perlin :" << m_world.m_worldGenerator.m_avg / m_world.m_worldGenerator.m_called);
+	LOG_DEBUG("MAX perlin :" << m_world.m_worldGenerator.m_max);
+	LOG_DEBUG("MIN perlin :" << m_world.m_worldGenerator.m_min);
 
 	for (auto & [position, chunk] : m_world.chunks())
 	{

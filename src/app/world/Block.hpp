@@ -2,7 +2,7 @@
 
 #include "define.hpp"
 
-typedef int	BlockType;
+typedef int_fast8_t	BlockType;
 //more to come soon
 
 enum class Block : BlockType
