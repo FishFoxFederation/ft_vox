@@ -1,5 +1,6 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
+#include "Debug.hpp"
 
 void RenderThread::updateImGui()
 {
@@ -13,6 +14,8 @@ void RenderThread::updateImGui()
 	);
 	ImGui::Text("FPS: %f", m_fps);
 	ImGui::Text("Triangle count: %d", m_triangle_count);
+	ImGui::Text("Debug triangle count: %d", Debug<int>::get("triangle_count"));
+
 
 	// write to texture
 	// vk.imgui_texture.clear();
