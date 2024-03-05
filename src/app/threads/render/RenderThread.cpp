@@ -1,6 +1,7 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
 #include "Perlin.hpp"
+#include "Debug.hpp"
 
 #include <iostream>
 #include <array>
@@ -134,6 +135,7 @@ void RenderThread::loop()
 	);
 
 	m_triangle_count = 0;
+	Debug<int>::set("triangle_count", 0);
 
 	auto mesh_render_data = m_world_scene.getMeshRenderData();
 
@@ -159,6 +161,10 @@ void RenderThread::loop()
 		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.meshes[mesh_data.id].index_count), 1, 0, 0, 0);
 
 		m_triangle_count += static_cast<int>(vk.meshes[mesh_data.id].index_count) / 3;
+		Debug<int>::set(
+			"triangle_count",
+			Debug<int>::get("triangle_count") + (vk.meshes[mesh_data.id].index_count) / 3
+		);
 	}
 
 	LOG_TRACE("End main rendering.");

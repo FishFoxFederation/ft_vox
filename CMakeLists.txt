@@ -30,6 +30,7 @@ target_sources(${PROJECT_NAME}
 		src/app/perlin/Perlin.cpp
 
 		src/app/application.cpp
+		src/app/Debug.cpp
 		src/app/Settings.cpp
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/AThreadWrapper.cpp
