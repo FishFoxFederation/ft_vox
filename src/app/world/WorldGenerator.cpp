@@ -58,7 +58,7 @@ Block WorldGenerator::generateReliefBlock(glm::ivec3 position)
 
 	value = ((value + 1) / 2) * 128;
 	if (value + 128 > position.y)
-		return Block::Grass;
+		return Block::Stone;
 	// else if (value > -0.05f && value < 0.05f)
 		// chunk.setBlock(blockX, blockY, blockZ, Block::Air);
 	else
@@ -120,7 +120,7 @@ Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	if (valueA > 0 && valueA < edge)
 		return Block::Air;
 	else
-		return Block::Grass;
+		return Block::Stone;
 
-	return Block::Grass;
+	return Block::Stone;
 }
