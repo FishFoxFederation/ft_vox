@@ -3,8 +3,8 @@
 #include <cmath>
 
 WorldGenerator::WorldGenerator()
-: m_relief_perlin(1, 3, 1, 0.3, 2),
-  m_cave_perlin(1, 2, 1, 0.7, 2)
+: m_relief_perlin(1, 3, 1, 0.5, 2),
+  m_cave_perlin(1, 4, 1, 0.5, 2)
 {
 
 }
@@ -55,15 +55,9 @@ Block WorldGenerator::generateReliefBlock(glm::ivec3 position)
 		position.z * 0.01f
 	));
 
-	m_avg += value;
-	if (value > m_max)
-		m_max = value;
-	if (value < m_min)
-		m_min = value;
-	m_called++;
 
 	value = ((value + 1) / 2) * 128;
-	if (value + 110 > position.y)
+	if (value + 128 > position.y)
 		return Block::Grass;
 	// else if (value > -0.05f && value < 0.05f)
 		// chunk.setBlock(blockX, blockY, blockZ, Block::Air);
@@ -73,12 +67,39 @@ Block WorldGenerator::generateReliefBlock(glm::ivec3 position)
 
 Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 {
-	float value = m_cave_perlin.noise(glm::vec3(
+
+
+	//spaghetti caves
+	float valueA = m_cave_perlin.noise(glm::vec3(
 		position.x * 0.01f,
 		position.y * 0.01f,
 		position.z * 0.01f
 	));
-	// value += 0.01f;
+
+	float valueB = m_cave_perlin.noise(glm::vec3(
+		position.x * 0.01f,
+		(position.y + 42) * 0.01f,
+		position.z * 0.01f
+	));
+
+	float threshold = 0.002f;
+	float value = valueA * valueA + valueB * valueB;
+	// value /= threshold;
+
+	m_avg += value;
+	if (value > m_max)
+		m_max = value;
+	if (value < m_min)
+		m_min = value;
+	m_called++;
+
+	if (value < threshold)
+		return Block::Air;
+	
+	// else try to create cheese cave
+
+	valueA = (valueA + 1) / 2;
+	valueA += 0.01f;
 
 	//bias value to have less chance of a cave the higher the y value
 	//for now the transition layer will be between 110 and 128
@@ -96,8 +117,10 @@ Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	else if (position.y >= 143)
 		edge = 0;
 
-	if (value > 0 && value < edge)
+	if (valueA > 0 && valueA < edge)
 		return Block::Air;
 	else
 		return Block::Grass;
+
+	return Block::Grass;
 }
