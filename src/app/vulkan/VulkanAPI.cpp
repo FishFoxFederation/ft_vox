@@ -26,6 +26,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createUniformBuffers();
 	createImageTexture("assets/textures/grass.jpg");
 	createTextureArray({
+		"assets/textures/snowy_grass_side.jpg",
+		"assets/textures/snowy_grass_side_512.jpg",
 		"assets/textures/grass.jpg",
 		"assets/textures/stone.jpg"
 	}, 64);
@@ -315,9 +317,19 @@ void VulkanAPI::pickPhysicalDevice()
 
 	for (const auto & device : devices)
 	{
+		VkPhysicalDeviceProperties device_properties;
+		vkGetPhysicalDeviceProperties(device, &device_properties);
+
+		LOG_INFO("device name: " << device_properties.deviceName);
+		LOG_INFO("device type: " << device_properties.deviceType);
+	}
+
+	for (const auto & device : devices)
+	{
 		if (isDeviceSuitable(device))
 		{
-			physical_device = device;
+			// physical_device = device;
+			physical_device = devices[1];
 			break;
 		}
 	}
@@ -331,6 +343,8 @@ void VulkanAPI::pickPhysicalDevice()
 
 	VkPhysicalDeviceProperties device_properties;
 	vkGetPhysicalDeviceProperties(physical_device, &device_properties);
+
+	LOG_INFO("device name: " << device_properties.deviceName);
 }
 
 bool VulkanAPI::isDeviceSuitable(VkPhysicalDevice device)
@@ -347,12 +361,38 @@ bool VulkanAPI::isDeviceSuitable(VkPhysicalDevice device)
 	}
 
 	VkPhysicalDeviceFeatures supported_features;
-    vkGetPhysicalDeviceFeatures(device, &supported_features);
+	vkGetPhysicalDeviceFeatures(device, &supported_features);
 
 	return indices.isComplete()
 		&& extensions_supported
 		&& swap_chain_adequate
 		&& supported_features.samplerAnisotropy;
+}
+
+int VulkanAPI::ratePhysicalDevice(VkPhysicalDevice device)
+{
+	int score = 0;
+
+	VkPhysicalDeviceProperties device_properties;
+	vkGetPhysicalDeviceProperties(device, &device_properties);
+
+	VkPhysicalDeviceFeatures device_features;
+	vkGetPhysicalDeviceFeatures(device, &device_features);
+
+	// Discrete GPUs have a significant performance advantage
+	if (device_properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+		score += 1000;
+	}
+
+	// Maximum possible size of textures affects graphics quality
+	score += device_properties.limits.maxImageDimension2D;
+
+	// Application can't function without geometry shaders
+	if (!device_features.geometryShader) {
+		return 0;
+	}
+
+	return score;
 }
 
 QueueFamilyIndices VulkanAPI::findQueueFamilies(VkPhysicalDevice device)
@@ -826,7 +866,10 @@ void VulkanAPI::createUniformBuffers()
 			uniform_buffers_memory[i]
 		);
 
-		vkMapMemory(device, uniform_buffers_memory[i], 0, buffer_size, 0, &uniform_buffers_mapped_memory[i]);
+		VK_CHECK(
+			vkMapMemory(device, uniform_buffers_memory[i], 0, buffer_size, 0, &uniform_buffers_mapped_memory[i]),
+			"Failed to map memory for uniform buffer."
+		);
 	}
 
 }
@@ -962,8 +1005,8 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		int tex_width, tex_height, tex_channels;
 		stbi_uc * pixel = stbi_load(
 			file_path.c_str(),
-			(int*)&tex_width,
-			(int*)&tex_height,
+			&tex_width,
+			&tex_height,
 			&tex_channels,
 			STBI_rgb_alpha
 		);
@@ -971,7 +1014,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 		if (!pixel)
 		{
-			throw std::runtime_error("Failed to load texture image");
+			throw std::runtime_error("Failed to load texture image" + file_path);
 		}
 
 		pixels.push_back(pixel);
@@ -999,13 +1042,16 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 			VK_IMAGE_ASPECT_COLOR_BIT,
 			1,
 			0,
-			0,
+			VK_ACCESS_TRANSFER_WRITE_BIT,
 			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
 			VK_PIPELINE_STAGE_TRANSFER_BIT
 		);
 
 		void * data;
-		vkMapMemory(device, staging_image_memory, 0, image_size, 0, &data);
+		VK_CHECK(
+			vkMapMemory(device, staging_image_memory, 0, image_size, 0, &data),
+			"Failed to map memory for texture array staging image."
+		);
 		memcpy(data, pixel, static_cast<size_t>(image_size));
 		vkUnmapMemory(device, staging_image_memory);
 
@@ -1110,6 +1156,11 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 			1
 		};
 		blit.dstSubresource.baseArrayLayer = i;
+
+		LOG_DEBUG("Copy texture '" << file_paths[i] << "' from ("
+			<< staging_images_extents[i].width << ", " << staging_images_extents[i].height
+			<< ") to (" << size << ", " << size << ")");
+
 		vkCmdBlitImage(
 			command_buffer,
 			staging_images[i],
@@ -1552,7 +1603,10 @@ uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t heig
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	);
 
-	vkMapMemory(device, imgui_texture.memory, 0, VK_WHOLE_SIZE, 0, &imgui_texture.mapped_memory);
+	VK_CHECK(
+		vkMapMemory(device, imgui_texture.memory, 0, VK_WHOLE_SIZE, 0, &imgui_texture.mapped_memory),
+		"Failed to map memory for ImGui texture."
+	);
 
 	return 0;
 }
@@ -1686,7 +1740,10 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	);
 
 	void * data;
-	vkMapMemory(device, staging_buffer_memory, 0, buffer_size, 0, &data);
+	VK_CHECK(
+		vkMapMemory(device, staging_buffer_memory, 0, buffer_size, 0, &data),
+		"Failed to map memory for vertex/index staging buffer."
+	);
 	std::memcpy(data, vertices.data(), static_cast<size_t>(vertex_size));
 	std::memcpy(static_cast<char *>(data) + vertex_size, indices.data(), static_cast<size_t>(index_size));
 	vkUnmapMemory(device, staging_buffer_memory);
@@ -1995,7 +2052,7 @@ void VulkanAPI::transitionImageLayout(
 
 	VK_CHECK(
 		vkQueueSubmit(graphics_queue, 1, &submit_info, VK_NULL_HANDLE),
-		"Failed to submit queue"
+		"Failed to submit queue 1"
 	);
 
 	VK_CHECK(
@@ -2085,7 +2142,7 @@ void VulkanAPI::copyBuffer(
 
 	VK_CHECK(
 		vkQueueSubmit(graphics_queue, 1, &submit_info, VK_NULL_HANDLE),
-		"Failed to submit queue"
+		"Failed to submit queue 2"
 	);
 
 	VK_CHECK(
@@ -2156,7 +2213,7 @@ void VulkanAPI::copyBufferToImage(
 
 	VK_CHECK(
 		vkQueueSubmit(graphics_queue, 1, &submit_info, VK_NULL_HANDLE),
-		"Failed to submit queue"
+		"Failed to submit queue 3"
 	);
 
 	VK_CHECK(
