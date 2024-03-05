@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME})
 
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
+		-O3
 		-g
 		-Wall
 		-Wextra

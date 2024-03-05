@@ -16,7 +16,7 @@ WorldGenerator::~WorldGenerator()
 
 Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 {
-	
+
 	Chunk chunk(glm::ivec3(x, y, z));
 	(void)x, (void)y;
 
@@ -40,6 +40,10 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 					to_set = generateReliefBlock(position);
 					if (to_set != Block::Air && generateCaveBlock(position) == Block::Air)
 						to_set = Block::Air;
+				}
+				if (to_set != Block::Air && position.y > 128)
+				{
+					to_set = Block::Grass;
 				}
 				chunk.setBlock(blockX, blockY, blockZ, to_set);
 			}
@@ -95,7 +99,7 @@ Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 
 	if (value < threshold)
 		return Block::Air;
-	
+
 	// else try to create cheese cave
 
 	valueA = (valueA + 1) / 2;

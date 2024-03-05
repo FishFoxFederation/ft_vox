@@ -46,6 +46,8 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
+	LOG_TRACE("Start rendering loop.");
+
 	updateTime();
 
 	int width, height;
@@ -69,6 +71,8 @@ void RenderThread::loop()
 	//                                  Start the vulkan rendering process here                                  #
 	//                     																                         #
 	//############################################################################################################
+
+	LOG_TRACE("Start vulkan logic.");
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
 
@@ -108,6 +112,8 @@ void RenderThread::loop()
 	render_info.colorAttachmentCount = static_cast<uint32_t>(color_attachments.size());
 	render_info.pColorAttachments = color_attachments.data();
 	render_info.pDepthAttachment = &depth_attachment;
+
+	LOG_TRACE("Begin main rendering.");
 
 	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
 	m_start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
@@ -155,6 +161,8 @@ void RenderThread::loop()
 		m_triangle_count += static_cast<int>(vk.meshes[mesh_data.id].index_count) / 3;
 	}
 
+	LOG_TRACE("End main rendering.");
+
 	m_end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
@@ -163,6 +171,8 @@ void RenderThread::loop()
 	//                              Submit the command buffer to the graphics queue                              #
 	//                     																                         #
 	//############################################################################################################
+
+	LOG_TRACE("End render_command_buffers.");
 
 	VK_CHECK(
 		vkEndCommandBuffer(vk.render_command_buffers[vk.current_frame]),
@@ -176,6 +186,8 @@ void RenderThread::loop()
 	render_submit_info.signalSemaphoreCount = 1;
 	render_submit_info.pSignalSemaphores = &vk.render_finished_semaphores[vk.current_frame];
 
+	LOG_TRACE("Submit render_command_buffers.");
+
 	VK_CHECK(
 		vkQueueSubmit(vk.graphics_queue, 1, &render_submit_info, vk.in_flight_fences[vk.current_frame]),
 		"Failed to submit draw command buffer"
@@ -186,6 +198,8 @@ void RenderThread::loop()
 	//                     Copy the color image attachment to the swap chain image with blit                     #
 	//                     																                         #
 	//############################################################################################################
+
+	LOG_TRACE("Acquire the next swap chain image.");
 
 	// Acquire the next swap chain image
 	uint32_t image_index;
@@ -209,6 +223,7 @@ void RenderThread::loop()
 	}
 
 
+	LOG_TRACE("Transition the swap chain image from present to transfer destination.");
 	// Transition the swap chain image from present to transfer destination
 	vk.transitionImageLayout(
 		vk.swap_chain_images[image_index],
@@ -222,6 +237,7 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	);
 
+	LOG_TRACE("Transition the color image from color attachment to transfer source.");
 	// Transition the color image from color attachment to transfer source
 	vk.transitionImageLayout(
 		vk.color_attachement_image,
@@ -235,6 +251,7 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	);
 
+	LOG_TRACE("Copy the color image to the swap chain image with blit.");
 	// Copy the color image to the swap chain image with blit
 	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
 
@@ -314,6 +331,7 @@ void RenderThread::loop()
 		"Failed to wait for queue to become idle"
 	);
 
+	LOG_TRACE("Transition the color image from transfer source to color attachment.");
 	// Transition the color image from transfer source to color attachment
 	vk.transitionImageLayout(
 		vk.color_attachement_image,
@@ -333,6 +351,7 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
+	LOG_TRACE("Transition the swap chain image from transfer destination to color attachment.");
 	// Transition the swap chain image from transfer destination to color attachment
 	vk.transitionImageLayout(
 		vk.swap_chain_images[image_index],
@@ -346,6 +365,7 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 	);
 
+	LOG_TRACE("Transition the imgui texture from general to shader read only optimal.");
 	// Transition the imgui texture from general to shader read only optimal
 	vk.transitionImageLayout(
 		vk.imgui_texture.image,
@@ -359,6 +379,7 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 	);
 
+	LOG_TRACE("Begin ImGui frame.");
 	ImGui_ImplVulkan_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -382,6 +403,7 @@ void RenderThread::loop()
 	VkCommandBufferBeginInfo imgui_begin_info = {};
 	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
+	LOG_TRACE("Begin ImGui command buffer.");
 	VK_CHECK(
 		vkBeginCommandBuffer(imgui_command_buffer, &imgui_begin_info),
 		"Failed to begin recording command buffer"
@@ -423,6 +445,7 @@ void RenderThread::loop()
 	imgui_submit_info.signalSemaphoreCount = 1;
 	imgui_submit_info.pSignalSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
 
+	LOG_TRACE("Submit ImGui command buffer.");
 	VK_CHECK(
 		vkQueueSubmit(vk.graphics_queue, 1, &imgui_submit_info, VK_NULL_HANDLE),
 		"Failed to submit command buffer"
@@ -433,6 +456,7 @@ void RenderThread::loop()
 		"Failed to wait for queue to become idle"
 	);
 
+	LOG_TRACE("Transition the imgui texture from shader read only optimal to general.");
 	// Transition the imgui texture from shader read only optimal to general
 	vk.transitionImageLayout(
 		vk.imgui_texture.image,
@@ -452,6 +476,7 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
+	LOG_TRACE("Transition the swap chain image from transfer destination to present.");
 	// Transition the swap chain image from transfer destination to present
 	vk.transitionImageLayout(
 		vk.swap_chain_images[image_index],
@@ -473,6 +498,7 @@ void RenderThread::loop()
 	present_info.pSwapchains = &vk.swap_chain;
 	present_info.pImageIndices = &image_index;
 
+	LOG_TRACE("Present to screen.");
 	result = vkQueuePresentKHR(vk.present_queue, &present_info);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
