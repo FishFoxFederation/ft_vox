@@ -7,6 +7,7 @@
 #include <cstring>
 #include <set>
 #include <algorithm>
+#include <map>
 
 VulkanAPI::VulkanAPI(GLFWwindow * window):
 	window(window)
@@ -315,26 +316,19 @@ void VulkanAPI::pickPhysicalDevice()
 	std::vector<VkPhysicalDevice> devices(device_count);
 	vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
 
-	for (const auto & device : devices)
-	{
-		VkPhysicalDeviceProperties device_properties;
-		vkGetPhysicalDeviceProperties(device, &device_properties);
-
-		LOG_INFO("device name: " << device_properties.deviceName);
-		LOG_INFO("device type: " << device_properties.deviceType);
-	}
+	std::multimap<int, VkPhysicalDevice, std::greater<int>> candidates;
 
 	for (const auto & device : devices)
 	{
-		if (isDeviceSuitable(device))
-		{
-			// physical_device = device;
-			physical_device = devices[1];
-			break;
-		}
+		int score = ratePhysicalDevice(device);
+		candidates.insert(std::make_pair(score, device));
 	}
 
-	if (physical_device == VK_NULL_HANDLE)
+	if (candidates.begin()->first > 0)
+	{
+		physical_device = candidates.begin()->second;
+	}
+	else
 	{
 		throw std::runtime_error("Failed to find a suitable GPU");
 	}
@@ -371,25 +365,21 @@ bool VulkanAPI::isDeviceSuitable(VkPhysicalDevice device)
 
 int VulkanAPI::ratePhysicalDevice(VkPhysicalDevice device)
 {
+	if (!isDeviceSuitable(device))
+	{
+		return 0;
+	}
+
 	int score = 0;
 
 	VkPhysicalDeviceProperties device_properties;
 	vkGetPhysicalDeviceProperties(device, &device_properties);
 
-	VkPhysicalDeviceFeatures device_features;
-	vkGetPhysicalDeviceFeatures(device, &device_features);
+	// VkPhysicalDeviceFeatures device_features;
+	// vkGetPhysicalDeviceFeatures(device, &device_features);
 
-	// Discrete GPUs have a significant performance advantage
 	if (device_properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
 		score += 1000;
-	}
-
-	// Maximum possible size of textures affects graphics quality
-	score += device_properties.limits.maxImageDimension2D;
-
-	// Application can't function without geometry shaders
-	if (!device_features.geometryShader) {
-		return 0;
 	}
 
 	return score;
