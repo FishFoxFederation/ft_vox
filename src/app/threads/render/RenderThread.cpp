@@ -36,6 +36,7 @@ RenderThread::~RenderThread()
 void RenderThread::init()
 {
 
+	LOG_INFO("RenderThread launched :" << gettid());
 }
 
 void RenderThread::loop()
