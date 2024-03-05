@@ -14,6 +14,24 @@ WorldGenerator::~WorldGenerator()
 
 }
 
+Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z)
+{
+	Chunk chunk(glm::ivec3(x, y, z));
+	(void)x, (void)y;
+
+	for(int blockX = 0; blockX < CHUNK_SIZE; blockX++)
+	{
+		for(int blockY = 0; blockY < CHUNK_SIZE; blockY++)
+		{
+			for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
+			{
+				chunk.setBlock(blockX, blockY, blockZ, Block::Stone);
+			}
+		}
+	}
+	return chunk;
+}
+
 Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 {
 

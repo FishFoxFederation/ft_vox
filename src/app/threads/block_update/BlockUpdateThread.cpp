@@ -5,8 +5,8 @@ BlockUpdateThread::BlockUpdateThread(
 	VulkanAPI & vulkanAPI
 ):
 	m_worldScene(worldScene),
-	m_vulkanAPI(vulkanAPI
-)
+	m_vulkanAPI(vulkanAPI),
+	m_world(worldScene, m_vulkanAPI)
 {
 }
 
@@ -16,24 +16,22 @@ BlockUpdateThread::~BlockUpdateThread()
 
 void BlockUpdateThread::init()
 {
-	int size_x = 16;
-	int size_y = 16;
-	int size_z = 16;
-	for (int x = 0; x < size_x; x++)
-	{
-		for (int z = 0; z < size_z; z++)
-		{
-			for (int y = 0; y < size_y; y++)
-			{
-				m_world.chunks().insert(
-					std::make_pair(
-						glm::vec3(x, y, z),
-						m_world.m_worldGenerator.generateChunk(x, y, z)
-					)
-				);
-			}
-		}
-	}
+	LOG_INFO("BlockUpdateThread launched :" << gettid());
+	// for (int x = 0; x < 10; x++)
+	// {
+	// 	for (int z = 0; z < 10; z++)
+	// 	{
+	// 		for (int y = 0; y < 16; y++)
+	// 		{
+	// 			m_world.chunks().insert(
+	// 				std::make_pair(
+	// 					glm::vec3(x, y, z),
+	// 					m_world.m_worldGenerator.generateChunk(x, y, z)
+	// 				)
+	// 			);
+	// 		}
+	// 	}
+	// }
 	LOG_DEBUG("AVG perlin :" << m_world.m_worldGenerator.m_avg / m_world.m_worldGenerator.m_called);
 	LOG_DEBUG("MAX perlin :" << m_world.m_worldGenerator.m_max);
 	LOG_DEBUG("MIN perlin :" << m_world.m_worldGenerator.m_min);
@@ -58,4 +56,6 @@ void BlockUpdateThread::init()
 
 void BlockUpdateThread::loop()
 {
+	m_world.update(m_worldScene.camera().position());
+	// LOG_INFO("PLAYER POSITION: " << m_worldScene.camera().position().x << " " << m_worldScene.camera().position().y << " " << m_worldScene.camera().position().z);
 }

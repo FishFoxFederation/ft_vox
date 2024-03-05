@@ -32,9 +32,9 @@ public:
 
 private:
 
-	World	m_world;
-	WorldScene & m_worldScene;
-	VulkanAPI & m_vulkanAPI;
+	WorldScene &	m_worldScene;
+	VulkanAPI &		m_vulkanAPI;
+	World			m_world;
 
 	/**
 	 * @brief WIP

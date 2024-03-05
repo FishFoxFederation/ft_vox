@@ -14,6 +14,7 @@ public:
 	~WorldGenerator();
 
 	Chunk generateChunk(const int & x, const int & y, const int & z);
+	Chunk generateFullChunk(const int & x, const int & y, const int & z);
 	double  m_avg = 0;
 	int    m_called = 0;
 	float	m_max = -1;

@@ -24,6 +24,7 @@ UpdateThread::~UpdateThread()
 
 void UpdateThread::init()
 {
+	LOG_INFO("UpdateThread launched :" << gettid());
 }
 
 void UpdateThread::loop()
