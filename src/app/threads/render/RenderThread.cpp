@@ -1,13 +1,13 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
 #include "Perlin.hpp"
-#include "Debug.hpp"
 
 #include <iostream>
 #include <array>
 #include <algorithm>
 #include <chrono>
 #include <cstring>
+#include <algorithm>
 
 RenderThread::RenderThread(
 	const Settings & settings,
@@ -19,6 +19,7 @@ RenderThread::RenderThread(
 	m_settings(settings),
 	vk(vulkanAPI),
 	m_world_scene(worldScene),
+	m_debug_gui(vk),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_frame_count(0),
@@ -27,7 +28,6 @@ RenderThread::RenderThread(
 	(void)m_settings;
 	(void)m_world_scene;
 	(void)m_start_time;
-
 }
 
 RenderThread::~RenderThread()
@@ -62,10 +62,14 @@ void RenderThread::loop()
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
 	{
-		m_fps = static_cast<float>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
+		DebugGui::fps = static_cast<float>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
 		m_frame_count = 0;
 		m_start_time_counting_fps = m_current_time;
 	}
+
+	std::shift_left(m_frame_times.begin(), m_frame_times.end(), 1);
+	m_frame_times.back() = m_delta_time.count() / 1e6;
+	// Debug<FrameTimeArray>::set("frame_times", m_frame_times);
 
 	//############################################################################################################
 	//                     																                         #
@@ -134,8 +138,8 @@ void RenderThread::loop()
 		nullptr
 	);
 
-	m_triangle_count = 0;
-	Debug<int>::set("triangle_count", 0);
+	// Debug<int>::set("triangle_count", 0);
+	DebugGui::triangle_count = 0;
 
 	auto mesh_render_data = m_world_scene.getMeshRenderData();
 
@@ -160,16 +164,17 @@ void RenderThread::loop()
 
 		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.meshes[mesh_data.id].index_count), 1, 0, 0, 0);
 
-		m_triangle_count += static_cast<int>(vk.meshes[mesh_data.id].index_count) / 3;
-		Debug<int>::set(
-			"triangle_count",
-			Debug<int>::get("triangle_count") + (vk.meshes[mesh_data.id].index_count) / 3
-		);
+		// Debug<int>::set(
+		// 	"triangle_count",
+		// 	Debug<int>::get("triangle_count") + (vk.meshes[mesh_data.id].index_count) / 3
+		// );
+		DebugGui::triangle_count += (vk.meshes[mesh_data.id].index_count) / 3;
 	}
 
 	LOG_TRACE("End main rendering.");
 
 	m_end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	// Debug<std::chrono::milliseconds>::set("cpu_rendering_time", std::chrono::duration_cast<std::chrono::milliseconds>(m_end_cpu_rendering_time - m_start_cpu_rendering_time));
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -390,7 +395,8 @@ void RenderThread::loop()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	updateImGui();
+	// updateImGui();
+	m_debug_gui.updateImGui();
 
 	ImGui::Render();
 

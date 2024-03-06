@@ -7,6 +7,7 @@
 #include "VulkanAPI.hpp"
 #include "Chunk.hpp"
 #include "WorldGenerator.hpp"
+#include "DebugGui.hpp"
 
 #include <chrono>
 #include <map>
@@ -58,6 +59,8 @@ private:
 	VulkanAPI & vk;
 	const WorldScene & m_world_scene;
 
+	DebugGui m_debug_gui;
+
 	struct ChunkData
 	{
 		glm::vec3 position;
@@ -74,14 +77,19 @@ private:
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
+
+	// For debugging
+
 	int m_frame_count;
-	float m_fps;
 	std::chrono::nanoseconds m_start_time_counting_fps;
 
 	std::chrono::nanoseconds m_start_cpu_rendering_time;
 	std::chrono::nanoseconds m_end_cpu_rendering_time;
 
-	int m_triangle_count;
+	typedef std::array<float, 300> FrameTimeArray;
+	FrameTimeArray m_frame_times;
+
+
 
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI

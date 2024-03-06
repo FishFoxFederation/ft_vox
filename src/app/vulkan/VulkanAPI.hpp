@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Chunk.hpp"
+#include "VulkanMemoryAllocator.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -21,6 +22,7 @@
 #include <optional>
 #include <unordered_map>
 #include <mutex>
+#include <map>
 
 // #define NDEBUG
 
@@ -123,6 +125,8 @@ struct Mesh
 	uint32_t vertex_count;
 	VkDeviceSize index_offset;
 	uint32_t index_count;
+
+	uint32_t memory_size;
 };
 
 struct CameraMatrices
@@ -169,6 +173,7 @@ struct ImGuiTexture
 	}
 };
 
+
 class VulkanAPI
 {
 
@@ -201,6 +206,8 @@ public:
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 
+
+	VulaknMemoryAllocator vma;
 
 	GLFWwindow * window;
 
