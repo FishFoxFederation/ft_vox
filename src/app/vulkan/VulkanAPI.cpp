@@ -54,23 +54,22 @@ VulkanAPI::~VulkanAPI()
 	for (auto & [key, mesh] : meshes)
 	{
 		vkDestroyBuffer(device, mesh.buffer, nullptr);
-		vkFreeMemory(device, mesh.buffer_memory, nullptr);
+		vma.freeMemory(device, mesh.buffer_memory, nullptr);
 	}
 
 	// vkDestroyImage(device, texture_image, nullptr);
-	// vkFreeMemory(device, texture_image_memory, nullptr);
 	// vkDestroyImageView(device, texture_image_view, nullptr);
 	// vkDestroySampler(device, texture_sampler, nullptr);
 
 	vkDestroyImage(device, textures_image, nullptr);
-	vkFreeMemory(device, textures_image_memory, nullptr);
+	vma.freeMemory(device, textures_image_memory, nullptr);
 	vkDestroyImageView(device, textures_image_view, nullptr);
 	vkDestroySampler(device, textures_sampler, nullptr);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkUnmapMemory(device, uniform_buffers_memory[i]);
-		vkFreeMemory(device, uniform_buffers_memory[i], nullptr);
+		vma.freeMemory(device, uniform_buffers_memory[i], nullptr);
 		vkDestroyBuffer(device, uniform_buffers[i], nullptr);
 	}
 
@@ -90,11 +89,11 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyFence(device, single_time_command_fence, nullptr);
 
 	vkDestroyImageView(device, color_attachement_view, nullptr);
-	vkFreeMemory(device, color_attachement_memory, nullptr);
+	vma.freeMemory(device, color_attachement_memory, nullptr);
 	vkDestroyImage(device, color_attachement_image, nullptr);
 
 	vkDestroyImageView(device, depth_attachement_view, nullptr);
-	vkFreeMemory(device, depth_attachement_memory, nullptr);
+	vma.freeMemory(device, depth_attachement_memory, nullptr);
 	vkDestroyImage(device, depth_attachement_image, nullptr);
 
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(render_command_buffers.size()), render_command_buffers.data());
@@ -607,11 +606,11 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
 	vkDestroyImageView(device, color_attachement_view, nullptr);
-	vkFreeMemory(device, color_attachement_memory, nullptr);
+	vma.freeMemory(device, color_attachement_memory, nullptr);
 	vkDestroyImage(device, color_attachement_image, nullptr);
 
 	vkDestroyImageView(device, depth_attachement_view, nullptr);
-	vkFreeMemory(device, depth_attachement_memory, nullptr);
+	vma.freeMemory(device, depth_attachement_memory, nullptr);
 	vkDestroyImage(device, depth_attachement_image, nullptr);
 
 	vkDestroyPipeline(device, graphics_pipeline, nullptr);
@@ -943,7 +942,6 @@ void VulkanAPI::createImageTexture(const std::string & file_path)
 	// );
 
 	// vkDestroyBuffer(device, staging_buffer, nullptr);
-	// vkFreeMemory(device, staging_buffer_memory, nullptr);
 
 	// createImageView(
 	// 	texture_image,
@@ -1085,7 +1083,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	);
 
 	VK_CHECK(
-		vkAllocateMemory(device, &alloc_info, nullptr, &textures_image_memory),
+		vma.allocateMemory(device, &alloc_info, nullptr, &textures_image_memory),
 		"Failed to allocate image memory"
 	);
 
@@ -1194,7 +1192,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	for (size_t i = 0; i < layers_count; i++)
 	{
 		vkDestroyImage(device, staging_images[i], nullptr);
-		vkFreeMemory(device, staging_images_memory[i], nullptr);
+		vma.freeMemory(device, staging_images_memory[i], nullptr);
 		stbi_image_free(pixels[i]);
 	}
 
@@ -1607,7 +1605,7 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 	ImGui_ImplVulkan_RemoveTexture(imgui_texture.descriptor_set);
 	vkDestroySampler(device, imgui_texture.sampler, nullptr);
 	vkDestroyImageView(device, imgui_texture.view, nullptr);
-	vkFreeMemory(device, imgui_texture.memory, nullptr);
+	vma.freeMemory(device, imgui_texture.memory, nullptr);
 	vkDestroyImage(device, imgui_texture.image, nullptr);
 }
 
@@ -1749,11 +1747,13 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	copyBuffer(staging_buffer, mesh.buffer, buffer_size);
 
 	vkDestroyBuffer(device, staging_buffer, nullptr);
-	vkFreeMemory(device, staging_buffer_memory, nullptr);
+	vma.freeMemory(device, staging_buffer_memory, nullptr);
 
 	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
 	mesh.index_offset = vertex_size;
 	mesh.index_count = static_cast<uint32_t>(indices.size());
+	mesh.memory_size = buffer_size;
+	// Debug<uint64_t>::add("mesh_memory_size", buffer_size);
 
 	meshes.emplace(next_mesh_id, mesh);
 	return next_mesh_id++;
@@ -1938,7 +1938,7 @@ void VulkanAPI::createImage(
 	alloc_info.memoryTypeIndex = findMemoryType(mem_requirements.memoryTypeBits, properties);
 
 	VK_CHECK(
-		vkAllocateMemory(device, &alloc_info, nullptr, &image_memory),
+		vma.allocateMemory(device, &alloc_info, nullptr, &image_memory),
 		"Failed to allocate image memory"
 	);
 
@@ -2081,7 +2081,7 @@ void VulkanAPI::createBuffer(
 	alloc_info.memoryTypeIndex = findMemoryType(mem_requirements.memoryTypeBits, properties);
 
 	VK_CHECK(
-		vkAllocateMemory(device, &alloc_info, nullptr, &buffer_memory),
+		vma.allocateMemory(device, &alloc_info, nullptr, &buffer_memory),
 		"Failed to allocate buffer memory"
 	);
 

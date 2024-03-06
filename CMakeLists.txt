@@ -30,7 +30,7 @@ target_sources(${PROJECT_NAME}
 		src/app/perlin/Perlin.cpp
 
 		src/app/application.cpp
-		src/app/Debug.cpp
+		src/app/DebugGui.cpp
 		src/app/Settings.cpp
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/AThreadWrapper.cpp
@@ -39,6 +39,7 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
+		src/app/vulkan/VulkanMemoryAllocator.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp

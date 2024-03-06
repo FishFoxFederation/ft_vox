@@ -1,23 +1,31 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
-#include "Debug.hpp"
 
 void RenderThread::updateImGui()
 {
 	// ImGui::ShowDemoWindow();
 
-	ImGui::Begin("Debug");
+	// ImGui::Begin("Debug");
 
-	ImGui::Text("Frame time: %f ms", m_delta_time.count() / 1e6);
-	ImGui::Text("CPU rendering time: %ld ms",
-		std::chrono::duration_cast<std::chrono::milliseconds>(m_end_cpu_rendering_time - m_start_cpu_rendering_time).count()
-	);
-	ImGui::Text("FPS: %f", m_fps);
-	ImGui::Text("Triangle count: %d", m_triangle_count);
-	ImGui::Text("Debug triangle count: %d", Debug<int>::get("triangle_count"));
+	// ImGui::Text("Frame time: %f ms", m_delta_time.count() / 1e6);
+
+	// ImGui::Text("CPU rendering time: %ld ms", Debug<std::chrono::milliseconds>::get("cpu_rendering_time").count());
+
+	// ImGui::Text("FPS: %d", Debug<int>::get("fps"));
+
+	// ImGui::Text("Triangle count: %d", Debug<int>::get("triangle_count"));
+
+	// ImGui::Text("Gpu memory for mesh: %ld MB", Debug<uint64_t>::get("mesh_memory_size") / 1024 / 1024);
 
 
-	// write to texture
+	// auto frame_times = Debug<FrameTimeArray>::get("frame_times");
+	// float max_frame_time = *std::max_element(frame_times.begin(), frame_times.end());
+	// max_frame_time = std::max(max_frame_time, 50.0f);
+
+	// ImGui::PlotHistogram("", frame_times.data(), frame_times.size(), 0, "frame time", 0, max_frame_time, ImVec2(0, 100));
+
+
+	// // write to texture
 	// vk.imgui_texture.clear();
 	// for (uint32_t x = 0; x < vk.imgui_texture.width(); x++)
 	// {
@@ -27,11 +35,11 @@ void RenderThread::updateImGui()
 	// 	}
 	// }
 
-	// display image
+	// // display image
 	// ImGui::Image(
 	// 	(void *)vk.imgui_texture.descriptor_set,
 	// 	ImVec2(vk.imgui_texture.extent.width, vk.imgui_texture.extent.height)
 	// );
 
-	ImGui::End();
+	// ImGui::End();
 }
