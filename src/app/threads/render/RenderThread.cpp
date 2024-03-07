@@ -119,7 +119,7 @@ void RenderThread::loop()
 	LOG_TRACE("Begin main rendering.");
 
 	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
-	m_start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
 
 	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
@@ -166,8 +166,8 @@ void RenderThread::loop()
 
 	LOG_TRACE("End main rendering.");
 
-	m_end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
-	DebugGui::cpu_time = (m_end_cpu_rendering_time - m_start_cpu_rendering_time).count() / 1e6;
+	std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	DebugGui::cpu_time = (end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6;
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -388,7 +388,6 @@ void RenderThread::loop()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	// updateImGui();
 	m_debug_gui.updateImGui();
 
 	ImGui::Render();
