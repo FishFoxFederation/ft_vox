@@ -67,9 +67,7 @@ void RenderThread::loop()
 		m_start_time_counting_fps = m_current_time;
 	}
 
-	std::shift_left(m_frame_times.begin(), m_frame_times.end(), 1);
-	m_frame_times.back() = m_delta_time.count() / 1e6;
-	// Debug<FrameTimeArray>::set("frame_times", m_frame_times);
+	DebugGui::pushFrameTime(m_delta_time.count() / 1e6);
 
 	//############################################################################################################
 	//                     																                         #
@@ -138,7 +136,6 @@ void RenderThread::loop()
 		nullptr
 	);
 
-	// Debug<int>::set("triangle_count", 0);
 	DebugGui::triangle_count = 0;
 
 	auto mesh_render_data = m_world_scene.getMeshRenderData();
@@ -164,17 +161,13 @@ void RenderThread::loop()
 
 		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.meshes[mesh_data.id].index_count), 1, 0, 0, 0);
 
-		// Debug<int>::set(
-		// 	"triangle_count",
-		// 	Debug<int>::get("triangle_count") + (vk.meshes[mesh_data.id].index_count) / 3
-		// );
 		DebugGui::triangle_count += (vk.meshes[mesh_data.id].index_count) / 3;
 	}
 
 	LOG_TRACE("End main rendering.");
 
 	m_end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
-	// Debug<std::chrono::milliseconds>::set("cpu_rendering_time", std::chrono::duration_cast<std::chrono::milliseconds>(m_end_cpu_rendering_time - m_start_cpu_rendering_time));
+	DebugGui::cpu_time = (m_end_cpu_rendering_time - m_start_cpu_rendering_time).count() / 1e6;
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
 	//############################################################################################################

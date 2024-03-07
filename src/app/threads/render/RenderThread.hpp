@@ -86,9 +86,6 @@ private:
 	std::chrono::nanoseconds m_start_cpu_rendering_time;
 	std::chrono::nanoseconds m_end_cpu_rendering_time;
 
-	typedef std::array<float, 300> FrameTimeArray;
-	FrameTimeArray m_frame_times;
-
 
 
 	/**
