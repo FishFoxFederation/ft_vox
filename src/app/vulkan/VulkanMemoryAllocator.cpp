@@ -1,4 +1,5 @@
 #include "VulkanMemoryAllocator.hpp"
+#include "logger.hpp"
 
 VulaknMemoryAllocator::VulaknMemoryAllocator()
 {
@@ -15,9 +16,15 @@ VkResult VulaknMemoryAllocator::allocateMemory(
 	VkDeviceMemory * pMemory
 )
 {
+	VkResult result = vkAllocateMemory(device, pAllocateInfo, pAllocator, pMemory);
+	if (result != VK_SUCCESS)
+	{
+		LOG_ERROR("Failed to allocate memory");
+		return result;
+	}
 	m_allocated_memory_size += pAllocateInfo->allocationSize;
 	m_allocated_memory[*pMemory] = pAllocateInfo->allocationSize;
-	return vkAllocateMemory(device, pAllocateInfo, pAllocator, pMemory);
+	return result;
 }
 
 void VulaknMemoryAllocator::freeMemory(
@@ -26,6 +33,10 @@ void VulaknMemoryAllocator::freeMemory(
 	const VkAllocationCallbacks * pAllocator
 )
 {
+	if (m_allocated_memory.find(memory) == m_allocated_memory.end())
+	{
+		LOG_ERROR("Memory not found");
+	}
 	m_allocated_memory_size -= m_allocated_memory[memory];
 	m_allocated_memory.erase(memory);
 	vkFreeMemory(device, memory, pAllocator);
