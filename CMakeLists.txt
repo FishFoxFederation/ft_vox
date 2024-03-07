@@ -35,7 +35,6 @@ target_sources(${PROJECT_NAME}
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp
-		src/app/threads/render/imgui_windows.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/vulkan/VulkanAPI.cpp

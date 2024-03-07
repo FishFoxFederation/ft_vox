@@ -78,14 +78,9 @@ private:
 	std::chrono::nanoseconds m_delta_time;
 
 
-	// For debugging
-
+	// For DebugGui
 	int m_frame_count;
 	std::chrono::nanoseconds m_start_time_counting_fps;
-
-	std::chrono::nanoseconds m_start_cpu_rendering_time;
-	std::chrono::nanoseconds m_end_cpu_rendering_time;
-
 
 
 	/**
@@ -109,11 +104,5 @@ private:
 	 *
 	 */
 	void updateTime();
-
-	/**
-	 * @brief Use the ImGui library to display debug information
-	 *
-	 */
-	void updateImGui();
 
 };
