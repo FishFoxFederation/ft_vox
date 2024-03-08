@@ -201,7 +201,15 @@ public:
 
 	void recreateSwapChain(GLFWwindow * window);
 
-	uint64_t createMesh(const Chunk & chunk);
+	uint64_t createMesh(
+		const Chunk & chunk,
+		const Chunk * x_pos_chunk,
+		const Chunk * x_neg_chunk,
+		const Chunk * y_pos_chunk,
+		const Chunk * y_neg_chunk,
+		const Chunk * z_pos_chunk,
+		const Chunk * z_neg_chunk
+	);
 	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);

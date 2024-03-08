@@ -39,6 +39,7 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/vulkan/VulkanMemoryAllocator.cpp
+		src/app/vulkan/chunk_mesh.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp

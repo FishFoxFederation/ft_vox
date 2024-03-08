@@ -33,18 +33,18 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 				);
 				Block to_set;
 
-				if( position.y == 128)
-					to_set = Block::Air;
-				else
-				{
+				// if( position.y == 128)
+				// 	to_set = Block::Air;
+				// else
+				// {
 					to_set = generateReliefBlock(position);
 					if (to_set != Block::Air && generateCaveBlock(position) == Block::Air)
 						to_set = Block::Air;
-				}
-				if (to_set != Block::Air && position.y > 128)
-				{
-					to_set = Block::Grass;
-				}
+				// }
+				// if (to_set != Block::Air && position.y > 128)
+				// {
+				// 	to_set = Block::Grass;
+				// }
 				chunk.setBlock(blockX, blockY, blockZ, to_set);
 			}
 		}
