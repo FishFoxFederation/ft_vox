@@ -64,5 +64,6 @@ var classVulkanAPI =
     [ "uniform_buffers", "classVulkanAPI.html#a9c01445f738c2181b4d574a8fae9f88c", null ],
     [ "uniform_buffers_mapped_memory", "classVulkanAPI.html#a825d37ea56204e6836b2a320c0437753", null ],
     [ "uniform_buffers_memory", "classVulkanAPI.html#af8c6cfc3c05804e2bc4263c1f3adb71a", null ],
+    [ "vma", "classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5", null ],
     [ "window", "classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1", null ]
 ];

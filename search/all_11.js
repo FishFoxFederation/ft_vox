@@ -17,5 +17,6 @@ var searchData=
   ['transform_14',['Transform',['../classWorldScene_1_1Transform.html#a25c42b8296eb24b147b51442a68671ed',1,'WorldScene::Transform']]],
   ['transform_15',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]],
   ['transform_16',['Transform',['../classWorldScene_1_1Transform.html',1,'WorldScene']]],
-  ['transitionimagelayout_17',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]]
+  ['transitionimagelayout_17',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]],
+  ['triangle_5fcount_18',['triangle_count',['../classDebugGui.html#aec721872e95b3d2c490123e63263546f',1,'DebugGui']]]
 ];

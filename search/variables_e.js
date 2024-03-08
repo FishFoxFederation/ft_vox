@@ -8,5 +8,6 @@ var searchData=
   ['textures_5fmip_5flevels_5',['textures_mip_levels',['../classVulkanAPI.html#adbdefb9eb1ab9c17d9bad0aedb390557',1,'VulkanAPI']]],
   ['textures_5fsampler_6',['textures_sampler',['../classVulkanAPI.html#a6cbb39f41f227f21c2c55a6b72332e64',1,'VulkanAPI']]],
   ['textures_5fsize_7',['textures_size',['../classVulkanAPI.html#a15a052f7ed700782fe7caff687d64748',1,'VulkanAPI']]],
-  ['transform_8',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]]
+  ['transform_8',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]],
+  ['triangle_5fcount_9',['triangle_count',['../classDebugGui.html#aec721872e95b3d2c490123e63263546f',1,'DebugGui']]]
 ];

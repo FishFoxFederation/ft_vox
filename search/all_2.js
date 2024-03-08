@@ -23,8 +23,9 @@ var searchData=
   ['command_5fpool_20',['command_pool',['../classVulkanAPI.html#a512711a2bf5f70765279aca5f1e6c5dd',1,'VulkanAPI']]],
   ['configure_21',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]],
   ['copy_5fcommand_5fbuffers_22',['copy_command_buffers',['../classVulkanAPI.html#a6e36af29d838a6599ddb213ca74a7edf',1,'VulkanAPI']]],
-  ['createimguitexture_23',['createImGuiTexture',['../classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323',1,'VulkanAPI']]],
-  ['createmesh_24',['createMesh',['../classVulkanAPI.html#a50595bdee3df594193c92357af304cd5',1,'VulkanAPI']]],
-  ['critical_25',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]],
-  ['current_5fframe_26',['current_frame',['../classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202',1,'VulkanAPI']]]
+  ['cpu_5ftime_23',['cpu_time',['../classDebugGui.html#a053a38c794d622e8926ecc4b7bdcea3a',1,'DebugGui']]],
+  ['createimguitexture_24',['createImGuiTexture',['../classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323',1,'VulkanAPI']]],
+  ['createmesh_25',['createMesh',['../classVulkanAPI.html#a50595bdee3df594193c92357af304cd5',1,'VulkanAPI']]],
+  ['critical_26',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]],
+  ['current_5fframe_27',['current_frame',['../classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202',1,'VulkanAPI']]]
 ];

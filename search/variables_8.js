@@ -9,6 +9,7 @@ var searchData=
   ['mapped_5fmemory_6',['mapped_memory',['../structImGuiTexture.html#a9e4e3e36fd24067f4efc48a3f6e57688',1,'ImGuiTexture']]],
   ['max_5fframes_5fin_5fflight_7',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
   ['memory_8',['memory',['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture']]],
-  ['meshes_9',['meshes',['../classVulkanAPI.html#aafa409bfcd712145122ed4539a06aa4c',1,'VulkanAPI']]],
-  ['model_10',['model',['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5',1,'ModelMatrice::model()']]]
+  ['memory_5fsize_9',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],
+  ['meshes_10',['meshes',['../classVulkanAPI.html#aafa409bfcd712145122ed4539a06aa4c',1,'VulkanAPI']]],
+  ['model_11',['model',['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5',1,'ModelMatrice::model()']]]
 ];

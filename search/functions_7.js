@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['level_0',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
-  ['logger_1',['Logger',['../classLogger.html#abc41bfb031d896170c7675fa96a6b30c',1,'Logger::Logger()'],['../classLogger.html#ae588fefbe500d9061e2ca2b314aa325f',1,'Logger::Logger(const std::filesystem::path &amp;path)']]],
-  ['lookat_2',['lookAt',['../classWorldScene_1_1Camera.html#aea31563228100aab4ab8da71df2fb511',1,'WorldScene::Camera']]]
+  ['input_0',['Input',['../classInput.html#aa895b31518ef527a6463c70fb4709097',1,'Input']]],
+  ['input_1',['input',['../classWindow.html#a82f1bcd7398902a364b803e6a4377fae',1,'Window']]],
+  ['iscomplete_2',['isComplete',['../structQueueFamilyIndices.html#a652cdfabe4719ae21a701e77d57e7899',1,'QueueFamilyIndices']]],
+  ['iscursorcaptured_3',['isCursorCaptured',['../classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda',1,'Input']]]
 ];

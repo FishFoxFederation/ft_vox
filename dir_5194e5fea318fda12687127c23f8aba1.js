@@ -8,6 +8,8 @@ var dir_5194e5fea318fda12687127c23f8aba1 =
     [ "world", "dir_209d8d7e4b7bf4dfb7c512b3795ac445.html", "dir_209d8d7e4b7bf4dfb7c512b3795ac445" ],
     [ "application.cpp", "application_8cpp.html", null ],
     [ "application.hpp", "application_8hpp.html", "application_8hpp" ],
+    [ "DebugGui.cpp", "DebugGui_8cpp.html", null ],
+    [ "DebugGui.hpp", "DebugGui_8hpp.html", "DebugGui_8hpp" ],
     [ "Settings.cpp", "Settings_8cpp.html", null ],
     [ "Settings.hpp", "Settings_8hpp.html", "Settings_8hpp" ]
 ];

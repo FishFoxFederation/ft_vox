@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['logger_0',['Logger',['../classLogger.html',1,'']]]
+  ['imguitexture_0',['ImGuiTexture',['../structImGuiTexture.html',1,'']]],
+  ['input_1',['Input',['../classInput.html',1,'']]]
 ];
