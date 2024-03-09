@@ -145,8 +145,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a48f6b428d99ea240a6ebdc1ad4dba0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581">recreateSwapChain</a> (GLFWwindow *<a class="el" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>)</td></tr>
 <tr class="separator:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50595bdee3df594193c92357af304cd5"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a50595bdee3df594193c92357af304cd5">createMesh</a> (const <a class="el" href="classChunk.html">Chunk</a> &amp;chunk)</td></tr>
-<tr class="separator:a50595bdee3df594193c92357af304cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3d7ddd6246c2b3cb960c58408919101"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aa3d7ddd6246c2b3cb960c58408919101">createMesh</a> (const <a class="el" href="classChunk.html">Chunk</a> &amp;chunk, const <a class="el" href="classChunk.html">Chunk</a> *x_pos_chunk, const <a class="el" href="classChunk.html">Chunk</a> *x_neg_chunk, const <a class="el" href="classChunk.html">Chunk</a> *y_pos_chunk, const <a class="el" href="classChunk.html">Chunk</a> *y_neg_chunk, const <a class="el" href="classChunk.html">Chunk</a> *z_pos_chunk, const <a class="el" href="classChunk.html">Chunk</a> *z_neg_chunk)</td></tr>
+<tr class="separator:aa3d7ddd6246c2b3cb960c58408919101"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a916d17d1a713268c205279c4e4685b80"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a916d17d1a713268c205279c4e4685b80">storeMesh</a> (const std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt; &amp;vertices, const std::vector&lt; uint32_t &gt; &amp;indices)</td></tr>
 <tr class="separator:a916d17d1a713268c205279c4e4685b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a656d3ac5626be8100d2d718b477c1323"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323">createImGuiTexture</a> (const uint32_t width, const uint32_t height)</td></tr>
@@ -387,8 +387,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a50595bdee3df594193c92357af304cd5" name="a50595bdee3df594193c92357af304cd5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50595bdee3df594193c92357af304cd5">&#9670;&#160;</a></span>createMesh()</h2>
+<a id="aa3d7ddd6246c2b3cb960c58408919101" name="aa3d7ddd6246c2b3cb960c58408919101"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3d7ddd6246c2b3cb960c58408919101">&#9670;&#160;</a></span>createMesh()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -397,8 +397,48 @@ Static Public Attributes</h2></td></tr>
           <td class="memname">uint64_t VulkanAPI::createMesh </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>chunk</em></td><td>)</td>
+          <td class="paramname"><em>chunk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> *&#160;</td>
+          <td class="paramname"><em>x_pos_chunk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> *&#160;</td>
+          <td class="paramname"><em>x_neg_chunk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> *&#160;</td>
+          <td class="paramname"><em>y_pos_chunk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> *&#160;</td>
+          <td class="paramname"><em>y_neg_chunk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> *&#160;</td>
+          <td class="paramname"><em>z_pos_chunk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html">Chunk</a> *&#160;</td>
+          <td class="paramname"><em>z_neg_chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1368,6 +1408,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/app/vulkan/<a class="el" href="VulkanAPI_8hpp_source.html">VulkanAPI.hpp</a></li>
+<li>src/app/vulkan/<a class="el" href="chunk__mesh_8cpp.html">chunk_mesh.cpp</a></li>
 <li>src/app/vulkan/<a class="el" href="VulkanAPI_8cpp.html">VulkanAPI.cpp</a></li>
 </ul>
 </div><!-- contents -->

@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classWorldScene.html#a8bcfa949f6e093c9794ace6f199742c0":[8,0,26,13],
 "classWorldScene.html#a96919a2cba5b6b6e544cc9b749e13ac8":[8,0,26,4],
 "classWorldScene.html#ab1ef2cb8d38726a515ec3042619b0ab5":[8,0,26,11],
 "classWorldScene.html#abb2f5adfccf441133d0109895adb44a0":[8,0,26,7],
