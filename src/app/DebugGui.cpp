@@ -51,6 +51,16 @@ void DebugGui::updateImGui()
 
 				ImGui::EndTabItem();
 			}
+			if (ImGui::BeginTabItem("Game"))
+			{
+				ImGui::Text("Last position: %11f / %11f / %11f", camera_last_position.get().x, camera_last_position.get().y, camera_last_position.get().z);
+				ImGui::Text("Displacement:  %11f / %11f / %11f", camera_displacement.get().x, camera_displacement.get().y, camera_displacement.get().z);
+				ImGui::Text("New position:  %11f / %11f / %11f", camera_new_position.get().x, camera_new_position.get().y, camera_new_position.get().z);
+				ImGui::Text("New position - last position: %11f / %11f / %11f", camera_position_sub_last_position.get().x, camera_position_sub_last_position.get().y, camera_position_sub_last_position.get().z);
+				// ImGui::Text("Update time: %f ms", camera_update_time.load());
+
+				ImGui::EndTabItem();
+			}
 
 			ImGui::EndTabBar();
 		}
