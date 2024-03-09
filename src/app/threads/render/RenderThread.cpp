@@ -54,10 +54,16 @@ void RenderThread::loop()
 	int width, height;
 	glfwGetFramebufferSize(vk.window, &width, &height);
 
+	float aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
+
 	CameraMatrices camera_matrices = {};
 	camera_matrices.view = m_world_scene.camera().getViewMatrix();
-	camera_matrices.proj = m_world_scene.camera().getProjectionMatrix(static_cast<float>(width) / static_cast<float>(height));
+	camera_matrices.proj = m_world_scene.camera().getProjectionMatrix(aspect_ratio);
 	camera_matrices.proj[1][1] *= -1;
+
+	Frustum frustum = m_world_scene.camera().getFrustum(aspect_ratio);
+
+	auto chunk_meshes = m_world_scene.getMeshRenderData();
 
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
@@ -136,20 +142,34 @@ void RenderThread::loop()
 		nullptr
 	);
 
-	DebugGui::triangle_count = 0;
+	uint32_t triangle_count = 0;
 
-	auto mesh_render_data = m_world_scene.getMeshRenderData();
-
-	for (auto & mesh_data : mesh_render_data)
+	for (auto & chunk_mesh : chunk_meshes)
 	{
-		VkBuffer vertex_buffers[] = { vk.meshes[mesh_data.id].buffer };
-		VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(vk.render_command_buffers[vk.current_frame], 0, 1, vertex_buffers, offsets);
+		glm::vec3 pos = chunk_mesh.transform.position();
+		if (!frustum.sphereInFrustum(pos + glm::vec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+		{
+			continue;
+		}
 
-		vkCmdBindIndexBuffer(vk.render_command_buffers[vk.current_frame], vk.meshes[mesh_data.id].buffer, vk.meshes[mesh_data.id].index_offset, VK_INDEX_TYPE_UINT32);
+		VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(
+			vk.render_command_buffers[vk.current_frame],
+			0, 1,
+			vertex_buffers,
+			offsets
+		);
+
+		vkCmdBindIndexBuffer(
+			vk.render_command_buffers[vk.current_frame],
+			vk.meshes[chunk_mesh.id].buffer,
+			vk.meshes[chunk_mesh.id].index_offset,
+			VK_INDEX_TYPE_UINT32
+		);
 
 		ModelMatrice model_matrice = {};
-		model_matrice.model = mesh_data.transform.model();
+		model_matrice.model = chunk_mesh.transform.model();
 		vkCmdPushConstants(
 			vk.render_command_buffers[vk.current_frame],
 			vk.pipeline_layout,
@@ -159,10 +179,16 @@ void RenderThread::loop()
 			&model_matrice
 		);
 
-		vkCmdDrawIndexed(vk.render_command_buffers[vk.current_frame], static_cast<uint32_t>(vk.meshes[mesh_data.id].index_count), 1, 0, 0, 0);
+		vkCmdDrawIndexed(
+			vk.render_command_buffers[vk.current_frame],
+			static_cast<uint32_t>(vk.meshes[chunk_mesh.id].index_count),
+			1, 0, 0, 0
+		);
 
-		DebugGui::triangle_count += (vk.meshes[mesh_data.id].index_count) / 3;
+		triangle_count += (vk.meshes[chunk_mesh.id].index_count) / 3;
 	}
+
+	DebugGui::triangle_count = triangle_count;
 
 	LOG_TRACE("End main rendering.");
 

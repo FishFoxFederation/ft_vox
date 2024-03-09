@@ -32,6 +32,7 @@ target_sources(${PROJECT_NAME}
 		src/app/application.cpp
 		src/app/DebugGui.cpp
 		src/app/Settings.cpp
+		src/app/scenes/Camera.cpp
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp

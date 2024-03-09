@@ -16,11 +16,14 @@ BlockUpdateThread::~BlockUpdateThread()
 
 void BlockUpdateThread::init()
 {
-	for (int x = 0; x < 10; x++)
+	int size_x = 10;
+	int size_y = 16;
+	int size_z = 10;
+	for (int x = 0; x < size_x; x++)
 	{
-		for (int z = 0; z < 10; z++)
+		for (int z = 0; z < size_z; z++)
 		{
-			for (int y = 0; y < 16; y++)
+			for (int y = 0; y < size_y; y++)
 			{
 				m_world.chunks().insert(
 					std::make_pair(
@@ -39,11 +42,11 @@ void BlockUpdateThread::init()
 	{
 		uint64_t mesh_id = m_vulkanAPI.createMesh(
 			chunk,
-			pos.x < 9 ? &m_world.chunks().at(glm::vec3(pos.x + 1, pos.y, pos.z)) : nullptr,
+			pos.x < size_x - 1 ? &m_world.chunks().at(glm::vec3(pos.x + 1, pos.y, pos.z)) : nullptr,
 			pos.x > 0 ? &m_world.chunks().at(glm::vec3(pos.x - 1, pos.y, pos.z)) : nullptr,
-			pos.y < 15 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y + 1, pos.z)) : nullptr,
+			pos.y < size_y - 1 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y + 1, pos.z)) : nullptr,
 			pos.y > 0 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y - 1, pos.z)) : nullptr,
-			pos.z < 9 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z + 1)) : nullptr,
+			pos.z < size_z - 1 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z + 1)) : nullptr,
 			pos.z > 0 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z - 1)) : nullptr
 		);
 		if (mesh_id != VulkanAPI::no_mesh_id)
