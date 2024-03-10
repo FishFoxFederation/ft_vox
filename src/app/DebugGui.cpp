@@ -1,6 +1,8 @@
 #include "DebugGui.hpp"
+#include "logger.hpp"
 
 #include <algorithm>
+#include <numeric>
 
 DebugGui::DebugGui(VulkanAPI & vulkanAPI):
 	vk(vulkanAPI)
@@ -19,6 +21,34 @@ void DebugGui::updateImGui()
 	{
 		if (ImGui::BeginTabBar("HeadTabBar"))
 		{
+			if (ImGui::BeginTabItem("Game"))
+			{
+				ImGui::Text("Fps: %d", fps.load());
+
+				ImGui::Separator();
+
+				ImGui::Text("Last position: %11f / %11f / %11f", camera_last_position.get().x, camera_last_position.get().y, camera_last_position.get().z);
+				ImGui::Text("Displacement:  %11f / %11f / %11f", camera_displacement.get().x, camera_displacement.get().y, camera_displacement.get().z);
+				ImGui::Text("New position:  %11f / %11f / %11f", camera_new_position.get().x, camera_new_position.get().y, camera_new_position.get().z);
+				ImGui::Text("New position - last position: %11f / %11f / %11f", camera_position_sub_last_position.get().x, camera_position_sub_last_position.get().y, camera_position_sub_last_position.get().z);
+				// ImGui::Text("Update time: %f ms", camera_update_time.load());
+
+				ImGui::Separator();
+
+				ImGui::Text("Rendered triangles: %ld", rendered_triangles.load());
+
+				ImGui::Separator();
+
+				float near_plane = DebugGui::near_plane.load();
+				float far_plane = DebugGui::far_plane.load();
+				ImGui::SliderFloat("Near plane", &near_plane, 0.01f, 10.0f);
+				ImGui::SliderFloat("Far plane", &far_plane, 30.0f, 500.0f);
+				DebugGui::near_plane = near_plane;
+				DebugGui::far_plane = far_plane;
+
+				ImGui::EndTabItem();
+			}
+
 			if (ImGui::BeginTabItem("Performance"))
 			{
 				if (ImGui::CollapsingHeader("Render Thread"))
@@ -26,11 +56,16 @@ void DebugGui::updateImGui()
 					ImGui::Text("Fps: %d", fps.load());
 
 					{
-						std::lock_guard<std::mutex> lock(frame_time_history_mutex);
-						ImGui::PlotHistogram("", frame_time_history.data(), frame_time_history.size(), 0, "Frame time", 0.0f, 100.0f, ImVec2(200, 80));
+						std::string average = "Average: " + std::to_string(frame_time_history.average()) + " ms";
+						auto lock = frame_time_history.lock();
+						ImGui::PlotHistogram("Frame time", frame_time_history.data(), frame_time_history.size(), 0, average.c_str(), 0.0f, 100.0f, ImVec2(200, 80));
 					}
 
-					ImGui::Text("Cpu time: %.2f ms", cpu_time.load());
+					{
+						std::string average = "Average: " + std::to_string(cpu_time_history.average()) + " ms";
+						auto lock = cpu_time_history.lock();
+						ImGui::PlotHistogram("Cpu time", cpu_time_history.data(), cpu_time_history.size(), 0, average.c_str(), 0.0f, 100.0f, ImVec2(200, 80));
+					}
 				}
 				if (ImGui::CollapsingHeader("Update Thread"))
 				{
@@ -43,36 +78,17 @@ void DebugGui::updateImGui()
 
 				ImGui::EndTabItem();
 			}
+
 			if (ImGui::BeginTabItem("Memory"))
 			{
-				ImGui::Text("Triangle count: %ld", triangle_count.load());
-
 				ImGui::Text("Gpu memory: %ld MB", vk.vma.allocatedMemorySize() / 1024 / 1024);
 
 				ImGui::EndTabItem();
 			}
-			if (ImGui::BeginTabItem("Game"))
-			{
-				ImGui::Text("Last position: %11f / %11f / %11f", camera_last_position.get().x, camera_last_position.get().y, camera_last_position.get().z);
-				ImGui::Text("Displacement:  %11f / %11f / %11f", camera_displacement.get().x, camera_displacement.get().y, camera_displacement.get().z);
-				ImGui::Text("New position:  %11f / %11f / %11f", camera_new_position.get().x, camera_new_position.get().y, camera_new_position.get().z);
-				ImGui::Text("New position - last position: %11f / %11f / %11f", camera_position_sub_last_position.get().x, camera_position_sub_last_position.get().y, camera_position_sub_last_position.get().z);
-				// ImGui::Text("Update time: %f ms", camera_update_time.load());
-
-				ImGui::EndTabItem();
-			}
-
+			
 			ImGui::EndTabBar();
 		}
 	
 	}
 	ImGui::End();
-}
-
-void DebugGui::pushFrameTime(float frame_time)
-{
-	std::lock_guard<std::mutex> lock(frame_time_history_mutex);
-
-	std::shift_left(frame_time_history.begin(), frame_time_history.end(), 1);
-	frame_time_history.back() = frame_time;
 }

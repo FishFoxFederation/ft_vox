@@ -27,26 +27,117 @@ public:
 	Frustum & operator=(Frustum & frustum) = delete;
 	Frustum & operator=(Frustum && frustum) = delete;
 
-	/**
-	 * @brief Check if a sphere is inside the frustum.
-	 *
-	 * @param center
-	 * @param radius
-	 * @return true if the sphere is inside the frustum.
-	 */
+	bool pointInFrustum(const glm::vec3 & point) const;
+
+	bool boxInFrustum(const glm::vec3 & min, const glm::vec3 & max) const;
+
 	bool sphereInFrustum(const glm::vec3 & center, float radius) const;
+
+	glm::vec3 nbr, nbl, ntr, ntl, fbr, fbl, ftr, ftl;
 
 private:
 
 	glm::vec3 m_camera_position;
 	glm::vec3 X, Y, Z; // camera axes
-	float near_plane, far_plane;
-	float horizontal_fov, vertical_fov;
-	float aspect_ratio;
+	float m_nearD, m_farD;
+	float m_horizontal_fov, m_vertical_fov;
+	float m_aspect_ratio;
 
 	// precalculated values to speed up the sphereInFrustum function
 	float sphereFactorX, sphereFactorY;
 	
+};
+
+class ViewFrustum
+{
+
+public:
+
+	ViewFrustum(
+		const glm::vec3 & pos, const glm::vec3 & front, const glm::vec3 & up,
+		const float fov, const float ratio, const float nearD, const float farD
+	)
+	{
+		m_ratio = ratio;
+		m_nearD = nearD;
+		m_farD = farD;
+		m_fov = glm::radians(fov);
+		m_tang = tanf(m_fov * 0.5f);
+
+		m_nearH = m_nearD * m_tang;
+		m_nearW = m_nearH * m_ratio;
+		m_farH = m_farD * m_tang;
+		m_farW = m_farH * m_ratio;
+
+		// compute sphere factors for sphere intersection test
+		m_sphereFactorY = 1.0f / cosf(m_fov);
+		// float anglex = atanf(m_tang * m_ratio);
+		// m_sphereFactorX = 1.0f / cosf(anglex);
+		m_sphereFactorX = 1.0f / cosf(atanf(tanf(m_fov * 0.5f) * m_ratio));
+
+		m_camera_position = pos;
+		m_z = glm::normalize(front);
+		m_x = glm::normalize(glm::cross(m_z, up));
+		m_y = glm::cross(m_x, m_z);
+
+		// compute the center of the near and far planes
+		glm::vec3 nc = m_camera_position + m_z * (m_nearD + 0.1f);
+		glm::vec3 fc = m_camera_position + m_z * (m_farD - 1.0f);
+
+		// compute the 8 corners of the frustum
+		nbr = nc + m_y * m_nearH + m_x * m_nearW;
+		nbl = nc + m_y * m_nearH - m_x * m_nearW;
+		ntr = nc - m_y * m_nearH + m_x * m_nearW;
+		ntl = nc - m_y * m_nearH - m_x * m_nearW;
+		fbr = fc + m_y * m_farH + m_x * m_farW;
+		fbl = fc + m_y * m_farH - m_x * m_farW;
+		ftr = fc - m_y * m_farH + m_x * m_farW;
+		ftl = fc - m_y * m_farH - m_x * m_farW;
+	}
+
+	bool sphereInFrustum(const glm::vec3 & center, float radius) const
+	{
+		float d;
+
+		glm::vec3 v = center - m_camera_position;
+
+		float az = glm::dot(v, m_z);
+		if (az > m_farD + radius || az < m_nearD - radius)
+		{
+			return false;
+		}
+
+		float ay = glm::dot(v, m_y);
+		d = radius * m_sphereFactorY;
+		az *= m_tang;
+		if (ay > az + d || ay < -az - d)
+		{
+			return false;
+		}
+
+		float ax = glm::dot(v, m_x);
+		az *= m_ratio;
+		d = radius * m_sphereFactorX;
+		if (ax > az + d || ax < -az - d)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	glm::vec3 nbr, nbl, ntr, ntl, fbr, fbl, ftr, ftl;
+
+private:
+
+	glm::vec3 m_camera_position;
+	glm::vec3 m_x, m_y, m_z;
+	float m_nearD, m_farD;
+	float m_ratio;
+	float m_fov, m_tang;
+	float m_nearH, m_nearW;
+	float m_farH, m_farW;
+	float m_sphereFactorX, m_sphereFactorY;
 };
 
 /**
@@ -60,10 +151,20 @@ public:
 	Camera() = default;
 	~Camera() = default;
 
-	Camera(Camera& camera) = delete;
-	Camera(Camera&& camera) = delete;
-	Camera& operator=(Camera& camera) = delete;
-	Camera& operator=(Camera&& camera) = delete;
+	Camera(const Camera & camera)
+	{
+		std::lock_guard<std::mutex> lock(camera.m_mutex);
+		position = camera.position;
+		pitch = camera.pitch;
+		yaw = camera.yaw;
+		up = camera.up;
+		fov = camera.fov;
+		near_plane = camera.near_plane;
+		far_plane = camera.far_plane;
+	}
+	Camera(Camera && camera) = delete;
+	Camera & operator=(Camera & camera) = delete;
+	Camera & operator=(Camera && camera) = delete;
 
 	/**
 	 * @brief Get the view matrix of the camera.
@@ -87,6 +188,14 @@ public:
 	 * @return The frustum.
 	 */
 	Frustum getFrustum(float aspect_ratio) const;
+
+	/**
+	 * @brief Get the view frustum of the camera.
+	 *
+	 * @param aspect_ratio
+	 * @return The view frustum.
+	 */
+	ViewFrustum getViewFrustum(float aspect_ratio) const;
 
 	/**
 	 * @brief Move the camera with a vector. x = right, y = up, z = forward.
@@ -117,6 +226,36 @@ public:
 	 */
 	void lookAt(const glm::vec3 & target);
 
+	glm::vec3 getPosition() const
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		return position;
+	}
+
+	float getPitch() const
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		return pitch;
+	}
+
+	float getYaw() const
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		return yaw;
+	}
+
+	void setPitch(float pitch)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		this->pitch = pitch;
+	}
+
+	void setYaw(float yaw)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		this->yaw = yaw;
+	}
+
 private:
 
 	glm::vec3 position{ 0.0f, 0.0f, 0.0f };
@@ -124,6 +263,7 @@ private:
 	float yaw{ 0.0f };
 	glm::vec3 up{ 0.0f, 1.0f, 0.0f };
 	float fov{ 80.0f };
+	float near_plane{ 0.01f };
 	float far_plane{ 1000.0f };
 
 	mutable std::mutex m_mutex;
