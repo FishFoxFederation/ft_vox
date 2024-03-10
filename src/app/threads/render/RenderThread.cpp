@@ -61,7 +61,6 @@ void RenderThread::loop()
 	camera_matrices.proj = m_world_scene.camera().getProjectionMatrix(aspect_ratio);
 	camera_matrices.proj[1][1] *= -1;
 
-	Frustum frustum = m_world_scene.camera().getFrustum(aspect_ratio);
 
 	auto chunk_meshes = m_world_scene.getMeshRenderData();
 
@@ -73,7 +72,30 @@ void RenderThread::loop()
 		m_start_time_counting_fps = m_current_time;
 	}
 
-	DebugGui::pushFrameTime(m_delta_time.count() / 1e6);
+	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
+
+	// Camera cam;
+	// cam.setPosition(DebugGui::camera_position.get());
+	// cam.setPitch(DebugGui::pitch);
+	// cam.setYaw(DebugGui::yaw);
+	// Frustum frustum = cam.getFrustum(aspect_ratio);
+	// ViewFrustum frustum = cam.getViewFrustum(aspect_ratio);
+	Frustum frustum = m_world_scene.camera().getFrustum(aspect_ratio);
+	// ViewFrustum frustum = m_world_scene.camera().getViewFrustum(aspect_ratio);
+
+	glm::vec3 color(1.0f, 0.0f, 0.0f);
+	std::vector<LineVertex> frustum_lines {
+		{frustum.nbr, color},
+		{frustum.nbl, color},
+		{frustum.ntl, color},
+		{frustum.ntr, color},
+
+		{frustum.fbr, color},
+		{frustum.fbl, color},
+		{frustum.ftl, color},
+		{frustum.ftr, color},
+	};
+
 
 	//############################################################################################################
 	//                     																                         #
@@ -87,6 +109,8 @@ void RenderThread::loop()
 
 	vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
+
+	std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
 	vkResetCommandBuffer(vk.render_command_buffers[vk.current_frame], 0);
 
@@ -125,21 +149,33 @@ void RenderThread::loop()
 	LOG_TRACE("Begin main rendering.");
 
 	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
-	std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
+	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
+	// Draw the chunks
 	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
 
-	memcpy(vk.uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 	vkCmdBindDescriptorSets(
 		vk.render_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.pipeline_layout,
 		0,
 		1,
-		&vk.descriptor_set,
+		&vk.camera_descriptor_set,
 		0,
 		nullptr
+	);
+
+	vkCmdBindDescriptorSets(
+		vk.render_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.pipeline_layout,
+		1,
+		1,
+		&vk.texture_array_descriptor_set,
+		0,
+		nullptr
+	
 	);
 
 	uint32_t triangle_count = 0;
@@ -148,6 +184,7 @@ void RenderThread::loop()
 	{
 		glm::vec3 pos = chunk_mesh.transform.position();
 		if (!frustum.sphereInFrustum(pos + glm::vec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+		// if (!frustum.boxInFrustum(pos, pos + glm::vec3(CHUNK_SIZE)))
 		{
 			continue;
 		}
@@ -187,13 +224,50 @@ void RenderThread::loop()
 
 		triangle_count += (vk.meshes[chunk_mesh.id].index_count) / 3;
 	}
+	DebugGui::rendered_triangles = triangle_count;
 
-	DebugGui::triangle_count = triangle_count;
+
+	// Draw the lines
+	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_graphics_pipeline);
+
+	vkCmdBindDescriptorSets(
+		vk.render_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.line_pipeline_layout,
+		0,
+		1,
+		&vk.camera_descriptor_set,
+		0,
+		nullptr
+	);
+
+	memcpy(vk.frustum_line_buffers_mapped_memory[vk.current_frame], frustum_lines.data(), sizeof(LineVertex) * frustum_lines.size());
+
+	VkBuffer line_vertex_buffers[] = { vk.frustum_line_buffers[vk.current_frame] };
+	VkDeviceSize line_offsets[] = { 0 };
+	vkCmdBindVertexBuffers(
+		vk.render_command_buffers[vk.current_frame],
+		0, 1,
+		line_vertex_buffers,
+		line_offsets
+	);
+
+	vkCmdBindIndexBuffer(
+		vk.render_command_buffers[vk.current_frame],
+		vk.frustum_line_buffers[vk.current_frame],
+		vk.frustum_line_index_offset,
+		VK_INDEX_TYPE_UINT32
+	);
+
+	vkCmdDrawIndexed(
+		vk.render_command_buffers[vk.current_frame],
+		static_cast<uint32_t>(vk.frustum_line_index_count),
+		1, 0, 0, 0
+	);
+
+
 
 	LOG_TRACE("End main rendering.");
-
-	std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
-	DebugGui::cpu_time = (end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6;
 	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -542,6 +616,9 @@ void RenderThread::loop()
 
 	// Increment the current frame
 	vk.current_frame = (vk.current_frame + 1) % vk.max_frames_in_flight;
+
+	std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
 }
 
 void RenderThread::updateTime()

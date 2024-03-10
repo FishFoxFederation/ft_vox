@@ -117,6 +117,39 @@ namespace std
 	};
 }
 
+struct LineVertex
+{
+	glm::vec3 pos;
+	glm::vec3 color;
+
+	static VkVertexInputBindingDescription getBindingDescription()
+	{
+		VkVertexInputBindingDescription bindingDescription{};
+		bindingDescription.binding = 0;
+		bindingDescription.stride = sizeof(LineVertex);
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return bindingDescription;
+	}
+
+	static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions()
+	{
+		std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+
+		attributeDescriptions[0].binding = 0;
+		attributeDescriptions[0].location = 0;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[0].offset = offsetof(LineVertex, pos);
+
+		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].location = 1;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[1].offset = offsetof(LineVertex, color);
+
+		return attributeDescriptions;
+	}
+
+};
 
 struct Mesh
 {
@@ -250,30 +283,26 @@ public:
 	const int max_frames_in_flight = 2;
 	int current_frame = 0;
 
+	// Color attachements
 	VkImage color_attachement_image;
 	VkDeviceMemory color_attachement_memory;
 	VkImageView color_attachement_view;
 	VkFormat color_attachement_format;
 	VkExtent2D color_attachement_extent;
 
+	// Depth attachement
 	VkImage depth_attachement_image;
 	VkDeviceMemory depth_attachement_memory;
 	VkImageView depth_attachement_view;
 	VkFormat depth_attachement_format;
 	VkExtent2D depth_attachement_extent;
 
-	std::vector<VkBuffer> uniform_buffers;
-	std::vector<VkDeviceMemory> uniform_buffers_memory;
-	std::vector<void *> uniform_buffers_mapped_memory;
+	// Uniform buffers for the camera matrices
+	std::vector<VkBuffer> camera_uniform_buffers;
+	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
+	std::vector<void *> camera_uniform_buffers_mapped_memory;
 
-	// VkImage texture_image;
-	// VkDeviceMemory texture_image_memory;
-	// VkImageView texture_image_view;
-	// VkSampler texture_sampler;
-	// uint32_t texture_width;
-	// uint32_t texture_height;
-	// uint32_t mip_levels;
-
+	// Image array for the textures
 	VkImage textures_image;
 	VkDeviceMemory textures_image_memory;
 	VkImageView textures_image_view;
@@ -281,18 +310,38 @@ public:
 	uint32_t textures_size;
 	uint32_t textures_mip_levels;
 
-	VkDescriptorSetLayout descriptor_set_layout;
-	VkDescriptorPool descriptor_pool;
-	VkDescriptorSet descriptor_set;
+	// Buffers for the line vertices and indices for the frustum
+	std::vector<VkBuffer> frustum_line_buffers;
+	std::vector<VkDeviceMemory> frustum_line_buffers_memory;
+	std::vector<void *> frustum_line_buffers_mapped_memory;
+	VkDeviceSize frustum_line_index_offset;
+	uint32_t frustum_line_vertex_count;
+	uint32_t frustum_line_index_count;
 
+	// Camera descriptors will be used by the chunk and line pipelines
+	VkDescriptorSetLayout camera_descriptor_set_layout;
+	VkDescriptorPool camera_descriptor_pool;
+	VkDescriptorSet camera_descriptor_set;
+
+	// Texture array descriptors will be used by the chunk pipeline
+	VkDescriptorSetLayout texture_array_descriptor_set_layout;
+	VkDescriptorPool texture_array_descriptor_pool;
+	VkDescriptorSet texture_array_descriptor_set;
+
+	// Pipeline for chunks
 	VkPipelineLayout pipeline_layout;
 	VkPipeline graphics_pipeline;
+
+	// Pipeline for lines
+	VkPipelineLayout line_pipeline_layout;
+	VkPipeline line_graphics_pipeline;
+
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
 	ImGuiTexture imgui_texture;
 
-
+	// Meshes
 	uint64_t next_mesh_id = 1;
 	static const uint64_t no_mesh_id = 0;
 	std::unordered_map<uint64_t, Mesh> meshes;
@@ -362,12 +411,14 @@ private:
 	void createDepthResources();
 
 	void createUniformBuffers();
-	void createImageTexture(const std::string & file_path);
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
+	void createFrustumLineBuffers();
 
-	void createDescriptors();
+	void createCameraDescriptors();
+	void createTextureArrayDescriptors();
 
 	void createPipeline();
+	void createLinePipeline();
 	static std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
 
