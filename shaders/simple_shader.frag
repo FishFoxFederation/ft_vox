@@ -12,6 +12,5 @@ void main()
 	vec3 normal = abs(normalize(fragNormal));
 	float intensity = normal.x * 0.200 + normal.y * 0.500 + normal.z * 0.800;
 
-	int layer = 1;
     outColor = texture(tex, fragTexCoord) * intensity;
 }

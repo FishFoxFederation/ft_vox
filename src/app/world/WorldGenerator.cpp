@@ -26,20 +26,20 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 		{
 			for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
 			{
-				// glm::ivec3 position = glm::ivec3(
-				// 	blockX + x * CHUNK_SIZE,
-				// 	blockY + y * CHUNK_SIZE,
-				// 	blockZ + z * CHUNK_SIZE
-				// );
-				Block to_set = Block::Grass;
+				glm::ivec3 position = glm::ivec3(
+					blockX + x * CHUNK_SIZE,
+					blockY + y * CHUNK_SIZE,
+					blockZ + z * CHUNK_SIZE
+				);
+				Block to_set;
 
 				// if( position.y == 128)
 				// 	to_set = Block::Air;
 				// else
 				// {
-					// to_set = generateReliefBlock(position);
-					// if (to_set != Block::Air && generateCaveBlock(position) == Block::Air)
-					// 	to_set = Block::Air;
+					to_set = generateReliefBlock(position);
+					if (to_set != Block::Air && generateCaveBlock(position) == Block::Air)
+						to_set = Block::Air;
 				// }
 				// if (to_set != Block::Air && position.y > 128)
 				// {

@@ -106,14 +106,6 @@ public:
 	static inline History<float, 100> frame_time_history;
 	static inline History<float, 100> cpu_time_history;
 
-	// Camera
-	static inline Atomic<glm::vec3> camera_position = glm::vec3(0.0f, 0.0f, 0.0f);
-	static inline std::atomic<float> pitch = 1.0f;
-	static inline std::atomic<float> yaw = 1.0f;
-	static inline std::atomic<float> near_plane = 1.0f;
-	static inline std::atomic<float> far_plane = 30.0f;
-	static inline std::atomic<float> fov = 80.0f;
-
 private:
 
 	VulkanAPI & vk;
