@@ -310,6 +310,13 @@ public:
 	uint32_t textures_size;
 	uint32_t textures_mip_levels;
 
+	// Image array for the cube map
+	VkImage cube_map_image;
+	VkDeviceMemory cube_map_image_memory;
+	VkImageView cube_map_image_view;
+	VkSampler cube_map_sampler;
+	uint32_t cube_map_size;
+
 	// Buffers for the line vertices and indices for the frustum
 	std::vector<VkBuffer> frustum_line_buffers;
 	std::vector<VkDeviceMemory> frustum_line_buffers_memory;
@@ -412,6 +419,7 @@ private:
 
 	void createUniformBuffers();
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
+	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
 	void createFrustumLineBuffers();
 
 	void createCameraDescriptors();

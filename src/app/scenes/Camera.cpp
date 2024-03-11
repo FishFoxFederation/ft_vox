@@ -4,146 +4,74 @@
 
 //############################################################################################################
 //                                                                                                           #
-//                                                  Frustum                                                  #
+//                                                ViewFrustum                                                #
 //                                                                                                           #
 //############################################################################################################
 
-Frustum::Frustum(
-	const glm::vec3 & camera_position,
-	const glm::vec3 & camera_direction,
-	const glm::vec3 & camera_up,
-	float horizontal_fov,
-	float near_plane,
-	float far_plane,
-	float aspect_ratio
-):
-	m_camera_position(camera_position),
-	m_nearD(near_plane),
-	m_farD(far_plane),
-	m_aspect_ratio(aspect_ratio)
+ViewFrustum::ViewFrustum(
+	const glm::vec3 & pos, const glm::vec3 & front, const glm::vec3 & up,
+	const float fov, const float ratio, const float nearD, const float farD
+)
 {
-	m_horizontal_fov = glm::radians(horizontal_fov);
-	m_vertical_fov = 2.0f * atan(tan(m_horizontal_fov * 0.5f) / m_aspect_ratio);
+	m_ratio = ratio;
+	m_nearD = nearD;
+	m_farD = farD;
+	m_fov = glm::radians(fov);
+	m_tang = tanf(m_fov * 0.5f);
 
-	Z = glm::normalize(camera_direction);
-	X = glm::normalize(glm::cross(camera_up, Z));
-	Y = glm::cross(Z, X);
+	// compute sphere factors for sphere intersection test
+	m_sphereFactorY = 1.0f / cosf(m_fov);
+	m_sphereFactorX = 1.0f / cosf(atanf(m_tang * m_ratio));
 
-	// expand the frustum manually because somehow the frustum is too small
-	// horizontal_fov *= 2.0f;
-	// vertical_fov *= 2.0f;
+	m_camera_position = pos;
+	m_z = glm::normalize(front);
+	m_x = glm::normalize(glm::cross(m_z, up));
+	m_y = glm::cross(m_x, m_z);
 
-	// TODO: calculate the sphereFactorX and sphereFactorY
+	// compute the center of the near and far planes
+	glm::vec3 nc = m_camera_position + m_z * (m_nearD + 0.1f);
+	glm::vec3 fc = m_camera_position + m_z * (m_farD - 1.0f);
 
-	m_nearD += 0.1f;
-	m_farD -= 0.1f;
+	// compute the size of the near and far planes
+	m_nearH = m_nearD * m_tang;
+	m_nearW = m_nearH * m_ratio;
+	m_farH = m_farD * m_tang;
+	m_farW = m_farH * m_ratio;
 
-	// calculate the 8 corners of the frustum
-	float h = tan(m_vertical_fov * 0.5f) * m_nearD;
-	float w = h * m_aspect_ratio;
-
-	nbr = m_camera_position + Z * m_nearD + Y * h + X * w;
-	nbl = m_camera_position + Z * m_nearD + Y * h - X * w;
-	ntr = m_camera_position + Z * m_nearD - Y * h + X * w;
-	ntl = m_camera_position + Z * m_nearD - Y * h - X * w;
-
-	h = tan(m_vertical_fov * 0.5f) * m_farD;
-	w = h * m_aspect_ratio;
-
-	fbr = m_camera_position + Z * m_farD + Y * h + X * w;
-	fbl = m_camera_position + Z * m_farD + Y * h - X * w;
-	ftr = m_camera_position + Z * m_farD - Y * h + X * w;
-	ftl = m_camera_position + Z * m_farD - Y * h - X * w;
-
+	// compute the 8 corners of the frustum
+	nbr = nc + m_y * m_nearH + m_x * m_nearW;
+	nbl = nc + m_y * m_nearH - m_x * m_nearW;
+	ntr = nc - m_y * m_nearH + m_x * m_nearW;
+	ntl = nc - m_y * m_nearH - m_x * m_nearW;
+	fbr = fc + m_y * m_farH + m_x * m_farW;
+	fbl = fc + m_y * m_farH - m_x * m_farW;
+	ftr = fc - m_y * m_farH + m_x * m_farW;
+	ftl = fc - m_y * m_farH - m_x * m_farW;
 }
 
-Frustum::Frustum(Frustum && frustum):
-	m_camera_position(frustum.m_camera_position),
-	X(frustum.X),
-	Y(frustum.Y),
-	Z(frustum.Z),
-	m_nearD(frustum.m_nearD),
-	m_farD(frustum.m_farD),
-	m_aspect_ratio(frustum.m_aspect_ratio),
-	sphereFactorX(frustum.sphereFactorX),
-	sphereFactorY(frustum.sphereFactorY)
+bool ViewFrustum::sphereInFrustum(const glm::vec3 & center, float radius) const
 {
-}
+	float d;
 
-bool Frustum::pointInFrustum(const glm::vec3 & point) const
-{
-	glm::vec3 toPoint = point - m_camera_position;
-
-	float distanceZ = glm::dot(toPoint, Z);
-	if (distanceZ > m_farD || distanceZ < m_nearD)
-	{
-		return false;
-	}
-
-	float distanceY = glm::dot(toPoint, Y);
-	float h = distanceZ * tan(m_vertical_fov * 0.5f);
-	if (distanceY > h || distanceY < -h)
-	{
-		return false;
-	}
-
-	float distanceX = glm::dot(toPoint, X);
-	float w = h * m_aspect_ratio;
-	if (distanceX > w || distanceX < -w)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-bool Frustum::boxInFrustum(const glm::vec3 & min, const glm::vec3 & max) const
-{
-	glm::vec3 vertices[8] = {
-		glm::vec3(min.x, min.y, min.z),
-		glm::vec3(max.x, min.y, min.z),
-		glm::vec3(min.x, max.y, min.z),
-		glm::vec3(max.x, max.y, min.z),
-		glm::vec3(min.x, min.y, max.z),
-		glm::vec3(max.x, min.y, max.z),
-		glm::vec3(min.x, max.y, max.z),
-		glm::vec3(max.x, max.y, max.z)
-	};
-
-	for (int i = 0; i < 8; i++)
-	{
-		if (pointInFrustum(vertices[i]))
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool Frustum::sphereInFrustum(const glm::vec3 & center, float radius) const
-{
 	glm::vec3 v = center - m_camera_position;
 
-	float az = glm::dot(v, Z);
+	float az = glm::dot(v, m_z);
 	if (az > m_farD + radius || az < m_nearD - radius)
 	{
 		return false;
 	}
 
-	float ay = glm::dot(v, Y);
-	// height of the frustum at the az
-	float h = az * tan(m_vertical_fov * 0.5f);
-	float d = radius / cos(m_vertical_fov * 0.5f);
+	float ay = glm::dot(v, m_y);
+	float h = az * m_tang;
+	d = radius * m_sphereFactorY;
 	if (ay > h + d || ay < -h - d)
 	{
 		return false;
 	}
 
-	float ax = glm::dot(v, X);
-	// width of the frustum at the az
-	float w = h * m_aspect_ratio;
-	d = radius / cos(m_horizontal_fov * 0.5f);
+	float ax = glm::dot(v, m_x);
+	float w = h * m_ratio;
+	d = radius * m_sphereFactorX;
 	if (ax > w + d || ax < -w - d)
 	{
 		return false;
@@ -168,12 +96,6 @@ glm::mat4 Camera::getProjectionMatrix(float aspect_ratio) const
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
 	return glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
-}
-
-Frustum Camera::getFrustum(float aspect_ratio) const
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return Frustum(position, direction(), up, fov, near_plane, far_plane, aspect_ratio);
 }
 
 ViewFrustum Camera::getViewFrustum(float aspect_ratio) const
@@ -213,8 +135,9 @@ void Camera::moveDirection(float x_offset, float y_offset)
 	std::lock_guard<std::mutex> lock(m_mutex);
 
 	// update the pitch and yaw
-	pitch += -y_offset;
+	pitch = glm::clamp(pitch - y_offset, -89.0f, 89.0f);
 	yaw += x_offset;
+
 }
 
 void Camera::setPosition(const glm::vec3& position)

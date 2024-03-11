@@ -32,15 +32,6 @@ void UpdateThread::loop()
 	readInput();
 	moveCamera();
 	rotateCamera();
-
-
-	int pressed = m_window.input().getKeyState(GLFW_KEY_E);
-	if (pressed == GLFW_PRESS)
-	{
-		DebugGui::camera_position.set(m_world_scene.camera().getPosition());
-		DebugGui::pitch = m_world_scene.camera().getPitch();
-		DebugGui::yaw = m_world_scene.camera().getYaw();
-	}
 }
 
 void UpdateThread::updateTime()

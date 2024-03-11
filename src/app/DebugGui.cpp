@@ -37,15 +37,6 @@ void DebugGui::updateImGui()
 
 				ImGui::Text("Rendered triangles: %ld", rendered_triangles.load());
 
-				ImGui::Separator();
-
-				float near_plane = DebugGui::near_plane.load();
-				float far_plane = DebugGui::far_plane.load();
-				ImGui::SliderFloat("Near plane", &near_plane, 0.01f, 10.0f);
-				ImGui::SliderFloat("Far plane", &far_plane, 30.0f, 500.0f);
-				DebugGui::near_plane = near_plane;
-				DebugGui::far_plane = far_plane;
-
 				ImGui::EndTabItem();
 			}
 

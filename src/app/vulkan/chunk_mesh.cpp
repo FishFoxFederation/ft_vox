@@ -55,7 +55,7 @@ uint64_t VulkanAPI::createMesh(
 						(x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == Block::Air)
 						|| (x == CHUNK_SIZE - 1 && x_pos_chunk != nullptr && x_pos_chunk->getBlock(0, y, z) == Block::Air)
 						// || (x == CHUNK_SIZE - 1 && x_pos_chunk == nullptr)
-						|| (x == CHUNK_SIZE - 1)
+						// || (x == CHUNK_SIZE - 1)
 					)
 					{
 						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
@@ -70,7 +70,7 @@ uint64_t VulkanAPI::createMesh(
 						(x > 0 && chunk.getBlock(x - 1, y, z) == Block::Air)
 						|| (x == 0 && x_neg_chunk != nullptr && x_neg_chunk->getBlock(CHUNK_SIZE - 1, y, z) == Block::Air)
 						// || (x == 0 && x_neg_chunk == nullptr)
-						|| (x == 0)
+						// || (x == 0)
 					)
 					{
 						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
@@ -85,7 +85,7 @@ uint64_t VulkanAPI::createMesh(
 						(y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == Block::Air)
 						|| (y == CHUNK_SIZE - 1 && y_pos_chunk != nullptr && y_pos_chunk->getBlock(x, 0, z) == Block::Air)
 						// || (y == CHUNK_SIZE - 1 && y_pos_chunk == nullptr)
-						|| (y == CHUNK_SIZE - 1)
+						// || (y == CHUNK_SIZE - 1)
 					)
 					{
 						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
@@ -100,7 +100,7 @@ uint64_t VulkanAPI::createMesh(
 						(y > 0 && chunk.getBlock(x, y - 1, z) == Block::Air)
 						|| (y == 0 && y_neg_chunk != nullptr && y_neg_chunk->getBlock(x, CHUNK_SIZE - 1, z) == Block::Air)
 						// || (y == 0 && y_neg_chunk == nullptr)
-						|| (y == 0)
+						// || (y == 0)
 					)
 					{
 						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
@@ -115,7 +115,7 @@ uint64_t VulkanAPI::createMesh(
 						(z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == Block::Air)
 						|| (z == CHUNK_SIZE - 1 && z_pos_chunk != nullptr && z_pos_chunk->getBlock(x, y, 0) == Block::Air)
 						// || (z == CHUNK_SIZE - 1 && z_pos_chunk == nullptr)
-						|| (z == CHUNK_SIZE - 1)
+						// || (z == CHUNK_SIZE - 1)
 					)
 					{
 						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, texture_index});
@@ -130,7 +130,7 @@ uint64_t VulkanAPI::createMesh(
 						(z > 0 && chunk.getBlock(x, y, z - 1) == Block::Air)
 						|| (z == 0 && z_neg_chunk != nullptr && z_neg_chunk->getBlock(x, y, CHUNK_SIZE - 1) == Block::Air)
 						// || (z == 0 && z_neg_chunk == nullptr)
-						|| (z == 0)
+						// || (z == 0)
 					)
 					{
 						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, texture_index});
