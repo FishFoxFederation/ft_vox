@@ -30,19 +30,22 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 		"assets/textures/stone.jpg"
 	}, 64);
 	createCubeMap({
-		"assets/textures/grass.jpg",
-		"assets/textures/grass.jpg",
-		"assets/textures/grass.jpg",
-		"assets/textures/grass.jpg",
-		"assets/textures/grass.jpg",
-		"assets/textures/grass.jpg"
+		"assets/textures/skybox/right.jpg",
+		"assets/textures/skybox/left.jpg",
+		"assets/textures/skybox/top.jpg",
+		"assets/textures/skybox/bottom.jpg",
+		"assets/textures/skybox/front.jpg",
+		"assets/textures/skybox/back.jpg"
 	}, 512);
 	createFrustumLineBuffers();
 	
 	createCameraDescriptors();
 	createTextureArrayDescriptors();
+	createCubeMapDescriptors();
+
 	createPipeline();
 	createLinePipeline();
+	createSkyboxPipeline();
 
 	setupImgui();
 	createImGuiTexture(100, 100);
@@ -95,6 +98,9 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyDescriptorSetLayout(device, texture_array_descriptor_set_layout, nullptr);
 	vkDestroyDescriptorPool(device, texture_array_descriptor_pool, nullptr);
 
+	vkDestroyDescriptorSetLayout(device, cube_map_descriptor_set_layout, nullptr);
+	vkDestroyDescriptorPool(device, cube_map_descriptor_pool, nullptr);
+
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkDestroySemaphore(device, image_available_semaphores[i], nullptr);
@@ -122,6 +128,9 @@ VulkanAPI::~VulkanAPI()
 
 	vkDestroyPipeline(device, line_graphics_pipeline, nullptr);
 	vkDestroyPipelineLayout(device, line_pipeline_layout, nullptr);
+
+	vkDestroyPipeline(device, skybox_graphics_pipeline, nullptr);
+	vkDestroyPipelineLayout(device, skybox_pipeline_layout, nullptr);
 
 	for (size_t i = 0; i < swap_chain_image_views.size(); i++)
 	{
@@ -639,6 +648,9 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	vkDestroyPipeline(device, line_graphics_pipeline, nullptr);
 	vkDestroyPipelineLayout(device, line_pipeline_layout, nullptr);
 
+	vkDestroyPipeline(device, skybox_graphics_pipeline, nullptr);
+	vkDestroyPipelineLayout(device, skybox_pipeline_layout, nullptr);
+
 	for (size_t i = 0; i < swap_chain_image_views.size(); i++)
 	{
 		vkDestroyImageView(device, swap_chain_image_views[i], nullptr);
@@ -651,6 +663,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	createDepthResources();
 	createPipeline();
 	createLinePipeline();
+	createSkyboxPipeline();
 	setupImgui();
 	createImGuiTexture(100, 100);
 }
@@ -1222,14 +1235,12 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 		});
 	}
 
-	textures_mip_levels = 1;
-
 	VkImageCreateInfo image_info = {};
 	image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	image_info.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
 	image_info.imageType = VK_IMAGE_TYPE_2D;
 	image_info.extent = {size, size, 1};
-	image_info.mipLevels = textures_mip_levels;
+	image_info.mipLevels = 1;
 	image_info.arrayLayers = layers_count;
 	image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
 	image_info.tiling = VK_IMAGE_TILING_OPTIMAL;
@@ -1239,12 +1250,12 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	image_info.samples = VK_SAMPLE_COUNT_1_BIT;
 
 	VK_CHECK(
-		vkCreateImage(device, &image_info, nullptr, &textures_image),
+		vkCreateImage(device, &image_info, nullptr, &cube_map_image),
 		"Failed to create image"
 	);
 
 	VkMemoryRequirements memory_requirements;
-	vkGetImageMemoryRequirements(device, textures_image, &memory_requirements);
+	vkGetImageMemoryRequirements(device, cube_map_image, &memory_requirements);
 
 	VkMemoryAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -1255,11 +1266,11 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	);
 
 	VK_CHECK(
-		vma.allocateMemory(device, &alloc_info, nullptr, &textures_image_memory),
+		vma.allocateMemory(device, &alloc_info, nullptr, &cube_map_image_memory),
 		"Failed to allocate image memory"
 	);
 
-	vkBindImageMemory(device, textures_image, textures_image_memory, 0);
+	vkBindImageMemory(device, cube_map_image, cube_map_image_memory, 0);
 
 	VkCommandBuffer command_buffer = beginSingleTimeCommands();
 
@@ -1270,10 +1281,10 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	first_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
 	first_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	first_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-	first_barrier.image = textures_image;
+	first_barrier.image = cube_map_image;
 	first_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	first_barrier.subresourceRange.baseMipLevel = 0;
-	first_barrier.subresourceRange.levelCount = textures_mip_levels;
+	first_barrier.subresourceRange.levelCount = 1;
 	first_barrier.subresourceRange.baseArrayLayer = 0;
 	first_barrier.subresourceRange.layerCount = layers_count;
 	first_barrier.srcAccessMask = 0;
@@ -1325,7 +1336,7 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 			command_buffer,
 			staging_images[i],
 			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-			textures_image,
+			cube_map_image,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			1,
 			&blit,
@@ -1340,10 +1351,10 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	second_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	second_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	second_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-	second_barrier.image = textures_image;
+	second_barrier.image = cube_map_image;
 	second_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	second_barrier.subresourceRange.baseMipLevel = 0;
-	second_barrier.subresourceRange.levelCount = textures_mip_levels;
+	second_barrier.subresourceRange.levelCount = 1;
 	second_barrier.subresourceRange.baseArrayLayer = 0;
 	second_barrier.subresourceRange.layerCount = layers_count;
 	second_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
@@ -1374,13 +1385,13 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	view_info.format = VK_FORMAT_R8G8B8A8_SRGB;
 	view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	view_info.subresourceRange.baseMipLevel = 0;
-	view_info.subresourceRange.levelCount = textures_mip_levels;
+	view_info.subresourceRange.levelCount = 1;
 	view_info.subresourceRange.baseArrayLayer = 0;
 	view_info.subresourceRange.layerCount = layers_count;
-	view_info.image = textures_image;
+	view_info.image = cube_map_image;
 
 	VK_CHECK(
-		vkCreateImageView(device, &view_info, nullptr, &textures_image_view),
+		vkCreateImageView(device, &view_info, nullptr, &cube_map_image_view),
 		"Failed to create image view"
 	);
 
@@ -1407,7 +1418,7 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	sampler_info.maxLod = 0.0f;
 
 	VK_CHECK(
-		vkCreateSampler(device, &sampler_info, nullptr, &textures_sampler),
+		vkCreateSampler(device, &sampler_info, nullptr, &cube_map_sampler),
 		"Failed to create sampler"
 	);
 }
@@ -1598,6 +1609,79 @@ void VulkanAPI::createTextureArrayDescriptors()
 			&descriptor_write,
 			0, nullptr
 		);
+	}
+}
+
+void VulkanAPI::createCubeMapDescriptors()
+{
+	VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+	sampler_layout_binding.binding = 0;
+	sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	sampler_layout_binding.descriptorCount = 1;
+	sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	sampler_layout_binding.pImmutableSamplers = nullptr;
+
+	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { sampler_layout_binding };
+
+	VkDescriptorSetLayoutCreateInfo layout_info = {};
+	layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
+	layout_info.pBindings = bindings.data();
+
+	VK_CHECK(
+		vkCreateDescriptorSetLayout(device, &layout_info, nullptr, &cube_map_descriptor_set_layout),
+		"Failed to create descriptor set layout"
+	);
+
+	VkDescriptorPoolSize pool_size = {};
+	pool_size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	pool_size.descriptorCount = static_cast<uint32_t>(max_frames_in_flight);
+
+	VkDescriptorPoolCreateInfo pool_info = {};
+	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	pool_info.poolSizeCount = 1;
+	pool_info.pPoolSizes = &pool_size;
+	pool_info.maxSets = static_cast<uint32_t>(max_frames_in_flight);
+
+	VK_CHECK(
+		vkCreateDescriptorPool(device, &pool_info, nullptr, &cube_map_descriptor_pool),
+		"Failed to create descriptor pool"
+	);
+
+	VkDescriptorSetAllocateInfo alloc_info = {};
+	alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	alloc_info.descriptorPool = cube_map_descriptor_pool;
+	alloc_info.descriptorSetCount = 1;
+	alloc_info.pSetLayouts = &cube_map_descriptor_set_layout;
+
+	VK_CHECK(
+		vkAllocateDescriptorSets(device, &alloc_info, &cube_map_descriptor_set),
+		"Failed to allocate descriptor sets"
+	);
+
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		VkDescriptorImageInfo image_info = {};
+		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.imageView = cube_map_image_view;
+		image_info.sampler = cube_map_sampler;
+
+		VkWriteDescriptorSet descriptor_write = {};
+		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptor_write.dstSet = cube_map_descriptor_set;
+		descriptor_write.dstBinding = 0;
+		descriptor_write.dstArrayElement = 0;
+		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		descriptor_write.descriptorCount = 1;
+		descriptor_write.pImageInfo = &image_info;
+
+		vkUpdateDescriptorSets(
+			device,
+			1,
+			&descriptor_write,
+			0, nullptr
+		);
+
 	}
 }
 
@@ -1898,6 +1982,157 @@ void VulkanAPI::createLinePipeline()
 
 	VK_CHECK(
 		vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &line_graphics_pipeline),
+		"Failed to create graphics pipeline"
+	);
+
+	vkDestroyShaderModule(device, frag_shader_module, nullptr);
+	vkDestroyShaderModule(device, vert_shader_module, nullptr);
+}
+
+void VulkanAPI::createSkyboxPipeline()
+{
+	auto vert_shader_code = readFile("shaders/skybox_shader.vert.spv");
+	auto frag_shader_code = readFile("shaders/skybox_shader.frag.spv");
+
+	VkShaderModule vert_shader_module = createShaderModule(vert_shader_code);
+	VkShaderModule frag_shader_module = createShaderModule(frag_shader_code);
+
+	VkPipelineShaderStageCreateInfo vert_shader_stage_info = {};
+	vert_shader_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	vert_shader_stage_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
+	vert_shader_stage_info.module = vert_shader_module;
+	vert_shader_stage_info.pName = "main";
+
+	VkPipelineShaderStageCreateInfo frag_shader_stage_info = {};
+	frag_shader_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	frag_shader_stage_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+	frag_shader_stage_info.module = frag_shader_module;
+	frag_shader_stage_info.pName = "main";
+
+	VkPipelineShaderStageCreateInfo shader_stages[] = { vert_shader_stage_info, frag_shader_stage_info };
+
+
+	VkPipelineVertexInputStateCreateInfo vertex_input_info = {};
+	vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vertex_input_info.vertexBindingDescriptionCount = 0;
+	vertex_input_info.vertexAttributeDescriptionCount = 0;
+
+
+	VkPipelineInputAssemblyStateCreateInfo input_assembly = {};
+	input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	input_assembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	input_assembly.primitiveRestartEnable = VK_FALSE;
+
+
+	VkViewport viewport = {};
+	viewport.x = 0.0f;
+	viewport.y = 0.0f;
+	viewport.width = static_cast<float>(swap_chain_extent.width);
+	viewport.height = static_cast<float>(swap_chain_extent.height);
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+
+	VkRect2D scissor = {};
+	scissor.offset = {0, 0};
+	scissor.extent = swap_chain_extent;
+
+	VkPipelineViewportStateCreateInfo viewport_state = {};
+	viewport_state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	viewport_state.viewportCount = 1;
+	viewport_state.pViewports = &viewport;
+	viewport_state.scissorCount = 1;
+	viewport_state.pScissors = &scissor;
+
+
+	VkPipelineRasterizationStateCreateInfo rasterizer = {};
+	rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizer.depthClampEnable = VK_FALSE;
+	rasterizer.rasterizerDiscardEnable = VK_FALSE;
+	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizer.lineWidth = 1.0f;
+	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+	rasterizer.depthBiasEnable = VK_FALSE;
+	rasterizer.depthBiasConstantFactor = 0.0f;
+	rasterizer.depthBiasClamp = 0.0f;
+	rasterizer.depthBiasSlopeFactor = 0.0f;
+
+
+	VkPipelineMultisampleStateCreateInfo multisampling = {};
+	multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+	multisampling.sampleShadingEnable = VK_FALSE;
+	multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+
+	VkPipelineColorBlendAttachmentState color_blend_attachment = {};
+	color_blend_attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	color_blend_attachment.blendEnable = VK_FALSE;
+
+
+	VkPipelineColorBlendStateCreateInfo color_blending = {};
+	color_blending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	color_blending.logicOpEnable = VK_FALSE;
+	color_blending.attachmentCount = 1;
+	color_blending.pAttachments = &color_blend_attachment;
+
+
+	VkPipelineDepthStencilStateCreateInfo depth_stencil = {};
+	depth_stencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	depth_stencil.depthTestEnable = VK_TRUE;
+	depth_stencil.depthWriteEnable = VK_TRUE;
+	depth_stencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+	depth_stencil.depthBoundsTestEnable = VK_FALSE;
+	depth_stencil.stencilTestEnable = VK_FALSE;
+
+
+	std::vector<VkFormat> color_formats = { color_attachement_format };
+
+	VkPipelineRenderingCreateInfo rendering_info = {};
+	rendering_info.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
+	rendering_info.colorAttachmentCount = static_cast<uint32_t>(color_formats.size());
+	rendering_info.pColorAttachmentFormats = color_formats.data();
+	rendering_info.depthAttachmentFormat = depth_attachement_format;
+
+
+	std::array<VkDescriptorSetLayout, 2> descriptor_set_layouts = {
+		camera_descriptor_set_layout,
+		cube_map_descriptor_set_layout
+	};
+
+	VkPushConstantRange push_constant_range = {};
+	push_constant_range.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	push_constant_range.offset = 0;
+	push_constant_range.size = sizeof(ModelMatrice);
+
+	VkPipelineLayoutCreateInfo pipeline_layout_info = {};
+	pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipeline_layout_info.setLayoutCount = static_cast<uint32_t>(descriptor_set_layouts.size());
+	pipeline_layout_info.pSetLayouts = descriptor_set_layouts.data();
+	pipeline_layout_info.pushConstantRangeCount = 1;
+	pipeline_layout_info.pPushConstantRanges = &push_constant_range;
+
+	VK_CHECK(
+		vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &skybox_pipeline_layout),
+		"Failed to create pipeline layout"
+	);
+
+
+	VkGraphicsPipelineCreateInfo pipeline_info = {};
+	pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipeline_info.stageCount = 2;
+	pipeline_info.pStages = shader_stages;
+	pipeline_info.pVertexInputState = &vertex_input_info;
+	pipeline_info.pInputAssemblyState = &input_assembly;
+	pipeline_info.pViewportState = &viewport_state;
+	pipeline_info.pRasterizationState = &rasterizer;
+	pipeline_info.pMultisampleState = &multisampling;
+	pipeline_info.pColorBlendState = &color_blending;
+	pipeline_info.pDepthStencilState = &depth_stencil;
+	pipeline_info.layout = skybox_pipeline_layout;
+	pipeline_info.pNext = &rendering_info;
+
+	VK_CHECK(
+		vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &skybox_graphics_pipeline),
 		"Failed to create graphics pipeline"
 	);
 

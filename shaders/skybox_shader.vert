@@ -8,21 +8,60 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 	mat4 projection;
 }cm;
 
-vec3 skyboxVertices[8] = vec3[8](
+layout(push_constant) uniform PushConstants
+{
+	mat4 model;
+}pc;
+
+vec3 skyboxVertices[36] = vec3[36](
 	vec3(-1.0,  1.0, -1.0),
 	vec3(-1.0, -1.0, -1.0),
 	vec3( 1.0, -1.0, -1.0),
+	vec3( 1.0, -1.0, -1.0),
 	vec3( 1.0,  1.0, -1.0),
+	vec3(-1.0,  1.0, -1.0),
+
+	vec3(-1.0, -1.0,  1.0),
+	vec3(-1.0, -1.0, -1.0),
+	vec3(-1.0,  1.0, -1.0),
+	vec3(-1.0,  1.0, -1.0),
 	vec3(-1.0,  1.0,  1.0),
 	vec3(-1.0, -1.0,  1.0),
+
+	vec3( 1.0, -1.0, -1.0),
 	vec3( 1.0, -1.0,  1.0),
-	vec3( 1.0,  1.0,  1.0)
+	vec3( 1.0,  1.0,  1.0),
+	vec3( 1.0,  1.0,  1.0),
+	vec3( 1.0,  1.0, -1.0),
+	vec3( 1.0, -1.0, -1.0),
+
+	vec3(-1.0, -1.0,  1.0),
+	vec3(-1.0,  1.0,  1.0),
+	vec3( 1.0,  1.0,  1.0),
+	vec3( 1.0,  1.0,  1.0),
+	vec3( 1.0, -1.0,  1.0),
+	vec3(-1.0, -1.0,  1.0),
+
+	vec3(-1.0,  1.0, -1.0),
+	vec3( 1.0,  1.0, -1.0),
+	vec3( 1.0,  1.0,  1.0),
+	vec3( 1.0,  1.0,  1.0),
+	vec3(-1.0,  1.0,  1.0),
+	vec3(-1.0,  1.0, -1.0),
+
+	vec3(-1.0, -1.0, -1.0),
+	vec3(-1.0, -1.0,  1.0),
+	vec3( 1.0, -1.0, -1.0),
+	vec3( 1.0, -1.0, -1.0),
+	vec3(-1.0, -1.0,  1.0),
+	vec3( 1.0, -1.0,  1.0)
 );
 
-layout(location = 0) out vec3 TexCoords;
+layout(location = 0) out vec3 texDir;
 
 void main()
 {
-	TexCoords = skyboxVertices[gl_VertexID];
-	gl_Position = projection * view * vec4(skyboxVertices[gl_VertexID], 1.0);
+	texDir = vec3(skyboxVertices[gl_VertexIndex]);
+	vec4 pos = cm.projection * cm.view * pc.model * vec4(skyboxVertices[gl_VertexIndex], 1.0);
+	gl_Position = pos.xyww;
 }

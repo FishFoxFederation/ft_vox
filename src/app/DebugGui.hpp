@@ -106,6 +106,9 @@ public:
 	static inline History<float, 100> frame_time_history;
 	static inline History<float, 100> cpu_time_history;
 
+
+	static inline History<float, 100> camera_pos_diff_history;
+
 private:
 
 	VulkanAPI & vk;
