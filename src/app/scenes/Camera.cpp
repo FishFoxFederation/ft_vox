@@ -86,27 +86,6 @@ bool ViewFrustum::sphereInFrustum(const glm::vec3 & center, float radius) const
 //                                                                                                           #
 //############################################################################################################
 
-glm::mat4 Camera::getViewMatrix() const
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return glm::lookAt(position, position + direction(), up);
-}
-
-glm::mat4 Camera::getProjectionMatrix(float aspect_ratio) const
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
-}
-
-ViewFrustum Camera::getViewFrustum(float aspect_ratio) const
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return ViewFrustum(
-		position, direction(), up,
-		fov, aspect_ratio, near_plane, far_plane
-	);
-}
-
 void Camera::movePosition(const glm::vec3 & move)
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
@@ -160,5 +139,23 @@ glm::vec3 Camera::direction() const
 		cos(glm::radians(pitch)) * cos(glm::radians(yaw)),
 		sin(glm::radians(pitch)),
 		cos(glm::radians(pitch)) * sin(glm::radians(yaw))
+	);
+}
+
+glm::mat4 Camera::getViewMatrix() const
+{
+	return glm::lookAt(position, position + direction(), up);
+}
+
+glm::mat4 Camera::getProjectionMatrix(float aspect_ratio) const
+{
+	return glm::perspective(glm::radians(fov), aspect_ratio, near_plane, far_plane);
+}
+
+ViewFrustum Camera::getViewFrustum(float aspect_ratio) const
+{
+	return ViewFrustum(
+		position, direction(), up,
+		fov, aspect_ratio, near_plane, far_plane
 	);
 }

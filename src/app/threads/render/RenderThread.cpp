@@ -56,10 +56,19 @@ void RenderThread::loop()
 
 	float aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
 
+	Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
+
 	CameraMatrices camera_matrices = {};
-	camera_matrices.view = m_world_scene.camera().getViewMatrix();
-	camera_matrices.proj = m_world_scene.camera().getProjectionMatrix(aspect_ratio);
+	camera_matrices.view = camera.view;
+	camera_matrices.proj = camera.projection;
 	camera_matrices.proj[1][1] *= -1;
+
+	static std::vector<glm::vec3> camera_position(vk.max_frames_in_flight, camera.position);
+	camera_position[vk.current_frame] = camera.position;
+
+	static glm::vec3 last_camera_position = camera.position;
+	DebugGui::camera_pos_diff_history.push(glm::length(camera.position - last_camera_position));
+	last_camera_position = camera.position;
 
 
 	auto chunk_meshes = m_world_scene.getMeshRenderData();
@@ -73,8 +82,6 @@ void RenderThread::loop()
 	}
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
-
-	ViewFrustum frustum = m_world_scene.camera().getViewFrustum(aspect_ratio);
 
 
 	//############################################################################################################
@@ -163,7 +170,7 @@ void RenderThread::loop()
 	for (auto & chunk_mesh : chunk_meshes)
 	{
 		glm::vec3 pos = chunk_mesh.transform.position();
-		if (!frustum.sphereInFrustum(pos + glm::vec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+		if (!camera.view_frustum.sphereInFrustum(pos + glm::vec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
 		// if (!frustum.boxInFrustum(pos, pos + glm::vec3(CHUNK_SIZE)))
 		{
 			continue;
@@ -205,6 +212,53 @@ void RenderThread::loop()
 		triangle_count += (vk.meshes[chunk_mesh.id].index_count) / 3;
 	}
 	DebugGui::rendered_triangles = triangle_count;
+
+
+	// Draw the skybox
+	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_graphics_pipeline);
+
+	vkCmdBindDescriptorSets(
+		vk.render_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.skybox_pipeline_layout,
+		0,
+		1,
+		&vk.camera_descriptor_set,
+		0,
+		nullptr
+	);
+
+	vkCmdBindDescriptorSets(
+		vk.render_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.skybox_pipeline_layout,
+		1,
+		1,
+		&vk.cube_map_descriptor_set,
+		0,
+		nullptr
+	);
+
+	ModelMatrice camera_model_matrice = {};
+	// camera_model_matrice.model = glm::translate(glm::mat4(1.0f), camera.position);
+	camera_model_matrice.model = glm::translate(glm::mat4(1.0f), camera_position[1]);
+	vkCmdPushConstants(
+		vk.render_command_buffers[vk.current_frame],
+		vk.skybox_pipeline_layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(ModelMatrice),
+		&camera_model_matrice
+	);
+
+	vkCmdDraw(
+		vk.render_command_buffers[vk.current_frame],
+		36,
+		1,
+		0,
+		0
+	);
+
 
 
 	LOG_TRACE("End main rendering.");

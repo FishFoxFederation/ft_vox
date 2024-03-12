@@ -37,6 +37,13 @@ void DebugGui::updateImGui()
 
 				ImGui::Text("Rendered triangles: %ld", rendered_triangles.load());
 
+				ImGui::Separator();
+
+				{
+					auto lock = camera_pos_diff_history.lock();
+					ImGui::PlotHistogram("Camera position difference", camera_pos_diff_history.data(), camera_pos_diff_history.size(), 0, nullptr, 0.0f, 1.0f, ImVec2(200, 80));
+				}
+
 				ImGui::EndTabItem();
 			}
 

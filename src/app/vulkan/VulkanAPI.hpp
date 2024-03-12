@@ -335,6 +335,11 @@ public:
 	VkDescriptorPool texture_array_descriptor_pool;
 	VkDescriptorSet texture_array_descriptor_set;
 
+	// Cube map descriptors will be used by the skybox pipeline
+	VkDescriptorSetLayout cube_map_descriptor_set_layout;
+	VkDescriptorPool cube_map_descriptor_pool;
+	VkDescriptorSet cube_map_descriptor_set;
+
 	// Pipeline for chunks
 	VkPipelineLayout pipeline_layout;
 	VkPipeline graphics_pipeline;
@@ -342,6 +347,10 @@ public:
 	// Pipeline for lines
 	VkPipelineLayout line_pipeline_layout;
 	VkPipeline line_graphics_pipeline;
+
+	// Pipeline for skybox
+	VkPipelineLayout skybox_pipeline_layout;
+	VkPipeline skybox_graphics_pipeline;
 
 
 	// Dear ImGui resources
@@ -424,9 +433,11 @@ private:
 
 	void createCameraDescriptors();
 	void createTextureArrayDescriptors();
+	void createCubeMapDescriptors();
 
 	void createPipeline();
 	void createLinePipeline();
+	void createSkyboxPipeline();
 	static std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
 

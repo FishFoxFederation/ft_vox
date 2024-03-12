@@ -41,6 +41,14 @@ class Camera
 
 public:
 
+	struct RenderInfo
+	{
+		glm::mat4 view;
+		glm::mat4 projection;
+		glm::vec3 position;
+		ViewFrustum view_frustum;
+	};
+
 	Camera() = default;
 	~Camera() = default;
 
@@ -58,29 +66,6 @@ public:
 	Camera(Camera && camera) = delete;
 	Camera & operator=(Camera & camera) = delete;
 	Camera & operator=(Camera && camera) = delete;
-
-	/**
-	 * @brief Get the view matrix of the camera.
-	 *
-	 * @return The view matrix.
-	 */
-	glm::mat4 getViewMatrix() const;
-
-	/**
-	 * @brief Get the projection matrix of the camera.
-	 *
-	 * @param aspect_ratio
-	 * @return The projection matrix.
-	 */
-	glm::mat4 getProjectionMatrix(float aspect_ratio) const;
-
-	/**
-	 * @brief Get the view frustum of the camera.
-	 *
-	 * @param aspect_ratio
-	 * @return The view frustum.
-	 */
-	ViewFrustum getViewFrustum(float aspect_ratio) const;
 
 	/**
 	 * @brief Move the camera with a vector. x = right, y = up, z = forward.
@@ -141,6 +126,17 @@ public:
 		this->yaw = yaw;
 	}
 
+	RenderInfo getRenderInfo(float aspect_ratio) const
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		return {
+			getViewMatrix(),
+			getProjectionMatrix(aspect_ratio),
+			position,
+			getViewFrustum(aspect_ratio)
+		};
+	}
+
 private:
 
 	glm::vec3 position{ 0.0f, 0.0f, 0.0f };
@@ -154,4 +150,12 @@ private:
 	mutable std::mutex m_mutex;
 
 	glm::vec3 direction() const;
+
+	glm::mat4 getViewMatrix() const;
+
+	glm::mat4 getProjectionMatrix(float aspect_ratio) const;
+
+	ViewFrustum getViewFrustum(float aspect_ratio) const;
+
+
 };
