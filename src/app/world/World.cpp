@@ -20,7 +20,7 @@ World::~World()
 {
 }
 
-void World::update(glm::vec3 playerPosition)
+void World::update(glm::dvec3 playerPosition)
 {
 	(void)playerPosition;
 }

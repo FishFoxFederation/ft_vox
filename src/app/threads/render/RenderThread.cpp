@@ -54,7 +54,7 @@ void RenderThread::loop()
 	int width, height;
 	glfwGetFramebufferSize(vk.window, &width, &height);
 
-	float aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
+	double aspect_ratio = static_cast<double>(width) / static_cast<double>(height);
 
 	Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
@@ -63,20 +63,15 @@ void RenderThread::loop()
 	camera_matrices.proj = camera.projection;
 	camera_matrices.proj[1][1] *= -1;
 
-	static std::vector<glm::vec3> camera_position(vk.max_frames_in_flight, camera.position);
+	static std::vector<glm::dvec3> camera_position(vk.max_frames_in_flight, camera.position);
 	camera_position[vk.current_frame] = camera.position;
-
-	static glm::vec3 last_camera_position = camera.position;
-	DebugGui::camera_pos_diff_history.push(glm::length(camera.position - last_camera_position));
-	last_camera_position = camera.position;
-
 
 	auto chunk_meshes = m_world_scene.getMeshRenderData();
 
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
 	{
-		DebugGui::fps = static_cast<float>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
+		DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
 		m_frame_count = 0;
 		m_start_time_counting_fps = m_current_time;
 	}
@@ -169,9 +164,9 @@ void RenderThread::loop()
 
 	for (auto & chunk_mesh : chunk_meshes)
 	{
-		glm::vec3 pos = chunk_mesh.transform.position();
-		if (!camera.view_frustum.sphereInFrustum(pos + glm::vec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
-		// if (!frustum.boxInFrustum(pos, pos + glm::vec3(CHUNK_SIZE)))
+		glm::dvec3 pos = chunk_mesh.transform.position();
+		if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+		// if (!frustum.boxInFrustum(pos, pos + glm::dvec3(CHUNK_SIZE)))
 		{
 			continue;
 		}
@@ -240,8 +235,8 @@ void RenderThread::loop()
 	);
 
 	ModelMatrice camera_model_matrice = {};
-	// camera_model_matrice.model = glm::translate(glm::mat4(1.0f), camera.position);
-	camera_model_matrice.model = glm::translate(glm::mat4(1.0f), camera_position[1]);
+	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	camera_model_matrice.model = glm::translate(glm::dmat4(1.0), camera_position[1]);
 	vkCmdPushConstants(
 		vk.render_command_buffers[vk.current_frame],
 		vk.skybox_pipeline_layout,
