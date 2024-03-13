@@ -96,18 +96,9 @@ public:
 	static inline std::atomic<uint32_t> fps = 0;
 	static inline std::atomic<uint64_t> rendered_triangles = 0;
 
-	static inline Atomic<glm::vec3> camera_last_position;
-	static inline Atomic<glm::vec3> camera_new_position;
-	static inline Atomic<glm::vec3> camera_displacement;
-	static inline Atomic<glm::vec3> camera_position_sub_last_position;
-	static inline std::atomic<float> camera_update_time = 0.0f;
-
 	// Render Thread times
 	static inline History<float, 100> frame_time_history;
 	static inline History<float, 100> cpu_time_history;
-
-
-	static inline History<float, 100> camera_pos_diff_history;
 
 private:
 

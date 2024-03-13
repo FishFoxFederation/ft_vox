@@ -55,34 +55,34 @@ void UpdateThread::readInput()
 
 void UpdateThread::moveCamera()
 {
-	glm::vec3 move = glm::vec3(0.0f);
+	glm::dvec3 move = glm::dvec3(0.0f);
 	if (m_w_key == GLFW_PRESS)
 	{
-		move += glm::vec3(0.0f, 0.0f, 1.0f);
+		move += glm::dvec3(0.0f, 0.0f, 1.0f);
 	}
 	if (m_a_key == GLFW_PRESS)
 	{
-		move += glm::vec3(-1.0f, 0.0f, 0.0f);
+		move += glm::dvec3(-1.0f, 0.0f, 0.0f);
 	}
 	if (m_s_key == GLFW_PRESS)
 	{
-		move += glm::vec3(0.0f, 0.0f, -1.0f);
+		move += glm::dvec3(0.0f, 0.0f, -1.0f);
 	}
 	if (m_d_key == GLFW_PRESS)
 	{
-		move += glm::vec3(1.0f, 0.0f, 0.0f);
+		move += glm::dvec3(1.0f, 0.0f, 0.0f);
 	}
 	if (m_space_key == GLFW_PRESS)
 	{
-		move += glm::vec3(0.0f, 1.0f, 0.0f);
+		move += glm::dvec3(0.0f, 1.0f, 0.0f);
 	}
 	if (m_left_shift_key == GLFW_PRESS)
 	{
-		move += glm::vec3(0.0f, -1.0f, 0.0f);
+		move += glm::dvec3(0.0f, -1.0f, 0.0f);
 	}
 	if (glm::length(move) > 0.0f)
 	{
-		move = glm::normalize(move) * m_camera_speed * static_cast<float>(m_delta_time.count()) / 1e8f;
+		move = glm::normalize(move) * m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e8;
 		m_world_scene.camera().movePosition(move);
 	}
 }

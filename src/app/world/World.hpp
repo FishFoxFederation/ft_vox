@@ -23,7 +23,7 @@ public:
 	World();
 	~World();
 
-	void update(glm::vec3 playerPosition);
+	void update(glm::dvec3 playerPosition);
 
 	std::unordered_map<glm::ivec3, Chunk> & chunks() { return m_chunks; }
 

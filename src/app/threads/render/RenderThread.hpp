@@ -67,11 +67,6 @@ private:
 		uint64_t mesh_id;
 	};
 
-	WorldGenerator world_generator;
-	std::vector<std::pair<glm::vec3, Chunk>> m_chunks;
-	std::vector<ChunkData> m_chunks_to_draw;
-
-
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;
 	std::chrono::nanoseconds m_last_frame_time;

@@ -398,7 +398,7 @@ int VulkanAPI::ratePhysicalDevice(VkPhysicalDevice device)
 		return 0;
 	}
 
-	int score = 0;
+	int score = 1;
 
 	VkPhysicalDeviceProperties device_properties;
 	vkGetPhysicalDeviceProperties(device, &device_properties);
