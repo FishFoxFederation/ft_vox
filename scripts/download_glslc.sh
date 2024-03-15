@@ -6,8 +6,12 @@ if [ ! -d external/glslc ]
 then
 	if [ ! -d ~/goinfre ]
 	then
-		echo "There is no ~/goinfre directory, please create it and run the script again or download glslc manually"
-		exit 1
+		mkdir -p tmp &&
+		curl -o ./tmp/install.tgz $url &&
+		tar -xf ./tmp/install.tgz -C ./tmp &&
+		mkdir -p external/glslc &&
+		mv ./tmp/install/bin/glslc external/glslc &&
+		rm -rf ./tmp/install.tgz ./tmp/install
 	fi
 
 	curl -o ~/goinfre/install.tgz $url &&
