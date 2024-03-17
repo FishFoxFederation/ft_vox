@@ -472,15 +472,6 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 	);
 
-	LOG_TRACE("Begin ImGui frame.");
-	ImGui_ImplVulkan_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	m_debug_gui.updateImGui();
-
-	ImGui::Render();
-
 	VkCommandBuffer imgui_command_buffer;
 	VkCommandBufferAllocateInfo imgui_command_buffer_info = {};
 	imgui_command_buffer_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -518,7 +509,18 @@ void RenderThread::loop()
 
 	vkCmdBeginRendering(imgui_command_buffer, &imgui_render_info);
 
+
+	LOG_TRACE("Begin ImGui frame.");
+	ImGui_ImplVulkan_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	m_debug_gui.updateImGui();
+
+	ImGui::Render();
+
 	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), imgui_command_buffer);
+
 
 	vkCmdEndRendering(imgui_command_buffer);
 

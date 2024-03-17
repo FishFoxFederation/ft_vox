@@ -12,13 +12,6 @@ uint64_t VulkanAPI::createMesh(
 	const Chunk * z_neg_chunk
 )
 {
-	(void)y_pos_chunk;
-	(void)x_pos_chunk;
-	(void)z_pos_chunk;
-	(void)x_neg_chunk;
-	(void)y_neg_chunk;
-	(void)z_neg_chunk;
-	std::lock_guard<std::mutex> lock(global_mutex);
 #define ADD_INDEX \
 	indices.push_back(vertices.size() - 4); \
 	indices.push_back(vertices.size() - 3); \
@@ -161,6 +154,8 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
 	VkDeviceSize buffer_size = vertex_size + index_size;
 
+	std::lock_guard<std::mutex> lock(global_mutex);
+	
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
 	createBuffer(
