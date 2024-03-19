@@ -13,7 +13,6 @@ add_executable(${PROJECT_NAME})
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
-		-g
 		-Wall
 		-Wextra
 		-Werror
@@ -37,6 +36,7 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp
+		src/app/threads/pool/ThreadPool.cpp
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/vulkan/VulkanMemoryAllocator.cpp
@@ -65,6 +65,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/scenes
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/pool
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/render
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
