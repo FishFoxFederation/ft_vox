@@ -3,7 +3,7 @@ var searchData=
   ['_7eapplication_0',['~Application',['../classApplication.html#a748bca84fefb9c12661cfaa2f623748d',1,'Application']]],
   ['_7eathreadwrapper_1',['~AThreadWrapper',['../classAThreadWrapper.html#aeeda6b6caa2a9985de8b69ef3b5438d7',1,'AThreadWrapper']]],
   ['_7eblockupdatethread_2',['~BlockUpdateThread',['../classBlockUpdateThread.html#a684a203fc0a69d2c9a81cdde03fa5ecf',1,'BlockUpdateThread']]],
-  ['_7ecamera_3',['~Camera',['../classWorldScene_1_1Camera.html#a89c12746f76363b6ffc0d29ba4f13147',1,'WorldScene::Camera']]],
+  ['_7ecamera_3',['~Camera',['../classCamera.html#adcb96efefa7af58e3ee6534b15d4979b',1,'Camera']]],
   ['_7echunk_4',['~Chunk',['../classChunk.html#ad21b515f41c9a1d21740b9e7e3f8eede',1,'Chunk']]],
   ['_7edebuggui_5',['~DebugGui',['../classDebugGui.html#a0a966b6e5195197a67a9a20294b142c4',1,'DebugGui']]],
   ['_7efileoutput_6',['~FileOutput',['../classFileOutput.html#a2cdf9b229a5b82b722728fdddad8503b',1,'FileOutput']]],

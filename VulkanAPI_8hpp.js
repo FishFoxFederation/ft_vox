@@ -4,6 +4,7 @@ var VulkanAPI_8hpp =
     [ "SwapChainSupportDetails", "structSwapChainSupportDetails.html", "structSwapChainSupportDetails" ],
     [ "BlockVertex", "structBlockVertex.html", "structBlockVertex" ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", "structstd_1_1hash_3_01BlockVertex_01_4" ],
+    [ "LineVertex", "structLineVertex.html", "structLineVertex" ],
     [ "Mesh", "structMesh.html", "structMesh" ],
     [ "CameraMatrices", "structCameraMatrices.html", "structCameraMatrices" ],
     [ "ModelMatrice", "structModelMatrice.html", "structModelMatrice" ],

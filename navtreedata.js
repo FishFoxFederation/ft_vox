@@ -50,6 +50,13 @@ var NAVTREE =
         [ "Useful links", "docstyleguide.html#autotoc_md13", null ]
       ] ]
     ] ],
+    [ "Render Loop", "render_loop.html", [
+      [ "Main rendering", "render_loop.html#main_rendering", null ],
+      [ "Swapchain", "render_loop.html#swapchain", null ],
+      [ "ImGui", "render_loop.html#imgui", null ],
+      [ "Present", "render_loop.html#present", null ],
+      [ "Conclusion", "render_loop.html#conclusion", null ]
+    ] ],
     [ "Style guide", "styleguide.html", null ],
     [ "Threads Architecture", "threads.html", [
       [ "Main thread", "threads.html#autotoc_md14", null ],
@@ -91,7 +98,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AThreadWrapper_8cpp.html",
-"classWorldScene.html#a8bcfa949f6e093c9794ace6f199742c0"
+"classVulkanAPI.html#a940a7401cf07be24321fb4135242ed02",
+"threads.html#autotoc_md16"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

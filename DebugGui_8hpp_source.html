@@ -111,47 +111,132 @@ $(document).ready(function(){initNavTree('DebugGui_8hpp_source.html',''); initRe
 <a href="DebugGui_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="Camera_8hpp.html">Camera.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;mutex&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;any&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;atomic&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="classDebugGui.html">   11</a></span><span class="keyword">class </span><a class="code hl_class" href="classDebugGui.html">DebugGui</a></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>{</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <a class="code hl_class" href="classDebugGui.html">DebugGui</a>(<a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vulkanAPI);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <a class="code hl_function" href="classDebugGui.html#a0a966b6e5195197a67a9a20294b142c4">~DebugGui</a>();</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classDebugGui.html#aa849cf767818482461efa78caef2ff70">updateImGui</a>();</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;atomic&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;numeric&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="classAtomic.html">   14</a></span><span class="keyword">class </span><a class="code hl_class" href="classAtomic.html">Atomic</a></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3">   19</a></span>    <a class="code hl_function" href="classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3">Atomic</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1">   20</a></span>    <a class="code hl_function" href="classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1">Atomic</a>(T value) : m_value(value) {}</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">   22</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::atomic&lt;uint32_t&gt; <a class="code hl_variable" href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">fps</a> = 0;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classDebugGui.html#aec721872e95b3d2c490123e63263546f">   23</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::atomic&lt;uint64_t&gt; <a class="code hl_variable" href="classDebugGui.html#aec721872e95b3d2c490123e63263546f">triangle_count</a> = 0;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classDebugGui.html#a053a38c794d622e8926ecc4b7bdcea3a">   24</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::atomic&lt;float&gt; <a class="code hl_variable" href="classDebugGui.html#a053a38c794d622e8926ecc4b7bdcea3a">cpu_time</a> = 0.0f;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classDebugGui.html#a236198ec1836347fc1bd1062a444f050">pushFrameTime</a>(<span class="keywordtype">float</span> frame_time);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classAtomic.html#ab99d547bb71994618d7f55f1002f09da">   22</a></span>    T <a class="code hl_function" href="classAtomic.html#ab99d547bb71994618d7f55f1002f09da">get</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        std::lock_guard&lt;std::mutex&gt; lock(m_mutex);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordflow">return</span> m_value;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    }</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vk;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::array&lt;float, 100&gt; frame_time_history;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::mutex frame_time_history_mutex;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>};</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classAtomic.html#a9ffd468634666af56d20bab3ac83ed9d">   28</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classAtomic.html#a9ffd468634666af56d20bab3ac83ed9d">set</a>(T value)</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        std::lock_guard&lt;std::mutex&gt; lock(m_mutex);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        m_value = value;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    }</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    T m_value;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">mutable</span> std::mutex m_mutex;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>};</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keywordtype">int</span> N&gt;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="classHistory.html">   42</a></span><span class="keyword">class </span><a class="code hl_class" href="classHistory.html">History</a></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>{</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classHistory.html#a9937f1512abab01e09ae808a866c7c64">   47</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classHistory.html#a9937f1512abab01e09ae808a866c7c64">push</a>(T value)</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classHistory.html#affeb2a1835f63948681fb91286042ca3">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        m_sum += value;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        m_sum -= m_history[0];</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        std::shift_left(m_history.begin(), m_history.end(), 1);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        m_history[N - 1] = value;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6">   56</a></span>    T <a class="code hl_function" href="classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6">average</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classHistory.html#affeb2a1835f63948681fb91286042ca3">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordflow">return</span> m_sum / N;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classHistory.html#affeb2a1835f63948681fb91286042ca3">   62</a></span>    std::unique_lock&lt;std::mutex&gt; <a class="code hl_function" href="classHistory.html#affeb2a1835f63948681fb91286042ca3">lock</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordflow">return</span> std::unique_lock&lt;std::mutex&gt;(m_mutex);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    }</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed">   67</a></span>    T * <a class="code hl_function" href="classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed">data</a>()</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keywordflow">return</span> m_history.data();</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classHistory.html#ac27dd6845ca0f414017ff591e9ae4e90">   72</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classHistory.html#ac27dd6845ca0f414017ff591e9ae4e90">size</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">return</span> N;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    std::array&lt;T, N&gt; m_history;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    T m_sum = 0;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">mutable</span> std::mutex m_mutex;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>};</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classDebugGui.html">   85</a></span><span class="keyword">class </span><a class="code hl_class" href="classDebugGui.html">DebugGui</a></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>{</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <a class="code hl_class" href="classDebugGui.html">DebugGui</a>(<a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vulkanAPI);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_function" href="classDebugGui.html#a0a966b6e5195197a67a9a20294b142c4">~DebugGui</a>();</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classDebugGui.html#aa849cf767818482461efa78caef2ff70">updateImGui</a>();</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">   96</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::atomic&lt;uint32_t&gt; <a class="code hl_variable" href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">fps</a> = 0;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13">   97</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::atomic&lt;uint64_t&gt; <a class="code hl_variable" href="classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13">rendered_triangles</a> = 0;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="comment">// Render Thread times</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">  100</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code hl_class" href="classHistory.html">History&lt;float, 100&gt;</a> <a class="code hl_variable" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">frame_time_history</a>;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">  101</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code hl_class" href="classHistory.html">History&lt;float, 100&gt;</a> <a class="code hl_variable" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">cpu_time_history</a>;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vk;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
+<div class="ttc" id="aCamera_8hpp_html"><div class="ttname"><a href="Camera_8hpp.html">Camera.hpp</a></div></div>
 <div class="ttc" id="aVulkanAPI_8hpp_html"><div class="ttname"><a href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a></div></div>
-<div class="ttc" id="aclassDebugGui_html"><div class="ttname"><a href="classDebugGui.html">DebugGui</a></div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:12</div></div>
-<div class="ttc" id="aclassDebugGui_html_a053a38c794d622e8926ecc4b7bdcea3a"><div class="ttname"><a href="classDebugGui.html#a053a38c794d622e8926ecc4b7bdcea3a">DebugGui::cpu_time</a></div><div class="ttdeci">static std::atomic&lt; float &gt; cpu_time</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:24</div></div>
-<div class="ttc" id="aclassDebugGui_html_a0a966b6e5195197a67a9a20294b142c4"><div class="ttname"><a href="classDebugGui.html#a0a966b6e5195197a67a9a20294b142c4">DebugGui::~DebugGui</a></div><div class="ttdeci">~DebugGui()</div><div class="ttdef"><b>Definition:</b> DebugGui.cpp:10</div></div>
-<div class="ttc" id="aclassDebugGui_html_a236198ec1836347fc1bd1062a444f050"><div class="ttname"><a href="classDebugGui.html#a236198ec1836347fc1bd1062a444f050">DebugGui::pushFrameTime</a></div><div class="ttdeci">static void pushFrameTime(float frame_time)</div><div class="ttdef"><b>Definition:</b> DebugGui.cpp:62</div></div>
-<div class="ttc" id="aclassDebugGui_html_aa849cf767818482461efa78caef2ff70"><div class="ttname"><a href="classDebugGui.html#aa849cf767818482461efa78caef2ff70">DebugGui::updateImGui</a></div><div class="ttdeci">void updateImGui()</div><div class="ttdef"><b>Definition:</b> DebugGui.cpp:14</div></div>
-<div class="ttc" id="aclassDebugGui_html_ab769bb8977dff721cd5db648458c8f3d"><div class="ttname"><a href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">DebugGui::fps</a></div><div class="ttdeci">static std::atomic&lt; uint32_t &gt; fps</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:22</div></div>
-<div class="ttc" id="aclassDebugGui_html_aec721872e95b3d2c490123e63263546f"><div class="ttname"><a href="classDebugGui.html#aec721872e95b3d2c490123e63263546f">DebugGui::triangle_count</a></div><div class="ttdeci">static std::atomic&lt; uint64_t &gt; triangle_count</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:23</div></div>
-<div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:178</div></div>
+<div class="ttc" id="aclassAtomic_html"><div class="ttname"><a href="classAtomic.html">Atomic</a></div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:15</div></div>
+<div class="ttc" id="aclassAtomic_html_a3282eeb8d5ca9d377bb193858409f3d3"><div class="ttname"><a href="classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3">Atomic::Atomic</a></div><div class="ttdeci">Atomic()=default</div></div>
+<div class="ttc" id="aclassAtomic_html_a755ced2f84542e2736e9735e4d3bc7b1"><div class="ttname"><a href="classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1">Atomic::Atomic</a></div><div class="ttdeci">Atomic(T value)</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:20</div></div>
+<div class="ttc" id="aclassAtomic_html_a9ffd468634666af56d20bab3ac83ed9d"><div class="ttname"><a href="classAtomic.html#a9ffd468634666af56d20bab3ac83ed9d">Atomic::set</a></div><div class="ttdeci">void set(T value)</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:28</div></div>
+<div class="ttc" id="aclassAtomic_html_ab99d547bb71994618d7f55f1002f09da"><div class="ttname"><a href="classAtomic.html#ab99d547bb71994618d7f55f1002f09da">Atomic::get</a></div><div class="ttdeci">T get() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:22</div></div>
+<div class="ttc" id="aclassDebugGui_html"><div class="ttname"><a href="classDebugGui.html">DebugGui</a></div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:86</div></div>
+<div class="ttc" id="aclassDebugGui_html_a0a966b6e5195197a67a9a20294b142c4"><div class="ttname"><a href="classDebugGui.html#a0a966b6e5195197a67a9a20294b142c4">DebugGui::~DebugGui</a></div><div class="ttdeci">~DebugGui()</div><div class="ttdef"><b>Definition:</b> DebugGui.cpp:12</div></div>
+<div class="ttc" id="aclassDebugGui_html_a29e6325358b57a6c69acccbdcf0e379e"><div class="ttname"><a href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">DebugGui::cpu_time_history</a></div><div class="ttdeci">static History&lt; float, 100 &gt; cpu_time_history</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:101</div></div>
+<div class="ttc" id="aclassDebugGui_html_aa849cf767818482461efa78caef2ff70"><div class="ttname"><a href="classDebugGui.html#aa849cf767818482461efa78caef2ff70">DebugGui::updateImGui</a></div><div class="ttdeci">void updateImGui()</div><div class="ttdef"><b>Definition:</b> DebugGui.cpp:16</div></div>
+<div class="ttc" id="aclassDebugGui_html_ab769bb8977dff721cd5db648458c8f3d"><div class="ttname"><a href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">DebugGui::fps</a></div><div class="ttdeci">static std::atomic&lt; uint32_t &gt; fps</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:96</div></div>
+<div class="ttc" id="aclassDebugGui_html_ac39ff26773e3f64810069871933c01da"><div class="ttname"><a href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">DebugGui::frame_time_history</a></div><div class="ttdeci">static History&lt; float, 100 &gt; frame_time_history</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:100</div></div>
+<div class="ttc" id="aclassDebugGui_html_adaf81c06685c6ec69beaf6270e399a13"><div class="ttname"><a href="classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13">DebugGui::rendered_triangles</a></div><div class="ttdeci">static std::atomic&lt; uint64_t &gt; rendered_triangles</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:97</div></div>
+<div class="ttc" id="aclassHistory_html"><div class="ttname"><a href="classHistory.html">History</a></div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:43</div></div>
+<div class="ttc" id="aclassHistory_html_a157dd81dbf380fd3fbe71a8c05ab79ed"><div class="ttname"><a href="classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed">History::data</a></div><div class="ttdeci">T * data()</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:67</div></div>
+<div class="ttc" id="aclassHistory_html_a9937f1512abab01e09ae808a866c7c64"><div class="ttname"><a href="classHistory.html#a9937f1512abab01e09ae808a866c7c64">History::push</a></div><div class="ttdeci">void push(T value)</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:47</div></div>
+<div class="ttc" id="aclassHistory_html_ab3669e563bc3aa8e094b53bff1fb2ca6"><div class="ttname"><a href="classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6">History::average</a></div><div class="ttdeci">T average() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:56</div></div>
+<div class="ttc" id="aclassHistory_html_ac27dd6845ca0f414017ff591e9ae4e90"><div class="ttname"><a href="classHistory.html#ac27dd6845ca0f414017ff591e9ae4e90">History::size</a></div><div class="ttdeci">int size() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:72</div></div>
+<div class="ttc" id="aclassHistory_html_affeb2a1835f63948681fb91286042ca3"><div class="ttname"><a href="classHistory.html#affeb2a1835f63948681fb91286042ca3">History::lock</a></div><div class="ttdeci">std::unique_lock&lt; std::mutex &gt; lock() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:62</div></div>
+<div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:211</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

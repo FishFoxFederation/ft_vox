@@ -120,7 +120,7 @@ Collaboration diagram for VulkanAPI:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVulkanAPI__coll__graph.png" border="0" usemap="#aVulkanAPI_coll__map" alt="Collaboration graph"/></div>
 <map name="aVulkanAPI_coll__map" id="aVulkanAPI_coll__map">
-<area shape="rect" title=" " alt="" coords="203,284,372,661"/>
+<area shape="rect" title=" " alt="" coords="203,284,372,676"/>
 <area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,20,191,207"/>
 <area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,71,359,155"/>
 <area shape="rect" href="structImGuiTexture.html" title=" " alt="" coords="388,5,520,221"/>
@@ -143,6 +143,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaeca4e5455f3982bac572f63af925855"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48f6b428d99ea240a6ebdc1ad4dba0cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd">transitionImageLayout</a> (VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, uint32_t mipLevels, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask)</td></tr>
 <tr class="separator:a48f6b428d99ea240a6ebdc1ad4dba0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cf827ed1548a6c79b7c0113cf726892"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a5cf827ed1548a6c79b7c0113cf726892">setImageLayout</a> (VkCommandBuffer command_buffer, VkImage image, VkImageLayout old_layout, VkImageLayout new_layout, VkImageSubresourceRange subresource_range, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask)</td></tr>
+<tr class="separator:a5cf827ed1548a6c79b7c0113cf726892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581">recreateSwapChain</a> (GLFWwindow *<a class="el" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>)</td></tr>
 <tr class="separator:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3d7ddd6246c2b3cb960c58408919101"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aa3d7ddd6246c2b3cb960c58408919101">createMesh</a> (const <a class="el" href="classChunk.html">Chunk</a> &amp;chunk, const <a class="el" href="classChunk.html">Chunk</a> *x_pos_chunk, const <a class="el" href="classChunk.html">Chunk</a> *x_neg_chunk, const <a class="el" href="classChunk.html">Chunk</a> *y_pos_chunk, const <a class="el" href="classChunk.html">Chunk</a> *y_neg_chunk, const <a class="el" href="classChunk.html">Chunk</a> *z_pos_chunk, const <a class="el" href="classChunk.html">Chunk</a> *z_neg_chunk)</td></tr>
@@ -186,16 +188,18 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a493c029a5d6e84944b10aba3e127f8d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a512711a2bf5f70765279aca5f1e6c5dd"><td class="memItemLeft" align="right" valign="top">VkCommandPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a512711a2bf5f70765279aca5f1e6c5dd">command_pool</a></td></tr>
 <tr class="separator:a512711a2bf5f70765279aca5f1e6c5dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b73b1224307608f291d38e747dbb0b0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a8b73b1224307608f291d38e747dbb0b0">render_command_buffers</a></td></tr>
-<tr class="separator:a8b73b1224307608f291d38e747dbb0b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ca1ad478d46ff986a5c70ff3de9907"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907">draw_command_buffers</a></td></tr>
+<tr class="separator:ae3ca1ad478d46ff986a5c70ff3de9907"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e36af29d838a6599ddb213ca74a7edf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a6e36af29d838a6599ddb213ca74a7edf">copy_command_buffers</a></td></tr>
 <tr class="separator:a6e36af29d838a6599ddb213ca74a7edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f31e9409e38aa1027e3cfd68c002b76"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a2f31e9409e38aa1027e3cfd68c002b76">imgui_command_buffers</a></td></tr>
+<tr class="separator:a2f31e9409e38aa1027e3cfd68c002b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aded6afbe797d9e490d44f56c818baa90"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aded6afbe797d9e490d44f56c818baa90">image_available_semaphores</a></td></tr>
 <tr class="separator:aded6afbe797d9e490d44f56c818baa90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78fde0e5cdd0b5a9155dc38e50200ea4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a78fde0e5cdd0b5a9155dc38e50200ea4">render_finished_semaphores</a></td></tr>
-<tr class="separator:a78fde0e5cdd0b5a9155dc38e50200ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c5478aa2b9c956fd32d8adb97dcde8f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a0c5478aa2b9c956fd32d8adb97dcde8f">swap_chain_updated_semaphores</a></td></tr>
-<tr class="separator:a0c5478aa2b9c956fd32d8adb97dcde8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d0897c4f64ec32ad6d320b3b2108f71"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71">main_render_finished_semaphores</a></td></tr>
+<tr class="separator:a1d0897c4f64ec32ad6d320b3b2108f71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3cf0d566570f615d38be314b304a2e2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aa3cf0d566570f615d38be314b304a2e2">copy_finished_semaphores</a></td></tr>
+<tr class="separator:aa3cf0d566570f615d38be314b304a2e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a760a68bd1116cac8ed2756832cea2020"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a760a68bd1116cac8ed2756832cea2020">imgui_render_finished_semaphores</a></td></tr>
 <tr class="separator:a760a68bd1116cac8ed2756832cea2020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d3a908536aee8c7f23b6f4a10ca2382"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkFence &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a5d3a908536aee8c7f23b6f4a10ca2382">in_flight_fences</a></td></tr>
@@ -226,12 +230,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a8fdaf5eb8bbf83f15738b92a1921b50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a968ca5aed397a91634a90f647d295e2e"><td class="memItemLeft" align="right" valign="top">VkExtent2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a968ca5aed397a91634a90f647d295e2e">depth_attachement_extent</a></td></tr>
 <tr class="separator:a968ca5aed397a91634a90f647d295e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c01445f738c2181b4d574a8fae9f88c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a9c01445f738c2181b4d574a8fae9f88c">uniform_buffers</a></td></tr>
-<tr class="separator:a9c01445f738c2181b4d574a8fae9f88c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8c6cfc3c05804e2bc4263c1f3adb71a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDeviceMemory &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#af8c6cfc3c05804e2bc4263c1f3adb71a">uniform_buffers_memory</a></td></tr>
-<tr class="separator:af8c6cfc3c05804e2bc4263c1f3adb71a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a825d37ea56204e6836b2a320c0437753"><td class="memItemLeft" align="right" valign="top">std::vector&lt; void * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a825d37ea56204e6836b2a320c0437753">uniform_buffers_mapped_memory</a></td></tr>
-<tr class="separator:a825d37ea56204e6836b2a320c0437753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75628d88876ae7453490a27b985de889"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a75628d88876ae7453490a27b985de889">camera_uniform_buffers</a></td></tr>
+<tr class="separator:a75628d88876ae7453490a27b985de889"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad13c169fc066448596240f3f9291adfd"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDeviceMemory &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ad13c169fc066448596240f3f9291adfd">camera_uniform_buffers_memory</a></td></tr>
+<tr class="separator:ad13c169fc066448596240f3f9291adfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe6ec2e82ad164f2a164cab715d51a60"><td class="memItemLeft" align="right" valign="top">std::vector&lt; void * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#abe6ec2e82ad164f2a164cab715d51a60">camera_uniform_buffers_mapped_memory</a></td></tr>
+<tr class="separator:abe6ec2e82ad164f2a164cab715d51a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a492dc8f7bf1d6696f52064782ac6c04b"><td class="memItemLeft" align="right" valign="top">VkImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a492dc8f7bf1d6696f52064782ac6c04b">textures_image</a></td></tr>
 <tr class="separator:a492dc8f7bf1d6696f52064782ac6c04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01d0a9506f2d3a8c6b419263243b682c"><td class="memItemLeft" align="right" valign="top">VkDeviceMemory&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a01d0a9506f2d3a8c6b419263243b682c">textures_image_memory</a></td></tr>
@@ -244,16 +248,58 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a15a052f7ed700782fe7caff687d64748"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbdefb9eb1ab9c17d9bad0aedb390557"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#adbdefb9eb1ab9c17d9bad0aedb390557">textures_mip_levels</a></td></tr>
 <tr class="separator:adbdefb9eb1ab9c17d9bad0aedb390557"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab83318885fe7e22dbc5a4d9b23384d4b"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ab83318885fe7e22dbc5a4d9b23384d4b">descriptor_set_layout</a></td></tr>
-<tr class="separator:ab83318885fe7e22dbc5a4d9b23384d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adccdc3daae3df430b1c7c2dd682a3e32"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#adccdc3daae3df430b1c7c2dd682a3e32">descriptor_pool</a></td></tr>
-<tr class="separator:adccdc3daae3df430b1c7c2dd682a3e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac47fb1911c5f42dac2963dcaaba6a619"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac47fb1911c5f42dac2963dcaaba6a619">descriptor_set</a></td></tr>
-<tr class="separator:ac47fb1911c5f42dac2963dcaaba6a619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fff0c5d321be9994092c311327c73b8"><td class="memItemLeft" align="right" valign="top">VkImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a5fff0c5d321be9994092c311327c73b8">cube_map_image</a></td></tr>
+<tr class="separator:a5fff0c5d321be9994092c311327c73b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6f0ddd0f3ed0fb0313ec5f1f4712d6f"><td class="memItemLeft" align="right" valign="top">VkDeviceMemory&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ad6f0ddd0f3ed0fb0313ec5f1f4712d6f">cube_map_image_memory</a></td></tr>
+<tr class="separator:ad6f0ddd0f3ed0fb0313ec5f1f4712d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa52d72f8a735ace078846a147a704bf9"><td class="memItemLeft" align="right" valign="top">VkImageView&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aa52d72f8a735ace078846a147a704bf9">cube_map_image_view</a></td></tr>
+<tr class="separator:aa52d72f8a735ace078846a147a704bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a634e507136329abd1435d95699cb33ec"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a634e507136329abd1435d95699cb33ec">cube_map_sampler</a></td></tr>
+<tr class="separator:a634e507136329abd1435d95699cb33ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac33ee4c3145d63b05b6d57fa37f2badc"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac33ee4c3145d63b05b6d57fa37f2badc">cube_map_size</a></td></tr>
+<tr class="separator:ac33ee4c3145d63b05b6d57fa37f2badc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82633a1238d22ee5e5524dbf61423f8e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a82633a1238d22ee5e5524dbf61423f8e">frustum_line_buffers</a></td></tr>
+<tr class="separator:a82633a1238d22ee5e5524dbf61423f8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad74bb5886fbc12796297b487122c9e10"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDeviceMemory &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ad74bb5886fbc12796297b487122c9e10">frustum_line_buffers_memory</a></td></tr>
+<tr class="separator:ad74bb5886fbc12796297b487122c9e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d948986f95421aaf88c715c6e724b30"><td class="memItemLeft" align="right" valign="top">std::vector&lt; void * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a2d948986f95421aaf88c715c6e724b30">frustum_line_buffers_mapped_memory</a></td></tr>
+<tr class="separator:a2d948986f95421aaf88c715c6e724b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab68d2e5ecb0854c609efc8fc51ea8449"><td class="memItemLeft" align="right" valign="top">VkDeviceSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ab68d2e5ecb0854c609efc8fc51ea8449">frustum_line_index_offset</a></td></tr>
+<tr class="separator:ab68d2e5ecb0854c609efc8fc51ea8449"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29a743a5a7e812219142f9ea819b70c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ab29a743a5a7e812219142f9ea819b70c">frustum_line_vertex_count</a></td></tr>
+<tr class="separator:ab29a743a5a7e812219142f9ea819b70c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd0f6df19f70e3fb00a244f2befdbbbd"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#abd0f6df19f70e3fb00a244f2befdbbbd">frustum_line_index_count</a></td></tr>
+<tr class="separator:abd0f6df19f70e3fb00a244f2befdbbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad15d96f9fa1df90d3f10de53968c8c04"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ad15d96f9fa1df90d3f10de53968c8c04">camera_descriptor_set_layout</a></td></tr>
+<tr class="separator:ad15d96f9fa1df90d3f10de53968c8c04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac269691b77d5e9fee8685941d1c62784"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac269691b77d5e9fee8685941d1c62784">camera_descriptor_pool</a></td></tr>
+<tr class="separator:ac269691b77d5e9fee8685941d1c62784"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93619da85b5c955e55a96a1e9bc658ca"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a93619da85b5c955e55a96a1e9bc658ca">camera_descriptor_set</a></td></tr>
+<tr class="separator:a93619da85b5c955e55a96a1e9bc658ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8d79bff113505d8ef9ca6f4bcc40887"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac8d79bff113505d8ef9ca6f4bcc40887">texture_array_descriptor_set_layout</a></td></tr>
+<tr class="separator:ac8d79bff113505d8ef9ca6f4bcc40887"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8bca3fb3e87cbed0b5f432b98814592"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ab8bca3fb3e87cbed0b5f432b98814592">texture_array_descriptor_pool</a></td></tr>
+<tr class="separator:ab8bca3fb3e87cbed0b5f432b98814592"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ee580cf6ec53d76e5b5d38b6bd78ef4"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a9ee580cf6ec53d76e5b5d38b6bd78ef4">texture_array_descriptor_set</a></td></tr>
+<tr class="separator:a9ee580cf6ec53d76e5b5d38b6bd78ef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ca2c8c6ba23bcee4f9fa88cc4d3d35d"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a7ca2c8c6ba23bcee4f9fa88cc4d3d35d">cube_map_descriptor_set_layout</a></td></tr>
+<tr class="separator:a7ca2c8c6ba23bcee4f9fa88cc4d3d35d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae05f2431bec0afe2421fa2718adba908"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ae05f2431bec0afe2421fa2718adba908">cube_map_descriptor_pool</a></td></tr>
+<tr class="separator:ae05f2431bec0afe2421fa2718adba908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae12a84a78a0ce609f90ced8052e1f98a"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ae12a84a78a0ce609f90ced8052e1f98a">cube_map_descriptor_set</a></td></tr>
+<tr class="separator:ae12a84a78a0ce609f90ced8052e1f98a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0446488c89a7a21f749f5984272385e"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aa0446488c89a7a21f749f5984272385e">pipeline_layout</a></td></tr>
 <tr class="separator:aa0446488c89a7a21f749f5984272385e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bfb7b5b831df96bd3b27160f8236e78"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a7bfb7b5b831df96bd3b27160f8236e78">graphics_pipeline</a></td></tr>
 <tr class="separator:a7bfb7b5b831df96bd3b27160f8236e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ae99556a83ceba41fd7de88ae590668"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a1ae99556a83ceba41fd7de88ae590668">line_pipeline_layout</a></td></tr>
+<tr class="separator:a1ae99556a83ceba41fd7de88ae590668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7a8783a7729e6214cafa95972262c25"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac7a8783a7729e6214cafa95972262c25">line_graphics_pipeline</a></td></tr>
+<tr class="separator:ac7a8783a7729e6214cafa95972262c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a552a8cdfee702a3014363136f209a3ca"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a552a8cdfee702a3014363136f209a3ca">skybox_pipeline_layout</a></td></tr>
+<tr class="separator:a552a8cdfee702a3014363136f209a3ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e05c6bfb8780bcae9cb3f3b092e4238"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a9e05c6bfb8780bcae9cb3f3b092e4238">skybox_graphics_pipeline</a></td></tr>
+<tr class="separator:a9e05c6bfb8780bcae9cb3f3b092e4238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a940a7401cf07be24321fb4135242ed02"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a940a7401cf07be24321fb4135242ed02">imgui_descriptor_pool</a></td></tr>
 <tr class="separator:a940a7401cf07be24321fb4135242ed02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a612c4d0c482f50a0f59bbd88469b6645"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structImGuiTexture.html">ImGuiTexture</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a612c4d0c482f50a0f59bbd88469b6645">imgui_texture</a></td></tr>
@@ -515,6 +561,76 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5cf827ed1548a6c79b7c0113cf726892" name="a5cf827ed1548a6c79b7c0113cf726892"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cf827ed1548a6c79b7c0113cf726892">&#9670;&#160;</a></span>setImageLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void VulkanAPI::setImageLayout </td>
+          <td>(</td>
+          <td class="paramtype">VkCommandBuffer&#160;</td>
+          <td class="paramname"><em>command_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkImage&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkImageLayout&#160;</td>
+          <td class="paramname"><em>old_layout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkImageLayout&#160;</td>
+          <td class="paramname"><em>new_layout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkImageSubresourceRange&#160;</td>
+          <td class="paramname"><em>subresource_range</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkAccessFlags&#160;</td>
+          <td class="paramname"><em>srcAccessMask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkAccessFlags&#160;</td>
+          <td class="paramname"><em>dstAccessMask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkPipelineStageFlags&#160;</td>
+          <td class="paramname"><em>srcStageMask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VkPipelineStageFlags&#160;</td>
+          <td class="paramname"><em>dstStageMask</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a916d17d1a713268c205279c4e4685b80" name="a916d17d1a713268c205279c4e4685b80"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a916d17d1a713268c205279c4e4685b80">&#9670;&#160;</a></span>storeMesh()</h2>
 
@@ -614,6 +730,90 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac269691b77d5e9fee8685941d1c62784" name="ac269691b77d5e9fee8685941d1c62784"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac269691b77d5e9fee8685941d1c62784">&#9670;&#160;</a></span>camera_descriptor_pool</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorPool VulkanAPI::camera_descriptor_pool</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a93619da85b5c955e55a96a1e9bc658ca" name="a93619da85b5c955e55a96a1e9bc658ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93619da85b5c955e55a96a1e9bc658ca">&#9670;&#160;</a></span>camera_descriptor_set</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet VulkanAPI::camera_descriptor_set</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad15d96f9fa1df90d3f10de53968c8c04" name="ad15d96f9fa1df90d3f10de53968c8c04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad15d96f9fa1df90d3f10de53968c8c04">&#9670;&#160;</a></span>camera_descriptor_set_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSetLayout VulkanAPI::camera_descriptor_set_layout</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a75628d88876ae7453490a27b985de889" name="a75628d88876ae7453490a27b985de889"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75628d88876ae7453490a27b985de889">&#9670;&#160;</a></span>camera_uniform_buffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkBuffer&gt; VulkanAPI::camera_uniform_buffers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe6ec2e82ad164f2a164cab715d51a60" name="abe6ec2e82ad164f2a164cab715d51a60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe6ec2e82ad164f2a164cab715d51a60">&#9670;&#160;</a></span>camera_uniform_buffers_mapped_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;void *&gt; VulkanAPI::camera_uniform_buffers_mapped_memory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad13c169fc066448596240f3f9291adfd" name="ad13c169fc066448596240f3f9291adfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad13c169fc066448596240f3f9291adfd">&#9670;&#160;</a></span>camera_uniform_buffers_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkDeviceMemory&gt; VulkanAPI::camera_uniform_buffers_memory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad6577a4ae85f6aa01f3eb4b6228ecc72" name="ad6577a4ae85f6aa01f3eb4b6228ecc72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad6577a4ae85f6aa01f3eb4b6228ecc72">&#9670;&#160;</a></span>color_attachement_extent</h2>
 
@@ -706,6 +906,132 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;VkCommandBuffer&gt; VulkanAPI::copy_command_buffers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa3cf0d566570f615d38be314b304a2e2" name="aa3cf0d566570f615d38be314b304a2e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3cf0d566570f615d38be314b304a2e2">&#9670;&#160;</a></span>copy_finished_semaphores</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkSemaphore&gt; VulkanAPI::copy_finished_semaphores</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae05f2431bec0afe2421fa2718adba908" name="ae05f2431bec0afe2421fa2718adba908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae05f2431bec0afe2421fa2718adba908">&#9670;&#160;</a></span>cube_map_descriptor_pool</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorPool VulkanAPI::cube_map_descriptor_pool</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae12a84a78a0ce609f90ced8052e1f98a" name="ae12a84a78a0ce609f90ced8052e1f98a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae12a84a78a0ce609f90ced8052e1f98a">&#9670;&#160;</a></span>cube_map_descriptor_set</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet VulkanAPI::cube_map_descriptor_set</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ca2c8c6ba23bcee4f9fa88cc4d3d35d" name="a7ca2c8c6ba23bcee4f9fa88cc4d3d35d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ca2c8c6ba23bcee4f9fa88cc4d3d35d">&#9670;&#160;</a></span>cube_map_descriptor_set_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSetLayout VulkanAPI::cube_map_descriptor_set_layout</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fff0c5d321be9994092c311327c73b8" name="a5fff0c5d321be9994092c311327c73b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fff0c5d321be9994092c311327c73b8">&#9670;&#160;</a></span>cube_map_image</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkImage VulkanAPI::cube_map_image</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6f0ddd0f3ed0fb0313ec5f1f4712d6f" name="ad6f0ddd0f3ed0fb0313ec5f1f4712d6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6f0ddd0f3ed0fb0313ec5f1f4712d6f">&#9670;&#160;</a></span>cube_map_image_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDeviceMemory VulkanAPI::cube_map_image_memory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa52d72f8a735ace078846a147a704bf9" name="aa52d72f8a735ace078846a147a704bf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa52d72f8a735ace078846a147a704bf9">&#9670;&#160;</a></span>cube_map_image_view</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkImageView VulkanAPI::cube_map_image_view</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a634e507136329abd1435d95699cb33ec" name="a634e507136329abd1435d95699cb33ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a634e507136329abd1435d95699cb33ec">&#9670;&#160;</a></span>cube_map_sampler</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkSampler VulkanAPI::cube_map_sampler</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac33ee4c3145d63b05b6d57fa37f2badc" name="ac33ee4c3145d63b05b6d57fa37f2badc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac33ee4c3145d63b05b6d57fa37f2badc">&#9670;&#160;</a></span>cube_map_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t VulkanAPI::cube_map_size</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -810,48 +1136,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="adccdc3daae3df430b1c7c2dd682a3e32" name="adccdc3daae3df430b1c7c2dd682a3e32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adccdc3daae3df430b1c7c2dd682a3e32">&#9670;&#160;</a></span>descriptor_pool</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkDescriptorPool VulkanAPI::descriptor_pool</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac47fb1911c5f42dac2963dcaaba6a619" name="ac47fb1911c5f42dac2963dcaaba6a619"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac47fb1911c5f42dac2963dcaaba6a619">&#9670;&#160;</a></span>descriptor_set</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkDescriptorSet VulkanAPI::descriptor_set</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab83318885fe7e22dbc5a4d9b23384d4b" name="ab83318885fe7e22dbc5a4d9b23384d4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab83318885fe7e22dbc5a4d9b23384d4b">&#9670;&#160;</a></span>descriptor_set_layout</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkDescriptorSetLayout VulkanAPI::descriptor_set_layout</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ac53aef29bbc7afd5cef325d4d608f669" name="ac53aef29bbc7afd5cef325d4d608f669"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac53aef29bbc7afd5cef325d4d608f669">&#9670;&#160;</a></span>device</h2>
 
@@ -860,6 +1144,104 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">VkDevice VulkanAPI::device</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae3ca1ad478d46ff986a5c70ff3de9907" name="ae3ca1ad478d46ff986a5c70ff3de9907"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3ca1ad478d46ff986a5c70ff3de9907">&#9670;&#160;</a></span>draw_command_buffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkCommandBuffer&gt; VulkanAPI::draw_command_buffers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82633a1238d22ee5e5524dbf61423f8e" name="a82633a1238d22ee5e5524dbf61423f8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82633a1238d22ee5e5524dbf61423f8e">&#9670;&#160;</a></span>frustum_line_buffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkBuffer&gt; VulkanAPI::frustum_line_buffers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d948986f95421aaf88c715c6e724b30" name="a2d948986f95421aaf88c715c6e724b30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d948986f95421aaf88c715c6e724b30">&#9670;&#160;</a></span>frustum_line_buffers_mapped_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;void *&gt; VulkanAPI::frustum_line_buffers_mapped_memory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad74bb5886fbc12796297b487122c9e10" name="ad74bb5886fbc12796297b487122c9e10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad74bb5886fbc12796297b487122c9e10">&#9670;&#160;</a></span>frustum_line_buffers_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkDeviceMemory&gt; VulkanAPI::frustum_line_buffers_memory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abd0f6df19f70e3fb00a244f2befdbbbd" name="abd0f6df19f70e3fb00a244f2befdbbbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd0f6df19f70e3fb00a244f2befdbbbd">&#9670;&#160;</a></span>frustum_line_index_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t VulkanAPI::frustum_line_index_count</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab68d2e5ecb0854c609efc8fc51ea8449" name="ab68d2e5ecb0854c609efc8fc51ea8449"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab68d2e5ecb0854c609efc8fc51ea8449">&#9670;&#160;</a></span>frustum_line_index_offset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDeviceSize VulkanAPI::frustum_line_index_offset</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab29a743a5a7e812219142f9ea819b70c" name="ab29a743a5a7e812219142f9ea819b70c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab29a743a5a7e812219142f9ea819b70c">&#9670;&#160;</a></span>frustum_line_vertex_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t VulkanAPI::frustum_line_vertex_count</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -916,6 +1298,20 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;VkSemaphore&gt; VulkanAPI::image_available_semaphores</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f31e9409e38aa1027e3cfd68c002b76" name="a2f31e9409e38aa1027e3cfd68c002b76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f31e9409e38aa1027e3cfd68c002b76">&#9670;&#160;</a></span>imgui_command_buffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkCommandBuffer&gt; VulkanAPI::imgui_command_buffers</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -986,6 +1382,48 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">VkInstance VulkanAPI::instance</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac7a8783a7729e6214cafa95972262c25" name="ac7a8783a7729e6214cafa95972262c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7a8783a7729e6214cafa95972262c25">&#9670;&#160;</a></span>line_graphics_pipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkPipeline VulkanAPI::line_graphics_pipeline</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ae99556a83ceba41fd7de88ae590668" name="a1ae99556a83ceba41fd7de88ae590668"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ae99556a83ceba41fd7de88ae590668">&#9670;&#160;</a></span>line_pipeline_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkPipelineLayout VulkanAPI::line_pipeline_layout</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d0897c4f64ec32ad6d320b3b2108f71" name="a1d0897c4f64ec32ad6d320b3b2108f71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d0897c4f64ec32ad6d320b3b2108f71">&#9670;&#160;</a></span>main_render_finished_semaphores</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkSemaphore&gt; VulkanAPI::main_render_finished_semaphores</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1112,34 +1550,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8b73b1224307608f291d38e747dbb0b0" name="a8b73b1224307608f291d38e747dbb0b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b73b1224307608f291d38e747dbb0b0">&#9670;&#160;</a></span>render_command_buffers</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;VkCommandBuffer&gt; VulkanAPI::render_command_buffers</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a78fde0e5cdd0b5a9155dc38e50200ea4" name="a78fde0e5cdd0b5a9155dc38e50200ea4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78fde0e5cdd0b5a9155dc38e50200ea4">&#9670;&#160;</a></span>render_finished_semaphores</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;VkSemaphore&gt; VulkanAPI::render_finished_semaphores</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a10a2d2c305087b878e1518437fd6ca4e" name="a10a2d2c305087b878e1518437fd6ca4e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a10a2d2c305087b878e1518437fd6ca4e">&#9670;&#160;</a></span>single_time_command_fence</h2>
 
@@ -1148,6 +1558,34 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">VkFence VulkanAPI::single_time_command_fence</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9e05c6bfb8780bcae9cb3f3b092e4238" name="a9e05c6bfb8780bcae9cb3f3b092e4238"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e05c6bfb8780bcae9cb3f3b092e4238">&#9670;&#160;</a></span>skybox_graphics_pipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkPipeline VulkanAPI::skybox_graphics_pipeline</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a552a8cdfee702a3014363136f209a3ca" name="a552a8cdfee702a3014363136f209a3ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a552a8cdfee702a3014363136f209a3ca">&#9670;&#160;</a></span>skybox_pipeline_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkPipelineLayout VulkanAPI::skybox_pipeline_layout</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1238,14 +1676,42 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0c5478aa2b9c956fd32d8adb97dcde8f" name="a0c5478aa2b9c956fd32d8adb97dcde8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c5478aa2b9c956fd32d8adb97dcde8f">&#9670;&#160;</a></span>swap_chain_updated_semaphores</h2>
+<a id="ab8bca3fb3e87cbed0b5f432b98814592" name="ab8bca3fb3e87cbed0b5f432b98814592"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8bca3fb3e87cbed0b5f432b98814592">&#9670;&#160;</a></span>texture_array_descriptor_pool</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;VkSemaphore&gt; VulkanAPI::swap_chain_updated_semaphores</td>
+          <td class="memname">VkDescriptorPool VulkanAPI::texture_array_descriptor_pool</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ee580cf6ec53d76e5b5d38b6bd78ef4" name="a9ee580cf6ec53d76e5b5d38b6bd78ef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ee580cf6ec53d76e5b5d38b6bd78ef4">&#9670;&#160;</a></span>texture_array_descriptor_set</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet VulkanAPI::texture_array_descriptor_set</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8d79bff113505d8ef9ca6f4bcc40887" name="ac8d79bff113505d8ef9ca6f4bcc40887"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8d79bff113505d8ef9ca6f4bcc40887">&#9670;&#160;</a></span>texture_array_descriptor_set_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSetLayout VulkanAPI::texture_array_descriptor_set_layout</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1330,48 +1796,6 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">uint32_t VulkanAPI::textures_size</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9c01445f738c2181b4d574a8fae9f88c" name="a9c01445f738c2181b4d574a8fae9f88c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c01445f738c2181b4d574a8fae9f88c">&#9670;&#160;</a></span>uniform_buffers</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;VkBuffer&gt; VulkanAPI::uniform_buffers</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a825d37ea56204e6836b2a320c0437753" name="a825d37ea56204e6836b2a320c0437753"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a825d37ea56204e6836b2a320c0437753">&#9670;&#160;</a></span>uniform_buffers_mapped_memory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;void *&gt; VulkanAPI::uniform_buffers_mapped_memory</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af8c6cfc3c05804e2bc4263c1f3adb71a" name="af8c6cfc3c05804e2bc4263c1f3adb71a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8c6cfc3c05804e2bc4263c1f3adb71a">&#9670;&#160;</a></span>uniform_buffers_memory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;VkDeviceMemory&gt; VulkanAPI::uniform_buffers_memory</td>
         </tr>
       </table>
 </div><div class="memdoc">

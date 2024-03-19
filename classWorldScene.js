@@ -1,6 +1,5 @@
 var classWorldScene =
 [
-    [ "Camera", "classWorldScene_1_1Camera.html", "classWorldScene_1_1Camera" ],
     [ "MeshRenderData", "structWorldScene_1_1MeshRenderData.html", "structWorldScene_1_1MeshRenderData" ],
     [ "Transform", "classWorldScene_1_1Transform.html", "classWorldScene_1_1Transform" ],
     [ "WorldScene", "classWorldScene.html#a86c5a4b83213d28ce5c62eba9d35da64", null ],

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['camera_0',['Camera',['../classWorldScene_1_1Camera.html#a78fab9922b38df0f9e06407d947022ec',1,'WorldScene::Camera::Camera()=default'],['../classWorldScene_1_1Camera.html#aa234eb78a5165b05d6c754939e9d6d51',1,'WorldScene::Camera::Camera(Camera &amp;camera)=delete'],['../classWorldScene_1_1Camera.html#a94acdd6a7d45ba6c7d563d90bfc90bb2',1,'WorldScene::Camera::Camera(Camera &amp;&amp;camera)=delete']]],
-  ['camera_1',['camera',['../classWorldScene.html#a71505cd83b2a2e9735a71cee2e353de9',1,'WorldScene::camera()'],['../classWorldScene.html#ad5100ff8f3edb4b7e9cbf65240169f05',1,'WorldScene::camera() const']]],
+  ['camera_0',['camera',['../classWorldScene.html#a71505cd83b2a2e9735a71cee2e353de9',1,'WorldScene::camera()'],['../classWorldScene.html#ad5100ff8f3edb4b7e9cbf65240169f05',1,'WorldScene::camera() const']]],
+  ['camera_1',['Camera',['../classCamera.html#ae23af4d7cab430c77d537621cdd16b3f',1,'Camera::Camera()=default'],['../classCamera.html#a4391264461cbef17b3b0895ad460ace0',1,'Camera::Camera(const Camera &amp;camera)'],['../classCamera.html#a2759558cc1dcf9d900f9b0bf18e24d5e',1,'Camera::Camera(Camera &amp;&amp;camera)=delete']]],
   ['chunk_2',['Chunk',['../classChunk.html#a76523171d0b51437c6d1d24c5001fa6e',1,'Chunk']]],
   ['chunks_3',['chunks',['../classWorld.html#ac3a32cfb8f5a69a60c7bf4e03a837539',1,'World']]],
   ['clear_4',['clear',['../structImGuiTexture.html#a9f8a1d9d9d6086444732b94e59074375',1,'ImGuiTexture']]],
