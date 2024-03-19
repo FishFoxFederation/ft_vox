@@ -16,9 +16,9 @@ BlockUpdateThread::~BlockUpdateThread()
 
 void BlockUpdateThread::init()
 {
-	int size_x = 10;
+	int size_x = 16;
 	int size_y = 16;
-	int size_z = 10;
+	int size_z = 16;
 	for (int x = 0; x < size_x; x++)
 	{
 		for (int z = 0; z < size_z; z++)

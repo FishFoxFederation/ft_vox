@@ -26,7 +26,6 @@ RenderThread::RenderThread(
 	m_start_time_counting_fps(start_time)
 {
 	(void)m_settings;
-	(void)m_world_scene;
 	(void)m_start_time;
 }
 
@@ -54,9 +53,9 @@ void RenderThread::loop()
 	int width, height;
 	glfwGetFramebufferSize(vk.window, &width, &height);
 
-	double aspect_ratio = static_cast<double>(width) / static_cast<double>(height);
+	const double aspect_ratio = static_cast<double>(width) / static_cast<double>(height);
 
-	Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
+	const Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
 	CameraMatrices camera_matrices = {};
 	camera_matrices.view = camera.view;
@@ -66,7 +65,7 @@ void RenderThread::loop()
 	static std::vector<glm::dvec3> camera_position(vk.max_frames_in_flight, camera.position);
 	camera_position[vk.current_frame] = camera.position;
 
-	auto chunk_meshes = m_world_scene.getMeshRenderData();
+	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.getMeshRenderData();
 
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
@@ -92,16 +91,28 @@ void RenderThread::loop()
 	vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
 
-	std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
-	vkResetCommandBuffer(vk.render_command_buffers[vk.current_frame], 0);
+	vkResetCommandBuffer(vk.draw_command_buffers[vk.current_frame], 0);
 
 	VkCommandBufferBeginInfo begin_info = {};
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	VK_CHECK(
-		vkBeginCommandBuffer(vk.render_command_buffers[vk.current_frame], &begin_info),
+		vkBeginCommandBuffer(vk.draw_command_buffers[vk.current_frame], &begin_info),
 		"Failed to begin recording command buffer!"
+	);
+
+	vk.setImageLayout(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.color_attachement_image,
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 	);
 
 	std::array<VkRenderingAttachmentInfo, 1> color_attachments = {};
@@ -130,15 +141,15 @@ void RenderThread::loop()
 
 	LOG_TRACE("Begin main rendering.");
 
-	vkCmdBeginRendering(vk.render_command_buffers[vk.current_frame], &render_info);
+	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &render_info);
 
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
 	// Draw the chunks
-	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
 
 	vkCmdBindDescriptorSets(
-		vk.render_command_buffers[vk.current_frame],
+		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.pipeline_layout,
 		0,
@@ -149,7 +160,7 @@ void RenderThread::loop()
 	);
 
 	vkCmdBindDescriptorSets(
-		vk.render_command_buffers[vk.current_frame],
+		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.pipeline_layout,
 		1,
@@ -157,7 +168,7 @@ void RenderThread::loop()
 		&vk.texture_array_descriptor_set,
 		0,
 		nullptr
-	
+
 	);
 
 	uint32_t triangle_count = 0;
@@ -171,17 +182,17 @@ void RenderThread::loop()
 			continue;
 		}
 
-		VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
-		VkDeviceSize offsets[] = { 0 };
+		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
+		const VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(
-			vk.render_command_buffers[vk.current_frame],
+			vk.draw_command_buffers[vk.current_frame],
 			0, 1,
 			vertex_buffers,
 			offsets
 		);
 
 		vkCmdBindIndexBuffer(
-			vk.render_command_buffers[vk.current_frame],
+			vk.draw_command_buffers[vk.current_frame],
 			vk.meshes[chunk_mesh.id].buffer,
 			vk.meshes[chunk_mesh.id].index_offset,
 			VK_INDEX_TYPE_UINT32
@@ -190,7 +201,7 @@ void RenderThread::loop()
 		ModelMatrice model_matrice = {};
 		model_matrice.model = chunk_mesh.transform.model();
 		vkCmdPushConstants(
-			vk.render_command_buffers[vk.current_frame],
+			vk.draw_command_buffers[vk.current_frame],
 			vk.pipeline_layout,
 			VK_SHADER_STAGE_VERTEX_BIT,
 			0,
@@ -199,7 +210,7 @@ void RenderThread::loop()
 		);
 
 		vkCmdDrawIndexed(
-			vk.render_command_buffers[vk.current_frame],
+			vk.draw_command_buffers[vk.current_frame],
 			static_cast<uint32_t>(vk.meshes[chunk_mesh.id].index_count),
 			1, 0, 0, 0
 		);
@@ -210,10 +221,10 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.render_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_graphics_pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_graphics_pipeline);
 
 	vkCmdBindDescriptorSets(
-		vk.render_command_buffers[vk.current_frame],
+		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.skybox_pipeline_layout,
 		0,
@@ -224,7 +235,7 @@ void RenderThread::loop()
 	);
 
 	vkCmdBindDescriptorSets(
-		vk.render_command_buffers[vk.current_frame],
+		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.skybox_pipeline_layout,
 		1,
@@ -238,7 +249,7 @@ void RenderThread::loop()
 	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
 	camera_model_matrice.model = glm::translate(glm::dmat4(1.0), camera_position[1]);
 	vkCmdPushConstants(
-		vk.render_command_buffers[vk.current_frame],
+		vk.draw_command_buffers[vk.current_frame],
 		vk.skybox_pipeline_layout,
 		VK_SHADER_STAGE_VERTEX_BIT,
 		0,
@@ -247,7 +258,7 @@ void RenderThread::loop()
 	);
 
 	vkCmdDraw(
-		vk.render_command_buffers[vk.current_frame],
+		vk.draw_command_buffers[vk.current_frame],
 		36,
 		1,
 		0,
@@ -255,9 +266,8 @@ void RenderThread::loop()
 	);
 
 
-
 	LOG_TRACE("End main rendering.");
-	vkCmdEndRendering(vk.render_command_buffers[vk.current_frame]);
+	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
 	//                     																                         #
@@ -268,23 +278,16 @@ void RenderThread::loop()
 	LOG_TRACE("End render_command_buffers.");
 
 	VK_CHECK(
-		vkEndCommandBuffer(vk.render_command_buffers[vk.current_frame]),
+		vkEndCommandBuffer(vk.draw_command_buffers[vk.current_frame]),
 		"Failed to record command buffer"
 	);
 
 	VkSubmitInfo render_submit_info = {};
 	render_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	render_submit_info.commandBufferCount = 1;
-	render_submit_info.pCommandBuffers = &vk.render_command_buffers[vk.current_frame];
+	render_submit_info.pCommandBuffers = &vk.draw_command_buffers[vk.current_frame];
 	render_submit_info.signalSemaphoreCount = 1;
-	render_submit_info.pSignalSemaphores = &vk.render_finished_semaphores[vk.current_frame];
-
-	LOG_TRACE("Submit render_command_buffers.");
-
-	VK_CHECK(
-		vkQueueSubmit(vk.graphics_queue, 1, &render_submit_info, vk.in_flight_fences[vk.current_frame]),
-		"Failed to submit draw command buffer"
-	);
+	render_submit_info.pSignalSemaphores = &vk.main_render_finished_semaphores[vk.current_frame];
 
 	//############################################################################################################
 	//                     																                         #
@@ -316,34 +319,6 @@ void RenderThread::loop()
 	}
 
 
-	LOG_TRACE("Transition the swap chain image from present to transfer destination.");
-	// Transition the swap chain image from present to transfer destination
-	vk.transitionImageLayout(
-		vk.swap_chain_images[image_index],
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	LOG_TRACE("Transition the color image from color attachment to transfer source.");
-	// Transition the color image from color attachment to transfer source
-	vk.transitionImageLayout(
-		vk.color_attachement_image,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
 	LOG_TRACE("Copy the color image to the swap chain image with blit.");
 	// Copy the color image to the swap chain image with blit
 	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
@@ -354,6 +329,30 @@ void RenderThread::loop()
 	VK_CHECK(
 		vkBeginCommandBuffer(vk.copy_command_buffers[vk.current_frame], &copy_begin_info),
 		"Failed to begin recording copy command buffer"
+	);
+
+	vk.setImageLayout(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.swap_chain_images[image_index],
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT
+	);
+
+	vk.setImageLayout(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.color_attachement_image,
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT
 	);
 
 	VkImageBlit blit = {};
@@ -399,11 +398,11 @@ void RenderThread::loop()
 	copy_submit_info.commandBufferCount = 1;
 	copy_submit_info.pCommandBuffers = &vk.copy_command_buffers[vk.current_frame];
 
-	std::array<VkSemaphore, 2> copy_wait_semaphores = {
+	const std::array<VkSemaphore, 2> copy_wait_semaphores = {
 		vk.image_available_semaphores[vk.current_frame],
-		vk.render_finished_semaphores[vk.current_frame]
+		vk.main_render_finished_semaphores[vk.current_frame]
 	};
-	std::array<VkPipelineStageFlags, 2> copy_wait_stages = {
+	const std::array<VkPipelineStageFlags, 2> copy_wait_stages = {
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	};
@@ -412,31 +411,7 @@ void RenderThread::loop()
 	copy_submit_info.pWaitDstStageMask = copy_wait_stages.data();
 
 	copy_submit_info.signalSemaphoreCount = 1;
-	copy_submit_info.pSignalSemaphores = &vk.swap_chain_updated_semaphores[vk.current_frame];
-
-	VK_CHECK(
-		vkQueueSubmit(vk.graphics_queue, 1, &copy_submit_info, VK_NULL_HANDLE),
-		"Failed to submit copy command buffer"
-	);
-
-	VK_CHECK(
-		vkQueueWaitIdle(vk.graphics_queue),
-		"Failed to wait for queue to become idle"
-	);
-
-	LOG_TRACE("Transition the color image from transfer source to color attachment.");
-	// Transition the color image from transfer source to color attachment
-	vk.transitionImageLayout(
-		vk.color_attachement_image,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-	);
+	copy_submit_info.pSignalSemaphores = &vk.copy_finished_semaphores[vk.current_frame];
 
 	//############################################################################################################
 	//                     																                         #
@@ -444,53 +419,39 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	LOG_TRACE("Transition the swap chain image from transfer destination to color attachment.");
-	// Transition the swap chain image from transfer destination to color attachment
-	vk.transitionImageLayout(
-		vk.swap_chain_images[image_index],
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-	);
-
-	LOG_TRACE("Transition the imgui texture from general to shader read only optimal.");
-	// Transition the imgui texture from general to shader read only optimal
-	vk.transitionImageLayout(
-		vk.imgui_texture.image,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
-
-	VkCommandBuffer imgui_command_buffer;
-	VkCommandBufferAllocateInfo imgui_command_buffer_info = {};
-	imgui_command_buffer_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	imgui_command_buffer_info.commandPool = vk.command_pool;
-	imgui_command_buffer_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	imgui_command_buffer_info.commandBufferCount = 1;
-
-	VK_CHECK(
-		vkAllocateCommandBuffers(vk.device, &imgui_command_buffer_info, &imgui_command_buffer),
-		"Failed to allocate command buffer"
-	);
+	vkResetCommandBuffer(vk.imgui_command_buffers[vk.current_frame], 0);
 
 	VkCommandBufferBeginInfo imgui_begin_info = {};
 	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	LOG_TRACE("Begin ImGui command buffer.");
 	VK_CHECK(
-		vkBeginCommandBuffer(imgui_command_buffer, &imgui_begin_info),
+		vkBeginCommandBuffer(vk.imgui_command_buffers[vk.current_frame], &imgui_begin_info),
 		"Failed to begin recording command buffer"
+	);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.swap_chain_images[image_index],
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+	);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.imgui_texture.image,
+		VK_IMAGE_LAYOUT_GENERAL,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 	);
 
 	VkRenderingAttachmentInfo imgui_color_attachment = {};
@@ -507,7 +468,7 @@ void RenderThread::loop()
 	imgui_render_info.colorAttachmentCount = 1;
 	imgui_render_info.pColorAttachments = &imgui_color_attachment;
 
-	vkCmdBeginRendering(imgui_command_buffer, &imgui_render_info);
+	vkCmdBeginRendering(vk.imgui_command_buffers[vk.current_frame], &imgui_render_info);
 
 
 	LOG_TRACE("Begin ImGui frame.");
@@ -519,50 +480,62 @@ void RenderThread::loop()
 
 	ImGui::Render();
 
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), imgui_command_buffer);
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), vk.imgui_command_buffers[vk.current_frame]);
 
 
-	vkCmdEndRendering(imgui_command_buffer);
+	vkCmdEndRendering(vk.imgui_command_buffers[vk.current_frame]);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.swap_chain_images[image_index],
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+	);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.imgui_texture.image,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		VK_IMAGE_LAYOUT_GENERAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+	);
 
 	VK_CHECK(
-		vkEndCommandBuffer(imgui_command_buffer),
-		"Failed to record command buffer"
+		vkEndCommandBuffer(vk.imgui_command_buffers[vk.current_frame]),
+		"Failed to record imgui command buffer"
 	);
 
 	VkSubmitInfo imgui_submit_info = {};
 	imgui_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	imgui_submit_info.commandBufferCount = 1;
-	imgui_submit_info.pCommandBuffers = &imgui_command_buffer;
+	imgui_submit_info.pCommandBuffers = &vk.imgui_command_buffers[vk.current_frame];
 	imgui_submit_info.waitSemaphoreCount = 1;
-	imgui_submit_info.pWaitSemaphores = &vk.swap_chain_updated_semaphores[vk.current_frame];
-	VkPipelineStageFlags vk_pipeline_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	imgui_submit_info.pWaitSemaphores = &vk.copy_finished_semaphores[vk.current_frame];
+	const VkPipelineStageFlags vk_pipeline_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	imgui_submit_info.pWaitDstStageMask = &vk_pipeline_stage_flags;
 	imgui_submit_info.signalSemaphoreCount = 1;
 	imgui_submit_info.pSignalSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
 
-	LOG_TRACE("Submit ImGui command buffer.");
-	VK_CHECK(
-		vkQueueSubmit(vk.graphics_queue, 1, &imgui_submit_info, VK_NULL_HANDLE),
-		"Failed to submit command buffer"
-	);
 
-	VK_CHECK(
-		vkQueueWaitIdle(vk.graphics_queue),
-		"Failed to wait for queue to become idle"
-	);
+	const std::array<VkSubmitInfo, 3> submit_infos = {
+		render_submit_info,
+		copy_submit_info,
+		imgui_submit_info
+	};
 
-	LOG_TRACE("Transition the imgui texture from shader read only optimal to general.");
-	// Transition the imgui texture from shader read only optimal to general
-	vk.transitionImageLayout(
-		vk.imgui_texture.image,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+	LOG_TRACE("Submit all command buffers.");
+	VK_CHECK(
+		vkQueueSubmit(vk.graphics_queue, static_cast<uint32_t>(submit_infos.size()), submit_infos.data(), vk.in_flight_fences[vk.current_frame]),
+		"Failed to submit all command buffers"
 	);
 
 	//############################################################################################################
@@ -570,20 +543,6 @@ void RenderThread::loop()
 	//                             Present the swap chain image to the present queue                             #
 	//                     																                         #
 	//############################################################################################################
-
-	LOG_TRACE("Transition the swap chain image from transfer destination to present.");
-	// Transition the swap chain image from transfer destination to present
-	vk.transitionImageLayout(
-		vk.swap_chain_images[image_index],
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-	);
 
 	VkPresentInfoKHR present_info = {};
 	present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -608,7 +567,7 @@ void RenderThread::loop()
 	// Increment the current frame
 	vk.current_frame = (vk.current_frame + 1) % vk.max_frames_in_flight;
 
-	std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
+	const std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
 }
 

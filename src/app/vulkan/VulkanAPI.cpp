@@ -38,7 +38,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 		"assets/textures/skybox/back.jpg"
 	}, 512);
 	createFrustumLineBuffers();
-	
+
 	createCameraDescriptors();
 	createTextureArrayDescriptors();
 	createCubeMapDescriptors();
@@ -104,8 +104,8 @@ VulkanAPI::~VulkanAPI()
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkDestroySemaphore(device, image_available_semaphores[i], nullptr);
-		vkDestroySemaphore(device, render_finished_semaphores[i], nullptr);
-		vkDestroySemaphore(device, swap_chain_updated_semaphores[i], nullptr);
+		vkDestroySemaphore(device, main_render_finished_semaphores[i], nullptr);
+		vkDestroySemaphore(device, copy_finished_semaphores[i], nullptr);
 		vkDestroySemaphore(device, imgui_render_finished_semaphores[i], nullptr);
 		vkDestroyFence(device, in_flight_fences[i], nullptr);
 	}
@@ -119,8 +119,9 @@ VulkanAPI::~VulkanAPI()
 	vma.freeMemory(device, depth_attachement_memory, nullptr);
 	vkDestroyImage(device, depth_attachement_image, nullptr);
 
-	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(render_command_buffers.size()), render_command_buffers.data());
+	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(draw_command_buffers.size()), draw_command_buffers.data());
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(copy_command_buffers.size()), copy_command_buffers.data());
+	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(imgui_command_buffers.size()), imgui_command_buffers.data());
 	vkDestroyCommandPool(device, command_pool, nullptr);
 
 	vkDestroyPipeline(device, graphics_pipeline, nullptr);
@@ -734,21 +735,26 @@ void VulkanAPI::createCommandPool()
 
 void VulkanAPI::createCommandBuffer()
 {
-	render_command_buffers.resize(max_frames_in_flight);
+	draw_command_buffers.resize(max_frames_in_flight);
 	copy_command_buffers.resize(max_frames_in_flight);
+	imgui_command_buffers.resize(max_frames_in_flight);
 
 	VkCommandBufferAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	alloc_info.commandPool = command_pool;
 	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	alloc_info.commandBufferCount = static_cast<uint32_t>(render_command_buffers.size());
+	alloc_info.commandBufferCount = static_cast<uint32_t>(draw_command_buffers.size());
 
 	VK_CHECK(
-		vkAllocateCommandBuffers(device, &alloc_info, render_command_buffers.data()),
+		vkAllocateCommandBuffers(device, &alloc_info, draw_command_buffers.data()),
 		"Failed to allocate command buffers"
 	);
 	VK_CHECK(
 		vkAllocateCommandBuffers(device, &alloc_info, copy_command_buffers.data()),
+		"Failed to allocate command buffers"
+	);
+	VK_CHECK(
+		vkAllocateCommandBuffers(device, &alloc_info, imgui_command_buffers.data()),
 		"Failed to allocate command buffers"
 	);
 }
@@ -756,8 +762,8 @@ void VulkanAPI::createCommandBuffer()
 void VulkanAPI::createSyncObjects()
 {
 	image_available_semaphores.resize(max_frames_in_flight);
-	render_finished_semaphores.resize(max_frames_in_flight);
-	swap_chain_updated_semaphores.resize(max_frames_in_flight);
+	main_render_finished_semaphores.resize(max_frames_in_flight);
+	copy_finished_semaphores.resize(max_frames_in_flight);
 	imgui_render_finished_semaphores.resize(max_frames_in_flight);
 	in_flight_fences.resize(max_frames_in_flight);
 
@@ -775,11 +781,11 @@ void VulkanAPI::createSyncObjects()
 			"Failed to create semaphores"
 		);
 		VK_CHECK(
-			vkCreateSemaphore(device, &semaphore_info, nullptr, &render_finished_semaphores[i]),
+			vkCreateSemaphore(device, &semaphore_info, nullptr, &main_render_finished_semaphores[i]),
 			"Failed to create semaphores"
 		);
 		VK_CHECK(
-			vkCreateSemaphore(device, &semaphore_info, nullptr, &swap_chain_updated_semaphores[i]),
+			vkCreateSemaphore(device, &semaphore_info, nullptr, &copy_finished_semaphores[i]),
 			"Failed to create semaphores"
 		);
 		VK_CHECK(
@@ -2554,6 +2560,43 @@ void VulkanAPI::transitionImageLayout(
 	);
 
 	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
+}
+
+void VulkanAPI::setImageLayout(
+	VkCommandBuffer command_buffer,
+	VkImage image,
+	VkImageLayout old_layout,
+	VkImageLayout new_layout,
+	VkImageSubresourceRange subresource_range,
+	VkAccessFlags srcAccessMask,
+	VkAccessFlags dstAccessMask,
+	VkPipelineStageFlags srcStageMask,
+	VkPipelineStageFlags dstStageMask
+)
+{
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = old_layout;
+	barrier.newLayout = new_layout;
+	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.image = image;
+	barrier.subresourceRange = subresource_range;
+	barrier.srcAccessMask = srcAccessMask;
+	barrier.dstAccessMask = dstAccessMask;
+
+	vkCmdPipelineBarrier(
+		command_buffer,
+		srcStageMask,
+		dstStageMask,
+		0,
+		0,
+		nullptr,
+		0,
+		nullptr,
+		1,
+		&barrier
+	);
 }
 
 void VulkanAPI::createBuffer(

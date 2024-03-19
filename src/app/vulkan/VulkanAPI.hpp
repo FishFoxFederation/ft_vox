@@ -232,6 +232,18 @@ public:
 		VkPipelineStageFlags dstStageMask
 	);
 
+	void setImageLayout(
+		VkCommandBuffer command_buffer,
+		VkImage image,
+		VkImageLayout old_layout,
+		VkImageLayout new_layout,
+		VkImageSubresourceRange subresource_range,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask,
+		VkPipelineStageFlags srcStageMask,
+		VkPipelineStageFlags dstStageMask
+	);
+
 	void recreateSwapChain(GLFWwindow * window);
 
 	uint64_t createMesh(
@@ -270,12 +282,13 @@ public:
 	VkExtent2D swap_chain_extent;
 
 	VkCommandPool command_pool;
-	std::vector<VkCommandBuffer> render_command_buffers;
+	std::vector<VkCommandBuffer> draw_command_buffers;
 	std::vector<VkCommandBuffer> copy_command_buffers;
+	std::vector<VkCommandBuffer> imgui_command_buffers;
 
 	std::vector<VkSemaphore> image_available_semaphores;
-	std::vector<VkSemaphore> render_finished_semaphores;
-	std::vector<VkSemaphore> swap_chain_updated_semaphores;
+	std::vector<VkSemaphore> main_render_finished_semaphores;
+	std::vector<VkSemaphore> copy_finished_semaphores;
 	std::vector<VkSemaphore> imgui_render_finished_semaphores;
 	std::vector<VkFence> in_flight_fences;
 	VkFence single_time_command_fence;
