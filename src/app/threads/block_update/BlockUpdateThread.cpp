@@ -2,11 +2,13 @@
 
 BlockUpdateThread::BlockUpdateThread(
 	WorldScene & worldScene,
-	VulkanAPI & vulkanAPI
+	VulkanAPI & vulkanAPI,
+	ThreadPool & threadPool
 ):
 	m_worldScene(worldScene),
 	m_vulkanAPI(vulkanAPI),
-	m_world(worldScene, m_vulkanAPI)
+	m_threadPool(threadPool),
+	m_world(worldScene, m_vulkanAPI, m_threadPool)
 {
 }
 
@@ -36,22 +38,22 @@ void BlockUpdateThread::init()
 	LOG_DEBUG("MAX perlin :" << m_world.m_worldGenerator.m_max);
 	LOG_DEBUG("MIN perlin :" << m_world.m_worldGenerator.m_min);
 
-	for (auto & [pos, chunk] : m_world.chunks())
-	{
-		uint64_t mesh_id = m_vulkanAPI.createMesh(
-			chunk,
-			pos.x < size_x - 1 ? &m_world.chunks().at(glm::vec3(pos.x + 1, pos.y, pos.z)) : nullptr,
-			pos.x > 0 ? &m_world.chunks().at(glm::vec3(pos.x - 1, pos.y, pos.z)) : nullptr,
-			pos.y < size_y - 1 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y + 1, pos.z)) : nullptr,
-			pos.y > 0 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y - 1, pos.z)) : nullptr,
-			pos.z < size_z - 1 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z + 1)) : nullptr,
-			pos.z > 0 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z - 1)) : nullptr
-		);
-		if (mesh_id != VulkanAPI::no_mesh_id)
-		{
-			m_worldScene.addMeshData(mesh_id, glm::vec3(pos * CHUNK_SIZE));
-		}
-	}
+	// for (auto & [pos, chunk] : m_world.chunks())
+	// {
+	// 	uint64_t mesh_id = m_vulkanAPI.createMesh(
+	// 		chunk,
+	// 		pos.x < 9 ? &m_world.chunks().at(glm::vec3(pos.x + 1, pos.y, pos.z)) : nullptr,
+	// 		pos.x > 0 ? &m_world.chunks().at(glm::vec3(pos.x - 1, pos.y, pos.z)) : nullptr,
+	// 		pos.y < 15 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y + 1, pos.z)) : nullptr,
+	// 		pos.y > 0 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y - 1, pos.z)) : nullptr,
+	// 		pos.z < 9 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z + 1)) : nullptr,
+	// 		pos.z > 0 ? &m_world.chunks().at(glm::vec3(pos.x, pos.y, pos.z - 1)) : nullptr
+	// 	);
+	// 	if (mesh_id != VulkanAPI::no_mesh_id)
+	// 	{
+	// 		m_worldScene.addMeshData(mesh_id, glm::vec3(pos * CHUNK_SIZE));
+	// 	}
+	// }
 }
 
 void BlockUpdateThread::loop()

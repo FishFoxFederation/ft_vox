@@ -12,6 +12,7 @@
 
 #include "VulkanAPI.hpp"
 #include "WorldScene.hpp"
+#include "ThreadPool.hpp"
 #include "Block.hpp"
 #include "Chunk.hpp"
 #include "WorldGenerator.hpp"
@@ -28,7 +29,11 @@
 class World
 {
 public:
-	World(WorldScene & WorldScene, VulkanAPI & vulkanAPI);
+	World(
+		WorldScene & WorldScene,
+		VulkanAPI & vulkanAPI,
+		ThreadPool & threadPool
+	);
 	~World();
 
 	void update(glm::dvec3 playerPosition);
@@ -39,18 +44,19 @@ public:
 private:
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
+	ThreadPool &							m_threadPool;
 	std::unordered_map<glm::ivec3, Chunk>	m_chunks;
 	std::mutex								m_chunks_mutex;
 	std::unordered_set<glm::ivec3>			m_visible_chunks;
 	Player 									m_player;
 
-	std::list<glm::ivec3>					m_chunk_gen_queue;
-	std::mutex								m_chunk_gen_queue_mutex;
+	std::unordered_set<glm::ivec3>			m_chunk_gen_set;
+	std::mutex								m_chunk_gen_set_mutex;
 
-	std::list<glm::ivec3>					m_chunk_unload_queue;
-	std::mutex								m_chunk_unload_queue_mutex;
+	std::unordered_set<glm::ivec3>			m_chunk_unload_set;
+	std::mutex								m_chunk_unload_set_mutex;
 
 	void	doChunkGen(const int & number_of_chunks);
-	void	doChunkLoadUnload(const int & number_of_chunks);
+	// void	doChunkLoadUnload(const int & number_of_chunks);
 	void	addChunksToLoadUnloadQueue(const glm::vec3 & playerPosition);
 };

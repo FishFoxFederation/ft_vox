@@ -8,6 +8,7 @@
 #include "UpdateThread.hpp"
 #include "VulkanAPI.hpp"
 #include "BlockUpdateThread.hpp"
+#include "ThreadPool.hpp"
 
 #include <chrono>
 
@@ -25,11 +26,12 @@ private:
 
 	std::chrono::nanoseconds m_start_time;
 
-	Settings m_settings;
-	WorldScene m_world_scene;
-	Window m_window;
-	VulkanAPI m_vulkan_api;
-	RenderThread m_render_thread;
-	UpdateThread m_update_thread;
-	BlockUpdateThread m_block_update_thread;
+	Settings			m_settings;
+	WorldScene			m_world_scene;
+	Window				m_window;
+	VulkanAPI			m_vulkan_api;
+	ThreadPool			m_thread_pool;
+	RenderThread		m_render_thread;
+	UpdateThread		m_update_thread;
+	BlockUpdateThread	m_block_update_thread;
 };

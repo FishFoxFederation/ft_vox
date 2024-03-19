@@ -5,6 +5,7 @@
 #include "World.hpp"
 #include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
+#include "ThreadPool.hpp"
 
 /**
  * @brief An implementation of the thread wrapper for the thread that handles block updates
@@ -22,7 +23,8 @@ public:
 
 	BlockUpdateThread(
 		WorldScene & worldScene,
-		VulkanAPI & vulkanAPI
+		VulkanAPI & vulkanAPI,
+		ThreadPool & threadPool
 	);
 	~BlockUpdateThread();
 
@@ -34,6 +36,7 @@ private:
 
 	WorldScene &	m_worldScene;
 	VulkanAPI &		m_vulkanAPI;
+	ThreadPool &	m_threadPool;
 	World			m_world;
 
 	/**
