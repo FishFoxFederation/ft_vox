@@ -979,7 +979,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		});
 	}
 
-	textures_mip_levels = 1;
+	textures_mip_levels = static_cast<uint32_t>(std::floor(std::log2(size))) + 1;
 
 	VkImageCreateInfo image_info = {};
 	image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -990,7 +990,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
 	image_info.tiling = VK_IMAGE_TILING_OPTIMAL;
 	image_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	image_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	image_info.samples = VK_SAMPLE_COUNT_1_BIT;
 
@@ -1022,8 +1022,6 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	// Transition image layout
 	VkImageMemoryBarrier first_barrier = {};
 	first_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-	first_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	first_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
 	first_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	first_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	first_barrier.image = textures_image;
@@ -1034,6 +1032,8 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 	first_barrier.subresourceRange.layerCount = layers_count;
 	first_barrier.srcAccessMask = 0;
 	first_barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	first_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	first_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
 
 	vkCmdPipelineBarrier(
 		command_buffer,
@@ -1073,10 +1073,6 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		};
 		blit.dstSubresource.baseArrayLayer = i;
 
-		LOG_DEBUG("Copy texture '" << file_paths[i] << "' from ("
-			<< staging_images_extents[i].width << ", " << staging_images_extents[i].height
-			<< ") to (" << size << ", " << size << ")");
-
 		vkCmdBlitImage(
 			command_buffer,
 			staging_images[i],
@@ -1089,21 +1085,112 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 		);
 	}
 
-	// Transition image layout
+	// Blit images to mip levels
+	blit.srcOffsets[0] = { 0, 0, 0 };
+	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.srcSubresource.baseArrayLayer = 0;
+	blit.srcSubresource.layerCount = layers_count;
+
+	blit.dstOffsets[0] = { 0, 0, 0 };
+	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.dstSubresource.baseArrayLayer = 0;
+	blit.dstSubresource.layerCount = layers_count;
+
+	for (u_int32_t level = 1; level < textures_mip_levels; level++)
+	{
+		VkImageMemoryBarrier barrier = {};
+		barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		barrier.image = textures_image;
+		barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		barrier.subresourceRange.baseArrayLayer = 0;
+		barrier.subresourceRange.layerCount = layers_count;
+		barrier.subresourceRange.baseMipLevel = level - 1;
+		barrier.subresourceRange.levelCount = 1;
+		barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+		barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+
+		vkCmdPipelineBarrier(
+			command_buffer,
+			VK_PIPELINE_STAGE_TRANSFER_BIT,
+			VK_PIPELINE_STAGE_TRANSFER_BIT,
+			0,
+			0, nullptr,
+			0, nullptr,
+			1, &barrier
+		);
+
+		blit.srcOffsets[1] = {
+			static_cast<int32_t>(size >> (level - 1)),
+			static_cast<int32_t>(size >> (level - 1)),
+			1
+		};
+		blit.srcSubresource.mipLevel = level - 1;
+
+		blit.dstOffsets[1] = {
+			static_cast<int32_t>(size >> level),
+			static_cast<int32_t>(size >> level),
+			1
+		};
+		blit.dstSubresource.mipLevel = level;
+
+		vkCmdBlitImage(
+			command_buffer,
+			textures_image,
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			textures_image,
+			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+			1,
+			&blit,
+			VK_FILTER_LINEAR
+		);
+	}
+
+	// Transition last mip level to shader read
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	barrier.image = textures_image;
+	barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	barrier.subresourceRange.baseMipLevel = textures_mip_levels - 1;
+	barrier.subresourceRange.levelCount = 1;
+	barrier.subresourceRange.baseArrayLayer = 0;
+	barrier.subresourceRange.layerCount = layers_count;
+	barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+	barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+	barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+	vkCmdPipelineBarrier(
+		command_buffer,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		0,
+		0, nullptr,
+		0, nullptr,
+		1, &barrier
+	);
+
+
+	// Transition image layout to shader read (execpt last mip level)
 	VkImageMemoryBarrier second_barrier = {};
 	second_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-	second_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-	second_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	second_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	second_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	second_barrier.image = textures_image;
 	second_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	second_barrier.subresourceRange.baseMipLevel = 0;
-	second_barrier.subresourceRange.levelCount = textures_mip_levels;
+	second_barrier.subresourceRange.levelCount = textures_mip_levels - 1;
 	second_barrier.subresourceRange.baseArrayLayer = 0;
 	second_barrier.subresourceRange.layerCount = layers_count;
 	second_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 	second_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	second_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+	second_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
 	vkCmdPipelineBarrier(
 		command_buffer,
@@ -1333,10 +1420,6 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 			1
 		};
 		blit.dstSubresource.baseArrayLayer = i;
-
-		LOG_DEBUG("Copy texture '" << file_paths[i] << "' from ("
-			<< staging_images_extents[i].width << ", " << staging_images_extents[i].height
-			<< ") to (" << size << ", " << size << ")");
 
 		vkCmdBlitImage(
 			command_buffer,
