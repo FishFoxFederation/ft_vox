@@ -23,8 +23,11 @@
 #include <unordered_map>
 #include <mutex>
 #include <map>
+#include <queue>
 
 // #define NDEBUG
+
+#define VK_ERR_STR(result) (std::string(string_VkResult(result)))
 
 #define VK_CHECK(function, message) \
 	{ \
@@ -160,6 +163,12 @@ struct Mesh
 	uint32_t index_count;
 
 	uint32_t memory_size;
+
+	union
+	{
+		uint64_t is_used = 0;
+		uint8_t used_by_frame[8];
+	};
 };
 
 struct CameraMatrices
@@ -376,6 +385,7 @@ public:
 	uint64_t next_mesh_id = 1;
 	static const uint64_t no_mesh_id = 0;
 	std::unordered_map<uint64_t, Mesh> meshes;
+	std::vector<uint64_t> mesh_ids_to_destroy;
 
 	std::mutex global_mutex;
 
@@ -455,6 +465,8 @@ private:
 	void createSkyboxPipeline();
 	static std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
+
+	void destroyMeshes();
 
 
 	void setupImgui();

@@ -2,6 +2,8 @@
 #include "logger.hpp"
 #include "DebugGui.hpp"
 
+#include <unistd.h>
+
 UpdateThread::UpdateThread(
 	const Settings & settings,
 	Window & window,
