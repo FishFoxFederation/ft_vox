@@ -1,5 +1,7 @@
 #include "BlockUpdateThread.hpp"
 
+#include <unistd.h>
+
 BlockUpdateThread::BlockUpdateThread(
 	WorldScene & worldScene,
 	VulkanAPI & vulkanAPI,

@@ -2351,35 +2351,6 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 	vkDestroyImage(device, imgui_texture.image, nullptr);
 }
 
-void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
-{
-	std::lock_guard<std::mutex> lock(global_mutex);
-	auto mesh = meshes.find(mesh_id);
-	if (mesh != meshes.end())
-	{
-		LOG_INFO("Destroying mesh: " << mesh_id);
-		vkDestroyBuffer(device, mesh->second.buffer, nullptr);
-		vkFreeMemory(device, mesh->second.buffer_memory, nullptr);
-		meshes.erase(mesh);
-	}
-}
-
-void VulkanAPI::destroyMeshes(const std::vector<uint64_t> & mesh_ids)
-{
-	std::lock_guard<std::mutex> lock(global_mutex);
-	for (uint64_t mesh_id : mesh_ids)
-	{
-		auto mesh = meshes.find(mesh_id);
-		if (mesh != meshes.end())
-		{
-			LOG_INFO("Destroying mesh: " << mesh_id);
-			vkDestroyBuffer(device, mesh->second.buffer, nullptr);
-			vkFreeMemory(device, mesh->second.buffer_memory, nullptr);
-			meshes.erase(mesh);
-		}
-	}
-}
-
 void VulkanAPI::setupImgui()
 {
 	IMGUI_CHECKVERSION();

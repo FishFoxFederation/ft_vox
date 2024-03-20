@@ -197,3 +197,39 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	meshes.emplace(next_mesh_id, mesh);
 	return next_mesh_id++;
 }
+
+void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
+{
+	std::lock_guard<std::mutex> lock(global_mutex);
+	mesh_ids_to_destroy.push_back(mesh_id);
+	destroyMeshes();
+}
+
+void VulkanAPI::destroyMeshes(const std::vector<uint64_t> & mesh_ids)
+{
+	std::lock_guard<std::mutex> lock(global_mutex);
+	mesh_ids_to_destroy.insert(mesh_ids_to_destroy.end(), mesh_ids.begin(), mesh_ids.end());
+	destroyMeshes();
+}
+
+void VulkanAPI::destroyMeshes()
+{
+	std::vector<uint64_t> meshes_still_in_use;
+	meshes_still_in_use.reserve(mesh_ids_to_destroy.size());
+	for (auto & id: mesh_ids_to_destroy)
+	{
+		auto mesh = meshes.find(id);
+		if (mesh != meshes.end() && mesh->second.is_used == false)
+		{
+			// LOG_INFO("Destroying mesh: " << id);
+			vkDestroyBuffer(device, mesh->second.buffer, nullptr);
+			vma.freeMemory(device, mesh->second.buffer_memory, nullptr);
+			meshes.erase(mesh);
+		}
+		else
+		{
+			meshes_still_in_use.push_back(id);
+		}
+	}
+	mesh_ids_to_destroy = std::move(meshes_still_in_use);
+}

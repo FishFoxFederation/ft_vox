@@ -8,6 +8,7 @@
 #include <chrono>
 #include <cstring>
 #include <algorithm>
+#include <unistd.h>
 
 RenderThread::RenderThread(
 	const Settings & settings,
@@ -89,19 +90,31 @@ void RenderThread::loop()
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
 
-	vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+	VK_CHECK(
+		vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
+		"Failed to wait for in flight fence"
+	);
 	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
 
 	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
-	vkResetCommandBuffer(vk.draw_command_buffers[vk.current_frame], 0);
+	// reset mesh usage by frame info
+	for (auto & mesh : vk.meshes)
+	{
+		mesh.second.used_by_frame[vk.current_frame] = false;
+	}
+
+	VK_CHECK(
+		vkResetCommandBuffer(vk.draw_command_buffers[vk.current_frame], 0),
+		"Failed to reset draw command buffer"
+	);
 
 	VkCommandBufferBeginInfo begin_info = {};
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	VK_CHECK(
 		vkBeginCommandBuffer(vk.draw_command_buffers[vk.current_frame], &begin_info),
-		"Failed to begin recording command buffer!"
+		"Failed to begin recording command buffer"
 	);
 
 	vk.setImageLayout(
@@ -176,6 +189,14 @@ void RenderThread::loop()
 
 	for (auto & chunk_mesh : chunk_meshes)
 	{
+		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
+		{
+			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+			continue;
+		}
+
+		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
+
 		glm::dvec3 pos = chunk_mesh.transform.position();
 		if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
 		// if (!frustum.boxInFrustum(pos, pos + glm::dvec3(CHUNK_SIZE)))
