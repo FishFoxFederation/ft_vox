@@ -1593,14 +1593,18 @@ void VulkanAPI::createCameraDescriptors()
 		"Failed to create descriptor pool"
 	);
 
+	std::vector<VkDescriptorSetLayout> layouts(max_frames_in_flight, camera_descriptor_set_layout);
+
 	VkDescriptorSetAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	alloc_info.descriptorPool = camera_descriptor_pool;
-	alloc_info.descriptorSetCount = 1;
-	alloc_info.pSetLayouts = &camera_descriptor_set_layout;
+	alloc_info.descriptorSetCount = max_frames_in_flight;
+	alloc_info.pSetLayouts = layouts.data();
+
+	camera_descriptor_sets.resize(max_frames_in_flight);
 
 	VK_CHECK(
-		vkAllocateDescriptorSets(device, &alloc_info, &camera_descriptor_set),
+		vkAllocateDescriptorSets(device, &alloc_info, camera_descriptor_sets.data()),
 		"Failed to allocate descriptor sets"
 	);
 
@@ -1613,7 +1617,7 @@ void VulkanAPI::createCameraDescriptors()
 
 		VkWriteDescriptorSet descriptor_write = {};
 		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = camera_descriptor_set;
+		descriptor_write.dstSet = camera_descriptor_sets[i];
 		descriptor_write.dstBinding = 0;
 		descriptor_write.dstArrayElement = 0;
 		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;

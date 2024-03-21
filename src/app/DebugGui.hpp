@@ -100,6 +100,8 @@ public:
 	static inline History<float, 100> frame_time_history;
 	static inline History<float, 100> cpu_time_history;
 
+	static inline std::atomic_int32_t chunk_mesh_count = 0;
+
 private:
 
 	VulkanAPI & vk;

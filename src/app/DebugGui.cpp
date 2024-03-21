@@ -28,6 +28,7 @@ void DebugGui::updateImGui()
 				ImGui::Separator();
 
 				ImGui::Text("Rendered triangles: %ld", rendered_triangles.load());
+				ImGui::Text("Chunk meshes count: %d", chunk_mesh_count.load());
 
 				ImGui::EndTabItem();
 			}

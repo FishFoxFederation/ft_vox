@@ -64,9 +64,6 @@ void RenderThread::loop()
 	camera_matrices.proj = camera.projection;
 	camera_matrices.proj[1][1] *= -1;
 
-	static std::vector<glm::dvec3> camera_position(vk.max_frames_in_flight, camera.position);
-	camera_position[vk.current_frame] = camera.position;
-
 	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.getMeshRenderData();
 
 	m_frame_count++;
@@ -89,6 +86,8 @@ void RenderThread::loop()
 	LOG_TRACE("Start vulkan logic.");
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
+
+	DebugGui::chunk_mesh_count = vk.meshes.size();
 
 	VK_CHECK(
 		vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
@@ -162,27 +161,17 @@ void RenderThread::loop()
 	// Draw the chunks
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
 
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.pipeline_layout,
-		0,
-		1,
-		&vk.camera_descriptor_set,
-		0,
-		nullptr
-	);
+	const std::array<VkDescriptorSet, 2> descriptor_sets = { vk.camera_descriptor_sets[vk.current_frame], vk.texture_array_descriptor_set };
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.pipeline_layout,
-		1,
-		1,
-		&vk.texture_array_descriptor_set,
+		0,
+		static_cast<uint32_t>(descriptor_sets.size()),
+		descriptor_sets.data(),
 		0,
 		nullptr
-
 	);
 
 	uint32_t triangle_count = 0;
@@ -245,31 +234,21 @@ void RenderThread::loop()
 	// Draw the skybox
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_graphics_pipeline);
 
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline_layout,
-		0,
-		1,
-		&vk.camera_descriptor_set,
-		0,
-		nullptr
-	);
+	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = { vk.camera_descriptor_sets[vk.current_frame], vk.cube_map_descriptor_set };
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.skybox_pipeline_layout,
-		1,
-		1,
-		&vk.cube_map_descriptor_set,
+		0,
+		static_cast<uint32_t>(skybox_descriptor_sets.size()),
+		skybox_descriptor_sets.data(),
 		0,
 		nullptr
 	);
 
 	ModelMatrice camera_model_matrice = {};
-	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	camera_model_matrice.model = glm::translate(glm::dmat4(1.0), camera_position[1]);
+	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
 	vkCmdPushConstants(
 		vk.draw_command_buffers[vk.current_frame],
 		vk.skybox_pipeline_layout,

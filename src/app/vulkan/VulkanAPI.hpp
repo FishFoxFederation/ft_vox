@@ -352,7 +352,8 @@ public:
 	// Camera descriptors will be used by the chunk and line pipelines
 	VkDescriptorSetLayout camera_descriptor_set_layout;
 	VkDescriptorPool camera_descriptor_pool;
-	VkDescriptorSet camera_descriptor_set;
+	// VkDescriptorSet camera_descriptor_set;
+	std::vector<VkDescriptorSet> camera_descriptor_sets;
 
 	// Texture array descriptors will be used by the chunk pipeline
 	VkDescriptorSetLayout texture_array_descriptor_set_layout;
