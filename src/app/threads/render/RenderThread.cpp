@@ -159,14 +159,14 @@ void RenderThread::loop()
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
 	// Draw the chunks
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
 	const std::array<VkDescriptorSet, 2> descriptor_sets = { vk.camera_descriptor_sets[vk.current_frame], vk.texture_array_descriptor_set };
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.pipeline_layout,
+		vk.chunk_pipeline.layout,
 		0,
 		static_cast<uint32_t>(descriptor_sets.size()),
 		descriptor_sets.data(),
@@ -213,7 +213,7 @@ void RenderThread::loop()
 		model_matrice.model = chunk_mesh.transform.model();
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
-			vk.pipeline_layout,
+			vk.chunk_pipeline.layout,
 			VK_SHADER_STAGE_VERTEX_BIT,
 			0,
 			sizeof(ModelMatrice),
@@ -232,14 +232,14 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_graphics_pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
 	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = { vk.camera_descriptor_sets[vk.current_frame], vk.cube_map_descriptor_set };
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline_layout,
+		vk.skybox_pipeline.layout,
 		0,
 		static_cast<uint32_t>(skybox_descriptor_sets.size()),
 		skybox_descriptor_sets.data(),
@@ -251,7 +251,7 @@ void RenderThread::loop()
 	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
 	vkCmdPushConstants(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline_layout,
+		vk.skybox_pipeline.layout,
 		VK_SHADER_STAGE_VERTEX_BIT,
 		0,
 		sizeof(ModelMatrice),
