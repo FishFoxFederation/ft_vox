@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Chunk.hpp"
+#include "vk_define.hpp"
+#include "vk_helper.hpp"
 #include "VulkanMemoryAllocator.hpp"
+#include "Pipeline.hpp"
+#include "Chunk.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
-
-#include <vulkan/vulkan.h>
-#include <vulkan/vk_enum_string_helper.h>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -24,20 +24,7 @@
 #include <mutex>
 #include <map>
 #include <queue>
-
-// #define NDEBUG
-
-#define VK_ERR_STR(result) (std::string(string_VkResult(result)))
-
-#define VK_CHECK(function, message) \
-	{ \
-		VkResult result = function; \
-		if (result != VK_SUCCESS) \
-		{ \
-			throw std::runtime_error(std::string(message) + " (" + std::string(string_VkResult(result)) + ")"); \
-		} \
-	}
-
+#include <memory>
 
 struct QueueFamilyIndices
 {
@@ -74,9 +61,9 @@ struct BlockVertex
 		return bindingDescription;
 	}
 
-	static std::array<VkVertexInputAttributeDescription, 4> getAttributeDescriptions()
+	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
 	{
-		std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions{};
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(4);
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
@@ -135,9 +122,9 @@ struct LineVertex
 		return bindingDescription;
 	}
 
-	static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions()
+	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
 	{
-		std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
@@ -321,6 +308,13 @@ public:
 	VkFormat depth_attachement_format;
 	VkExtent2D depth_attachement_extent;
 
+	// Image for shadow map
+	VkImage shadow_map_image;
+	VkDeviceMemory shadow_map_memory;
+	VkImageView shadow_map_view;
+	VkFormat shadow_map_format;
+	VkExtent2D shadow_map_extent;
+
 	// Uniform buffers for the camera matrices
 	std::vector<VkBuffer> camera_uniform_buffers;
 	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
@@ -352,7 +346,6 @@ public:
 	// Camera descriptors will be used by the chunk and line pipelines
 	VkDescriptorSetLayout camera_descriptor_set_layout;
 	VkDescriptorPool camera_descriptor_pool;
-	// VkDescriptorSet camera_descriptor_set;
 	std::vector<VkDescriptorSet> camera_descriptor_sets;
 
 	// Texture array descriptors will be used by the chunk pipeline
@@ -365,17 +358,10 @@ public:
 	VkDescriptorPool cube_map_descriptor_pool;
 	VkDescriptorSet cube_map_descriptor_set;
 
-	// Pipeline for chunks
-	VkPipelineLayout pipeline_layout;
-	VkPipeline graphics_pipeline;
-
-	// Pipeline for lines
-	VkPipelineLayout line_pipeline_layout;
-	VkPipeline line_graphics_pipeline;
-
-	// Pipeline for skybox
-	VkPipelineLayout skybox_pipeline_layout;
-	VkPipeline skybox_graphics_pipeline;
+	// Pipelines
+	Pipeline chunk_pipeline;
+	Pipeline line_pipeline;
+	Pipeline skybox_pipeline;
 
 
 	// Dear ImGui resources
@@ -449,8 +435,9 @@ private:
 
 	void createSyncObjects();
 
-	void createColorResources();
-	void createDepthResources();
+	void createColorAttachement();
+	void createDepthAttachement();
+	void createShadowMap();
 
 	void createUniformBuffers();
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
@@ -476,10 +463,6 @@ private:
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);
 
-	uint32_t findMemoryType(
-		uint32_t type_filter,
-		VkMemoryPropertyFlags properties
-	);
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat> & candidates,
 		VkImageTiling tiling,
