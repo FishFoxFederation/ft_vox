@@ -85,18 +85,6 @@ VulkanAPI::~VulkanAPI()
 
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
-	vkDestroyDescriptorSetLayout(device, camera_descriptor_set_layout, nullptr);
-	vkDestroyDescriptorPool(device, camera_descriptor_pool, nullptr);
-
-	vkDestroyDescriptorSetLayout(device, texture_array_descriptor_set_layout, nullptr);
-	vkDestroyDescriptorPool(device, texture_array_descriptor_pool, nullptr);
-
-	vkDestroyDescriptorSetLayout(device, cube_map_descriptor_set_layout, nullptr);
-	vkDestroyDescriptorPool(device, cube_map_descriptor_pool, nullptr);
-
-	vkDestroyDescriptorSetLayout(device, shadow_map_descriptor_set_layout, nullptr);
-	vkDestroyDescriptorPool(device, shadow_map_descriptor_pool, nullptr);
-
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkDestroySemaphore(device, image_available_semaphores[i], nullptr);
@@ -106,11 +94,6 @@ VulkanAPI::~VulkanAPI()
 		vkDestroyFence(device, in_flight_fences[i], nullptr);
 	}
 	vkDestroyFence(device, single_time_command_fence, nullptr);
-
-	vkDestroySampler(device, shadow_map_sampler, nullptr);
-	vkDestroyImageView(device, shadow_map_view, nullptr);
-	vma.freeMemory(device, shadow_map_memory, nullptr);
-	vkDestroyImage(device, shadow_map_image, nullptr);
 
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(draw_command_buffers.size()), draw_command_buffers.data());
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(copy_command_buffers.size()), copy_command_buffers.data());
@@ -807,62 +790,20 @@ void VulkanAPI::createDepthAttachement()
 
 void VulkanAPI::createShadowMap()
 {
-	shadow_map_format = VK_FORMAT_D32_SFLOAT;
-	shadow_map_extent = {2048, 2048};
+	Image::CreateInfo shadow_map_info = {};
+	shadow_map_info.extent = { 2048, 2048 };
+	shadow_map_info.aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	shadow_map_info.format = VK_FORMAT_D32_SFLOAT;
+	shadow_map_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	shadow_map_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+	shadow_map_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	shadow_map_info.create_view = true;
+	shadow_map_info.create_sampler = true;
+	shadow_map_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
-	createImage(
-		shadow_map_extent.width,
-		shadow_map_extent.height,
-		1,
-		shadow_map_format,
-		VK_IMAGE_TILING_OPTIMAL,
-		VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-		shadow_map_image,
-		shadow_map_memory
-	);
-	createImageView(
-		shadow_map_image,
-		shadow_map_format,
-		VK_IMAGE_ASPECT_DEPTH_BIT,
-		shadow_map_view
-	);
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
-	VkSamplerCreateInfo sampler_info = {};
-	sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	sampler_info.magFilter = VK_FILTER_LINEAR;
-	sampler_info.minFilter = VK_FILTER_LINEAR;
-	sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	sampler_info.anisotropyEnable = VK_TRUE;
-	sampler_info.maxAnisotropy = 16;
-	sampler_info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-	sampler_info.unnormalizedCoordinates = VK_FALSE;
-	sampler_info.compareEnable = VK_FALSE;
-	sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
-	sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	sampler_info.mipLodBias = 0.0f;
-	sampler_info.minLod = 0.0f;
-	sampler_info.maxLod = 1.0f;
-
-	VK_CHECK(
-		vkCreateSampler(device, &sampler_info, nullptr, &shadow_map_sampler),
-		"Failed to create sampler"
-	);
-
-	transitionImageLayout(
-		shadow_map_image,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_ASPECT_DEPTH_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-	);
-
+	shadow_map = Image(device, physical_device, command_buffer, shadow_map_info);
 }
 
 void VulkanAPI::createUniformBuffers()
@@ -907,7 +848,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
-	textures = Image(device, physical_device, command_buffer, image_info);
+	block_textures = Image(device, physical_device, command_buffer, image_info);
 }
 
 void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size)
@@ -927,7 +868,7 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 
 	SingleTimeCommand command_buffer_2(device, command_pool, graphics_queue);
 
-	cube_map = Image(device, physical_device, command_buffer_2, _image_info);
+	skybox_cube_map = Image(device, physical_device, command_buffer_2, _image_info);
 }
 
 void VulkanAPI::createFrustumLineBuffers()
@@ -984,47 +925,12 @@ void VulkanAPI::createCameraDescriptors()
 	ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 	ubo_layout_binding.pImmutableSamplers = nullptr;
 
-	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { ubo_layout_binding };
-
-	VkDescriptorSetLayoutCreateInfo layout_info = {};
-	layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
-	layout_info.pBindings = bindings.data();
-
-	VK_CHECK(
-		vkCreateDescriptorSetLayout(device, &layout_info, nullptr, &camera_descriptor_set_layout),
-		"Failed to create descriptor set layout"
-	);
-
-	VkDescriptorPoolSize pool_size = {};
-	pool_size.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	pool_size.descriptorCount = static_cast<uint32_t>(max_frames_in_flight);
-
-	VkDescriptorPoolCreateInfo pool_info = {};
-	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	pool_info.poolSizeCount = 1;
-	pool_info.pPoolSizes = &pool_size;
-	pool_info.maxSets = static_cast<uint32_t>(max_frames_in_flight);
-
-	VK_CHECK(
-		vkCreateDescriptorPool(device, &pool_info, nullptr, &camera_descriptor_pool),
-		"Failed to create descriptor pool"
-	);
-
-	std::vector<VkDescriptorSetLayout> layouts(max_frames_in_flight, camera_descriptor_set_layout);
-
-	VkDescriptorSetAllocateInfo alloc_info = {};
-	alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	alloc_info.descriptorPool = camera_descriptor_pool;
-	alloc_info.descriptorSetCount = max_frames_in_flight;
-	alloc_info.pSetLayouts = layouts.data();
-
-	camera_descriptor_sets.resize(max_frames_in_flight);
-
-	VK_CHECK(
-		vkAllocateDescriptorSets(device, &alloc_info, camera_descriptor_sets.data()),
-		"Failed to allocate descriptor sets"
-	);
+	Descriptor::CreateInfo descriptor_info = {};
+	descriptor_info.bindings = { ubo_layout_binding };
+	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+	descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+	
+	camera_descriptor = Descriptor(device, descriptor_info);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -1035,7 +941,7 @@ void VulkanAPI::createCameraDescriptors()
 
 		VkWriteDescriptorSet descriptor_write = {};
 		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = camera_descriptor_sets[i];
+		descriptor_write.dstSet = camera_descriptor.sets[i];
 		descriptor_write.dstBinding = 0;
 		descriptor_write.dstArrayElement = 0;
 		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -1060,67 +966,32 @@ void VulkanAPI::createTextureArrayDescriptors()
 	sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 	sampler_layout_binding.pImmutableSamplers = nullptr;
 
-	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { sampler_layout_binding };
+	Descriptor::CreateInfo descriptor_info = {};
+	descriptor_info.bindings = { sampler_layout_binding };
+	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
 
-	VkDescriptorSetLayoutCreateInfo layout_info = {};
-	layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
-	layout_info.pBindings = bindings.data();
+	block_textures_descriptor = Descriptor(device, descriptor_info);
 
-	VK_CHECK(
-		vkCreateDescriptorSetLayout(device, &layout_info, nullptr, &texture_array_descriptor_set_layout),
-		"Failed to create descriptor set layout"
+	VkDescriptorImageInfo image_info = {};
+	image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	image_info.imageView = block_textures.view;
+	image_info.sampler = block_textures.sampler;
+
+	VkWriteDescriptorSet descriptor_write = {};
+	descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	descriptor_write.dstSet = block_textures_descriptor.set;
+	descriptor_write.dstBinding = 0;
+	descriptor_write.dstArrayElement = 0;
+	descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	descriptor_write.descriptorCount = 1;
+	descriptor_write.pImageInfo = &image_info;
+
+	vkUpdateDescriptorSets(
+		device,
+		1,
+		&descriptor_write,
+		0, nullptr
 	);
-
-	VkDescriptorPoolSize pool_size = {};
-	pool_size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	pool_size.descriptorCount = static_cast<uint32_t>(max_frames_in_flight);
-
-	VkDescriptorPoolCreateInfo pool_info = {};
-	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	pool_info.poolSizeCount = 1;
-	pool_info.pPoolSizes = &pool_size;
-	pool_info.maxSets = static_cast<uint32_t>(max_frames_in_flight);
-
-	VK_CHECK(
-		vkCreateDescriptorPool(device, &pool_info, nullptr, &texture_array_descriptor_pool),
-		"Failed to create descriptor pool"
-	);
-
-	VkDescriptorSetAllocateInfo alloc_info = {};
-	alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	alloc_info.descriptorPool = texture_array_descriptor_pool;
-	alloc_info.descriptorSetCount = 1;
-	alloc_info.pSetLayouts = &texture_array_descriptor_set_layout;
-
-	VK_CHECK(
-		vkAllocateDescriptorSets(device, &alloc_info, &texture_array_descriptor_set),
-		"Failed to allocate descriptor sets"
-	);
-
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = textures.view;
-		image_info.sampler = textures.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = texture_array_descriptor_set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
 }
 
 void VulkanAPI::createCubeMapDescriptors()
@@ -1132,68 +1003,32 @@ void VulkanAPI::createCubeMapDescriptors()
 	sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 	sampler_layout_binding.pImmutableSamplers = nullptr;
 
-	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { sampler_layout_binding };
+	Descriptor::CreateInfo descriptor_info = {};
+	descriptor_info.bindings = { sampler_layout_binding };
+	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
 
-	VkDescriptorSetLayoutCreateInfo layout_info = {};
-	layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
-	layout_info.pBindings = bindings.data();
+	cube_map_descriptor = Descriptor(device, descriptor_info);
 
-	VK_CHECK(
-		vkCreateDescriptorSetLayout(device, &layout_info, nullptr, &cube_map_descriptor_set_layout),
-		"Failed to create descriptor set layout"
+	VkDescriptorImageInfo image_info = {};
+	image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	image_info.imageView = skybox_cube_map.view;
+	image_info.sampler = skybox_cube_map.sampler;
+
+	VkWriteDescriptorSet descriptor_write = {};
+	descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	descriptor_write.dstSet = cube_map_descriptor.set;
+	descriptor_write.dstBinding = 0;
+	descriptor_write.dstArrayElement = 0;
+	descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	descriptor_write.descriptorCount = 1;
+	descriptor_write.pImageInfo = &image_info;
+
+	vkUpdateDescriptorSets(
+		device,
+		1,
+		&descriptor_write,
+		0, nullptr
 	);
-
-	VkDescriptorPoolSize pool_size = {};
-	pool_size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	pool_size.descriptorCount = static_cast<uint32_t>(max_frames_in_flight);
-
-	VkDescriptorPoolCreateInfo pool_info = {};
-	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	pool_info.poolSizeCount = 1;
-	pool_info.pPoolSizes = &pool_size;
-	pool_info.maxSets = static_cast<uint32_t>(max_frames_in_flight);
-
-	VK_CHECK(
-		vkCreateDescriptorPool(device, &pool_info, nullptr, &cube_map_descriptor_pool),
-		"Failed to create descriptor pool"
-	);
-
-	VkDescriptorSetAllocateInfo alloc_info = {};
-	alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	alloc_info.descriptorPool = cube_map_descriptor_pool;
-	alloc_info.descriptorSetCount = 1;
-	alloc_info.pSetLayouts = &cube_map_descriptor_set_layout;
-
-	VK_CHECK(
-		vkAllocateDescriptorSets(device, &alloc_info, &cube_map_descriptor_set),
-		"Failed to allocate descriptor sets"
-	);
-
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = cube_map.view;
-		image_info.sampler = cube_map.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = cube_map_descriptor_set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-
-	}
 }
 
 void VulkanAPI::createShadowMapDescriptors()
@@ -1205,67 +1040,32 @@ void VulkanAPI::createShadowMapDescriptors()
 	sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 	sampler_layout_binding.pImmutableSamplers = nullptr;
 
-	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { sampler_layout_binding };
+	Descriptor::CreateInfo descriptor_info = {};
+	descriptor_info.bindings = { sampler_layout_binding };
+	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
 
-	VkDescriptorSetLayoutCreateInfo layout_info = {};
-	layout_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layout_info.bindingCount = static_cast<uint32_t>(bindings.size());
-	layout_info.pBindings = bindings.data();
+	shadow_map_descriptor = Descriptor(device, descriptor_info);
 
-	VK_CHECK(
-		vkCreateDescriptorSetLayout(device, &layout_info, nullptr, &shadow_map_descriptor_set_layout),
-		"Failed to create descriptor set layout"
+	VkDescriptorImageInfo image_info = {};
+	image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	image_info.imageView = shadow_map.view;
+	image_info.sampler = shadow_map.sampler;
+
+	VkWriteDescriptorSet descriptor_write = {};
+	descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	descriptor_write.dstSet = shadow_map_descriptor.set;
+	descriptor_write.dstBinding = 0;
+	descriptor_write.dstArrayElement = 0;
+	descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	descriptor_write.descriptorCount = 1;
+	descriptor_write.pImageInfo = &image_info;
+
+	vkUpdateDescriptorSets(
+		device,
+		1,
+		&descriptor_write,
+		0, nullptr
 	);
-
-	VkDescriptorPoolSize pool_size = {};
-	pool_size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	pool_size.descriptorCount = static_cast<uint32_t>(max_frames_in_flight);
-
-	VkDescriptorPoolCreateInfo pool_info = {};
-	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	pool_info.poolSizeCount = 1;
-	pool_info.pPoolSizes = &pool_size;
-	pool_info.maxSets = static_cast<uint32_t>(max_frames_in_flight);
-
-	VK_CHECK(
-		vkCreateDescriptorPool(device, &pool_info, nullptr, &shadow_map_descriptor_pool),
-		"Failed to create descriptor pool"
-	);
-
-	VkDescriptorSetAllocateInfo alloc_info = {};
-	alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	alloc_info.descriptorPool = shadow_map_descriptor_pool;
-	alloc_info.descriptorSetCount = 1;
-	alloc_info.pSetLayouts = &shadow_map_descriptor_set_layout;
-
-	VK_CHECK(
-		vkAllocateDescriptorSets(device, &alloc_info, &shadow_map_descriptor_set),
-		"Failed to allocate descriptor sets"
-	);
-
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = shadow_map_view;
-		image_info.sampler = shadow_map_sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = shadow_map_descriptor_set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
 }
 
 void VulkanAPI::createChunkPipeline()
@@ -1279,9 +1079,9 @@ void VulkanAPI::createChunkPipeline()
 	pipeline_info.color_formats = { color_attachement.format };
 	pipeline_info.depth_format = depth_attachement.format;
 	pipeline_info.descriptor_set_layouts = {
-		camera_descriptor_set_layout,
-		texture_array_descriptor_set_layout,
-		shadow_map_descriptor_set_layout
+		camera_descriptor.layout,
+		block_textures_descriptor.layout,
+		shadow_map_descriptor.layout
 	};
 	pipeline_info.push_constant_ranges = {
 		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
@@ -1303,7 +1103,7 @@ void VulkanAPI::createLinePipeline()
 	pipeline_info.color_formats = { color_attachement.format };
 	pipeline_info.depth_format = depth_attachement.format;
 	pipeline_info.descriptor_set_layouts = {
-		camera_descriptor_set_layout
+		camera_descriptor.layout
 	};
 
 	line_pipeline = Pipeline::create(device, pipeline_info);
@@ -1318,8 +1118,8 @@ void VulkanAPI::createSkyboxPipeline()
 	pipeline_info.color_formats = { color_attachement.format };
 	pipeline_info.depth_format = depth_attachement.format;
 	pipeline_info.descriptor_set_layouts = {
-		camera_descriptor_set_layout,
-		cube_map_descriptor_set_layout
+		camera_descriptor.layout,
+		cube_map_descriptor.layout
 	};
 	pipeline_info.push_constant_ranges = {
 		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
@@ -1331,7 +1131,7 @@ void VulkanAPI::createSkyboxPipeline()
 void VulkanAPI::createShadowMapPipeline()
 {
 	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = shadow_map_extent;
+	pipeline_info.extent = shadow_map.extent2D;
 	pipeline_info.vert_path = "shaders/shadow_map_shader.vert.spv";
 	pipeline_info.frag_path = "shaders/shadow_map_shader.frag.spv";
 	pipeline_info.binding_description = BlockVertex::getBindingDescription();
@@ -1354,7 +1154,7 @@ void VulkanAPI::createTexturePipeline()
 	pipeline_info.color_formats = { color_attachement.format };
 	pipeline_info.depth_format = depth_attachement.format;
 	pipeline_info.descriptor_set_layouts = {
-		shadow_map_descriptor_set_layout
+		shadow_map_descriptor.layout
 	};
 
 	texture_pipeline = Pipeline::create(device, pipeline_info);

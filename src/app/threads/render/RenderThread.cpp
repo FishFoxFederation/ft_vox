@@ -148,7 +148,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.shadow_map_image,
+		vk.shadow_map.image,
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 		{ VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 },
@@ -161,7 +161,7 @@ void RenderThread::loop()
 
 	VkRenderingAttachmentInfo shadow_pass_depth_attachment = {};
 	shadow_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	shadow_pass_depth_attachment.imageView = vk.shadow_map_view;
+	shadow_pass_depth_attachment.imageView = vk.shadow_map.view;
 	shadow_pass_depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	shadow_pass_depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	shadow_pass_depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -169,7 +169,7 @@ void RenderThread::loop()
 
 	VkRenderingInfo shadow_pass_render_info = {};
 	shadow_pass_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	shadow_pass_render_info.renderArea = { 0, 0, vk.shadow_map_extent.width, vk.shadow_map_extent.height };
+	shadow_pass_render_info.renderArea = { 0, 0, vk.shadow_map.extent2D.width, vk.shadow_map.extent2D.height };
 	shadow_pass_render_info.layerCount = 1;
 	shadow_pass_render_info.colorAttachmentCount = 0;
 	shadow_pass_render_info.pColorAttachments = nullptr;
@@ -239,7 +239,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.shadow_map_image,
+		vk.shadow_map.image,
 		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 		{ VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 },
@@ -282,9 +282,9 @@ void RenderThread::loop()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> descriptor_sets = {
-		vk.camera_descriptor_sets[vk.current_frame],
-		vk.texture_array_descriptor_set,
-		vk.shadow_map_descriptor_set
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.block_textures_descriptor.set,
+		vk.shadow_map_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
@@ -355,69 +355,69 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		vk.camera_descriptor_sets[vk.current_frame],
-		vk.cube_map_descriptor_set
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline.layout,
-		0,
-		static_cast<uint32_t>(skybox_descriptor_sets.size()),
-		skybox_descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	ModelMatrice camera_model_matrice = {};
-	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(ModelMatrice),
-		&camera_model_matrice
-	);
-
-	vkCmdDraw(
-		vk.draw_command_buffers[vk.current_frame],
-		36,
-		1,
-		0,
-		0
-	);
-
-
-	// draw the shadow map texture
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.texture_pipeline.pipeline);
-
-	// const std::vector<VkDescriptorSet> texture_descriptor_sets = {
-	// 	vk.shadow_map_descriptor_set
+	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+	// 	vk.camera_descriptor.sets[vk.current_frame],
+	// 	vk.cube_map_descriptor.set
 	// };
 
 	// vkCmdBindDescriptorSets(
 	// 	vk.draw_command_buffers[vk.current_frame],
 	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.texture_pipeline.layout,
+	// 	vk.skybox_pipeline.layout,
 	// 	0,
-	// 	static_cast<uint32_t>(texture_descriptor_sets.size()),
-	// 	texture_descriptor_sets.data(),
+	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
+	// 	skybox_descriptor_sets.data(),
 	// 	0,
 	// 	nullptr
 	// );
 
+	// ModelMatrice camera_model_matrice = {};
+	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	// vkCmdPushConstants(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	vk.skybox_pipeline.layout,
+	// 	VK_SHADER_STAGE_VERTEX_BIT,
+	// 	0,
+	// 	sizeof(ModelMatrice),
+	// 	&camera_model_matrice
+	// );
+
 	// vkCmdDraw(
 	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	6,
+	// 	36,
 	// 	1,
 	// 	0,
 	// 	0
 	// );
+
+
+	// draw the shadow map texture
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.texture_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> texture_descriptor_sets = {
+		vk.shadow_map_descriptor.set
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.texture_pipeline.layout,
+		0,
+		static_cast<uint32_t>(texture_descriptor_sets.size()),
+		texture_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	vkCmdDraw(
+		vk.draw_command_buffers[vk.current_frame],
+		6,
+		1,
+		0,
+		0
+	);
 
 
 	LOG_TRACE("End main rendering.");
