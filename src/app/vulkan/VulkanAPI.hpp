@@ -304,6 +304,7 @@ public:
 
 
 	Image color_attachement;
+	Image color_attachement_copy;
 	Image depth_attachement;
 	Image block_textures;
 	Image skybox_cube_map;
@@ -327,6 +328,9 @@ public:
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
 	Descriptor shadow_map_descriptor;
+	Descriptor depth_attachement_descriptor;
+	Descriptor color_attachement_copy_descriptor;
+	void createDescriptors();
 
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
@@ -414,11 +418,6 @@ private:
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
 	void createFrustumLineBuffers();
-
-	void createCameraDescriptors();
-	void createTextureArrayDescriptors();
-	void createCubeMapDescriptors();
-	void createShadowMapDescriptors();
 
 	void createChunkPipeline();
 	void createLinePipeline();

@@ -36,7 +36,6 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
-
 	LOG_INFO("RenderThread launched :" << gettid());
 }
 
@@ -146,14 +145,10 @@ void RenderThread::loop()
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
 
-	vk.setImageLayout(
+	vk.shadow_map.transitionLayout(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.shadow_map.image,
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-		{ VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 },
-		0,
-		0,
 		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
 		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
 	);
@@ -237,27 +232,50 @@ void RenderThread::loop()
 	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
 
 
-	vk.setImageLayout(
+	vk.shadow_map.transitionLayout(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.shadow_map.image,
 		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		{ VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1 },
-		0,
-		0,
 		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
 		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 	);
 
+	vk.depth_attachement.transitionLayout(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+	);
 
+	vk.color_attachement_copy.transitionLayout(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+	);
 
-	std::array<VkRenderingAttachmentInfo, 1> lighting_pass_color_attachments = {};
-	lighting_pass_color_attachments[0].sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	lighting_pass_color_attachments[0].imageView = vk.color_attachement.view;
-	lighting_pass_color_attachments[0].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	lighting_pass_color_attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	lighting_pass_color_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	lighting_pass_color_attachments[0].clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
+	VkRenderingAttachmentInfo color_attachment = {};
+	color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	color_attachment.imageView = vk.color_attachement.view;
+	color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	color_attachment.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	VkRenderingAttachmentInfo color_attachment_copy = {};
+	color_attachment_copy.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	color_attachment_copy.imageView = vk.color_attachement_copy.view;
+	color_attachment_copy.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	color_attachment_copy.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	color_attachment_copy.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	color_attachment_copy.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	std::vector<VkRenderingAttachmentInfo> lighting_pass_color_attachments = {
+		color_attachment,
+		color_attachment_copy
+	};
 
 	VkRenderingAttachmentInfo lighting_pass_depth_attachment = {};
 	lighting_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
@@ -393,11 +411,50 @@ void RenderThread::loop()
 	// );
 
 
+	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
+
+
+	vk.depth_attachement.transitionLayout(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+	);
+
+	vk.color_attachement_copy.transitionLayout(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+	);
+
+
+	std::array<VkRenderingAttachmentInfo, 1> depth_test_color_attachments = {};
+	depth_test_color_attachments[0].sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	depth_test_color_attachments[0].imageView = vk.color_attachement.view;
+	depth_test_color_attachments[0].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	depth_test_color_attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	depth_test_color_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+	VkRenderingInfo depth_test_render_info = {};
+	depth_test_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+	depth_test_render_info.renderArea = { 0, 0, vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height };
+	depth_test_render_info.layerCount = 1;
+	depth_test_render_info.colorAttachmentCount = static_cast<uint32_t>(depth_test_color_attachments.size());
+	depth_test_render_info.pColorAttachments = depth_test_color_attachments.data();
+
+	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &depth_test_render_info);
+
+
 	// draw the shadow map texture
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.texture_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> texture_descriptor_sets = {
-		vk.shadow_map_descriptor.set
+		vk.shadow_map_descriptor.set,
+		vk.depth_attachement_descriptor.set,
+		vk.color_attachement_copy_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
@@ -419,8 +476,6 @@ void RenderThread::loop()
 		0
 	);
 
-
-	LOG_TRACE("End main rendering.");
 	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
