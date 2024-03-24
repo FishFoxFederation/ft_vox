@@ -3,6 +3,8 @@
 #include "vk_define.hpp"
 #include "vk_helper.hpp"
 #include "VulkanMemoryAllocator.hpp"
+#include "Command.hpp"
+#include "Image.hpp"
 #include "Pipeline.hpp"
 #include "Chunk.hpp"
 
@@ -169,6 +171,12 @@ struct ModelMatrice
 	glm::mat4 model;
 };
 
+struct ShadowMapLight
+{
+	glm::mat4 view;
+	glm::mat4 proj;
+	glm::mat4 model;
+};
 
 struct ImGuiTexture
 {
@@ -201,7 +209,6 @@ struct ImGuiTexture
 		pixel[3] = a;
 	}
 };
-
 
 class VulkanAPI
 {
@@ -294,24 +301,15 @@ public:
 	const int max_frames_in_flight = 2;
 	int current_frame = 0;
 
-	// Color attachements
-	VkImage color_attachement_image;
-	VkDeviceMemory color_attachement_memory;
-	VkImageView color_attachement_view;
-	VkFormat color_attachement_format;
-	VkExtent2D color_attachement_extent;
 
-	// Depth attachement
-	VkImage depth_attachement_image;
-	VkDeviceMemory depth_attachement_memory;
-	VkImageView depth_attachement_view;
-	VkFormat depth_attachement_format;
-	VkExtent2D depth_attachement_extent;
+	Image color_attachement;
+	Image depth_attachement;
 
 	// Image for shadow map
 	VkImage shadow_map_image;
 	VkDeviceMemory shadow_map_memory;
 	VkImageView shadow_map_view;
+	VkSampler shadow_map_sampler;
 	VkFormat shadow_map_format;
 	VkExtent2D shadow_map_extent;
 
@@ -320,20 +318,8 @@ public:
 	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
 	std::vector<void *> camera_uniform_buffers_mapped_memory;
 
-	// Image array for the textures
-	VkImage textures_image;
-	VkDeviceMemory textures_image_memory;
-	VkImageView textures_image_view;
-	VkSampler textures_sampler;
-	uint32_t textures_size;
-	uint32_t textures_mip_levels;
-
-	// Image array for the cube map
-	VkImage cube_map_image;
-	VkDeviceMemory cube_map_image_memory;
-	VkImageView cube_map_image_view;
-	VkSampler cube_map_sampler;
-	uint32_t cube_map_size;
+	Image textures;
+	Image cube_map;
 
 	// Buffers for the line vertices and indices for the frustum
 	std::vector<VkBuffer> frustum_line_buffers;
@@ -358,10 +344,17 @@ public:
 	VkDescriptorPool cube_map_descriptor_pool;
 	VkDescriptorSet cube_map_descriptor_set;
 
+	// Shadow map descriptors will be used by the chunk pipeline
+	VkDescriptorSetLayout shadow_map_descriptor_set_layout;
+	VkDescriptorPool shadow_map_descriptor_pool;
+	VkDescriptorSet shadow_map_descriptor_set;
+
 	// Pipelines
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
 	Pipeline skybox_pipeline;
+	Pipeline shadow_map_pipeline;
+	Pipeline texture_pipeline;
 
 
 	// Dear ImGui resources
@@ -447,12 +440,13 @@ private:
 	void createCameraDescriptors();
 	void createTextureArrayDescriptors();
 	void createCubeMapDescriptors();
+	void createShadowMapDescriptors();
 
-	void createPipeline();
+	void createChunkPipeline();
 	void createLinePipeline();
 	void createSkyboxPipeline();
-	static std::vector<char> readFile(const std::string & filename);
-	VkShaderModule createShaderModule(const std::vector<char> & code);
+	void createShadowMapPipeline();
+	void createTexturePipeline();
 
 	void destroyMeshes();
 

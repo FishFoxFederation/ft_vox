@@ -9,4 +9,17 @@ namespace vk_helper
 		uint32_t type_filter,
 		VkMemoryPropertyFlags properties
 	);
+
+	void setImageLayout(
+		VkCommandBuffer command_buffer,
+		VkImage image,
+		VkImageLayout old_layout,
+		VkImageLayout new_layout,
+		VkImageSubresourceRange subresource_range,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask,
+		VkPipelineStageFlags srcStageMask,
+		VkPipelineStageFlags dstStageMask
+	);
+
 }

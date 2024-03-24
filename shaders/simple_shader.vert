@@ -9,6 +9,8 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 layout(push_constant) uniform PushConstants
 {
 	mat4 model;
+	// mat4 light_view;
+	// mat4 light_projection;
 }pc;
 
 layout(location = 0) in ivec3 positions;
@@ -18,10 +20,17 @@ layout(location = 3) in uint texLayer;
 
 layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec3 fragTexCoords;
+layout(location = 2) out vec3 shadowCoords;
 
 void main()
 {
     gl_Position = cm.projection * cm.view * pc.model * vec4(positions, 1.0);
+	mat4 biasMatrix = mat4(0.5, 0.0, 0.0, 0.0,
+						   0.0, 0.5, 0.0, 0.0,
+						   0.0, 0.0, 0.5, 0.0,
+						   0.5, 0.5, 0.5, 1.0);
+	// shadowCoords = (biasMatrix * pc.light_projection * pc.light_view * pc.model * vec4(positions, 1.0)).xyz;
+
     fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);
 }
