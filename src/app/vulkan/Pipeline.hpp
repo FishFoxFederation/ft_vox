@@ -191,11 +191,13 @@ private:
 		color_blend_attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
 		color_blend_attachment.blendEnable = VK_FALSE;
 
+		std::vector<VkPipelineColorBlendAttachmentState> color_blend_attachments(create_info.color_formats.size(), color_blend_attachment);
+
 		VkPipelineColorBlendStateCreateInfo color_blending = {};
 		color_blending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 		color_blending.logicOpEnable = VK_FALSE;
-		color_blending.attachmentCount = 1;
-		color_blending.pAttachments = &color_blend_attachment;
+		color_blending.attachmentCount = static_cast<uint32_t>(color_blend_attachments.size());
+		color_blending.pAttachments = color_blend_attachments.data();
 
 
 		VkPipelineDepthStencilStateCreateInfo depth_stencil = {};

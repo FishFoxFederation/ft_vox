@@ -21,10 +21,13 @@ layout(location = 3) in uint texLayer;
 layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec3 fragTexCoords;
 layout(location = 2) out vec3 shadowCoords;
+layout(location = 3) out vec4 pos;
 
 void main()
 {
     gl_Position = cm.projection * cm.view * pc.model * vec4(positions, 1.0);
+	pos = cm.projection * cm.view * pc.model * vec4(positions, 1.0);
+
 	mat4 biasMatrix = mat4(0.5, 0.0, 0.0, 0.0,
 						   0.0, 0.5, 0.0, 0.0,
 						   0.0, 0.0, 0.5, 0.0,
