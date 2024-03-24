@@ -5,6 +5,7 @@
 #include "VulkanMemoryAllocator.hpp"
 #include "Command.hpp"
 #include "Image.hpp"
+#include "Descriptor.hpp"
 #include "Pipeline.hpp"
 #include "Chunk.hpp"
 
@@ -304,22 +305,15 @@ public:
 
 	Image color_attachement;
 	Image depth_attachement;
-
-	// Image for shadow map
-	VkImage shadow_map_image;
-	VkDeviceMemory shadow_map_memory;
-	VkImageView shadow_map_view;
-	VkSampler shadow_map_sampler;
-	VkFormat shadow_map_format;
-	VkExtent2D shadow_map_extent;
+	Image block_textures;
+	Image skybox_cube_map;
+	Image shadow_map;
 
 	// Uniform buffers for the camera matrices
 	std::vector<VkBuffer> camera_uniform_buffers;
 	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
 	std::vector<void *> camera_uniform_buffers_mapped_memory;
 
-	Image textures;
-	Image cube_map;
 
 	// Buffers for the line vertices and indices for the frustum
 	std::vector<VkBuffer> frustum_line_buffers;
@@ -329,27 +323,11 @@ public:
 	uint32_t frustum_line_vertex_count;
 	uint32_t frustum_line_index_count;
 
-	// Camera descriptors will be used by the chunk and line pipelines
-	VkDescriptorSetLayout camera_descriptor_set_layout;
-	VkDescriptorPool camera_descriptor_pool;
-	std::vector<VkDescriptorSet> camera_descriptor_sets;
+	Descriptor camera_descriptor;
+	Descriptor block_textures_descriptor;
+	Descriptor cube_map_descriptor;
+	Descriptor shadow_map_descriptor;
 
-	// Texture array descriptors will be used by the chunk pipeline
-	VkDescriptorSetLayout texture_array_descriptor_set_layout;
-	VkDescriptorPool texture_array_descriptor_pool;
-	VkDescriptorSet texture_array_descriptor_set;
-
-	// Cube map descriptors will be used by the skybox pipeline
-	VkDescriptorSetLayout cube_map_descriptor_set_layout;
-	VkDescriptorPool cube_map_descriptor_pool;
-	VkDescriptorSet cube_map_descriptor_set;
-
-	// Shadow map descriptors will be used by the chunk pipeline
-	VkDescriptorSetLayout shadow_map_descriptor_set_layout;
-	VkDescriptorPool shadow_map_descriptor_pool;
-	VkDescriptorSet shadow_map_descriptor_set;
-
-	// Pipelines
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
 	Pipeline skybox_pipeline;
