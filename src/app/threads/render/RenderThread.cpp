@@ -36,7 +36,6 @@ RenderThread::~RenderThread()
 
 void RenderThread::init()
 {
-
 	LOG_INFO("RenderThread launched :" << gettid());
 }
 
@@ -75,6 +74,21 @@ void RenderThread::loop()
 	}
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
+
+	// const glm::vec3 sun_pos = glm::vec3(70.0f, 250.0f, 70.0f);
+
+	CameraMatrices sun = {};
+	// sun.view = glm::lookAt(
+	// 	sun_pos,
+	// 	glm::vec3(0.0f),
+	// 	glm::vec3(0.0f, 1.0f, 0.0f)
+	// );
+	// sun.proj = glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f, 0.1f, 1000.0f);
+	// sun.proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 1000.0f);
+	// sun.proj[1][1] *= -1;
+
+	sun.view = camera.view;
+	sun.proj = camera.projection;
 
 
 	//############################################################################################################
@@ -118,7 +132,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.color_attachement_image,
+		vk.color_attachement.image,
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -128,45 +142,52 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 	);
 
-	std::array<VkRenderingAttachmentInfo, 1> color_attachments = {};
-	color_attachments[0].sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	color_attachments[0].imageView = vk.color_attachement_view;
-	color_attachments[0].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	color_attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	color_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	color_attachments[0].clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-	VkRenderingAttachmentInfo depth_attachment = {};
-	depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	depth_attachment.imageView = vk.depth_attachement_view;
-	depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	depth_attachment.clearValue = { 1.0f, 0 };
-
-	VkRenderingInfo render_info = {};
-	render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	render_info.renderArea = { 0, 0, vk.color_attachement_extent.width, vk.color_attachement_extent.height };
-	render_info.layerCount = 1;
-	render_info.colorAttachmentCount = static_cast<uint32_t>(color_attachments.size());
-	render_info.pColorAttachments = color_attachments.data();
-	render_info.pDepthAttachment = &depth_attachment;
-
-	LOG_TRACE("Begin main rendering.");
-
-	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &render_info);
-
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
-	// Draw the chunks
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.graphics_pipeline);
 
-	const std::array<VkDescriptorSet, 2> descriptor_sets = { vk.camera_descriptor_sets[vk.current_frame], vk.texture_array_descriptor_set };
+	VkRenderingAttachmentInfo color_attachment = {};
+	color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	color_attachment.imageView = vk.color_attachement.view;
+	color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	color_attachment.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	std::vector<VkRenderingAttachmentInfo> lighting_pass_color_attachments = {
+		color_attachment
+	};
+
+	VkRenderingAttachmentInfo lighting_pass_depth_attachment = {};
+	lighting_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	lighting_pass_depth_attachment.imageView = vk.depth_attachement.view;
+	lighting_pass_depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	lighting_pass_depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	lighting_pass_depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	lighting_pass_depth_attachment.clearValue = { 1.0f, 0 };
+
+	VkRenderingInfo lighting_pass_render_info = {};
+	lighting_pass_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+	lighting_pass_render_info.renderArea = { 0, 0, vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height };
+	lighting_pass_render_info.layerCount = 1;
+	lighting_pass_render_info.colorAttachmentCount = static_cast<uint32_t>(lighting_pass_color_attachments.size());
+	lighting_pass_render_info.pColorAttachments = lighting_pass_color_attachments.data();
+	lighting_pass_render_info.pDepthAttachment = &lighting_pass_depth_attachment;
+
+	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &lighting_pass_render_info);
+
+
+	// Draw the chunks
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.block_textures_descriptor.set
+	};
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.pipeline_layout,
+		vk.chunk_pipeline.layout,
 		0,
 		static_cast<uint32_t>(descriptor_sets.size()),
 		descriptor_sets.data(),
@@ -188,7 +209,6 @@ void RenderThread::loop()
 
 		glm::dvec3 pos = chunk_mesh.transform.position();
 		if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
-		// if (!frustum.boxInFrustum(pos, pos + glm::dvec3(CHUNK_SIZE)))
 		{
 			continue;
 		}
@@ -213,7 +233,7 @@ void RenderThread::loop()
 		model_matrice.model = chunk_mesh.transform.model();
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
-			vk.pipeline_layout,
+			vk.chunk_pipeline.layout,
 			VK_SHADER_STAGE_VERTEX_BIT,
 			0,
 			sizeof(ModelMatrice),
@@ -232,14 +252,17 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_graphics_pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = { vk.camera_descriptor_sets[vk.current_frame], vk.cube_map_descriptor_set };
+	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.cube_map_descriptor.set
+	};
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline_layout,
+		vk.skybox_pipeline.layout,
 		0,
 		static_cast<uint32_t>(skybox_descriptor_sets.size()),
 		skybox_descriptor_sets.data(),
@@ -251,7 +274,7 @@ void RenderThread::loop()
 	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
 	vkCmdPushConstants(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline_layout,
+		vk.skybox_pipeline.layout,
 		VK_SHADER_STAGE_VERTEX_BIT,
 		0,
 		sizeof(ModelMatrice),
@@ -267,7 +290,6 @@ void RenderThread::loop()
 	);
 
 
-	LOG_TRACE("End main rendering.");
 	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -346,7 +368,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.color_attachement_image,
+		vk.color_attachement.image,
 		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -359,8 +381,8 @@ void RenderThread::loop()
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.color_attachement_extent.width),
-		static_cast<int32_t>(vk.color_attachement_extent.height),
+		static_cast<int32_t>(vk.color_attachement.extent2D.width),
+		static_cast<int32_t>(vk.color_attachement.extent2D.height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -380,7 +402,7 @@ void RenderThread::loop()
 
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.color_attachement_image,
+		vk.color_attachement.image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vk.swap_chain_images[image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,

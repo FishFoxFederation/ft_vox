@@ -41,6 +41,10 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/vulkan/VulkanMemoryAllocator.cpp
 		src/app/vulkan/chunk_mesh.cpp
+		src/app/vulkan/vk_helper.cpp
+		src/app/vulkan/Image.cpp
+		src/app/vulkan/Command.cpp
+		src/app/vulkan/Descriptor.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
