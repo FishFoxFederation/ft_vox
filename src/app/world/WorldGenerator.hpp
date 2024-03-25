@@ -6,6 +6,7 @@
 #include "Chunk.hpp"
 #include "Block.hpp"
 #include "logger.hpp"
+#include "DebugGui.hpp"
 
 class WorldGenerator
 {

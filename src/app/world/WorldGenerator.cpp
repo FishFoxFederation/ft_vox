@@ -79,10 +79,13 @@ Block WorldGenerator::generateReliefBlock(glm::ivec3 position)
 
 
 	value = ((value + 1) / 2) * 128;
+	
 	if (value + 128 > position.y)
 		return Block::Stone;
 	// else if (value > -0.05f && value < 0.05f)
 		// chunk.setBlock(blockX, blockY, blockZ, Block::Air);
+	else if (value + 133 > position.y)
+		return Block::Grass;
 	else
 		return Block::Air;
 }
@@ -94,13 +97,13 @@ Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	//spaghetti caves
 	float valueA = m_cave_perlin.noise(glm::vec3(
 		position.x * 0.01f,
-		position.y * 0.01f,
+		position.y * 0.016f,
 		position.z * 0.01f
 	));
 
 	float valueB = m_cave_perlin.noise(glm::vec3(
 		position.x * 0.01f,
-		(position.y + 42) * 0.01f,
+		(position.y + 42) * 0.016f,
 		position.z * 0.01f
 	));
 

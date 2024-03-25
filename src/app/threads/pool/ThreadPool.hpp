@@ -7,6 +7,7 @@
 #include <functional>
 #include <mutex>
 #include <condition_variable>
+#include <future>
 
 class JoinThreads
 {
@@ -38,18 +39,22 @@ public:
 	~ThreadPool();
 
 	template<typename FunctionType>
-	void submit(FunctionType f)
+	std::future<typename std::invoke_result<FunctionType>::type> submit(FunctionType f)
 	{
+		typedef typename std::invoke_result<FunctionType>::type result_type;
 		{
 			std::unique_lock<std::mutex> lock(m_queue_mutex);
-			m_work_queue.push(std::function<void()>(f));
+			std::packaged_task<result_type()> task(std::move(f));
+			std::future<result_type> res(task.get_future());
+			m_work_queue.push(std::move(task));
 			m_cond.notify_one();
+			return res;
 		}
 	}
 
 private:
 	std::atomic_bool					m_done;
-	std::queue<std::function<void()> >	m_work_queue;
+	std::queue<std::packaged_task<void()> >	m_work_queue;
 	std::mutex							m_queue_mutex;
 	std::condition_variable				m_cond;
 	std::vector<std::thread>			m_threads;
