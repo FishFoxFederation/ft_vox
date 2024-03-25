@@ -128,9 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3225e86aa7835545b3f6c2c8d363d5e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44d3d2ab618970605e684efc216655eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThreadPool.html#a44d3d2ab618970605e684efc216655eb">~ThreadPool</a> ()</td></tr>
 <tr class="separator:a44d3d2ab618970605e684efc216655eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea44e16754ae53582639eb5613f69f87"><td class="memTemplParams" colspan="2">template&lt;typename FunctionType &gt; </td></tr>
-<tr class="memitem:aea44e16754ae53582639eb5613f69f87"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classThreadPool.html#aea44e16754ae53582639eb5613f69f87">submit</a> (FunctionType f)</td></tr>
-<tr class="separator:aea44e16754ae53582639eb5613f69f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c503ac77debb1ab044e117f3adda10f"><td class="memTemplParams" colspan="2">template&lt;typename FunctionType &gt; </td></tr>
+<tr class="memitem:a9c503ac77debb1ab044e117f3adda10f"><td class="memTemplItemLeft" align="right" valign="top">std::future&lt; typename std::invoke_result&lt; FunctionType &gt;::type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classThreadPool.html#a9c503ac77debb1ab044e117f3adda10f">submit</a> (FunctionType f)</td></tr>
+<tr class="separator:a9c503ac77debb1ab044e117f3adda10f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3225e86aa7835545b3f6c2c8d363d5e5" name="a3225e86aa7835545b3f6c2c8d363d5e5"></a>
@@ -168,8 +168,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aea44e16754ae53582639eb5613f69f87" name="aea44e16754ae53582639eb5613f69f87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea44e16754ae53582639eb5613f69f87">&#9670;&#160;</a></span>submit()</h2>
+<a id="a9c503ac77debb1ab044e117f3adda10f" name="a9c503ac77debb1ab044e117f3adda10f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c503ac77debb1ab044e117f3adda10f">&#9670;&#160;</a></span>submit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -180,7 +180,7 @@ template&lt;typename FunctionType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void ThreadPool::submit </td>
+          <td class="memname">std::future&lt; typename std::invoke_result&lt; FunctionType &gt;::type &gt; ThreadPool::submit </td>
           <td>(</td>
           <td class="paramtype">FunctionType&#160;</td>
           <td class="paramname"><em>f</em></td><td>)</td>

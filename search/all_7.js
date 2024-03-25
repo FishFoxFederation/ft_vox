@@ -5,5 +5,6 @@ var searchData=
   ['hashes_2ehpp_2',['hashes.hpp',['../hashes_8hpp.html',1,'']]],
   ['height_3',['height',['../structImGuiTexture.html#a66c085d7946ee7eddd64faf5ee263326',1,'ImGuiTexture']]],
   ['history_4',['History',['../classHistory.html',1,'']]],
-  ['history_3c_20float_2c_20100_20_3e_5',['History&lt; float, 100 &gt;',['../classHistory.html',1,'']]]
+  ['history_3c_20float_2c_20100_20_3e_5',['History&lt; float, 100 &gt;',['../classHistory.html',1,'']]],
+  ['history_3c_20float_2c_201000_20_3e_6',['History&lt; float, 1000 &gt;',['../classHistory.html',1,'']]]
 ];

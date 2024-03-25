@@ -162,10 +162,15 @@ $(document).ready(function(){initNavTree('World_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::unordered_set&lt;glm::ivec3&gt;          m_chunk_unload_set;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    std::mutex                              m_chunk_unload_set_mutex;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">void</span>    doChunkGen(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp; number_of_chunks);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="comment">// void doChunkLoadUnload(const int &amp; number_of_chunks);</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">void</span>    addChunksToLoadUnloadQueue(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::unordered_set&lt;glm::ivec3&gt;          m_chunk_render_set;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    std::mutex                              m_chunk_render_set_mutex;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    std::queue&lt;std::future&lt;void&gt;&gt;           m_chunk_futures;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">void</span>    doChunkGen(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp; number_of_chunks);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="comment">// void doChunkLoadUnload(const int &amp; number_of_chunks);</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">void</span>    addChunksToLoadUnloadQueue(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>};</div>
 <div class="ttc" id="aBlock_8hpp_html"><div class="ttname"><a href="Block_8hpp.html">Block.hpp</a></div></div>
 <div class="ttc" id="aChunk_8hpp_html"><div class="ttname"><a href="Chunk_8hpp.html">Chunk.hpp</a></div></div>
 <div class="ttc" id="aPlayer_8hpp_html"><div class="ttname"><a href="Player_8hpp.html">Player.hpp</a></div></div>
@@ -174,14 +179,14 @@ $(document).ready(function(){initNavTree('World_8hpp_source.html',''); initResiz
 <div class="ttc" id="aWorldGenerator_8hpp_html"><div class="ttname"><a href="WorldGenerator_8hpp.html">WorldGenerator.hpp</a></div></div>
 <div class="ttc" id="aWorldScene_8hpp_html"><div class="ttname"><a href="WorldScene_8hpp.html">WorldScene.hpp</a></div></div>
 <div class="ttc" id="aclassPlayer_html"><div class="ttname"><a href="classPlayer.html">Player</a></div><div class="ttdef"><b>Definition:</b> Player.hpp:8</div></div>
-<div class="ttc" id="aclassThreadPool_html"><div class="ttname"><a href="classThreadPool.html">ThreadPool</a></div><div class="ttdef"><b>Definition:</b> ThreadPool.hpp:35</div></div>
+<div class="ttc" id="aclassThreadPool_html"><div class="ttname"><a href="classThreadPool.html">ThreadPool</a></div><div class="ttdef"><b>Definition:</b> ThreadPool.hpp:36</div></div>
 <div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:215</div></div>
-<div class="ttc" id="aclassWorldGenerator_html"><div class="ttname"><a href="classWorldGenerator.html">WorldGenerator</a></div><div class="ttdef"><b>Definition:</b> WorldGenerator.hpp:11</div></div>
+<div class="ttc" id="aclassWorldGenerator_html"><div class="ttname"><a href="classWorldGenerator.html">WorldGenerator</a></div><div class="ttdef"><b>Definition:</b> WorldGenerator.hpp:12</div></div>
 <div class="ttc" id="aclassWorldScene_html"><div class="ttname"><a href="classWorldScene.html">WorldScene</a></div><div class="ttdoc">Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ...</div><div class="ttdef"><b>Definition:</b> WorldScene.hpp:20</div></div>
 <div class="ttc" id="aclassWorld_html"><div class="ttname"><a href="classWorld.html">World</a></div><div class="ttdef"><b>Definition:</b> World.hpp:30</div></div>
 <div class="ttc" id="aclassWorld_html_a27e7781b2b2b2be832a4fccd7faaf1ec"><div class="ttname"><a href="classWorld.html#a27e7781b2b2b2be832a4fccd7faaf1ec">World::m_worldGenerator</a></div><div class="ttdeci">WorldGenerator m_worldGenerator</div><div class="ttdef"><b>Definition:</b> World.hpp:43</div></div>
 <div class="ttc" id="aclassWorld_html_a8c73fba541a5817fff65147ba47cd827"><div class="ttname"><a href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">World::~World</a></div><div class="ttdeci">~World()</div><div class="ttdef"><b>Definition:</b> World.cpp:24</div></div>
-<div class="ttc" id="aclassWorld_html_aa4ad28164f2e86601115f28b5c7f51b7"><div class="ttname"><a href="classWorld.html#aa4ad28164f2e86601115f28b5c7f51b7">World::update</a></div><div class="ttdeci">void update(glm::dvec3 playerPosition)</div><div class="ttdef"><b>Definition:</b> World.cpp:258</div></div>
+<div class="ttc" id="aclassWorld_html_aa4ad28164f2e86601115f28b5c7f51b7"><div class="ttname"><a href="classWorld.html#aa4ad28164f2e86601115f28b5c7f51b7">World::update</a></div><div class="ttdeci">void update(glm::dvec3 playerPosition)</div><div class="ttdef"><b>Definition:</b> World.cpp:282</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
 <div class="ttc" id="ahashes_8hpp_html"><div class="ttname"><a href="hashes_8hpp.html">hashes.hpp</a></div></div>
 <div class="ttc" id="alogger_8hpp_html"><div class="ttname"><a href="logger_8hpp.html">logger.hpp</a></div></div>

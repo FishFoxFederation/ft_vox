@@ -20,6 +20,7 @@ var hierarchy =
     [ "std::hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", null ],
     [ "History< T, N >", "classHistory.html", null ],
     [ "History< float, 100 >", "classHistory.html", null ],
+    [ "History< float, 1000 >", "classHistory.html", null ],
     [ "Image", "classImage.html", null ],
     [ "ImGuiTexture", "structImGuiTexture.html", null ],
     [ "Input", "classInput.html", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"logger_8hpp.html":[10,0,1,1,2],
 "logger_8hpp.html#a378e28bfcb78d17285210d6bbb70a083":[10,0,1,1,2,5],
 "logger_8hpp.html#a4091a2d7d849a8b5eded40d8723b8768":[10,0,1,1,2,2],
 "logger_8hpp.html#a58c994180e09d2f6400133b19b1d7036":[10,0,1,1,2,6],
