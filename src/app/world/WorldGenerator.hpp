@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "define.hpp"
 
@@ -21,9 +21,9 @@ public:
 	float	m_max = -1;
 	float 	m_min = 1;
 private:
-	Perlin m_relief_perlin;	
+	Perlin m_relief_perlin;
 	Perlin m_cave_perlin;
 
-	Block generateCaveBlock(glm::ivec3 position);
-	Block generateReliefBlock(glm::ivec3 position);
+	BlockID generateCaveBlock(glm::ivec3 position);
+	BlockID generateReliefBlock(glm::ivec3 position);
 };

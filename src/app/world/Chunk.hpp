@@ -6,7 +6,7 @@
 #include "Block.hpp"
 #include "define.hpp"
 
-#define CHUNK_SIZE 16
+#define CHUNK_SIZE 32
 
 class Chunk
 {
@@ -18,10 +18,10 @@ public:
 	Chunk(Chunk && other);
 	~Chunk();
 
-	typedef std::array<Block, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE> BlockArray;
+	typedef std::array<BlockID, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE> BlockArray;
 
-	Block				getBlock(const int & x, const int & y, const int & z) const;
-	void				setBlock(const int & x, const int & y, const int & z, Block block);
+	BlockID				getBlock(const int & x, const int & y, const int & z) const;
+	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
 
 	const uint64_t	&	getMeshID() const;
 	void				setMeshID(const uint64_t & mesh_id);

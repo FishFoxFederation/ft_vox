@@ -25,7 +25,7 @@ Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int 
 		{
 			for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
 			{
-				chunk.setBlock(blockX, blockY, blockZ, Block::Stone);
+				chunk.setBlock(blockX, blockY, blockZ, BlockID::Stone);
 			}
 		}
 	}
@@ -49,15 +49,15 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 					blockY + y * CHUNK_SIZE,
 					blockZ + z * CHUNK_SIZE
 				);
-				Block to_set;
+				BlockID to_set;
 
 				// if( position.y == 128)
 				// 	to_set = Block::Air;
 				// else
 				// {
 					to_set = generateReliefBlock(position);
-					if (to_set != Block::Air && generateCaveBlock(position) == Block::Air)
-						to_set = Block::Air;
+					if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
+						to_set = BlockID::Air;
 				// }
 				// if (to_set != Block::Air && position.y > 128)
 				// {
@@ -70,7 +70,7 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 	return chunk;
 }
 
-Block WorldGenerator::generateReliefBlock(glm::ivec3 position)
+BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
 {
 	float value = m_relief_perlin.noise(glm::vec2(
 		position.x * 0.01f,
@@ -79,18 +79,18 @@ Block WorldGenerator::generateReliefBlock(glm::ivec3 position)
 
 
 	value = ((value + 1) / 2) * 128;
-	
+
 	if (value + 128 > position.y)
-		return Block::Stone;
+		return BlockID::Stone;
 	// else if (value > -0.05f && value < 0.05f)
 		// chunk.setBlock(blockX, blockY, blockZ, Block::Air);
 	else if (value + 133 > position.y)
-		return Block::Grass;
+		return BlockID::Grass;
 	else
-		return Block::Air;
+		return BlockID::Air;
 }
 
-Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
+BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 {
 
 
@@ -119,7 +119,7 @@ Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	m_called++;
 
 	if (value < threshold)
-		return Block::Air;
+		return BlockID::Air;
 
 	// else try to create cheese cave
 
@@ -143,9 +143,9 @@ Block WorldGenerator::generateCaveBlock(glm::ivec3 position)
 		edge = 0;
 
 	if (valueA > 0 && valueA < edge)
-		return Block::Air;
+		return BlockID::Air;
 	else
-		return Block::Stone;
+		return BlockID::Stone;
 
-	return Block::Stone;
+	return BlockID::Stone;
 }

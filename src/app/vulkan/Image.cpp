@@ -110,7 +110,7 @@ Image::Image(
 
 		if (!pixel)
 		{
-			throw std::runtime_error("Failed to load texture image" + file_path);
+			throw std::runtime_error("Failed to load texture image '" + file_path + "'.");
 		}
 
 
