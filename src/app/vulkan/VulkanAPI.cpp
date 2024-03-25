@@ -23,7 +23,6 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	createColorAttachement();
 	createDepthAttachement();
-	createShadowMap();
 	createUniformBuffers();
 	createTextureArray({
 		"assets/textures/stone.jpg",
@@ -44,8 +43,6 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createChunkPipeline();
 	createLinePipeline();
 	createSkyboxPipeline();
-	createShadowMapPipeline();
-	createTexturePipeline();
 
 	setupImgui();
 	createImGuiTexture(100, 100);
@@ -763,11 +760,6 @@ void VulkanAPI::createColorAttachement()
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 	color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
-
-	color_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
-	color_attachement_info.create_sampler = true;
-
-	color_attachement_copy = Image(device, physical_device, command_buffer, color_attachement_info);
 }
 
 void VulkanAPI::createDepthAttachement()
@@ -790,24 +782,6 @@ void VulkanAPI::createDepthAttachement()
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
-}
-
-void VulkanAPI::createShadowMap()
-{
-	Image::CreateInfo shadow_map_info = {};
-	shadow_map_info.extent = { 2048, 2048 };
-	shadow_map_info.aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT;
-	shadow_map_info.format = VK_FORMAT_D32_SFLOAT;
-	shadow_map_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-	shadow_map_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-	shadow_map_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	shadow_map_info.create_view = true;
-	shadow_map_info.create_sampler = true;
-	shadow_map_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-
-	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
-
-	shadow_map = Image(device, physical_device, command_buffer, shadow_map_info);
 }
 
 void VulkanAPI::createUniformBuffers()
@@ -935,7 +909,7 @@ void VulkanAPI::createDescriptors()
 		descriptor_info.bindings = { ubo_layout_binding };
 		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
 		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
-		
+
 		camera_descriptor = Descriptor(device, descriptor_info);
 
 		for (int i = 0; i < max_frames_in_flight; i++)
@@ -1036,117 +1010,6 @@ void VulkanAPI::createDescriptors()
 			0, nullptr
 		);
 	}
-
-	// Shadow map descriptor
-	{
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		shadow_map_descriptor = Descriptor(device, descriptor_info);
-
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = shadow_map.view;
-		image_info.sampler = shadow_map.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = shadow_map_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
-
-	// Depth attachement descriptor
-	{
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		depth_attachement_descriptor = Descriptor(device, descriptor_info);
-
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = depth_attachement.view;
-		image_info.sampler = depth_attachement.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = depth_attachement_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
-
-	// Color attachement descriptor
-	{
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		color_attachement_copy_descriptor = Descriptor(device, descriptor_info);
-
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = color_attachement_copy.view;
-		image_info.sampler = color_attachement_copy.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = color_attachement_copy_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
 }
 
 void VulkanAPI::createChunkPipeline()
@@ -1157,12 +1020,11 @@ void VulkanAPI::createChunkPipeline()
 	pipeline_info.frag_path = "shaders/simple_shader.frag.spv";
 	pipeline_info.binding_description = BlockVertex::getBindingDescription();
 	pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
-	pipeline_info.color_formats = { color_attachement.format, color_attachement_copy.format };
+	pipeline_info.color_formats = { color_attachement.format };
 	pipeline_info.depth_format = depth_attachement.format;
 	pipeline_info.descriptor_set_layouts = {
 		camera_descriptor.layout,
-		block_textures_descriptor.layout,
-		shadow_map_descriptor.layout
+		block_textures_descriptor.layout
 	};
 	pipeline_info.push_constant_ranges = {
 		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
@@ -1196,7 +1058,7 @@ void VulkanAPI::createSkyboxPipeline()
 	pipeline_info.extent = swap_chain_extent;
 	pipeline_info.vert_path = "shaders/skybox_shader.vert.spv";
 	pipeline_info.frag_path = "shaders/skybox_shader.frag.spv";
-	pipeline_info.color_formats = { color_attachement.format, color_attachement_copy.format };
+	pipeline_info.color_formats = { color_attachement.format };
 	pipeline_info.depth_format = depth_attachement.format;
 	pipeline_info.descriptor_set_layouts = {
 		camera_descriptor.layout,
@@ -1207,39 +1069,6 @@ void VulkanAPI::createSkyboxPipeline()
 	};
 
 	skybox_pipeline = Pipeline::create(device, pipeline_info);
-}
-
-void VulkanAPI::createShadowMapPipeline()
-{
-	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = shadow_map.extent2D;
-	pipeline_info.vert_path = "shaders/shadow_map_shader.vert.spv";
-	pipeline_info.frag_path = "shaders/shadow_map_shader.frag.spv";
-	pipeline_info.binding_description = BlockVertex::getBindingDescription();
-	pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
-	pipeline_info.depth_format = VK_FORMAT_D32_SFLOAT;
-	pipeline_info.push_constant_ranges = {
-		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ShadowMapLight) }
-	};
-
-	shadow_map_pipeline = Pipeline::create(device, pipeline_info);
-}
-
-void VulkanAPI::createTexturePipeline()
-{
-	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = { swap_chain_extent.width / 2, swap_chain_extent.height / 2 };
-	pipeline_info.vert_path = "shaders/texture_shader.vert.spv";
-	pipeline_info.frag_path = "shaders/texture_shader.frag.spv";
-	pipeline_info.cull_mode = VK_CULL_MODE_NONE;
-	pipeline_info.color_formats = { color_attachement.format };
-	pipeline_info.descriptor_set_layouts = {
-		shadow_map_descriptor.layout,
-		depth_attachement_descriptor.layout,
-		color_attachement_copy_descriptor.layout
-	};
-
-	texture_pipeline = Pipeline::create(device, pipeline_info);
 }
 
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)

@@ -145,117 +145,6 @@ void RenderThread::loop()
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
 
-	vk.shadow_map.transitionLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-	);
-
-
-	VkRenderingAttachmentInfo shadow_pass_depth_attachment = {};
-	shadow_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	shadow_pass_depth_attachment.imageView = vk.shadow_map.view;
-	shadow_pass_depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	shadow_pass_depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	shadow_pass_depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	shadow_pass_depth_attachment.clearValue = { 1.0f, 0 };
-
-	VkRenderingInfo shadow_pass_render_info = {};
-	shadow_pass_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	shadow_pass_render_info.renderArea = { 0, 0, vk.shadow_map.extent2D.width, vk.shadow_map.extent2D.height };
-	shadow_pass_render_info.layerCount = 1;
-	shadow_pass_render_info.colorAttachmentCount = 0;
-	shadow_pass_render_info.pColorAttachments = nullptr;
-	shadow_pass_render_info.pDepthAttachment = &shadow_pass_depth_attachment;
-
-	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &shadow_pass_render_info);
-
-
-	// Shadow pass
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_map_pipeline.pipeline);
-	
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.shadow_map_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(CameraMatrices),
-		&sun
-	);
-
-	for (auto & chunk_mesh : chunk_meshes)
-	{
-		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
-		{
-			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
-			continue;
-		}
-
-		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
-
-		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
-		const VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(
-			vk.draw_command_buffers[vk.current_frame],
-			0, 1,
-			vertex_buffers,
-			offsets
-		);
-
-		vkCmdBindIndexBuffer(
-			vk.draw_command_buffers[vk.current_frame],
-			vk.meshes[chunk_mesh.id].buffer,
-			vk.meshes[chunk_mesh.id].index_offset,
-			VK_INDEX_TYPE_UINT32
-		);
-
-		ModelMatrice model_matrice = {};
-		model_matrice.model = chunk_mesh.transform.model();
-		vkCmdPushConstants(
-			vk.draw_command_buffers[vk.current_frame],
-			vk.shadow_map_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT,
-			2 * sizeof(glm::mat4),
-			sizeof(ModelMatrice),
-			&model_matrice
-		);
-
-		vkCmdDrawIndexed(
-			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(vk.meshes[chunk_mesh.id].index_count),
-			1, 0, 0, 0
-		);
-	}
-
-	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
-
-
-	vk.shadow_map.transitionLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
-
-	vk.depth_attachement.transitionLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-	);
-
-	vk.color_attachement_copy.transitionLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-	);
-
 	VkRenderingAttachmentInfo color_attachment = {};
 	color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
 	color_attachment.imageView = vk.color_attachement.view;
@@ -264,17 +153,8 @@ void RenderThread::loop()
 	color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	color_attachment.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	VkRenderingAttachmentInfo color_attachment_copy = {};
-	color_attachment_copy.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	color_attachment_copy.imageView = vk.color_attachement_copy.view;
-	color_attachment_copy.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	color_attachment_copy.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	color_attachment_copy.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	color_attachment_copy.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
-
 	std::vector<VkRenderingAttachmentInfo> lighting_pass_color_attachments = {
-		color_attachment,
-		color_attachment_copy
+		color_attachment
 	};
 
 	VkRenderingAttachmentInfo lighting_pass_depth_attachment = {};
@@ -301,8 +181,7 @@ void RenderThread::loop()
 
 	const std::vector<VkDescriptorSet> descriptor_sets = {
 		vk.camera_descriptor.sets[vk.current_frame],
-		vk.block_textures_descriptor.set,
-		vk.shadow_map_descriptor.set
+		vk.block_textures_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
@@ -373,108 +252,43 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-	// 	vk.camera_descriptor.sets[vk.current_frame],
-	// 	vk.cube_map_descriptor.set
-	// };
-
-	// vkCmdBindDescriptorSets(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.skybox_pipeline.layout,
-	// 	0,
-	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
-	// 	skybox_descriptor_sets.data(),
-	// 	0,
-	// 	nullptr
-	// );
-
-	// ModelMatrice camera_model_matrice = {};
-	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	// vkCmdPushConstants(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	vk.skybox_pipeline.layout,
-	// 	VK_SHADER_STAGE_VERTEX_BIT,
-	// 	0,
-	// 	sizeof(ModelMatrice),
-	// 	&camera_model_matrice
-	// );
-
-	// vkCmdDraw(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	36,
-	// 	1,
-	// 	0,
-	// 	0
-	// );
-
-
-	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
-
-
-	vk.depth_attachement.transitionLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
-
-	vk.color_attachement_copy.transitionLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
-
-
-	std::array<VkRenderingAttachmentInfo, 1> depth_test_color_attachments = {};
-	depth_test_color_attachments[0].sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	depth_test_color_attachments[0].imageView = vk.color_attachement.view;
-	depth_test_color_attachments[0].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	depth_test_color_attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-	depth_test_color_attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-
-	VkRenderingInfo depth_test_render_info = {};
-	depth_test_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	depth_test_render_info.renderArea = { 0, 0, vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height };
-	depth_test_render_info.layerCount = 1;
-	depth_test_render_info.colorAttachmentCount = static_cast<uint32_t>(depth_test_color_attachments.size());
-	depth_test_render_info.pColorAttachments = depth_test_color_attachments.data();
-
-	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &depth_test_render_info);
-
-
-	// draw the shadow map texture
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.texture_pipeline.pipeline);
-
-	const std::vector<VkDescriptorSet> texture_descriptor_sets = {
-		vk.shadow_map_descriptor.set,
-		vk.depth_attachement_descriptor.set,
-		vk.color_attachement_copy_descriptor.set
+	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.cube_map_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.texture_pipeline.layout,
+		vk.skybox_pipeline.layout,
 		0,
-		static_cast<uint32_t>(texture_descriptor_sets.size()),
-		texture_descriptor_sets.data(),
+		static_cast<uint32_t>(skybox_descriptor_sets.size()),
+		skybox_descriptor_sets.data(),
 		0,
 		nullptr
 	);
 
+	ModelMatrice camera_model_matrice = {};
+	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.skybox_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(ModelMatrice),
+		&camera_model_matrice
+	);
+
 	vkCmdDraw(
 		vk.draw_command_buffers[vk.current_frame],
-		6,
+		36,
 		1,
 		0,
 		0
 	);
+
 
 	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
 
