@@ -29,7 +29,7 @@ void ThreadPool::worker_thread()
 {
 	while (!m_done)
 	{
-		std::function<void()> task;
+		std::packaged_task<void()> task;
 		{
 			std::unique_lock<std::mutex> lock(m_queue_mutex);
 			m_cond.wait(lock, [&] {return !m_work_queue.empty() || m_done; });

@@ -102,6 +102,12 @@ public:
 
 	static inline std::atomic_int32_t chunk_mesh_count = 0;
 
+	static inline History<float, 100> chunk_count_history;
+
+	static inline History<float, 1000> chunk_load_queue_size_history;
+
+	static inline History<float, 1000> chunk_unload_queue_size_history;
+
 private:
 
 	VulkanAPI & vk;

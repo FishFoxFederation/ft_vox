@@ -111,9 +111,21 @@ void World::addChunksToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
 	std::lock_guard<std::mutex> lock2(m_chunk_gen_set_mutex);
 	std::lock_guard<std::mutex> lock3(m_chunk_unload_set_mutex);
+
+
+	DebugGui::chunk_count_history.push(m_chunks.size());
+	DebugGui::chunk_load_queue_size_history.push(m_chunk_gen_set.size());
+	DebugGui::chunk_unload_queue_size_history.push(m_chunk_unload_set.size());
+
+
+
+
 	/**************************************************************
 	 * GENERATE CHUNKS DYNAMICALLY
 	 **************************************************************/
+
+
+
 	glm::ivec3 playerChunk = glm::ivec3(m_player.position()) / CHUNK_SIZE;
 	glm::ivec3 nextPlayerChunk = glm::ivec3(nextPlayerPosition) / CHUNK_SIZE;
 	glm::ivec3 playerChunkDiff = playerChunk - nextPlayerChunk;
@@ -124,12 +136,12 @@ void World::addChunksToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 	/**************************************************************
 	 * LOAD CHUNKS
 	 **************************************************************/
-	for(int x = -RENDER_DISTANCE; x < RENDER_DISTANCE; x++)
+	for(int x = -LOAD_DISTANCE; x < LOAD_DISTANCE; x++)
 	{
-		for(int y = -RENDER_DISTANCE; y < RENDER_DISTANCE; y++)
+		for(int y = -LOAD_DISTANCE; y < LOAD_DISTANCE; y++)
 		{
 			if (y + nextPlayerChunk.y < 0 || (y + nextPlayerChunk.y) * CHUNK_SIZE > WORLD_Y_MAX) continue;
-			for(int z = -RENDER_DISTANCE; z < RENDER_DISTANCE; z++)
+			for(int z = -LOAD_DISTANCE; z < LOAD_DISTANCE; z++)
 			{
 				glm::ivec3 chunkPos = glm::ivec3(x, y, z) + nextPlayerChunk;
 
@@ -137,43 +149,33 @@ void World::addChunksToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				{
 					// LOG_INFO("Adding chunk to queue: " << chunkPos.x << " " << chunkPos.y << " " << chunkPos.z);
 
-					if(m_chunk_unload_set.contains(chunkPos))
-						m_chunk_unload_set.erase(chunkPos);
+					if(m_chunk_gen_set.contains(chunkPos))
+						continue;
 					m_chunk_gen_set.insert(chunkPos);
 
-					m_threadPool.submit([this, chunkPos]()
+					m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
 					{
 						/**************************************************************
 						 * CHUNK LOADING FUNCTION
 						 **************************************************************/
+						Chunk chunk = m_worldGenerator.generateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
+						chunk.setMeshID(0);
 						{
-							std::lock_guard<std::mutex> lock(m_chunk_gen_set_mutex);
+							std::lock_guard<std::mutex> lock(m_chunks_mutex);
+							std::lock_guard<std::mutex> lock2(m_chunk_gen_set_mutex);
+
 							if (!m_chunk_gen_set.contains(chunkPos))
 								return;
 							m_chunk_gen_set.erase(chunkPos);
+							// auto [it, success] = m_chunks.insert(std::make_pair(chunkPos, std::move(chunk)));
+							m_chunks.insert(std::make_pair(chunkPos, std::move(chunk)));
 						}
-
-						Chunk chunk = m_worldGenerator.generateChunk(chunkPos.x, chunkPos.y, chunkPos.z);
-						Chunk * chunk_ptr;
-						{
-							std::lock_guard<std::mutex> lock(m_chunks_mutex);
-							auto [it, success] = m_chunks.insert(std::make_pair(chunkPos, std::move(chunk)));
-							chunk_ptr = &it->second;
-						}
-
-						uint64_t mesh_id = m_vulkanAPI.createMesh(*chunk_ptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
-						chunk_ptr->setMeshID(mesh_id);
-						if(mesh_id != VulkanAPI::no_mesh_id)
-							m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos * CHUNK_SIZE));
-					});
+					}));
 				}
 			}
 		}
 	}
 
-	/**************************************************************
-	 * UNLOAD CHUNKS
-	 **************************************************************/
 	/*// for(int x = -RENDER_DISTANCE; x < RENDER_DISTANCE; x++)
 	// {
 	// 	for(int y = -RENDER_DISTANCE; y < RENDER_DISTANCE; y++)
@@ -206,53 +208,75 @@ void World::addChunksToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 	// 		}
 	// 	}
 	// }*/
-	
 
 	for (auto & [pos, chunk] : m_chunks)
 	{
-		if (glm::distance(glm::vec3(pos), glm::vec3(playerChunk)) > RENDER_DISTANCE + 2)
+		/**************************************************************
+		 * UNLOAD CHUNKS
+		 **************************************************************/
+		float distance = glm::distance(glm::vec3(pos), glm::vec3(playerChunk));
+		const glm::ivec3 chunkPos = pos;
+		if (distance > LOAD_DISTANCE)
 		{
-			LOG_INFO("Adding chunk to unload queue: " << pos.x << " " << pos.y << " " << pos.z);
+			// LOG_INFO("Adding chunk to unload queue: " << pos.x << " " << pos.y << " " << pos.z);
 
-			if(m_chunk_gen_set.contains(pos))
-				m_chunk_gen_set.erase(pos);			
-			m_chunk_unload_set.insert(pos);
+			// if(m_chunk_unload_set.contains(pos))
+			// 	continue;
+			// m_chunk_unload_set.insert(pos);
+			m_chunk_gen_set.erase(pos);			
 
-			const glm::ivec3 chunkPos = pos;
-			m_threadPool.submit([this, chunkPos]()
+			m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
 			{
 				/**************************************************************
 				 * CHUNK UNLOADING FUNCTION
 				 **************************************************************/
-				{
-					std::lock_guard<std::mutex> lock(m_chunk_unload_set_mutex);
-					if (!m_chunk_unload_set.contains(chunkPos))
-						return;
-					m_chunk_unload_set.erase(chunkPos);
-				}
-
-
 				std::unique_lock<std::mutex> lock(m_chunks_mutex);
-				LOG_INFO("Unloading chunk: " << chunkPos.x << " " << chunkPos.y << " " << chunkPos.z);
 
-				if(!m_chunks.contains(chunkPos))
-					return;
+				// LOG_INFO("Unloading chunk: " << chunkPos.x << " " << chunkPos.y << " " << chunkPos.z);
+
 				uint64_t mesh_id = m_chunks.at(chunkPos).getMeshID();
 				m_chunks.erase(chunkPos);
 				lock.unlock();
 
 				m_worldScene.removeMesh(mesh_id);
 				m_vulkanAPI.destroyMesh(mesh_id);
-			});
+			}));
+		}
+		/**************************************************************
+		* RENDER CHUNKS
+		****************************************************************/
+		else if (distance <= RENDER_DISTANCE && chunk.getMeshID() == VulkanAPI::no_mesh_id)
+		{
+			// LOG_INFO("Adding chunk to load queue: " << pos.x << " " << pos.y << " " << pos.z);
+			// if (m_chunk_render_set.contains(pos) || m_chunk_unload_set.contains(pos))
+				// continue;
+			m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
+			{
+				/**************************************************************
+				 * CALCULATE MESH FUNCTION
+				 **************************************************************/
+				std::pair<Chunk *, uint64_t> chunk_pair, z_pos, z_neg, x_pos, x_neg, y_pos, y_neg;
+				{
+					std::lock_guard<std::mutex> lock(m_chunks_mutex);
+					z_pos.first = m_chunks.contains(chunkPos + glm::ivec3(0, 0, 1)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 0, 1)) : nullptr;
+					z_neg.first = m_chunks.contains(chunkPos + glm::ivec3(0, 0, -1)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 0, -1)) : nullptr;
+					x_pos.first = m_chunks.contains(chunkPos + glm::ivec3(1, 0, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(1, 0, 0)) : nullptr;
+					x_neg.first = m_chunks.contains(chunkPos + glm::ivec3(-1, 0, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(-1, 0, 0)) : nullptr;
+					y_pos.first = m_chunks.contains(chunkPos + glm::ivec3(0, 1, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 1, 0)) : nullptr;
+					y_neg.first = m_chunks.contains(chunkPos + glm::ivec3(0, -1, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(0, -1, 0)) : nullptr;
+					auto it = m_chunks.find(chunkPos);
+					if (it == m_chunks.end())
+						return;
+					chunk_pair.first = &it->second;
+				}
+
+				uint64_t mesh_id = m_vulkanAPI.createMesh(*chunk_pair.first, x_pos.first, x_neg.first, y_pos.first, y_neg.first, z_pos.first, z_neg.first);
+				chunk_pair.first->setMeshID(mesh_id);
+				if(mesh_id != VulkanAPI::no_mesh_id)
+					m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos * CHUNK_SIZE));
+			}));
 		}
 	}
-
-	// for (int x = -(RENDER_DISTANCE * playerChunkDiff.x); x < RENDER_DISTANCE * playerChunkDiff.x; x++)
-	// {
-	// 	for (int y = -(RENDER_DISTANCE * playerChunkDiff.y); y < RENDER_DISTANCE * playerChunkDiff.y; y++)
-	// 	{
-	// 		for (int z = -(RENDER_DISTANCE * playerChunkDiff.z); z < RENDER_DISTANCE * playerChunkDiff.z; z++)
-	// 		{
 }
 
 void World::update(glm::dvec3 nextPlayerPosition)
@@ -260,6 +284,18 @@ void World::update(glm::dvec3 nextPlayerPosition)
 	// if (playerPosition.length() == 0.0f) return;
 
 	addChunksToLoadUnloadQueue(nextPlayerPosition);
+
+	while(!m_chunk_futures.empty())
+	{
+		m_chunk_futures.front().wait();
+		m_chunk_futures.front().get();
+		m_chunk_futures.pop();
+	}
+
+	if (m_chunk_gen_set.size() > 0 || m_chunk_unload_set.size() > 0 || m_chunk_render_set.size() > 0)
+	{
+		LOG_INFO("Chunk gen: " << m_chunk_gen_set.size() << " Chunk unload: " << m_chunk_unload_set.size() << " Chunk render: " << m_chunk_render_set.size());
+	}
 	// doChunkLoadUnload(20);
 
 	m_player.setPosition(nextPlayerPosition);

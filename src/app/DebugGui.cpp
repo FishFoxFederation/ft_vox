@@ -42,13 +42,13 @@ void DebugGui::updateImGui()
 					{
 						std::string average = "Average: " + std::to_string(frame_time_history.average()) + " ms";
 						auto lock = frame_time_history.lock();
-						ImGui::PlotHistogram("Frame time", frame_time_history.data(), frame_time_history.size(), 0, average.c_str(), 0.0f, 100.0f, ImVec2(200, 80));
+						ImGui::PlotHistogram("Frame time", frame_time_history.data(), frame_time_history.size(), 0, average.c_str(), 0.0f, 3000.0f, ImVec2(200, 80));
 					}
 
 					{
 						std::string average = "Average: " + std::to_string(cpu_time_history.average()) + " ms";
 						auto lock = cpu_time_history.lock();
-						ImGui::PlotHistogram("Cpu time", cpu_time_history.data(), cpu_time_history.size(), 0, average.c_str(), 0.0f, 100.0f, ImVec2(200, 80));
+						ImGui::PlotHistogram("Cpu time", cpu_time_history.data(), cpu_time_history.size(), 0, average.c_str(), 0.0f, 3000.0f, ImVec2(200, 80));
 					}
 				}
 				if (ImGui::CollapsingHeader("Update Thread"))
@@ -58,6 +58,16 @@ void DebugGui::updateImGui()
 				if (ImGui::CollapsingHeader("Block Update Thread"))
 				{
 					ImGui::Text("Fps: %d", fps.load());
+
+					{
+						auto lock = chunk_load_queue_size_history.lock();
+						ImGui::PlotHistogram("Load queue size", chunk_load_queue_size_history.data(), chunk_load_queue_size_history.size(), 0, "Chunks", 0.0f, 100.0f, ImVec2(200, 80));
+					}
+					{
+						auto lock = chunk_unload_queue_size_history.lock();
+						ImGui::PlotHistogram("Unload queue size", chunk_unload_queue_size_history.data(), chunk_unload_queue_size_history.size(), 0, "Chunks", 0.0f, 100.0f, ImVec2(200, 80));
+					}
+
 				}
 
 				ImGui::EndTabItem();

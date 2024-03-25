@@ -26,7 +26,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createDepthResources();
 	createUniformBuffers();
 	createTextureArray({
-		"assets/textures/stone.jpg",
+		"assets/textures/grass.jpg",
 		"assets/textures/stone.jpg"
 	}, 64);
 	createCubeMap({
