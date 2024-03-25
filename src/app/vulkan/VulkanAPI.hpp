@@ -304,11 +304,9 @@ public:
 
 
 	Image color_attachement;
-	Image color_attachement_copy;
 	Image depth_attachement;
 	Image block_textures;
 	Image skybox_cube_map;
-	Image shadow_map;
 
 	// Uniform buffers for the camera matrices
 	std::vector<VkBuffer> camera_uniform_buffers;
@@ -327,16 +325,11 @@ public:
 	Descriptor camera_descriptor;
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
-	Descriptor shadow_map_descriptor;
-	Descriptor depth_attachement_descriptor;
-	Descriptor color_attachement_copy_descriptor;
 	void createDescriptors();
 
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
 	Pipeline skybox_pipeline;
-	Pipeline shadow_map_pipeline;
-	Pipeline texture_pipeline;
 
 
 	// Dear ImGui resources
@@ -412,7 +405,6 @@ private:
 
 	void createColorAttachement();
 	void createDepthAttachement();
-	void createShadowMap();
 
 	void createUniformBuffers();
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
@@ -422,8 +414,6 @@ private:
 	void createChunkPipeline();
 	void createLinePipeline();
 	void createSkyboxPipeline();
-	void createShadowMapPipeline();
-	void createTexturePipeline();
 
 	void destroyMeshes();
 

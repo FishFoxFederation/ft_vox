@@ -17,6 +17,7 @@ Image::Image():
 	sampler(VK_NULL_HANDLE),
 	m_device(VK_NULL_HANDLE)
 {
+	(void)m_physical_device;
 }
 
 Image::Image(Image && other) noexcept:
@@ -174,7 +175,7 @@ Image::Image(
 		vkCreateImage(m_device, &image_create_info, nullptr, &image),
 		"Failed to create image"
 	);
-	
+
 	VkMemoryRequirements memory_requirements;
 	vkGetImageMemoryRequirements(m_device, image, &memory_requirements);
 
@@ -380,7 +381,7 @@ Image::Image(
 				create_info.final_layout
 			);
 		}
-	
+
 	}
 	else // No files
 	{
@@ -494,7 +495,7 @@ void Image::transitionLayout(
 		{
 			barrier.srcAccessMask = 0;
 			src_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-			
+
 			switch (new_layout)
 			{
 			case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
