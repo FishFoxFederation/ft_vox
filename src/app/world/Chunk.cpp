@@ -7,7 +7,7 @@ Chunk::Chunk(glm::ivec3 position)
 	(void)m_position;
 	// LOG_INFO("Chunk created at position: " << m_position.x << " " << m_position.y << " " << m_position.z);
 	for(auto & block : m_blocks)
-		block = Block::Air;
+		block = BlockID::Air;
 }
 
 Chunk::Chunk(const Chunk & other)
@@ -29,14 +29,14 @@ Chunk::~Chunk()
 
 }
 
-Block Chunk::getBlock(const int & x, const int & y, const int & z) const
+BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const
 {
 	int index = toIndex(x, y, z);
 
 	return m_blocks[index];
 }
 
-void Chunk::setBlock(const int & x, const int & y, const int & z, Block block)
+void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 {
 	int index = toIndex(x, y, z);
 

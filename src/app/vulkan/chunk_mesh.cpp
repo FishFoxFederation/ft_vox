@@ -29,107 +29,99 @@ uint64_t VulkanAPI::createMesh(
 		{
 			for (int z = 0; z < CHUNK_SIZE; z++)
 			{
-				Block block = chunk.getBlock(x, y, z);
+				BlockID block_id = chunk.getBlock(x, y, z);
 
-				if (block != Block::Air)
+				if (block_id != BlockID::Air)
 				{
-
-					uint32_t texture_index = 0;
-					switch (block)
-					{
-					case Block::Grass: texture_index = 0; break;
-					case Block::Stone: texture_index = 1; break;
-					default:
-						break;
-					}
+					Data block_data = Block::getData(block_id);
 
 					// check right neighbor (x + 1)
 					if (
-						(x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == Block::Air)
-						|| (x == CHUNK_SIZE - 1 && x_pos_chunk != nullptr && x_pos_chunk->getBlock(0, y, z) == Block::Air)
+						(x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == BlockID::Air)
+						|| (x == CHUNK_SIZE - 1 && x_pos_chunk != nullptr && x_pos_chunk->getBlock(0, y, z) == BlockID::Air)
 						// || (x == CHUNK_SIZE - 1 && x_pos_chunk == nullptr)
 						// || (x == CHUNK_SIZE - 1)
 					)
 					{
-						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
-						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
-						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
+						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.right});
+						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.right});
+						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.right});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.right});
 						ADD_INDEX
 					}
 
 					// check left neighbor (x - 1)
 					if (
-						(x > 0 && chunk.getBlock(x - 1, y, z) == Block::Air)
-						|| (x == 0 && x_neg_chunk != nullptr && x_neg_chunk->getBlock(CHUNK_SIZE - 1, y, z) == Block::Air)
+						(x > 0 && chunk.getBlock(x - 1, y, z) == BlockID::Air)
+						|| (x == 0 && x_neg_chunk != nullptr && x_neg_chunk->getBlock(CHUNK_SIZE - 1, y, z) == BlockID::Air)
 						// || (x == 0 && x_neg_chunk == nullptr)
 						// || (x == 0)
 					)
 					{
-						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
-						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
-						vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
-						vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
+						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.left});
+						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.left});
+						vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.left});
+						vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.left});
 						ADD_INDEX
 					}
 
 					// check top neighbor (y + 1)
 					if (
-						(y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == Block::Air)
-						|| (y == CHUNK_SIZE - 1 && y_pos_chunk != nullptr && y_pos_chunk->getBlock(x, 0, z) == Block::Air)
+						(y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == BlockID::Air)
+						|| (y == CHUNK_SIZE - 1 && y_pos_chunk != nullptr && y_pos_chunk->getBlock(x, 0, z) == BlockID::Air)
 						// || (y == CHUNK_SIZE - 1 && y_pos_chunk == nullptr)
 						// || (y == CHUNK_SIZE - 1)
 					)
 					{
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
-						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.top});
+						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.top});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.top});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.top});
 						ADD_INDEX
 					}
 
 					// check bottom neighbor (y - 1)
 					if (
-						(y > 0 && chunk.getBlock(x, y - 1, z) == Block::Air)
-						|| (y == 0 && y_neg_chunk != nullptr && y_neg_chunk->getBlock(x, CHUNK_SIZE - 1, z) == Block::Air)
+						(y > 0 && chunk.getBlock(x, y - 1, z) == BlockID::Air)
+						|| (y == 0 && y_neg_chunk != nullptr && y_neg_chunk->getBlock(x, CHUNK_SIZE - 1, z) == BlockID::Air)
 						// || (y == 0 && y_neg_chunk == nullptr)
 						// || (y == 0)
 					)
 					{
-						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, texture_index});
-						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, texture_index});
-						vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, texture_index});
-						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, texture_index});
+						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.bottom});
+						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.bottom});
+						vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.bottom});
+						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.bottom});
 						ADD_INDEX
 					}
 
 					// check back neighbor (z + 1)
 					if (
-						(z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == Block::Air)
-						|| (z == CHUNK_SIZE - 1 && z_pos_chunk != nullptr && z_pos_chunk->getBlock(x, y, 0) == Block::Air)
+						(z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == BlockID::Air)
+						|| (z == CHUNK_SIZE - 1 && z_pos_chunk != nullptr && z_pos_chunk->getBlock(x, y, 0) == BlockID::Air)
 						// || (z == CHUNK_SIZE - 1 && z_pos_chunk == nullptr)
 						// || (z == CHUNK_SIZE - 1)
 					)
 					{
-						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, texture_index});
-						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, texture_index});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, texture_index});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, texture_index});
+						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, block_data.texture.front});
+						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, block_data.texture.front});
+						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, block_data.texture.front});
+						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, block_data.texture.front});
 						ADD_INDEX
 					}
 
 					// check front neighbor (z - 1)
 					if (
-						(z > 0 && chunk.getBlock(x, y, z - 1) == Block::Air)
-						|| (z == 0 && z_neg_chunk != nullptr && z_neg_chunk->getBlock(x, y, CHUNK_SIZE - 1) == Block::Air)
+						(z > 0 && chunk.getBlock(x, y, z - 1) == BlockID::Air)
+						|| (z == 0 && z_neg_chunk != nullptr && z_neg_chunk->getBlock(x, y, CHUNK_SIZE - 1) == BlockID::Air)
 						// || (z == 0 && z_neg_chunk == nullptr)
 						// || (z == 0)
 					)
 					{
-						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, texture_index});
-						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, texture_index});
-						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, texture_index});
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, texture_index});
+						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, block_data.texture.back});
+						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, block_data.texture.back});
+						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, block_data.texture.back});
+						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, block_data.texture.back});
 						ADD_INDEX
 					}
 				}
@@ -155,7 +147,7 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	VkDeviceSize buffer_size = vertex_size + index_size;
 
 	std::lock_guard<std::mutex> lock(global_mutex);
-	
+
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
 	createBuffer(

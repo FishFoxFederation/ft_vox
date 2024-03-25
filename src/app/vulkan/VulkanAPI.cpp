@@ -1,5 +1,6 @@
 #include "VulkanAPI.hpp"
 #include "logger.hpp"
+#include "Block.hpp"
 
 #include <stb_image.h>
 
@@ -24,10 +25,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createColorAttachement();
 	createDepthAttachement();
 	createUniformBuffers();
-	createTextureArray({
-		"assets/textures/grass.jpg",
-		"assets/textures/stone.jpg"
-	}, 64);
+	createTextureArray(Block::texture_names, 64);
 	createCubeMap({
 		"assets/textures/skybox/right.jpg",
 		"assets/textures/skybox/left.jpg",
