@@ -1,12 +1,10 @@
 var searchData=
 [
-  ['physical_5fdevice_0',['physical_device',['../classVulkanAPI.html#a70fc3d9525d7e52852bb0b7be66af812',1,'VulkanAPI']]],
-  ['pipeline_5flayout_1',['pipeline_layout',['../classVulkanAPI.html#aa0446488c89a7a21f749f5984272385e',1,'VulkanAPI']]],
-  ['pos_2',['pos',['../structBlockVertex.html#a73131a2407e7ccc48cf5cf276f1bcb18',1,'BlockVertex::pos()'],['../structLineVertex.html#a1dc068e612b921483967c7a1cf60f96a',1,'LineVertex::pos()']]],
-  ['position_3',['position',['../structCamera_1_1RenderInfo.html#ac48415567e0ed4b659f646513fbbf19b',1,'Camera::RenderInfo']]],
-  ['present_5ffamily_4',['present_family',['../structQueueFamilyIndices.html#a2f4be08657178d2397981ace027b01a0',1,'QueueFamilyIndices']]],
-  ['present_5fmodes_5',['present_modes',['../structSwapChainSupportDetails.html#a7163b5cd6b10e048bccdd26b27cd547f',1,'SwapChainSupportDetails']]],
-  ['present_5fqueue_6',['present_queue',['../classVulkanAPI.html#acd95a2f7af31d3ccba7de8553aeed384',1,'VulkanAPI']]],
-  ['proj_7',['proj',['../structCameraMatrices.html#af9e5017feb665d41afb30606defdf483',1,'CameraMatrices']]],
-  ['projection_8',['projection',['../structCamera_1_1RenderInfo.html#a58c6cf4540ac7b4ee498c74345fb91c8',1,'Camera::RenderInfo']]]
+  ['nbl_0',['nbl',['../classViewFrustum.html#a0db51dba32f28c644340adfd98c53dbb',1,'ViewFrustum']]],
+  ['nbr_1',['nbr',['../classViewFrustum.html#a75edebf5cd4f491261d3e7a1ec90ea43',1,'ViewFrustum']]],
+  ['next_5fmesh_5fid_2',['next_mesh_id',['../classVulkanAPI.html#a6ebdad6fe938979f82df36ab8796a6c7',1,'VulkanAPI']]],
+  ['no_5fmesh_5fid_3',['no_mesh_id',['../classVulkanAPI.html#a2f39e64fdb127b3c55df158878c0e1d4',1,'VulkanAPI']]],
+  ['normal_4',['normal',['../structBlockVertex.html#aaf98e3657aea0f75a5601d73aa1a52a3',1,'BlockVertex']]],
+  ['ntl_5',['ntl',['../classViewFrustum.html#afd88c0f94ae5fc640b58bbe6f51eebb8',1,'ViewFrustum']]],
+  ['ntr_6',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]]
 ];

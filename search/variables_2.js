@@ -1,12 +1,22 @@
 var searchData=
 [
-  ['debug_5fmessenger_0',['debug_messenger',['../classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e',1,'VulkanAPI']]],
-  ['depth_5fattachement_5fextent_1',['depth_attachement_extent',['../classVulkanAPI.html#a968ca5aed397a91634a90f647d295e2e',1,'VulkanAPI']]],
-  ['depth_5fattachement_5fformat_2',['depth_attachement_format',['../classVulkanAPI.html#a8fdaf5eb8bbf83f15738b92a1921b50d',1,'VulkanAPI']]],
-  ['depth_5fattachement_5fimage_3',['depth_attachement_image',['../classVulkanAPI.html#a68e18f48121e8f57626443e46737e7d6',1,'VulkanAPI']]],
-  ['depth_5fattachement_5fmemory_4',['depth_attachement_memory',['../classVulkanAPI.html#aac57ff46f9532f6a76df44bc015146ce',1,'VulkanAPI']]],
-  ['depth_5fattachement_5fview_5',['depth_attachement_view',['../classVulkanAPI.html#a27efab2bad4ba04f438d9be074a11adf',1,'VulkanAPI']]],
-  ['descriptor_5fset_6',['descriptor_set',['../structImGuiTexture.html#a59b9c69a62d0c0dc053ece9fd54bd3af',1,'ImGuiTexture']]],
-  ['device_7',['device',['../classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669',1,'VulkanAPI']]],
-  ['draw_5fcommand_5fbuffers_8',['draw_command_buffers',['../classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907',1,'VulkanAPI']]]
+  ['camera_5fdescriptor_0',['camera_descriptor',['../classVulkanAPI.html#abb2e40866d5f0e30c5b254dbbb094e96',1,'VulkanAPI']]],
+  ['camera_5funiform_5fbuffers_1',['camera_uniform_buffers',['../classVulkanAPI.html#a75628d88876ae7453490a27b985de889',1,'VulkanAPI']]],
+  ['camera_5funiform_5fbuffers_5fmapped_5fmemory_2',['camera_uniform_buffers_mapped_memory',['../classVulkanAPI.html#abe6ec2e82ad164f2a164cab715d51a60',1,'VulkanAPI']]],
+  ['camera_5funiform_5fbuffers_5fmemory_3',['camera_uniform_buffers_memory',['../classVulkanAPI.html#ad13c169fc066448596240f3f9291adfd',1,'VulkanAPI']]],
+  ['capabilities_4',['capabilities',['../structSwapChainSupportDetails.html#a8918f9f5496b29a701e8d094aa455b2a',1,'SwapChainSupportDetails']]],
+  ['chunk_5fmesh_5fcount_5',['chunk_mesh_count',['../classDebugGui.html#af0fb1675053788f8bb51314f290850b4',1,'DebugGui']]],
+  ['chunk_5fpipeline_6',['chunk_pipeline',['../classVulkanAPI.html#aed55454df00de407ecbd6443cfb83fcb',1,'VulkanAPI']]],
+  ['color_7',['color',['../structLineVertex.html#af461b7f3416e020d0af52f440a764d2c',1,'LineVertex']]],
+  ['color_5fattachement_8',['color_attachement',['../classVulkanAPI.html#a7598e68cc5cf8b943ee619b76483b77d',1,'VulkanAPI']]],
+  ['color_5fformats_9',['color_formats',['../structPipeline_1_1CreateInfo.html#a9cb9c18feed0563d0f3a9943ee708fb6',1,'Pipeline::CreateInfo']]],
+  ['command_5fpool_10',['command_pool',['../classVulkanAPI.html#a512711a2bf5f70765279aca5f1e6c5dd',1,'VulkanAPI']]],
+  ['copy_5fcommand_5fbuffers_11',['copy_command_buffers',['../classVulkanAPI.html#a6e36af29d838a6599ddb213ca74a7edf',1,'VulkanAPI']]],
+  ['copy_5ffinished_5fsemaphores_12',['copy_finished_semaphores',['../classVulkanAPI.html#aa3cf0d566570f615d38be314b304a2e2',1,'VulkanAPI']]],
+  ['cpu_5ftime_5fhistory_13',['cpu_time_history',['../classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e',1,'DebugGui']]],
+  ['create_5fsampler_14',['create_sampler',['../structImage_1_1CreateInfo.html#aa60e260af555b0e310667a842ad24c8c',1,'Image::CreateInfo']]],
+  ['create_5fview_15',['create_view',['../structImage_1_1CreateInfo.html#a5e958a877ee6a5a4fd273bd5abf12818',1,'Image::CreateInfo']]],
+  ['cube_5fmap_5fdescriptor_16',['cube_map_descriptor',['../classVulkanAPI.html#ad12579eb2dc9bc8d779073a64d91e93e',1,'VulkanAPI']]],
+  ['cull_5fmode_17',['cull_mode',['../structPipeline_1_1CreateInfo.html#a501ff910e2a8879679c17a6fd6590ec0',1,'Pipeline::CreateInfo']]],
+  ['current_5fframe_18',['current_frame',['../classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202',1,'VulkanAPI']]]
 ];

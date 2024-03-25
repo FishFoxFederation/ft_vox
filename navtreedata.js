@@ -66,7 +66,11 @@ var NAVTREE =
       [ "Thread pool", "threads.html#autotoc_md18", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ]
+      ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -74,7 +78,7 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
+        [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
@@ -98,8 +102,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AThreadWrapper_8cpp.html",
-"classVulkanAPI.html#a4d925a6136031c943dcf6817afdd5972",
-"structMesh.html#a2bf63c2b488333beef25a8ab9e4e0a02"
+"classSingleTimeCommand.html#ada1488f5f8ccc37760e2ec73d8dcb161",
+"logger_8hpp.html#a378e28bfcb78d17285210d6bbb70a083"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rendered_5ftriangles_0',['rendered_triangles',['../classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13',1,'DebugGui']]]
+  ['queue_5ffamily_5findices_0',['queue_family_indices',['../classVulkanAPI.html#a3f4eb2dfd0c916f2c2d5cd32a11d1805',1,'VulkanAPI']]]
 ];
