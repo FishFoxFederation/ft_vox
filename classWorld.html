@@ -119,21 +119,19 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="33,211,116,309"/>
-<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="5,5,144,148"/>
+<area shape="rect" title=" " alt="" coords="39,225,121,309"/>
+<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="5,5,155,163"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afa39d4e6f714a7a3691ac0c656f5e8a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a> ()</td></tr>
-<tr class="separator:afa39d4e6f714a7a3691ac0c656f5e8a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad837fd51d7bfdfe752c32ea027930da0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ad837fd51d7bfdfe752c32ea027930da0">World</a> (<a class="el" href="classWorldScene.html">WorldScene</a> &amp;<a class="el" href="classWorldScene.html">WorldScene</a>, <a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkanAPI, <a class="el" href="classThreadPool.html">ThreadPool</a> &amp;threadPool)</td></tr>
+<tr class="separator:ad837fd51d7bfdfe752c32ea027930da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c73fba541a5817fff65147ba47cd827"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">~World</a> ()</td></tr>
 <tr class="separator:a8c73fba541a5817fff65147ba47cd827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4ad28164f2e86601115f28b5c7f51b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aa4ad28164f2e86601115f28b5c7f51b7">update</a> (glm::dvec3 playerPosition)</td></tr>
 <tr class="separator:aa4ad28164f2e86601115f28b5c7f51b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3a32cfb8f5a69a60c7bf4e03a837539"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, <a class="el" href="classChunk.html">Chunk</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ac3a32cfb8f5a69a60c7bf4e03a837539">chunks</a> ()</td></tr>
-<tr class="separator:ac3a32cfb8f5a69a60c7bf4e03a837539"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -141,8 +139,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a27e7781b2b2b2be832a4fccd7faaf1ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afa39d4e6f714a7a3691ac0c656f5e8a8" name="afa39d4e6f714a7a3691ac0c656f5e8a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa39d4e6f714a7a3691ac0c656f5e8a8">&#9670;&#160;</a></span>World()</h2>
+<a id="ad837fd51d7bfdfe752c32ea027930da0" name="ad837fd51d7bfdfe752c32ea027930da0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad837fd51d7bfdfe752c32ea027930da0">&#9670;&#160;</a></span>World()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,8 +148,25 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">World::World </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classWorldScene.html">WorldScene</a> &amp;&#160;</td>
+          <td class="paramname"><em>WorldScene</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;&#160;</td>
+          <td class="paramname"><em>vulkanAPI</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classThreadPool.html">ThreadPool</a> &amp;&#160;</td>
+          <td class="paramname"><em>threadPool</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -176,31 +191,6 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac3a32cfb8f5a69a60c7bf4e03a837539" name="ac3a32cfb8f5a69a60c7bf4e03a837539"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3a32cfb8f5a69a60c7bf4e03a837539">&#9670;&#160;</a></span>chunks()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt; glm::ivec3, <a class="el" href="classChunk.html">Chunk</a> &gt; &amp; World::chunks </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa4ad28164f2e86601115f28b5c7f51b7" name="aa4ad28164f2e86601115f28b5c7f51b7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa4ad28164f2e86601115f28b5c7f51b7">&#9670;&#160;</a></span>update()</h2>
 

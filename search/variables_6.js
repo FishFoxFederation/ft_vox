@@ -10,5 +10,6 @@ var searchData=
   ['in_5fflight_5ffences_7',['in_flight_fences',['../classVulkanAPI.html#a5d3a908536aee8c7f23b6f4a10ca2382',1,'VulkanAPI']]],
   ['index_5fcount_8',['index_count',['../structMesh.html#abe4097b26baf4450ce8f99b6e534da11',1,'Mesh']]],
   ['index_5foffset_9',['index_offset',['../structMesh.html#a2bf63c2b488333beef25a8ab9e4e0a02',1,'Mesh']]],
-  ['instance_10',['instance',['../classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742',1,'VulkanAPI']]]
+  ['instance_10',['instance',['../classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742',1,'VulkanAPI']]],
+  ['is_5fused_11',['is_used',['../structMesh.html#a8ea5a0edf71dfc56e666db22e049a161',1,'Mesh']]]
 ];

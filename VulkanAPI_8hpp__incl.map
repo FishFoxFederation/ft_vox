@@ -1,5 +1,5 @@
 <map id="src/app/vulkan/VulkanAPI.hpp" name="src/app/vulkan/VulkanAPI.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1053,5,1251,31"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1112,5,1309,31"/>
 <area shape="rect" id="node2" href="$Chunk_8hpp.html" title=" " alt="" coords="192,86,275,111"/>
 <area shape="rect" id="node7" href="$VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="350,86,533,111"/>
 <area shape="rect" id="node8" title=" " alt="" coords="376,167,488,192"/>
@@ -16,6 +16,7 @@
 <area shape="rect" id="node19" title=" " alt="" coords="1765,86,1832,111"/>
 <area shape="rect" id="node20" title=" " alt="" coords="1857,86,1967,111"/>
 <area shape="rect" id="node21" title=" " alt="" coords="1991,86,2049,111"/>
+<area shape="rect" id="node22" title=" " alt="" coords="2073,86,2130,111"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,167,56,192"/>
 <area shape="rect" id="node4" title=" " alt="" coords="80,167,179,192"/>
 <area shape="rect" id="node5" href="$Block_8hpp.html" title=" " alt="" coords="203,167,282,192"/>

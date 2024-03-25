@@ -1,20 +1,16 @@
 var searchData=
 [
-  ['warning_0',['WARNING',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca',1,'Logger']]],
-  ['width_1',['width',['../structImGuiTexture.html#a65c4a49da2ec8e2891f5c7c3469eec80',1,'ImGuiTexture']]],
-  ['window_2',['Window',['../classWindow.html',1,'']]],
-  ['window_3',['window',['../classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1',1,'VulkanAPI']]],
-  ['window_4',['Window',['../classWindow.html#ad7cd97b52e2a93c394402f2f084fcb1b',1,'Window']]],
-  ['window_2ecpp_5',['window.cpp',['../window_8cpp.html',1,'']]],
-  ['window_2ehpp_6',['window.hpp',['../window_8hpp.html',1,'']]],
-  ['world_7',['World',['../classWorld.html',1,'World'],['../classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8',1,'World::World()']]],
-  ['world_2ecpp_8',['World.cpp',['../World_8cpp.html',1,'']]],
-  ['world_2ehpp_9',['World.hpp',['../World_8hpp.html',1,'']]],
-  ['world_5fy_5fmax_10',['WORLD_Y_MAX',['../define_8hpp.html#a2a7abdace53c2954b6c60d5d66a52464',1,'define.hpp']]],
-  ['worldgenerator_11',['WorldGenerator',['../classWorldGenerator.html#ac4f4abec2013abad54ec417e3b2b6d70',1,'WorldGenerator::WorldGenerator()'],['../classWorldGenerator.html',1,'WorldGenerator']]],
-  ['worldgenerator_2ecpp_12',['WorldGenerator.cpp',['../WorldGenerator_8cpp.html',1,'']]],
-  ['worldgenerator_2ehpp_13',['WorldGenerator.hpp',['../WorldGenerator_8hpp.html',1,'']]],
-  ['worldscene_14',['WorldScene',['../classWorldScene.html',1,'WorldScene'],['../classWorldScene.html#a86c5a4b83213d28ce5c62eba9d35da64',1,'WorldScene::WorldScene()'],['../classWorldScene.html#a31e767d0a4e116e712a3ff9432b3b59b',1,'WorldScene::WorldScene(WorldScene &amp;scene)=delete'],['../classWorldScene.html#a5066dc9503636b3dce03f2e1a0342c0e',1,'WorldScene::WorldScene(WorldScene &amp;&amp;scene)=delete']]],
-  ['worldscene_2ecpp_15',['WorldScene.cpp',['../WorldScene_8cpp.html',1,'']]],
-  ['worldscene_2ehpp_16',['WorldScene.hpp',['../WorldScene_8hpp.html',1,'']]]
+  ['vertex_5fcount_0',['vertex_count',['../structMesh.html#a21d4053e57ef0a7c7022de6301adb92a',1,'Mesh']]],
+  ['view_1',['view',['../structImGuiTexture.html#a411e55284d8214522f76d218545d4433',1,'ImGuiTexture::view()'],['../structCameraMatrices.html#a94b76bdb27f4bbb757c56fb861cf8a03',1,'CameraMatrices::view()'],['../structCamera_1_1RenderInfo.html#a8bec29f57c433c3c0c0aeca64ec38419',1,'Camera::RenderInfo::view()']]],
+  ['view_5ffrustum_2',['view_frustum',['../structCamera_1_1RenderInfo.html#ae916554eb253bd990d63e5b8ea35ce58',1,'Camera::RenderInfo']]],
+  ['viewfrustum_3',['ViewFrustum',['../classViewFrustum.html',1,'ViewFrustum'],['../classViewFrustum.html#a83f7e9dfeac35c1f67b085d9887a103b',1,'ViewFrustum::ViewFrustum()']]],
+  ['vk_5fcheck_4',['VK_CHECK',['../VulkanAPI_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b',1,'VulkanAPI.hpp']]],
+  ['vk_5ferr_5fstr_5',['VK_ERR_STR',['../VulkanAPI_8hpp.html#a1f660f35443e79ab59cf61a864198f34',1,'VulkanAPI.hpp']]],
+  ['vma_6',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]],
+  ['vulaknmemoryallocator_7',['VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html#a640bd4cb7d7185a15512e635485e6fb5',1,'VulaknMemoryAllocator::VulaknMemoryAllocator()'],['../classVulaknMemoryAllocator.html#afe98fb3b31b66dc9f83efa94fab47abc',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(const VulaknMemoryAllocator &amp;)=delete'],['../classVulaknMemoryAllocator.html#aea802393219721d2d50925a9728f615e',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(VulaknMemoryAllocator &amp;&amp;)=delete'],['../classVulaknMemoryAllocator.html',1,'VulaknMemoryAllocator']]],
+  ['vulkanapi_8',['VulkanAPI',['../classVulkanAPI.html#a0847afa3a3335e05c44922686174d17b',1,'VulkanAPI::VulkanAPI(GLFWwindow *window)'],['../classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad',1,'VulkanAPI::VulkanAPI(const VulkanAPI &amp;)=delete'],['../classVulkanAPI.html#af0178da68566ea2136a91746e686efdf',1,'VulkanAPI::VulkanAPI(VulkanAPI &amp;&amp;)=delete'],['../classVulkanAPI.html',1,'VulkanAPI']]],
+  ['vulkanapi_2ecpp_9',['VulkanAPI.cpp',['../VulkanAPI_8cpp.html',1,'']]],
+  ['vulkanapi_2ehpp_10',['VulkanAPI.hpp',['../VulkanAPI_8hpp.html',1,'']]],
+  ['vulkanmemoryallocator_2ecpp_11',['VulkanMemoryAllocator.cpp',['../VulkanMemoryAllocator_8cpp.html',1,'']]],
+  ['vulkanmemoryallocator_2ehpp_12',['VulkanMemoryAllocator.hpp',['../VulkanMemoryAllocator_8hpp.html',1,'']]]
 ];

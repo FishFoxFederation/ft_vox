@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['width_0',['width',['../structImGuiTexture.html#a65c4a49da2ec8e2891f5c7c3469eec80',1,'ImGuiTexture']]],
-  ['window_1',['Window',['../classWindow.html#ad7cd97b52e2a93c394402f2f084fcb1b',1,'Window']]],
-  ['world_2',['World',['../classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8',1,'World']]],
-  ['worldgenerator_3',['WorldGenerator',['../classWorldGenerator.html#ac4f4abec2013abad54ec417e3b2b6d70',1,'WorldGenerator']]],
-  ['worldscene_4',['WorldScene',['../classWorldScene.html#a86c5a4b83213d28ce5c62eba9d35da64',1,'WorldScene::WorldScene()'],['../classWorldScene.html#a31e767d0a4e116e712a3ff9432b3b59b',1,'WorldScene::WorldScene(WorldScene &amp;scene)=delete'],['../classWorldScene.html#a5066dc9503636b3dce03f2e1a0342c0e',1,'WorldScene::WorldScene(WorldScene &amp;&amp;scene)=delete']]]
+  ['viewfrustum_0',['ViewFrustum',['../classViewFrustum.html#a83f7e9dfeac35c1f67b085d9887a103b',1,'ViewFrustum']]],
+  ['vulaknmemoryallocator_1',['VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html#a640bd4cb7d7185a15512e635485e6fb5',1,'VulaknMemoryAllocator::VulaknMemoryAllocator()'],['../classVulaknMemoryAllocator.html#afe98fb3b31b66dc9f83efa94fab47abc',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(const VulaknMemoryAllocator &amp;)=delete'],['../classVulaknMemoryAllocator.html#aea802393219721d2d50925a9728f615e',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(VulaknMemoryAllocator &amp;&amp;)=delete']]],
+  ['vulkanapi_2',['VulkanAPI',['../classVulkanAPI.html#a0847afa3a3335e05c44922686174d17b',1,'VulkanAPI::VulkanAPI(GLFWwindow *window)'],['../classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad',1,'VulkanAPI::VulkanAPI(const VulkanAPI &amp;)=delete'],['../classVulkanAPI.html#af0178da68566ea2136a91746e686efdf',1,'VulkanAPI::VulkanAPI(VulkanAPI &amp;&amp;)=delete']]]
 ];

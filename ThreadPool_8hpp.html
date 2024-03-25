@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VOX: src/app -&gt; threads Relation</title>
+<title>VOX: src/app/threads/pool/ThreadPool.hpp File Reference</title>
 <!--BEGIN PROJECT_ICON-->
 <link rel="icon" href="$projecticon" type="image/x-icon" />
 <!--END PROJECT_ICON-->
@@ -79,7 +79,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('dir_5194e5fea318fda12687127c23f8aba1.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('ThreadPool_8hpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -104,13 +104,64 @@ $(document).ready(function(){initNavTree('dir_5194e5fea318fda12687127c23f8aba1.h
 </div>
 </div>
 
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a>  </div>
+  <div class="headertitle"><div class="title">ThreadPool.hpp File Reference</div></div>
+</div><!--header-->
 <div class="contents">
-<h3>app &rarr; threads Relation</h3><table class="dirtab"><tr class="dirtab"><th class="dirtab">File in src/app</th><th class="dirtab">Includes file in src/app/threads</th></tr><tr class="dirtab"><td class="dirtab"><a class="el" href="application_8hpp.html">application.hpp</a></td><td class="dirtab"><a class="el" href="dir_7960643a946ec5b943973cbe85b3bc3e.html">block_update</a>&#160;/&#160;<a class="el" href="BlockUpdateThread_8hpp.html">BlockUpdateThread.hpp</a></td></tr><tr class="dirtab"><td class="dirtab"><a class="el" href="application_8hpp.html">application.hpp</a></td><td class="dirtab"><a class="el" href="dir_5b9282acebde718df9b0353dfd74d407.html">render</a>&#160;/&#160;<a class="el" href="RenderThread_8hpp.html">RenderThread.hpp</a></td></tr><tr class="dirtab"><td class="dirtab"><a class="el" href="application_8hpp.html">application.hpp</a></td><td class="dirtab"><a class="el" href="dir_3b10795b623567d589c03ab0747682b0.html">update</a>&#160;/&#160;<a class="el" href="UpdateThread_8hpp.html">UpdateThread.hpp</a></td></tr></table></div><!-- contents -->
+<div class="textblock"><code>#include &quot;<a class="el" href="define_8hpp_source.html">define.hpp</a>&quot;</code><br />
+<code>#include &lt;thread&gt;</code><br />
+<code>#include &lt;queue&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
+<code>#include &lt;condition_variable&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for ThreadPool.hpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="ThreadPool_8hpp__incl.png" border="0" usemap="#asrc_2app_2threads_2pool_2ThreadPool_8hpp" alt=""/></div>
+<map name="asrc_2app_2threads_2pool_2ThreadPool_8hpp" id="asrc_2app_2threads_2pool_2ThreadPool_8hpp">
+<area shape="rect" title=" " alt="" coords="197,5,337,45"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="5,93,85,119"/>
+<area shape="rect" title=" " alt="" coords="109,93,168,119"/>
+<area shape="rect" title=" " alt="" coords="193,93,250,119"/>
+<area shape="rect" title=" " alt="" coords="274,93,353,119"/>
+<area shape="rect" title=" " alt="" coords="377,93,434,119"/>
+<area shape="rect" title=" " alt="" coords="458,93,585,119"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="ThreadPool_8hpp__dep__incl.png" border="0" usemap="#asrc_2app_2threads_2pool_2ThreadPool_8hppdep" alt=""/></div>
+<map name="asrc_2app_2threads_2pool_2ThreadPool_8hppdep" id="asrc_2app_2threads_2pool_2ThreadPool_8hppdep">
+<area shape="rect" title=" " alt="" coords="201,5,341,45"/>
+<area shape="rect" href="application_8hpp.html" title=" " alt="" coords="80,277,235,302"/>
+<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="195,181,405,221"/>
+<area shape="rect" href="ThreadPool_8cpp.html" title=" " alt="" coords="255,93,395,133"/>
+<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="419,101,581,126"/>
+<area shape="rect" href="application_8cpp.html" title=" " alt="" coords="5,357,160,383"/>
+<area shape="rect" href="main_8cpp.html" title=" " alt="" coords="184,357,280,383"/>
+<area shape="rect" href="BlockUpdateThread_8cpp.html" title=" " alt="" coords="259,269,469,309"/>
+<area shape="rect" href="World_8cpp.html" title=" " alt="" coords="430,189,591,214"/>
+</map>
+</div>
+</div>
+<p><a href="ThreadPool_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJoinThreads.html">JoinThreads</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThreadPool.html">ThreadPool</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5194e5fea318fda12687127c23f8aba1.html">app</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5194e5fea318fda12687127c23f8aba1.html">app</a></li><li class="navelem"><a class="el" href="dir_e2d4946961cb2f7a598bb8a45601bca0.html">threads</a></li><li class="navelem"><a class="el" href="dir_e0870200418b25675e0ea23f406010ef.html">pool</a></li><li class="navelem"><a class="el" href="ThreadPool_8hpp.html">ThreadPool.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

@@ -210,12 +210,14 @@ $(document).ready(function(){initNavTree('DebugGui_8hpp_source.html',''); initRe
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">  100</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code hl_class" href="classHistory.html">History&lt;float, 100&gt;</a> <a class="code hl_variable" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">frame_time_history</a>;</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">  101</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code hl_class" href="classHistory.html">History&lt;float, 100&gt;</a> <a class="code hl_variable" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">cpu_time_history</a>;</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="classDebugGui.html#af0fb1675053788f8bb51314f290850b4">  103</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> std::atomic_int32_t <a class="code hl_variable" href="classDebugGui.html#af0fb1675053788f8bb51314f290850b4">chunk_mesh_count</a> = 0;</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vk;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vk;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>};</div>
 <div class="ttc" id="aCamera_8hpp_html"><div class="ttname"><a href="Camera_8hpp.html">Camera.hpp</a></div></div>
 <div class="ttc" id="aVulkanAPI_8hpp_html"><div class="ttname"><a href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a></div></div>
 <div class="ttc" id="aclassAtomic_html"><div class="ttname"><a href="classAtomic.html">Atomic</a></div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:15</div></div>
@@ -230,13 +232,14 @@ $(document).ready(function(){initNavTree('DebugGui_8hpp_source.html',''); initRe
 <div class="ttc" id="aclassDebugGui_html_ab769bb8977dff721cd5db648458c8f3d"><div class="ttname"><a href="classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d">DebugGui::fps</a></div><div class="ttdeci">static std::atomic&lt; uint32_t &gt; fps</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:96</div></div>
 <div class="ttc" id="aclassDebugGui_html_ac39ff26773e3f64810069871933c01da"><div class="ttname"><a href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">DebugGui::frame_time_history</a></div><div class="ttdeci">static History&lt; float, 100 &gt; frame_time_history</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:100</div></div>
 <div class="ttc" id="aclassDebugGui_html_adaf81c06685c6ec69beaf6270e399a13"><div class="ttname"><a href="classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13">DebugGui::rendered_triangles</a></div><div class="ttdeci">static std::atomic&lt; uint64_t &gt; rendered_triangles</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:97</div></div>
+<div class="ttc" id="aclassDebugGui_html_af0fb1675053788f8bb51314f290850b4"><div class="ttname"><a href="classDebugGui.html#af0fb1675053788f8bb51314f290850b4">DebugGui::chunk_mesh_count</a></div><div class="ttdeci">static std::atomic_int32_t chunk_mesh_count</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:103</div></div>
 <div class="ttc" id="aclassHistory_html"><div class="ttname"><a href="classHistory.html">History</a></div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:43</div></div>
 <div class="ttc" id="aclassHistory_html_a157dd81dbf380fd3fbe71a8c05ab79ed"><div class="ttname"><a href="classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed">History::data</a></div><div class="ttdeci">T * data()</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:67</div></div>
 <div class="ttc" id="aclassHistory_html_a9937f1512abab01e09ae808a866c7c64"><div class="ttname"><a href="classHistory.html#a9937f1512abab01e09ae808a866c7c64">History::push</a></div><div class="ttdeci">void push(T value)</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:47</div></div>
 <div class="ttc" id="aclassHistory_html_ab3669e563bc3aa8e094b53bff1fb2ca6"><div class="ttname"><a href="classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6">History::average</a></div><div class="ttdeci">T average() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:56</div></div>
 <div class="ttc" id="aclassHistory_html_ac27dd6845ca0f414017ff591e9ae4e90"><div class="ttname"><a href="classHistory.html#ac27dd6845ca0f414017ff591e9ae4e90">History::size</a></div><div class="ttdeci">int size() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:72</div></div>
 <div class="ttc" id="aclassHistory_html_affeb2a1835f63948681fb91286042ca3"><div class="ttname"><a href="classHistory.html#affeb2a1835f63948681fb91286042ca3">History::lock</a></div><div class="ttdeci">std::unique_lock&lt; std::mutex &gt; lock() const</div><div class="ttdef"><b>Definition:</b> DebugGui.hpp:62</div></div>
-<div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:211</div></div>
+<div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:220</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

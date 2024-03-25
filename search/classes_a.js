@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['queuefamilyindices_0',['QueueFamilyIndices',['../structQueueFamilyIndices.html',1,'']]]
+  ['perlin_0',['Perlin',['../classPerlin.html',1,'']]],
+  ['player_1',['Player',['../classPlayer.html',1,'']]]
 ];

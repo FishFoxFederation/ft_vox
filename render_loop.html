@@ -261,8 +261,8 @@ Draw the chunks</h3>
 <div class="line">    );</div>
 <div class="line">}</div>
 <div class="ttc" id="aChunk_8hpp_html_aea3cfda4f3a9f978ec759f206cf186fe"><div class="ttname"><a href="Chunk_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a></div><div class="ttdeci">#define CHUNK_SIZE</div><div class="ttdef"><b>Definition:</b> Chunk.hpp:9</div></div>
-<div class="ttc" id="astructModelMatrice_html"><div class="ttname"><a href="structModelMatrice.html">ModelMatrice</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:172</div></div>
-<div class="ttc" id="astructModelMatrice_html_a3824832bb0d1687e930f25489a7c1dd5"><div class="ttname"><a href="structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5">ModelMatrice::model</a></div><div class="ttdeci">glm::mat4 model</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:173</div></div>
+<div class="ttc" id="astructModelMatrice_html"><div class="ttname"><a href="structModelMatrice.html">ModelMatrice</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:181</div></div>
+<div class="ttc" id="astructModelMatrice_html_a3824832bb0d1687e930f25489a7c1dd5"><div class="ttname"><a href="structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5">ModelMatrice::model</a></div><div class="ttdeci">glm::mat4 model</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:182</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="draw_the_skybox"></a>
 Draw the skybox</h3>
 <p >For the skybox we use a cube map texture that is rendered using a separate pipeline. The skybox is drawn last so that we can use the depth buffer that was created when drawing the chunks to only draw the skybox where necessary. As the skybox is always drawn around the camera, the model matrix is set to the camera position. Finally, the skybox is a simple cube so the vertices are hardcoded in the vertex shader.</p>

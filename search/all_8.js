@@ -18,6 +18,7 @@ var searchData=
   ['input_2ecpp_15',['input.cpp',['../input_8cpp.html',1,'']]],
   ['input_2ehpp_16',['input.hpp',['../input_8hpp.html',1,'']]],
   ['instance_17',['instance',['../classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742',1,'VulkanAPI']]],
-  ['iscomplete_18',['isComplete',['../structQueueFamilyIndices.html#a652cdfabe4719ae21a701e77d57e7899',1,'QueueFamilyIndices']]],
-  ['iscursorcaptured_19',['isCursorCaptured',['../classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda',1,'Input']]]
+  ['is_5fused_18',['is_used',['../structMesh.html#a8ea5a0edf71dfc56e666db22e049a161',1,'Mesh']]],
+  ['iscomplete_19',['isComplete',['../structQueueFamilyIndices.html#a652cdfabe4719ae21a701e77d57e7899',1,'QueueFamilyIndices']]],
+  ['iscursorcaptured_20',['isCursorCaptured',['../classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda',1,'Input']]]
 ];

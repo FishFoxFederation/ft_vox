@@ -120,7 +120,7 @@ Collaboration diagram for VulkanAPI:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVulkanAPI__coll__graph.png" border="0" usemap="#aVulkanAPI_coll__map" alt="Collaboration graph"/></div>
 <map name="aVulkanAPI_coll__map" id="aVulkanAPI_coll__map">
-<area shape="rect" title=" " alt="" coords="203,284,372,676"/>
+<area shape="rect" title=" " alt="" coords="203,284,372,705"/>
 <area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,20,191,207"/>
 <area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,71,359,155"/>
 <area shape="rect" href="structImGuiTexture.html" title=" " alt="" coords="388,5,520,221"/>
@@ -151,6 +151,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa3d7ddd6246c2b3cb960c58408919101"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a916d17d1a713268c205279c4e4685b80"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a916d17d1a713268c205279c4e4685b80">storeMesh</a> (const std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt; &amp;vertices, const std::vector&lt; uint32_t &gt; &amp;indices)</td></tr>
 <tr class="separator:a916d17d1a713268c205279c4e4685b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64487d489c2c83eda603848f99c53826"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a64487d489c2c83eda603848f99c53826">destroyMeshes</a> (const std::vector&lt; uint64_t &gt; &amp;mesh_ids)</td></tr>
+<tr class="separator:a64487d489c2c83eda603848f99c53826"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27846b71139eb87106408bd25940dbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ad27846b71139eb87106408bd25940dbb">destroyMesh</a> (const uint64_t &amp;mesh_id)</td></tr>
+<tr class="separator:ad27846b71139eb87106408bd25940dbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a656d3ac5626be8100d2d718b477c1323"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323">createImGuiTexture</a> (const uint32_t width, const uint32_t height)</td></tr>
 <tr class="separator:a656d3ac5626be8100d2d718b477c1323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -274,8 +278,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad15d96f9fa1df90d3f10de53968c8c04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac269691b77d5e9fee8685941d1c62784"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac269691b77d5e9fee8685941d1c62784">camera_descriptor_pool</a></td></tr>
 <tr class="separator:ac269691b77d5e9fee8685941d1c62784"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93619da85b5c955e55a96a1e9bc658ca"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a93619da85b5c955e55a96a1e9bc658ca">camera_descriptor_set</a></td></tr>
-<tr class="separator:a93619da85b5c955e55a96a1e9bc658ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a833f6e00dd06d45ed281abd36aecbc4b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a833f6e00dd06d45ed281abd36aecbc4b">camera_descriptor_sets</a></td></tr>
+<tr class="separator:a833f6e00dd06d45ed281abd36aecbc4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8d79bff113505d8ef9ca6f4bcc40887"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ac8d79bff113505d8ef9ca6f4bcc40887">texture_array_descriptor_set_layout</a></td></tr>
 <tr class="separator:ac8d79bff113505d8ef9ca6f4bcc40887"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8bca3fb3e87cbed0b5f432b98814592"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ab8bca3fb3e87cbed0b5f432b98814592">texture_array_descriptor_pool</a></td></tr>
@@ -308,6 +312,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6ebdad6fe938979f82df36ab8796a6c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafa409bfcd712145122ed4539a06aa4c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, <a class="el" href="structMesh.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aafa409bfcd712145122ed4539a06aa4c">meshes</a></td></tr>
 <tr class="separator:aafa409bfcd712145122ed4539a06aa4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af077051ab8c2e9346f85ebef42b87f5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a">mesh_ids_to_destroy</a></td></tr>
+<tr class="separator:af077051ab8c2e9346f85ebef42b87f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12d94d7daef95cd6ed0451e9a9cc69d4"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">global_mutex</a></td></tr>
 <tr class="separator:a12d94d7daef95cd6ed0451e9a9cc69d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -485,6 +491,42 @@ Static Public Attributes</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad27846b71139eb87106408bd25940dbb" name="ad27846b71139eb87106408bd25940dbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad27846b71139eb87106408bd25940dbb">&#9670;&#160;</a></span>destroyMesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void VulkanAPI::destroyMesh </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>mesh_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a64487d489c2c83eda603848f99c53826" name="a64487d489c2c83eda603848f99c53826"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64487d489c2c83eda603848f99c53826">&#9670;&#160;</a></span>destroyMeshes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void VulkanAPI::destroyMeshes </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; uint64_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mesh_ids</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -744,20 +786,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a93619da85b5c955e55a96a1e9bc658ca" name="a93619da85b5c955e55a96a1e9bc658ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93619da85b5c955e55a96a1e9bc658ca">&#9670;&#160;</a></span>camera_descriptor_set</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">VkDescriptorSet VulkanAPI::camera_descriptor_set</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ad15d96f9fa1df90d3f10de53968c8c04" name="ad15d96f9fa1df90d3f10de53968c8c04"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad15d96f9fa1df90d3f10de53968c8c04">&#9670;&#160;</a></span>camera_descriptor_set_layout</h2>
 
@@ -766,6 +794,20 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">VkDescriptorSetLayout VulkanAPI::camera_descriptor_set_layout</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a833f6e00dd06d45ed281abd36aecbc4b" name="a833f6e00dd06d45ed281abd36aecbc4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a833f6e00dd06d45ed281abd36aecbc4b">&#9670;&#160;</a></span>camera_descriptor_sets</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkDescriptorSet&gt; VulkanAPI::camera_descriptor_sets</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1438,6 +1480,20 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const int VulkanAPI::max_frames_in_flight = 2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af077051ab8c2e9346f85ebef42b87f5a" name="af077051ab8c2e9346f85ebef42b87f5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af077051ab8c2e9346f85ebef42b87f5a">&#9670;&#160;</a></span>mesh_ids_to_destroy</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint64_t&gt; VulkanAPI::mesh_ids_to_destroy</td>
         </tr>
       </table>
 </div><div class="memdoc">
