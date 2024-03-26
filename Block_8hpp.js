@@ -1,11 +1,20 @@
 var Block_8hpp =
 [
+    [ "TextureData", "structTextureData.html", "structTextureData" ],
+    [ "Data", "structData.html", "structData" ],
+    [ "Block", "structBlock.html", null ],
+    [ "BLOCK_PROPERTY_CUBE", "Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4", null ],
+    [ "BLOCK_PROPERTY_LIGHT", "Block_8hpp.html#a7b867f1721c0e596365e40122301d822", null ],
+    [ "BLOCK_PROPERTY_NONE", "Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a", null ],
+    [ "BLOCK_PROPERTY_OPAQUE", "Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03", null ],
+    [ "BLOCK_PROPERTY_SOLID", "Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190", null ],
+    [ "BlockProperties", "Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c", null ],
     [ "BlockType", "Block_8hpp.html#aa38934da64b62c122965f1699b71e2cb", null ],
-    [ "Block", "Block_8hpp.html#a1589455c1e10176af51e3a974ee91382", [
-      [ "Air", "Block_8hpp.html#a1589455c1e10176af51e3a974ee91382a71c546fa61f3964d72bdf25223b78669", null ],
-      [ "Grass", "Block_8hpp.html#a1589455c1e10176af51e3a974ee91382aaac9a63596f76a62bb9f61a5dd7c0d25", null ],
-      [ "Dirt", "Block_8hpp.html#a1589455c1e10176af51e3a974ee91382a7cf334b79a84091f27dfc019b4b79229", null ],
-      [ "Stone", "Block_8hpp.html#a1589455c1e10176af51e3a974ee91382a2ff4ab1d379832d3edee28194fb4e7b2", null ],
-      [ "Sand", "Block_8hpp.html#a1589455c1e10176af51e3a974ee91382acec7ca178e2f7b1ae3a4600868c57aca", null ]
+    [ "TextureID", "Block_8hpp.html#a89c717f0912ef81a8573e40d87a93519", null ],
+    [ "BlockID", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509", [
+      [ "Air", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a71c546fa61f3964d72bdf25223b78669", null ],
+      [ "Grass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaac9a63596f76a62bb9f61a5dd7c0d25", null ],
+      [ "Dirt", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a7cf334b79a84091f27dfc019b4b79229", null ],
+      [ "Stone", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2", null ]
     ] ]
 ];

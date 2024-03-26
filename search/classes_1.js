@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['blockupdatethread_0',['BlockUpdateThread',['../classBlockUpdateThread.html',1,'']]],
-  ['blockvertex_1',['BlockVertex',['../structBlockVertex.html',1,'']]]
+  ['block_0',['Block',['../structBlock.html',1,'']]],
+  ['blockupdatethread_1',['BlockUpdateThread',['../classBlockUpdateThread.html',1,'']]],
+  ['blockvertex_2',['BlockVertex',['../structBlockVertex.html',1,'']]]
 ];

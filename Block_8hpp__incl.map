@@ -1,4 +1,6 @@
 <map id="src/app/world/Block.hpp" name="src/app/world/Block.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,167,31"/>
-<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="46,79,126,104"/>
+<area shape="rect" id="node1" title=" " alt="" coords="57,5,218,31"/>
+<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="5,79,85,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="110,79,165,104"/>
+<area shape="rect" id="node4" title=" " alt="" coords="189,79,248,104"/>
 </map>

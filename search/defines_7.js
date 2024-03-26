@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['vk_5fcheck_0',['VK_CHECK',['../vk__define_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b',1,'vk_define.hpp']]],
-  ['vk_5ferr_5fstr_1',['VK_ERR_STR',['../vk__define_8hpp.html#a1f660f35443e79ab59cf61a864198f34',1,'vk_define.hpp']]]
+  ['stb_5fimage_5fimplementation_0',['STB_IMAGE_IMPLEMENTATION',['../Image_8cpp.html#a18372412ad2fc3ce1e3240b3cf0efe78',1,'Image.cpp']]]
 ];

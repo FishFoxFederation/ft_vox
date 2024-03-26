@@ -7,6 +7,7 @@ var hierarchy =
       [ "UpdateThread", "classUpdateThread.html", null ]
     ] ],
     [ "Atomic< T >", "classAtomic.html", null ],
+    [ "Block", "structBlock.html", null ],
     [ "BlockVertex", "structBlockVertex.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "CameraMatrices", "structCameraMatrices.html", null ],
@@ -14,6 +15,7 @@ var hierarchy =
     [ "Descriptor::CreateInfo", "structDescriptor_1_1CreateInfo.html", null ],
     [ "Image::CreateInfo", "structImage_1_1CreateInfo.html", null ],
     [ "Pipeline::CreateInfo", "structPipeline_1_1CreateInfo.html", null ],
+    [ "Data", "structData.html", null ],
     [ "DebugGui", "classDebugGui.html", null ],
     [ "Descriptor", "classDescriptor.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
@@ -43,6 +45,7 @@ var hierarchy =
     [ "ShadowMapLight", "structShadowMapLight.html", null ],
     [ "SingleTimeCommand", "classSingleTimeCommand.html", null ],
     [ "SwapChainSupportDetails", "structSwapChainSupportDetails.html", null ],
+    [ "TextureData", "structTextureData.html", null ],
     [ "ThreadPool", "classThreadPool.html", null ],
     [ "WorldScene::Transform", "classWorldScene_1_1Transform.html", null ],
     [ "ViewFrustum", "classViewFrustum.html", null ],
