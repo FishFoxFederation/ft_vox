@@ -324,7 +324,7 @@ void RenderThread::loop()
 	uint32_t image_index;
 	VkResult result = vkAcquireNextImageKHR(
 		vk.device,
-		vk.swap_chain,
+		vk.swapchain.swapchain,
 		std::numeric_limits<uint64_t>::max(),
 		vk.image_available_semaphores[vk.current_frame],
 		VK_NULL_HANDLE,
@@ -356,7 +356,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.swap_chain_images[image_index],
+		vk.swapchain.images[image_index],
 		VK_IMAGE_LAYOUT_UNDEFINED,
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -391,8 +391,8 @@ void RenderThread::loop()
 	blit.srcSubresource.layerCount = 1;
 	blit.dstOffsets[0] = { 0, 0, 0 };
 	blit.dstOffsets[1] = {
-		static_cast<int32_t>(vk.swap_chain_extent.width),
-		static_cast<int32_t>(vk.swap_chain_extent.height),
+		static_cast<int32_t>(vk.swapchain.extent.width),
+		static_cast<int32_t>(vk.swapchain.extent.height),
 		1
 	};
 	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -404,7 +404,7 @@ void RenderThread::loop()
 		vk.copy_command_buffers[vk.current_frame],
 		vk.color_attachement.image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		vk.swap_chain_images[image_index],
+		vk.swapchain.images[image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		1,
 		&blit,
@@ -455,7 +455,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.imgui_command_buffers[vk.current_frame],
-		vk.swap_chain_images[image_index],
+		vk.swapchain.images[image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -479,14 +479,14 @@ void RenderThread::loop()
 
 	VkRenderingAttachmentInfo imgui_color_attachment = {};
 	imgui_color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	imgui_color_attachment.imageView = vk.swap_chain_image_views[image_index];
+	imgui_color_attachment.imageView = vk.swapchain.image_views[image_index];
 	imgui_color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	imgui_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 	imgui_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 
 	VkRenderingInfo imgui_render_info = {};
 	imgui_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	imgui_render_info.renderArea = { 0, 0, vk.swap_chain_extent.width, vk.swap_chain_extent.height };
+	imgui_render_info.renderArea = { 0, 0, vk.swapchain.extent.width, vk.swapchain.extent.height };
 	imgui_render_info.layerCount = 1;
 	imgui_render_info.colorAttachmentCount = 1;
 	imgui_render_info.pColorAttachments = &imgui_color_attachment;
@@ -510,7 +510,7 @@ void RenderThread::loop()
 
 	vk.setImageLayout(
 		vk.imgui_command_buffers[vk.current_frame],
-		vk.swap_chain_images[image_index],
+		vk.swapchain.images[image_index],
 		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -572,7 +572,7 @@ void RenderThread::loop()
 	present_info.waitSemaphoreCount = 1;
 	present_info.pWaitSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
 	present_info.swapchainCount = 1;
-	present_info.pSwapchains = &vk.swap_chain;
+	present_info.pSwapchains = &vk.swapchain.swapchain;
 	present_info.pImageIndices = &image_index;
 
 	LOG_TRACE("Present to screen.");

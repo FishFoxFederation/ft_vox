@@ -92,12 +92,6 @@ VulkanAPI::~VulkanAPI()
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(imgui_command_buffers.size()), imgui_command_buffers.data());
 	vkDestroyCommandPool(device, command_pool, nullptr);
 
-	for (size_t i = 0; i < swap_chain_image_views.size(); i++)
-	{
-		vkDestroyImageView(device, swap_chain_image_views[i], nullptr);
-	}
-	vkDestroySwapchainKHR(device, swap_chain, nullptr);
-
 	vkDestroyDevice(device, nullptr);
 
 	#ifndef NDEBUG
@@ -335,11 +329,11 @@ bool VulkanAPI::isDeviceSuitable(VkPhysicalDevice device)
 
 	bool extensions_supported = checkDeviceExtensionSupport(device);
 
-	bool swap_chain_adequate = false;
+	bool swapchain_adequate = false;
 	if (extensions_supported)
 	{
-		SwapChainSupportDetails swap_chain_support = querySwapChainSupport(device);
-		swap_chain_adequate = !swap_chain_support.formats.empty() && !swap_chain_support.present_modes.empty();
+		Swapchain::SupportDetails swapchain_support = Swapchain::querySwapChainSupport(device, surface);
+		swapchain_adequate = !swapchain_support.formats.empty() && !swapchain_support.present_modes.empty();
 	}
 
 	VkPhysicalDeviceFeatures supported_features;
@@ -347,7 +341,7 @@ bool VulkanAPI::isDeviceSuitable(VkPhysicalDevice device)
 
 	return indices.isComplete()
 		&& extensions_supported
-		&& swap_chain_adequate
+		&& swapchain_adequate
 		&& supported_features.samplerAnisotropy;
 }
 
@@ -425,31 +419,6 @@ bool VulkanAPI::checkDeviceExtensionSupport(VkPhysicalDevice device)
 	return required_extensions.empty();
 }
 
-SwapChainSupportDetails VulkanAPI::querySwapChainSupport(VkPhysicalDevice device)
-{
-	SwapChainSupportDetails details;
-
-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
-
-	uint32_t format_count;
-	vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &format_count, nullptr);
-	if (format_count != 0)
-	{
-		details.formats.resize(format_count);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &format_count, details.formats.data());
-	}
-
-	uint32_t present_mode_count;
-	vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &present_mode_count, nullptr);
-	if (present_mode_count != 0)
-	{
-		details.present_modes.resize(present_mode_count);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &present_mode_count, details.present_modes.data());
-	}
-
-	return details;
-}
-
 void VulkanAPI::createLogicalDevice()
 {
 	std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
@@ -505,74 +474,14 @@ void VulkanAPI::createLogicalDevice()
 
 void VulkanAPI::createSwapChain(GLFWwindow * window)
 {
-	SwapChainSupportDetails swap_chain_support = querySwapChainSupport(physical_device);
+	Swapchain::SupportDetails swapchain_support = Swapchain::querySwapChainSupport(physical_device, surface);
 
-	VkSurfaceFormatKHR surface_format = chooseSwapSurfaceFormat(swap_chain_support.formats);
-	VkPresentModeKHR present_mode = chooseSwapPresentMode(swap_chain_support.present_modes);
-	VkExtent2D extent = chooseSwapExtent(swap_chain_support.capabilities, window);
+	Swapchain::CreateInfo create_info = {};
+	create_info.surface_format = chooseSwapSurfaceFormat(swapchain_support.formats);
+	create_info.present_mode = chooseSwapPresentMode(swapchain_support.present_modes);
+	create_info.extent = chooseSwapExtent(swapchain_support.capabilities, window);
 
-	uint32_t image_count = swap_chain_support.capabilities.minImageCount + 1;
-	if (swap_chain_support.capabilities.maxImageCount > 0 && image_count > swap_chain_support.capabilities.maxImageCount)
-	{
-		image_count = swap_chain_support.capabilities.maxImageCount;
-	}
-
-	VkSwapchainCreateInfoKHR create_info = {};
-	create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	create_info.surface = surface;
-	create_info.minImageCount = image_count;
-	create_info.imageFormat = surface_format.format;
-	create_info.imageColorSpace = surface_format.colorSpace;
-	create_info.imageExtent = extent;
-	create_info.imageArrayLayers = 1;
-	create_info.imageUsage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-
-	uint32_t indices[] = {
-		queue_family_indices.graphics_family.value(),
-		queue_family_indices.present_family.value()
-	};
-
-	if (queue_family_indices.graphics_family != queue_family_indices.present_family)
-	{
-		create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-		create_info.queueFamilyIndexCount = 2;
-		create_info.pQueueFamilyIndices = indices;
-	}
-	else
-	{
-		create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-		create_info.queueFamilyIndexCount = 0;
-		create_info.pQueueFamilyIndices = nullptr;
-	}
-
-	create_info.preTransform = swap_chain_support.capabilities.currentTransform;
-	create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-	create_info.presentMode = present_mode;
-	create_info.clipped = VK_TRUE;
-	create_info.oldSwapchain = VK_NULL_HANDLE;
-
-	VK_CHECK(
-		vkCreateSwapchainKHR(device, &create_info, nullptr, &swap_chain),
-		"Failed to create swap chain"
-	);
-
-	vkGetSwapchainImagesKHR(device, swap_chain, &image_count, nullptr);
-	swap_chain_images.resize(image_count);
-	vkGetSwapchainImagesKHR(device, swap_chain, &image_count, swap_chain_images.data());
-
-	swap_chain_image_format = surface_format.format;
-	swap_chain_extent = extent;
-
-	swap_chain_image_views.resize(image_count);
-	for (size_t i = 0; i < image_count; i++)
-	{
-		createImageView(
-			swap_chain_images[i],
-			swap_chain_image_format,
-			VK_IMAGE_ASPECT_COLOR_BIT,
-			swap_chain_image_views[i]
-		);
-	}
+	swapchain = Swapchain(device, physical_device, surface, create_info);
 }
 
 void VulkanAPI::recreateSwapChain(GLFWwindow * window)
@@ -593,12 +502,6 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
-
-	for (size_t i = 0; i < swap_chain_image_views.size(); i++)
-	{
-		vkDestroyImageView(device, swap_chain_image_views[i], nullptr);
-	}
-	vkDestroySwapchainKHR(device, swap_chain, nullptr);
 
 	createSwapChain(window);
 	createColorAttachement();
@@ -748,8 +651,8 @@ void VulkanAPI::createSyncObjects()
 void VulkanAPI::createColorAttachement()
 {
 	Image::CreateInfo color_attachement_info = {};
-	color_attachement_info.extent = swap_chain_extent;
-	color_attachement_info.format = swap_chain_image_format;
+	color_attachement_info.extent = swapchain.extent;
+	color_attachement_info.format = swapchain.image_format;
 	color_attachement_info.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 	color_attachement_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 	color_attachement_info.final_layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -763,7 +666,7 @@ void VulkanAPI::createColorAttachement()
 void VulkanAPI::createDepthAttachement()
 {
 	Image::CreateInfo depth_attachement_info = {};
-	depth_attachement_info.extent = swap_chain_extent;
+	depth_attachement_info.extent = swapchain.extent;
 	depth_attachement_info.aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT;
 	depth_attachement_info.format = findSupportedFormat(
 		{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
@@ -1013,7 +916,7 @@ void VulkanAPI::createDescriptors()
 void VulkanAPI::createChunkPipeline()
 {
 	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = swap_chain_extent;
+	pipeline_info.extent = swapchain.extent;
 	pipeline_info.vert_path = "shaders/simple_shader.vert.spv";
 	pipeline_info.frag_path = "shaders/simple_shader.frag.spv";
 	pipeline_info.binding_description = BlockVertex::getBindingDescription();
@@ -1034,7 +937,7 @@ void VulkanAPI::createChunkPipeline()
 void VulkanAPI::createLinePipeline()
 {
 	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = swap_chain_extent;
+	pipeline_info.extent = swapchain.extent;
 	pipeline_info.vert_path = "shaders/line_shader.vert.spv";
 	pipeline_info.frag_path = "shaders/line_shader.frag.spv";
 	pipeline_info.binding_description = LineVertex::getBindingDescription();
@@ -1053,7 +956,7 @@ void VulkanAPI::createLinePipeline()
 void VulkanAPI::createSkyboxPipeline()
 {
 	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = swap_chain_extent;
+	pipeline_info.extent = swapchain.extent;
 	pipeline_info.vert_path = "shaders/skybox_shader.vert.spv";
 	pipeline_info.frag_path = "shaders/skybox_shader.frag.spv";
 	pipeline_info.color_formats = { color_attachement.format };
@@ -1199,11 +1102,11 @@ void VulkanAPI::setupImgui()
 	init_info.DescriptorPool = imgui_descriptor_pool;
 	init_info.Allocator = nullptr;
 	init_info.MinImageCount = 2;
-	init_info.ImageCount = static_cast<uint32_t>(swap_chain_images.size());
+	init_info.ImageCount = static_cast<uint32_t>(swapchain.images.size());
 	init_info.UseDynamicRendering = VK_TRUE;
 	init_info.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
 	init_info.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-	init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &swap_chain_image_format;
+	init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &swapchain.image_format;
 
 	ImGui_ImplVulkan_Init(&init_info);
 }
