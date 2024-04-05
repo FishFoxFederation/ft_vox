@@ -2,7 +2,7 @@
 
 Swapchain::Swapchain():
 	swapchain(VK_NULL_HANDLE),
-	extent({}),
+	extent({0, 0}),
 	image_format(VK_FORMAT_UNDEFINED),
 	m_device(VK_NULL_HANDLE)
 {
@@ -13,14 +13,10 @@ Swapchain::Swapchain(
 	VkPhysicalDevice physical_device,
 	VkSurfaceKHR surface,
 	CreateInfo create_info
-)
-	: m_device(device)
+):
+	m_device(device)
 {
 	SupportDetails swapchain_support = querySwapChainSupport(physical_device, surface);
-
-	// VkSurfaceFormatKHR surface_format = chooseSwapSurfaceFormat(swapchain_support.formats);
-	// VkPresentModeKHR present_mode = chooseSwapPresentMode(swapchain_support.present_modes);
-	// VkExtent2D extent = chooseSwapExtent(swapchain_support.capabilities, create_info.extent);
 
 	uint32_t image_count = swapchain_support.capabilities.minImageCount + 1;
 	if (swapchain_support.capabilities.maxImageCount > 0 && image_count > swapchain_support.capabilities.maxImageCount)
@@ -56,12 +52,12 @@ Swapchain::Swapchain(
 	swapchain_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 	swapchain_info.presentMode = create_info.present_mode;
 	swapchain_info.clipped = VK_TRUE;
-	swapchain_info.oldSwapchain = VK_NULL_HANDLE;
+	swapchain_info.oldSwapchain = create_info.old_swapchain;
 
-	if (vkCreateSwapchainKHR(device, &swapchain_info, nullptr, &swapchain) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create swap chain!");
-	}
+	VK_CHECK(
+		vkCreateSwapchainKHR(device, &swapchain_info, nullptr, &swapchain),
+		"Failed to create swapchain"
+	);
 
 	vkGetSwapchainImagesKHR(device, swapchain, &image_count, nullptr);
 	images.resize(image_count);

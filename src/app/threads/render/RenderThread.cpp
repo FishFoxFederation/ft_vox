@@ -145,35 +145,54 @@ void RenderThread::loop()
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
 
-	VkRenderingAttachmentInfo color_attachment = {};
-	color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	color_attachment.imageView = vk.color_attachement.view;
-	color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	color_attachment.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
+	// VkRenderingAttachmentInfo color_attachment = {};
+	// color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	// color_attachment.imageView = vk.color_attachement.view;
+	// color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	// color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	// color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	// color_attachment.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	std::vector<VkRenderingAttachmentInfo> lighting_pass_color_attachments = {
-		color_attachment
+	// std::vector<VkRenderingAttachmentInfo> lighting_pass_color_attachments = {
+	// 	color_attachment
+	// };
+
+	// VkRenderingAttachmentInfo lighting_pass_depth_attachment = {};
+	// lighting_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	// lighting_pass_depth_attachment.imageView = vk.depth_attachement.view;
+	// lighting_pass_depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	// lighting_pass_depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	// lighting_pass_depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	// lighting_pass_depth_attachment.clearValue = { 1.0f, 0 };
+
+	// VkRenderingInfo lighting_pass_render_info = {};
+	// lighting_pass_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+	// lighting_pass_render_info.renderArea = { 0, 0, vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height };
+	// lighting_pass_render_info.layerCount = 1;
+	// lighting_pass_render_info.colorAttachmentCount = static_cast<uint32_t>(lighting_pass_color_attachments.size());
+	// lighting_pass_render_info.pColorAttachments = lighting_pass_color_attachments.data();
+	// lighting_pass_render_info.pDepthAttachment = &lighting_pass_depth_attachment;
+
+	// vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &lighting_pass_render_info);
+
+	VkRenderPassBeginInfo render_pass_begin_info = {};
+	render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	render_pass_begin_info.renderPass = vk.lighting_render_pass;
+	render_pass_begin_info.framebuffer = vk.framebuffers[vk.current_frame];
+	render_pass_begin_info.renderArea.offset = { 0, 0 };
+	render_pass_begin_info.renderArea.extent = vk.swapchain.extent;
+	std::vector<VkClearValue> clear_values = {
+		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 1.0f, 0 }
 	};
+	render_pass_begin_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
+	render_pass_begin_info.pClearValues = clear_values.data();
 
-	VkRenderingAttachmentInfo lighting_pass_depth_attachment = {};
-	lighting_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	lighting_pass_depth_attachment.imageView = vk.depth_attachement.view;
-	lighting_pass_depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	lighting_pass_depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	lighting_pass_depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	lighting_pass_depth_attachment.clearValue = { 1.0f, 0 };
-
-	VkRenderingInfo lighting_pass_render_info = {};
-	lighting_pass_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	lighting_pass_render_info.renderArea = { 0, 0, vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height };
-	lighting_pass_render_info.layerCount = 1;
-	lighting_pass_render_info.colorAttachmentCount = static_cast<uint32_t>(lighting_pass_color_attachments.size());
-	lighting_pass_render_info.pColorAttachments = lighting_pass_color_attachments.data();
-	lighting_pass_render_info.pDepthAttachment = &lighting_pass_depth_attachment;
-
-	vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &lighting_pass_render_info);
+	vkCmdBeginRenderPass(
+		vk.draw_command_buffers[vk.current_frame],
+		&render_pass_begin_info,
+		VK_SUBPASS_CONTENTS_INLINE
+	);
 
 
 	// Draw the chunks
@@ -290,7 +309,8 @@ void RenderThread::loop()
 	);
 
 
-	vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
+	// vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
+	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
 	//                     																                         #
