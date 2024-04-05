@@ -45,6 +45,7 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/Image.cpp
 		src/app/vulkan/Command.cpp
 		src/app/vulkan/Descriptor.cpp
+		src/app/vulkan/Swapchain.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp

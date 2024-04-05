@@ -6,6 +6,7 @@
 #include "Command.hpp"
 #include "Image.hpp"
 #include "Descriptor.hpp"
+#include "Swapchain.hpp"
 #include "Pipeline.hpp"
 #include "Chunk.hpp"
 #include "CreateMeshData.hpp"
@@ -39,13 +40,6 @@ struct QueueFamilyIndices
 	{
 		return graphics_family.has_value() && present_family.has_value();
 	}
-};
-
-struct SwapChainSupportDetails
-{
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> present_modes;
 };
 
 struct BlockVertex
@@ -274,11 +268,7 @@ public:
 	VkQueue present_queue;
 	QueueFamilyIndices queue_family_indices;
 
-	VkSwapchainKHR swap_chain;
-	std::vector<VkImage> swap_chain_images;
-	std::vector<VkImageView> swap_chain_image_views;
-	VkFormat swap_chain_image_format;
-	VkExtent2D swap_chain_extent;
+	Swapchain swapchain;
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
@@ -382,7 +372,6 @@ private:
 	int ratePhysicalDevice(VkPhysicalDevice device);
 	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-	SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
 
 	void createLogicalDevice();
 
