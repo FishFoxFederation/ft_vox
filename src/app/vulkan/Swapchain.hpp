@@ -21,6 +21,8 @@ public:
 		VkSurfaceFormatKHR surface_format;
 		VkPresentModeKHR present_mode;
 		VkExtent2D extent;
+
+		VkSwapchainKHR old_swapchain;
 	};
 
 	Swapchain();

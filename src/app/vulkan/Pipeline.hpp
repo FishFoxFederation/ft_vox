@@ -34,6 +34,8 @@ public:
 
 		std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {};
 		std::vector<VkPushConstantRange> push_constant_ranges = {};
+
+		VkRenderPass render_pass = VK_NULL_HANDLE;
 	};
 
 	Pipeline():
@@ -42,62 +44,6 @@ public:
 		m_device(VK_NULL_HANDLE)
 	{
 	}
-
-	Pipeline(const Pipeline &) = delete;
-	Pipeline & operator=(const Pipeline &) = delete;
-
-	Pipeline(Pipeline && other) noexcept:
-		pipeline(other.pipeline),
-		layout(other.layout),
-		m_device(other.m_device)
-	{
-		other.pipeline = VK_NULL_HANDLE;
-		other.layout = VK_NULL_HANDLE;
-		other.m_device = VK_NULL_HANDLE;
-	}
-
-	Pipeline & operator=(Pipeline && other) noexcept
-	{
-		if (this != &other)
-		{
-			if (m_device != VK_NULL_HANDLE)
-			{
-				vkDestroyPipeline(m_device, pipeline, nullptr);
-				vkDestroyPipelineLayout(m_device, layout, nullptr);
-			}
-
-			pipeline = other.pipeline;
-			layout = other.layout;
-			m_device = other.m_device;
-
-			other.pipeline = VK_NULL_HANDLE;
-			other.layout = VK_NULL_HANDLE;
-			other.m_device = VK_NULL_HANDLE;
-		}
-
-		return *this;
-	}
-
-	~Pipeline()
-	{
-		if (m_device != VK_NULL_HANDLE)
-		{
-			vkDestroyPipeline(m_device, pipeline, nullptr);
-			vkDestroyPipelineLayout(m_device, layout, nullptr);
-		}
-	}
-
-	static Pipeline create(VkDevice device, const CreateInfo & create_info)
-	{
-		return Pipeline(device, create_info);
-	}
-
-	VkPipeline pipeline;
-	VkPipelineLayout layout;
-
-private:
-
-	VkDevice m_device;
 
 	Pipeline(VkDevice device, const CreateInfo & create_info):
 		m_device(device)
@@ -246,7 +192,15 @@ private:
 		pipeline_info.pColorBlendState = &color_blending;
 		pipeline_info.pDepthStencilState = &depth_stencil;
 		pipeline_info.layout = layout;
-		pipeline_info.pNext = &rendering_info;
+
+		if (create_info.render_pass == VK_NULL_HANDLE)
+		{
+			pipeline_info.pNext = &rendering_info;
+		}
+		else
+		{
+			pipeline_info.renderPass = create_info.render_pass;
+		}
 
 		VK_CHECK(
 			vkCreateGraphicsPipelines(m_device, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &pipeline),
@@ -255,6 +209,66 @@ private:
 
 		vkDestroyShaderModule(device, frag_module, nullptr);
 		vkDestroyShaderModule(device, vert_module, nullptr);
+	}
+
+
+	Pipeline(const Pipeline &) = delete;
+	Pipeline & operator=(const Pipeline &) = delete;
+
+	Pipeline(Pipeline && other) noexcept:
+		pipeline(other.pipeline),
+		layout(other.layout),
+		m_device(other.m_device)
+	{
+		other.pipeline = VK_NULL_HANDLE;
+		other.layout = VK_NULL_HANDLE;
+		other.m_device = VK_NULL_HANDLE;
+	}
+
+	Pipeline & operator=(Pipeline && other) noexcept
+	{
+		if (this != &other)
+		{
+			clear();
+
+			pipeline = other.pipeline;
+			layout = other.layout;
+			m_device = other.m_device;
+
+			other.pipeline = VK_NULL_HANDLE;
+			other.layout = VK_NULL_HANDLE;
+			other.m_device = VK_NULL_HANDLE;
+		}
+
+		return *this;
+	}
+
+	~Pipeline()
+	{
+		clear();
+	}
+
+	VkPipeline pipeline;
+	VkPipelineLayout layout;
+
+private:
+
+	VkDevice m_device;
+
+	void clear()
+	{
+		if (m_device != VK_NULL_HANDLE)
+		{
+			if (pipeline != VK_NULL_HANDLE)
+			{
+				vkDestroyPipeline(m_device, pipeline, nullptr);
+			}
+
+			if (layout != VK_NULL_HANDLE)
+			{
+				vkDestroyPipelineLayout(m_device, layout, nullptr);
+			}
+		}
 	}
 
 	std::vector<char> readFile(const std::string & filename)

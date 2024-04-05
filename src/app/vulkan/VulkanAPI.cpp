@@ -42,6 +42,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createLinePipeline();
 	createSkyboxPipeline();
 
+	createFramebuffers();
+
 	setupImgui();
 	createImGuiTexture(100, 100);
 
@@ -74,6 +76,13 @@ VulkanAPI::~VulkanAPI()
 		vma.freeMemory(device, frustum_line_buffers_memory[i], nullptr);
 		vkDestroyBuffer(device, frustum_line_buffers[i], nullptr);
 	}
+
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		vkDestroyFramebuffer(device, framebuffers[i], nullptr);
+	}
+
+	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
@@ -480,6 +489,7 @@ void VulkanAPI::createSwapChain(GLFWwindow * window)
 	create_info.surface_format = chooseSwapSurfaceFormat(swapchain_support.formats);
 	create_info.present_mode = chooseSwapPresentMode(swapchain_support.present_modes);
 	create_info.extent = chooseSwapExtent(swapchain_support.capabilities, window);
+	create_info.old_swapchain = swapchain.swapchain;
 
 	swapchain = Swapchain(device, physical_device, surface, create_info);
 }
@@ -502,6 +512,11 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		vkDestroyFramebuffer(device, framebuffers[i], nullptr);
+	}
+	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 
 	createSwapChain(window);
 	createColorAttachement();
@@ -509,6 +524,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	createChunkPipeline();
 	createLinePipeline();
 	createSkyboxPipeline();
+	createFramebuffers();
 	setupImgui();
 	createImGuiTexture(100, 100);
 }
@@ -915,6 +931,59 @@ void VulkanAPI::createDescriptors()
 
 void VulkanAPI::createChunkPipeline()
 {
+	VkAttachmentDescription color_attachement_description = {};
+	color_attachement_description.format = color_attachement.format;
+	color_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+	color_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	color_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	color_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	color_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	color_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	color_attachement_description.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	VkAttachmentDescription depth_attachement_description = {};
+	depth_attachement_description.format = depth_attachement.format;
+	depth_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+	depth_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	depth_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	depth_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	depth_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	depth_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	depth_attachement_description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	VkAttachmentReference color_attachement_ref = {};
+	color_attachement_ref.attachment = 0;
+	color_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	VkAttachmentReference depth_attachement_ref = {};
+	depth_attachement_ref.attachment = 1;
+	depth_attachement_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	VkSubpassDescription subpass = {};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &color_attachement_ref;
+	subpass.pDepthStencilAttachment = &depth_attachement_ref;
+
+	std::array<VkAttachmentDescription, 2> attachments = {
+		color_attachement_description,
+		depth_attachement_description
+	};
+
+	VkRenderPassCreateInfo render_pass_info = {};
+	render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+	render_pass_info.pAttachments = attachments.data();
+	render_pass_info.subpassCount = 1;
+	render_pass_info.pSubpasses = &subpass;
+
+	VK_CHECK(
+		vkCreateRenderPass(device, &render_pass_info, nullptr, &lighting_render_pass),
+		"Failed to create render pass"
+	);
+
+
+
 	Pipeline::CreateInfo pipeline_info = {};
 	pipeline_info.extent = swapchain.extent;
 	pipeline_info.vert_path = "shaders/simple_shader.vert.spv";
@@ -930,8 +999,9 @@ void VulkanAPI::createChunkPipeline()
 	pipeline_info.push_constant_ranges = {
 		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
 	};
+	pipeline_info.render_pass = lighting_render_pass;
 
-	chunk_pipeline = Pipeline::create(device, pipeline_info);
+	chunk_pipeline = Pipeline(device, pipeline_info);
 }
 
 void VulkanAPI::createLinePipeline()
@@ -950,7 +1020,7 @@ void VulkanAPI::createLinePipeline()
 		camera_descriptor.layout
 	};
 
-	line_pipeline = Pipeline::create(device, pipeline_info);
+	line_pipeline = Pipeline(device, pipeline_info);
 }
 
 void VulkanAPI::createSkyboxPipeline()
@@ -968,8 +1038,37 @@ void VulkanAPI::createSkyboxPipeline()
 	pipeline_info.push_constant_ranges = {
 		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
 	};
+	pipeline_info.render_pass = lighting_render_pass;
 
-	skybox_pipeline = Pipeline::create(device, pipeline_info);
+	skybox_pipeline = Pipeline(device, pipeline_info);
+}
+
+void VulkanAPI::createFramebuffers()
+{
+	framebuffers.resize(max_frames_in_flight);
+
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		std::vector<VkImageView> attachments = {
+			color_attachement.view,
+			depth_attachement.view
+		};
+
+		VkFramebufferCreateInfo framebuffer_info = {};
+		framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebuffer_info.renderPass = lighting_render_pass;
+		framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		framebuffer_info.pAttachments = attachments.data();
+		framebuffer_info.width = swapchain.extent.width;
+		framebuffer_info.height = swapchain.extent.height;
+		framebuffer_info.layers = 1;
+
+		VK_CHECK(
+			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &framebuffers[i]),
+			"Failed to create framebuffer"
+		);
+	}
+
 }
 
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)

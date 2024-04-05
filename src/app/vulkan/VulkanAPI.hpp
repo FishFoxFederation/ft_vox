@@ -269,6 +269,7 @@ public:
 	QueueFamilyIndices queue_family_indices;
 
 	Swapchain swapchain;
+	std::vector<VkFramebuffer> framebuffers;
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
@@ -309,6 +310,8 @@ public:
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
 	void createDescriptors();
+
+	VkRenderPass lighting_render_pass;
 
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
@@ -396,6 +399,8 @@ private:
 	void createChunkPipeline();
 	void createLinePipeline();
 	void createSkyboxPipeline();
+
+	void createFramebuffers();
 
 	void destroyMeshes();
 
