@@ -130,67 +130,126 @@ void RenderThread::loop()
 		"Failed to begin recording command buffer"
 	);
 
-	vk.setImageLayout(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.color_attachement.image,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
-
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 
+	//############################################################################################################
+	//                     																                         #
+	//                                     Start shadow pass rendering here                                      #
+	//                     																                         #
+	//############################################################################################################
 
-	// VkRenderingAttachmentInfo color_attachment = {};
-	// color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	// color_attachment.imageView = vk.color_attachement.view;
-	// color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	// color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	// color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	// color_attachment.clearValue = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-	// std::vector<VkRenderingAttachmentInfo> lighting_pass_color_attachments = {
-	// 	color_attachment
-	// };
-
-	// VkRenderingAttachmentInfo lighting_pass_depth_attachment = {};
-	// lighting_pass_depth_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	// lighting_pass_depth_attachment.imageView = vk.depth_attachement.view;
-	// lighting_pass_depth_attachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-	// lighting_pass_depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	// lighting_pass_depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	// lighting_pass_depth_attachment.clearValue = { 1.0f, 0 };
-
-	// VkRenderingInfo lighting_pass_render_info = {};
-	// lighting_pass_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	// lighting_pass_render_info.renderArea = { 0, 0, vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height };
-	// lighting_pass_render_info.layerCount = 1;
-	// lighting_pass_render_info.colorAttachmentCount = static_cast<uint32_t>(lighting_pass_color_attachments.size());
-	// lighting_pass_render_info.pColorAttachments = lighting_pass_color_attachments.data();
-	// lighting_pass_render_info.pDepthAttachment = &lighting_pass_depth_attachment;
-
-	// vkCmdBeginRendering(vk.draw_command_buffers[vk.current_frame], &lighting_pass_render_info);
-
-	VkRenderPassBeginInfo render_pass_begin_info = {};
-	render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	render_pass_begin_info.renderPass = vk.lighting_render_pass;
-	render_pass_begin_info.framebuffer = vk.framebuffers[vk.current_frame];
-	render_pass_begin_info.renderArea.offset = { 0, 0 };
-	render_pass_begin_info.renderArea.extent = vk.swapchain.extent;
-	std::vector<VkClearValue> clear_values = {
+	VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
+	shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
+	shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
+	shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_color_attachement.extent2D;
+	std::vector<VkClearValue> shadow_clear_values = {
 		{ 0.0f, 0.0f, 0.0f, 1.0f },
 		{ 1.0f, 0 }
 	};
-	render_pass_begin_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
-	render_pass_begin_info.pClearValues = clear_values.data();
+	shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
+	shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
 
 	vkCmdBeginRenderPass(
 		vk.draw_command_buffers[vk.current_frame],
-		&render_pass_begin_info,
+		&shadow_render_pass_begin_info,
+		VK_SUBPASS_CONTENTS_INLINE
+	);
+
+	// Draw the chunks
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.block_textures_descriptor.set
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.shadow_pipeline.layout,
+		0,
+		static_cast<uint32_t>(shadow_descriptor_sets.size()),
+		shadow_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	for (auto & chunk_mesh : chunk_meshes)
+	{
+		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
+		{
+			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+			continue;
+		}
+
+		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
+
+		glm::dvec3 pos = chunk_mesh.transform.position();
+		if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+		{
+			continue;
+		}
+
+		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
+		const VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(
+			vk.draw_command_buffers[vk.current_frame],
+			0, 1,
+			vertex_buffers,
+			offsets
+		);
+
+		vkCmdBindIndexBuffer(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.meshes[chunk_mesh.id].buffer,
+			vk.meshes[chunk_mesh.id].index_offset,
+			VK_INDEX_TYPE_UINT32
+		);
+
+		ModelMatrice model_matrice = {};
+		model_matrice.model = chunk_mesh.transform.model();
+		vkCmdPushConstants(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.shadow_pipeline.layout,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			0,
+			sizeof(ModelMatrice),
+			&model_matrice
+		);
+
+		vkCmdDrawIndexed(
+			vk.draw_command_buffers[vk.current_frame],
+			static_cast<uint32_t>(vk.meshes[chunk_mesh.id].index_count),
+			1, 0, 0, 0
+		);
+	}
+
+	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
+
+	//############################################################################################################
+	//                     																                         #
+	//                                    Start lighting pass rendering here                                     #
+	//                     																                         #
+	//############################################################################################################
+
+	VkRenderPassBeginInfo lighting_render_pass_begin_info = {};
+	lighting_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
+	lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
+	lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	lighting_render_pass_begin_info.renderArea.extent = vk.color_attachement.extent2D;
+	std::vector<VkClearValue> lighting_clear_values = {
+		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 1.0f, 0 }
+	};
+	lighting_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(lighting_clear_values.size());
+	lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
+
+	vkCmdBeginRenderPass(
+		vk.draw_command_buffers[vk.current_frame],
+		&lighting_render_pass_begin_info,
 		VK_SUBPASS_CONTENTS_INLINE
 	);
 
@@ -271,45 +330,71 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.cube_map_descriptor.set
+	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+	// 	vk.camera_descriptor.sets[vk.current_frame],
+	// 	vk.cube_map_descriptor.set
+	// };
+
+	// vkCmdBindDescriptorSets(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+	// 	vk.skybox_pipeline.layout,
+	// 	0,
+	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
+	// 	skybox_descriptor_sets.data(),
+	// 	0,
+	// 	nullptr
+	// );
+
+	// ModelMatrice camera_model_matrice = {};
+	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	// vkCmdPushConstants(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	vk.skybox_pipeline.layout,
+	// 	VK_SHADER_STAGE_VERTEX_BIT,
+	// 	0,
+	// 	sizeof(ModelMatrice),
+	// 	&camera_model_matrice
+	// );
+
+	// vkCmdDraw(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	36,
+	// 	1,
+	// 	0,
+	// 	0
+	// );
+
+
+	// Draw test image
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+		vk.test_image_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline.layout,
+		vk.test_image_pipeline.layout,
 		0,
-		static_cast<uint32_t>(skybox_descriptor_sets.size()),
-		skybox_descriptor_sets.data(),
+		static_cast<uint32_t>(test_image_descriptor_sets.size()),
+		test_image_descriptor_sets.data(),
 		0,
 		nullptr
 	);
 
-	ModelMatrice camera_model_matrice = {};
-	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(ModelMatrice),
-		&camera_model_matrice
-	);
-
 	vkCmdDraw(
 		vk.draw_command_buffers[vk.current_frame],
-		36,
+		6,
 		1,
 		0,
 		0
 	);
 
 
-	// vkCmdEndRendering(vk.draw_command_buffers[vk.current_frame]);
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
@@ -383,18 +468,6 @@ void RenderThread::loop()
 		0,
 		0,
 		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	vk.setImageLayout(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.color_attachement.image,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	);
 
