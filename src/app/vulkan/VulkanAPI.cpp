@@ -37,11 +37,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createFrustumLineBuffers();
 
 	createDescriptors();
-
-	createChunkPipeline();
-	createLinePipeline();
-	createSkyboxPipeline();
-
+	createRenderPass();
+	createPipelines();
 	createFramebuffers();
 
 	setupImgui();
@@ -79,10 +76,12 @@ VulkanAPI::~VulkanAPI()
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
-		vkDestroyFramebuffer(device, framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
 	}
 
 	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
+	vkDestroyRenderPass(device, shadow_render_pass, nullptr);
 
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
@@ -514,16 +513,14 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
-		vkDestroyFramebuffer(device, framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
 	}
-	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 
 	createSwapChain(window);
 	createColorAttachement();
 	createDepthAttachement();
-	createChunkPipeline();
-	createLinePipeline();
-	createSkyboxPipeline();
+	createPipelines();
 	createFramebuffers();
 	setupImgui();
 	createImGuiTexture(100, 100);
@@ -667,7 +664,7 @@ void VulkanAPI::createSyncObjects()
 void VulkanAPI::createColorAttachement()
 {
 	Image::CreateInfo color_attachement_info = {};
-	color_attachement_info.extent = swapchain.extent;
+	color_attachement_info.extent = { swapchain.extent.width * 2, swapchain.extent.height * 2 };
 	color_attachement_info.format = swapchain.image_format;
 	color_attachement_info.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 	color_attachement_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
@@ -677,28 +674,35 @@ void VulkanAPI::createColorAttachement()
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 	color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
+
+	color_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
+	color_attachement_info.create_sampler = true;
+	shadow_map_color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 }
 
 void VulkanAPI::createDepthAttachement()
 {
 	Image::CreateInfo depth_attachement_info = {};
-	depth_attachement_info.extent = swapchain.extent;
+	depth_attachement_info.extent = { swapchain.extent.width * 2, swapchain.extent.height * 2 };
 	depth_attachement_info.aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT;
 	depth_attachement_info.format = findSupportedFormat(
 		{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
 		VK_IMAGE_TILING_OPTIMAL,
 		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 	);
-	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 	depth_attachement_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 	depth_attachement_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depth_attachement_info.create_view = true;
-	depth_attachement_info.create_sampler = true;
 	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
+
+	depth_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
+	depth_attachement_info.create_sampler = true;
+	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
 void VulkanAPI::createUniformBuffers()
@@ -927,125 +931,294 @@ void VulkanAPI::createDescriptors()
 			0, nullptr
 		);
 	}
+
+	// shadow map descriptor
+	{
+		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+		sampler_layout_binding.binding = 0;
+		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding.descriptorCount = 1;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { sampler_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		shadow_map_descriptor = Descriptor(device, descriptor_info);
+
+		VkDescriptorImageInfo image_info = {};
+		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.imageView = shadow_map_color_attachement.view;
+		image_info.sampler = shadow_map_color_attachement.sampler;
+
+		VkWriteDescriptorSet descriptor_write = {};
+		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptor_write.dstSet = shadow_map_descriptor.set;
+		descriptor_write.dstBinding = 0;
+		descriptor_write.dstArrayElement = 0;
+		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		descriptor_write.descriptorCount = 1;
+		descriptor_write.pImageInfo = &image_info;
+
+		vkUpdateDescriptorSets(
+			device,
+			1,
+			&descriptor_write,
+			0, nullptr
+		);
+	}
+
+	{ // test image descriptor
+		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+		sampler_layout_binding.binding = 0;
+		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding.descriptorCount = 1;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { sampler_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		test_image_descriptor = Descriptor(device, descriptor_info);
+
+		VkDescriptorImageInfo image_info = {};
+		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.imageView = shadow_map_depth_attachement.view;
+		image_info.sampler = shadow_map_depth_attachement.sampler;
+
+		VkWriteDescriptorSet descriptor_write = {};
+		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptor_write.dstSet = test_image_descriptor.set;
+		descriptor_write.dstBinding = 0;
+		descriptor_write.dstArrayElement = 0;
+		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		descriptor_write.descriptorCount = 1;
+		descriptor_write.pImageInfo = &image_info;
+
+		vkUpdateDescriptorSets(
+			device,
+			1,
+			&descriptor_write,
+			0, nullptr
+		);
+	}
 }
 
-void VulkanAPI::createChunkPipeline()
+void VulkanAPI::createRenderPass()
 {
-	VkAttachmentDescription color_attachement_description = {};
-	color_attachement_description.format = color_attachement.format;
-	color_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
-	color_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	color_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	color_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	color_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	color_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	color_attachement_description.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	{ // lighting render pass
+		VkAttachmentDescription color_attachement_description = {};
+		color_attachement_description.format = color_attachement.format;
+		color_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+		color_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		color_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		color_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		color_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		color_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		color_attachement_description.finalLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
-	VkAttachmentDescription depth_attachement_description = {};
-	depth_attachement_description.format = depth_attachement.format;
-	depth_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
-	depth_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	depth_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	depth_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	depth_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	depth_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	depth_attachement_description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+		VkAttachmentDescription depth_attachement_description = {};
+		depth_attachement_description.format = depth_attachement.format;
+		depth_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+		depth_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		depth_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		depth_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		depth_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		depth_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		depth_attachement_description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-	VkAttachmentReference color_attachement_ref = {};
-	color_attachement_ref.attachment = 0;
-	color_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		VkAttachmentReference color_attachement_ref = {};
+		color_attachement_ref.attachment = 0;
+		color_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-	VkAttachmentReference depth_attachement_ref = {};
-	depth_attachement_ref.attachment = 1;
-	depth_attachement_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+		VkAttachmentReference depth_attachement_ref = {};
+		depth_attachement_ref.attachment = 1;
+		depth_attachement_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-	VkSubpassDescription subpass = {};
-	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-	subpass.colorAttachmentCount = 1;
-	subpass.pColorAttachments = &color_attachement_ref;
-	subpass.pDepthStencilAttachment = &depth_attachement_ref;
+		VkSubpassDescription subpass = {};
+		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		subpass.colorAttachmentCount = 1;
+		subpass.pColorAttachments = &color_attachement_ref;
+		subpass.pDepthStencilAttachment = &depth_attachement_ref;
 
-	std::array<VkAttachmentDescription, 2> attachments = {
-		color_attachement_description,
-		depth_attachement_description
-	};
+		std::array<VkAttachmentDescription, 2> attachments = {
+			color_attachement_description,
+			depth_attachement_description
+		};
 
-	VkRenderPassCreateInfo render_pass_info = {};
-	render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
-	render_pass_info.pAttachments = attachments.data();
-	render_pass_info.subpassCount = 1;
-	render_pass_info.pSubpasses = &subpass;
+		VkRenderPassCreateInfo render_pass_info = {};
+		render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		render_pass_info.pAttachments = attachments.data();
+		render_pass_info.subpassCount = 1;
+		render_pass_info.pSubpasses = &subpass;
 
-	VK_CHECK(
-		vkCreateRenderPass(device, &render_pass_info, nullptr, &lighting_render_pass),
-		"Failed to create render pass"
-	);
+		VK_CHECK(
+			vkCreateRenderPass(device, &render_pass_info, nullptr, &lighting_render_pass),
+			"Failed to create render pass"
+		);
+	}
 
+	{ // shadow render pass
+		VkAttachmentDescription color_attachement_description = {};
+		color_attachement_description.format = shadow_map_color_attachement.format;
+		color_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+		color_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		color_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		color_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		color_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		color_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		color_attachement_description.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
+		VkAttachmentDescription depth_attachement_description = {};
+		depth_attachement_description.format = shadow_map_depth_attachement.format;
+		depth_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+		depth_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		depth_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		depth_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		depth_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		depth_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		depth_attachement_description.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = swapchain.extent;
-	pipeline_info.vert_path = "shaders/simple_shader.vert.spv";
-	pipeline_info.frag_path = "shaders/simple_shader.frag.spv";
-	pipeline_info.binding_description = BlockVertex::getBindingDescription();
-	pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
-	pipeline_info.color_formats = { color_attachement.format };
-	pipeline_info.depth_format = depth_attachement.format;
-	pipeline_info.descriptor_set_layouts = {
-		camera_descriptor.layout,
-		block_textures_descriptor.layout
-	};
-	pipeline_info.push_constant_ranges = {
-		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
-	};
-	pipeline_info.render_pass = lighting_render_pass;
+		VkAttachmentReference color_attachement_ref = {};
+		color_attachement_ref.attachment = 0;
+		color_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-	chunk_pipeline = Pipeline(device, pipeline_info);
+		VkAttachmentReference depth_attachement_ref = {};
+		depth_attachement_ref.attachment = 1;
+		depth_attachement_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+		VkSubpassDescription subpass = {};
+		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		subpass.colorAttachmentCount = 1;
+		subpass.pColorAttachments = &color_attachement_ref;
+		subpass.pDepthStencilAttachment = &depth_attachement_ref;
+
+		std::array<VkAttachmentDescription, 2> attachments = {
+			color_attachement_description,
+			depth_attachement_description
+		};
+
+		VkRenderPassCreateInfo render_pass_info = {};
+		render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		render_pass_info.pAttachments = attachments.data();
+		render_pass_info.subpassCount = 1;
+		render_pass_info.pSubpasses = &subpass;
+
+		VK_CHECK(
+			vkCreateRenderPass(device, &render_pass_info, nullptr, &shadow_render_pass),
+			"Failed to create render pass"
+		);
+	}
 }
 
-void VulkanAPI::createLinePipeline()
+void VulkanAPI::createPipelines()
 {
-	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = swapchain.extent;
-	pipeline_info.vert_path = "shaders/line_shader.vert.spv";
-	pipeline_info.frag_path = "shaders/line_shader.frag.spv";
-	pipeline_info.binding_description = LineVertex::getBindingDescription();
-	pipeline_info.attribute_descriptions = LineVertex::getAttributeDescriptions();
-	pipeline_info.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-	pipeline_info.polygon_mode = VK_POLYGON_MODE_LINE;
-	pipeline_info.color_formats = { color_attachement.format };
-	pipeline_info.depth_format = depth_attachement.format;
-	pipeline_info.descriptor_set_layouts = {
-		camera_descriptor.layout
-	};
+	{ // chunk pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/chunk_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/chunk_shader.frag.spv";
+		pipeline_info.binding_description = BlockVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout,
+			block_textures_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
 
-	line_pipeline = Pipeline(device, pipeline_info);
-}
+		chunk_pipeline = Pipeline(device, pipeline_info);
+	}
 
-void VulkanAPI::createSkyboxPipeline()
-{
-	Pipeline::CreateInfo pipeline_info = {};
-	pipeline_info.extent = swapchain.extent;
-	pipeline_info.vert_path = "shaders/skybox_shader.vert.spv";
-	pipeline_info.frag_path = "shaders/skybox_shader.frag.spv";
-	pipeline_info.color_formats = { color_attachement.format };
-	pipeline_info.depth_format = depth_attachement.format;
-	pipeline_info.descriptor_set_layouts = {
-		camera_descriptor.layout,
-		cube_map_descriptor.layout
-	};
-	pipeline_info.push_constant_ranges = {
-		{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
-	};
-	pipeline_info.render_pass = lighting_render_pass;
+	{ // line pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = swapchain.extent;
+		pipeline_info.vert_path = "shaders/line_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/line_shader.frag.spv";
+		pipeline_info.binding_description = LineVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = LineVertex::getAttributeDescriptions();
+		pipeline_info.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+		pipeline_info.polygon_mode = VK_POLYGON_MODE_LINE;
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout
+		};
 
-	skybox_pipeline = Pipeline(device, pipeline_info);
+		line_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // skybox pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/skybox_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/skybox_shader.frag.spv";
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout,
+			cube_map_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+
+		skybox_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // shadow map pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = shadow_map_color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/shadow_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/shadow_shader.frag.spv";
+		pipeline_info.binding_description = BlockVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { shadow_map_color_attachement.format };
+		pipeline_info.depth_format = shadow_map_depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout,
+			block_textures_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = shadow_render_pass;
+
+		shadow_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // test image pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = { color_attachement.extent2D.width / 3, color_attachement.extent2D.height / 3 };
+		pipeline_info.vert_path = "shaders/test_image_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/test_image_shader.frag.spv";
+		pipeline_info.color_formats = { color_attachement.format };
+		// pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			test_image_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+
+		test_image_pipeline = Pipeline(device, pipeline_info);
+	}
 }
 
 void VulkanAPI::createFramebuffers()
 {
-	framebuffers.resize(max_frames_in_flight);
+	lighting_framebuffers.resize(max_frames_in_flight);
+	shadow_framebuffers.resize(max_frames_in_flight);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -1059,12 +1232,34 @@ void VulkanAPI::createFramebuffers()
 		framebuffer_info.renderPass = lighting_render_pass;
 		framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
 		framebuffer_info.pAttachments = attachments.data();
-		framebuffer_info.width = swapchain.extent.width;
-		framebuffer_info.height = swapchain.extent.height;
+		framebuffer_info.width = color_attachement.extent2D.width;
+		framebuffer_info.height = color_attachement.extent2D.height;
 		framebuffer_info.layers = 1;
 
 		VK_CHECK(
-			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &framebuffers[i]),
+			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &lighting_framebuffers[i]),
+			"Failed to create framebuffer"
+		);
+	}
+
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		std::vector<VkImageView> attachments = {
+			shadow_map_color_attachement.view,
+			shadow_map_depth_attachement.view
+		};
+
+		VkFramebufferCreateInfo framebuffer_info = {};
+		framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebuffer_info.renderPass = shadow_render_pass;
+		framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		framebuffer_info.pAttachments = attachments.data();
+		framebuffer_info.width = shadow_map_color_attachement.extent2D.width;
+		framebuffer_info.height = shadow_map_color_attachement.extent2D.height;
+		framebuffer_info.layers = 1;
+
+		VK_CHECK(
+			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &shadow_framebuffers[i]),
 			"Failed to create framebuffer"
 		);
 	}

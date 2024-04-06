@@ -269,7 +269,8 @@ public:
 	QueueFamilyIndices queue_family_indices;
 
 	Swapchain swapchain;
-	std::vector<VkFramebuffer> framebuffers;
+	std::vector<VkFramebuffer> lighting_framebuffers;
+	std::vector<VkFramebuffer> shadow_framebuffers;
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
@@ -291,6 +292,8 @@ public:
 	Image depth_attachement;
 	Image block_textures;
 	Image skybox_cube_map;
+	Image shadow_map_color_attachement;
+	Image shadow_map_depth_attachement;
 
 	// Uniform buffers for the camera matrices
 	std::vector<VkBuffer> camera_uniform_buffers;
@@ -309,14 +312,17 @@ public:
 	Descriptor camera_descriptor;
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
-	void createDescriptors();
+	Descriptor shadow_map_descriptor;
+	Descriptor test_image_descriptor;
 
 	VkRenderPass lighting_render_pass;
+	VkRenderPass shadow_render_pass;
 
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
 	Pipeline skybox_pipeline;
-
+	Pipeline shadow_pipeline;
+	Pipeline test_image_pipeline;
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
@@ -396,10 +402,9 @@ private:
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
 	void createFrustumLineBuffers();
 
-	void createChunkPipeline();
-	void createLinePipeline();
-	void createSkyboxPipeline();
-
+	void createDescriptors();
+	void createRenderPass();
+	void createPipelines();
 	void createFramebuffers();
 
 	void destroyMeshes();
