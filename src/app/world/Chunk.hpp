@@ -23,13 +23,21 @@ public:
 	BlockID				getBlock(const int & x, const int & y, const int & z) const;
 	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
 
+	const glm::ivec3 &	getPosition() const {return position;};
+
+	const int & 		x()const {return position.x;};
+	const int & 		y()const {return position.y;};
+	const int & 		z()const {return position.z;};
+
+
 	const uint64_t	&	getMeshID() const;
 	void				setMeshID(const uint64_t & mesh_id);
 
 	static  int			toIndex(const int & x, const int & y, const int & z);
 	static	glm::ivec3	toCoord(const int & index);
+
+	const		glm::ivec3 position;
 private:
-	const		glm::ivec3 m_position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
 

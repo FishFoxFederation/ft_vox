@@ -32,6 +32,56 @@ Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int 
 	return chunk;
 }
 
+std::vector<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int & z)
+{
+	std::vector<Chunk> column;
+
+	for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
+		column.push_back(Chunk(glm::ivec3(x, y, z)));
+
+	for(int blockX = 0; blockX < CHUNK_SIZE; blockX++)
+	{
+		for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
+		{
+			//generate the relief value for the whole column
+			float value = generateReliefValue(glm::ivec2(
+				blockX + x * CHUNK_SIZE,
+				blockZ + z * CHUNK_SIZE
+			));
+
+			for(int blockY = 0; blockY < WORLD_Y_MAX; blockY++)
+			{
+				
+				glm::ivec3 position = glm::ivec3(
+					blockX + x * CHUNK_SIZE,
+					blockY,
+					blockZ + z * CHUNK_SIZE
+				);
+				BlockID to_set;
+
+				//check to see wether above or below the relief value
+				if (value + 128 > position.y)
+					to_set = BlockID::Stone;
+				else if (value + 133 > position.y)
+					to_set = BlockID::Grass;
+				else
+					to_set = BlockID::Air;
+
+				//if below relief value try to carve a cave
+				if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
+					to_set = BlockID::Air;
+				// try {
+				column[position.y / CHUNK_SIZE].setBlock(blockX, position.y % CHUNK_SIZE, blockZ, to_set);
+				// } catch (std::exception & e)
+				// {
+					// LOG_ERROR("EXCEPTION: " << e.what());
+				// }
+			}
+		}
+	}
+	return column;
+}
+
 Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 {
 
@@ -72,13 +122,7 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 
 BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
 {
-	float value = m_relief_perlin.noise(glm::vec2(
-		position.x * 0.01f,
-		position.z * 0.01f
-	));
-
-
-	value = ((value + 1) / 2) * 128;
+	float value = generateReliefValue(glm::ivec2(position.x, position.z));
 
 	if (value + 128 > position.y)
 		return BlockID::Stone;
@@ -88,6 +132,18 @@ BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
 		return BlockID::Grass;
 	else
 		return BlockID::Air;
+}
+
+float WorldGenerator::generateReliefValue(glm::ivec2 position)
+{
+	float value = m_relief_perlin.noise(glm::vec2(
+		position.x * 0.01f,
+		position.y * 0.01f
+	));
+
+	value = ((value + 1) / 2) * 128;
+
+	return value;
 }
 
 BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)

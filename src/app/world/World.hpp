@@ -50,6 +50,12 @@ private:
 	std::unordered_set<glm::ivec3>			m_visible_chunks;
 	Player 									m_player;
 
+
+	std::unordered_set<glm::ivec2>			m_loaded_columns;
+	std::unordered_set<glm::ivec2>			m_visible_columns;
+	std::mutex								m_visible_columns_mutex;
+
+
 	std::unordered_set<glm::ivec3>			m_chunk_gen_set;
 	std::mutex								m_chunk_gen_set_mutex;
 
@@ -64,4 +70,5 @@ private:
 	void	doChunkGen(const int & number_of_chunks);
 	// void	doChunkLoadUnload(const int & number_of_chunks);
 	void	addChunksToLoadUnloadQueue(const glm::vec3 & playerPosition);
+	void	addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition);
 };

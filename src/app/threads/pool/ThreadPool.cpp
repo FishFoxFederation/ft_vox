@@ -4,6 +4,7 @@ ThreadPool::ThreadPool()
 {
 	m_done = false;
 	unsigned const thread_count = std::thread::hardware_concurrency();
+	// unsigned const thread_count = 4;
 	try
 	{
 		for (unsigned i = 0; i < thread_count; i++)
