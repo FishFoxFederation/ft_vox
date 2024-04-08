@@ -56,12 +56,18 @@ void RenderThread::loop()
 
 	const double aspect_ratio = static_cast<double>(width) / static_cast<double>(height);
 
+	const glm::mat4 clip = glm::mat4(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f,-1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.0f, 0.0f, 0.5f, 1.0f
+	);
+
 	const Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
-	CameraMatrices camera_matrices = {};
+	ViewProjMatrices camera_matrices = {};
 	camera_matrices.view = camera.view;
-	camera_matrices.proj = camera.projection;
-	camera_matrices.proj[1][1] *= -1;
+	camera_matrices.proj = clip * camera.projection;
 
 	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.getMeshRenderData();
 
@@ -75,20 +81,20 @@ void RenderThread::loop()
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
-	// const glm::vec3 sun_pos = glm::vec3(70.0f, 250.0f, 70.0f);
+	const glm::dvec3 sun_offset = glm::dvec3(10.0f, 10.0f, 10.0f);
+	const glm::dvec3 sun_pos = camera.position + sun_offset;
 
-	CameraMatrices sun = {};
-	// sun.view = glm::lookAt(
-	// 	sun_pos,
-	// 	glm::vec3(0.0f),
-	// 	glm::vec3(0.0f, 1.0f, 0.0f)
-	// );
-	// sun.proj = glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f, 0.1f, 1000.0f);
-	// sun.proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 1000.0f);
-	// sun.proj[1][1] *= -1;
-
-	sun.view = camera.view;
-	sun.proj = camera.projection;
+	ViewProjMatrices sun = camera_matrices;
+	sun.view = glm::lookAt(
+		sun_pos,
+		camera.position,
+		glm::dvec3(0.0f, 1.0f, 0.0f)
+	);
+	sun.proj = clip * glm::ortho(
+		-20.0f, 20.0f,
+		-20.0f / static_cast<float>(aspect_ratio), 20.0f / static_cast<float>(aspect_ratio),
+		1.0f, 500.0f
+	);
 
 
 	//############################################################################################################
@@ -96,8 +102,6 @@ void RenderThread::loop()
 	//                                  Start the vulkan rendering process here                                  #
 	//                     																                         #
 	//############################################################################################################
-
-	LOG_TRACE("Start vulkan logic.");
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
 
@@ -131,6 +135,7 @@ void RenderThread::loop()
 	);
 
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
+	memcpy(vk.sun_uniform_buffers_mapped_memory[vk.current_frame], &sun, sizeof(sun));
 
 	//############################################################################################################
 	//                     																                         #
@@ -145,7 +150,6 @@ void RenderThread::loop()
 	shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
 	shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_color_attachement.extent2D;
 	std::vector<VkClearValue> shadow_clear_values = {
-		{ 0.0f, 0.0f, 0.0f, 1.0f },
 		{ 1.0f, 0 }
 	};
 	shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
@@ -161,8 +165,7 @@ void RenderThread::loop()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.block_textures_descriptor.set
+		vk.sun_descriptor.sets[vk.current_frame]
 	};
 
 	vkCmdBindDescriptorSets(
@@ -185,12 +188,6 @@ void RenderThread::loop()
 		}
 
 		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
-
-		glm::dvec3 pos = chunk_mesh.transform.position();
-		if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
-		{
-			continue;
-		}
 
 		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
 		const VkDeviceSize offsets[] = { 0 };
@@ -259,7 +256,9 @@ void RenderThread::loop()
 
 	const std::vector<VkDescriptorSet> descriptor_sets = {
 		vk.camera_descriptor.sets[vk.current_frame],
-		vk.block_textures_descriptor.set
+		vk.sun_descriptor.sets[vk.current_frame],
+		vk.block_textures_descriptor.set,
+		vk.shadow_map_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
@@ -330,42 +329,42 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-	// 	vk.camera_descriptor.sets[vk.current_frame],
-	// 	vk.cube_map_descriptor.set
-	// };
+	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.cube_map_descriptor.set
+	};
 
-	// vkCmdBindDescriptorSets(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.skybox_pipeline.layout,
-	// 	0,
-	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
-	// 	skybox_descriptor_sets.data(),
-	// 	0,
-	// 	nullptr
-	// );
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.skybox_pipeline.layout,
+		0,
+		static_cast<uint32_t>(skybox_descriptor_sets.size()),
+		skybox_descriptor_sets.data(),
+		0,
+		nullptr
+	);
 
-	// ModelMatrice camera_model_matrice = {};
-	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	// vkCmdPushConstants(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	vk.skybox_pipeline.layout,
-	// 	VK_SHADER_STAGE_VERTEX_BIT,
-	// 	0,
-	// 	sizeof(ModelMatrice),
-	// 	&camera_model_matrice
-	// );
+	ModelMatrice camera_model_matrice = {};
+	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.skybox_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(ModelMatrice),
+		&camera_model_matrice
+	);
 
-	// vkCmdDraw(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	36,
-	// 	1,
-	// 	0,
-	// 	0
-	// );
+	vkCmdDraw(
+		vk.draw_command_buffers[vk.current_frame],
+		36,
+		1,
+		0,
+		0
+	);
 
 
 	// Draw test image
@@ -402,8 +401,6 @@ void RenderThread::loop()
 	//                              Submit the command buffer to the graphics queue                              #
 	//                     																                         #
 	//############################################################################################################
-
-	LOG_TRACE("End render_command_buffers.");
 
 	VK_CHECK(
 		vkEndCommandBuffer(vk.draw_command_buffers[vk.current_frame]),

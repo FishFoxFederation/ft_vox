@@ -32,6 +32,11 @@ public:
 		std::vector<VkFormat> color_formats = {};
 		VkFormat depth_format = VK_FORMAT_UNDEFINED;
 
+		VkBool32 depth_bias_enable = VK_FALSE;
+		float depth_bias_constant_factor = 0.0f;
+		float depth_bias_clamp = 0.0f;
+		float depth_bias_slope_factor = 0.0f;
+
 		std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {};
 		std::vector<VkPushConstantRange> push_constant_ranges = {};
 
@@ -48,25 +53,33 @@ public:
 	Pipeline(VkDevice device, const CreateInfo & create_info):
 		m_device(device)
 	{
-		auto vert_code = readFile(create_info.vert_path);
-		auto frag_code = readFile(create_info.frag_path);
+		std::vector<VkPipelineShaderStageCreateInfo> shader_stages;
 
-		VkShaderModule vert_module = createShaderModule(vert_code);
-		VkShaderModule frag_module = createShaderModule(frag_code);
+		if (!create_info.vert_path.empty())
+		{
+			auto vert_code = readFile(create_info.vert_path);
+			VkShaderModule vert_module = createShaderModule(vert_code);
+			VkPipelineShaderStageCreateInfo vert_stage_info = {};
+			vert_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			vert_stage_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
+			vert_stage_info.module = vert_module;
+			vert_stage_info.pName = "main";
 
-		VkPipelineShaderStageCreateInfo vert_stage_info = {};
-		vert_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		vert_stage_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
-		vert_stage_info.module = vert_module;
-		vert_stage_info.pName = "main";
+			shader_stages.push_back(vert_stage_info);
+		}
 
-		VkPipelineShaderStageCreateInfo frag_stage_info = {};
-		frag_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		frag_stage_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-		frag_stage_info.module = frag_module;
-		frag_stage_info.pName = "main";
+		if (!create_info.frag_path.empty())
+		{
+			auto frag_code = readFile(create_info.frag_path);
+			VkShaderModule frag_module = createShaderModule(frag_code);
+			VkPipelineShaderStageCreateInfo frag_stage_info = {};
+			frag_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			frag_stage_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+			frag_stage_info.module = frag_module;
+			frag_stage_info.pName = "main";
 
-		VkPipelineShaderStageCreateInfo shader_stages[] = { vert_stage_info, frag_stage_info };
+			shader_stages.push_back(frag_stage_info);
+		}
 
 
 		VkPipelineVertexInputStateCreateInfo vertex_input_info = {};
@@ -122,10 +135,10 @@ public:
 		rasterizer.lineWidth = 1.0f;
 		rasterizer.cullMode = create_info.cull_mode;
 		rasterizer.frontFace = create_info.front_face;
-		rasterizer.depthBiasEnable = VK_FALSE;
-		rasterizer.depthBiasConstantFactor = 0.0f;
-		rasterizer.depthBiasClamp = 0.0f;
-		rasterizer.depthBiasSlopeFactor = 0.0f;
+		rasterizer.depthBiasEnable = create_info.depth_bias_enable;
+		rasterizer.depthBiasConstantFactor = create_info.depth_bias_constant_factor;
+		rasterizer.depthBiasClamp = create_info.depth_bias_clamp;
+		rasterizer.depthBiasSlopeFactor = create_info.depth_bias_slope_factor;
 
 		VkPipelineMultisampleStateCreateInfo multisampling = {};
 		multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -182,8 +195,8 @@ public:
 
 		VkGraphicsPipelineCreateInfo pipeline_info = {};
 		pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-		pipeline_info.stageCount = 2;
-		pipeline_info.pStages = shader_stages;
+		pipeline_info.stageCount = static_cast<uint32_t>(shader_stages.size());
+		pipeline_info.pStages = shader_stages.data();
 		pipeline_info.pVertexInputState = &vertex_input_info;
 		pipeline_info.pInputAssemblyState = &input_assembly;
 		pipeline_info.pViewportState = &viewport_state;
@@ -207,8 +220,10 @@ public:
 			"Failed to create graphics pipeline"
 		);
 
-		vkDestroyShaderModule(device, frag_module, nullptr);
-		vkDestroyShaderModule(device, vert_module, nullptr);
+		for (auto & shader_stage : shader_stages)
+		{
+			vkDestroyShaderModule(m_device, shader_stage.module, nullptr);
+		}
 	}
 
 

@@ -8,6 +8,8 @@ layout (location = 0) out vec4 outColor;
 
 void main()
 {
-	vec4 color = texture(image, inUV);
-	outColor = color.rrra;
+	// float depth = texture(image, inUV).r;
+	// outColor = vec4(1.0 - (1.0 - depth) * 100.0);
+
+	outColor = texture(image, inUV).rrra;
 }
