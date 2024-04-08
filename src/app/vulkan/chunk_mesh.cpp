@@ -3,13 +3,7 @@
 #include <cstring>
 
 uint64_t VulkanAPI::createMesh(
-	const Chunk & chunk,
-	const Chunk * x_pos_chunk,
-	const Chunk * x_neg_chunk,
-	const Chunk * y_pos_chunk,
-	const Chunk * y_neg_chunk,
-	const Chunk * z_pos_chunk,
-	const Chunk * z_neg_chunk
+	const CreateMeshData & data
 )
 {
 #define ADD_INDEX \
@@ -22,6 +16,13 @@ uint64_t VulkanAPI::createMesh(
 
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
+	const Chunk & chunk = *data.chunk;
+	const Chunk * x_pos_chunk = data.x_pos_chunk;
+	const Chunk * x_neg_chunk = data.x_neg_chunk;
+	const Chunk * y_pos_chunk = data.y_pos_chunk;
+	const Chunk * y_neg_chunk = data.y_neg_chunk;
+	const Chunk * z_pos_chunk = data.z_pos_chunk;
+	const Chunk * z_neg_chunk = data.z_neg_chunk;
 
 	for (int x = 0; x < CHUNK_SIZE; x++)
 	{

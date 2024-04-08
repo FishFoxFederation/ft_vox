@@ -2,23 +2,23 @@
 #include "logger.hpp"
 
 Chunk::Chunk(glm::ivec3 position)
-: m_position(position), m_mesh_id(0)
+: position(position), m_mesh_id(0)
 {
-	(void)m_position;
-	// LOG_INFO("Chunk created at position: " << m_position.x << " " << m_position.y << " " << m_position.z);
+	(void)position;
+	// LOG_INFO("Chunk created at position: " << position.x << " " << position.y << " " << position.z);
 	for(auto & block : m_blocks)
 		block = BlockID::Air;
 }
 
 Chunk::Chunk(const Chunk & other)
-:	m_position(other.m_position),
+:	position(other.position),
 	m_mesh_id(other.m_mesh_id),
 	m_blocks(other.m_blocks)
 {
 }
 
 Chunk::Chunk(Chunk && other)
-:	m_position(other.m_position),
+:	position(other.position),
 	m_mesh_id(other.m_mesh_id),
 	m_blocks(std::move(other.m_blocks))
 {

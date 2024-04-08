@@ -1,4 +1,5 @@
 #include "World.hpp"
+#include "../../../../../../../../../../../usr/include/c++/12/bits/unordered_map.h"
 
 World::World(WorldScene & WorldScene, VulkanAPI & vulkanAPI, ThreadPool & threadPool)
 : m_worldGenerator()
@@ -105,6 +106,158 @@ World::~World()
 // 	for(auto & future : futures)
 // 		future.get();
 // }
+
+void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
+{
+	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	std::lock_guard<std::mutex> lock2(m_chunk_gen_set_mutex);
+	std::lock_guard<std::mutex> lock3(m_chunk_unload_set_mutex);
+	std::lock_guard<std::mutex> lock4(m_visible_columns_mutex);
+
+
+	// glm::ivec3 playerChunk = glm::ivec3(m_player.position()) / CHUNK_SIZE;
+	glm::ivec3 nextPlayerChunk = glm::ivec3(nextPlayerPosition) / CHUNK_SIZE;
+	// glm::ivec3 playerChunkDiff = playerChunk - nextPlayerChunk;
+
+	/**************************************************************
+	 * LOAD CHUNKS
+	 **************************************************************/
+	//here coords are in 2D because we are working with chunk columns
+	//when we need specific 3D coords we always use 0 Y
+	for(int x = -LOAD_DISTANCE; x < LOAD_DISTANCE; x++)
+	{
+		for(int z = -LOAD_DISTANCE; z < LOAD_DISTANCE; z++)
+		{
+			//transform the relative position to the real position
+			glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + nextPlayerChunk; 
+
+			if(!m_loaded_columns.contains(glm::ivec2(chunkPos.x, chunkPos.z)))
+			{
+				if (m_chunk_gen_set.contains(chunkPos))
+					continue;
+				m_chunk_gen_set.insert(chunkPos);
+
+				m_chunk_futures.push(m_threadPool.submit([this, chunkPos](){
+					/**************************************************************
+					 * CHUNK LOADING FUNCTION
+					 **************************************************************/
+					std::vector<Chunk> column = m_worldGenerator.generateChunkColumn(chunkPos.x, chunkPos.z);
+					for(auto chunk : column)
+						chunk.setMeshID(0);
+					{
+						std::lock_guard<std::mutex> lock(m_chunks_mutex);
+						std::lock_guard<std::mutex> lock2(m_chunk_gen_set_mutex);
+						if (!m_chunk_gen_set.contains(chunkPos))
+							return;
+						m_chunk_gen_set.erase(chunkPos);
+						m_loaded_columns.insert(glm::ivec2(chunkPos.x, chunkPos.z));
+						for(auto chunk : column)
+							m_chunks.insert(std::make_pair(glm::ivec3(chunk.x(), chunk.y() , chunk.z()), std::move(chunk)));
+					}
+				}));
+			}
+		}
+	}
+
+	for(auto pos : m_loaded_columns)
+	{
+		float distance = glm::distance(glm::vec3(pos.x, 0, pos.y), glm::vec3(nextPlayerChunk.x, 0, nextPlayerChunk.z));
+		const glm::ivec3 chunkPos = glm::ivec3(pos.x, 0, pos.y);
+		/**************************************************************
+		 * UNLOAD CHUNKS
+		 **************************************************************/
+		if (distance > LOAD_DISTANCE && !m_chunk_unload_set.contains(chunkPos) && !m_chunk_render_set.contains(chunkPos))
+		{
+			m_chunk_gen_set.erase(chunkPos);
+
+			m_chunk_unload_set.insert(chunkPos);
+
+			m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
+			{
+				/**************************************************************
+				 * CHUNK UNLOADING FUNCTION
+				 **************************************************************/
+
+				std::array<uint64_t, WORLD_Y_MAX / CHUNK_SIZE> mesh_ids;
+				{
+					std::lock_guard<std::mutex> lock(m_chunks_mutex);
+					std::lock_guard<std::mutex> lock2(m_chunk_unload_set_mutex);
+					std::lock_guard<std::mutex> lock3(m_visible_columns_mutex);
+
+					if (!m_chunk_unload_set.contains(chunkPos))
+						return;
+					m_chunk_unload_set.erase(chunkPos);
+					m_loaded_columns.erase(glm::ivec2(chunkPos.x, chunkPos.z));
+					m_visible_columns.erase(chunkPos);
+
+					for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
+					{
+						const glm::ivec3 pos = glm::ivec3(chunkPos.x, y, chunkPos.z);
+						mesh_ids[y] = m_chunks.at(pos).getMeshID();
+						m_chunks.erase(pos);
+					}
+				}
+				for(auto & mesh_id : mesh_ids)
+				{
+					m_worldScene.removeMesh(mesh_id);
+					m_vulkanAPI.destroyMesh(mesh_id);
+				}
+			}));
+		}
+
+		/**************************************************************
+		 * RENDER CHUNKS
+		 * *******************************************************/
+		else if (distance <= RENDER_DISTANCE && m_chunks.at(glm::ivec3(pos.x, 0, pos.y)).getMeshID() == VulkanAPI::no_mesh_id && !m_visible_columns.contains(chunkPos))
+		{
+			m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
+			{
+				/**************************************************************
+				 * CALCULATE MESH FUNCTION
+				 **************************************************************/
+				std::array<CreateMeshData, WORLD_Y_MAX / CHUNK_SIZE> mesh_data;
+				{
+					std::lock_guard<std::mutex> lock(m_visible_columns_mutex);
+
+					if (m_visible_columns.contains(chunkPos))
+						return;
+					m_visible_columns.insert(chunkPos);
+				}
+				{
+					//create all mesh data needed ( pointers to neighbors basically )
+					std::lock_guard<std::mutex> lock(m_chunks_mutex);
+					for(int y = 0 ; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
+					{
+						const glm::ivec3 pos = glm::ivec3(chunkPos.x, y, chunkPos.z);
+						CreateMeshData & data = mesh_data[y];
+						{
+							data.z_pos_chunk = m_chunks.contains(pos + glm::ivec3(0, 0, 1)) ? &m_chunks.at(pos + glm::ivec3(0, 0, 1)) : nullptr;
+							data.z_neg_chunk = m_chunks.contains(pos + glm::ivec3(0, 0, -1)) ? &m_chunks.at(pos + glm::ivec3(0, 0, -1)) : nullptr;
+							data.x_pos_chunk = m_chunks.contains(pos + glm::ivec3(1, 0, 0)) ? &m_chunks.at(pos + glm::ivec3(1, 0, 0)) : nullptr;
+							data.x_neg_chunk = m_chunks.contains(pos + glm::ivec3(-1, 0, 0)) ? &m_chunks.at(pos + glm::ivec3(-1, 0, 0)) : nullptr;
+							data.y_pos_chunk = m_chunks.contains(pos + glm::ivec3(0, 1, 0)) ? &m_chunks.at(pos + glm::ivec3(0, 1, 0)) : nullptr;
+							data.y_neg_chunk = m_chunks.contains(pos + glm::ivec3(0, -1, 0)) ? &m_chunks.at(pos + glm::ivec3(0, -1, 0)) : nullptr;
+
+							auto it = m_chunks.find(pos);
+							if (it == m_chunks.end())
+								return;
+							data.chunk = &it->second;
+						}
+					}
+				}
+
+				for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
+				{
+					const glm::ivec3 pos = glm::ivec3(chunkPos.x, y, chunkPos.z);
+					uint64_t mesh_id = m_vulkanAPI.createMesh(mesh_data[y]);
+					mesh_data[y].chunk->setMeshID(mesh_id);
+					if(mesh_id != VulkanAPI::no_mesh_id)
+						m_worldScene.addMeshData(mesh_id, glm::vec3(pos * CHUNK_SIZE));
+				}
+			}));
+		}
+	}
+}
 
 void World::addChunksToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 {
@@ -245,37 +398,37 @@ void World::addChunksToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		/**************************************************************
 		* RENDER CHUNKS
 		****************************************************************/
-		else if (distance <= RENDER_DISTANCE && chunk.getMeshID() == VulkanAPI::no_mesh_id)
-		{
-			// LOG_INFO("Adding chunk to load queue: " << pos.x << " " << pos.y << " " << pos.z);
-			// if (m_chunk_render_set.contains(pos) || m_chunk_unload_set.contains(pos))
-				// continue;
-			m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
-			{
-				/**************************************************************
-				 * CALCULATE MESH FUNCTION
-				 **************************************************************/
-				std::pair<Chunk *, uint64_t> chunk_pair, z_pos, z_neg, x_pos, x_neg, y_pos, y_neg;
-				{
-					std::lock_guard<std::mutex> lock(m_chunks_mutex);
-					z_pos.first = m_chunks.contains(chunkPos + glm::ivec3(0, 0, 1)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 0, 1)) : nullptr;
-					z_neg.first = m_chunks.contains(chunkPos + glm::ivec3(0, 0, -1)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 0, -1)) : nullptr;
-					x_pos.first = m_chunks.contains(chunkPos + glm::ivec3(1, 0, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(1, 0, 0)) : nullptr;
-					x_neg.first = m_chunks.contains(chunkPos + glm::ivec3(-1, 0, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(-1, 0, 0)) : nullptr;
-					y_pos.first = m_chunks.contains(chunkPos + glm::ivec3(0, 1, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 1, 0)) : nullptr;
-					y_neg.first = m_chunks.contains(chunkPos + glm::ivec3(0, -1, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(0, -1, 0)) : nullptr;
-					auto it = m_chunks.find(chunkPos);
-					if (it == m_chunks.end())
-						return;
-					chunk_pair.first = &it->second;
-				}
+		// else if (distance <= RENDER_DISTANCE && chunk.getMeshID() == VulkanAPI::no_mesh_id)
+		// {
+		// 	// LOG_INFO("Adding chunk to load queue: " << pos.x << " " << pos.y << " " << pos.z);
+		// 	// if (m_chunk_render_set.contains(pos) || m_chunk_unload_set.contains(pos))
+		// 		// continue;
+		// 	m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
+		// 	{
+		// 		/**************************************************************
+		// 		 * CALCULATE MESH FUNCTION
+		// 		 **************************************************************/
+		// 		std::pair<Chunk *, uint64_t> chunk_pair, z_pos, z_neg, x_pos, x_neg, y_pos, y_neg;
+		// 		{
+		// 			std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		// 			z_pos.first = m_chunks.contains(chunkPos + glm::ivec3(0, 0, 1)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 0, 1)) : nullptr;
+		// 			z_neg.first = m_chunks.contains(chunkPos + glm::ivec3(0, 0, -1)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 0, -1)) : nullptr;
+		// 			x_pos.first = m_chunks.contains(chunkPos + glm::ivec3(1, 0, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(1, 0, 0)) : nullptr;
+		// 			x_neg.first = m_chunks.contains(chunkPos + glm::ivec3(-1, 0, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(-1, 0, 0)) : nullptr;
+		// 			y_pos.first = m_chunks.contains(chunkPos + glm::ivec3(0, 1, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(0, 1, 0)) : nullptr;
+		// 			y_neg.first = m_chunks.contains(chunkPos + glm::ivec3(0, -1, 0)) ? &m_chunks.at(chunkPos + glm::ivec3(0, -1, 0)) : nullptr;
+		// 			auto it = m_chunks.find(chunkPos);
+		// 			if (it == m_chunks.end())
+		// 				return;
+		// 			chunk_pair.first = &it->second;
+		// 		}
 
-				uint64_t mesh_id = m_vulkanAPI.createMesh(*chunk_pair.first, x_pos.first, x_neg.first, y_pos.first, y_neg.first, z_pos.first, z_neg.first);
-				chunk_pair.first->setMeshID(mesh_id);
-				if(mesh_id != VulkanAPI::no_mesh_id)
-					m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos * CHUNK_SIZE));
-			}));
-		}
+		// 		uint64_t mesh_id = m_vulkanAPI.createMesh(*chunk_pair.first, x_pos.first, x_neg.first, y_pos.first, y_neg.first, z_pos.first, z_neg.first);
+		// 		chunk_pair.first->setMeshID(mesh_id);
+		// 		if(mesh_id != VulkanAPI::no_mesh_id)
+		// 			m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos * CHUNK_SIZE));
+		// 	}));
+		// }
 	}
 }
 
@@ -283,7 +436,8 @@ void World::update(glm::dvec3 nextPlayerPosition)
 {
 	// if (playerPosition.length() == 0.0f) return;
 
-	addChunksToLoadUnloadQueue(nextPlayerPosition);
+	// addChunksToLoadUnloadQueue(nextPlayerPosition);
+	addColumnToLoadUnloadQueue(nextPlayerPosition);
 
 	while(!m_chunk_futures.empty())
 	{
@@ -292,10 +446,10 @@ void World::update(glm::dvec3 nextPlayerPosition)
 		m_chunk_futures.pop();
 	}
 
-	if (m_chunk_gen_set.size() > 0 || m_chunk_unload_set.size() > 0 || m_chunk_render_set.size() > 0)
-	{
-		LOG_INFO("Chunk gen: " << m_chunk_gen_set.size() << " Chunk unload: " << m_chunk_unload_set.size() << " Chunk render: " << m_chunk_render_set.size());
-	}
+	// if (m_chunk_gen_set.size() > 0 || m_chunk_unload_set.size() > 0 || m_chunk_render_set.size() > 0)
+	// {
+	// 	LOG_INFO("Chunk gen: " << m_chunk_gen_set.size() << " Chunk unload: " << m_chunk_unload_set.size() << " Chunk render: " << m_chunk_render_set.size());
+	// }
 	// doChunkLoadUnload(20);
 
 	m_player.setPosition(nextPlayerPosition);

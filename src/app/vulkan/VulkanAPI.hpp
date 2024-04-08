@@ -97,6 +97,17 @@ struct BlockVertex
 	}
 };
 
+struct CreateMeshData
+{
+	Chunk * chunk;
+	Chunk * x_pos_chunk;
+	Chunk * x_neg_chunk;
+	Chunk * y_pos_chunk;
+	Chunk * y_neg_chunk;
+	Chunk * z_pos_chunk;
+	Chunk * z_neg_chunk;
+};
+
 namespace std
 {
 	template<> struct hash<BlockVertex>
@@ -250,15 +261,7 @@ public:
 
 	void recreateSwapChain(GLFWwindow * window);
 
-	uint64_t createMesh(
-		const Chunk & chunk,
-		const Chunk * x_pos_chunk,
-		const Chunk * x_neg_chunk,
-		const Chunk * y_pos_chunk,
-		const Chunk * y_neg_chunk,
-		const Chunk * z_pos_chunk,
-		const Chunk * z_neg_chunk
-	);
+	uint64_t createMesh(const CreateMeshData & data);
 	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
 	void	 destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void	 destroyMesh(const uint64_t & mesh_id);
