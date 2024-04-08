@@ -156,7 +156,7 @@ struct Mesh
 	};
 };
 
-struct CameraMatrices
+struct ViewProjMatrices
 {
 	glm::mat4 view;
 	glm::mat4 proj;
@@ -300,6 +300,11 @@ public:
 	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
 	std::vector<void *> camera_uniform_buffers_mapped_memory;
 
+	// Uniform buffers for the sun light matrices
+	std::vector<VkBuffer> sun_uniform_buffers;
+	std::vector<VkDeviceMemory> sun_uniform_buffers_memory;
+	std::vector<void *> sun_uniform_buffers_mapped_memory;
+
 
 	// Buffers for the line vertices and indices for the frustum
 	std::vector<VkBuffer> frustum_line_buffers;
@@ -314,6 +319,7 @@ public:
 	Descriptor cube_map_descriptor;
 	Descriptor shadow_map_descriptor;
 	Descriptor test_image_descriptor;
+	Descriptor sun_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
