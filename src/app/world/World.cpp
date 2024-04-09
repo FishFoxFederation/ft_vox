@@ -224,7 +224,10 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
 				{
 					const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
-					uint64_t mesh_id = m_vulkanAPI.createMesh(mesh_data[y]);
+
+					mesh_data[y].create();
+					uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data[y].vertices, mesh_data[y].indices);
+
 					mesh_data[y].chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT]->setMeshID(mesh_id);
 					if(mesh_id != VulkanAPI::no_mesh_id)
 						m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE));
@@ -261,7 +264,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 // 	glm::ivec3 playerChunkDiff = playerChunk - nextPlayerChunk;
 
 // 	if (playerChunkDiff == glm::ivec3(0)) return;
-	
+
 
 // 	/**************************************************************
 // 	 * LOAD CHUNKS
@@ -353,7 +356,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 // 			// if(m_chunk_unload_set.contains(pos))
 // 			// 	continue;
 // 			// m_chunk_unload_set.insert(pos);
-// 			m_chunk_gen_set.erase(pos);			
+// 			m_chunk_gen_set.erase(pos);
 
 // 			m_chunk_futures.push(m_threadPool.submit([this, chunkPos]()
 // 			{

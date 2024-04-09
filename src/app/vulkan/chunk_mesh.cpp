@@ -132,16 +132,16 @@ uint64_t VulkanAPI::createMesh(
 
 #undef ADD_INDEX
 
-	if (vertices.empty())
-	{
-		return no_mesh_id;
-	}
-
 	return storeMesh(vertices, indices);
 }
 
 uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
 {
+	if (vertices.empty())
+	{
+		return no_mesh_id;
+	}
+
 	Mesh mesh;
 	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
 	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
