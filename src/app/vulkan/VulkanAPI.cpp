@@ -529,51 +529,19 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	setupImgui();
 	createImGuiTexture(100, 100);
 
-	{ // Update the shadow map descriptor
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = shadow_map_depth_attachement.view;
-		image_info.sampler = shadow_map_depth_attachement.sampler;
+	shadow_map_descriptor.update(
+		device,
+		shadow_map_depth_attachement.view,
+		shadow_map_depth_attachement.sampler,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+	);
 
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = shadow_map_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
-
-	{ // Update the test image descriptor
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = shadow_map_depth_attachement.view;
-		image_info.sampler = shadow_map_depth_attachement.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = test_image_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
-			device,
-			1,
-			&descriptor_write,
-			0, nullptr
-		);
-	}
+	test_image_descriptor.update(
+		device,
+		shadow_map_depth_attachement.view,
+		shadow_map_depth_attachement.sampler,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+	);
 }
 
 VkSurfaceFormatKHR VulkanAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
@@ -724,14 +692,13 @@ void VulkanAPI::createColorAttachement()
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 	color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
-
-	color_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
-	color_attachement_info.create_sampler = true;
-	shadow_map_color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 }
 
 void VulkanAPI::createDepthAttachement()
 {
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+
 	Image::CreateInfo depth_attachement_info = {};
 	depth_attachement_info.extent = { swapchain.extent.width * 2, swapchain.extent.height * 2 };
 	depth_attachement_info.aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -744,14 +711,15 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 	depth_attachement_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depth_attachement_info.create_view = true;
-	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-
-	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 
+
+	depth_attachement_info.extent = { 2048, 2048 };
 	depth_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
 	depth_attachement_info.create_sampler = true;
+	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
@@ -941,25 +909,11 @@ void VulkanAPI::createDescriptors()
 
 		block_textures_descriptor = Descriptor(device, descriptor_info);
 
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = block_textures.view;
-		image_info.sampler = block_textures.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = block_textures_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
+		block_textures_descriptor.update(
 			device,
-			1,
-			&descriptor_write,
-			0, nullptr
+			block_textures.view,
+			block_textures.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		);
 	}
 
@@ -977,29 +931,15 @@ void VulkanAPI::createDescriptors()
 
 		cube_map_descriptor = Descriptor(device, descriptor_info);
 
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = skybox_cube_map.view;
-		image_info.sampler = skybox_cube_map.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = cube_map_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
+		cube_map_descriptor.update(
 			device,
-			1,
-			&descriptor_write,
-			0, nullptr
+			skybox_cube_map.view,
+			skybox_cube_map.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		);
 	}
 
-	{ // shadow map descriptor
+	{ // Shadow map descriptor
 		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
 		sampler_layout_binding.binding = 0;
 		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -1013,29 +953,15 @@ void VulkanAPI::createDescriptors()
 
 		shadow_map_descriptor = Descriptor(device, descriptor_info);
 
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = shadow_map_depth_attachement.view;
-		image_info.sampler = shadow_map_depth_attachement.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = shadow_map_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
+		shadow_map_descriptor.update(
 			device,
-			1,
-			&descriptor_write,
-			0, nullptr
+			shadow_map_depth_attachement.view,
+			shadow_map_depth_attachement.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		);
 	}
 
-	{ // test image descriptor
+	{ // Test image descriptor
 		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
 		sampler_layout_binding.binding = 0;
 		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -1049,29 +975,15 @@ void VulkanAPI::createDescriptors()
 
 		test_image_descriptor = Descriptor(device, descriptor_info);
 
-		VkDescriptorImageInfo image_info = {};
-		image_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.imageView = shadow_map_depth_attachement.view;
-		image_info.sampler = shadow_map_depth_attachement.sampler;
-
-		VkWriteDescriptorSet descriptor_write = {};
-		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptor_write.dstSet = test_image_descriptor.set;
-		descriptor_write.dstBinding = 0;
-		descriptor_write.dstArrayElement = 0;
-		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		descriptor_write.descriptorCount = 1;
-		descriptor_write.pImageInfo = &image_info;
-
-		vkUpdateDescriptorSets(
+		test_image_descriptor.update(
 			device,
-			1,
-			&descriptor_write,
-			0, nullptr
+			shadow_map_depth_attachement.view,
+			shadow_map_depth_attachement.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		);
 	}
 
-	{ // sun descriptor
+	{ // Sun matrices descriptor
 		VkDescriptorSetLayoutBinding ubo_layout_binding = {};
 		ubo_layout_binding.binding = 0;
 		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -1268,14 +1180,13 @@ void VulkanAPI::createPipelines()
 
 	{ // shadow map pipeline
 		Pipeline::CreateInfo pipeline_info = {};
-		pipeline_info.extent = shadow_map_color_attachement.extent2D;
+		pipeline_info.extent = shadow_map_depth_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/shadow_shader.vert.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		std::vector<VkVertexInputAttributeDescription> attribute_descriptions = {
 			BlockVertex::getAttributeDescriptions()[0]
 		};
 		pipeline_info.attribute_descriptions = attribute_descriptions;
-		pipeline_info.color_formats = { shadow_map_color_attachement.format };
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
 		pipeline_info.depth_bias_enable = VK_TRUE;
 		pipeline_info.depth_bias_constant_factor = 0.0f;
@@ -1297,7 +1208,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.vert_path = "shaders/test_image_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/test_image_shader.frag.spv";
 		pipeline_info.color_formats = { color_attachement.format };
-		// pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
 			test_image_descriptor.layout
 		};

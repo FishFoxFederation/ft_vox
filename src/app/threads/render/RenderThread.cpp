@@ -81,8 +81,11 @@ void RenderThread::loop()
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
-	const glm::dvec3 sun_offset = glm::dvec3(10.0f, 10.0f, 10.0f);
+	const glm::dvec3 sun_offset = glm::dvec3(100.0f, 100.0f, 100.0f);
 	const glm::dvec3 sun_pos = camera.position + sun_offset;
+	const float sun_size = 100.0f;
+	const float sun_near = 10.0f;
+	const float sun_far = 500.0f;
 
 	ViewProjMatrices sun = camera_matrices;
 	sun.view = glm::lookAt(
@@ -91,9 +94,9 @@ void RenderThread::loop()
 		glm::dvec3(0.0f, 1.0f, 0.0f)
 	);
 	sun.proj = clip * glm::ortho(
-		-20.0f, 20.0f,
-		-20.0f / static_cast<float>(aspect_ratio), 20.0f / static_cast<float>(aspect_ratio),
-		1.0f, 500.0f
+		-sun_size, sun_size,
+		-sun_size, sun_size,
+		sun_near, sun_far
 	);
 
 
@@ -148,7 +151,7 @@ void RenderThread::loop()
 	shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
 	shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
 	shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
-	shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_color_attachement.extent2D;
+	shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
 	std::vector<VkClearValue> shadow_clear_values = {
 		{ 1.0f, 0 }
 	};
