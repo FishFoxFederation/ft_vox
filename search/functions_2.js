@@ -8,5 +8,6 @@ var searchData=
   ['create_5',['create',['../classPipeline.html#afff566c594b04a32e2ebc827e61afb5c',1,'Pipeline']]],
   ['createdescriptors_6',['createDescriptors',['../classVulkanAPI.html#a9dcf63989fa3a5cf55d07e8b4f0525a2',1,'VulkanAPI']]],
   ['createimguitexture_7',['createImGuiTexture',['../classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323',1,'VulkanAPI']]],
-  ['createmesh_8',['createMesh',['../classVulkanAPI.html#aa3d7ddd6246c2b3cb960c58408919101',1,'VulkanAPI']]]
+  ['createmesh_8',['createMesh',['../classVulkanAPI.html#a22a0cf12be7d41eb6c9495b6785eec98',1,'VulkanAPI']]],
+  ['createmeshdata_9',['CreateMeshData',['../structCreateMeshData.html#aaf869df07a64a8517a02d11b3d345c87',1,'CreateMeshData']]]
 ];

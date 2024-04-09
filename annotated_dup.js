@@ -13,6 +13,7 @@ var annotated_dup =
     [ "Camera", "classCamera.html", "classCamera" ],
     [ "CameraMatrices", "structCameraMatrices.html", "structCameraMatrices" ],
     [ "Chunk", "classChunk.html", "classChunk" ],
+    [ "CreateMeshData", "structCreateMeshData.html", "structCreateMeshData" ],
     [ "Data", "structData.html", "structData" ],
     [ "DebugGui", "classDebugGui.html", "classDebugGui" ],
     [ "Descriptor", "classDescriptor.html", "classDescriptor" ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['noise_0',['noise',['../classPerlin.html#abcfff015267939c504d1ad8be568a458',1,'Perlin::noise(float x) const'],['../classPerlin.html#a23eb216a86639bbe6c46d196be872504',1,'Perlin::noise(glm::vec2 v) const'],['../classPerlin.html#a0664aabfafbf533f1fc0c4499afe322f',1,'Perlin::noise(glm::vec3 v) const']]]
+  ['noise_0',['noise',['../classPerlin.html#a5e65dd9a201248a3d27da333d42bbd70',1,'Perlin::noise(const float &amp;x) const'],['../classPerlin.html#acd2456017152d413ce1f14d4726fff6c',1,'Perlin::noise(const glm::vec2 &amp;v) const'],['../classPerlin.html#ae571597e43864f2e2d35fcb3af2fa68c',1,'Perlin::noise(const glm::vec3 &amp;v) const']]]
 ];

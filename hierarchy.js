@@ -15,6 +15,7 @@ var hierarchy =
     [ "Descriptor::CreateInfo", "structDescriptor_1_1CreateInfo.html", null ],
     [ "Image::CreateInfo", "structImage_1_1CreateInfo.html", null ],
     [ "Pipeline::CreateInfo", "structPipeline_1_1CreateInfo.html", null ],
+    [ "CreateMeshData", "structCreateMeshData.html", null ],
     [ "Data", "structData.html", null ],
     [ "DebugGui", "classDebugGui.html", null ],
     [ "Descriptor", "classDescriptor.html", null ],

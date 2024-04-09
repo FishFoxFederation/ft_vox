@@ -6,7 +6,7 @@ var classVulkanAPI =
     [ "VulkanAPI", "classVulkanAPI.html#af0178da68566ea2136a91746e686efdf", null ],
     [ "createDescriptors", "classVulkanAPI.html#a9dcf63989fa3a5cf55d07e8b4f0525a2", null ],
     [ "createImGuiTexture", "classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323", null ],
-    [ "createMesh", "classVulkanAPI.html#aa3d7ddd6246c2b3cb960c58408919101", null ],
+    [ "createMesh", "classVulkanAPI.html#a22a0cf12be7d41eb6c9495b6785eec98", null ],
     [ "destroyMesh", "classVulkanAPI.html#ad27846b71139eb87106408bd25940dbb", null ],
     [ "destroyMeshes", "classVulkanAPI.html#a64487d489c2c83eda603848f99c53826", null ],
     [ "operator=", "classVulkanAPI.html#a3374616511a7077e1469cc8a1e8aee31", null ],
