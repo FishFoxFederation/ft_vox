@@ -60,12 +60,13 @@ void DebugGui::updateImGui()
 					ImGui::Text("Fps: %d", fps.load());
 
 					{
-						auto lock = chunk_load_queue_size_history.lock();
-						ImGui::PlotHistogram("Load queue size", chunk_load_queue_size_history.data(), chunk_load_queue_size_history.size(), 0, "Chunks", 0.0f, 100.0f, ImVec2(200, 80));
+						ImGui::Text("Chunk gen time:     %f ms", chunk_gen_time_history.average());
 					}
 					{
-						auto lock = chunk_unload_queue_size_history.lock();
-						ImGui::PlotHistogram("Unload queue size", chunk_unload_queue_size_history.data(), chunk_unload_queue_size_history.size(), 0, "Chunks", 0.0f, 100.0f, ImVec2(200, 80));
+						ImGui::Text("Chunk unload time:  %f ms", chunk_unload_time_history.average());
+					}
+					{
+						ImGui::Text("Chunk render time:  %f ms", chunk_render_time_history.average());
 					}
 
 				}

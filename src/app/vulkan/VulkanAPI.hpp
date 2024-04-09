@@ -8,6 +8,7 @@
 #include "Descriptor.hpp"
 #include "Pipeline.hpp"
 #include "Chunk.hpp"
+#include "CreateMeshData.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -95,17 +96,6 @@ struct BlockVertex
 	{
 		return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
 	}
-};
-
-struct CreateMeshData
-{
-	Chunk * chunk;
-	Chunk * x_pos_chunk;
-	Chunk * x_neg_chunk;
-	Chunk * y_pos_chunk;
-	Chunk * y_neg_chunk;
-	Chunk * z_pos_chunk;
-	Chunk * z_neg_chunk;
 };
 
 namespace std

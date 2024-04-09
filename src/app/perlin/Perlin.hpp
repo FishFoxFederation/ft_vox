@@ -56,7 +56,7 @@ public:
 	 * @param x a point in the 1D space
 	 * @return a value in the range [-1, 1]
 	 */
-	float			noise(float x) const;
+	float			noise(const float & x) const;
 
 	/**
 	 * @brief generate 2D Perlin noise in the range [-1, 1]
@@ -64,7 +64,7 @@ public:
 	 * @param v a point in the 2D space
 	 * @return a value in the range [-1, 1]
 	 */
-	float			noise(glm::vec2 v) const;
+	float			noise(const glm::vec2 & v) const;
 
 	/**
 	 * @brief generate 3D Perlin noise in the range [-1, 1]
@@ -72,7 +72,7 @@ public:
 	 * @param v a point in the 3D space
 	 * @return a value in the range [-1, 1]
 	 */
-	float			noise(glm::vec3 v) const;
+	float			noise(const glm::vec3 & v) const;
 private:
 	unsigned int	_seed;
 	int 			_octaves = 1;
@@ -81,7 +81,7 @@ private:
 	float			_lacunarity = 2.0;
 
 
-	float 			insideNoise(glm::vec3 v, unsigned int seed) const;
+	float 			insideNoise(const glm::vec3 & v, const unsigned int & seed) const;
 	float			interpolate(
 		const float & v1,
 		const float & v2,
@@ -100,7 +100,7 @@ private:
 	 * @param seed 
 	 * @return unsigned int 
 	 */
-	unsigned int	hash(unsigned int x, unsigned int seed) const;
+	unsigned int	hash(unsigned int x, const unsigned int & seed) const;
 
 	/**
 	 * @brief a vector hash function using murmurhash
@@ -109,7 +109,7 @@ private:
 	 * @param seed 
 	 * @return unsigned int 
 	 */
-	unsigned int 	hash(glm::uvec3 v, unsigned int seed) const;
+	unsigned int 	hash(const glm::uvec3 & v, const unsigned int & seed) const;
 
 	/**
 	 * @brief Get one of the 16 predefined vectors ( see improved perlin articles for explanations )
@@ -118,7 +118,7 @@ private:
 	 * @param seed 
 	 * @return glm::vec3 
 	 */
-	glm::vec3		getHashedGradient(glm::uvec3 v, unsigned int seed) const;
+	glm::vec3		getHashedGradient(const glm::uvec3 & v, const unsigned int & seed) const;
 
 	/**
 	 * @brief Generates a pseudo-random unit vector
@@ -127,5 +127,5 @@ private:
 	 * @param seed 
 	 * @return glm::vec2 
 	 */
-	glm::vec2		getAngleGradient(glm::uvec2 v, unsigned int seed) const;
+	glm::vec2		getAngleGradient(const glm::uvec2 & v, const unsigned int & seed) const;
 };
