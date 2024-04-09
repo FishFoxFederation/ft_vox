@@ -79,7 +79,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ]
@@ -102,8 +102,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AThreadWrapper_8cpp.html",
-"classSettings.html#a3235cc319f2ca06193bc5f709a3387c3",
-"functions_w.html"
+"classRenderThread.html#aad762f76aa79f3c247731133aeca68b3",
+"functions_func_r.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

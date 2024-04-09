@@ -5,7 +5,7 @@ var searchData=
   ['file_5fpaths_2',['file_paths',['../structImage_1_1CreateInfo.html#a4167400ed26c6ee4c2d7b27934cbec72',1,'Image::CreateInfo']]],
   ['final_5flayout_3',['final_layout',['../structImage_1_1CreateInfo.html#a39839c20e413fecb24f6145f99e11347',1,'Image::CreateInfo']]],
   ['format_4',['format',['../structImage_1_1CreateInfo.html#ac9bddd80a32d320e5818deffcf2d4f25',1,'Image::CreateInfo::format()'],['../classImage.html#a3261b28e4da1955ba89ad6665bfc2f8e',1,'Image::format()'],['../structImGuiTexture.html#a2a2f4e756ce99d69c598506fa587afd4',1,'ImGuiTexture::format()']]],
-  ['formats_5',['formats',['../structSwapChainSupportDetails.html#a22cda9622ff2cd725ec00311e2007a7f',1,'SwapChainSupportDetails']]],
+  ['formats_5',['formats',['../structSwapchain_1_1SupportDetails.html#a2a4f0f958367aff61916f25a008953a5',1,'Swapchain::SupportDetails']]],
   ['fps_6',['fps',['../classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d',1,'DebugGui']]],
   ['frag_5fpath_7',['frag_path',['../structPipeline_1_1CreateInfo.html#a9a7242854bbd28737eeb70e4b19fe553',1,'Pipeline::CreateInfo']]],
   ['frame_5ftime_5fhistory_8',['frame_time_history',['../classDebugGui.html#ac39ff26773e3f64810069871933c01da',1,'DebugGui']]],

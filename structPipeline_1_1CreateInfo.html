@@ -118,7 +118,7 @@ Collaboration diagram for Pipeline::CreateInfo:</div>
 <div class="dyncontent">
 <div class="center"><img src="structPipeline_1_1CreateInfo__coll__graph.png" border="0" usemap="#aPipeline_1_1CreateInfo_coll__map" alt="Collaboration graph"/></div>
 <map name="aPipeline_1_1CreateInfo_coll__map" id="aPipeline_1_1CreateInfo_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,169,236"/>
+<area shape="rect" title=" " alt="" coords="5,5,163,207"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -146,10 +146,20 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a9cb9c18feed0563d0f3a9943ee708fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53624f801bfdee5d90b987df844dd356"><td class="memItemLeft" align="right" valign="top">VkFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a53624f801bfdee5d90b987df844dd356">depth_format</a> = VK_FORMAT_UNDEFINED</td></tr>
 <tr class="separator:a53624f801bfdee5d90b987df844dd356"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0a65fa0068271cee011e6ece5c05f2"><td class="memItemLeft" align="right" valign="top">VkBool32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#aad0a65fa0068271cee011e6ece5c05f2">depth_bias_enable</a> = VK_FALSE</td></tr>
+<tr class="separator:aad0a65fa0068271cee011e6ece5c05f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5ab13ac9228b2147fea6d1f846a3e8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#aef5ab13ac9228b2147fea6d1f846a3e8">depth_bias_constant_factor</a> = 0.0f</td></tr>
+<tr class="separator:aef5ab13ac9228b2147fea6d1f846a3e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae95948271ff108a34c8659455c0cf8c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#aae95948271ff108a34c8659455c0cf8c">depth_bias_clamp</a> = 0.0f</td></tr>
+<tr class="separator:aae95948271ff108a34c8659455c0cf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae45ff04b3b97493ba41e71f731f04f0c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#ae45ff04b3b97493ba41e71f731f04f0c">depth_bias_slope_factor</a> = 0.0f</td></tr>
+<tr class="separator:ae45ff04b3b97493ba41e71f731f04f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d8f66f446243480dd64b87fe2a920c5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSetLayout &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a5d8f66f446243480dd64b87fe2a920c5">descriptor_set_layouts</a> = {}</td></tr>
 <tr class="separator:a5d8f66f446243480dd64b87fe2a920c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad71d7079bfbfe032392e48c3c1f2b57e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkPushConstantRange &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#ad71d7079bfbfe032392e48c3c1f2b57e">push_constant_ranges</a> = {}</td></tr>
 <tr class="separator:ad71d7079bfbfe032392e48c3c1f2b57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab40d996acb993a2798c34273f04ce458"><td class="memItemLeft" align="right" valign="top">VkRenderPass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#ab40d996acb993a2798c34273f04ce458">render_pass</a> = VK_NULL_HANDLE</td></tr>
+<tr class="separator:ab40d996acb993a2798c34273f04ce458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a1cdc58779c520317193b8e4275aa0b8f" name="a1cdc58779c520317193b8e4275aa0b8f"></a>
@@ -202,6 +212,62 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">VkCullModeFlags Pipeline::CreateInfo::cull_mode = VK_CULL_MODE_BACK_BIT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae95948271ff108a34c8659455c0cf8c" name="aae95948271ff108a34c8659455c0cf8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae95948271ff108a34c8659455c0cf8c">&#9670;&#160;</a></span>depth_bias_clamp</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pipeline::CreateInfo::depth_bias_clamp = 0.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aef5ab13ac9228b2147fea6d1f846a3e8" name="aef5ab13ac9228b2147fea6d1f846a3e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef5ab13ac9228b2147fea6d1f846a3e8">&#9670;&#160;</a></span>depth_bias_constant_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pipeline::CreateInfo::depth_bias_constant_factor = 0.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad0a65fa0068271cee011e6ece5c05f2" name="aad0a65fa0068271cee011e6ece5c05f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad0a65fa0068271cee011e6ece5c05f2">&#9670;&#160;</a></span>depth_bias_enable</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkBool32 Pipeline::CreateInfo::depth_bias_enable = VK_FALSE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae45ff04b3b97493ba41e71f731f04f0c" name="ae45ff04b3b97493ba41e71f731f04f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae45ff04b3b97493ba41e71f731f04f0c">&#9670;&#160;</a></span>depth_bias_slope_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pipeline::CreateInfo::depth_bias_slope_factor = 0.0f</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -300,6 +366,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;VkPushConstantRange&gt; Pipeline::CreateInfo::push_constant_ranges = {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab40d996acb993a2798c34273f04ce458" name="ab40d996acb993a2798c34273f04ce458"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab40d996acb993a2798c34273f04ce458">&#9670;&#160;</a></span>render_pass</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkRenderPass Pipeline::CreateInfo::render_pass = VK_NULL_HANDLE</td>
         </tr>
       </table>
 </div><div class="memdoc">

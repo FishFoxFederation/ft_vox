@@ -5,9 +5,7 @@ var searchData=
   ['chunk_2',['Chunk',['../classChunk.html#a76523171d0b51437c6d1d24c5001fa6e',1,'Chunk::Chunk(glm::ivec3 position)'],['../classChunk.html#a03ea40e33c8ef9e183b026bcaee4e1d8',1,'Chunk::Chunk(const Chunk &amp;other)'],['../classChunk.html#af736ac12c9122c37346b980428d83c3d',1,'Chunk::Chunk(Chunk &amp;&amp;other)']]],
   ['clear_3',['clear',['../structImGuiTexture.html#a9f8a1d9d9d6086444732b94e59074375',1,'ImGuiTexture']]],
   ['configure_4',['configure',['../classLogger.html#a88db10d14e5ee48a5f3c4f7365ea0a21',1,'Logger']]],
-  ['create_5',['create',['../classPipeline.html#afff566c594b04a32e2ebc827e61afb5c',1,'Pipeline']]],
-  ['createdescriptors_6',['createDescriptors',['../classVulkanAPI.html#a9dcf63989fa3a5cf55d07e8b4f0525a2',1,'VulkanAPI']]],
-  ['createimguitexture_7',['createImGuiTexture',['../classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323',1,'VulkanAPI']]],
-  ['createmesh_8',['createMesh',['../classVulkanAPI.html#a22a0cf12be7d41eb6c9495b6785eec98',1,'VulkanAPI']]],
-  ['createmeshdata_9',['CreateMeshData',['../structCreateMeshData.html#aaf869df07a64a8517a02d11b3d345c87',1,'CreateMeshData']]]
+  ['createimguitexture_5',['createImGuiTexture',['../classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323',1,'VulkanAPI']]],
+  ['createmesh_6',['createMesh',['../classVulkanAPI.html#a22a0cf12be7d41eb6c9495b6785eec98',1,'VulkanAPI']]],
+  ['createmeshdata_7',['CreateMeshData',['../structCreateMeshData.html#aaf869df07a64a8517a02d11b3d345c87',1,'CreateMeshData']]]
 ];

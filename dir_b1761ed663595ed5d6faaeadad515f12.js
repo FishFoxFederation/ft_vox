@@ -8,6 +8,8 @@ var dir_b1761ed663595ed5d6faaeadad515f12 =
     [ "Image.cpp", "Image_8cpp.html", "Image_8cpp" ],
     [ "Image.hpp", "Image_8hpp.html", "Image_8hpp" ],
     [ "Pipeline.hpp", "Pipeline_8hpp.html", "Pipeline_8hpp" ],
+    [ "Swapchain.cpp", "Swapchain_8cpp.html", null ],
+    [ "Swapchain.hpp", "Swapchain_8hpp.html", "Swapchain_8hpp" ],
     [ "vk_define.hpp", "vk__define_8hpp.html", "vk__define_8hpp" ],
     [ "vk_helper.cpp", "vk__helper_8cpp.html", "vk__helper_8cpp" ],
     [ "vk_helper.hpp", "vk__helper_8hpp.html", "vk__helper_8hpp" ],

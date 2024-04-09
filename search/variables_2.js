@@ -4,7 +4,7 @@ var searchData=
   ['camera_5funiform_5fbuffers_1',['camera_uniform_buffers',['../classVulkanAPI.html#a75628d88876ae7453490a27b985de889',1,'VulkanAPI']]],
   ['camera_5funiform_5fbuffers_5fmapped_5fmemory_2',['camera_uniform_buffers_mapped_memory',['../classVulkanAPI.html#abe6ec2e82ad164f2a164cab715d51a60',1,'VulkanAPI']]],
   ['camera_5funiform_5fbuffers_5fmemory_3',['camera_uniform_buffers_memory',['../classVulkanAPI.html#ad13c169fc066448596240f3f9291adfd',1,'VulkanAPI']]],
-  ['capabilities_4',['capabilities',['../structSwapChainSupportDetails.html#a8918f9f5496b29a701e8d094aa455b2a',1,'SwapChainSupportDetails']]],
+  ['capabilities_4',['capabilities',['../structSwapchain_1_1SupportDetails.html#a3e6ebb1faa79aa2509f1b701b516f4c6',1,'Swapchain::SupportDetails']]],
   ['chunk_5fcount_5fhistory_5',['chunk_count_history',['../classDebugGui.html#a151b13be29dbaa17be07342f088726fe',1,'DebugGui']]],
   ['chunk_5fgen_5ftime_5fhistory_6',['chunk_gen_time_history',['../classDebugGui.html#afb57f4b014c6b4a58af2577c82da45a5',1,'DebugGui']]],
   ['chunk_5fload_5fqueue_5fsize_5fhistory_7',['chunk_load_queue_size_history',['../classDebugGui.html#a4033cb44c0180d828591791762178755',1,'DebugGui']]],

@@ -1,12 +1,11 @@
 var VulkanAPI_8hpp =
 [
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", "structQueueFamilyIndices" ],
-    [ "SwapChainSupportDetails", "structSwapChainSupportDetails.html", "structSwapChainSupportDetails" ],
     [ "BlockVertex", "structBlockVertex.html", "structBlockVertex" ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", "structstd_1_1hash_3_01BlockVertex_01_4" ],
     [ "LineVertex", "structLineVertex.html", "structLineVertex" ],
     [ "Mesh", "structMesh.html", "structMesh" ],
-    [ "CameraMatrices", "structCameraMatrices.html", "structCameraMatrices" ],
+    [ "ViewProjMatrices", "structViewProjMatrices.html", "structViewProjMatrices" ],
     [ "ModelMatrice", "structModelMatrice.html", "structModelMatrice" ],
     [ "ShadowMapLight", "structShadowMapLight.html", "structShadowMapLight" ],
     [ "ImGuiTexture", "structImGuiTexture.html", "structImGuiTexture" ],

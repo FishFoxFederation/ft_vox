@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['viewfrustum_0',['ViewFrustum',['../classViewFrustum.html#a83f7e9dfeac35c1f67b085d9887a103b',1,'ViewFrustum']]],
-  ['vulaknmemoryallocator_1',['VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html#a640bd4cb7d7185a15512e635485e6fb5',1,'VulaknMemoryAllocator::VulaknMemoryAllocator()'],['../classVulaknMemoryAllocator.html#afe98fb3b31b66dc9f83efa94fab47abc',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(const VulaknMemoryAllocator &amp;)=delete'],['../classVulaknMemoryAllocator.html#aea802393219721d2d50925a9728f615e',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(VulaknMemoryAllocator &amp;&amp;)=delete']]],
-  ['vulkanapi_2',['VulkanAPI',['../classVulkanAPI.html#a0847afa3a3335e05c44922686174d17b',1,'VulkanAPI::VulkanAPI(GLFWwindow *window)'],['../classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad',1,'VulkanAPI::VulkanAPI(const VulkanAPI &amp;)=delete'],['../classVulkanAPI.html#af0178da68566ea2136a91746e686efdf',1,'VulkanAPI::VulkanAPI(VulkanAPI &amp;&amp;)=delete']]]
+  ['update_0',['update',['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor::update()'],['../classWorld.html#aa4ad28164f2e86601115f28b5c7f51b7',1,'World::update()']]],
+  ['updateimgui_1',['updateImGui',['../classDebugGui.html#aa849cf767818482461efa78caef2ff70',1,'DebugGui']]],
+  ['updatethread_2',['UpdateThread',['../classUpdateThread.html#a08240b38796935e4760e82b929b2fb52',1,'UpdateThread::UpdateThread(const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]]
 ];

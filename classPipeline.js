@@ -2,6 +2,7 @@ var classPipeline =
 [
     [ "CreateInfo", "structPipeline_1_1CreateInfo.html", "structPipeline_1_1CreateInfo" ],
     [ "Pipeline", "classPipeline.html#a79e49366358f823b8812658f8bf3a9e8", null ],
+    [ "Pipeline", "classPipeline.html#a38e623c03d6e105861a83432979d63a8", null ],
     [ "Pipeline", "classPipeline.html#acdbef56529368f248e7290f13e8f9940", null ],
     [ "Pipeline", "classPipeline.html#aec42c193a24462d5aec9a30039509f1b", null ],
     [ "~Pipeline", "classPipeline.html#a527044d53a20f851d0579fbf313a2dec", null ],

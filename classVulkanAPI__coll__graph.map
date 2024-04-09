@@ -1,9 +1,10 @@
 <map id="VulkanAPI" name="VulkanAPI">
-<area shape="rect" id="node1" title=" " alt="" coords="444,416,613,852"/>
+<area shape="rect" id="node1" title=" " alt="" coords="495,445,664,867"/>
 <area shape="rect" id="node2" href="$classVulaknMemoryAllocator.html" title=" " alt="" coords="5,64,191,251"/>
 <area shape="rect" id="node3" href="$structQueueFamilyIndices.html" title=" " alt="" coords="215,115,359,199"/>
-<area shape="rect" id="node4" href="$classImage.html" title=" " alt="" coords="387,5,521,309"/>
-<area shape="rect" id="node5" href="$classDescriptor.html" title=" " alt="" coords="551,57,658,258"/>
-<area shape="rect" id="node6" href="$classPipeline.html" title=" " alt="" coords="747,71,843,243"/>
-<area shape="rect" id="node7" href="$structImGuiTexture.html" title=" " alt="" coords="868,49,1000,265"/>
+<area shape="rect" id="node4" href="$classSwapchain.html" title=" " alt="" coords="384,42,567,273"/>
+<area shape="rect" id="node5" href="$classImage.html" title=" " alt="" coords="591,5,725,309"/>
+<area shape="rect" id="node6" href="$classDescriptor.html" title=" " alt="" coords="761,49,867,265"/>
+<area shape="rect" id="node7" href="$classPipeline.html" title=" " alt="" coords="957,71,1053,243"/>
+<area shape="rect" id="node8" href="$structImGuiTexture.html" title=" " alt="" coords="1093,49,1225,265"/>
 </map>

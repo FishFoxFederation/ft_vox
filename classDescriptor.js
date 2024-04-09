@@ -8,6 +8,7 @@ var classDescriptor =
     [ "~Descriptor", "classDescriptor.html#a39ec4174511f7b5e84bd59e8b1ad2b93", null ],
     [ "operator=", "classDescriptor.html#a2b54958a34779ebfa6501c69e65a7b5a", null ],
     [ "operator=", "classDescriptor.html#a81645a1d806949e8e5725c657fa7c4cc", null ],
+    [ "update", "classDescriptor.html#a042525e659ae32a5361d384930c4c25b", null ],
     [ "layout", "classDescriptor.html#a55bc0ee227abcb76bd3147ce5836ab67", null ],
     [ "pool", "classDescriptor.html#a837073a4ccc081a2fbb77c0acd4a549c", null ],
     [ "set", "classDescriptor.html#a4abee7d7a822bba9ac840fc77ac55213", null ],
