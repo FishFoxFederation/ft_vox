@@ -292,7 +292,6 @@ public:
 	Image depth_attachement;
 	Image block_textures;
 	Image skybox_cube_map;
-	Image shadow_map_color_attachement;
 	Image shadow_map_depth_attachement;
 
 	// Uniform buffers for the camera matrices

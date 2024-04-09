@@ -4,12 +4,14 @@ Descriptor::Descriptor():
 	layout(VK_NULL_HANDLE),
 	pool(VK_NULL_HANDLE),
 	set(VK_NULL_HANDLE),
-	m_device(VK_NULL_HANDLE)
+	m_device(VK_NULL_HANDLE),
+	m_info()
 {
 }
 
-Descriptor::Descriptor(VkDevice device, const CreateInfo & info)
-	: m_device(device)
+Descriptor::Descriptor(VkDevice device, const CreateInfo & info):
+	m_device(device),
+	m_info(info)
 {
 	VkDescriptorSetLayoutCreateInfo layoutInfo = {};
 	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -61,7 +63,8 @@ Descriptor::Descriptor(Descriptor && other) noexcept:
 	pool(other.pool),
 	sets(std::move(other.sets)),
 	set(other.set),
-	m_device(other.m_device)
+	m_device(other.m_device),
+	m_info(other.m_info)
 {
 	other.layout = VK_NULL_HANDLE;
 	other.pool = VK_NULL_HANDLE;
@@ -79,6 +82,7 @@ Descriptor & Descriptor::operator=(Descriptor && other) noexcept
 		sets = std::move(other.sets);
 		set = other.set;
 		m_device = other.m_device;
+		m_info = other.m_info;
 
 		other.layout = VK_NULL_HANDLE;
 		other.pool = VK_NULL_HANDLE;
@@ -112,4 +116,23 @@ void Descriptor::clear()
 		vkDestroyDescriptorSetLayout(m_device, layout, nullptr);
 		layout = VK_NULL_HANDLE;
 	}
+}
+
+void Descriptor::update(VkDevice device, VkImageView imageView, VkSampler sampler, VkImageLayout imageLayout)
+{
+	VkDescriptorImageInfo imageInfo = {};
+	imageInfo.imageLayout = imageLayout;
+	imageInfo.imageView = imageView;
+	imageInfo.sampler = sampler;
+
+	VkWriteDescriptorSet descriptorWrite = {};
+	descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	descriptorWrite.dstSet = set;
+	descriptorWrite.dstBinding = 0;
+	descriptorWrite.dstArrayElement = 0;
+	descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	descriptorWrite.descriptorCount = 1;
+	descriptorWrite.pImageInfo = &imageInfo;
+
+	vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
 }

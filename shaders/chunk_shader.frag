@@ -7,45 +7,71 @@ layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
 layout(location = 2) in vec4 shadow_coords;
 
-layout(location = 0) out vec4 outColor;
+layout(location = 0) out vec4 out_color;
 
 
-float compute_shadow_factor(vec4 light_space_pos, sampler2D shadow_map)
+float compute_shadow_factor(
+	vec4 light_space_pos,
+	sampler2D shadow_map,
+	uint shadow_map_size,
+	uint pcf_size
+)
 {
-	// Convert light space position to NDC
+	// Compute the light space position in NDC
 	vec3 light_space_ndc = light_space_pos.xyz /= light_space_pos.w;
 
 	// If the fragment is outside the light's projection then it is outside
 	// the light's influence, which means it is in the shadow (notice that
 	// such sample would be outside the shadow map image)
-	if (abs(light_space_ndc.x) > 1.0 ||
-		 abs(light_space_ndc.y) > 1.0 ||
-		 abs(light_space_ndc.z) > 1.0)
-		return 0.0;
+	if (
+		abs(light_space_ndc.x) > 1.0 ||
+		abs(light_space_ndc.y) > 1.0 ||
+		abs(light_space_ndc.z) > 1.0
+	)
+	{
+	 	return 0.0;
+	}
 
 	// Translate from NDC to shadow map space (Vulkan's Z is already in [0..1])
 	vec2 shadow_map_coord = light_space_ndc.xy * 0.5 + 0.5;
 
-	// Check if the sample is in the light or in the shadow
-	if (light_space_ndc.z > texture(shadow_map, shadow_map_coord.xy).x)
-		return 0.0; // In the shadow
+	// compute total number of samples to take from the shadow map
+	int pcf_size_minus_1 = int(pcf_size - 1);
+	float kernel_size = 2.0 * pcf_size_minus_1 + 1.0;
+	float num_samples = kernel_size * kernel_size;
 
-	// In the light
-	return 1.0;
+	// Counter for the shadow map samples not in the shadow
+	float lighted_count = 0.0;
+
+	// Take samples from the shadow map
+	float shadow_map_texel_size = 1.0 / shadow_map_size;
+	for (int x = -pcf_size_minus_1; x <= pcf_size_minus_1; x++)
+	{
+		for (int y = -pcf_size_minus_1; y <= pcf_size_minus_1; y++)
+		{
+			// Compute coordinate for this PFC sample
+			vec2 pcf_coord = shadow_map_coord + vec2(x, y) * shadow_map_texel_size;
+
+			// Check if the sample is in light or in the shadow
+			if (light_space_ndc.z <= texture(shadow_map, pcf_coord.xy).x)
+			{
+				lighted_count += 1.0;
+			}
+		}
+	}
+
+	return lighted_count / num_samples;
 }
 
 void main()
 {
 	vec3 normal = abs(normalize(frag_normal));
-	float intensity = normal.x * 0.200 + normal.y * 0.500 + normal.z * 0.800;
+	float normal_light = normal.x * 0.200 + normal.y * 0.400 + normal.z * 0.600;
 
 	vec4 texel = texture(tex, frag_tex_coord);
 
-	intensity = 1.0;
-	if (compute_shadow_factor(shadow_coords, shadow_map) == 0.0)
-	{
-		intensity = 0.5;
-	}
+	float base_light = normal_light;
+	float light = base_light + compute_shadow_factor(shadow_coords, shadow_map, 2048, 3);
 
-	outColor = texel * intensity;
+	out_color = texel * light;
 }
