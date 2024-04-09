@@ -16,13 +16,13 @@ uint64_t VulkanAPI::createMesh(
 
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
-	const Chunk & chunk = *data.chunk;
-	const Chunk * x_pos_chunk = data.x_pos_chunk;
-	const Chunk * x_neg_chunk = data.x_neg_chunk;
-	const Chunk * y_pos_chunk = data.y_pos_chunk;
-	const Chunk * y_neg_chunk = data.y_neg_chunk;
-	const Chunk * z_pos_chunk = data.z_pos_chunk;
-	const Chunk * z_neg_chunk = data.z_neg_chunk;
+	const Chunk & chunk = *data.chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT];
+	const Chunk * x_pos_chunk = data.chunks[CreateMeshData::POS][CreateMeshData::NEUT][CreateMeshData::NEUT];
+	const Chunk * x_neg_chunk = data.chunks[CreateMeshData::NEG][CreateMeshData::NEUT][CreateMeshData::NEUT];
+	const Chunk * y_pos_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::POS][CreateMeshData::NEUT];
+	const Chunk * y_neg_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::NEG][CreateMeshData::NEUT];
+	const Chunk * z_pos_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::POS];
+	const Chunk * z_neg_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEG];
 
 	for (int x = 0; x < CHUNK_SIZE; x++)
 	{

@@ -12,7 +12,7 @@ Perlin::Perlin(unsigned int seed, int octaves, int frequency, float persistence,
 {
 }
 
-static inline glm::vec3 smoothstep(glm::vec3 t)
+static inline glm::vec3 smoothstep(const glm::vec3 & t)
 {
 	// 6t^5 - 15t^4 + 10t^3
 	//https://www.geogebra.org/solver/fr/results/6t%5E5%20-%2015t%5E4%20%2B%2010t%5E3?from=google
@@ -20,7 +20,7 @@ static inline glm::vec3 smoothstep(glm::vec3 t)
 	return t * t * t * ( t * ( t * 6.0f - 15.0f ) + 10.0f );
 }
 
-unsigned int Perlin::hash(unsigned int x, unsigned int seed) const
+unsigned int Perlin::hash(unsigned int x, const unsigned int & seed) const
 {
 	//this is a murmur hash
 	static const unsigned int m = 0x5bd1e995U;
@@ -38,7 +38,7 @@ unsigned int Perlin::hash(unsigned int x, unsigned int seed) const
 	return hash;
 }
 
-unsigned int Perlin::hash(glm::uvec3 v, unsigned int seed) const
+unsigned int Perlin::hash(const glm::uvec3 & v, const unsigned int & seed) const
 {
 	static const unsigned int m = 0x5bd1e995U;
 
@@ -72,7 +72,7 @@ unsigned int Perlin::hash(glm::uvec3 v, unsigned int seed) const
 	return hash;
 }
 
-glm::vec2 Perlin::getAngleGradient(glm::uvec2 v, unsigned int seed) const
+glm::vec2 Perlin::getAngleGradient(const glm::uvec2 & v, const unsigned int & seed) const
 {
 	static const unsigned int m = 0x5bd1e995U;
 
@@ -101,7 +101,7 @@ glm::vec2 Perlin::getAngleGradient(glm::uvec2 v, unsigned int seed) const
 	return glm::vec2(glm::cos(angle), glm::sin(angle));
 }
 
-glm::vec3 Perlin::getHashedGradient(glm::uvec3 v, unsigned int seed) const
+glm::vec3 Perlin::getHashedGradient(const glm::uvec3 & v, const unsigned int & seed) const
 {
 	unsigned int h = hash(v, seed);
 
@@ -166,35 +166,35 @@ float Perlin::interpolate(
 	return glm::mix(y1, y2, t.z);
 }
 
-float Perlin::insideNoise(glm::vec3 v, unsigned int seed) const
+float Perlin::insideNoise(const glm::vec3 & v, const unsigned int & seed) const
 {
 	glm::vec3 floor_position = glm::floor(v);
 	glm::vec3 unit_position = v - floor_position;
 	glm::uvec3 cell_position(floor_position);
 
-	float value1 = glm::dot(getHashedGradient(cell_position, seed), unit_position);
-	float value2 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 0, 0), seed), unit_position - glm::vec3(1, 0, 0));
-	float value3 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 1, 0), seed), unit_position - glm::vec3(0, 1, 0));
-	float value4 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 1, 0), seed), unit_position - glm::vec3(1, 1, 0));
-	float value5 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 0, 1), seed), unit_position - glm::vec3(0, 0, 1));
-	float value6 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 0, 1), seed), unit_position - glm::vec3(1, 0, 1));
-	float value7 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 1, 1), seed), unit_position - glm::vec3(0, 1, 1));
-	float value8 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 1, 1), seed), unit_position - glm::vec3(1, 1, 1));
+	const float value1 = glm::dot(getHashedGradient(cell_position, seed), unit_position);
+	const float value2 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 0, 0), seed), unit_position - glm::vec3(1, 0, 0));
+	const float value3 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 1, 0), seed), unit_position - glm::vec3(0, 1, 0));
+	const float value4 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 1, 0), seed), unit_position - glm::vec3(1, 1, 0));
+	const float value5 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 0, 1), seed), unit_position - glm::vec3(0, 0, 1));
+	const float value6 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 0, 1), seed), unit_position - glm::vec3(1, 0, 1));
+	const float value7 = glm::dot(getHashedGradient(cell_position + glm::uvec3(0, 1, 1), seed), unit_position - glm::vec3(0, 1, 1));
+	const float value8 = glm::dot(getHashedGradient(cell_position + glm::uvec3(1, 1, 1), seed), unit_position - glm::vec3(1, 1, 1));
 
 	return interpolate(value1, value2, value3, value4, value5, value6, value7, value8, smoothstep(unit_position));
 }
 
-float Perlin::noise(float x) const
+float Perlin::noise(const float & x) const
 {
 	return noise(glm::vec3(x, 0.5f, 0.5f));
 }
 
-float Perlin::noise(glm::vec2 v) const
+float Perlin::noise(const glm::vec2 & v) const
 {
 	return noise(glm::vec3(v, 0.5f));
 }
 
-float Perlin::noise(glm::vec3 v) const
+float Perlin::noise(const glm::vec3 & v) const
 {
 	float total = 0;
 	float maxValue = 0;

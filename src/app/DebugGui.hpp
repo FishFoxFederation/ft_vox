@@ -108,6 +108,12 @@ public:
 
 	static inline History<float, 1000> chunk_unload_queue_size_history;
 
+	static inline History<float, 100> chunk_render_time_history;
+
+	static inline History<float, 100> chunk_gen_time_history;
+
+	static inline History<float, 100> chunk_unload_time_history;
+
 private:
 
 	VulkanAPI & vk;
