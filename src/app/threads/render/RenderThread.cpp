@@ -20,7 +20,7 @@ RenderThread::RenderThread(
 	m_settings(settings),
 	vk(vulkanAPI),
 	m_world_scene(worldScene),
-	m_debug_gui(vk),
+	m_debug_gui(),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_frame_count(0),

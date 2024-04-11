@@ -25,20 +25,18 @@ enum class BlockID : BlockType
 #define BLOCK_PROPERTY_CUBE		1U << 2 // cube block (is a standard cube shape)
 #define BLOCK_PROPERTY_LIGHT	1U << 2 // light block (emits light)
 
-struct TextureData
-{
-	const TextureID top;
-	const TextureID bottom;
-	const TextureID left;
-	const TextureID right;
-	const TextureID front;
-	const TextureID back;
-};
+// Block faces coresponding to the texture array
+#define BLOCK_FACE_TOP		0
+#define BLOCK_FACE_BOTTOM	1
+#define BLOCK_FACE_LEFT		2
+#define BLOCK_FACE_RIGHT	3
+#define BLOCK_FACE_FRONT	4
+#define BLOCK_FACE_BACK		5
 
 struct Data
 {
 	const BlockID id;
-	const TextureData texture;
+	const TextureID texture[6];
 	const BlockProperties properties;
 };
 
@@ -68,24 +66,24 @@ struct Block
 	static inline const Data Air = {
 		.id = BlockID::Air,
 		.texture = {
-			.top = 0,
-			.bottom = 0,
-			.left = 0,
-			.right = 0,
-			.front = 0,
-			.back = 0
+			0,
+			0,
+			0,
+			0,
+			0,
+			0
 		},
 		.properties = BLOCK_PROPERTY_NONE
 	};
 	static inline const Data Grass = {
 		.id = BlockID::Grass,
 		.texture = {
-			.top = 1, // grass_top
-			.bottom = 3, // dirt
-			.left = 2, // grass_side
-			.right = 2, // grass_side
-			.front = 2, // grass_side
-			.back = 2 // grass_side
+			1, // grass_top
+			3, // dirt
+			2, // grass_side
+			2, // grass_side
+			2, // grass_side
+			2  // grass_side
 		},
 		.properties =
 			BLOCK_PROPERTY_SOLID
@@ -95,12 +93,12 @@ struct Block
 	static inline const Data Dirt = {
 		.id = BlockID::Dirt,
 		.texture = {
-			.top = 3, // dirt
-			.bottom = 3, // dirt
-			.left = 3, // dirt
-			.right = 3, // dirt
-			.front = 3, // dirt
-			.back = 3 // dirt
+			3, // dirt
+			3, // dirt
+			3, // dirt
+			3, // dirt
+			3, // dirt
+			3  // dirt
 		},
 		.properties =
 			BLOCK_PROPERTY_SOLID
@@ -110,12 +108,12 @@ struct Block
 	static inline const Data Stone = {
 		.id = BlockID::Stone,
 		.texture = {
-			.top = 4, // stone
-			.bottom = 4, // stone
-			.left = 4, // stone
-			.right = 4, // stone
-			.front = 4, // stone
-			.back = 4 // stone
+			4, // stone
+			4, // stone
+			4, // stone
+			4, // stone
+			4, // stone
+			4  // stone
 		},
 		.properties =
 			BLOCK_PROPERTY_SOLID

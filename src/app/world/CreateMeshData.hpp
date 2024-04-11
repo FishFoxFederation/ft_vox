@@ -2,6 +2,8 @@
 
 #include "define.hpp"
 #include "vk_define.hpp"
+#include "DebugGui.hpp"
+#include "Timer.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -108,132 +110,255 @@ struct CreateMeshData
 		NEG = 0
 	};
 
-	void create()
+	BlockID block(const int x, const int y, const int z)
 	{
-		#define ADD_INDEX \
-		indices.push_back(vertices.size() - 4); \
-		indices.push_back(vertices.size() - 3); \
-		indices.push_back(vertices.size() - 2); \
-		indices.push_back(vertices.size() - 4); \
-		indices.push_back(vertices.size() - 2); \
-		indices.push_back(vertices.size() - 1);
+		const int chunk_x = (x + CHUNK_SIZE) / CHUNK_SIZE;
+		const int chunk_y = (y + CHUNK_SIZE) / CHUNK_SIZE;
+		const int chunk_z = (z + CHUNK_SIZE) / CHUNK_SIZE;
 
-		const Chunk & chunk = *chunks[NEUT][NEUT][NEUT];
-		const Chunk * x_pos_chunk = chunks[POS][NEUT][NEUT];
-		const Chunk * x_neg_chunk = chunks[NEG][NEUT][NEUT];
-		const Chunk * y_pos_chunk = chunks[NEUT][POS][NEUT];
-		const Chunk * y_neg_chunk = chunks[NEUT][NEG][NEUT];
-		const Chunk * z_pos_chunk = chunks[NEUT][NEUT][POS];
-		const Chunk * z_neg_chunk = chunks[NEUT][NEUT][NEG];
+		const int block_x = (x + CHUNK_SIZE) % CHUNK_SIZE;
+		const int block_y = (y + CHUNK_SIZE) % CHUNK_SIZE;
+		const int block_z = (z + CHUNK_SIZE) % CHUNK_SIZE;
 
+		if (chunks[chunk_x][chunk_y][chunk_z] == nullptr)
+		{
+			return BlockID::Air;
+		}
+
+		return chunks[chunk_x][chunk_y][chunk_z]->getBlock(block_x, block_y, block_z);
+	}
+
+	#define ADD_INDEX \
+	indices.push_back(vertices.size() - 4); \
+	indices.push_back(vertices.size() - 3); \
+	indices.push_back(vertices.size() - 2); \
+	indices.push_back(vertices.size() - 4); \
+	indices.push_back(vertices.size() - 2); \
+	indices.push_back(vertices.size() - 1);
+
+	void create_old()
+	{
 		for (int x = 0; x < CHUNK_SIZE; x++)
 		{
 			for (int y = 0; y < CHUNK_SIZE; y++)
 			{
 				for (int z = 0; z < CHUNK_SIZE; z++)
 				{
-					BlockID block_id = chunk.getBlock(x, y, z);
+					BlockID block_id = block(x, y, z);
 
 					if (block_id != BlockID::Air)
 					{
 						Data block_data = Block::getData(block_id);
 
 						// check right neighbor (x + 1)
-						if (
-							(x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == BlockID::Air)
-							|| (x == CHUNK_SIZE - 1 && x_pos_chunk != nullptr && x_pos_chunk->getBlock(0, y, z) == BlockID::Air)
-							// || (x == CHUNK_SIZE - 1 && x_pos_chunk == nullptr)
-							// || (x == CHUNK_SIZE - 1)
-						)
+						if (block(x + 1, y, z) == BlockID::Air)
 						{
-							vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.right});
-							vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.right});
-							vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.right});
-							vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.right});
+							vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
+							vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
+							vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
+							vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
 							ADD_INDEX
 						}
 
 						// check left neighbor (x - 1)
-						if (
-							(x > 0 && chunk.getBlock(x - 1, y, z) == BlockID::Air)
-							|| (x == 0 && x_neg_chunk != nullptr && x_neg_chunk->getBlock(CHUNK_SIZE - 1, y, z) == BlockID::Air)
-							// || (x == 0 && x_neg_chunk == nullptr)
-							// || (x == 0)
-						)
+						if (block(x - 1, y, z) == BlockID::Air)
 						{
-							vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.left});
-							vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.left});
-							vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.left});
-							vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.left});
+							vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_LEFT]});
+							vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_LEFT]});
+							vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_LEFT]});
+							vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_LEFT]});
 							ADD_INDEX
 						}
 
 						// check top neighbor (y + 1)
-						if (
-							(y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == BlockID::Air)
-							|| (y == CHUNK_SIZE - 1 && y_pos_chunk != nullptr && y_pos_chunk->getBlock(x, 0, z) == BlockID::Air)
-							// || (y == CHUNK_SIZE - 1 && y_pos_chunk == nullptr)
-							// || (y == CHUNK_SIZE - 1)
-						)
+						if (block(x, y + 1, z) == BlockID::Air)
 						{
-							vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.top});
-							vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.top});
-							vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.top});
-							vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.top});
+							vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_TOP]});
+							vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_TOP]});
+							vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_TOP]});
+							vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_TOP]});
 							ADD_INDEX
 						}
 
 						// check bottom neighbor (y - 1)
-						if (
-							(y > 0 && chunk.getBlock(x, y - 1, z) == BlockID::Air)
-							|| (y == 0 && y_neg_chunk != nullptr && y_neg_chunk->getBlock(x, CHUNK_SIZE - 1, z) == BlockID::Air)
-							// || (y == 0 && y_neg_chunk == nullptr)
-							// || (y == 0)
-						)
+						if (block(x, y - 1, z) == BlockID::Air)
 						{
-							vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.bottom});
-							vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.bottom});
-							vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.bottom});
-							vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.bottom});
+							vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
+							vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
+							vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
+							vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
 							ADD_INDEX
 						}
 
 						// check back neighbor (z + 1)
-						if (
-							(z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == BlockID::Air)
-							|| (z == CHUNK_SIZE - 1 && z_pos_chunk != nullptr && z_pos_chunk->getBlock(x, y, 0) == BlockID::Air)
-							// || (z == CHUNK_SIZE - 1 && z_pos_chunk == nullptr)
-							// || (z == CHUNK_SIZE - 1)
-						)
+						if (block(x, y, z + 1) == BlockID::Air)
 						{
-							vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, block_data.texture.front});
-							vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, block_data.texture.front});
-							vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, block_data.texture.front});
-							vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, block_data.texture.front});
+							vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_FRONT]});
+							vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_FRONT]});
+							vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_FRONT]});
+							vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_FRONT]});
 							ADD_INDEX
 						}
 
 						// check front neighbor (z - 1)
-						if (
-							(z > 0 && chunk.getBlock(x, y, z - 1) == BlockID::Air)
-							|| (z == 0 && z_neg_chunk != nullptr && z_neg_chunk->getBlock(x, y, CHUNK_SIZE - 1) == BlockID::Air)
-							// || (z == 0 && z_neg_chunk == nullptr)
-							// || (z == 0)
-						)
+						if (block(x, y, z - 1) == BlockID::Air)
 						{
-							vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, block_data.texture.back});
-							vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, block_data.texture.back});
-							vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, block_data.texture.back});
-							vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, block_data.texture.back});
+							vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_BACK]});
+							vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_BACK]});
+							vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_BACK]});
+							vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_BACK]});
 							ADD_INDEX
 						}
 					}
 				}
 			}
 		}
-
-		#undef ADD_INDEX
 	}
+
+	void create()
+	{
+		static Timer timer; timer.start();
+
+		for (int i = 0; i < CHUNK_SIZE; i++)
+		{
+			// right face
+			createFace(
+				{i, 0, 0},
+				{1, CHUNK_SIZE, CHUNK_SIZE},
+				{
+					glm::ivec3{1, 0, 1},
+					glm::ivec3{1, 0, 0},
+					glm::ivec3{1, 1, 0},
+					glm::ivec3{1, 1, 1}
+				},
+				{1, 0, 0},
+				BLOCK_FACE_RIGHT
+			);
+
+			// left face
+			createFace(
+				{i, 0, 0},
+				{1, CHUNK_SIZE, CHUNK_SIZE},
+				{
+					glm::ivec3{0, 0, 0},
+					glm::ivec3{0, 0, 1},
+					glm::ivec3{0, 1, 1},
+					glm::ivec3{0, 1, 0}
+				},
+				{-1, 0, 0},
+				BLOCK_FACE_LEFT
+			);
+
+			// top face
+			createFace(
+				{0, i, 0},
+				{CHUNK_SIZE, 1, CHUNK_SIZE},
+				{
+					glm::ivec3{1, 1, 0},
+					glm::ivec3{0, 1, 0},
+					glm::ivec3{0, 1, 1},
+					glm::ivec3{1, 1, 1}
+				},
+				{0, 1, 0},
+				BLOCK_FACE_TOP
+			);
+
+			// bottom face
+			createFace(
+				{0, i, 0},
+				{CHUNK_SIZE, 1, CHUNK_SIZE},
+				{
+					glm::ivec3{0, 0, 0},
+					glm::ivec3{1, 0, 0},
+					glm::ivec3{1, 0, 1},
+					glm::ivec3{0, 0, 1}
+				},
+				{0, -1, 0},
+				BLOCK_FACE_BOTTOM
+			);
+
+			// back face
+			createFace(
+				{0, 0, i},
+				{CHUNK_SIZE, CHUNK_SIZE, 1},
+				{
+					glm::ivec3{0, 0, 1},
+					glm::ivec3{1, 0, 1},
+					glm::ivec3{1, 1, 1},
+					glm::ivec3{0, 1, 1}
+				},
+				{0, 0, 1},
+				BLOCK_FACE_BACK
+			);
+
+			// front face
+			createFace(
+				{0, 0, i},
+				{CHUNK_SIZE, CHUNK_SIZE, 1},
+				{
+					glm::ivec3{1, 0, 0},
+					glm::ivec3{0, 0, 0},
+					glm::ivec3{0, 1, 0},
+					glm::ivec3{1, 1, 0}
+				},
+				{0, 0, -1},
+				BLOCK_FACE_FRONT
+			);
+		}
+		timer.stop();
+		DebugGui::create_mesh_time = timer.average<std::chrono::microseconds>();
+	}
+
+	/**
+	 * @brief Create the mesh for a particular face for a specific range of blocks
+	 * 
+	 * @param start the starting position
+	 * @param max_iter the maximum iteration for the x, y, z axis
+	 * @param offsets the offsets for the 4 vertices of the face
+	 * @param normal the normal of the face
+	 * @param face the texture index for the face
+	 */
+	void createFace(
+		const glm::ivec3 & start,
+		const glm::ivec3 & max_iter,
+		const std::array<glm::ivec3, 4> & offsets,
+		const glm::ivec3 & normal,
+		const int face
+	)
+	{
+		glm::ivec3 final_max_iter = start + max_iter;
+		for (int x = start.x; x < final_max_iter.x; x++)
+		{
+			for (int y = start.y; y < final_max_iter.y; y++)
+			{
+				for (int z = start.z; z < final_max_iter.z; z++)
+				{
+					BlockID block_id = block(x, y, z);
+
+					if (block_id != BlockID::Air)
+					{
+						BlockID neighbor_id = block(x + normal.x, y + normal.y, z + normal.z);
+
+						if (neighbor_id == BlockID::Air)
+						{
+							Data block_data = Block::getData(block_id);
+
+							glm::ivec3 pos = {x, y, z};
+
+							vertices.push_back({pos + offsets[0], normal, {0.0f, 1.0f}, block_data.texture[face]});
+							vertices.push_back({pos + offsets[1], normal, {1.0f, 1.0f}, block_data.texture[face]});
+							vertices.push_back({pos + offsets[2], normal, {1.0f, 0.0f}, block_data.texture[face]});
+							vertices.push_back({pos + offsets[3], normal, {0.0f, 0.0f}, block_data.texture[face]});
+							ADD_INDEX
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	#undef ADD_INDEX
 
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;

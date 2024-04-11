@@ -1,7 +1,8 @@
 #pragma once
 
-#include "VulkanAPI.hpp"
 #include "Camera.hpp"
+
+#include "imgui.h"
 
 #include <string>
 #include <mutex>
@@ -87,7 +88,7 @@ class DebugGui
 
 public:
 
-	DebugGui(VulkanAPI & vulkanAPI);
+	DebugGui();
 
 	~DebugGui();
 
@@ -95,6 +96,7 @@ public:
 
 	static inline std::atomic<uint32_t> fps = 0;
 	static inline std::atomic<uint64_t> rendered_triangles = 0;
+	static inline std::atomic<uint64_t> gpu_allocated_memory = 0;
 
 	// Render Thread times
 	static inline History<float, 100> frame_time_history;
@@ -105,18 +107,20 @@ public:
 	static inline History<float, 100> chunk_count_history;
 
 	static inline History<float, 1000> chunk_load_queue_size_history;
-
 	static inline History<float, 1000> chunk_unload_queue_size_history;
 
 	static inline History<float, 100> chunk_render_time_history;
-
 	static inline History<float, 100> chunk_gen_time_history;
-
 	static inline History<float, 100> chunk_unload_time_history;
 
-private:
+	static inline std::atomic<double> create_mesh_time;
 
-	VulkanAPI & vk;
-
+	static inline std::atomic<double> store_mesh_time;
+	static inline std::atomic<double> store_mesh_mutex_wait_time;
+	static inline std::atomic<double> store_mesh_create_staging_buffer_time;
+	static inline std::atomic<double> store_mesh_memcpy_time;
+	static inline std::atomic<double> store_mesh_create_buffer_time;
+	static inline std::atomic<double> store_mesh_copy_buffer_time;
+	static inline std::atomic<double> store_mesh_destroy_buffer_time;
 
 };
