@@ -180,7 +180,6 @@ public:
 
 	void recreateSwapChain(GLFWwindow * window);
 
-	uint64_t createMesh(const CreateMeshData & data);
 	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
 	void	 destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void	 destroyMesh(const uint64_t & mesh_id);

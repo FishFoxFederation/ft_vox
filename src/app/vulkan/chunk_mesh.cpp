@@ -1,154 +1,30 @@
 #include "VulkanAPI.hpp"
+#include "DebugGui.hpp"
+#include "Timer.hpp"
 
 #include <cstring>
 
-uint64_t VulkanAPI::createMesh(
-	const CreateMeshData & data
-)
+uint64_t __attribute__((optimize("O0"))) VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
 {
-#define ADD_INDEX \
-	indices.push_back(vertices.size() - 4); \
-	indices.push_back(vertices.size() - 3); \
-	indices.push_back(vertices.size() - 2); \
-	indices.push_back(vertices.size() - 4); \
-	indices.push_back(vertices.size() - 2); \
-	indices.push_back(vertices.size() - 1);
+	static Timer<7> timer;
 
-	std::vector<BlockVertex> vertices;
-	std::vector<uint32_t> indices;
-	const Chunk & chunk = *data.chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT];
-	const Chunk * x_pos_chunk = data.chunks[CreateMeshData::POS][CreateMeshData::NEUT][CreateMeshData::NEUT];
-	const Chunk * x_neg_chunk = data.chunks[CreateMeshData::NEG][CreateMeshData::NEUT][CreateMeshData::NEUT];
-	const Chunk * y_pos_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::POS][CreateMeshData::NEUT];
-	const Chunk * y_neg_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::NEG][CreateMeshData::NEUT];
-	const Chunk * z_pos_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::POS];
-	const Chunk * z_neg_chunk = data.chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEG];
-
-	for (int x = 0; x < CHUNK_SIZE; x++)
-	{
-		for (int y = 0; y < CHUNK_SIZE; y++)
-		{
-			for (int z = 0; z < CHUNK_SIZE; z++)
-			{
-				BlockID block_id = chunk.getBlock(x, y, z);
-
-				if (block_id != BlockID::Air)
-				{
-					Data block_data = Block::getData(block_id);
-
-					// check right neighbor (x + 1)
-					if (
-						(x < CHUNK_SIZE - 1 && chunk.getBlock(x + 1, y, z) == BlockID::Air)
-						|| (x == CHUNK_SIZE - 1 && x_pos_chunk != nullptr && x_pos_chunk->getBlock(0, y, z) == BlockID::Air)
-						// || (x == CHUNK_SIZE - 1 && x_pos_chunk == nullptr)
-						// || (x == CHUNK_SIZE - 1)
-					)
-					{
-						vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.right});
-						vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.right});
-						vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.right});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.right});
-						ADD_INDEX
-					}
-
-					// check left neighbor (x - 1)
-					if (
-						(x > 0 && chunk.getBlock(x - 1, y, z) == BlockID::Air)
-						|| (x == 0 && x_neg_chunk != nullptr && x_neg_chunk->getBlock(CHUNK_SIZE - 1, y, z) == BlockID::Air)
-						// || (x == 0 && x_neg_chunk == nullptr)
-						// || (x == 0)
-					)
-					{
-						vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.left});
-						vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.left});
-						vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.left});
-						vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.left});
-						ADD_INDEX
-					}
-
-					// check top neighbor (y + 1)
-					if (
-						(y < CHUNK_SIZE - 1 && chunk.getBlock(x, y + 1, z) == BlockID::Air)
-						|| (y == CHUNK_SIZE - 1 && y_pos_chunk != nullptr && y_pos_chunk->getBlock(x, 0, z) == BlockID::Air)
-						// || (y == CHUNK_SIZE - 1 && y_pos_chunk == nullptr)
-						// || (y == CHUNK_SIZE - 1)
-					)
-					{
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.top});
-						vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.top});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.top});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.top});
-						ADD_INDEX
-					}
-
-					// check bottom neighbor (y - 1)
-					if (
-						(y > 0 && chunk.getBlock(x, y - 1, z) == BlockID::Air)
-						|| (y == 0 && y_neg_chunk != nullptr && y_neg_chunk->getBlock(x, CHUNK_SIZE - 1, z) == BlockID::Air)
-						// || (y == 0 && y_neg_chunk == nullptr)
-						// || (y == 0)
-					)
-					{
-						vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture.bottom});
-						vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture.bottom});
-						vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture.bottom});
-						vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture.bottom});
-						ADD_INDEX
-					}
-
-					// check back neighbor (z + 1)
-					if (
-						(z < CHUNK_SIZE - 1 && chunk.getBlock(x, y, z + 1) == BlockID::Air)
-						|| (z == CHUNK_SIZE - 1 && z_pos_chunk != nullptr && z_pos_chunk->getBlock(x, y, 0) == BlockID::Air)
-						// || (z == CHUNK_SIZE - 1 && z_pos_chunk == nullptr)
-						// || (z == CHUNK_SIZE - 1)
-					)
-					{
-						vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, block_data.texture.front});
-						vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, block_data.texture.front});
-						vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, block_data.texture.front});
-						vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, block_data.texture.front});
-						ADD_INDEX
-					}
-
-					// check front neighbor (z - 1)
-					if (
-						(z > 0 && chunk.getBlock(x, y, z - 1) == BlockID::Air)
-						|| (z == 0 && z_neg_chunk != nullptr && z_neg_chunk->getBlock(x, y, CHUNK_SIZE - 1) == BlockID::Air)
-						// || (z == 0 && z_neg_chunk == nullptr)
-						// || (z == 0)
-					)
-					{
-						vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, block_data.texture.back});
-						vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, block_data.texture.back});
-						vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, block_data.texture.back});
-						vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, block_data.texture.back});
-						ADD_INDEX
-					}
-				}
-			}
-		}
-	}
-
-#undef ADD_INDEX
-
-	return storeMesh(vertices, indices);
-}
-
-uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
-{
 	if (vertices.empty())
 	{
 		return no_mesh_id;
 	}
+
+	timer.start(0);
 
 	Mesh mesh;
 	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
 	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
 	VkDeviceSize buffer_size = vertex_size + index_size;
 
+	timer.start(1);
 	std::lock_guard<std::mutex> lock(global_mutex);
+	timer.stop(1);
 
+	timer.start(2);
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
 	createBuffer(
@@ -158,7 +34,9 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 		staging_buffer,
 		staging_buffer_memory
 	);
+	timer.stop(2);
 
+	timer.start(3);
 	void * data;
 	VK_CHECK(
 		vkMapMemory(device, staging_buffer_memory, 0, buffer_size, 0, &data),
@@ -167,7 +45,9 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	std::memcpy(data, vertices.data(), static_cast<size_t>(vertex_size));
 	std::memcpy(static_cast<char *>(data) + vertex_size, indices.data(), static_cast<size_t>(index_size));
 	vkUnmapMemory(device, staging_buffer_memory);
+	timer.stop(3);
 
+	timer.start(4);
 	createBuffer(
 		buffer_size,
 		VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
@@ -175,19 +55,33 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 		mesh.buffer,
 		mesh.buffer_memory
 	);
+	timer.stop(4);
 
+	timer.start(5);
 	copyBuffer(staging_buffer, mesh.buffer, buffer_size);
+	timer.stop(5);
 
+	timer.start(6);
 	vkDestroyBuffer(device, staging_buffer, nullptr);
 	vma.freeMemory(device, staging_buffer_memory, nullptr);
+	timer.stop(6);
 
 	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
 	mesh.index_offset = vertex_size;
 	mesh.index_count = static_cast<uint32_t>(indices.size());
 	mesh.memory_size = buffer_size;
-	// Debug<uint64_t>::add("mesh_memory_size", buffer_size);
 
 	meshes.emplace(next_mesh_id, mesh);
+
+	timer.stop(0);
+	DebugGui::store_mesh_time = timer.average<std::chrono::microseconds>(0);
+	DebugGui::store_mesh_mutex_wait_time = timer.average<std::chrono::microseconds>(1);
+	DebugGui::store_mesh_create_staging_buffer_time = timer.average<std::chrono::microseconds>(2);
+	DebugGui::store_mesh_memcpy_time = timer.average<std::chrono::microseconds>(3);
+	DebugGui::store_mesh_create_buffer_time = timer.average<std::chrono::microseconds>(4);
+	DebugGui::store_mesh_copy_buffer_time = timer.average<std::chrono::microseconds>(5);
+	DebugGui::store_mesh_destroy_buffer_time = timer.average<std::chrono::microseconds>(6);
+
 	return next_mesh_id++;
 }
 

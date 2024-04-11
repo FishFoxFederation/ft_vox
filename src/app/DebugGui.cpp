@@ -4,8 +4,7 @@
 #include <algorithm>
 #include <numeric>
 
-DebugGui::DebugGui(VulkanAPI & vulkanAPI):
-	vk(vulkanAPI)
+DebugGui::DebugGui()
 {
 }
 
@@ -59,16 +58,17 @@ void DebugGui::updateImGui()
 				{
 					ImGui::Text("Fps: %d", fps.load());
 
-					{
-						ImGui::Text("Chunk gen time:     %f ms", chunk_gen_time_history.average());
-					}
-					{
-						ImGui::Text("Chunk unload time:  %f ms", chunk_unload_time_history.average());
-					}
-					{
-						ImGui::Text("Chunk render time:  %f ms", chunk_render_time_history.average());
-					}
-
+					ImGui::Text("Chunk gen time:     %f µs", chunk_gen_time_history.average());
+					ImGui::Text("Chunk unload time:  %f µs", chunk_unload_time_history.average());
+					ImGui::Text("Chunk render time:  %f µs", chunk_render_time_history.average());
+					ImGui::Text("  Chunk mesh create time:  %f µs", create_mesh_time.load());
+					ImGui::Text("  Chunk mesh store time:   %f µs", store_mesh_time.load());
+					ImGui::Text("    Mutex wait time:            %f µs", store_mesh_mutex_wait_time.load());
+					ImGui::Text("    Staging buffer create time: %f µs", store_mesh_create_staging_buffer_time.load());
+					ImGui::Text("    Memcpy time:                %f µs", store_mesh_memcpy_time.load());
+					ImGui::Text("    Buffer create time:         %f µs", store_mesh_create_buffer_time.load());
+					ImGui::Text("    Copy buffer time:           %f µs", store_mesh_copy_buffer_time.load());
+					ImGui::Text("    Destroy buffer time:        %f µs", store_mesh_destroy_buffer_time.load());
 				}
 
 				ImGui::EndTabItem();
@@ -76,7 +76,7 @@ void DebugGui::updateImGui()
 
 			if (ImGui::BeginTabItem("Memory"))
 			{
-				ImGui::Text("Gpu memory: %ld MB", vk.vma.allocatedMemorySize() / 1024 / 1024);
+				ImGui::Text("Gpu memory: %ld MB", gpu_allocated_memory / 1024 / 1024);
 
 				ImGui::EndTabItem();
 			}
