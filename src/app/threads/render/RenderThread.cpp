@@ -287,11 +287,11 @@ void RenderThread::loop()
 
 		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
 
-		glm::dvec3 pos = chunk_mesh.transform.position();
-		if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
-		{
-			continue;
-		}
+		// glm::dvec3 pos = chunk_mesh.transform.position();
+		// if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+		// {
+		// 	continue;
+		// }
 
 		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
 		const VkDeviceSize offsets[] = { 0 };
@@ -371,30 +371,30 @@ void RenderThread::loop()
 
 
 	// Draw test image
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
-	const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-		vk.test_image_descriptor.set
-	};
+	// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+	// 	vk.test_image_descriptor.set
+	// };
 
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.test_image_pipeline.layout,
-		0,
-		static_cast<uint32_t>(test_image_descriptor_sets.size()),
-		test_image_descriptor_sets.data(),
-		0,
-		nullptr
-	);
+	// vkCmdBindDescriptorSets(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+	// 	vk.test_image_pipeline.layout,
+	// 	0,
+	// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
+	// 	test_image_descriptor_sets.data(),
+	// 	0,
+	// 	nullptr
+	// );
 
-	vkCmdDraw(
-		vk.draw_command_buffers[vk.current_frame],
-		6,
-		1,
-		0,
-		0
-	);
+	// vkCmdDraw(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	6,
+	// 	1,
+	// 	0,
+	// 	0
+	// );
 
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);

@@ -20,16 +20,13 @@ float compute_shadow_factor(
 	// Compute the light space position in NDC
 	vec3 light_space_ndc = light_space_pos.xyz /= light_space_pos.w;
 
-	// If the fragment is outside the light's projection then it is outside
-	// the light's influence, which means it is in the shadow (notice that
-	// such sample would be outside the shadow map image)
 	if (
 		abs(light_space_ndc.x) > 1.0 ||
 		abs(light_space_ndc.y) > 1.0 ||
 		abs(light_space_ndc.z) > 1.0
 	)
 	{
-	 	return 0.0;
+	 	return 0.5;
 	}
 
 	// Translate from NDC to shadow map space (Vulkan's Z is already in [0..1])

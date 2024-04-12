@@ -81,27 +81,35 @@ typedef std::unordered_map<glm::ivec3, Chunk> ChunkMap;
 
 struct CreateMeshData
 {
-	CreateMeshData(const glm::ivec3 & pos, ChunkMap & chunk_map)
+	/**
+	 * @brief Create a Mesh Data object
+	 * 
+	 * @param pos the position of the chunk in the chunk map
+	 * @param size the number of chunks to create the mesh data
+	 * @param chunk_map the chunk map
+	 */
+	CreateMeshData(const glm::ivec3 & pos, const glm::ivec3 & size, ChunkMap & chunk_map):
+		chunks(size.x + 2, std::vector<std::vector<Chunk *>>(size.y + 2, std::vector<Chunk *>(size.z + 2, nullptr))),
+		size(size)
 	{
-		for (int x = -1; x <= 1; x++)
+		for (int x = -1; x <= size.x; x++)
 		{
-			for (int y = -1; y <= 1; y++)
+			for (int y = -1; y <= size.y; y++)
 			{
-				for (int z = -1; z <= 1; z++)
+				for (int z = -1; z <= size.z; z++)
 				{
 					glm::ivec3 chunk_pos = pos + glm::ivec3(x, y, z);
 					const auto & it = chunk_map.find(chunk_pos);
 
 					if (it != chunk_map.end())
 						chunks[x + 1][y + 1][z + 1] = &it->second;
-					else
-						chunks[x + 1][y + 1][z + 1] = nullptr;
 				}
 			}
 		}
 	}
 
-	std::array<std::array<std::array<Chunk *, 3> , 3>, 3> chunks;
+	std::vector<std::vector<std::vector<Chunk *>>> chunks;
+	glm::ivec3 size;
 
 	enum
 	{
@@ -110,6 +118,10 @@ struct CreateMeshData
 		NEG = 0
 	};
 
+	/**
+	 * @brief Get the block at a position relative to the starting chunk
+	 *
+	 */
 	BlockID block(const int x, const int y, const int z)
 	{
 		const int chunk_x = (x + CHUNK_SIZE) / CHUNK_SIZE;
@@ -219,12 +231,14 @@ struct CreateMeshData
 	{
 		static Timer timer; timer.start();
 
-		for (int i = 0; i < CHUNK_SIZE; i++)
+		glm::ivec3 size_block = size * CHUNK_SIZE;
+
+		for (int x = 0; x < size_block.x; x++)
 		{
 			// right face
 			createFace(
-				{i, 0, 0},
-				{1, CHUNK_SIZE, CHUNK_SIZE},
+				{x, 0, 0},
+				{1, size_block.y, size_block.z},
 				{
 					glm::ivec3{1, 0, 1},
 					glm::ivec3{1, 0, 0},
@@ -237,8 +251,8 @@ struct CreateMeshData
 
 			// left face
 			createFace(
-				{i, 0, 0},
-				{1, CHUNK_SIZE, CHUNK_SIZE},
+				{x, 0, 0},
+				{1, size_block.y, size_block.z},
 				{
 					glm::ivec3{0, 0, 0},
 					glm::ivec3{0, 0, 1},
@@ -248,11 +262,14 @@ struct CreateMeshData
 				{-1, 0, 0},
 				BLOCK_FACE_LEFT
 			);
+		}
 
+		for (int y = 0; y < size_block.y; y++)
+		{
 			// top face
 			createFace(
-				{0, i, 0},
-				{CHUNK_SIZE, 1, CHUNK_SIZE},
+				{0, y, 0},
+				{size_block.x, 1, size_block.z},
 				{
 					glm::ivec3{1, 1, 0},
 					glm::ivec3{0, 1, 0},
@@ -265,8 +282,8 @@ struct CreateMeshData
 
 			// bottom face
 			createFace(
-				{0, i, 0},
-				{CHUNK_SIZE, 1, CHUNK_SIZE},
+				{0, y, 0},
+				{size_block.x, 1, size_block.z},
 				{
 					glm::ivec3{0, 0, 0},
 					glm::ivec3{1, 0, 0},
@@ -276,11 +293,14 @@ struct CreateMeshData
 				{0, -1, 0},
 				BLOCK_FACE_BOTTOM
 			);
+		}
 
+		for (int z = 0; z < size_block.z; z++)
+		{
 			// back face
 			createFace(
-				{0, 0, i},
-				{CHUNK_SIZE, CHUNK_SIZE, 1},
+				{0, 0, z},
+				{size_block.x, size_block.y, 1},
 				{
 					glm::ivec3{0, 0, 1},
 					glm::ivec3{1, 0, 1},
@@ -293,8 +313,8 @@ struct CreateMeshData
 
 			// front face
 			createFace(
-				{0, 0, i},
-				{CHUNK_SIZE, CHUNK_SIZE, 1},
+				{0, 0, z},
+				{size_block.x, size_block.y, 1},
 				{
 					glm::ivec3{1, 0, 0},
 					glm::ivec3{0, 0, 0},

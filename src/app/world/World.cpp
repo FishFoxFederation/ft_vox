@@ -214,24 +214,35 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				{
 					//create all mesh data needed ( pointers to neighbors basically )
 					std::lock_guard<std::mutex> lock(m_chunks_mutex);
-					for(int y = 0 ; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
-					{
-						const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
-						mesh_data.push_back(CreateMeshData(pos3D, m_chunks));
-					}
+					// for(int y = 0 ; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
+					// {
+					// 	const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
+					// 	mesh_data.push_back(CreateMeshData(pos3D, m_chunks, {1, 1, 1}));
+					// }
+					const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
+					mesh_data.push_back(CreateMeshData(pos3D, {1, WORLD_Y_MAX / CHUNK_SIZE, 1}, m_chunks));
 				}
 
-				for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
-				{
-					const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
+				// for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
+				// {
+				// 	const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
 
-					mesh_data[y].create();
-					uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data[y].vertices, mesh_data[y].indices);
+				// 	mesh_data[y].create();
+				// 	uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data[y].vertices, mesh_data[y].indices);
 
-					mesh_data[y].chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT]->setMeshID(mesh_id);
-					if(mesh_id != VulkanAPI::no_mesh_id)
-						m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE));
-				}
+				// 	mesh_data[y].chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT]->setMeshID(mesh_id);
+				// 	if(mesh_id != VulkanAPI::no_mesh_id)
+				// 		m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE));
+				// }
+				const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
+
+				mesh_data[0].create();
+				uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data[0].vertices, mesh_data[0].indices);
+
+				mesh_data[0].chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT]->setMeshID(mesh_id);
+				if(mesh_id != VulkanAPI::no_mesh_id)
+					m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE));
+
 				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 			}));
