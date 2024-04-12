@@ -4,6 +4,7 @@
 #include "vk_define.hpp"
 #include "DebugGui.hpp"
 #include "Timer.hpp"
+#include "logger.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -79,8 +80,11 @@ namespace std
 
 typedef std::unordered_map<glm::ivec3, Chunk> ChunkMap;
 
-struct CreateMeshData
+class CreateMeshData
 {
+
+public:
+
 	/**
 	 * @brief Create a Mesh Data object
 	 * 
@@ -90,6 +94,13 @@ struct CreateMeshData
 	 */
 	CreateMeshData(const glm::ivec3 & pos, const glm::ivec3 & size, ChunkMap & chunk_map):
 		chunks(size.x + 2, std::vector<std::vector<Chunk *>>(size.y + 2, std::vector<Chunk *>(size.z + 2, nullptr))),
+		face_data(
+			size.x * CHUNK_SIZE,
+			std::vector<std::vector<FaceData>>(
+				size.y * CHUNK_SIZE,
+				std::vector<FaceData>(size.z * CHUNK_SIZE, {0, 0})
+			)
+		),
 		size(size)
 	{
 		for (int x = -1; x <= size.x; x++)
@@ -107,9 +118,6 @@ struct CreateMeshData
 			}
 		}
 	}
-
-	std::vector<std::vector<std::vector<Chunk *>>> chunks;
-	glm::ivec3 size;
 
 	enum
 	{
@@ -138,93 +146,6 @@ struct CreateMeshData
 		}
 
 		return chunks[chunk_x][chunk_y][chunk_z]->getBlock(block_x, block_y, block_z);
-	}
-
-	#define ADD_INDEX \
-	indices.push_back(vertices.size() - 4); \
-	indices.push_back(vertices.size() - 3); \
-	indices.push_back(vertices.size() - 2); \
-	indices.push_back(vertices.size() - 4); \
-	indices.push_back(vertices.size() - 2); \
-	indices.push_back(vertices.size() - 1);
-
-	void create_old()
-	{
-		for (int x = 0; x < CHUNK_SIZE; x++)
-		{
-			for (int y = 0; y < CHUNK_SIZE; y++)
-			{
-				for (int z = 0; z < CHUNK_SIZE; z++)
-				{
-					BlockID block_id = block(x, y, z);
-
-					if (block_id != BlockID::Air)
-					{
-						Data block_data = Block::getData(block_id);
-
-						// check right neighbor (x + 1)
-						if (block(x + 1, y, z) == BlockID::Air)
-						{
-							vertices.push_back({{x + 1, y, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
-							vertices.push_back({{x + 1, y, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
-							vertices.push_back({{x + 1, y + 1, z}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
-							vertices.push_back({{x + 1, y + 1, z + 1}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_RIGHT]});
-							ADD_INDEX
-						}
-
-						// check left neighbor (x - 1)
-						if (block(x - 1, y, z) == BlockID::Air)
-						{
-							vertices.push_back({{x, y, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_LEFT]});
-							vertices.push_back({{x, y, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_LEFT]});
-							vertices.push_back({{x, y + 1, z + 1}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_LEFT]});
-							vertices.push_back({{x, y + 1, z}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_LEFT]});
-							ADD_INDEX
-						}
-
-						// check top neighbor (y + 1)
-						if (block(x, y + 1, z) == BlockID::Air)
-						{
-							vertices.push_back({{x + 1, y + 1, z}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_TOP]});
-							vertices.push_back({{x, y + 1, z}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_TOP]});
-							vertices.push_back({{x, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_TOP]});
-							vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_TOP]});
-							ADD_INDEX
-						}
-
-						// check bottom neighbor (y - 1)
-						if (block(x, y - 1, z) == BlockID::Air)
-						{
-							vertices.push_back({{x, y, z}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
-							vertices.push_back({{x + 1, y, z}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
-							vertices.push_back({{x + 1, y, z + 1}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
-							vertices.push_back({{x, y, z + 1}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_BOTTOM]});
-							ADD_INDEX
-						}
-
-						// check back neighbor (z + 1)
-						if (block(x, y, z + 1) == BlockID::Air)
-						{
-							vertices.push_back({{x, y, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_FRONT]});
-							vertices.push_back({{x + 1, y, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_FRONT]});
-							vertices.push_back({{x + 1, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_FRONT]});
-							vertices.push_back({{x, y + 1, z + 1}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_FRONT]});
-							ADD_INDEX
-						}
-
-						// check front neighbor (z - 1)
-						if (block(x, y, z - 1) == BlockID::Air)
-						{
-							vertices.push_back({{x + 1, y, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, block_data.texture[BLOCK_FACE_BACK]});
-							vertices.push_back({{x, y, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, block_data.texture[BLOCK_FACE_BACK]});
-							vertices.push_back({{x, y + 1, z}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, block_data.texture[BLOCK_FACE_BACK]});
-							vertices.push_back({{x + 1, y + 1, z}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, block_data.texture[BLOCK_FACE_BACK]});
-							ADD_INDEX
-						}
-					}
-				}
-			}
-		}
 	}
 
 	void create()
@@ -354,32 +275,129 @@ struct CreateMeshData
 				for (int z = start.z; z < final_max_iter.z; z++)
 				{
 					BlockID block_id = block(x, y, z);
+					BlockID neighbor_id = block(x + normal.x, y + normal.y, z + normal.z);
 
-					if (block_id != BlockID::Air)
+					if (block_id != BlockID::Air && neighbor_id == BlockID::Air)
 					{
-						BlockID neighbor_id = block(x + normal.x, y + normal.y, z + normal.z);
+						face_data[x][y][z] = {Block::getData(block_id).texture[face], 0};
+					}
+					else
+					{
+						face_data[x][y][z] = {0, 0};
+					}
+				}
+			}
+		}
 
-						if (neighbor_id == BlockID::Air)
+		for (int x = start.x; x < final_max_iter.x; x++)
+		{
+			for (int y = start.y; y < final_max_iter.y; y++)
+			{
+				for (int z = start.z; z < final_max_iter.z; z++)
+				{
+					FaceData data = face_data[x][y][z];
+
+					if (data.texture != 0)
+					{
+
+						// check if the block has identical neighbors for greedy meshing
+						// if so, then merge the blocks into one mesh
+						glm::ivec3 offset{0, 0, 0};
+						glm::ivec3 saved_offset{0, 0, 0};
+						for (offset.x = x; offset.x < final_max_iter.x; offset.x++)
 						{
-							Data block_data = Block::getData(block_id);
+							for (offset.y = y; offset.y < final_max_iter.y && (saved_offset.y == 0 || offset.y < saved_offset.y); offset.y++)
+							{
+								// continue if still in chunk bounds and if either it's the first iteration or the offset is less than the saved offset
+								for (offset.z = z; offset.z < final_max_iter.z && (saved_offset.z == 0 || offset.z < saved_offset.z); offset.z++)
+								{
+									if (face_data[offset.x][offset.y][offset.z] != data)
+									{
+										break;
+									}
+									face_data[offset.x][offset.y][offset.z] = {0, 0};
+								}
+								// save the offset if it's the first iteration
+								if (saved_offset.z == 0)
+								{
+									saved_offset.z = offset.z;
+								}
+								// if the offset is less than the saved offset, then break
+								else if (offset.z != saved_offset.z)
+								{
+									break;
+								}
+							}
+							// save the offset if it's the first iteration
+							if (saved_offset.y == 0)
+							{
+								saved_offset.y = offset.y;
+							}
+							// if the offset is less than the saved offset, then break
+							else if (offset.y != saved_offset.y)
+							{
+								break;
+							}
+						}
+						saved_offset.x = offset.x;
 
-							glm::ivec3 pos = {x, y, z};
-
-							vertices.push_back({pos + offsets[0], normal, {0.0f, 1.0f}, block_data.texture[face]});
-							vertices.push_back({pos + offsets[1], normal, {1.0f, 1.0f}, block_data.texture[face]});
-							vertices.push_back({pos + offsets[2], normal, {1.0f, 0.0f}, block_data.texture[face]});
-							vertices.push_back({pos + offsets[3], normal, {0.0f, 0.0f}, block_data.texture[face]});
-							ADD_INDEX
+						if (normal.x + normal.y + normal.z < 0)
+						{
+							saved_offset += normal;
 						}
 
+						glm::ivec3 pos = {x, y, z};
+						saved_offset -= pos;
+
+						glm::vec2 texCoord = {0.0f, 0.0f};
+						if (normal.x != 0)
+						{
+							texCoord = {saved_offset.z, saved_offset.y};
+						}
+						else if (normal.y != 0)
+						{
+							texCoord = {saved_offset.x, saved_offset.z};
+						}
+						else if (normal.z != 0)
+						{
+							texCoord = {saved_offset.x, saved_offset.y};
+						}
+
+						vertices.push_back({pos + glm::ivec3(offsets[0].x * saved_offset.x, offsets[0].y * saved_offset.y, offsets[0].z * saved_offset.z), normal, {0.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
+						vertices.push_back({pos + glm::ivec3(offsets[1].x * saved_offset.x, offsets[1].y * saved_offset.y, offsets[1].z * saved_offset.z), normal, {1.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
+						vertices.push_back({pos + glm::ivec3(offsets[2].x * saved_offset.x, offsets[2].y * saved_offset.y, offsets[2].z * saved_offset.z), normal, {1.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
+						vertices.push_back({pos + glm::ivec3(offsets[3].x * saved_offset.x, offsets[3].y * saved_offset.y, offsets[3].z * saved_offset.z), normal, {0.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
+						
+						indices.push_back(vertices.size() - 4);
+						indices.push_back(vertices.size() - 3);
+						indices.push_back(vertices.size() - 2);
+						indices.push_back(vertices.size() - 4);
+						indices.push_back(vertices.size() - 2);
+						indices.push_back(vertices.size() - 1);
 					}
 				}
 			}
 		}
 	}
 
-	#undef ADD_INDEX
-
+	std::vector<std::vector<std::vector<Chunk *>>> chunks;
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
+
+private:
+
+	struct FaceData
+	{
+		TextureID texture;
+		int ao;
+
+		bool operator==(const FaceData & other) const
+		{
+			return texture == other.texture && ao == other.ao;
+		}
+	};
+
+	std::vector<std::vector<std::vector<FaceData>>> face_data;
+	glm::ivec3 size;
+
 };
