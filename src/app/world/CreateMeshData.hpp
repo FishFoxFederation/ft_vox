@@ -299,7 +299,7 @@ public:
 
 					if (data.texture != 0)
 					{
-
+						int merge_count = 0;
 						// check if the block has identical neighbors for greedy meshing
 						// if so, then merge the blocks into one mesh
 						glm::ivec3 offset{0, 0, 0};
@@ -315,14 +315,15 @@ public:
 									{
 										break;
 									}
-									face_data[offset.x][offset.y][offset.z] = {0, 0};
+									// face_data[offset.x][offset.y][offset.z] = {0, 0};
+									merge_count++;
 								}
 								// save the offset if it's the first iteration
 								if (saved_offset.z == 0)
 								{
 									saved_offset.z = offset.z;
 								}
-								// if the offset is less than the saved offset, then break
+								// if the offset is different than the saved offset, then break
 								else if (offset.z != saved_offset.z)
 								{
 									break;
@@ -333,7 +334,7 @@ public:
 							{
 								saved_offset.y = offset.y;
 							}
-							// if the offset is less than the saved offset, then break
+							// if the offset is different than the saved offset, then break
 							else if (offset.y != saved_offset.y)
 							{
 								break;
@@ -341,13 +342,23 @@ public:
 						}
 						saved_offset.x = offset.x;
 
+						for (offset.x = x; offset.x < saved_offset.x; offset.x++)
+						{
+							for (offset.y = y; offset.y < saved_offset.y; offset.y++)
+							{
+								for (offset.z = z; offset.z < saved_offset.z; offset.z++)
+								{
+									face_data[offset.x][offset.y][offset.z] = {0, 0};
+								}
+							}
+						}
+
+						saved_offset -= glm::ivec3(x, y, z);
+
 						if (normal.x + normal.y + normal.z < 0)
 						{
 							saved_offset += normal;
 						}
-
-						glm::ivec3 pos = {x, y, z};
-						saved_offset -= pos;
 
 						glm::vec2 texCoord = {0.0f, 0.0f};
 						if (normal.x != 0)
@@ -362,11 +373,12 @@ public:
 						{
 							texCoord = {saved_offset.x, saved_offset.y};
 						}
+						// texCoord = {1.0f, 1.0f};
 
-						vertices.push_back({pos + glm::ivec3(offsets[0].x * saved_offset.x, offsets[0].y * saved_offset.y, offsets[0].z * saved_offset.z), normal, {0.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
-						vertices.push_back({pos + glm::ivec3(offsets[1].x * saved_offset.x, offsets[1].y * saved_offset.y, offsets[1].z * saved_offset.z), normal, {1.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
-						vertices.push_back({pos + glm::ivec3(offsets[2].x * saved_offset.x, offsets[2].y * saved_offset.y, offsets[2].z * saved_offset.z), normal, {1.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
-						vertices.push_back({pos + glm::ivec3(offsets[3].x * saved_offset.x, offsets[3].y * saved_offset.y, offsets[3].z * saved_offset.z), normal, {0.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
+						vertices.push_back({{x + offsets[0].x * saved_offset.x, y + offsets[0].y * saved_offset.y, z + offsets[0].z * saved_offset.z}, normal, {0.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
+						vertices.push_back({{x + offsets[1].x * saved_offset.x, y + offsets[1].y * saved_offset.y, z + offsets[1].z * saved_offset.z}, normal, {1.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
+						vertices.push_back({{x + offsets[2].x * saved_offset.x, y + offsets[2].y * saved_offset.y, z + offsets[2].z * saved_offset.z}, normal, {1.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
+						vertices.push_back({{x + offsets[3].x * saved_offset.x, y + offsets[3].y * saved_offset.y, z + offsets[3].z * saved_offset.z}, normal, {0.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
 						
 						indices.push_back(vertices.size() - 4);
 						indices.push_back(vertices.size() - 3);
@@ -374,6 +386,7 @@ public:
 						indices.push_back(vertices.size() - 4);
 						indices.push_back(vertices.size() - 2);
 						indices.push_back(vertices.size() - 1);
+
 					}
 				}
 			}

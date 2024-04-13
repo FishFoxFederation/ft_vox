@@ -65,6 +65,8 @@ void RenderThread::loop()
 
 	const Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
+	DebugGui::player_position = camera.position;
+
 	ViewProjMatrices camera_matrices = {};
 	camera_matrices.view = camera.view;
 	camera_matrices.proj = clip * camera.projection;
