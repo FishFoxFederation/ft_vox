@@ -23,6 +23,7 @@ void DebugGui::updateImGui()
 			if (ImGui::BeginTabItem("Game"))
 			{
 				ImGui::Text("Fps: %d", fps.load());
+				ImGui::Text("XYZ: %.3f %.3f %.3f", player_position.get().x, player_position.get().y, player_position.get().z);
 
 				ImGui::Separator();
 

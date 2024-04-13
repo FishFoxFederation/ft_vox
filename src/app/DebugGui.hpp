@@ -32,6 +32,17 @@ public:
 		m_value = value;
 	}
 
+	operator T() const
+	{
+		return get();
+	}
+
+	Atomic<T> & operator=(T value)
+	{
+		set(value);
+		return *this;
+	}
+
 private:
 
 	T m_value;
@@ -97,6 +108,8 @@ public:
 	static inline std::atomic<uint32_t> fps = 0;
 	static inline std::atomic<uint64_t> rendered_triangles = 0;
 	static inline std::atomic<uint64_t> gpu_allocated_memory = 0;
+
+	static inline Atomic<glm::vec3> player_position;
 
 	// Render Thread times
 	static inline History<float, 100> frame_time_history;
