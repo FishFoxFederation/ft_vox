@@ -120,6 +120,8 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 
 	glm::ivec2 nextPlayerChunk2D = glm::ivec2(nextPlayerChunk.x, nextPlayerChunk.z);
 
+	if (nextPlayerChunk == glm::ivec3(m_player.position()) / CHUNK_SIZE) return;
+
 	/**************************************************************
 	 * LOAD CHUNKS
 	 **************************************************************/
@@ -134,7 +136,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 
 			if(!m_loaded_columns.contains(chunkPos2D))
 			{
-				m_chunk_futures.push(m_threadPool.submit([this, chunkPos2D](){
+				std::future<void> future = m_threadPool.submit([this, chunkPos2D](){
 					/**************************************************************
 					 * CHUNK LOADING FUNCTION
 					 **************************************************************/
@@ -150,7 +152,8 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 					}
 					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
-				}));
+				});
+				m_chunk_futures.push(std::move(future));
 			}
 		}
 	}
@@ -209,6 +212,8 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				std::vector<CreateMeshData> mesh_data;
 				{
 					std::lock_guard<std::mutex> lock(m_visible_columns_mutex);
+					if (m_visible_columns.contains(pos2D))
+						return;
 					m_visible_columns.insert(pos2D);
 				}
 				{
