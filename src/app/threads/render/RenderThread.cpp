@@ -334,42 +334,42 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.cube_map_descriptor.set
-	};
+	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+	// 	vk.camera_descriptor.sets[vk.current_frame],
+	// 	vk.cube_map_descriptor.set
+	// };
 
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline.layout,
-		0,
-		static_cast<uint32_t>(skybox_descriptor_sets.size()),
-		skybox_descriptor_sets.data(),
-		0,
-		nullptr
-	);
+	// vkCmdBindDescriptorSets(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+	// 	vk.skybox_pipeline.layout,
+	// 	0,
+	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
+	// 	skybox_descriptor_sets.data(),
+	// 	0,
+	// 	nullptr
+	// );
 
-	ModelMatrice camera_model_matrice = {};
-	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(ModelMatrice),
-		&camera_model_matrice
-	);
+	// ModelMatrice camera_model_matrice = {};
+	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	// vkCmdPushConstants(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	vk.skybox_pipeline.layout,
+	// 	VK_SHADER_STAGE_VERTEX_BIT,
+	// 	0,
+	// 	sizeof(ModelMatrice),
+	// 	&camera_model_matrice
+	// );
 
-	vkCmdDraw(
-		vk.draw_command_buffers[vk.current_frame],
-		36,
-		1,
-		0,
-		0
-	);
+	// vkCmdDraw(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	36,
+	// 	1,
+	// 	0,
+	// 	0
+	// );
 
 
 	// Draw test image

@@ -103,6 +103,8 @@ VulkanAPI::~VulkanAPI()
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(copy_command_buffers.size()), copy_command_buffers.data());
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(imgui_command_buffers.size()), imgui_command_buffers.data());
 	vkDestroyCommandPool(device, command_pool, nullptr);
+	vkFreeCommandBuffers(device, transfer_command_pool, 1, &transfer_command_buffers);
+	vkDestroyCommandPool(device, transfer_command_pool, nullptr);
 
 	vkDestroyDevice(device, nullptr);
 
@@ -391,16 +393,24 @@ QueueFamilyIndices VulkanAPI::findQueueFamilies(VkPhysicalDevice device)
 	int i = 0;
 	for (const auto & queue_family : queue_families)
 	{
+		// Find a queue family that supports graphics
 		if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 		{
 			indices.graphics_family = i;
 		}
 
+		// Find a queue family that supports presentation
 		VkBool32 present_support = false;
 		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &present_support);
 		if (present_support)
 		{
 			indices.present_family = i;
+		}
+
+		// Find a queue family that supports transfer
+		if (queue_family.queueFlags & VK_QUEUE_TRANSFER_BIT)
+		{
+			indices.transfer_family = i;
 		}
 
 		if (indices.isComplete())
@@ -436,17 +446,32 @@ void VulkanAPI::createLogicalDevice()
 	std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
 	std::set<uint32_t> unique_queue_families = {
 		queue_family_indices.graphics_family.value(),
-		queue_family_indices.present_family.value()
+		queue_family_indices.present_family.value(),
+		queue_family_indices.transfer_family.value()
 	};
+	std::map<uint32_t, std::vector<float>> queue_priorities;
 
-	float queue_priority = 1.0f;
 	for (uint32_t queue_family : unique_queue_families)
 	{
 		VkDeviceQueueCreateInfo queue_create_info = {};
+
+		if (queue_family == queue_family_indices.graphics_family.value())
+		{
+			queue_create_info.queueCount += 1;
+		}
+		if (queue_family == queue_family_indices.present_family.value())
+		{
+			queue_create_info.queueCount += 1;
+		}
+		if (queue_family == queue_family_indices.transfer_family.value())
+		{
+			queue_create_info.queueCount += 1;
+		}
+		queue_priorities.insert({queue_family, std::vector<float>(queue_create_info.queueCount, 1.0f)});
+
 		queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queue_create_info.queueFamilyIndex = queue_family;
-		queue_create_info.queueCount = 1;
-		queue_create_info.pQueuePriorities = &queue_priority;
+		queue_create_info.pQueuePriorities = queue_priorities[queue_family].data();
 		queue_create_infos.push_back(queue_create_info);
 	}
 
@@ -480,8 +505,15 @@ void VulkanAPI::createLogicalDevice()
 		"Failed to create logical device"
 	);
 
-	vkGetDeviceQueue(device, queue_family_indices.graphics_family.value(), 0, &graphics_queue);
-	vkGetDeviceQueue(device, queue_family_indices.present_family.value(), 0, &present_queue);
+	std::map<uint32_t, uint32_t> queues_indices = {
+		{queue_family_indices.graphics_family.value(), 0},
+		{queue_family_indices.present_family.value(), 0},
+		{queue_family_indices.transfer_family.value(), 0}
+	};
+
+	vkGetDeviceQueue(device, queue_family_indices.graphics_family.value(), queues_indices[queue_family_indices.graphics_family.value()]++, &graphics_queue);
+	vkGetDeviceQueue(device, queue_family_indices.present_family.value(), queues_indices[queue_family_indices.present_family.value()]++, &present_queue);
+	vkGetDeviceQueue(device, queue_family_indices.graphics_family.value(), queues_indices[queue_family_indices.graphics_family.value()]++, &transfer_queue);
 }
 
 void VulkanAPI::createSwapChain(GLFWwindow * window)
@@ -606,6 +638,11 @@ void VulkanAPI::createCommandPool()
 		vkCreateCommandPool(device, &pool_info, nullptr, &command_pool),
 		"Failed to create command pool"
 	);
+
+	VK_CHECK(
+		vkCreateCommandPool(device, &pool_info, nullptr, &transfer_command_pool),
+		"Failed to create command pool"
+	);
 }
 
 void VulkanAPI::createCommandBuffer()
@@ -630,6 +667,14 @@ void VulkanAPI::createCommandBuffer()
 	);
 	VK_CHECK(
 		vkAllocateCommandBuffers(device, &alloc_info, imgui_command_buffers.data()),
+		"Failed to allocate command buffers"
+	);
+	
+	alloc_info.commandPool = transfer_command_pool;
+	alloc_info.commandBufferCount = 1;
+
+	VK_CHECK(
+		vkAllocateCommandBuffers(device, &alloc_info, &transfer_command_buffers),
 		"Failed to allocate command buffers"
 	);
 }
@@ -1706,53 +1751,57 @@ void VulkanAPI::copyBuffer(
 	VkDeviceSize size
 )
 {
-	VkCommandBufferAllocateInfo alloc_info = {};
-	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	alloc_info.commandPool = command_pool;
-	alloc_info.commandBufferCount = 1;
+	// VkCommandBufferAllocateInfo alloc_info = {};
+	// alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	// alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	// alloc_info.commandPool = command_pool;
+	// alloc_info.commandBufferCount = 1;
 
-	VkCommandBuffer command_buffer;
-	VK_CHECK(
-		vkAllocateCommandBuffers(device, &alloc_info, &command_buffer),
-		"Failed to allocate command buffers"
-	);
+	// VkCommandBuffer command_buffer;
+	// VK_CHECK(
+	// 	vkAllocateCommandBuffers(device, &alloc_info, &command_buffer),
+	// 	"Failed to allocate command buffers"
+	// );
+
+	std::unique_lock<std::mutex> lock(transfer_operation_mutex);
+
+	vkResetCommandBuffer(transfer_command_buffers, 0);
 
 	VkCommandBufferBeginInfo begin_info = {};
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
 	VK_CHECK(
-		vkBeginCommandBuffer(command_buffer, &begin_info),
+		vkBeginCommandBuffer(transfer_command_buffers, &begin_info),
 		"Failed to begin recording command buffer"
 	);
 
 	VkBufferCopy copy_region = {};
 	copy_region.size = size;
 
-	vkCmdCopyBuffer(command_buffer, src_buffer, dst_buffer, 1, &copy_region);
+	vkCmdCopyBuffer(transfer_command_buffers, src_buffer, dst_buffer, 1, &copy_region);
 
 	VK_CHECK(
-		vkEndCommandBuffer(command_buffer),
+		vkEndCommandBuffer(transfer_command_buffers),
 		"Failed to end recording command buffer"
 	);
 
 	VkSubmitInfo submit_info = {};
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.commandBufferCount = 1;
-	submit_info.pCommandBuffers = &command_buffer;
+	submit_info.pCommandBuffers = &transfer_command_buffers;
 
 	VK_CHECK(
-		vkQueueSubmit(graphics_queue, 1, &submit_info, VK_NULL_HANDLE),
+		vkQueueSubmit(transfer_queue, 1, &submit_info, VK_NULL_HANDLE),
 		"Failed to submit queue 2"
 	);
 
 	VK_CHECK(
-		vkQueueWaitIdle(graphics_queue),
+		vkQueueWaitIdle(transfer_queue),
 		"Failed to wait for queue"
 	);
 
-	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
+	// vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
 }
 
 void VulkanAPI::copyBufferToImage(

@@ -33,10 +33,11 @@ struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphics_family;
 	std::optional<uint32_t> present_family;
+	std::optional<uint32_t> transfer_family;
 
 	bool isComplete()
 	{
-		return graphics_family.has_value() && present_family.has_value();
+		return graphics_family.has_value() && present_family.has_value() && transfer_family.has_value();
 	}
 };
 
@@ -200,6 +201,7 @@ public:
 	VkDevice device;
 	VkQueue graphics_queue;
 	VkQueue present_queue;
+	VkQueue transfer_queue;
 	QueueFamilyIndices queue_family_indices;
 
 	Swapchain swapchain;
@@ -210,6 +212,10 @@ public:
 	std::vector<VkCommandBuffer> draw_command_buffers;
 	std::vector<VkCommandBuffer> copy_command_buffers;
 	std::vector<VkCommandBuffer> imgui_command_buffers;
+
+	VkCommandPool transfer_command_pool;
+	VkCommandBuffer transfer_command_buffers;
+	std::mutex transfer_operation_mutex;
 
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> main_render_finished_semaphores;

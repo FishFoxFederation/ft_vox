@@ -21,7 +21,7 @@ uint64_t __attribute__((optimize("O0"))) VulkanAPI::storeMesh(const std::vector<
 	VkDeviceSize buffer_size = vertex_size + index_size;
 
 	timer.start(1);
-	std::lock_guard<std::mutex> lock(global_mutex);
+	// std::lock_guard<std::mutex> lock(global_mutex);
 	timer.stop(1);
 
 	timer.start(2);
