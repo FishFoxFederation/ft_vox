@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-uint64_t __attribute__((optimize("O0"))) VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
+uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
 {
 	static Timer<7> timer;
 

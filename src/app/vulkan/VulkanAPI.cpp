@@ -51,6 +51,8 @@ VulkanAPI::~VulkanAPI()
 {
 	vkDeviceWaitIdle(device);
 
+	destroyMeshes();
+
 	destroyImGuiTexture(imgui_texture);
 
 	ImGui_ImplVulkan_Shutdown();
@@ -390,27 +392,32 @@ QueueFamilyIndices VulkanAPI::findQueueFamilies(VkPhysicalDevice device)
 	std::vector<VkQueueFamilyProperties> queue_families(queue_family_count);
 	vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families.data());
 
+	std::vector<uint32_t> queue_families_use_count(queue_family_count, 0);
+
 	int i = 0;
 	for (const auto & queue_family : queue_families)
 	{
 		// Find a queue family that supports graphics
-		if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+		if (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT && queue_families_use_count[i] < queue_family.queueCount)
 		{
 			indices.graphics_family = i;
+			queue_families_use_count[i]++;
 		}
 
 		// Find a queue family that supports presentation
 		VkBool32 present_support = false;
 		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &present_support);
-		if (present_support)
+		if (present_support && queue_families_use_count[i] < queue_family.queueCount)
 		{
 			indices.present_family = i;
+			queue_families_use_count[i]++;
 		}
 
 		// Find a queue family that supports transfer
-		if (queue_family.queueFlags & VK_QUEUE_TRANSFER_BIT)
+		if (queue_family.queueFlags & VK_QUEUE_TRANSFER_BIT && queue_families_use_count[i] < queue_family.queueCount)
 		{
 			indices.transfer_family = i;
+			queue_families_use_count[i]++;
 		}
 
 		if (indices.isComplete())
@@ -513,7 +520,7 @@ void VulkanAPI::createLogicalDevice()
 
 	vkGetDeviceQueue(device, queue_family_indices.graphics_family.value(), queues_indices[queue_family_indices.graphics_family.value()]++, &graphics_queue);
 	vkGetDeviceQueue(device, queue_family_indices.present_family.value(), queues_indices[queue_family_indices.present_family.value()]++, &present_queue);
-	vkGetDeviceQueue(device, queue_family_indices.graphics_family.value(), queues_indices[queue_family_indices.graphics_family.value()]++, &transfer_queue);
+	vkGetDeviceQueue(device, queue_family_indices.transfer_family.value(), queues_indices[queue_family_indices.transfer_family.value()]++, &transfer_queue);
 }
 
 void VulkanAPI::createSwapChain(GLFWwindow * window)
@@ -639,6 +646,8 @@ void VulkanAPI::createCommandPool()
 		"Failed to create command pool"
 	);
 
+	pool_info.queueFamilyIndex = queue_family_indices.transfer_family.value();
+
 	VK_CHECK(
 		vkCreateCommandPool(device, &pool_info, nullptr, &transfer_command_pool),
 		"Failed to create command pool"
@@ -669,7 +678,7 @@ void VulkanAPI::createCommandBuffer()
 		vkAllocateCommandBuffers(device, &alloc_info, imgui_command_buffers.data()),
 		"Failed to allocate command buffers"
 	);
-	
+
 	alloc_info.commandPool = transfer_command_pool;
 	alloc_info.commandBufferCount = 1;
 
