@@ -18,11 +18,12 @@ var searchData=
   ['_7esingletimecommand_15',['~SingleTimeCommand',['../classSingleTimeCommand.html#a3644ca785bc0f23038fe328578be0c58',1,'SingleTimeCommand']]],
   ['_7eswapchain_16',['~Swapchain',['../classSwapchain.html#a5848dea9c4317e57363760ed0c052ea7',1,'Swapchain']]],
   ['_7ethreadpool_17',['~ThreadPool',['../classThreadPool.html#a44d3d2ab618970605e684efc216655eb',1,'ThreadPool']]],
-  ['_7eupdatethread_18',['~UpdateThread',['../classUpdateThread.html#a6b0329b5ce1c37b523ca25276d180cbb',1,'UpdateThread']]],
-  ['_7evulaknmemoryallocator_19',['~VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html#af2beefa1c3ed892b1ef5a305946bbb05',1,'VulaknMemoryAllocator']]],
-  ['_7evulkanapi_20',['~VulkanAPI',['../classVulkanAPI.html#af0fc9d116584aa25c04587c6ac9b43cc',1,'VulkanAPI']]],
-  ['_7ewindow_21',['~Window',['../classWindow.html#a245d821e6016fa1f6970ccbbedd635f6',1,'Window']]],
-  ['_7eworld_22',['~World',['../classWorld.html#a8c73fba541a5817fff65147ba47cd827',1,'World']]],
-  ['_7eworldgenerator_23',['~WorldGenerator',['../classWorldGenerator.html#afed7aa2e501ab283bb41bbaa6fbdf24a',1,'WorldGenerator']]],
-  ['_7eworldscene_24',['~WorldScene',['../classWorldScene.html#a96919a2cba5b6b6e544cc9b749e13ac8',1,'WorldScene']]]
+  ['_7etimer_18',['~Timer',['../classTimer.html#a253fd8709268b053f17cac1835e6e9ae',1,'Timer']]],
+  ['_7eupdatethread_19',['~UpdateThread',['../classUpdateThread.html#a6b0329b5ce1c37b523ca25276d180cbb',1,'UpdateThread']]],
+  ['_7evulaknmemoryallocator_20',['~VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html#af2beefa1c3ed892b1ef5a305946bbb05',1,'VulaknMemoryAllocator']]],
+  ['_7evulkanapi_21',['~VulkanAPI',['../classVulkanAPI.html#af0fc9d116584aa25c04587c6ac9b43cc',1,'VulkanAPI']]],
+  ['_7ewindow_22',['~Window',['../classWindow.html#a245d821e6016fa1f6970ccbbedd635f6',1,'Window']]],
+  ['_7eworld_23',['~World',['../classWorld.html#a8c73fba541a5817fff65147ba47cd827',1,'World']]],
+  ['_7eworldgenerator_24',['~WorldGenerator',['../classWorldGenerator.html#afed7aa2e501ab283bb41bbaa6fbdf24a',1,'WorldGenerator']]],
+  ['_7eworldscene_25',['~WorldScene',['../classWorldScene.html#a96919a2cba5b6b6e544cc9b749e13ac8',1,'WorldScene']]]
 ];

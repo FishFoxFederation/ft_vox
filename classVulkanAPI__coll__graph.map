@@ -1,7 +1,7 @@
 <map id="VulkanAPI" name="VulkanAPI">
-<area shape="rect" id="node1" title=" " alt="" coords="495,445,664,867"/>
+<area shape="rect" id="node1" title=" " alt="" coords="495,445,664,852"/>
 <area shape="rect" id="node2" href="$classVulaknMemoryAllocator.html" title=" " alt="" coords="5,64,191,251"/>
-<area shape="rect" id="node3" href="$structQueueFamilyIndices.html" title=" " alt="" coords="215,115,359,199"/>
+<area shape="rect" id="node3" href="$structQueueFamilyIndices.html" title=" " alt="" coords="215,108,359,207"/>
 <area shape="rect" id="node4" href="$classSwapchain.html" title=" " alt="" coords="384,42,567,273"/>
 <area shape="rect" id="node5" href="$classImage.html" title=" " alt="" coords="591,5,725,309"/>
 <area shape="rect" id="node6" href="$classDescriptor.html" title=" " alt="" coords="761,49,867,265"/>

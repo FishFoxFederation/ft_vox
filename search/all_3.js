@@ -4,7 +4,7 @@ var searchData=
   ['data_1',['data',['../classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed',1,'History']]],
   ['debug_2',['DEBUG',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e',1,'Logger']]],
   ['debug_5fmessenger_3',['debug_messenger',['../classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e',1,'VulkanAPI']]],
-  ['debuggui_4',['DebugGui',['../classDebugGui.html',1,'DebugGui'],['../classDebugGui.html#ab110608595afb079909e4eb709465059',1,'DebugGui::DebugGui()']]],
+  ['debuggui_4',['DebugGui',['../classDebugGui.html',1,'DebugGui'],['../classDebugGui.html#a23e2594d0e7208444ffc46c8b34a5e37',1,'DebugGui::DebugGui()']]],
   ['debuggui_2ecpp_5',['DebugGui.cpp',['../DebugGui_8cpp.html',1,'']]],
   ['debuggui_2ehpp_6',['DebugGui.hpp',['../DebugGui_8hpp.html',1,'']]],
   ['define_2ehpp_7',['define.hpp',['../define_8hpp.html',1,'']]],

@@ -120,9 +120,9 @@ Collaboration diagram for VulkanAPI:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVulkanAPI__coll__graph.png" border="0" usemap="#aVulkanAPI_coll__map" alt="Collaboration graph"/></div>
 <map name="aVulkanAPI_coll__map" id="aVulkanAPI_coll__map">
-<area shape="rect" title=" " alt="" coords="495,445,664,867"/>
+<area shape="rect" title=" " alt="" coords="495,445,664,852"/>
 <area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,64,191,251"/>
-<area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,115,359,199"/>
+<area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,108,359,207"/>
 <area shape="rect" href="classSwapchain.html" title=" " alt="" coords="384,42,567,273"/>
 <area shape="rect" href="classImage.html" title=" " alt="" coords="591,5,725,309"/>
 <area shape="rect" href="classDescriptor.html" title=" " alt="" coords="761,49,867,265"/>
@@ -151,8 +151,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5cf827ed1548a6c79b7c0113cf726892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581">recreateSwapChain</a> (GLFWwindow *<a class="el" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>)</td></tr>
 <tr class="separator:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22a0cf12be7d41eb6c9495b6785eec98"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a22a0cf12be7d41eb6c9495b6785eec98">createMesh</a> (const <a class="el" href="structCreateMeshData.html">CreateMeshData</a> &amp;data)</td></tr>
-<tr class="separator:a22a0cf12be7d41eb6c9495b6785eec98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a916d17d1a713268c205279c4e4685b80"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a916d17d1a713268c205279c4e4685b80">storeMesh</a> (const std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt; &amp;vertices, const std::vector&lt; uint32_t &gt; &amp;indices)</td></tr>
 <tr class="separator:a916d17d1a713268c205279c4e4685b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64487d489c2c83eda603848f99c53826"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a64487d489c2c83eda603848f99c53826">destroyMeshes</a> (const std::vector&lt; uint64_t &gt; &amp;mesh_ids)</td></tr>
@@ -182,6 +180,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a3d2e2ba32d12d350853d6de00770eab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd95a2f7af31d3ccba7de8553aeed384"><td class="memItemLeft" align="right" valign="top">VkQueue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#acd95a2f7af31d3ccba7de8553aeed384">present_queue</a></td></tr>
 <tr class="separator:acd95a2f7af31d3ccba7de8553aeed384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0517937337ae0b3ad6e147526be0d960"><td class="memItemLeft" align="right" valign="top">VkQueue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960">transfer_queue</a></td></tr>
+<tr class="separator:a0517937337ae0b3ad6e147526be0d960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f4eb2dfd0c916f2c2d5cd32a11d1805"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structQueueFamilyIndices.html">QueueFamilyIndices</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a3f4eb2dfd0c916f2c2d5cd32a11d1805">queue_family_indices</a></td></tr>
 <tr class="separator:a3f4eb2dfd0c916f2c2d5cd32a11d1805"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6605ae5a44cb5327a1633051b00cbd3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSwapchain.html">Swapchain</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a6605ae5a44cb5327a1633051b00cbd3f">swapchain</a></td></tr>
@@ -198,6 +198,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6e36af29d838a6599ddb213ca74a7edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f31e9409e38aa1027e3cfd68c002b76"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a2f31e9409e38aa1027e3cfd68c002b76">imgui_command_buffers</a></td></tr>
 <tr class="separator:a2f31e9409e38aa1027e3cfd68c002b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f4d479c32e0010b49c8400eb96340ab"><td class="memItemLeft" align="right" valign="top">VkCommandPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a3f4d479c32e0010b49c8400eb96340ab">transfer_command_pool</a></td></tr>
+<tr class="separator:a3f4d479c32e0010b49c8400eb96340ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77a5993a4ce2374bb9c920a52476a669"><td class="memItemLeft" align="right" valign="top">VkCommandBuffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a77a5993a4ce2374bb9c920a52476a669">transfer_command_buffers</a></td></tr>
+<tr class="separator:a77a5993a4ce2374bb9c920a52476a669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e2a8e23d44bb3ba01152cabbfb634d0"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a3e2a8e23d44bb3ba01152cabbfb634d0">transfer_operation_mutex</a></td></tr>
+<tr class="separator:a3e2a8e23d44bb3ba01152cabbfb634d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aded6afbe797d9e490d44f56c818baa90"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aded6afbe797d9e490d44f56c818baa90">image_available_semaphores</a></td></tr>
 <tr class="separator:aded6afbe797d9e490d44f56c818baa90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d0897c4f64ec32ad6d320b3b2108f71"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkSemaphore &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71">main_render_finished_semaphores</a></td></tr>
@@ -403,24 +409,6 @@ Static Public Attributes</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a22a0cf12be7d41eb6c9495b6785eec98" name="a22a0cf12be7d41eb6c9495b6785eec98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22a0cf12be7d41eb6c9495b6785eec98">&#9670;&#160;</a></span>createMesh()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t VulkanAPI::createMesh </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structCreateMeshData.html">CreateMeshData</a> &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1544,6 +1532,62 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classPipeline.html">Pipeline</a> VulkanAPI::test_image_pipeline</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a77a5993a4ce2374bb9c920a52476a669" name="a77a5993a4ce2374bb9c920a52476a669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77a5993a4ce2374bb9c920a52476a669">&#9670;&#160;</a></span>transfer_command_buffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkCommandBuffer VulkanAPI::transfer_command_buffers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3f4d479c32e0010b49c8400eb96340ab" name="a3f4d479c32e0010b49c8400eb96340ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f4d479c32e0010b49c8400eb96340ab">&#9670;&#160;</a></span>transfer_command_pool</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkCommandPool VulkanAPI::transfer_command_pool</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3e2a8e23d44bb3ba01152cabbfb634d0" name="a3e2a8e23d44bb3ba01152cabbfb634d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e2a8e23d44bb3ba01152cabbfb634d0">&#9670;&#160;</a></span>transfer_operation_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex VulkanAPI::transfer_operation_mutex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0517937337ae0b3ad6e147526be0d960" name="a0517937337ae0b3ad6e147526be0d960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0517937337ae0b3ad6e147526be0d960">&#9670;&#160;</a></span>transfer_queue</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkQueue VulkanAPI::transfer_queue</td>
         </tr>
       </table>
 </div><div class="memdoc">

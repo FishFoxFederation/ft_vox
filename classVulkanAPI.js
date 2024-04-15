@@ -5,7 +5,6 @@ var classVulkanAPI =
     [ "VulkanAPI", "classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad", null ],
     [ "VulkanAPI", "classVulkanAPI.html#af0178da68566ea2136a91746e686efdf", null ],
     [ "createImGuiTexture", "classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323", null ],
-    [ "createMesh", "classVulkanAPI.html#a22a0cf12be7d41eb6c9495b6785eec98", null ],
     [ "destroyMesh", "classVulkanAPI.html#ad27846b71139eb87106408bd25940dbb", null ],
     [ "destroyMeshes", "classVulkanAPI.html#a64487d489c2c83eda603848f99c53826", null ],
     [ "operator=", "classVulkanAPI.html#a3374616511a7077e1469cc8a1e8aee31", null ],
@@ -73,6 +72,10 @@ var classVulkanAPI =
     [ "swapchain", "classVulkanAPI.html#a6605ae5a44cb5327a1633051b00cbd3f", null ],
     [ "test_image_descriptor", "classVulkanAPI.html#a3f8d472b0563d698d14b40a18acce612", null ],
     [ "test_image_pipeline", "classVulkanAPI.html#ae8f0c464acae09cabfc3631aaa50304a", null ],
+    [ "transfer_command_buffers", "classVulkanAPI.html#a77a5993a4ce2374bb9c920a52476a669", null ],
+    [ "transfer_command_pool", "classVulkanAPI.html#a3f4d479c32e0010b49c8400eb96340ab", null ],
+    [ "transfer_operation_mutex", "classVulkanAPI.html#a3e2a8e23d44bb3ba01152cabbfb634d0", null ],
+    [ "transfer_queue", "classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960", null ],
     [ "vma", "classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5", null ],
     [ "window", "classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1", null ]
 ];

@@ -11,13 +11,15 @@ var searchData=
   ['setposition_8',['setPosition',['../classCamera.html#adf6accc669562babbd26e2ad261935ea',1,'Camera::setPosition()'],['../classPlayer.html#a81b96c8d6bd9dc3df162df1f0ba6731e',1,'Player::setPosition(const glm::vec3 &amp;position)']]],
   ['setrotation_9',['setRotation',['../classPlayer.html#a97304aab9dd89d889b1b29c4bda9cd68',1,'Player']]],
   ['settimestamp_10',['setTimestamp',['../classLogger.html#a9556d57fb4b693911149599a8724b2b0',1,'Logger']]],
-  ['settings_11',['Settings',['../classSettings.html#ae25bcc96acb95e2bab23f2df682c9803',1,'Settings::Settings(Settings &amp;other)=delete'],['../classSettings.html#a3235cc319f2ca06193bc5f709a3387c3',1,'Settings::Settings(Settings &amp;&amp;other)=delete'],['../classSettings.html#ab7169a6eefce79566dd07db3b1e5e967',1,'Settings::Settings()']]],
+  ['settings_11',['Settings',['../classSettings.html#a3235cc319f2ca06193bc5f709a3387c3',1,'Settings::Settings(Settings &amp;&amp;other)=delete'],['../classSettings.html#ab7169a6eefce79566dd07db3b1e5e967',1,'Settings::Settings()'],['../classSettings.html#ae25bcc96acb95e2bab23f2df682c9803',1,'Settings::Settings(Settings &amp;other)=delete']]],
   ['setyaw_12',['setYaw',['../classCamera.html#ae185b708c48defb404766ca01058fad3',1,'Camera']]],
   ['shouldclose_13',['shouldClose',['../classWindow.html#ae779be3a5327f62c5e86a3e3d8a37289',1,'Window']]],
   ['singletimecommand_14',['SingleTimeCommand',['../classSingleTimeCommand.html#a3dc2d9eb289b07c8987727d2c29fede6',1,'SingleTimeCommand::SingleTimeCommand(VkDevice device, VkCommandPool command_pool, VkQueue queue)'],['../classSingleTimeCommand.html#a6358df0955f5cbf379822e37286b8600',1,'SingleTimeCommand::SingleTimeCommand(const SingleTimeCommand &amp;)=delete'],['../classSingleTimeCommand.html#ae401c67cb75002cda1455476b290fcb9',1,'SingleTimeCommand::SingleTimeCommand(SingleTimeCommand &amp;&amp;other) noexcept']]],
   ['size_15',['size',['../classHistory.html#ac27dd6845ca0f414017ff591e9ae4e90',1,'History']]],
   ['sphereinfrustum_16',['sphereInFrustum',['../classViewFrustum.html#ad2e685ee3819ff90df3994df71455f80',1,'ViewFrustum']]],
-  ['storemesh_17',['storeMesh',['../classVulkanAPI.html#a916d17d1a713268c205279c4e4685b80',1,'VulkanAPI']]],
-  ['submit_18',['submit',['../classThreadPool.html#a9c503ac77debb1ab044e117f3adda10f',1,'ThreadPool']]],
-  ['swapchain_19',['Swapchain',['../classSwapchain.html#ac17a8879535f88e5ff3b4635392cefa1',1,'Swapchain::Swapchain()'],['../classSwapchain.html#a04b93a4607fdc211c3018ab02489f26f',1,'Swapchain::Swapchain(VkDevice device, VkPhysicalDevice physical_device, VkSurfaceKHR surface, CreateInfo create_info)'],['../classSwapchain.html#a30927e6bfaa0444297b3ba2958893b93',1,'Swapchain::Swapchain(const Swapchain &amp;)=delete'],['../classSwapchain.html#a04ba7da3842a1f7da16bb854dd89d65a',1,'Swapchain::Swapchain(Swapchain &amp;&amp;other) noexcept']]]
+  ['start_17',['start',['../classTimer.html#a89cbcd5f86e010298f644c979fe45d06',1,'Timer']]],
+  ['stop_18',['stop',['../classTimer.html#abab6876b961b39fb1123ac2d700167ed',1,'Timer']]],
+  ['storemesh_19',['storeMesh',['../classVulkanAPI.html#a916d17d1a713268c205279c4e4685b80',1,'VulkanAPI']]],
+  ['submit_20',['submit',['../classThreadPool.html#a9c503ac77debb1ab044e117f3adda10f',1,'ThreadPool']]],
+  ['swapchain_21',['Swapchain',['../classSwapchain.html#ac17a8879535f88e5ff3b4635392cefa1',1,'Swapchain::Swapchain()'],['../classSwapchain.html#a04b93a4607fdc211c3018ab02489f26f',1,'Swapchain::Swapchain(VkDevice device, VkPhysicalDevice physical_device, VkSurfaceKHR surface, CreateInfo create_info)'],['../classSwapchain.html#a30927e6bfaa0444297b3ba2958893b93',1,'Swapchain::Swapchain(const Swapchain &amp;)=delete'],['../classSwapchain.html#a04ba7da3842a1f7da16bb854dd89d65a',1,'Swapchain::Swapchain(Swapchain &amp;&amp;other) noexcept']]]
 ];

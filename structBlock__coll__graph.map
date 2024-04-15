@@ -1,5 +1,4 @@
 <map id="Block" name="Block">
-<area shape="rect" id="node1" title=" " alt="" coords="5,372,127,441"/>
-<area shape="rect" id="node2" href="$structData.html" title=" " alt="" coords="21,196,111,265"/>
-<area shape="rect" id="node3" href="$structTextureData.html" title=" " alt="" coords="18,5,114,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,196,127,265"/>
+<area shape="rect" id="node2" href="$structData.html" title=" " alt="" coords="21,5,111,89"/>
 </map>

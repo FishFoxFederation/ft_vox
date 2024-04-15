@@ -119,16 +119,17 @@ Collaboration diagram for DebugGui:</div>
 <div class="dyncontent">
 <div class="center"><img src="classDebugGui__coll__graph.png" border="0" usemap="#aDebugGui_coll__map" alt="Collaboration graph"/></div>
 <map name="aDebugGui_coll__map" id="aDebugGui_coll__map">
-<area shape="rect" title=" " alt="" coords="100,255,247,383"/>
-<area shape="rect" href="classHistory.html" title=" " alt="" coords="5,5,147,119"/>
-<area shape="rect" href="classHistory.html" title=" " alt="" coords="198,5,346,119"/>
+<area shape="rect" title=" " alt="" coords="139,269,354,559"/>
+<area shape="rect" href="classAtomic.html" title=" " alt="" coords="5,5,152,133"/>
+<area shape="rect" href="classHistory.html" title=" " alt="" coords="176,13,317,126"/>
+<area shape="rect" href="classHistory.html" title=" " alt="" coords="369,13,517,126"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab110608595afb079909e4eb709465059"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ab110608595afb079909e4eb709465059">DebugGui</a> (<a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkanAPI)</td></tr>
-<tr class="separator:ab110608595afb079909e4eb709465059"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23e2594d0e7208444ffc46c8b34a5e37"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a23e2594d0e7208444ffc46c8b34a5e37">DebugGui</a> ()</td></tr>
+<tr class="separator:a23e2594d0e7208444ffc46c8b34a5e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a966b6e5195197a67a9a20294b142c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a0a966b6e5195197a67a9a20294b142c4">~DebugGui</a> ()</td></tr>
 <tr class="separator:a0a966b6e5195197a67a9a20294b142c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa849cf767818482461efa78caef2ff70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#aa849cf767818482461efa78caef2ff70">updateImGui</a> ()</td></tr>
@@ -140,6 +141,10 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:ab769bb8977dff721cd5db648458c8f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaf81c06685c6ec69beaf6270e399a13"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13">rendered_triangles</a> = 0</td></tr>
 <tr class="separator:adaf81c06685c6ec69beaf6270e399a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41587c9a96dcd6592953dd1ea8255218"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a41587c9a96dcd6592953dd1ea8255218">gpu_allocated_memory</a> = 0</td></tr>
+<tr class="separator:a41587c9a96dcd6592953dd1ea8255218"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5f88dfe8444bcbffb320128d3e906e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classAtomic.html">Atomic</a>&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a2a5f88dfe8444bcbffb320128d3e906e">player_position</a></td></tr>
+<tr class="separator:a2a5f88dfe8444bcbffb320128d3e906e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac39ff26773e3f64810069871933c01da"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">frame_time_history</a></td></tr>
 <tr class="separator:ac39ff26773e3f64810069871933c01da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29e6325358b57a6c69acccbdcf0e379e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">cpu_time_history</a></td></tr>
@@ -158,10 +163,26 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:afb57f4b014c6b4a58af2577c82da45a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b12e1898b277332ee74269752b3f66c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a2b12e1898b277332ee74269752b3f66c">chunk_unload_time_history</a></td></tr>
 <tr class="separator:a2b12e1898b277332ee74269752b3f66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71ef96f7b8feaf081a0a2f185c664018"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a71ef96f7b8feaf081a0a2f185c664018">create_mesh_time</a></td></tr>
+<tr class="separator:a71ef96f7b8feaf081a0a2f185c664018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a227bc10dd0126aed7c100fb82f9985ee"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a227bc10dd0126aed7c100fb82f9985ee">store_mesh_time</a></td></tr>
+<tr class="separator:a227bc10dd0126aed7c100fb82f9985ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ac81069aa15b873345932c8ecadf97a"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a2ac81069aa15b873345932c8ecadf97a">store_mesh_mutex_wait_time</a></td></tr>
+<tr class="separator:a2ac81069aa15b873345932c8ecadf97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6990964b0922bfbe815ef19447365de"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ab6990964b0922bfbe815ef19447365de">store_mesh_create_staging_buffer_time</a></td></tr>
+<tr class="separator:ab6990964b0922bfbe815ef19447365de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee38af097dbb3f17478930df23d30fe1"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#aee38af097dbb3f17478930df23d30fe1">store_mesh_memcpy_time</a></td></tr>
+<tr class="separator:aee38af097dbb3f17478930df23d30fe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed02e6935a7d852e4894de28e9e3e464"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#aed02e6935a7d852e4894de28e9e3e464">store_mesh_create_buffer_time</a></td></tr>
+<tr class="separator:aed02e6935a7d852e4894de28e9e3e464"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab1723a676ea4f26cc3797dfd6853a02"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#aab1723a676ea4f26cc3797dfd6853a02">store_mesh_copy_buffer_time</a></td></tr>
+<tr class="separator:aab1723a676ea4f26cc3797dfd6853a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82835a5a2a0b6b833486e1b0805d1d4a"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a82835a5a2a0b6b833486e1b0805d1d4a">store_mesh_destroy_buffer_time</a></td></tr>
+<tr class="separator:a82835a5a2a0b6b833486e1b0805d1d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab110608595afb079909e4eb709465059" name="ab110608595afb079909e4eb709465059"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab110608595afb079909e4eb709465059">&#9670;&#160;</a></span>DebugGui()</h2>
+<a id="a23e2594d0e7208444ffc46c8b34a5e37" name="a23e2594d0e7208444ffc46c8b34a5e37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23e2594d0e7208444ffc46c8b34a5e37">&#9670;&#160;</a></span>DebugGui()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,8 +190,7 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">DebugGui::DebugGui </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;&#160;</td>
-          <td class="paramname"><em>vulkanAPI</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -390,6 +410,28 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a71ef96f7b8feaf081a0a2f185c664018" name="a71ef96f7b8feaf081a0a2f185c664018"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71ef96f7b8feaf081a0a2f185c664018">&#9670;&#160;</a></span>create_mesh_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::create_mesh_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab769bb8977dff721cd5db648458c8f3d" name="ab769bb8977dff721cd5db648458c8f3d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab769bb8977dff721cd5db648458c8f3d">&#9670;&#160;</a></span>fps</h2>
 
@@ -434,6 +476,50 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a41587c9a96dcd6592953dd1ea8255218" name="a41587c9a96dcd6592953dd1ea8255218"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41587c9a96dcd6592953dd1ea8255218">&#9670;&#160;</a></span>gpu_allocated_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;uint64_t&gt; DebugGui::gpu_allocated_memory = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2a5f88dfe8444bcbffb320128d3e906e" name="a2a5f88dfe8444bcbffb320128d3e906e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a5f88dfe8444bcbffb320128d3e906e">&#9670;&#160;</a></span>player_position</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classAtomic.html">Atomic</a>&lt;glm::vec3&gt; DebugGui::player_position</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adaf81c06685c6ec69beaf6270e399a13" name="adaf81c06685c6ec69beaf6270e399a13"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adaf81c06685c6ec69beaf6270e399a13">&#9670;&#160;</a></span>rendered_triangles</h2>
 
@@ -445,6 +531,160 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::atomic&lt;uint64_t&gt; DebugGui::rendered_triangles = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aab1723a676ea4f26cc3797dfd6853a02" name="aab1723a676ea4f26cc3797dfd6853a02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab1723a676ea4f26cc3797dfd6853a02">&#9670;&#160;</a></span>store_mesh_copy_buffer_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_copy_buffer_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed02e6935a7d852e4894de28e9e3e464" name="aed02e6935a7d852e4894de28e9e3e464"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed02e6935a7d852e4894de28e9e3e464">&#9670;&#160;</a></span>store_mesh_create_buffer_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_create_buffer_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6990964b0922bfbe815ef19447365de" name="ab6990964b0922bfbe815ef19447365de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6990964b0922bfbe815ef19447365de">&#9670;&#160;</a></span>store_mesh_create_staging_buffer_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_create_staging_buffer_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82835a5a2a0b6b833486e1b0805d1d4a" name="a82835a5a2a0b6b833486e1b0805d1d4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82835a5a2a0b6b833486e1b0805d1d4a">&#9670;&#160;</a></span>store_mesh_destroy_buffer_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_destroy_buffer_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee38af097dbb3f17478930df23d30fe1" name="aee38af097dbb3f17478930df23d30fe1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee38af097dbb3f17478930df23d30fe1">&#9670;&#160;</a></span>store_mesh_memcpy_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_memcpy_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ac81069aa15b873345932c8ecadf97a" name="a2ac81069aa15b873345932c8ecadf97a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ac81069aa15b873345932c8ecadf97a">&#9670;&#160;</a></span>store_mesh_mutex_wait_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_mutex_wait_time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a227bc10dd0126aed7c100fb82f9985ee" name="a227bc10dd0126aed7c100fb82f9985ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a227bc10dd0126aed7c100fb82f9985ee">&#9670;&#160;</a></span>store_mesh_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::store_mesh_time</td>
         </tr>
       </table>
   </td>

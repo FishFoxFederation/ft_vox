@@ -1,8 +1,13 @@
 var Block_8hpp =
 [
-    [ "TextureData", "structTextureData.html", "structTextureData" ],
     [ "Data", "structData.html", "structData" ],
     [ "Block", "structBlock.html", null ],
+    [ "BLOCK_FACE_BACK", "Block_8hpp.html#acdc50e3ae7204b9a9281913ce0c4ed54", null ],
+    [ "BLOCK_FACE_BOTTOM", "Block_8hpp.html#aea576020eabcf8b7dca0825e42edf1b2", null ],
+    [ "BLOCK_FACE_FRONT", "Block_8hpp.html#ab8b856d7513a2a0459d4a88061f8388f", null ],
+    [ "BLOCK_FACE_LEFT", "Block_8hpp.html#a35dc84e47dbf862580cf70d921e4e2e2", null ],
+    [ "BLOCK_FACE_RIGHT", "Block_8hpp.html#aebc7ca26651a7601015b02cf720220dc", null ],
+    [ "BLOCK_FACE_TOP", "Block_8hpp.html#aac9bd84159982d113cfd30e2bf361d41", null ],
     [ "BLOCK_PROPERTY_CUBE", "Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4", null ],
     [ "BLOCK_PROPERTY_LIGHT", "Block_8hpp.html#a7b867f1721c0e596365e40122301d822", null ],
     [ "BLOCK_PROPERTY_NONE", "Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a", null ],

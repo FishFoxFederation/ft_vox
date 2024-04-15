@@ -1,52 +1,52 @@
 <map id="src/app/threads/render/RenderThread.cpp" name="src/app/threads/render/RenderThread.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="2384,5,2536,45"/>
-<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="759,93,886,119"/>
-<area shape="rect" id="node7" href="$logger_8hpp.html" title=" " alt="" coords="2745,460,2826,485"/>
-<area shape="rect" id="node8" title=" " alt="" coords="2956,533,3028,559"/>
-<area shape="rect" id="node32" title=" " alt="" coords="81,533,132,559"/>
-<area shape="rect" id="node41" href="$Perlin_8hpp.html" title=" " alt="" coords="2421,240,2499,265"/>
-<area shape="rect" id="node47" title=" " alt="" coords="224,313,299,339"/>
-<area shape="rect" id="node48" title=" " alt="" coords="2343,167,2404,192"/>
-<area shape="rect" id="node49" title=" " alt="" coords="2948,93,3009,119"/>
-<area shape="rect" id="node50" title=" " alt="" coords="3033,93,3100,119"/>
-<area shape="rect" id="node3" href="$define_8hpp.html" title=" " alt="" coords="244,533,324,559"/>
-<area shape="rect" id="node4" href="$AThreadWrapper_8hpp.html" title=" " alt="" coords="102,167,245,192"/>
-<area shape="rect" id="node6" href="$WorldScene_8hpp.html" title=" " alt="" coords="659,240,775,265"/>
-<area shape="rect" id="node19" href="$Settings_8hpp.html" title=" " alt="" coords="333,167,427,192"/>
-<area shape="rect" id="node21" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="1846,313,1954,339"/>
-<area shape="rect" id="node25" title=" " alt="" coords="1403,460,1450,485"/>
-<area shape="rect" id="node31" href="$Chunk_8hpp.html" title=" " alt="" coords="835,460,917,485"/>
-<area shape="rect" id="node40" href="$WorldGenerator_8hpp.html" title=" " alt="" coords="755,167,891,192"/>
-<area shape="rect" id="node46" href="$DebugGui_8hpp.html" title=" " alt="" coords="533,240,635,265"/>
-<area shape="rect" id="node5" title=" " alt="" coords="144,240,203,265"/>
-<area shape="rect" id="node14" href="$Camera_8hpp.html" title=" " alt="" coords="576,313,667,339"/>
-<area shape="rect" id="node15" title=" " alt="" coords="695,387,787,412"/>
-<area shape="rect" id="node16" title=" " alt="" coords="481,387,671,412"/>
-<area shape="rect" id="node17" title=" " alt="" coords="347,387,405,412"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1976,533,2035,559"/>
-<area shape="rect" id="node9" title=" " alt="" coords="2497,533,2564,559"/>
-<area shape="rect" id="node10" title=" " alt="" coords="2863,533,2932,559"/>
-<area shape="rect" id="node11" title=" " alt="" coords="2589,533,2643,559"/>
-<area shape="rect" id="node12" title=" " alt="" coords="2668,533,2735,559"/>
-<area shape="rect" id="node13" title=" " alt="" coords="2759,533,2839,559"/>
-<area shape="rect" id="node20" title=" " alt="" coords="329,240,431,265"/>
-<area shape="rect" id="node22" href="$vk__define_8hpp.html" title=" " alt="" coords="2361,533,2463,559"/>
-<area shape="rect" id="node23" href="$vk__helper_8hpp.html" title=" " alt="" coords="2450,460,2553,485"/>
-<area shape="rect" id="node24" href="$VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="1335,387,1518,412"/>
-<area shape="rect" id="node26" href="$Command_8hpp.html" title=" " alt="" coords="1953,460,2058,485"/>
-<area shape="rect" id="node27" href="$Image_8hpp.html" title=" " alt="" coords="2268,387,2351,412"/>
-<area shape="rect" id="node28" href="$Descriptor_8hpp.html" title=" " alt="" coords="2269,460,2374,485"/>
-<area shape="rect" id="node29" href="$Swapchain_8hpp.html" title=" " alt="" coords="2082,460,2193,485"/>
-<area shape="rect" id="node30" href="$Pipeline_8hpp.html" title=" " alt="" coords="2629,387,2721,412"/>
-<area shape="rect" id="node34" href="$CreateMeshData_8hpp.html" title=" " alt="" coords="965,387,1107,412"/>
-<area shape="rect" id="node35" title=" " alt="" coords="1594,387,1699,412"/>
-<area shape="rect" id="node36" title=" " alt="" coords="1724,387,1844,412"/>
-<area shape="rect" id="node37" title=" " alt="" coords="1869,387,1931,412"/>
-<area shape="rect" id="node38" title=" " alt="" coords="1956,387,2081,412"/>
-<area shape="rect" id="node39" title=" " alt="" coords="2105,387,2244,412"/>
-<area shape="rect" id="node33" title=" " alt="" coords="987,533,1085,559"/>
-<area shape="rect" id="node42" title=" " alt="" coords="2577,313,2676,339"/>
-<area shape="rect" id="node43" title=" " alt="" coords="2701,313,2822,339"/>
-<area shape="rect" id="node44" title=" " alt="" coords="2255,313,2383,339"/>
-<area shape="rect" id="node45" title=" " alt="" coords="2407,313,2553,339"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1025,5,1177,45"/>
+<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="511,93,638,119"/>
+<area shape="rect" id="node7" href="$logger_8hpp.html" title=" " alt="" coords="1218,387,1299,412"/>
+<area shape="rect" id="node8" title=" " alt="" coords="2509,460,2581,485"/>
+<area shape="rect" id="node33" title=" " alt="" coords="769,387,820,412"/>
+<area shape="rect" id="node38" title=" " alt="" coords="844,387,919,412"/>
+<area shape="rect" id="node43" href="$Perlin_8hpp.html" title=" " alt="" coords="1541,313,1619,339"/>
+<area shape="rect" id="node48" title=" " alt="" coords="809,167,871,192"/>
+<area shape="rect" id="node49" title=" " alt="" coords="2671,93,2732,119"/>
+<area shape="rect" id="node50" title=" " alt="" coords="2756,93,2823,119"/>
+<area shape="rect" id="node3" href="$define_8hpp.html" title=" " alt="" coords="156,460,236,485"/>
+<area shape="rect" id="node4" href="$AThreadWrapper_8hpp.html" title=" " alt="" coords="51,167,194,192"/>
+<area shape="rect" id="node6" href="$WorldScene_8hpp.html" title=" " alt="" coords="319,313,435,339"/>
+<area shape="rect" id="node19" href="$Settings_8hpp.html" title=" " alt="" coords="231,167,326,192"/>
+<area shape="rect" id="node21" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="1707,167,1815,192"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1470,313,1517,339"/>
+<area shape="rect" id="node32" href="$Chunk_8hpp.html" title=" " alt="" coords="697,313,780,339"/>
+<area shape="rect" id="node36" href="$DebugGui_8hpp.html" title=" " alt="" coords="519,313,622,339"/>
+<area shape="rect" id="node42" href="$WorldGenerator_8hpp.html" title=" " alt="" coords="507,240,643,265"/>
+<area shape="rect" id="node5" title=" " alt="" coords="93,240,152,265"/>
+<area shape="rect" id="node14" href="$Camera_8hpp.html" title=" " alt="" coords="415,387,505,412"/>
+<area shape="rect" id="node15" title=" " alt="" coords="894,460,986,485"/>
+<area shape="rect" id="node16" title=" " alt="" coords="323,460,514,485"/>
+<area shape="rect" id="node17" title=" " alt="" coords="609,460,666,485"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1967,387,2025,412"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1649,460,1716,485"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1180,460,1249,485"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1274,460,1329,485"/>
+<area shape="rect" id="node12" title=" " alt="" coords="1353,460,1420,485"/>
+<area shape="rect" id="node13" title=" " alt="" coords="1076,460,1156,485"/>
+<area shape="rect" id="node20" title=" " alt="" coords="227,240,330,265"/>
+<area shape="rect" id="node22" href="$vk__define_8hpp.html" title=" " alt="" coords="2135,387,2236,412"/>
+<area shape="rect" id="node23" title=" " alt="" coords="2233,460,2311,485"/>
+<area shape="rect" id="node24" href="$vk__helper_8hpp.html" title=" " alt="" coords="2391,313,2494,339"/>
+<area shape="rect" id="node25" href="$VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="1734,240,1917,265"/>
+<area shape="rect" id="node27" href="$Command_8hpp.html" title=" " alt="" coords="2133,313,2238,339"/>
+<area shape="rect" id="node28" href="$Image_8hpp.html" title=" " alt="" coords="2144,240,2227,265"/>
+<area shape="rect" id="node29" href="$Descriptor_8hpp.html" title=" " alt="" coords="2262,313,2367,339"/>
+<area shape="rect" id="node30" href="$Swapchain_8hpp.html" title=" " alt="" coords="1895,313,2006,339"/>
+<area shape="rect" id="node31" href="$Pipeline_8hpp.html" title=" " alt="" coords="1677,313,1769,339"/>
+<area shape="rect" id="node35" href="$CreateMeshData_8hpp.html" title=" " alt="" coords="819,240,962,265"/>
+<area shape="rect" id="node37" title=" " alt="" coords="631,387,694,412"/>
+<area shape="rect" id="node39" title=" " alt="" coords="1139,240,1245,265"/>
+<area shape="rect" id="node40" title=" " alt="" coords="1269,240,1395,265"/>
+<area shape="rect" id="node41" title=" " alt="" coords="1419,240,1557,265"/>
+<area shape="rect" id="node34" title=" " alt="" coords="943,387,1041,412"/>
+<area shape="rect" id="node44" title=" " alt="" coords="1495,387,1593,412"/>
+<area shape="rect" id="node45" title=" " alt="" coords="1618,387,1739,412"/>
+<area shape="rect" id="node46" title=" " alt="" coords="1764,387,1892,412"/>
+<area shape="rect" id="node47" title=" " alt="" coords="1324,387,1471,412"/>
 </map>
