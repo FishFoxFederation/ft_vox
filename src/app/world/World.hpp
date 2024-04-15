@@ -43,6 +43,9 @@ public:
 
 	WorldGenerator m_worldGenerator;
 private:
+
+	typedef std::pair<std::atomic<bool>, std::future<void>> FuturePair;
+
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
@@ -66,7 +69,7 @@ private:
 	std::unordered_set<glm::ivec3>			m_chunk_render_set;
 	std::mutex								m_chunk_render_set_mutex;
 
-	std::queue<std::future<void>> 			m_chunk_futures;
+	std::queue<std::future<void>> 					m_chunk_futures;
 
 	void	doChunkGen(const int & number_of_chunks);
 	// void	doChunkLoadUnload(const int & number_of_chunks);

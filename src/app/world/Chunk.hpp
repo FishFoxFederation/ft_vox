@@ -37,6 +37,13 @@ public:
 	static	glm::ivec3	toCoord(const int & index);
 
 	const		glm::ivec3 position;
+
+	class ChunkStatus
+	{
+	public:
+	private:
+	};
+
 private:
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
