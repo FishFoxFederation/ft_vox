@@ -87,7 +87,7 @@ public:
 
 	/**
 	 * @brief Create a Mesh Data object
-	 * 
+	 *
 	 * @param pos the position of the chunk in the chunk map
 	 * @param size the number of chunks to create the mesh data
 	 * @param chunk_map the chunk map
@@ -252,7 +252,7 @@ public:
 
 	/**
 	 * @brief Create the mesh for a particular face for a specific range of blocks
-	 * 
+	 *
 	 * @param start the starting position
 	 * @param max_iter the maximum iteration for the x, y, z axis
 	 * @param offsets the offsets for the 4 vertices of the face
@@ -315,7 +315,6 @@ public:
 									{
 										break;
 									}
-									// face_data[offset.x][offset.y][offset.z] = {0, 0};
 									merge_count++;
 								}
 								// save the offset if it's the first iteration
@@ -379,7 +378,7 @@ public:
 						vertices.push_back({{x + offsets[1].x * saved_offset.x, y + offsets[1].y * saved_offset.y, z + offsets[1].z * saved_offset.z}, normal, {1.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
 						vertices.push_back({{x + offsets[2].x * saved_offset.x, y + offsets[2].y * saved_offset.y, z + offsets[2].z * saved_offset.z}, normal, {1.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
 						vertices.push_back({{x + offsets[3].x * saved_offset.x, y + offsets[3].y * saved_offset.y, z + offsets[3].z * saved_offset.z}, normal, {0.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
-						
+
 						indices.push_back(vertices.size() - 4);
 						indices.push_back(vertices.size() - 3);
 						indices.push_back(vertices.size() - 2);
