@@ -222,7 +222,7 @@ Draw the chunks</h3>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp; chunk_mesh : chunk_meshes)</div>
 <div class="line">{</div>
 <div class="line">    glm::dvec3 pos = chunk_mesh.transform.position();</div>
-<div class="line">    <span class="keywordflow">if</span> (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(<a class="code hl_define" href="Chunk_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a> / 2), <a class="code hl_define" href="Chunk_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a> / 2 * std::sqrt(3)))</div>
+<div class="line">    <span class="keywordflow">if</span> (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))</div>
 <div class="line">    {</div>
 <div class="line">        <span class="keywordflow">continue</span>;</div>
 <div class="line">    }</div>
@@ -260,7 +260,6 @@ Draw the chunks</h3>
 <div class="line">        1, 0, 0, 0</div>
 <div class="line">    );</div>
 <div class="line">}</div>
-<div class="ttc" id="aChunk_8hpp_html_aea3cfda4f3a9f978ec759f206cf186fe"><div class="ttname"><a href="Chunk_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a></div><div class="ttdeci">#define CHUNK_SIZE</div><div class="ttdef"><b>Definition:</b> Chunk.hpp:9</div></div>
 <div class="ttc" id="astructModelMatrice_html"><div class="ttname"><a href="structModelMatrice.html">ModelMatrice</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:102</div></div>
 <div class="ttc" id="astructModelMatrice_html_a3824832bb0d1687e930f25489a7c1dd5"><div class="ttname"><a href="structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5">ModelMatrice::model</a></div><div class="ttdeci">glm::mat4 model</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:103</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="draw_the_skybox"></a>

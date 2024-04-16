@@ -113,45 +113,47 @@ $(document).ready(function(){initNavTree('hashes_8hpp.html',''); initResizable()
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="CreateMeshData_8hpp_source.html">CreateMeshData.hpp</a>&quot;</code><br />
 <code>#include &lt;glm/vec3.hpp&gt;</code><br />
-<code>#include &lt;unordered_map&gt;</code><br />
+<code>#include &lt;glm/vec2.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for hashes.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="hashes_8hpp__incl.png" border="0" usemap="#asrc_2utils_2hashes_8hpp" alt=""/></div>
 <map name="asrc_2utils_2hashes_8hpp" id="asrc_2utils_2hashes_8hpp">
-<area shape="rect" title=" " alt="" coords="916,5,1055,31"/>
-<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="859,79,1002,104"/>
-<area shape="rect" title=" " alt="" coords="1003,233,1101,258"/>
-<area shape="rect" title=" " alt="" coords="1811,152,1922,177"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="681,313,761,339"/>
-<area shape="rect" href="vk__define_8hpp.html" title=" " alt="" coords="1685,152,1787,177"/>
-<area shape="rect" href="DebugGui_8hpp.html" title=" " alt="" coords="343,152,446,177"/>
-<area shape="rect" title=" " alt="" coords="491,313,583,339"/>
-<area shape="rect" href="Timer_8hpp.html" title=" " alt="" coords="642,152,721,177"/>
-<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1297,152,1378,177"/>
-<area shape="rect" title=" " alt="" coords="745,152,865,177"/>
-<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="889,152,972,177"/>
-<area shape="rect" title=" " alt="" coords="1680,233,1792,258"/>
-<area shape="rect" title=" " alt="" coords="1817,225,1973,265"/>
-<area shape="rect" title=" " alt="" coords="939,313,994,339"/>
-<area shape="rect" title=" " alt="" coords="2049,233,2127,258"/>
-<area shape="rect" href="Camera_8hpp.html" title=" " alt="" coords="248,233,339,258"/>
-<area shape="rect" title=" " alt="" coords="182,313,239,339"/>
-<area shape="rect" title=" " alt="" coords="363,233,426,258"/>
-<area shape="rect" title=" " alt="" coords="451,233,512,258"/>
-<area shape="rect" title=" " alt="" coords="723,233,773,258"/>
-<area shape="rect" title=" " alt="" coords="5,233,80,258"/>
-<area shape="rect" title=" " alt="" coords="105,233,173,258"/>
-<area shape="rect" title=" " alt="" coords="263,313,454,339"/>
-<area shape="rect" title=" " alt="" coords="637,233,699,258"/>
-<area shape="rect" title=" " alt="" coords="1584,233,1656,258"/>
-<area shape="rect" title=" " alt="" coords="1125,233,1192,258"/>
-<area shape="rect" title=" " alt="" coords="1216,233,1285,258"/>
-<area shape="rect" title=" " alt="" coords="1310,233,1365,258"/>
-<area shape="rect" title=" " alt="" coords="1389,233,1456,258"/>
-<area shape="rect" title=" " alt="" coords="1480,233,1560,258"/>
-<area shape="rect" href="Block_8hpp.html" title=" " alt="" coords="849,233,927,258"/>
-<area shape="rect" title=" " alt="" coords="856,313,915,339"/>
+<area shape="rect" title=" " alt="" coords="1978,5,2117,31"/>
+<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="1781,79,1924,104"/>
+<area shape="rect" title=" " alt="" coords="2230,233,2329,258"/>
+<area shape="rect" title=" " alt="" coords="2281,79,2379,104"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="2102,313,2182,339"/>
+<area shape="rect" href="vk__define_8hpp.html" title=" " alt="" coords="226,152,327,177"/>
+<area shape="rect" href="DebugGui_8hpp.html" title=" " alt="" coords="767,152,869,177"/>
+<area shape="rect" title=" " alt="" coords="1472,313,1564,339"/>
+<area shape="rect" href="Timer_8hpp.html" title=" " alt="" coords="1129,152,1208,177"/>
+<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1475,152,1556,177"/>
+<area shape="rect" title=" " alt="" coords="1793,152,1913,177"/>
+<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="1937,152,2019,177"/>
+<area shape="rect" title=" " alt="" coords="2044,152,2155,177"/>
+<area shape="rect" title=" " alt="" coords="341,233,453,258"/>
+<area shape="rect" title=" " alt="" coords="5,225,161,265"/>
+<area shape="rect" title=" " alt="" coords="740,313,795,339"/>
+<area shape="rect" title=" " alt="" coords="237,233,316,258"/>
+<area shape="rect" href="Camera_8hpp.html" title=" " alt="" coords="943,233,1034,258"/>
+<area shape="rect" title=" " alt="" coords="1071,313,1128,339"/>
+<area shape="rect" title=" " alt="" coords="856,233,919,258"/>
+<area shape="rect" title=" " alt="" coords="477,233,538,258"/>
+<area shape="rect" title=" " alt="" coords="1143,233,1194,258"/>
+<area shape="rect" title=" " alt="" coords="562,233,637,258"/>
+<area shape="rect" title=" " alt="" coords="661,233,729,258"/>
+<area shape="rect" title=" " alt="" coords="856,313,1047,339"/>
+<area shape="rect" title=" " alt="" coords="1058,233,1119,258"/>
+<area shape="rect" title=" " alt="" coords="1677,233,1749,258"/>
+<area shape="rect" title=" " alt="" coords="1218,233,1285,258"/>
+<area shape="rect" title=" " alt="" coords="1309,233,1378,258"/>
+<area shape="rect" title=" " alt="" coords="1403,233,1457,258"/>
+<area shape="rect" title=" " alt="" coords="1482,233,1549,258"/>
+<area shape="rect" title=" " alt="" coords="1573,233,1653,258"/>
+<area shape="rect" title=" " alt="" coords="1875,233,2001,258"/>
+<area shape="rect" href="Block_8hpp.html" title=" " alt="" coords="2025,233,2104,258"/>
+<area shape="rect" title=" " alt="" coords="2019,313,2078,339"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -181,6 +183,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1hash_3_01glm_1_1ivec3_01_4.html">std::hash&lt; glm::ivec3 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1hash_3_01glm_1_1ivec2_01_4.html">std::hash&lt; glm::ivec2 &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>

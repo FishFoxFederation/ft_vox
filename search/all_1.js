@@ -18,14 +18,15 @@ var searchData=
   ['block_5fproperty_5fsolid_15',['BLOCK_PROPERTY_SOLID',['../Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190',1,'Block.hpp']]],
   ['block_5ftextures_16',['block_textures',['../classVulkanAPI.html#a887ed6c1ccefd7ec65a67f8f7f117d11',1,'VulkanAPI']]],
   ['block_5ftextures_5fdescriptor_17',['block_textures_descriptor',['../classVulkanAPI.html#ae308bfb7f1637a8d8a0490a2faf798f2',1,'VulkanAPI']]],
-  ['blockarray_18',['BlockArray',['../classChunk.html#a9c906a1d4e73a9f9d8897714cf78b540',1,'Chunk']]],
+  ['blockarray_18',['BlockArray',['../classChunk.html#a88ee5de5ab052189e31a7446d6acac1e',1,'Chunk']]],
   ['blockid_19',['BlockID',['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509',1,'Block.hpp']]],
   ['blockproperties_20',['BlockProperties',['../Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c',1,'Block.hpp']]],
-  ['blocktype_21',['BlockType',['../Block_8hpp.html#aa38934da64b62c122965f1699b71e2cb',1,'Block.hpp']]],
-  ['blockupdatethread_22',['BlockUpdateThread',['../classBlockUpdateThread.html',1,'BlockUpdateThread'],['../classBlockUpdateThread.html#afc8b69c912bcadcac529322cdd24a8cb',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;&amp;other)=delete'],['../classBlockUpdateThread.html#ac5e8f510884616c75e89bac2ee17b75c',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;other)=delete'],['../classBlockUpdateThread.html#aaa07deff23590436696625188336b853',1,'BlockUpdateThread::BlockUpdateThread(WorldScene &amp;worldScene, VulkanAPI &amp;vulkanAPI, ThreadPool &amp;threadPool)']]],
-  ['blockupdatethread_2ecpp_23',['BlockUpdateThread.cpp',['../BlockUpdateThread_8cpp.html',1,'']]],
-  ['blockupdatethread_2ehpp_24',['BlockUpdateThread.hpp',['../BlockUpdateThread_8hpp.html',1,'']]],
-  ['blockvertex_25',['BlockVertex',['../structBlockVertex.html',1,'']]],
-  ['buffer_26',['buffer',['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh']]],
-  ['buffer_5fmemory_27',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]]
+  ['blocks_5fper_5fchunk_21',['BLOCKS_PER_CHUNK',['../Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3',1,'Chunk.hpp']]],
+  ['blocktype_22',['BlockType',['../Block_8hpp.html#aa38934da64b62c122965f1699b71e2cb',1,'Block.hpp']]],
+  ['blockupdatethread_23',['BlockUpdateThread',['../classBlockUpdateThread.html',1,'BlockUpdateThread'],['../classBlockUpdateThread.html#afc8b69c912bcadcac529322cdd24a8cb',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;&amp;other)=delete'],['../classBlockUpdateThread.html#ac5e8f510884616c75e89bac2ee17b75c',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;other)=delete'],['../classBlockUpdateThread.html#aaa07deff23590436696625188336b853',1,'BlockUpdateThread::BlockUpdateThread(WorldScene &amp;worldScene, VulkanAPI &amp;vulkanAPI, ThreadPool &amp;threadPool)']]],
+  ['blockupdatethread_2ecpp_24',['BlockUpdateThread.cpp',['../BlockUpdateThread_8cpp.html',1,'']]],
+  ['blockupdatethread_2ehpp_25',['BlockUpdateThread.hpp',['../BlockUpdateThread_8hpp.html',1,'']]],
+  ['blockvertex_26',['BlockVertex',['../structBlockVertex.html',1,'']]],
+  ['buffer_27',['buffer',['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh']]],
+  ['buffer_5fmemory_28',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]]
 ];

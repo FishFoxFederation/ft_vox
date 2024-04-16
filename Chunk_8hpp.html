@@ -113,6 +113,8 @@ $(document).ready(function(){initNavTree('Chunk_8hpp.html',''); initResizable();
 <div class="contents">
 <div class="textblock"><code>#include &lt;array&gt;</code><br />
 <code>#include &lt;glm/vec3.hpp&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
+<code>#include &lt;condition_variable&gt;</code><br />
 <code>#include &quot;<a class="el" href="Block_8hpp_source.html">Block.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="define_8hpp_source.html">define.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -120,13 +122,15 @@ Include dependency graph for Chunk.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="Chunk_8hpp__incl.png" border="0" usemap="#asrc_2app_2world_2Chunk_8hpp" alt=""/></div>
 <map name="asrc_2app_2world_2Chunk_8hpp" id="asrc_2app_2world_2Chunk_8hpp">
-<area shape="rect" title=" " alt="" coords="89,5,255,31"/>
+<area shape="rect" title=" " alt="" coords="207,5,372,31"/>
 <area shape="rect" title=" " alt="" coords="5,79,56,104"/>
 <area shape="rect" title=" " alt="" coords="80,79,179,104"/>
-<area shape="rect" href="Block_8hpp.html" title=" " alt="" coords="261,79,339,104"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="172,152,252,177"/>
-<area shape="rect" title=" " alt="" coords="277,152,331,177"/>
-<area shape="rect" title=" " alt="" coords="356,152,415,177"/>
+<area shape="rect" title=" " alt="" coords="203,79,261,104"/>
+<area shape="rect" title=" " alt="" coords="285,79,411,104"/>
+<area shape="rect" href="Block_8hpp.html" title=" " alt="" coords="494,79,573,104"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="405,152,485,177"/>
+<area shape="rect" title=" " alt="" coords="510,152,565,177"/>
+<area shape="rect" title=" " alt="" coords="589,152,648,177"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -161,21 +165,87 @@ This graph shows which files directly or indirectly include this file:</div>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html">Chunk</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk_1_1ChunkStatus.html">Chunk::ChunkStatus</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:aea3cfda4f3a9f978ec759f206cf186fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a>&#160;&#160;&#160;16</td></tr>
-<tr class="separator:aea3cfda4f3a9f978ec759f206cf186fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a953c741ba256712c6f72ae2c30518a20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a>&#160;&#160;&#160;256</td></tr>
+<tr class="separator:a953c741ba256712c6f72ae2c30518a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78f1b70acf986005160e8bb23fb610a5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a>&#160;&#160;&#160;16</td></tr>
+<tr class="separator:a78f1b70acf986005160e8bb23fb610a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84cf7bf9436462576770ca3359cc2100"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a>&#160;&#160;&#160;16</td></tr>
+<tr class="separator:a84cf7bf9436462576770ca3359cc2100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43f266fc7456ae5714f5a528b80b3ba3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a>&#160;&#160;&#160;<a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a> * <a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a> * <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a></td></tr>
+<tr class="separator:a43f266fc7456ae5714f5a528b80b3ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f076f66a2e2b8c32529115c9c1c0a74"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a6f076f66a2e2b8c32529115c9c1c0a74">CHUNK_SIZE_IVEC3</a>&#160;&#160;&#160;glm::ivec3(<a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a>, <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a>)</td></tr>
+<tr class="separator:a6f076f66a2e2b8c32529115c9c1c0a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="aea3cfda4f3a9f978ec759f206cf186fe" name="aea3cfda4f3a9f978ec759f206cf186fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea3cfda4f3a9f978ec759f206cf186fe">&#9670;&#160;</a></span>CHUNK_SIZE</h2>
+<a id="a43f266fc7456ae5714f5a528b80b3ba3" name="a43f266fc7456ae5714f5a528b80b3ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43f266fc7456ae5714f5a528b80b3ba3">&#9670;&#160;</a></span>BLOCKS_PER_CHUNK</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CHUNK_SIZE&#160;&#160;&#160;16</td>
+          <td class="memname">#define BLOCKS_PER_CHUNK&#160;&#160;&#160;<a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a> * <a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a> * <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6f076f66a2e2b8c32529115c9c1c0a74" name="a6f076f66a2e2b8c32529115c9c1c0a74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f076f66a2e2b8c32529115c9c1c0a74">&#9670;&#160;</a></span>CHUNK_SIZE_IVEC3</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHUNK_SIZE_IVEC3&#160;&#160;&#160;glm::ivec3(<a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a>, <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a78f1b70acf986005160e8bb23fb610a5" name="a78f1b70acf986005160e8bb23fb610a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78f1b70acf986005160e8bb23fb610a5">&#9670;&#160;</a></span>CHUNK_X_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHUNK_X_SIZE&#160;&#160;&#160;16</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a953c741ba256712c6f72ae2c30518a20" name="a953c741ba256712c6f72ae2c30518a20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a953c741ba256712c6f72ae2c30518a20">&#9670;&#160;</a></span>CHUNK_Y_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHUNK_Y_SIZE&#160;&#160;&#160;256</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a84cf7bf9436462576770ca3359cc2100" name="a84cf7bf9436462576770ca3359cc2100"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84cf7bf9436462576770ca3359cc2100">&#9670;&#160;</a></span>CHUNK_Z_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHUNK_Z_SIZE&#160;&#160;&#160;16</td>
         </tr>
       </table>
 </div><div class="memdoc">

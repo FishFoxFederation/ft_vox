@@ -168,9 +168,10 @@ $(document).ready(function(){initNavTree('ThreadPool_8hpp_source.html',''); init
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    std::mutex                          m_queue_mutex;</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::condition_variable             m_cond;</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    std::vector&lt;std::thread&gt;            m_threads;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">void</span> worker_thread();</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>};</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_class" href="classJoinThreads.html">JoinThreads</a>                         m_joiner;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">void</span> worker_thread();</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>};</div>
 <div class="ttc" id="aclassJoinThreads_html"><div class="ttname"><a href="classJoinThreads.html">JoinThreads</a></div><div class="ttdef"><b>Definition:</b> ThreadPool.hpp:13</div></div>
 <div class="ttc" id="aclassJoinThreads_html_a1091279804075cc09628131a7691bdb5"><div class="ttname"><a href="classJoinThreads.html#a1091279804075cc09628131a7691bdb5">JoinThreads::~JoinThreads</a></div><div class="ttdeci">~JoinThreads()</div><div class="ttdef"><b>Definition:</b> ThreadPool.hpp:19</div></div>
 <div class="ttc" id="aclassJoinThreads_html_a8fb417fdbcbf6a2fbaed27189473ecfe"><div class="ttname"><a href="classJoinThreads.html#a8fb417fdbcbf6a2fbaed27189473ecfe">JoinThreads::JoinThreads</a></div><div class="ttdeci">JoinThreads(std::vector&lt; std::thread &gt; &amp;threads)</div><div class="ttdef"><b>Definition:</b> ThreadPool.hpp:15</div></div>
