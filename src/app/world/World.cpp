@@ -115,12 +115,10 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 
 
 	// glm::ivec3 playerChunk = glm::ivec3(m_player.position()) / CHUNK_SIZE;
-	glm::ivec3 nextPlayerChunk = glm::ivec3(nextPlayerPosition) / CHUNK_SIZE;
+	glm::ivec3 nextPlayerChunk = glm::ivec3(nextPlayerPosition) / CHUNK_SIZE_IVEC3;
 	// glm::ivec3 playerChunkDiff = playerChunk - nextPlayerChunk;
 
 	glm::ivec2 nextPlayerChunk2D = glm::ivec2(nextPlayerChunk.x, nextPlayerChunk.z);
-
-	if (nextPlayerChunk == glm::ivec3(m_player.position()) / CHUNK_SIZE) return;
 
 	/**************************************************************
 	 * LOAD CHUNKS
@@ -136,19 +134,17 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 
 			if(!m_loaded_columns.contains(chunkPos2D))
 			{
+				// LOG_DEBUG("Loading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
 				std::future<void> future = m_threadPool.submit([this, chunkPos2D](){
 					/**************************************************************
 					 * CHUNK LOADING FUNCTION
 					 **************************************************************/
 					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-					std::vector<Chunk> column = m_worldGenerator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
-					for(auto chunk : column)
-						chunk.setMeshID(0);
+					Chunk chunk = m_worldGenerator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
 					{
 						std::lock_guard<std::mutex> lock(m_chunks_mutex);
 						m_loaded_columns.insert(chunkPos2D);
-						for(auto chunk : column)
-							m_chunks.insert(std::make_pair(glm::ivec3(chunk.x(), chunk.y() , chunk.z()), std::move(chunk)));
+						m_chunks.insert(std::make_pair(glm::ivec3(chunk.x(), chunk.y() , chunk.z()), std::move(chunk)));
 					}
 					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
@@ -160,39 +156,41 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 
 	for(auto pos2D : m_loaded_columns)
 	{
-		float distance = glm::distance(glm::vec3(pos2D.x, 0, pos2D.y), glm::vec3(nextPlayerChunk.x, 0, nextPlayerChunk.z));
-		// const glm::ivec3 chunkPos = glm::ivec3(pos2D.x, 0, pos2D.y);
+		const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
+		float distance = glm::distance(glm::vec3(pos3D), glm::vec3(nextPlayerChunk.x, 0, nextPlayerChunk.z));
 		/**************************************************************
 		 * UNLOAD CHUNKS
 		 **************************************************************/
-		if (distance > LOAD_DISTANCE)
+		if (distance > LOAD_DISTANCE + 1)
 		{
-
+			if (!m_chunks.at(pos3D).status.isClear())
+			{
+				LOG_DEBUG("Chunk is busy: " << pos2D.x << " " << pos2D.y);
+				continue;
+			}
+			LOG_DEBUG("Unloading chunk: " << pos2D.x << " " << pos2D.y);
+			m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::DELETING);
+			// m_loaded_columns.erase(pos2D);
+			// m_visible_columns.erase(pos2D);
 			m_chunk_futures.push(m_threadPool.submit([this, pos2D]()
 			{
 				/**************************************************************
 				 * CHUNK UNLOADING FUNCTION
 				 **************************************************************/
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-				std::array<uint64_t, WORLD_Y_MAX / CHUNK_SIZE> mesh_ids;
+				uint64_t mesh_id;
+				const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
 				{
 					std::lock_guard<std::mutex> lock(m_chunks_mutex);
-					std::lock_guard<std::mutex> lock2(m_chunk_unload_set_mutex);
-					std::lock_guard<std::mutex> lock3(m_visible_columns_mutex);
+					std::lock_guard<std::mutex> lock2(m_visible_columns_mutex);
 
+					mesh_id = m_chunks.at(pos3D).getMeshID();
+					m_chunks.erase(pos3D);
 					m_loaded_columns.erase(pos2D);
 					m_visible_columns.erase(pos2D);
-
-					for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
-					{
-						const glm::ivec3 pos = glm::ivec3(pos2D.x, y, pos2D.y);
-						mesh_ids[y] = m_chunks.at(pos).getMeshID();
-						m_chunks.erase(pos);
-					}
 				}
-				for(auto & mesh_id : mesh_ids)
-					m_worldScene.removeMesh(mesh_id);
-				m_vulkanAPI.destroyMeshes(std::vector<uint64_t>(mesh_ids.begin(), mesh_ids.end()));
+				m_worldScene.removeMesh(mesh_id);
+				m_vulkanAPI.destroyMesh(mesh_id);
 				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 				DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 			}));
@@ -201,52 +199,77 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		/**************************************************************
 		 * RENDER CHUNKS
 		 * *******************************************************/
-		else if (distance < RENDER_DISTANCE && !m_visible_columns.contains(pos2D))
+		else if (distance < RENDER_DISTANCE
+			&& !m_visible_columns.contains(pos2D))
 		{
-			m_chunk_futures.push(m_threadPool.submit([this, pos2D]()
+			if (m_chunks.at(pos3D).status.isSet(Chunk::ChunkStatus::MESHING))
+			{
+				LOG_DEBUG("Chunk is already meshing: " << pos2D.x << " " << pos2D.y);
+				continue;
+			}
+			LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
+			/*********
+			 * SETTING STATUSES
+			*********/
+			//set chunks as working
+			for(int x = -1; x < 2; x++)
+			{
+				for(int z = -1; z < 2; z++)
+				{
+					glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(pos2D.x, 0, pos2D.y);
+					if(m_chunks.contains(chunkPos))
+						m_chunks.at(chunkPos).status.addWorking();
+				}
+			}
+			//set the current chunk as meshing
+			m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::MESHING);
+
+
+			/********
+			* PUSHING TASK TO THREAD POOL 
+			********/
+			m_chunk_futures.push(m_threadPool.submit([this, pos2D, pos3D]()
 			{
 				/**************************************************************
 				 * CALCULATE MESH FUNCTION
 				 **************************************************************/
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-				std::vector<CreateMeshData> mesh_data;
 				{
 					std::lock_guard<std::mutex> lock(m_visible_columns_mutex);
-					if (m_visible_columns.contains(pos2D))
-						return;
 					m_visible_columns.insert(pos2D);
+					LOG_DEBUG("Chunk added to visible set " << pos2D.x << " " << pos2D.y);
 				}
-				{
-					//create all mesh data needed ( pointers to neighbors basically )
-					std::lock_guard<std::mutex> lock(m_chunks_mutex);
-					// for(int y = 0 ; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
-					// {
-					// 	const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
-					// 	mesh_data.push_back(CreateMeshData(pos3D, m_chunks, {1, 1, 1}));
-					// }
-					const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
-					mesh_data.push_back(CreateMeshData(pos3D, {1, WORLD_Y_MAX / CHUNK_SIZE, 1}, m_chunks));
-				}
+				//create all mesh data needed ( pointers to neighbors basically )
+				std::unique_lock<std::mutex> lock(m_chunks_mutex);
+				CreateMeshData mesh_data(pos3D, {1, 1, 1}, m_chunks);
+				Chunk & chunk = m_chunks.at(pos3D);
+				lock.unlock();
 
-				// for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
-				// {
-				// 	const glm::ivec3 pos3D = glm::ivec3(pos2D.x, y, pos2D.y);
+				mesh_data.create(); //CPU intensive task to create the mesh
+				//storing mesh in the GPU
+				uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data.vertices, mesh_data.indices);
 
-				// 	mesh_data[y].create();
-				// 	uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data[y].vertices, mesh_data[y].indices);
-
-				// 	mesh_data[y].chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT]->setMeshID(mesh_id);
-				// 	if(mesh_id != VulkanAPI::no_mesh_id)
-				// 		m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE));
-				// }
-				const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
-
-				mesh_data[0].create();
-				uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data[0].vertices, mesh_data[0].indices);
-
-				mesh_data[0].chunks[CreateMeshData::NEUT][CreateMeshData::NEUT][CreateMeshData::NEUT]->setMeshID(mesh_id);
+				chunk.setMeshID(mesh_id);
+				//adding mesh id to the scene so it is rendered
 				if(mesh_id != VulkanAPI::no_mesh_id)
-					m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE));
+					m_worldScene.addMeshData(mesh_id, glm::vec3(pos3D * CHUNK_SIZE_IVEC3));
+
+				/*********************
+				 * SETTING STATUSES
+				**********************/
+				for (auto vec2D : mesh_data.chunks)
+				{
+					for (auto vec1D : vec2D)
+					{
+						for(auto & chunk_ptr : vec1D)
+						{
+							if (chunk_ptr == nullptr)
+								continue;
+							chunk_ptr->status.removeWorking();
+						}
+					}
+				}
+				chunk.status.clearFlag(Chunk::ChunkStatus::MESHING);
 
 				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
@@ -449,4 +472,5 @@ void World::update(glm::dvec3 nextPlayerPosition)
 	// doChunkLoadUnload(20);
 
 	m_player.setPosition(nextPlayerPosition);
+	// LOG_DEBUG("NEXT ITERATION");
 }

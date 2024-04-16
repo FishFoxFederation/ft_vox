@@ -19,11 +19,11 @@ Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int 
 	Chunk chunk(glm::ivec3(x, y, z));
 	(void)x, (void)y;
 
-	for(int blockX = 0; blockX < CHUNK_SIZE; blockX++)
+	for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 	{
-		for(int blockY = 0; blockY < CHUNK_SIZE; blockY++)
+		for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 		{
-			for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
+			for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 			{
 				chunk.setBlock(blockX, blockY, blockZ, BlockID::Stone);
 			}
@@ -32,30 +32,28 @@ Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int 
 	return chunk;
 }
 
-std::vector<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int & z)
+Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
 {
-	std::vector<Chunk> column;
+	Chunk column(glm::ivec3(x, 0, z));
 
-	for(int y = 0; y < WORLD_Y_MAX / CHUNK_SIZE; y++)
-		column.push_back(Chunk(glm::ivec3(x, y, z)));
 
-	for(int blockX = 0; blockX < CHUNK_SIZE; blockX++)
+	for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 	{
-		for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
+		for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 		{
 			//generate the relief value for the whole column
 			float value = generateReliefValue(glm::ivec2(
-				blockX + x * CHUNK_SIZE,
-				blockZ + z * CHUNK_SIZE
+				blockX + x * CHUNK_X_SIZE,
+				blockZ + z * CHUNK_Z_SIZE
 			));
 
-			for(int blockY = 0; blockY < WORLD_Y_MAX; blockY++)
+			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 			{
 				
 				glm::ivec3 position = glm::ivec3(
-					blockX + x * CHUNK_SIZE,
+					blockX + x * CHUNK_X_SIZE,
 					blockY,
-					blockZ + z * CHUNK_SIZE
+					blockZ + z * CHUNK_Z_SIZE
 				);
 				BlockID to_set;
 
@@ -71,7 +69,7 @@ std::vector<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int 
 				if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
 					to_set = BlockID::Air;
 				// try {
-				column[position.y / CHUNK_SIZE].setBlock(blockX, position.y % CHUNK_SIZE, blockZ, to_set);
+				column.setBlock(blockX, blockY, blockZ, to_set);
 				// } catch (std::exception & e)
 				// {
 					// LOG_ERROR("EXCEPTION: " << e.what());
@@ -88,16 +86,16 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 	Chunk chunk(glm::ivec3(x, y, z));
 	(void)x, (void)y;
 
-	for(int blockX = 0; blockX < CHUNK_SIZE; blockX++)
+	for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 	{
-		for(int blockY = 0; blockY < CHUNK_SIZE; blockY++)
+		for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 		{
-			for(int blockZ = 0; blockZ < CHUNK_SIZE; blockZ++)
+			for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 			{
 				glm::ivec3 position = glm::ivec3(
-					blockX + x * CHUNK_SIZE,
-					blockY + y * CHUNK_SIZE,
-					blockZ + z * CHUNK_SIZE
+					blockX + x * CHUNK_X_SIZE,
+					blockY + y * CHUNK_Y_SIZE,
+					blockZ + z * CHUNK_Z_SIZE
 				);
 				BlockID to_set;
 
