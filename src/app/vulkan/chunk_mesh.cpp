@@ -71,7 +71,12 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	mesh.index_count = static_cast<uint32_t>(indices.size());
 	mesh.memory_size = buffer_size;
 
-	meshes.emplace(next_mesh_id, mesh);
+	uint64_t mesh_id;
+	{
+		std::lock_guard<std::mutex> lock(mesh_mutex);
+		mesh_id = next_mesh_id++;
+		meshes.emplace(mesh_id, mesh);
+	}
 
 	timer.stop(0);
 	DebugGui::store_mesh_time = timer.average<std::chrono::microseconds>(0);
@@ -82,7 +87,7 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	DebugGui::store_mesh_copy_buffer_time = timer.average<std::chrono::microseconds>(5);
 	DebugGui::store_mesh_destroy_buffer_time = timer.average<std::chrono::microseconds>(6);
 
-	return next_mesh_id++;
+	return mesh_id;
 }
 
 void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
@@ -105,6 +110,7 @@ void VulkanAPI::destroyMeshes()
 	meshes_still_in_use.reserve(mesh_ids_to_destroy.size());
 	for (auto & id: mesh_ids_to_destroy)
 	{
+		std::lock_guard<std::mutex> lock(mesh_mutex);
 		auto mesh = meshes.find(id);
 		if (mesh != meshes.end() && mesh->second.is_used == false)
 		{

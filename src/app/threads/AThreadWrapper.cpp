@@ -9,14 +9,18 @@ AThreadWrapper::AThreadWrapper():
 
 void AThreadWrapper::launch()
 {
-	try {
-	init();
-
-	while (!m_thread.get_stop_token().stop_requested())
+	try
 	{
-		loop();
+		init();
+
+		while (!m_thread.get_stop_token().stop_requested())
+		{
+			loop();
+		}
 	}
-	} catch (const std::exception & e) {
+	catch (const std::exception & e)
+	{
 		LOG_ERROR("Thread exception: " << e.what());
 	}
+	LOG_DEBUG("Thread stopped");
 }

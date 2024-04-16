@@ -6,6 +6,8 @@
 #include <ctime>
 #include <iomanip>
 #include <filesystem>
+#include <memory>
+#include <mutex>
 
 #define LOG_CRITICAL(...) logger << Logger::Level::CRITICAL << __VA_ARGS__ << std::endl
 #define LOG_ERROR(...) logger << Logger::Level::ERROR << __VA_ARGS__ << std::endl
@@ -13,6 +15,8 @@
 #define LOG_INFO(...) logger << Logger::Level::INFO << __VA_ARGS__ << std::endl
 #define LOG_DEBUG(...) logger << Logger::Level::DEBUG << __VA_ARGS__ << std::endl
 #define LOG_TRACE(...) logger << Logger::Level::TRACE << __VA_ARGS__ << std::endl
+
+// #define LOG_CRITICAL_FMT(fmt, ...) logger << Logger::Level::CRITICAL << fmt << std::endl, __VA_ARGS__
 
 /**
  * @brief A class that represents a file used for output with RAII.
@@ -24,9 +28,9 @@ public:
 
 	/**
 	 * @brief Construct a new FileOutput object which opens a file.
-	 * 
+	 *
 	 * @param path The path to the file.
-	 * 
+	 *
 	 * @throw std::runtime_error if the file could not be opened.
 	*/
 	FileOutput(const std::filesystem::path & path);
@@ -42,8 +46,6 @@ public:
 	~FileOutput();
 
 };
-
-// TODO: make the logger thread-safe.
 
 /**
  * @brief A class for logging messages to the console and to files.
@@ -75,25 +77,25 @@ public:
 
 	/**
 	 * @brief Construct a new Logger object and open 5 different files for logging. If the files exist, they will be overwritten.
-	 * 
+	 *
 	 * @param path The path to the log files.
-	 * 
+	 *
 	 * @throw std::runtime_error if a log file could not be opened.
 	*/
 	Logger(const std::filesystem::path & path);
 
 	/**
 	 * @brief Open 5 different files for logging. If the files exist, they will be overwritten.
-	 * 
+	 *
 	 * @param path The path to the log files.
-	 * 
+	 *
 	 * @throw std::runtime_error if a log file could not be opened.
 	*/
 	void configure(const std::filesystem::path & path);
 
 	/**
 	 * @brief Set the minimum level of messages to log to the console.
-	 * 
+	 *
 	 * @param level The level to set.
 	*/
 	void setLevel(Level level);
@@ -105,30 +107,30 @@ public:
 
 	/**
 	 * @brief Enable or disable timestamps.
-	 * 
+	 *
 	 * @param enabled Whether or not to enable timestamps.
 	*/
 	void setTimestamp(bool enabled);
 
 	/**
 	 * @brief Set the message level.
-	 * 
+	 *
 	 * @param level The level to set.
-	 * 
+	 *
 	 * @throw std::runtime_error if a message is currently being logged.
 	*/
 	Logger & operator<<(Level level);
 
 	/**
 	 * @brief Transfer a manipulator to the stringstream buffer waiting to be flushed. If the manipulator is std::endl, the buffer will be flushed.
-	 * 
+	 *
 	 * @param manipulator The manipulator to transfer.
 	*/
 	Logger & operator<<(std::ostream & (*manipulator)(std::ostream &));
 
 	/**
 	 * @brief Transfer a argument to the stringstream buffer waiting to be flushed.
-	 * 
+	 *
 	 * @param arg The argument to transfer.
 	*/
 	template <typename T>
@@ -169,6 +171,8 @@ private:
 	 * @brief Whether or not timestamps are enabled.
 	*/
 	bool m_timestamp_enabled = true;
+
+	std::mutex m_mutex;
 
 	/**
 	 * @brief A map of the different levels of logging to their string representations.
