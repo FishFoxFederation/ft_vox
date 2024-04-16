@@ -32,6 +32,8 @@ RenderThread::RenderThread(
 
 RenderThread::~RenderThread()
 {
+	this->m_thread.request_stop();
+	this->m_thread.join();
 }
 
 void RenderThread::init()

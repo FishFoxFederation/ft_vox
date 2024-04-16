@@ -22,6 +22,8 @@ UpdateThread::UpdateThread(
 
 UpdateThread::~UpdateThread()
 {
+	this->m_thread.request_stop();
+	this->m_thread.join();
 }
 
 void UpdateThread::init()
