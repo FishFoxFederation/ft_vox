@@ -144,12 +144,15 @@ void Swapchain::clear()
 		for (VkImageView image_view : image_views)
 		{
 			vkDestroyImageView(m_device, image_view, nullptr);
+			image_view = VK_NULL_HANDLE;
 		}
 
 		if (swapchain != VK_NULL_HANDLE)
 		{
 			vkDestroySwapchainKHR(m_device, swapchain, nullptr);
+			swapchain = VK_NULL_HANDLE;
 		}
+		m_device = VK_NULL_HANDLE;
 	}
 }
 

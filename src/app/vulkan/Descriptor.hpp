@@ -29,6 +29,8 @@ public:
 
 	void update(VkDevice device, VkImageView imageView, VkSampler sampler, VkImageLayout imageLayout);
 
+	void clear();
+
 	VkDescriptorSetLayout layout;
 	VkDescriptorPool pool;
 	std::vector<VkDescriptorSet> sets;
@@ -38,7 +40,5 @@ private:
 
 	VkDevice m_device;
 	CreateInfo m_info;
-
-	void clear();
 
 };

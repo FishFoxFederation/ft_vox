@@ -592,24 +592,28 @@ void Image::transitionLayout(
 
 void Image::clear()
 {
-	if (image != VK_NULL_HANDLE)
+	if (m_device != VK_NULL_HANDLE)
 	{
-		vkDestroyImage(m_device, image, nullptr);
-		image = VK_NULL_HANDLE;
-	}
-	if (memory != VK_NULL_HANDLE)
-	{
-		vkFreeMemory(m_device, memory, nullptr);
-		memory = VK_NULL_HANDLE;
-	}
-	if (view != VK_NULL_HANDLE)
-	{
-		vkDestroyImageView(m_device, view, nullptr);
-		view = VK_NULL_HANDLE;
-	}
-	if (sampler != VK_NULL_HANDLE)
-	{
-		vkDestroySampler(m_device, sampler, nullptr);
-		sampler = VK_NULL_HANDLE;
+		if (image != VK_NULL_HANDLE)
+		{
+			vkDestroyImage(m_device, image, nullptr);
+			image = VK_NULL_HANDLE;
+		}
+		if (memory != VK_NULL_HANDLE)
+		{
+			vkFreeMemory(m_device, memory, nullptr);
+			memory = VK_NULL_HANDLE;
+		}
+		if (view != VK_NULL_HANDLE)
+		{
+			vkDestroyImageView(m_device, view, nullptr);
+			view = VK_NULL_HANDLE;
+		}
+		if (sampler != VK_NULL_HANDLE)
+		{
+			vkDestroySampler(m_device, sampler, nullptr);
+			sampler = VK_NULL_HANDLE;
+		}
+		m_device = VK_NULL_HANDLE;
 	}
 }

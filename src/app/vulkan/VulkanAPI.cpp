@@ -111,6 +111,30 @@ VulkanAPI::~VulkanAPI()
 	vkFreeCommandBuffers(device, transfer_command_pool, 1, &transfer_command_buffers);
 	vkDestroyCommandPool(device, transfer_command_pool, nullptr);
 
+	// Bad design, but better than nothing until I find a better solution
+	{
+		color_attachement.clear();
+		depth_attachement.clear();
+		shadow_map_depth_attachement.clear();
+		block_textures.clear();
+		skybox_cube_map.clear();
+
+		camera_descriptor.clear();
+		block_textures_descriptor.clear();
+		cube_map_descriptor.clear();
+		shadow_map_descriptor.clear();
+		test_image_descriptor.clear();
+		sun_descriptor.clear();
+
+		chunk_pipeline.clear();
+		line_pipeline.clear();
+		skybox_pipeline.clear();
+		shadow_pipeline.clear();
+		test_image_pipeline.clear();
+
+		swapchain.clear();
+	}
+
 	vkDestroyDevice(device, nullptr);
 
 	#ifndef NDEBUG

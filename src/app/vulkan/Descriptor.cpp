@@ -99,22 +99,20 @@ Descriptor::~Descriptor()
 
 void Descriptor::clear()
 {
-	if (set != VK_NULL_HANDLE)
+	if (m_device != VK_NULL_HANDLE)
 	{
-		vkFreeDescriptorSets(m_device, pool, 1, &set);
-		set = VK_NULL_HANDLE;
-	}
+		if (pool != VK_NULL_HANDLE)
+		{
+			vkDestroyDescriptorPool(m_device, pool, nullptr);
+			pool = VK_NULL_HANDLE;
+		}
 
-	if (pool != VK_NULL_HANDLE)
-	{
-		vkDestroyDescriptorPool(m_device, pool, nullptr);
-		pool = VK_NULL_HANDLE;
-	}
-
-	if (layout != VK_NULL_HANDLE)
-	{
-		vkDestroyDescriptorSetLayout(m_device, layout, nullptr);
-		layout = VK_NULL_HANDLE;
+		if (layout != VK_NULL_HANDLE)
+		{
+			vkDestroyDescriptorSetLayout(m_device, layout, nullptr);
+			layout = VK_NULL_HANDLE;
+		}
+		m_device = VK_NULL_HANDLE;
 	}
 }
 

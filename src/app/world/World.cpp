@@ -492,7 +492,7 @@ void World::update(glm::dvec3 nextPlayerPosition)
 		// 	m_futures.erase(m_futures.begin());
 		// }
 		// LOG_DEBUG("Waiting for futures");
-		LOG_DEBUG("current id : " << m_future_id);
+		// LOG_DEBUG("current id : " << m_future_id);
 		std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 		while(!m_finished_futures.empty())
 		{
