@@ -24,6 +24,7 @@ void DebugGui::updateImGui()
 			{
 				ImGui::Text("Fps: %d", fps.load());
 				ImGui::Text("XYZ: %.3f %.3f %.3f", player_position.get().x, player_position.get().y, player_position.get().z);
+				ImGui::Text("Chunk: %f %f %f", std::floor(player_position.get().x / 16) , std::floor(player_position.get().y / 256), std::floor(player_position.get().z / 16));
 
 				ImGui::Separator();
 
