@@ -3,7 +3,7 @@
 #include <vulkan/vulkan.h>
 
 #include <map>
-
+#include <mutex>
 
 class VulaknMemoryAllocator
 {
@@ -40,5 +40,7 @@ private:
 	std::map<VkDeviceMemory, VkDeviceSize> m_allocated_memory;
 
 	VkDeviceSize m_allocated_memory_size = 0;
+
+	mutable std::mutex m_mutex;
 
 };

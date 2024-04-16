@@ -49,8 +49,6 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	LOG_TRACE("Start rendering loop.");
-
 	updateTime();
 
 	int width, height;
@@ -112,7 +110,10 @@ void RenderThread::loop()
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
 
-	DebugGui::chunk_mesh_count = vk.meshes.size();
+	{
+		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+		DebugGui::chunk_mesh_count = vk.meshes.size();
+	}
 
 	VK_CHECK(
 		vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
@@ -123,9 +124,12 @@ void RenderThread::loop()
 	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
 	// reset mesh usage by frame info
-	for (auto & mesh : vk.meshes)
 	{
-		mesh.second.used_by_frame[vk.current_frame] = false;
+		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+		for (auto & mesh : vk.meshes)
+		{
+			mesh.second.used_by_frame[vk.current_frame] = false;
+		}
 	}
 
 	VK_CHECK(
@@ -188,9 +192,17 @@ void RenderThread::loop()
 
 	for (auto & chunk_mesh : chunk_meshes)
 	{
+		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+
 		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
 		{
 			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+			continue;
+		}
+
+		if (vk.meshes[chunk_mesh.id].buffer == VK_NULL_HANDLE)
+		{
+			LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
 			continue;
 		}
 
@@ -283,9 +295,17 @@ void RenderThread::loop()
 
 	for (auto & chunk_mesh : chunk_meshes)
 	{
+		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+
 		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
 		{
 			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+			continue;
+		}
+
+		if (vk.meshes[chunk_mesh.id].buffer == VK_NULL_HANDLE)
+		{
+			LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
 			continue;
 		}
 
@@ -336,42 +356,42 @@ void RenderThread::loop()
 
 
 	// Draw the skybox
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-	// 	vk.camera_descriptor.sets[vk.current_frame],
-	// 	vk.cube_map_descriptor.set
-	// };
+	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.cube_map_descriptor.set
+	};
 
-	// vkCmdBindDescriptorSets(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.skybox_pipeline.layout,
-	// 	0,
-	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
-	// 	skybox_descriptor_sets.data(),
-	// 	0,
-	// 	nullptr
-	// );
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.skybox_pipeline.layout,
+		0,
+		static_cast<uint32_t>(skybox_descriptor_sets.size()),
+		skybox_descriptor_sets.data(),
+		0,
+		nullptr
+	);
 
-	// ModelMatrice camera_model_matrice = {};
-	// camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	// vkCmdPushConstants(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	vk.skybox_pipeline.layout,
-	// 	VK_SHADER_STAGE_VERTEX_BIT,
-	// 	0,
-	// 	sizeof(ModelMatrice),
-	// 	&camera_model_matrice
-	// );
+	ModelMatrice camera_model_matrice = {};
+	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.skybox_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(ModelMatrice),
+		&camera_model_matrice
+	);
 
-	// vkCmdDraw(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	36,
-	// 	1,
-	// 	0,
-	// 	0
-	// );
+	vkCmdDraw(
+		vk.draw_command_buffers[vk.current_frame],
+		36,
+		1,
+		0,
+		0
+	);
 
 
 	// Draw test image
@@ -427,8 +447,6 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	LOG_TRACE("Acquire the next swap chain image.");
-
 	// Acquire the next swap chain image
 	uint32_t image_index;
 	VkResult result = vkAcquireNextImageKHR(
@@ -451,7 +469,6 @@ void RenderThread::loop()
 	}
 
 
-	LOG_TRACE("Copy the color image to the swap chain image with blit.");
 	// Copy the color image to the swap chain image with blit
 	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
 
@@ -544,7 +561,6 @@ void RenderThread::loop()
 	VkCommandBufferBeginInfo imgui_begin_info = {};
 	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-	LOG_TRACE("Begin ImGui command buffer.");
 	VK_CHECK(
 		vkBeginCommandBuffer(vk.imgui_command_buffers[vk.current_frame], &imgui_begin_info),
 		"Failed to begin recording command buffer"
@@ -591,7 +607,6 @@ void RenderThread::loop()
 	vkCmdBeginRendering(vk.imgui_command_buffers[vk.current_frame], &imgui_render_info);
 
 
-	LOG_TRACE("Begin ImGui frame.");
 	ImGui_ImplVulkan_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -652,7 +667,6 @@ void RenderThread::loop()
 		imgui_submit_info
 	};
 
-	LOG_TRACE("Submit all command buffers.");
 	VK_CHECK(
 		vkQueueSubmit(vk.graphics_queue, static_cast<uint32_t>(submit_infos.size()), submit_infos.data(), vk.in_flight_fences[vk.current_frame]),
 		"Failed to submit all command buffers"
@@ -672,7 +686,6 @@ void RenderThread::loop()
 	present_info.pSwapchains = &vk.swapchain.swapchain;
 	present_info.pImageIndices = &image_index;
 
-	LOG_TRACE("Present to screen.");
 	result = vkQueuePresentKHR(vk.present_queue, &present_info);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)

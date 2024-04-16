@@ -69,6 +69,7 @@ void Logger::setTimestamp(bool enabled)
 
 Logger & Logger::operator<<(Level level)
 {
+	m_mutex.lock();
 	if (!m_current_msg.str().empty())
 	{
 		std::runtime_error("Cannot change message level while a message is being logged. Please flush the message first with std::endl.");
@@ -83,6 +84,7 @@ Logger & Logger::operator<<(std::ostream & (*manipulator)(std::ostream &))
 	if (manipulator == static_cast<std::ostream & (*)(std::ostream &)>(std::endl))
 	{
 		_flush();
+		m_mutex.unlock();
 	}
 	else
 	{

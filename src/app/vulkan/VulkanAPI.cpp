@@ -59,10 +59,13 @@ VulkanAPI::~VulkanAPI()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
-	for (auto & [key, mesh] : meshes)
 	{
-		vkDestroyBuffer(device, mesh.buffer, nullptr);
-		vma.freeMemory(device, mesh.buffer_memory, nullptr);
+		std::lock_guard<std::mutex> lock(mesh_mutex);
+		for (auto & [key, mesh] : meshes)
+		{
+			vkDestroyBuffer(device, mesh.buffer, nullptr);
+			vma.freeMemory(device, mesh.buffer_memory, nullptr);
+		}
 	}
 
 	for (int i = 0; i < max_frames_in_flight; i++)
