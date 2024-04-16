@@ -46,6 +46,8 @@ public:
 		VkSurfaceKHR surface
 	);
 
+	void clear();
+
 	VkSwapchainKHR swapchain;
 	VkExtent2D extent;
 	VkFormat image_format;
@@ -55,7 +57,5 @@ public:
 private:
 
 	VkDevice m_device;
-
-	void clear();
 
 };

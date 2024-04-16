@@ -44,12 +44,4 @@ void Application::run()
 	{
 		glfwWaitEvents();
 	}
-
-	m_render_thread.m_thread.request_stop();
-	m_update_thread.m_thread.request_stop();
-	m_block_update_thread.m_thread.request_stop();
-
-	m_render_thread.m_thread.join();
-	m_update_thread.m_thread.join();
-	m_block_update_thread.m_thread.join();
 }

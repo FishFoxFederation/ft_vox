@@ -263,13 +263,6 @@ public:
 		clear();
 	}
 
-	VkPipeline pipeline;
-	VkPipelineLayout layout;
-
-private:
-
-	VkDevice m_device;
-
 	void clear()
 	{
 		if (m_device != VK_NULL_HANDLE)
@@ -277,14 +270,24 @@ private:
 			if (pipeline != VK_NULL_HANDLE)
 			{
 				vkDestroyPipeline(m_device, pipeline, nullptr);
+				pipeline = VK_NULL_HANDLE;
 			}
 
 			if (layout != VK_NULL_HANDLE)
 			{
 				vkDestroyPipelineLayout(m_device, layout, nullptr);
+				layout = VK_NULL_HANDLE;
 			}
+			m_device = VK_NULL_HANDLE;
 		}
 	}
+
+	VkPipeline pipeline;
+	VkPipelineLayout layout;
+
+private:
+
+	VkDevice m_device;
 
 	std::vector<char> readFile(const std::string & filename)
 	{

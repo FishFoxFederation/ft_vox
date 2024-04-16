@@ -62,6 +62,8 @@ public:
 		VkPipelineStageFlags dst_stage = VK_PIPELINE_STAGE_NONE
 	);
 
+	void clear();
+
 	VkImage image;
 	VkDeviceMemory memory;
 	VkImageView view;
@@ -79,6 +81,4 @@ private:
 	VkDevice m_device;
 	VkPhysicalDevice m_physical_device;
 
-
-	void clear();
 };
