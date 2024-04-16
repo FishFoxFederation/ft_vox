@@ -95,10 +95,10 @@ public:
 	CreateMeshData(const glm::ivec3 & pos, const glm::ivec3 & size, ChunkMap & chunk_map):
 		chunks(size.x + 2, std::vector<std::vector<Chunk *>>(size.y + 2, std::vector<Chunk *>(size.z + 2, nullptr))),
 		face_data(
-			size.x * CHUNK_SIZE,
+			size.x * CHUNK_X_SIZE,
 			std::vector<std::vector<FaceData>>(
-				size.y * CHUNK_SIZE,
-				std::vector<FaceData>(size.z * CHUNK_SIZE, {0, 0})
+				size.y * CHUNK_Y_SIZE,
+				std::vector<FaceData>(size.z * CHUNK_Z_SIZE, {0, 0})
 			)
 		),
 		size(size)
@@ -113,7 +113,9 @@ public:
 					const auto & it = chunk_map.find(chunk_pos);
 
 					if (it != chunk_map.end())
+					{
 						chunks[x + 1][y + 1][z + 1] = &it->second;
+					}
 				}
 			}
 		}
@@ -132,13 +134,13 @@ public:
 	 */
 	BlockID block(const int x, const int y, const int z)
 	{
-		const int chunk_x = (x + CHUNK_SIZE) / CHUNK_SIZE;
-		const int chunk_y = (y + CHUNK_SIZE) / CHUNK_SIZE;
-		const int chunk_z = (z + CHUNK_SIZE) / CHUNK_SIZE;
+		const int chunk_x = (x + CHUNK_X_SIZE) / CHUNK_X_SIZE;
+		const int chunk_y = (y + CHUNK_Y_SIZE) / CHUNK_Y_SIZE;
+		const int chunk_z = (z + CHUNK_Z_SIZE) / CHUNK_Z_SIZE;
 
-		const int block_x = (x + CHUNK_SIZE) % CHUNK_SIZE;
-		const int block_y = (y + CHUNK_SIZE) % CHUNK_SIZE;
-		const int block_z = (z + CHUNK_SIZE) % CHUNK_SIZE;
+		const int block_x = (x + CHUNK_X_SIZE) % CHUNK_X_SIZE;
+		const int block_y = (y + CHUNK_Y_SIZE) % CHUNK_Y_SIZE;
+		const int block_z = (z + CHUNK_Z_SIZE) % CHUNK_Z_SIZE;
 
 		if (chunks[chunk_x][chunk_y][chunk_z] == nullptr)
 		{
@@ -152,7 +154,7 @@ public:
 	{
 		static Timer timer; timer.start();
 
-		glm::ivec3 size_block = size * CHUNK_SIZE;
+		glm::ivec3 size_block = size * CHUNK_SIZE_IVEC3;
 
 		for (int x = 0; x < size_block.x; x++)
 		{
