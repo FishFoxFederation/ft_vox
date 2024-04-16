@@ -24,6 +24,13 @@ Chunk::Chunk(Chunk && other)
 {
 }
 
+Chunk & Chunk::operator=(const Chunk && other)
+{
+	m_mesh_id = other.m_mesh_id;
+	m_blocks = std::move(other.m_blocks);
+	return *this;
+}
+
 Chunk::~Chunk()
 {
 

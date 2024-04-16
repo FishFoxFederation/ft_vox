@@ -26,6 +26,7 @@ public:
 		const static inline uint64_t WORKING = 1 << 1;
 		const static inline uint64_t MESHING = 1 << 2;
 		const static inline uint64_t DELETING = 1 << 3;
+		const static inline uint64_t LOADING = 1 << 4;
 
 		ChunkStatus()
 			: m_flags(CLEAR), m_counter(0)
