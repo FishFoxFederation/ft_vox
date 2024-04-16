@@ -58,6 +58,7 @@ private:
 	std::mutex							m_queue_mutex;
 	std::condition_variable				m_cond;
 	std::vector<std::thread>			m_threads;
+	JoinThreads							m_joiner;
 
 	void worker_thread();
 };

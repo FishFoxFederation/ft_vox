@@ -1,8 +1,8 @@
 #include "ThreadPool.hpp"
 
 ThreadPool::ThreadPool()
+: m_done(false), m_joiner(m_threads)
 {
-	m_done = false;
 	unsigned const thread_count = std::thread::hardware_concurrency();
 	// unsigned const thread_count = 4;
 	try

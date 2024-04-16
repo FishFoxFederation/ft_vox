@@ -16,6 +16,8 @@ BlockUpdateThread::BlockUpdateThread(
 
 BlockUpdateThread::~BlockUpdateThread()
 {
+	this->m_thread.request_stop();
+	this->m_thread.join();
 }
 
 void BlockUpdateThread::init()
