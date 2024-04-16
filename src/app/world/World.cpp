@@ -114,11 +114,13 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 	std::lock_guard<std::mutex> lock4(m_visible_columns_mutex);
 
 
-	// glm::ivec3 playerChunk = glm::ivec3(m_player.position()) / CHUNK_SIZE;
+	// glm::ivec3 playerChunk = glm::ivec3(m_player.position()) / CHUNK_SIZE_IVEC3;
 	glm::ivec3 nextPlayerChunk = glm::ivec3(nextPlayerPosition) / CHUNK_SIZE_IVEC3;
 	// glm::ivec3 playerChunkDiff = playerChunk - nextPlayerChunk;
 
 	glm::ivec2 nextPlayerChunk2D = glm::ivec2(nextPlayerChunk.x, nextPlayerChunk.z);
+
+	// if (nextPlayerChunk == playerChunk) return;
 
 	/**************************************************************
 	 * LOAD CHUNKS
@@ -131,25 +133,37 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		{
 			//transform the relative position to the real position
 			glm::ivec2 chunkPos2D = glm::ivec2(x, z) + nextPlayerChunk2D;
-
+			glm::ivec3 chunkPos3D = glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
 			if(!m_loaded_columns.contains(chunkPos2D))
 			{
-				// LOG_DEBUG("Loading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
-				std::future<void> future = m_threadPool.submit([this, chunkPos2D](){
+				auto it = m_chunks.find(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
+				if (it != m_chunks.end())
+					continue;
+				m_chunks.insert(std::make_pair(chunkPos3D, Chunk(chunkPos3D)));
+				uint64_t current_id = m_future_id++;
+				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id]()
+				{
 					/**************************************************************
 					 * CHUNK LOADING FUNCTION
 					 **************************************************************/
 					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+					// LOG_DEBUG("Loading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
 					Chunk chunk = m_worldGenerator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
 					{
 						std::lock_guard<std::mutex> lock(m_chunks_mutex);
 						m_loaded_columns.insert(chunkPos2D);
-						m_chunks.insert(std::make_pair(glm::ivec3(chunk.x(), chunk.y() , chunk.z()), std::move(chunk)));
+						m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())) = std::move(chunk);
+					}
+					
+					{
+						std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+						m_finished_futures.push(current_id);
+						// LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
 					}
 					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 				});
-				m_chunk_futures.push(std::move(future));
+				m_futures.insert(std::make_pair(current_id, std::move(future)));
 			}
 		}
 	}
@@ -167,14 +181,15 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		{
 			if (!m_chunks.at(pos3D).status.isClear())
 			{
-				LOG_DEBUG("Chunk is busy: " << pos2D.x << " " << pos2D.y);
+				// LOG_DEBUG("Chunk is busy: " << pos2D.x << " " << pos2D.y);
 				continue;
 			}
-			LOG_DEBUG("Unloading chunk: " << pos2D.x << " " << pos2D.y);
+			// LOG_DEBUG("Unloading chunk: " << pos2D.x << " " << pos2D.y);
 			m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::DELETING);
 			// m_loaded_columns.erase(pos2D);
 			// m_visible_columns.erase(pos2D);
-			m_chunk_futures.push(m_threadPool.submit([this, pos2D]()
+			uint64_t current_id = m_future_id++;
+			std::future<void> future = m_threadPool.submit([this, pos2D, current_id]()
 			{
 				/**************************************************************
 				 * CHUNK UNLOADING FUNCTION
@@ -193,23 +208,25 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				}
 				m_worldScene.removeMesh(mesh_id);
 				m_vulkanAPI.destroyMesh(mesh_id);
+
+				{
+					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+					m_finished_futures.push(current_id);
+				}
+
 				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 				DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
-			}));
+			});
+			m_futures.insert(std::make_pair(current_id, std::move(future)));
 		}
 
 		/**************************************************************
 		 * RENDER CHUNKS
 		 * *******************************************************/
 		else if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE
-			&& !m_visible_columns.contains(pos2D))
+			&& !m_visible_columns.contains(pos2D)
+			&& !m_chunks.at(pos3D).status.isSet(Chunk::ChunkStatus::MESHING))
 		{
-			if (m_chunks.at(pos3D).status.isSet(Chunk::ChunkStatus::MESHING))
-			{
-				LOG_DEBUG("Chunk is already meshing: " << pos2D.x << " " << pos2D.y);
-				continue;
-			}
-			LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
 			/*********
 			 * SETTING STATUSES
 			*********/
@@ -230,16 +247,18 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 			/********
 			* PUSHING TASK TO THREAD POOL 
 			********/
-			m_chunk_futures.push(m_threadPool.submit([this, pos2D, pos3D]()
+			uint64_t current_id = m_future_id++;
+			std::future<void> future = m_threadPool.submit([this, pos2D, pos3D, current_id]()
 			{
 				/**************************************************************
 				 * CALCULATE MESH FUNCTION
 				 **************************************************************/
+				LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 				{
 					std::lock_guard<std::mutex> lock(m_visible_columns_mutex);
 					m_visible_columns.insert(pos2D);
-					LOG_DEBUG("Chunk added to visible set " << pos2D.x << " " << pos2D.y);
+					// LOG_DEBUG("Chunk added to visible set " << pos2D.x << " " << pos2D.y);
 				}
 				//create all mesh data needed ( pointers to neighbors basically )
 				std::unique_lock<std::mutex> lock(m_chunks_mutex);
@@ -275,7 +294,13 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 
 				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
-			}));
+				{
+					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+					m_finished_futures.push(current_id);
+					LOG_DEBUG("Chunk meshed: " << pos2D.x << " " << pos2D.y);
+				}
+			});
+			m_futures.insert(std::make_pair(current_id, std::move(future)));
 		}
 	}
 }
@@ -460,13 +485,24 @@ void World::update(glm::dvec3 nextPlayerPosition)
 	// addChunksToLoadUnloadQueue(nextPlayerPosition);
 	addColumnToLoadUnloadQueue(nextPlayerPosition);
 
-	while(!m_chunk_futures.empty())
 	{
-		m_chunk_futures.front().wait();
-		m_chunk_futures.front().get();
-		m_chunk_futures.pop();
+		// while(!m_futures.empty())
+		// {
+		// 	m_futures.begin()->second.get();
+		// 	m_futures.erase(m_futures.begin());
+		// }
+		// LOG_DEBUG("Waiting for futures");
+		LOG_DEBUG("current id : " << m_future_id);
+		std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+		while(!m_finished_futures.empty())
+		{
+			uint64_t id = m_finished_futures.front();
+			m_finished_futures.pop();
+			auto & future = m_futures.at(id);
+			future.get();
+			m_futures.erase(id);
+		}
 	}
-
 	// if (m_chunk_gen_set.size() > 0 || m_chunk_unload_set.size() > 0 || m_chunk_render_set.size() > 0)
 	// {
 	// 	LOG_INFO("Chunk gen: " << m_chunk_gen_set.size() << " Chunk unload: " << m_chunk_unload_set.size() << " Chunk render: " << m_chunk_render_set.size());
