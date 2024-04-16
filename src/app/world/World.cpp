@@ -157,11 +157,13 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 	for(auto pos2D : m_loaded_columns)
 	{
 		const glm::ivec3 pos3D = glm::ivec3(pos2D.x, 0, pos2D.y);
-		float distance = glm::distance(glm::vec3(pos3D), glm::vec3(nextPlayerChunk.x, 0, nextPlayerChunk.z));
+		// float distance = glm::distance(glm::vec3(pos3D), glm::vec3(nextPlayerChunk.x, 0, nextPlayerChunk.z));
+		float distanceX = std::abs(pos2D.x - nextPlayerChunk2D.x);
+		float distanceZ = std::abs(pos2D.y - nextPlayerChunk2D.y);
 		/**************************************************************
 		 * UNLOAD CHUNKS
 		 **************************************************************/
-		if (distance > LOAD_DISTANCE + 1)
+		if (distanceX > LOAD_DISTANCE || distanceZ > LOAD_DISTANCE) 
 		{
 			if (!m_chunks.at(pos3D).status.isClear())
 			{
@@ -199,7 +201,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		/**************************************************************
 		 * RENDER CHUNKS
 		 * *******************************************************/
-		else if (distance < RENDER_DISTANCE
+		else if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE
 			&& !m_visible_columns.contains(pos2D))
 		{
 			if (m_chunks.at(pos3D).status.isSet(Chunk::ChunkStatus::MESHING))
