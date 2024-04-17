@@ -31,7 +31,7 @@ public:
 
 	virtual ~AThreadWrapper() = default;
 
-// protected:
+protected:
 	std::jthread m_thread;
 private:
 
