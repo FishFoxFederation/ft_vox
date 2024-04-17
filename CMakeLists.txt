@@ -8,11 +8,14 @@ project(ft_vox
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+
 add_executable(${PROJECT_NAME})
 
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
+		# -g3
 		-Wall
 		-Wextra
 		-Werror
