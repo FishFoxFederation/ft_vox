@@ -49,6 +49,12 @@ struct Block
 		"assets/textures/grass_side.jpg", // 2
 		"assets/textures/dirt.jpg", // 3
 		"assets/textures/stone.jpg" // 4
+		// "assets/textures/debug/white.png",
+		// "assets/textures/debug/right.png",
+		// "assets/textures/debug/left.png",
+		// "assets/textures/debug/front.png",
+		// "assets/textures/debug/top.png",
+		// "assets/textures/debug/back_bottom.png",
 	};
 
 	static const Data & getData(const BlockID id)
@@ -61,6 +67,11 @@ struct Block
 		case BlockID::Stone: return Stone;
 		default: return Air;
 		}
+	}
+
+	static bool hasProperty(const BlockID id, const BlockProperties property)
+	{
+		return (getData(id).properties & property) == property;
 	}
 
 	static inline const Data Air = {

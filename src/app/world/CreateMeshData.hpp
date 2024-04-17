@@ -21,6 +21,7 @@ struct BlockVertex
 	glm::vec3 normal;
 	glm::vec2 texCoord;
 	uint32_t texLayer;
+	uint8_t ao;
 
 	static VkVertexInputBindingDescription getBindingDescription()
 	{
@@ -34,7 +35,7 @@ struct BlockVertex
 
 	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
 	{
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(4);
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(5);
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
@@ -56,12 +57,17 @@ struct BlockVertex
 		attributeDescriptions[3].format = VK_FORMAT_R32_UINT;
 		attributeDescriptions[3].offset = offsetof(BlockVertex, texLayer);
 
+		attributeDescriptions[4].binding = 0;
+		attributeDescriptions[4].location = 4;
+		attributeDescriptions[4].format = VK_FORMAT_R8_UINT;
+		attributeDescriptions[4].offset = offsetof(BlockVertex, ao);
+
 		return attributeDescriptions;
 	}
 
 	bool operator==(const BlockVertex& other) const
 	{
-		return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
+		return pos == other.pos && normal == other.normal && texCoord == other.texCoord && texLayer == other.texLayer && ao == other.ao;
 	}
 };
 
@@ -128,10 +134,13 @@ public:
 		NEG = 0
 	};
 
-	/**
-	 * @brief Get the block at a position relative to the starting chunk
-	 *
-	 */
+	enum class Dimensions
+	{
+		X = 0,
+		Y = 1,
+		Z = 2
+	};
+
 	BlockID block(const int x, const int y, const int z)
 	{
 		const int chunk_x = (x + CHUNK_X_SIZE) / CHUNK_X_SIZE;
@@ -150,6 +159,11 @@ public:
 		return chunks[chunk_x][chunk_y][chunk_z]->getBlock(block_x, block_y, block_z);
 	}
 
+	BlockID block(const glm::ivec3 & pos)
+	{
+		return block(pos.x, pos.y, pos.z);
+	}
+
 	void create()
 	{
 		static Timer timer; timer.start();
@@ -160,29 +174,25 @@ public:
 		{
 			// right face
 			createFace(
+				static_cast<int>(Dimensions::Z),
+				static_cast<int>(Dimensions::Y),
 				{x, 0, 0},
 				{1, size_block.y, size_block.z},
-				{
-					glm::ivec3{1, 0, 1},
-					glm::ivec3{1, 0, 0},
-					glm::ivec3{1, 1, 0},
-					glm::ivec3{1, 1, 1}
-				},
-				{1, 0, 0},
+				{1, 0, 2, 1, 2, 3},
+				{0, 2, 3, 0, 3, 1},
+				{1, 0, 0}, 1,
 				BLOCK_FACE_RIGHT
 			);
 
 			// left face
 			createFace(
+				static_cast<int>(Dimensions::Z),
+				static_cast<int>(Dimensions::Y),
 				{x, 0, 0},
 				{1, size_block.y, size_block.z},
-				{
-					glm::ivec3{0, 0, 0},
-					glm::ivec3{0, 0, 1},
-					glm::ivec3{0, 1, 1},
-					glm::ivec3{0, 1, 0}
-				},
-				{-1, 0, 0},
+				{0, 1, 2, 1, 3, 2},
+				{0, 1, 3, 0, 3, 2},
+				{1, 0, 0}, -1,
 				BLOCK_FACE_LEFT
 			);
 		}
@@ -191,113 +201,127 @@ public:
 		{
 			// top face
 			createFace(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Z),
 				{0, y, 0},
 				{size_block.x, 1, size_block.z},
-				{
-					glm::ivec3{1, 1, 0},
-					glm::ivec3{0, 1, 0},
-					glm::ivec3{0, 1, 1},
-					glm::ivec3{1, 1, 1}
-				},
-				{0, 1, 0},
+				{1, 0, 2, 1, 2, 3},
+				{0, 2, 3, 0, 3, 1},
+				{0, 1, 0}, 1,
 				BLOCK_FACE_TOP
 			);
 
 			// bottom face
 			createFace(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Z),
 				{0, y, 0},
 				{size_block.x, 1, size_block.z},
-				{
-					glm::ivec3{0, 0, 0},
-					glm::ivec3{1, 0, 0},
-					glm::ivec3{1, 0, 1},
-					glm::ivec3{0, 0, 1}
-				},
-				{0, -1, 0},
+				{0, 1, 2, 1, 3, 2},
+				{0, 1, 3, 0, 3, 2},
+				{0, 1, 0}, -1,
 				BLOCK_FACE_BOTTOM
 			);
 		}
 
 		for (int z = 0; z < size_block.z; z++)
 		{
-			// back face
-			createFace(
-				{0, 0, z},
-				{size_block.x, size_block.y, 1},
-				{
-					glm::ivec3{0, 0, 1},
-					glm::ivec3{1, 0, 1},
-					glm::ivec3{1, 1, 1},
-					glm::ivec3{0, 1, 1}
-				},
-				{0, 0, 1},
-				BLOCK_FACE_BACK
-			);
-
 			// front face
 			createFace(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Y),
 				{0, 0, z},
 				{size_block.x, size_block.y, 1},
-				{
-					glm::ivec3{1, 0, 0},
-					glm::ivec3{0, 0, 0},
-					glm::ivec3{0, 1, 0},
-					glm::ivec3{1, 1, 0}
-				},
-				{0, 0, -1},
+				{0, 1, 2, 1, 3, 2},
+				{0, 1, 3, 0, 3, 2},
+				{0, 0, 1}, 1,
 				BLOCK_FACE_FRONT
+			);
+
+			// back face
+			createFace(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Y),
+				{0, 0, z},
+				{size_block.x, size_block.y, 1},
+				{1, 0, 2, 1, 2, 3},
+				{0, 2, 3, 0, 3, 1},
+				{0, 0, 1}, -1,
+				BLOCK_FACE_BACK
 			);
 		}
 		timer.stop();
 		DebugGui::create_mesh_time = timer.average<std::chrono::microseconds>();
 	}
 
-	/**
-	 * @brief Create the mesh for a particular face for a specific range of blocks
-	 *
-	 * @param start the starting position
-	 * @param max_iter the maximum iteration for the x, y, z axis
-	 * @param offsets the offsets for the 4 vertices of the face
-	 * @param normal the normal of the face
-	 * @param face the texture index for the face
-	 */
 	void createFace(
+		const int dim_1,
+		const int dim_2,
 		const glm::ivec3 & start,
 		const glm::ivec3 & max_iter,
-		const std::array<glm::ivec3, 4> & offsets,
-		const glm::ivec3 & normal,
+		const std::array<int, 6> & indices_order,
+		const std::array<int, 6> & indices_order_fliped,
+		const glm::ivec3 & abs_normal,
+		const int normal_signe,
 		const int face
 	)
 	{
-		glm::ivec3 final_max_iter = start + max_iter;
-		for (int x = start.x; x < final_max_iter.x; x++)
+		const glm::ivec3 normal = abs_normal * normal_signe;
+
+		glm::ivec3 tmp = normal_signe > 0 ? normal : glm::ivec3{0, 0, 0};
+		std::array<glm::ivec3, 4> offsets = { tmp, tmp, tmp, tmp };
+		offsets[1][dim_1] = 1;
+		offsets[2][dim_2] = 1;
+		offsets[3][dim_1] = 1;
+		offsets[3][dim_2] = 1;
+
+		std::array<glm::vec2, 4> tex_coord_factor = {
+			glm::vec2(1.0f, 1.0f),
+			glm::vec2(0.0f, 1.0f),
+			glm::vec2(1.0f, 0.0f),
+			glm::vec2(0.0f, 0.0f)
+		};
+
+		if (face == BLOCK_FACE_LEFT || face == BLOCK_FACE_FRONT || face == BLOCK_FACE_BOTTOM)
 		{
-			for (int y = start.y; y < final_max_iter.y; y++)
+			tex_coord_factor = {
+				glm::vec2(0.0f, 1.0f),
+				glm::vec2(1.0f, 1.0f),
+				glm::vec2(0.0f, 0.0f),
+				glm::vec2(1.0f, 0.0f)
+			};
+		}
+
+		glm::ivec3 final_max_iter = start + max_iter;
+		glm::ivec3 pos;
+		for (pos.x = start.x; pos.x < final_max_iter.x; pos.x++)
+		{
+			for (pos.y = start.y; pos.y < final_max_iter.y; pos.y++)
 			{
-				for (int z = start.z; z < final_max_iter.z; z++)
+				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					BlockID block_id = block(x, y, z);
-					BlockID neighbor_id = block(x + normal.x, y + normal.y, z + normal.z);
+					BlockID block_id = block(pos.x, pos.y, pos.z);
+					BlockID neighbor_id = block(pos.x + normal.x, pos.y + normal.y, pos.z + normal.z);
 
 					if (block_id != BlockID::Air && neighbor_id == BlockID::Air)
 					{
-						face_data[x][y][z] = {Block::getData(block_id).texture[face], 0};
+						face_data[pos.x][pos.y][pos.z] = {Block::getData(block_id).texture[face], getAmbientOcclusion(pos + normal, dim_1, dim_2)};
 					}
 					else
 					{
-						face_data[x][y][z] = {0, 0};
+						face_data[pos.x][pos.y][pos.z] = {0, 0};
 					}
 				}
 			}
 		}
 
-		for (int x = start.x; x < final_max_iter.x; x++)
+		for (pos.x = start.x; pos.x < final_max_iter.x; pos.x++)
 		{
-			for (int y = start.y; y < final_max_iter.y; y++)
+			for (pos.y = start.y; pos.y < final_max_iter.y; pos.y++)
 			{
-				for (int z = start.z; z < final_max_iter.z; z++)
+				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					FaceData data = face_data[x][y][z];
+					FaceData data = face_data[pos.x][pos.y][pos.z];
 
 					if (data.texture != 0)
 					{
@@ -306,12 +330,12 @@ public:
 						// if so, then merge the blocks into one mesh
 						glm::ivec3 offset{0, 0, 0};
 						glm::ivec3 saved_offset{0, 0, 0};
-						for (offset.x = x; offset.x < final_max_iter.x; offset.x++)
+						for (offset.x = pos.x; offset.x < final_max_iter.x; offset.x++)
 						{
-							for (offset.y = y; offset.y < final_max_iter.y && (saved_offset.y == 0 || offset.y < saved_offset.y); offset.y++)
+							for (offset.y = pos.y; offset.y < final_max_iter.y && (saved_offset.y == 0 || offset.y < saved_offset.y); offset.y++)
 							{
 								// continue if still in chunk bounds and if either it's the first iteration or the offset is less than the saved offset
-								for (offset.z = z; offset.z < final_max_iter.z && (saved_offset.z == 0 || offset.z < saved_offset.z); offset.z++)
+								for (offset.z = pos.z; offset.z < final_max_iter.z && (saved_offset.z == 0 || offset.z < saved_offset.z); offset.z++)
 								{
 									if (face_data[offset.x][offset.y][offset.z] != data)
 									{
@@ -343,55 +367,114 @@ public:
 						}
 						saved_offset.x = offset.x;
 
-						for (offset.x = x; offset.x < saved_offset.x; offset.x++)
+						// saved_offset = glm::ivec3(pos.x + 1, pos.y + 1, pos.z + 1);
+
+						for (offset.x = pos.x; offset.x < saved_offset.x; offset.x++)
 						{
-							for (offset.y = y; offset.y < saved_offset.y; offset.y++)
+							for (offset.y = pos.y; offset.y < saved_offset.y; offset.y++)
 							{
-								for (offset.z = z; offset.z < saved_offset.z; offset.z++)
+								for (offset.z = pos.z; offset.z < saved_offset.z; offset.z++)
 								{
 									face_data[offset.x][offset.y][offset.z] = {0, 0};
 								}
 							}
 						}
 
-						saved_offset -= glm::ivec3(x, y, z);
+						saved_offset -= pos;
 
 						if (normal.x + normal.y + normal.z < 0)
 						{
 							saved_offset += normal;
 						}
 
-						glm::vec2 texCoord = {0.0f, 0.0f};
-						if (normal.x != 0)
-						{
-							texCoord = {saved_offset.z, saved_offset.y};
-						}
-						else if (normal.y != 0)
-						{
-							texCoord = {saved_offset.x, saved_offset.z};
-						}
-						else if (normal.z != 0)
-						{
-							texCoord = {saved_offset.x, saved_offset.y};
-						}
-						// texCoord = {1.0f, 1.0f};
+						glm::vec2 tex_coord = { saved_offset[dim_1], saved_offset[dim_2] };
+						// tex_coord = {1.0f, 1.0f};
 
-						vertices.push_back({{x + offsets[0].x * saved_offset.x, y + offsets[0].y * saved_offset.y, z + offsets[0].z * saved_offset.z}, normal, {0.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
-						vertices.push_back({{x + offsets[1].x * saved_offset.x, y + offsets[1].y * saved_offset.y, z + offsets[1].z * saved_offset.z}, normal, {1.0f * texCoord.x, 1.0f * texCoord.y}, data.texture});
-						vertices.push_back({{x + offsets[2].x * saved_offset.x, y + offsets[2].y * saved_offset.y, z + offsets[2].z * saved_offset.z}, normal, {1.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
-						vertices.push_back({{x + offsets[3].x * saved_offset.x, y + offsets[3].y * saved_offset.y, z + offsets[3].z * saved_offset.z}, normal, {0.0f * texCoord.x, 0.0f * texCoord.y}, data.texture});
+						for (int i = 0; i < 4; i++)
+						{
+							vertices.push_back({pos + offsets[i] * saved_offset, normal, tex_coord_factor[i] * tex_coord, data.texture, data.ao[i]});
+						}
 
-						indices.push_back(vertices.size() - 4);
-						indices.push_back(vertices.size() - 3);
-						indices.push_back(vertices.size() - 2);
-						indices.push_back(vertices.size() - 4);
-						indices.push_back(vertices.size() - 2);
-						indices.push_back(vertices.size() - 1);
-
+						if (data.ao[0] + data.ao[3] > data.ao[1] + data.ao[2]) // if the first triangle has more ambient occlusion than the second triangle
+						{
+							for (int i = 0; i < 6; i++)
+							{
+								indices.push_back(vertices.size() - 4 + indices_order[i]);
+							}
+						}
+						else
+						{
+							for (int i = 0; i < 6; i++)
+							{
+								indices.push_back(vertices.size() - 4 + indices_order_fliped[i]);
+							}
+						}
 					}
 				}
 			}
 		}
+	}
+
+	std::array<uint8_t, 4> getAmbientOcclusion(
+		const glm::ivec3 & pos,
+		const int dim_1,
+		const int dim_2
+	)
+	{
+		std::array<uint8_t, 4> ao = {0, 0, 0, 0};
+
+		glm::ivec3 side_1 = pos;
+		glm::ivec3 side_2 = pos;
+		glm::ivec3 corner = pos;
+
+		side_1[dim_1]--;
+		side_2[dim_2]--;
+		corner[dim_1]--;
+		corner[dim_2]--;
+		ao[0] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+
+		side_1 = pos;
+		side_2 = pos;
+		corner = pos;
+
+		side_1[dim_1]++;
+		side_2[dim_2]--;
+		corner[dim_1]++;
+		corner[dim_2]--;
+		ao[1] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+
+		side_1 = pos;
+		side_2 = pos;
+		corner = pos;
+
+		side_1[dim_1]--;
+		side_2[dim_2]++;
+		corner[dim_1]--;
+		corner[dim_2]++;
+		ao[2] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+
+		side_1 = pos;
+		side_2 = pos;
+		corner = pos;
+
+		side_1[dim_1]++;
+		side_2[dim_2]++;
+		corner[dim_1]++;
+		corner[dim_2]++;
+		ao[3] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+
+		return ao;
+	}
+
+	int getAmbientOcclusion(
+		BlockID side_1,
+		BlockID side_2,
+		BlockID corner
+	)
+	{
+		return Block::hasProperty(side_1, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID) +
+				Block::hasProperty(side_2, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID) +
+				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID);
 	}
 
 	std::vector<std::vector<std::vector<Chunk *>>> chunks;
@@ -403,7 +486,7 @@ private:
 	struct FaceData
 	{
 		TextureID texture;
-		int ao;
+		std::array<uint8_t, 4> ao;
 
 		bool operator==(const FaceData & other) const
 		{
