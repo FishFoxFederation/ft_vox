@@ -120,14 +120,14 @@ Collaboration diagram for VulkanAPI:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVulkanAPI__coll__graph.png" border="0" usemap="#aVulkanAPI_coll__map" alt="Collaboration graph"/></div>
 <map name="aVulkanAPI_coll__map" id="aVulkanAPI_coll__map">
-<area shape="rect" title=" " alt="" coords="495,445,664,852"/>
-<area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,64,191,251"/>
-<area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,108,359,207"/>
-<area shape="rect" href="classSwapchain.html" title=" " alt="" coords="384,42,567,273"/>
-<area shape="rect" href="classImage.html" title=" " alt="" coords="591,5,725,309"/>
-<area shape="rect" href="classDescriptor.html" title=" " alt="" coords="761,49,867,265"/>
-<area shape="rect" href="classPipeline.html" title=" " alt="" coords="957,71,1053,243"/>
-<area shape="rect" href="structImGuiTexture.html" title=" " alt="" coords="1093,49,1225,265"/>
+<area shape="rect" title=" " alt="" coords="495,460,664,867"/>
+<area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,71,191,258"/>
+<area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,115,359,214"/>
+<area shape="rect" href="classSwapchain.html" title=" " alt="" coords="384,42,567,287"/>
+<area shape="rect" href="classImage.html" title=" " alt="" coords="591,5,725,324"/>
+<area shape="rect" href="classDescriptor.html" title=" " alt="" coords="761,49,867,280"/>
+<area shape="rect" href="classPipeline.html" title=" " alt="" coords="957,71,1053,258"/>
+<area shape="rect" href="structImGuiTexture.html" title=" " alt="" coords="1093,57,1225,273"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -288,6 +288,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6ebdad6fe938979f82df36ab8796a6c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafa409bfcd712145122ed4539a06aa4c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, <a class="el" href="structMesh.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aafa409bfcd712145122ed4539a06aa4c">meshes</a></td></tr>
 <tr class="separator:aafa409bfcd712145122ed4539a06aa4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afec7c006633bbca151891603c8968495"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#afec7c006633bbca151891603c8968495">mesh_mutex</a></td></tr>
+<tr class="separator:afec7c006633bbca151891603c8968495"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af077051ab8c2e9346f85ebef42b87f5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a">mesh_ids_to_destroy</a></td></tr>
 <tr class="separator:af077051ab8c2e9346f85ebef42b87f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12d94d7daef95cd6ed0451e9a9cc69d4"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">global_mutex</a></td></tr>
@@ -1216,6 +1218,20 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;uint64_t&gt; VulkanAPI::mesh_ids_to_destroy</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afec7c006633bbca151891603c8968495" name="afec7c006633bbca151891603c8968495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afec7c006633bbca151891603c8968495">&#9670;&#160;</a></span>mesh_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex VulkanAPI::mesh_mutex</td>
         </tr>
       </table>
 </div><div class="memdoc">

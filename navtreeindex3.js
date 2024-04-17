@@ -1,5 +1,10 @@
 var NAVTREEINDEX3 =
 {
+"structWorldScene_1_1MeshRenderData.html#a95cf5e88754f36c61ed53a352da3c4cf":[9,0,43,0,0],
+"structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689":[9,0,43,0,1],
+"structstd_1_1hash_3_01BlockVertex_01_4.html":[9,0,0,0],
+"structstd_1_1hash_3_01BlockVertex_01_4.html":[8,0,0,0],
+"structstd_1_1hash_3_01BlockVertex_01_4.html#a5df8e5e44c7f14a7be132e938b79c17b":[9,0,0,0,0],
 "structstd_1_1hash_3_01BlockVertex_01_4.html#a5df8e5e44c7f14a7be132e938b79c17b":[8,0,0,0,0],
 "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html":[9,0,0,1],
 "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html":[8,0,0,1],

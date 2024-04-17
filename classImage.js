@@ -6,6 +6,7 @@ var classImage =
     [ "Image", "classImage.html#ab3d72c4c60d06ca1c897dd58526a8702", null ],
     [ "~Image", "classImage.html#a0294f63700543e11c0f0da85601c7ae5", null ],
     [ "Image", "classImage.html#aa4fb6cbaa00822c5afa8e40b2c870a9a", null ],
+    [ "clear", "classImage.html#a3a233515eb3a5f83917dc634c778db5a", null ],
     [ "operator=", "classImage.html#a4c4f631b85b6363dd713903d02dab693", null ],
     [ "operator=", "classImage.html#a3615c0b5e441172283352b63489c6798", null ],
     [ "transitionLayout", "classImage.html#accc61110a5c1048242212d482c63f5c8", null ],

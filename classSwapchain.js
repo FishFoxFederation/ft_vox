@@ -7,6 +7,7 @@ var classSwapchain =
     [ "Swapchain", "classSwapchain.html#a30927e6bfaa0444297b3ba2958893b93", null ],
     [ "Swapchain", "classSwapchain.html#a04ba7da3842a1f7da16bb854dd89d65a", null ],
     [ "~Swapchain", "classSwapchain.html#a5848dea9c4317e57363760ed0c052ea7", null ],
+    [ "clear", "classSwapchain.html#a3f8ee8c3ae46e537f4be8293820cf4f8", null ],
     [ "operator=", "classSwapchain.html#a469349b4b438204faab2409a7d5a1454", null ],
     [ "operator=", "classSwapchain.html#a5f92b2c1255583187a9db5534d449afd", null ],
     [ "extent", "classSwapchain.html#a58517f87b90a3c8753d76d008a82c5e0", null ],

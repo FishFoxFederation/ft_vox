@@ -1,8 +1,8 @@
 <map id="src/app/vulkan/Command.cpp" name="src/app/vulkan/Command.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="565,5,760,31"/>
+<area shape="rect" id="node1" title=" " alt="" coords="652,5,847,31"/>
 <area shape="rect" id="node2" href="$Command_8hpp.html" title=" " alt="" coords="335,79,441,104"/>
-<area shape="rect" id="node9" href="$logger_8hpp.html" title=" " alt="" coords="622,79,703,104"/>
-<area shape="rect" id="node16" title=" " alt="" coords="727,79,793,104"/>
+<area shape="rect" id="node9" href="$logger_8hpp.html" title=" " alt="" coords="709,79,790,104"/>
+<area shape="rect" id="node18" title=" " alt="" coords="814,79,879,104"/>
 <area shape="rect" id="node3" href="$vk__define_8hpp.html" title=" " alt="" coords="233,152,335,177"/>
 <area shape="rect" id="node8" title=" " alt="" coords="359,152,417,177"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,233,117,258"/>
@@ -15,4 +15,6 @@
 <area shape="rect" id="node13" title=" " alt="" coords="722,152,777,177"/>
 <area shape="rect" id="node14" title=" " alt="" coords="801,152,868,177"/>
 <area shape="rect" id="node15" title=" " alt="" coords="892,152,972,177"/>
+<area shape="rect" id="node16" title=" " alt="" coords="997,152,1065,177"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1089,152,1146,177"/>
 </map>

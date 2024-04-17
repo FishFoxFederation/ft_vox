@@ -6,6 +6,7 @@ var classDescriptor =
     [ "Descriptor", "classDescriptor.html#a92551db1cf5b2dacf3e5a3c039bdec0b", null ],
     [ "Descriptor", "classDescriptor.html#a329c6eb69cd7c155e6d6777fbafbeb0f", null ],
     [ "~Descriptor", "classDescriptor.html#a39ec4174511f7b5e84bd59e8b1ad2b93", null ],
+    [ "clear", "classDescriptor.html#ac781f2e9b97d7b8803fe321e1f5d8470", null ],
     [ "operator=", "classDescriptor.html#a2b54958a34779ebfa6501c69e65a7b5a", null ],
     [ "operator=", "classDescriptor.html#a81645a1d806949e8e5725c657fa7c4cc", null ],
     [ "update", "classDescriptor.html#a042525e659ae32a5361d384930c4c25b", null ],

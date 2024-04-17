@@ -51,6 +51,7 @@ var classVulkanAPI =
     [ "main_render_finished_semaphores", "classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71", null ],
     [ "max_frames_in_flight", "classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f", null ],
     [ "mesh_ids_to_destroy", "classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a", null ],
+    [ "mesh_mutex", "classVulkanAPI.html#afec7c006633bbca151891603c8968495", null ],
     [ "meshes", "classVulkanAPI.html#aafa409bfcd712145122ed4539a06aa4c", null ],
     [ "next_mesh_id", "classVulkanAPI.html#a6ebdad6fe938979f82df36ab8796a6c7", null ],
     [ "physical_device", "classVulkanAPI.html#a70fc3d9525d7e52852bb0b7be66af812", null ],

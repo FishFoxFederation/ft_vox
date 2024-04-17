@@ -354,7 +354,7 @@ $(document).ready(function(){initNavTree('Pipeline_8hpp_source.html',''); initRe
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    {</div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;other)</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        {</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            clear();</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            <a class="code hl_function" href="classPipeline.html#a75c3ba97f5fd9a5f77d8a5aaec28f4ab">clear</a>();</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            <a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a> = other.pipeline;</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            <a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a> = other.layout;</div>
@@ -370,79 +370,83 @@ $(document).ready(function(){initNavTree('Pipeline_8hpp_source.html',''); initRe
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno"><a class="line" href="classPipeline.html#a527044d53a20f851d0579fbf313a2dec">  261</a></span>    <a class="code hl_function" href="classPipeline.html#a527044d53a20f851d0579fbf313a2dec">~Pipeline</a>()</div>
 <div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    {</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        clear();</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        <a class="code hl_function" href="classPipeline.html#a75c3ba97f5fd9a5f77d8a5aaec28f4ab">clear</a>();</div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    }</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno"><a class="line" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">  266</a></span>    VkPipeline <a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a>;</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">  267</a></span>    VkPipelineLayout <a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a>;</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    VkDevice m_device;</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    <span class="keywordtype">void</span> clear()</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    {</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>        <span class="keywordflow">if</span> (m_device != VK_NULL_HANDLE)</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        {</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a> != VK_NULL_HANDLE)</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>            {</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                vkDestroyPipeline(m_device, <a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a>, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno"><a class="line" href="classPipeline.html#a75c3ba97f5fd9a5f77d8a5aaec28f4ab">  266</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classPipeline.html#a75c3ba97f5fd9a5f77d8a5aaec28f4ab">clear</a>()</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    {</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        <span class="keywordflow">if</span> (m_device != VK_NULL_HANDLE)</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        {</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a> != VK_NULL_HANDLE)</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>            {</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                vkDestroyPipeline(m_device, <a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a>, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                <a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a> = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>            }</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a> != VK_NULL_HANDLE)</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>            {</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                vkDestroyPipelineLayout(m_device, <a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a>, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                <a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a> = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>            }</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a> != VK_NULL_HANDLE)</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>            {</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>                vkDestroyPipelineLayout(m_device, <a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a>, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>            }</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        }</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    }</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    std::vector&lt;char&gt; readFile(<span class="keyword">const</span> std::string &amp; filename)</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    {</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>        std::ifstream file</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        {</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>            filename,</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>            std::ios::ate | std::ios::binary</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        };</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>        <span class="keywordflow">if</span> (!file.is_open())</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        {</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Failed to open file: &quot;</span> + filename);</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        }</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>        <span class="keywordtype">size_t</span> file_size = <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(file.tellg());</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        std::vector&lt;char&gt; buffer(file_size);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>            m_device = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        }</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    }</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno"><a class="line" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">  285</a></span>    VkPipeline <a class="code hl_variable" href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">pipeline</a>;</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno"><a class="line" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">  286</a></span>    VkPipelineLayout <a class="code hl_variable" href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">layout</a>;</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    VkDevice m_device;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    std::vector&lt;char&gt; readFile(<span class="keyword">const</span> std::string &amp; filename)</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    {</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        std::ifstream file</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        {</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>            filename,</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>            std::ios::ate | std::ios::binary</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        };</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        <span class="keywordflow">if</span> (!file.is_open())</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>        {</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Failed to open file: &quot;</span> + filename);</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        }</div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span> </div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        file.seekg(0);</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>        file.read(buffer.data(), file_size);</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>        file.close();</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        <span class="keywordflow">return</span> buffer;</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    }</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        <span class="keywordtype">size_t</span> file_size = <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(file.tellg());</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>        std::vector&lt;char&gt; buffer(file_size);</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        file.seekg(0);</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        file.read(buffer.data(), file_size);</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        file.close();</div>
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    VkShaderModule createShaderModule(<span class="keyword">const</span> std::vector&lt;char&gt; &amp; code)</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    {</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        VkShaderModuleCreateInfo create_info = {};</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        create_info.codeSize = code.size();</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        create_info.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t *<span class="keyword">&gt;</span>(code.data());</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>        VkShaderModule shader_module;</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        <a class="code hl_define" href="vk__define_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b">VK_CHECK</a>(</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>            vkCreateShaderModule(m_device, &amp;create_info, <span class="keyword">nullptr</span>, &amp;shader_module),</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>            <span class="stringliteral">&quot;Failed to create shader module&quot;</span></div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>        );</div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        <span class="keywordflow">return</span> shader_module;</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    }</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        <span class="keywordflow">return</span> buffer;</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    }</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    VkShaderModule createShaderModule(<span class="keyword">const</span> std::vector&lt;char&gt; &amp; code)</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    {</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        VkShaderModuleCreateInfo create_info = {};</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>        create_info.codeSize = code.size();</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        create_info.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t *<span class="keyword">&gt;</span>(code.data());</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>        VkShaderModule shader_module;</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>        <a class="code hl_define" href="vk__define_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b">VK_CHECK</a>(</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>            vkCreateShaderModule(m_device, &amp;create_info, <span class="keyword">nullptr</span>, &amp;shader_module),</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>            <span class="stringliteral">&quot;Failed to create shader module&quot;</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>        );</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>};</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>        <span class="keywordflow">return</span> shader_module;</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    }</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>};</div>
 <div class="ttc" id="aclassPipeline_html"><div class="ttname"><a href="classPipeline.html">Pipeline</a></div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:12</div></div>
 <div class="ttc" id="aclassPipeline_html_a10d428d6899d02eeeda0e16f8b0fa109"><div class="ttname"><a href="classPipeline.html#a10d428d6899d02eeeda0e16f8b0fa109">Pipeline::operator=</a></div><div class="ttdeci">Pipeline &amp; operator=(Pipeline &amp;&amp;other) noexcept</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:243</div></div>
-<div class="ttc" id="aclassPipeline_html_a372ca1f1579d6350790b5a40f9e1292a"><div class="ttname"><a href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">Pipeline::pipeline</a></div><div class="ttdeci">VkPipeline pipeline</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:266</div></div>
+<div class="ttc" id="aclassPipeline_html_a372ca1f1579d6350790b5a40f9e1292a"><div class="ttname"><a href="classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a">Pipeline::pipeline</a></div><div class="ttdeci">VkPipeline pipeline</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:285</div></div>
 <div class="ttc" id="aclassPipeline_html_a38e623c03d6e105861a83432979d63a8"><div class="ttname"><a href="classPipeline.html#a38e623c03d6e105861a83432979d63a8">Pipeline::Pipeline</a></div><div class="ttdeci">Pipeline(VkDevice device, const CreateInfo &amp;create_info)</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:53</div></div>
 <div class="ttc" id="aclassPipeline_html_a527044d53a20f851d0579fbf313a2dec"><div class="ttname"><a href="classPipeline.html#a527044d53a20f851d0579fbf313a2dec">Pipeline::~Pipeline</a></div><div class="ttdeci">~Pipeline()</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:261</div></div>
 <div class="ttc" id="aclassPipeline_html_a5bd72869a5c4d5a9a02a67892be2e1b3"><div class="ttname"><a href="classPipeline.html#a5bd72869a5c4d5a9a02a67892be2e1b3">Pipeline::operator=</a></div><div class="ttdeci">Pipeline &amp; operator=(const Pipeline &amp;)=delete</div></div>
-<div class="ttc" id="aclassPipeline_html_a608b23460b3d7e283b04cddac0df1937"><div class="ttname"><a href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">Pipeline::layout</a></div><div class="ttdeci">VkPipelineLayout layout</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:267</div></div>
+<div class="ttc" id="aclassPipeline_html_a608b23460b3d7e283b04cddac0df1937"><div class="ttname"><a href="classPipeline.html#a608b23460b3d7e283b04cddac0df1937">Pipeline::layout</a></div><div class="ttdeci">VkPipelineLayout layout</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:286</div></div>
+<div class="ttc" id="aclassPipeline_html_a75c3ba97f5fd9a5f77d8a5aaec28f4ab"><div class="ttname"><a href="classPipeline.html#a75c3ba97f5fd9a5f77d8a5aaec28f4ab">Pipeline::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:266</div></div>
 <div class="ttc" id="aclassPipeline_html_a79e49366358f823b8812658f8bf3a9e8"><div class="ttname"><a href="classPipeline.html#a79e49366358f823b8812658f8bf3a9e8">Pipeline::Pipeline</a></div><div class="ttdeci">Pipeline()</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:46</div></div>
 <div class="ttc" id="aclassPipeline_html_acdbef56529368f248e7290f13e8f9940"><div class="ttname"><a href="classPipeline.html#acdbef56529368f248e7290f13e8f9940">Pipeline::Pipeline</a></div><div class="ttdeci">Pipeline(const Pipeline &amp;)=delete</div></div>
 <div class="ttc" id="aclassPipeline_html_aec42c193a24462d5aec9a30039509f1b"><div class="ttname"><a href="classPipeline.html#aec42c193a24462d5aec9a30039509f1b">Pipeline::Pipeline</a></div><div class="ttdeci">Pipeline(Pipeline &amp;&amp;other) noexcept</div><div class="ttdef"><b>Definition:</b> Pipeline.hpp:233</div></div>
