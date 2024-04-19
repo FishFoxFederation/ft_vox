@@ -1,5 +1,13 @@
 var NAVTREEINDEX3 =
 {
+"structSwapchain_1_1SupportDetails.html":[9,0,32,1],
+"structSwapchain_1_1SupportDetails.html#a2a4f0f958367aff61916f25a008953a5":[9,0,32,1,1],
+"structSwapchain_1_1SupportDetails.html#a3e6ebb1faa79aa2509f1b701b516f4c6":[9,0,32,1,0],
+"structSwapchain_1_1SupportDetails.html#ac0f4f61750c7a405c1ab2ef0183b17bf":[9,0,32,1,2],
+"structViewProjMatrices.html":[9,0,37],
+"structViewProjMatrices.html#a75bed5a79358936fb1700d91a245d415":[9,0,37,1],
+"structViewProjMatrices.html#a884b600e32d477a8b9bb9ddbae105a29":[9,0,37,0],
+"structWorldScene_1_1MeshRenderData.html":[9,0,43,0],
 "structWorldScene_1_1MeshRenderData.html#a95cf5e88754f36c61ed53a352da3c4cf":[9,0,43,0,0],
 "structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689":[9,0,43,0,1],
 "structstd_1_1hash_3_01BlockVertex_01_4.html":[9,0,0,0],

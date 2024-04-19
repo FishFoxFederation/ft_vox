@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['level_0',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]]
+  ['dimensions_0',['Dimensions',['../classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277',1,'CreateMeshData']]]
 ];

@@ -121,7 +121,7 @@ Collaboration diagram for CreateMeshData:</div>
 <div class="dyncontent">
 <div class="center"><img src="classCreateMeshData__coll__graph.png" border="0" usemap="#aCreateMeshData_coll__map" alt="Collaboration graph"/></div>
 <map name="aCreateMeshData_coll__map" id="aCreateMeshData_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,147,148"/>
+<area shape="rect" title=" " alt="" coords="5,5,171,192"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -132,6 +132,11 @@ Public Types</h2></td></tr>
 , <a class="el" href="classCreateMeshData.html#a5f075a1c439c7a4316214c1e1ad759a0a0d7537a73d1445406d9ca3a7b36121d7">NEG</a> = 0
  }</td></tr>
 <tr class="separator:a5f075a1c439c7a4316214c1e1ad759a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c6063de0e463d26969267ecdb269277"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277">Dimensions</a> { <a class="el" href="classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a02129bb861061d1a052c592e2dc6b383">X</a> = 0
+, <a class="el" href="classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a57cec4137b614c87cb4e24a3d003a3e0">Y</a> = 1
+, <a class="el" href="classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a21c2e59531c8710156d34a3c30ac81d5">Z</a> = 2
+ }</td></tr>
+<tr class="separator:a5c6063de0e463d26969267ecdb269277"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -139,13 +144,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a49d413b60a8e005b36083e958a849bb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="structMesh.html">Mesh</a> <a class="el" href="structData.html">Data</a> object.  <a href="classCreateMeshData.html#a49d413b60a8e005b36083e958a849bb3">More...</a><br /></td></tr>
 <tr class="separator:a49d413b60a8e005b36083e958a849bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52bfd670f68e7e5298d44a73295fdc4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c">block</a> (const int x, const int y, const int z)</td></tr>
-<tr class="memdesc:a52bfd670f68e7e5298d44a73295fdc4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the block at a position relative to the starting chunk.  <a href="classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c">More...</a><br /></td></tr>
 <tr class="separator:a52bfd670f68e7e5298d44a73295fdc4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62f5b52d9f5460c2e38576026fdf5883"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a62f5b52d9f5460c2e38576026fdf5883">block</a> (const glm::ivec3 &amp;pos)</td></tr>
+<tr class="separator:a62f5b52d9f5460c2e38576026fdf5883"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84cb268e8f684dcda9a2400e3ec3ed27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a84cb268e8f684dcda9a2400e3ec3ed27">create</a> ()</td></tr>
 <tr class="separator:a84cb268e8f684dcda9a2400e3ec3ed27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a219e3acb282f32f170a4e9a4e4261d03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a219e3acb282f32f170a4e9a4e4261d03">createFace</a> (const glm::ivec3 &amp;start, const glm::ivec3 &amp;max_iter, const std::array&lt; glm::ivec3, 4 &gt; &amp;offsets, const glm::ivec3 &amp;normal, const int face)</td></tr>
-<tr class="memdesc:a219e3acb282f32f170a4e9a4e4261d03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the mesh for a particular face for a specific range of blocks.  <a href="classCreateMeshData.html#a219e3acb282f32f170a4e9a4e4261d03">More...</a><br /></td></tr>
-<tr class="separator:a219e3acb282f32f170a4e9a4e4261d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7f45ff2e999fe0217ee8a2638645f47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#aa7f45ff2e999fe0217ee8a2638645f47">createFace</a> (const int dim_1, const int dim_2, const glm::ivec3 &amp;start, const glm::ivec3 &amp;max_iter, const std::array&lt; int, 6 &gt; &amp;indices_order, const std::array&lt; int, 6 &gt; &amp;indices_order_fliped, const glm::ivec3 &amp;abs_normal, const int normal_signe, const int face)</td></tr>
+<tr class="separator:aa7f45ff2e999fe0217ee8a2638645f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc423bbf0cc48e6d4e7ee86c10bd1c9f"><td class="memItemLeft" align="right" valign="top">std::array&lt; uint8_t, 4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f">getAmbientOcclusion</a> (const glm::ivec3 &amp;pos, const int dim_1, const int dim_2)</td></tr>
+<tr class="separator:adc423bbf0cc48e6d4e7ee86c10bd1c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a570c9ca0e96d4663d69a4c14282fc95d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d">getAmbientOcclusion</a> (<a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> side_1, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> side_2, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> corner)</td></tr>
+<tr class="separator:a570c9ca0e96d4663d69a4c14282fc95d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -172,6 +181,33 @@ Public Attributes</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5f075a1c439c7a4316214c1e1ad759a0a8b9c6df131e2af7d0169e2a6d949076d" name="a5f075a1c439c7a4316214c1e1ad759a0a8b9c6df131e2af7d0169e2a6d949076d"></a>POS&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a5f075a1c439c7a4316214c1e1ad759a0af464f33765f31f59f6f7886ae4f85926" name="a5f075a1c439c7a4316214c1e1ad759a0af464f33765f31f59f6f7886ae4f85926"></a>NEUT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a5f075a1c439c7a4316214c1e1ad759a0a0d7537a73d1445406d9ca3a7b36121d7" name="a5f075a1c439c7a4316214c1e1ad759a0a0d7537a73d1445406d9ca3a7b36121d7"></a>NEG&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a5c6063de0e463d26969267ecdb269277" name="a5c6063de0e463d26969267ecdb269277"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c6063de0e463d26969267ecdb269277">&#9670;&#160;</a></span>Dimensions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277">CreateMeshData::Dimensions</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5c6063de0e463d26969267ecdb269277a02129bb861061d1a052c592e2dc6b383" name="a5c6063de0e463d26969267ecdb269277a02129bb861061d1a052c592e2dc6b383"></a>X&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5c6063de0e463d26969267ecdb269277a57cec4137b614c87cb4e24a3d003a3e0" name="a5c6063de0e463d26969267ecdb269277a57cec4137b614c87cb4e24a3d003a3e0"></a>Y&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5c6063de0e463d26969267ecdb269277a21c2e59531c8710156d34a3c30ac81d5" name="a5c6063de0e463d26969267ecdb269277a21c2e59531c8710156d34a3c30ac81d5"></a>Z&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -230,8 +266,34 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a62f5b52d9f5460c2e38576026fdf5883" name="a62f5b52d9f5460c2e38576026fdf5883"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62f5b52d9f5460c2e38576026fdf5883">&#9670;&#160;</a></span>block() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> CreateMeshData::block </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a52bfd670f68e7e5298d44a73295fdc4c" name="a52bfd670f68e7e5298d44a73295fdc4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52bfd670f68e7e5298d44a73295fdc4c">&#9670;&#160;</a></span>block()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a52bfd670f68e7e5298d44a73295fdc4c">&#9670;&#160;</a></span>block() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -270,8 +332,6 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get the block at a position relative to the starting chunk. </p>
-
 </div>
 </div>
 <a id="a84cb268e8f684dcda9a2400e3ec3ed27" name="a84cb268e8f684dcda9a2400e3ec3ed27"></a>
@@ -299,8 +359,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a219e3acb282f32f170a4e9a4e4261d03" name="a219e3acb282f32f170a4e9a4e4261d03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a219e3acb282f32f170a4e9a4e4261d03">&#9670;&#160;</a></span>createFace()</h2>
+<a id="aa7f45ff2e999fe0217ee8a2638645f47" name="aa7f45ff2e999fe0217ee8a2638645f47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7f45ff2e999fe0217ee8a2638645f47">&#9670;&#160;</a></span>createFace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -311,6 +371,18 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">void CreateMeshData::createFace </td>
           <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dim_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dim_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
@@ -323,14 +395,26 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::array&lt; glm::ivec3, 4 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
+          <td class="paramtype">const std::array&lt; int, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indices_order</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; int, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indices_order_fliped</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
-          <td class="paramname"><em>normal</em>, </td>
+          <td class="paramname"><em>abs_normal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>normal_signe</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -351,17 +435,89 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Create the mesh for a particular face for a specific range of blocks. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">start</td><td>the starting position </td></tr>
-    <tr><td class="paramname">max_iter</td><td>the maximum iteration for the x, y, z axis </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets for the 4 vertices of the face </td></tr>
-    <tr><td class="paramname">normal</td><td>the normal of the face </td></tr>
-    <tr><td class="paramname">face</td><td>the texture index for the face </td></tr>
-  </table>
-  </dd>
-</dl>
+</div>
+</div>
+<a id="a570c9ca0e96d4663d69a4c14282fc95d" name="a570c9ca0e96d4663d69a4c14282fc95d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a570c9ca0e96d4663d69a4c14282fc95d">&#9670;&#160;</a></span>getAmbientOcclusion() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CreateMeshData::getAmbientOcclusion </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramname"><em>side_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramname"><em>side_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramname"><em>corner</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adc423bbf0cc48e6d4e7ee86c10bd1c9f" name="adc423bbf0cc48e6d4e7ee86c10bd1c9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc423bbf0cc48e6d4e7ee86c10bd1c9f">&#9670;&#160;</a></span>getAmbientOcclusion() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt; uint8_t, 4 &gt; CreateMeshData::getAmbientOcclusion </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dim_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dim_2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

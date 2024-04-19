@@ -159,79 +159,90 @@ $(document).ready(function(){initNavTree('Block_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="stringliteral">&quot;assets/textures/grass_side.jpg&quot;</span>, <span class="comment">// 2</span></div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="stringliteral">&quot;assets/textures/dirt.jpg&quot;</span>, <span class="comment">// 3</span></div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="stringliteral">&quot;assets/textures/stone.jpg&quot;</span> <span class="comment">// 4</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    };</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">   54</a></span>    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> &amp; <a class="code hl_function" href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">getData</a>(<span class="keyword">const</span> <a class="code hl_enumeration" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> <span class="keywordtype">id</span>)</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    {</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordflow">switch</span> (<span class="keywordtype">id</span>)</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        {</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="keywordflow">case</span> BlockID::Air: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Air</a>;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordflow">case</span> BlockID::Grass: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">Grass</a>;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">case</span> BlockID::Dirt: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">Dirt</a>;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">case</span> BlockID::Stone: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">Stone</a>;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">default</span>: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Air</a>;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        }</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    }</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">   66</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Air</a> = {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Air,</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        .texture = {</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            0,</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            0,</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            0,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            0,</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            0,</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            0</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        },</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        .properties = <a class="code hl_define" href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    };</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">   78</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">Grass</a> = {</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Grass,</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        .texture = {</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            1, <span class="comment">// grass_top</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            3, <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            2, <span class="comment">// grass_side</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            2, <span class="comment">// grass_side</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            2, <span class="comment">// grass_side</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            2  <span class="comment">// grass_side</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        },</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        .properties =</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    };</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">   93</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">Dirt</a> = {</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Dirt,</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        .texture = {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            3, <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            3, <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            3, <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            3, <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            3, <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            3  <span class="comment">// dirt</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        },</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        .properties =</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    };</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">  108</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">Stone</a> = {</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Stone,</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        .texture = {</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            4, <span class="comment">// stone</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            4, <span class="comment">// stone</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            4, <span class="comment">// stone</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            4, <span class="comment">// stone</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            4, <span class="comment">// stone</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            4  <span class="comment">// stone</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        },</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        .properties =</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    };</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>};</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="comment">// &quot;assets/textures/debug/white.png&quot;,</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="comment">// &quot;assets/textures/debug/right.png&quot;,</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="comment">// &quot;assets/textures/debug/left.png&quot;,</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="comment">// &quot;assets/textures/debug/front.png&quot;,</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="comment">// &quot;assets/textures/debug/top.png&quot;,</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="comment">// &quot;assets/textures/debug/back_bottom.png&quot;,</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    };</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">   60</a></span>    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> &amp; <a class="code hl_function" href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">getData</a>(<span class="keyword">const</span> <a class="code hl_enumeration" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">switch</span> (<span class="keywordtype">id</span>)</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        {</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordflow">case</span> BlockID::Air: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Air</a>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordflow">case</span> BlockID::Grass: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">Grass</a>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordflow">case</span> BlockID::Dirt: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">Dirt</a>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">case</span> BlockID::Stone: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">Stone</a>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">default</span>: <span class="keywordflow">return</span> <a class="code hl_variable" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Air</a>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        }</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="structBlock.html#a4eb13c88e8e43b8c2e3a7c2f328e8893">   72</a></span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="structBlock.html#a4eb13c88e8e43b8c2e3a7c2f328e8893">hasProperty</a>(<span class="keyword">const</span> <a class="code hl_enumeration" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <a class="code hl_typedef" href="Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c">BlockProperties</a> property)</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">return</span> (<a class="code hl_function" href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">getData</a>(<span class="keywordtype">id</span>).properties &amp; property) == property;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">   77</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Air</a> = {</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Air,</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        .texture = {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            0,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            0,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            0,</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            0,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            0,</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            0</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        },</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        .properties = <a class="code hl_define" href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    };</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">   89</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">Grass</a> = {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Grass,</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        .texture = {</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>            1, <span class="comment">// grass_top</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            3, <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            2, <span class="comment">// grass_side</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            2, <span class="comment">// grass_side</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            2, <span class="comment">// grass_side</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            2  <span class="comment">// grass_side</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        },</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        .properties =</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    };</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">  104</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">Dirt</a> = {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Dirt,</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        .texture = {</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            3, <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            3, <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            3, <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            3, <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            3, <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            3  <span class="comment">// dirt</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        },</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        .properties =</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    };</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">  119</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code hl_struct" href="structData.html">Data</a> <a class="code hl_variable" href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">Stone</a> = {</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        .<a class="code hl_variable" href="structData.html#afa343b8218893bb247495ed804341ca0">id</a> = BlockID::Stone,</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        .texture = {</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>            4, <span class="comment">// stone</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            4, <span class="comment">// stone</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            4, <span class="comment">// stone</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            4, <span class="comment">// stone</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            4, <span class="comment">// stone</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            4  <span class="comment">// stone</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        },</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        .properties =</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    };</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>};</div>
 <div class="ttc" id="aBlock_8hpp_html_a03f647e3fa4bbfb59dfcdf8b268cb1d4"><div class="ttname"><a href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_CUBE</div><div class="ttdef"><b>Definition:</b> Block.hpp:25</div></div>
 <div class="ttc" id="aBlock_8hpp_html_a0af7951ff19b7d7d986e482a89a8024c"><div class="ttname"><a href="Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c">BlockProperties</a></div><div class="ttdeci">uint64_t BlockProperties</div><div class="ttdef"><b>Definition:</b> Block.hpp:9</div></div>
 <div class="ttc" id="aBlock_8hpp_html_a7208759f17440102bcbf1e3ac291858a"><div class="ttname"><a href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_NONE</div><div class="ttdef"><b>Definition:</b> Block.hpp:22</div></div>
@@ -246,11 +257,12 @@ $(document).ready(function(){initNavTree('Block_8hpp_source.html',''); initResiz
 <div class="ttc" id="aBlock_8hpp_html_ad41d59e68570f498ab983461b86d0e03"><div class="ttname"><a href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_OPAQUE</div><div class="ttdef"><b>Definition:</b> Block.hpp:24</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
 <div class="ttc" id="astructBlock_html"><div class="ttname"><a href="structBlock.html">Block</a></div><div class="ttdef"><b>Definition:</b> Block.hpp:44</div></div>
-<div class="ttc" id="astructBlock_html_a338b278d25bcdf19adda3fe4508bf401"><div class="ttname"><a href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">Block::Grass</a></div><div class="ttdeci">static const Data Grass</div><div class="ttdef"><b>Definition:</b> Block.hpp:78</div></div>
-<div class="ttc" id="astructBlock_html_a7ce40a3a7ff643bb8c8559c6e3f35e44"><div class="ttname"><a href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">Block::getData</a></div><div class="ttdeci">static const Data &amp; getData(const BlockID id)</div><div class="ttdef"><b>Definition:</b> Block.hpp:54</div></div>
-<div class="ttc" id="astructBlock_html_a93fe878e93430bd6ea0232d789fa7737"><div class="ttname"><a href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">Block::Stone</a></div><div class="ttdeci">static const Data Stone</div><div class="ttdef"><b>Definition:</b> Block.hpp:108</div></div>
-<div class="ttc" id="astructBlock_html_abb1008ce22b49dd675adb4e2a57a1c60"><div class="ttname"><a href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Block::Air</a></div><div class="ttdeci">static const Data Air</div><div class="ttdef"><b>Definition:</b> Block.hpp:66</div></div>
-<div class="ttc" id="astructBlock_html_ada116f107b1d659e9d3fecd2f5fb9da1"><div class="ttname"><a href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">Block::Dirt</a></div><div class="ttdeci">static const Data Dirt</div><div class="ttdef"><b>Definition:</b> Block.hpp:93</div></div>
+<div class="ttc" id="astructBlock_html_a338b278d25bcdf19adda3fe4508bf401"><div class="ttname"><a href="structBlock.html#a338b278d25bcdf19adda3fe4508bf401">Block::Grass</a></div><div class="ttdeci">static const Data Grass</div><div class="ttdef"><b>Definition:</b> Block.hpp:89</div></div>
+<div class="ttc" id="astructBlock_html_a4eb13c88e8e43b8c2e3a7c2f328e8893"><div class="ttname"><a href="structBlock.html#a4eb13c88e8e43b8c2e3a7c2f328e8893">Block::hasProperty</a></div><div class="ttdeci">static bool hasProperty(const BlockID id, const BlockProperties property)</div><div class="ttdef"><b>Definition:</b> Block.hpp:72</div></div>
+<div class="ttc" id="astructBlock_html_a7ce40a3a7ff643bb8c8559c6e3f35e44"><div class="ttname"><a href="structBlock.html#a7ce40a3a7ff643bb8c8559c6e3f35e44">Block::getData</a></div><div class="ttdeci">static const Data &amp; getData(const BlockID id)</div><div class="ttdef"><b>Definition:</b> Block.hpp:60</div></div>
+<div class="ttc" id="astructBlock_html_a93fe878e93430bd6ea0232d789fa7737"><div class="ttname"><a href="structBlock.html#a93fe878e93430bd6ea0232d789fa7737">Block::Stone</a></div><div class="ttdeci">static const Data Stone</div><div class="ttdef"><b>Definition:</b> Block.hpp:119</div></div>
+<div class="ttc" id="astructBlock_html_abb1008ce22b49dd675adb4e2a57a1c60"><div class="ttname"><a href="structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60">Block::Air</a></div><div class="ttdeci">static const Data Air</div><div class="ttdef"><b>Definition:</b> Block.hpp:77</div></div>
+<div class="ttc" id="astructBlock_html_ada116f107b1d659e9d3fecd2f5fb9da1"><div class="ttname"><a href="structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1">Block::Dirt</a></div><div class="ttdeci">static const Data Dirt</div><div class="ttdef"><b>Definition:</b> Block.hpp:104</div></div>
 <div class="ttc" id="astructBlock_html_aebef79a6d35d204084f018e75e82ed4b"><div class="ttname"><a href="structBlock.html#aebef79a6d35d204084f018e75e82ed4b">Block::texture_names</a></div><div class="ttdeci">static const std::vector&lt; std::string &gt; texture_names</div><div class="ttdef"><b>Definition:</b> Block.hpp:46</div></div>
 <div class="ttc" id="astructData_html"><div class="ttname"><a href="structData.html">Data</a></div><div class="ttdef"><b>Definition:</b> Block.hpp:37</div></div>
 <div class="ttc" id="astructData_html_a2c81c85bc1fd25b26f0fed72bfb3044a"><div class="ttname"><a href="structData.html#a2c81c85bc1fd25b26f0fed72bfb3044a">Data::properties</a></div><div class="ttdeci">const BlockProperties properties</div><div class="ttdef"><b>Definition:</b> Block.hpp:40</div></div>

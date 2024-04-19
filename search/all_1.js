@@ -3,7 +3,7 @@ var searchData=
   ['binding_5fdescription_0',['binding_description',['../structPipeline_1_1CreateInfo.html#a98a9203deb394878a54df0bd399debd7',1,'Pipeline::CreateInfo']]],
   ['bindings_1',['bindings',['../structDescriptor_1_1CreateInfo.html#a2adb4c296c558b7b62ed92771dc8ec55',1,'Descriptor::CreateInfo']]],
   ['block_2',['Block',['../structBlock.html',1,'']]],
-  ['block_3',['block',['../classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c',1,'CreateMeshData']]],
+  ['block_3',['block',['../classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c',1,'CreateMeshData::block(const int x, const int y, const int z)'],['../classCreateMeshData.html#a62f5b52d9f5460c2e38576026fdf5883',1,'CreateMeshData::block(const glm::ivec3 &amp;pos)']]],
   ['block_2ehpp_4',['Block.hpp',['../Block_8hpp.html',1,'']]],
   ['block_5fface_5fback_5',['BLOCK_FACE_BACK',['../Block_8hpp.html#acdc50e3ae7204b9a9281913ce0c4ed54',1,'Block.hpp']]],
   ['block_5fface_5fbottom_6',['BLOCK_FACE_BOTTOM',['../Block_8hpp.html#aea576020eabcf8b7dca0825e42edf1b2',1,'Block.hpp']]],
