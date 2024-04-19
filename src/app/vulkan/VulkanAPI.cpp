@@ -796,7 +796,7 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 
 
-	depth_attachement_info.extent = { 2048, 2048 };
+	depth_attachement_info.extent = { 10000, 10000 };
 	depth_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
 	depth_attachement_info.create_sampler = true;
 	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
@@ -1271,7 +1271,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
 		pipeline_info.depth_bias_enable = VK_TRUE;
 		pipeline_info.depth_bias_constant_factor = 0.0f;
-		pipeline_info.depth_bias_slope_factor = 0.5f;
+		pipeline_info.depth_bias_slope_factor = 0.1f;
 		pipeline_info.descriptor_set_layouts = {
 			sun_descriptor.layout
 		};

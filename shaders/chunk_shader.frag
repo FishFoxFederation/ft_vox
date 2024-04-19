@@ -65,16 +65,14 @@ void main()
 {
 	float min_light = 0.2;
 
-	float max_ao_light = 0.5;
-	float ao_factor = (1 - (fragAO / 3.0));
+	float max_ao_shadow = 0.13;
+	float ao_factor = fragAO / 3.0;
 
-	float max_shadow_light = 0.5;
-	// float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 2048, 2);
-	float shadow_factor = 0.0;;
+	float max_shadow_light = 0.8;
+	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 10000, 3);
 
-	float light = min_light
-				+ max_ao_light * ao_factor
-				+ max_shadow_light * shadow_factor;
+	float light = (min_light + max_shadow_light * shadow_factor) - max_ao_shadow * ao_factor;
+
 
 	out_color = texture(tex, frag_tex_coord) * light;
 }

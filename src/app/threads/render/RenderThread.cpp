@@ -83,11 +83,11 @@ void RenderThread::loop()
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
-	const glm::dvec3 sun_offset = glm::dvec3(100.0f, 100.0f, 100.0f);
+	const glm::dvec3 sun_offset = glm::dvec3(100.0f, 70.0f, 100.0f);
 	const glm::dvec3 sun_pos = camera.position + sun_offset;
-	const float sun_size = 100.0f;
+	const float sun_size = 300.0f;
 	const float sun_near = 10.0f;
-	const float sun_far = 500.0f;
+	const float sun_far = 1000.0f;
 
 	ViewProjMatrices sun = camera_matrices;
 	sun.view = glm::lookAt(
