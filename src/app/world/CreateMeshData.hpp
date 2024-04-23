@@ -156,7 +156,7 @@ public:
 			return BlockID::Air;
 		}
 
-		return chunks[chunk_x][chunk_y][chunk_z]->getBlock(block_x, block_y, block_z);
+		return chunks[chunk_x][chunk_y][chunk_z]->getBlock({block_x, block_y, block_z});
 	}
 
 	BlockID block(const glm::ivec3 & pos)

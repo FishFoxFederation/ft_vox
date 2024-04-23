@@ -25,7 +25,7 @@ Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int 
 		{
 			for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 			{
-				chunk.setBlock(blockX, blockY, blockZ, BlockID::Stone);
+				chunk.setBlock({blockX, blockY, blockZ}, BlockID::Stone);
 			}
 		}
 	}
@@ -50,7 +50,7 @@ Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
 			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 			{
 				
-				glm::ivec3 position = glm::ivec3(
+				glm::ivec3 world_position = glm::ivec3(
 					blockX + x * CHUNK_X_SIZE,
 					blockY,
 					blockZ + z * CHUNK_Z_SIZE
@@ -58,18 +58,18 @@ Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
 				BlockID to_set;
 
 				//check to see wether above or below the relief value
-				if (value + 128 > position.y)
+				if (value + 128 > blockY)
 					to_set = BlockID::Stone;
-				else if (value + 133 > position.y)
+				else if (value + 133 > blockY)
 					to_set = BlockID::Grass;
 				else
 					to_set = BlockID::Air;
 
 				//if below relief value try to carve a cave
-				if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
+				if (to_set != BlockID::Air && generateCaveBlock(world_position) == BlockID::Air)
 					to_set = BlockID::Air;
 				// try {
-				column.setBlock(blockX, blockY, blockZ, to_set);
+				column.setBlock({blockX, blockY, blockZ}, to_set);
 				// } catch (std::exception & e)
 				// {
 					// LOG_ERROR("EXCEPTION: " << e.what());
@@ -111,7 +111,7 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 				// {
 				// 	to_set = Block::Grass;
 				// }
-				chunk.setBlock(blockX, blockY, blockZ, to_set);
+				chunk.setBlock({blockX, blockY, blockZ}, to_set);
 			}
 		}
 	}

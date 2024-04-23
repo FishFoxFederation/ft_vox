@@ -36,19 +36,18 @@ Chunk::~Chunk()
 
 }
 
-BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const
+BlockID Chunk::getBlock(const glm::ivec3 & position) const
 {
-	int index = toIndex(x, y, z);
+	int index = toIndex(position);
 
 	return m_blocks[index];
 }
 
-void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
+void Chunk::setBlock(const glm::ivec3 & position, BlockID block)
 {
-	int index = toIndex(x, y, z);
+	int index = toIndex(position);
 
 	m_blocks[index] = block;
-	//REGENERATE MESH HERE
 }
 
 const uint64_t & Chunk::getMeshID() const
@@ -61,9 +60,10 @@ void Chunk::setMeshID(const uint64_t & mesh_id)
 	m_mesh_id = mesh_id;
 }
 
-int Chunk::toIndex(const int & x, const int & y, const int & z)
+
+int Chunk::toIndex(const glm::ivec3 & pos)
 {
-	return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
+	return pos.x + pos.y * CHUNK_X_SIZE + pos.z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
 }
 
 glm::ivec3	Chunk::toCoord(const int & index)
