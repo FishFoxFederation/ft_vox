@@ -125,6 +125,11 @@ public:
 				}
 			}
 		}
+
+	}
+
+	~CreateMeshData()
+	{
 	}
 
 	enum
@@ -475,6 +480,29 @@ public:
 		return Block::hasProperty(side_1, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID) +
 				Block::hasProperty(side_2, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID) +
 				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID);
+	}
+
+	void setAllChunkStatus(bool to_set)
+	{
+		for (auto vec2D : chunks)
+		{
+			for (auto vec1D : vec2D)
+			{
+				for(auto & chunk_ptr : vec1D)
+				{
+					if (chunk_ptr == nullptr)
+						continue;
+					if (to_set)
+						chunk_ptr->status.addWorking();
+					else
+						chunk_ptr->status.removeWorking();
+				}
+			}
+		}
+		if (to_set)
+			chunks[NEUT][NEUT][NEUT]->status.setFlag(Chunk::ChunkStatus::MESHING);
+		else
+			chunks[NEUT][NEUT][NEUT]->status.clearFlag(Chunk::ChunkStatus::MESHING);
 	}
 
 	std::vector<std::vector<std::vector<Chunk *>>> chunks;

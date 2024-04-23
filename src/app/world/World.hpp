@@ -24,8 +24,11 @@
 #define CHUNKS_PER_WORLD 16
 
 /**
- * @brief 
+ * @brief A Class that represents a game world
  * 
+ * @details This class is responsible for managing the game world,
+ * it is responsible for loading and unloading chunks, updating the world and generating new chunks.
+ * It will be responsible for the multiplayer aspect of the game as well
  */
 class World
 {
@@ -37,6 +40,12 @@ public:
 	);
 	~World();
 
+	/**
+	 * @brief Will update the world status based on the new player position
+	 * (load and unload chunks, update the player position, etc.)
+	 * 
+	 * @param playerPosition 
+	 */
 	void update(glm::dvec3 playerPosition);
 
 	// std::unordered_map<glm::ivec3, Chunk> & chunks() { return m_chunks; }
@@ -49,6 +58,8 @@ private:
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
+
+
 	std::unordered_map<glm::ivec3, Chunk>	m_chunks;
 	std::mutex								m_chunks_mutex;
 	std::unordered_set<glm::ivec3>			m_visible_chunks;
@@ -67,8 +78,18 @@ private:
 	uint64_t								m_future_id = 0;
 
 
-	void	doChunkGen(const int & number_of_chunks);
-	void	addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition);
+	void	updateChunks(const glm::vec3 & nextPlayerPosition);
+
+	/**
+	 * @brief Will launch tasks to load the chunks around the player
+	 * @warning This function will not wait for the tasks to finish
+	 * @warning You MUST lock the m_chunks_mutex before calling this function
+	 * 
+	 * @param nextPlayerChunk2D 
+	 */
+	void	loadChunks(const glm::ivec2 & nextPlayerChunk2D);
+	void	unloadChunks(const glm::ivec2 & nextPlayerChunk2D);
+	void	meshChunks(const glm::ivec2 & nextPlayerChunk2D);
 	void	waitForFinishedTasks();
 
 	//TIMING UTILS
