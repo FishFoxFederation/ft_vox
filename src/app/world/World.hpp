@@ -59,18 +59,6 @@ private:
 	std::unordered_set<glm::ivec2>			m_visible_columns;
 	std::mutex								m_visible_columns_mutex;
 
-
-	std::unordered_set<glm::ivec3>			m_chunk_gen_set;
-	std::mutex								m_chunk_gen_set_mutex;
-
-	std::unordered_set<glm::ivec3>			m_chunk_unload_set;
-	std::mutex								m_chunk_unload_set_mutex;
-
-	std::unordered_set<glm::ivec3>			m_chunk_render_set;
-	std::mutex								m_chunk_render_set_mutex;
-
-
-
 	std::unordered_map<uint64_t, std::future<void>> m_futures;
 
 	std::queue<uint64_t>					m_finished_futures;
@@ -80,9 +68,8 @@ private:
 
 
 	void	doChunkGen(const int & number_of_chunks);
-	// void	doChunkLoadUnload(const int & number_of_chunks);
-	// void	addChunksToLoadUnloadQueue(const glm::vec3 & playerPosition);
 	void	addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition);
+	void	waitForFinishedTasks();
 
 	//TIMING UTILS
 	
