@@ -139,7 +139,9 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				auto it = m_chunks.find(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
 				if (it != m_chunks.end())
 					continue;
-				m_chunks.insert(std::make_pair(chunkPos3D, Chunk(chunkPos3D)));
+				auto ret = m_chunks.insert(std::make_pair(chunkPos3D, Chunk(chunkPos3D)));
+				ret.first->second.status.setFlag(Chunk::ChunkStatus::LOADING);
+
 				uint64_t current_id = m_future_id++;
 				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id]()
 				{
@@ -153,6 +155,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 						std::lock_guard<std::mutex> lock(m_chunks_mutex);
 						m_loaded_columns.insert(chunkPos2D);
 						m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())) = std::move(chunk);
+						m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.clearFlag(Chunk::ChunkStatus::LOADING);
 					}
 					
 					{
@@ -224,9 +227,27 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		 * RENDER CHUNKS
 		 * *******************************************************/
 		else if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE
-			&& !m_visible_columns.contains(pos2D)
-			&& !m_chunks.at(pos3D).status.isSet(Chunk::ChunkStatus::MESHING))
+			&& !m_visible_columns.contains(pos2D))
 		{
+			/********
+			 * CHECKING IF NEIGHBOURS EXIST AND ARE AVAILABLE
+			********/
+			bool unavailable_neighbours = false;
+			for(int x = -1; x < 2; x++)
+			{
+				for(int z = -1; z < 2; z++)
+				{
+					glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(pos2D.x, 0, pos2D.y);
+					if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isReadeable())
+					{
+						unavailable_neighbours = true;
+						break;
+					}
+				}
+			}
+			if (unavailable_neighbours)
+				continue;
+
 			/*********
 			 * SETTING STATUSES
 			*********/
@@ -243,7 +264,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 			//set the current chunk as meshing
 			m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::MESHING);
 
-
+			m_visible_columns.insert(pos2D);
 			/********
 			* PUSHING TASK TO THREAD POOL 
 			********/
@@ -255,11 +276,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				 **************************************************************/
 				LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-				{
-					std::lock_guard<std::mutex> lock(m_visible_columns_mutex);
-					m_visible_columns.insert(pos2D);
-					// LOG_DEBUG("Chunk added to visible set " << pos2D.x << " " << pos2D.y);
-				}
+
 				//create all mesh data needed ( pointers to neighbors basically )
 				std::unique_lock<std::mutex> lock(m_chunks_mutex);
 				CreateMeshData mesh_data(pos3D, {1, 1, 1}, m_chunks);
