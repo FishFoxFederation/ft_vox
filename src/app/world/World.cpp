@@ -262,7 +262,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				}
 			}
 			//set the current chunk as meshing
-			m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::MESHING);
+			// m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::MESHING);
 
 			m_visible_columns.insert(pos2D);
 			/********
@@ -307,7 +307,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 						}
 					}
 				}
-				chunk.status.clearFlag(Chunk::ChunkStatus::MESHING);
+				// chunk.status.clearFlag(Chunk::ChunkStatus::MESHING);
 
 				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
