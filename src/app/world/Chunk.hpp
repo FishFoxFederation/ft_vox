@@ -40,6 +40,7 @@ public:
 		void			removeWorking();
 		bool			isSet(const uint64_t & flag);
 		bool			isClear();
+		bool			isReadeable();
 		std::mutex &	getMutex() {return m_mutex;};
 	private:
 		uint64_t				m_flags;

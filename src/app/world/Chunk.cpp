@@ -125,3 +125,9 @@ bool Chunk::ChunkStatus::isClear()
 	std::lock_guard<std::mutex> lock(m_mutex);
 	return m_flags == ChunkStatus::CLEAR;
 }
+
+bool Chunk::ChunkStatus::isReadeable()
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_flags == ChunkStatus::CLEAR || m_flags == ChunkStatus::WORKING;
+}
