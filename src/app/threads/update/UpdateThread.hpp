@@ -5,6 +5,7 @@
 #include "window.hpp"
 #include "WorldScene.hpp"
 #include "Settings.hpp"
+#include "World.hpp"
 
 #include <chrono>
 
@@ -16,6 +17,7 @@ public:
 		const Settings & settings,
 		Window & window,
 		WorldScene & world_scene,
+		World & world,
 		std::chrono::nanoseconds start_time
 	);
 	~UpdateThread();
@@ -30,6 +32,7 @@ private:
 	const Settings & m_settings;
 	Window & m_window;
 	WorldScene & m_world_scene;
+	World & m_world;
 
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;
@@ -43,7 +46,7 @@ private:
 	int m_space_key;
 	int m_left_shift_key;
 
-	double m_camera_speed = 5.0f;
+	double m_camera_speed = 1.0f;
 	double m_mouse_x;
 	double m_mouse_y;
 	double m_last_mouse_x;
@@ -61,6 +64,5 @@ private:
 
 	void updateTime();
 	void readInput();
-	void moveCamera();
-	void rotateCamera();
+	void movePlayer();
 };

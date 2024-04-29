@@ -10,6 +10,7 @@
 #include "CreateMeshData.hpp"
 #include "ThreadPool.hpp"
 #include "VulkanAPI.hpp"
+#include "Camera.hpp"
 
 #include <unordered_map>
 
@@ -30,11 +31,20 @@ public:
 	World & operator=(World & other) = delete;
 	World & operator=(World && other) = delete;
 
-	
-	
+
+
 
 	void updateEntities();
 	void updateBlock(glm::dvec3 position);
+
+	void updatePlayer(
+		const glm::dvec3 & move,
+		const glm::dvec2 & look
+	);
+	Camera getCamera()
+	{
+		return m_player->camera();
+	}
 
 private:
 	WorldScene &							m_worldScene;
@@ -43,7 +53,7 @@ private:
 
 	IdList<uint64_t, std::shared_ptr<Entity>> m_entities;
 
-	std::shared_ptr<Entity> m_player;
+	std::shared_ptr<Player> m_player;
 
 	/*************************************
 	 *  CHUNKS AND MAP
@@ -70,9 +80,9 @@ private:
 
 
 	/*********************************************************
-	 * 
+	 *
 	 *  METHODS
-	 * 
+	 *
 	*********************************************************/
 
 
@@ -82,31 +92,31 @@ private:
 	/**
 	 * @brief will load all chunks around the player
 	 * @warning you must lock m_chunks_mutex before calling this function
-	 * 
-	 * @param playerPosition 
+	 *
+	 * @param playerPosition
 	 */
 	void 	loadChunks(const glm::vec3 & playerPosition);
 
 	/**
 	 * @brief will load all chunks around the players
 	 * @warning you must lock m_chunks_mutex before calling this function
-	 * 
-	 * @param playerPositions 
+	 *
+	 * @param playerPositions
 	 */
 	void 	loadChunks(const std::vector<glm::vec3> & playerPositions);
 
 	/**
 	 * @brief will unload chunk that are too far from the player
 	 * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
-	 * @param playerPosition 
+	 * @param playerPosition
 	 */
 	void	unloadChunks(const glm::vec3 & playerPosition);
 
 	/**
 	 * @brief will unload chunk that are too far from the players
 	 * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
-	 * 
-	 * @param playerPositions 
+	 *
+	 * @param playerPositions
 	 */
 	void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
 
@@ -114,15 +124,15 @@ private:
 	 * @brief will mesh chunks that are meshable around the player
 	 * @warning you must lock m_chunks_mutex as well as m_visible_chunks_mutex
 	 * before calling this function
-	 * 
-	 * @param playerPosition 
+	 *
+	 * @param playerPosition
 	 */
 	void	meshChunks(const glm::vec3 & playerPosition);
 
 	/**
 	 * @brief Will load, unload and mesh chunks around the player
-	 * 
-	 * @param playerPosition 
+	 *
+	 * @param playerPosition
 	 */
 	void 	updateChunks(const glm::vec3 & playerPosition);
 

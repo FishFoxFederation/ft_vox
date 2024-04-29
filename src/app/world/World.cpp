@@ -8,8 +8,11 @@ World::World(
 : m_worldScene(WorldScene),
   m_vulkanAPI(vulkanAPI),
   m_threadPool(threadPool),
-  m_future_id(0)
+  m_future_id(0),
+	m_entities(),
+	m_player(std::make_shared<Player>())
 {
+	m_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
 }
 
 World::~World()
@@ -280,3 +283,13 @@ void World::waitForFutures()
 }
 
 
+
+void World::updatePlayer(
+	const glm::dvec3 & move,
+	const glm::dvec2 & look
+)
+{
+	m_player->movePosition(move);
+	m_player->moveDirection(look.x, look.y);
+	DebugGui::player_position = m_player->transform.position;
+}
