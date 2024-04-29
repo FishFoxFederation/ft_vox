@@ -140,7 +140,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				if (it != m_chunks.end())
 					continue;
 				auto ret = m_chunks.insert(std::make_pair(chunkPos3D, Chunk(chunkPos3D)));
-				ret.first->second.status.setFlag(Chunk::ChunkStatus::LOADING);
+				ret.first->second.status.addWriter();
 
 				uint64_t current_id = m_future_id++;
 				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id]()
@@ -155,13 +155,14 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 						std::lock_guard<std::mutex> lock(m_chunks_mutex);
 						m_loaded_columns.insert(chunkPos2D);
 						m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())) = std::move(chunk);
-						m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.clearFlag(Chunk::ChunkStatus::LOADING);
+						//line under is commented because the new chunk that is being moved in has a blank status
+						// m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.removeWriter();
 					}
 					
 					{
 						std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 						m_finished_futures.push(current_id);
-						// LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
+						LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
 					}
 					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
@@ -182,13 +183,12 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 		 **************************************************************/
 		if (distanceX > LOAD_DISTANCE || distanceZ > LOAD_DISTANCE) 
 		{
-			if (!m_chunks.at(pos3D).status.isClear())
+			if (!m_chunks.at(pos3D).status.tryAddWriter())
 			{
 				// LOG_DEBUG("Chunk is busy: " << pos2D.x << " " << pos2D.y);
 				continue;
 			}
 			// LOG_DEBUG("Unloading chunk: " << pos2D.x << " " << pos2D.y);
-			m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::DELETING);
 			// m_loaded_columns.erase(pos2D);
 			// m_visible_columns.erase(pos2D);
 			uint64_t current_id = m_future_id++;
@@ -238,7 +238,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 				for(int z = -1; z < 2; z++)
 				{
 					glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(pos2D.x, 0, pos2D.y);
-					if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isReadeable())
+					if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isReadable())
 					{
 						unavailable_neighbours = true;
 						break;
@@ -251,20 +251,24 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 			/*********
 			 * SETTING STATUSES
 			*********/
-			//set chunks as working
+			//set chunks as being read
+			//this is possible and thread safe to test if they are readable and then to modify their statuses
+			//only because we have the guarantee that not other task will try to write to them
+			//since task dispatching is done in order
 			for(int x = -1; x < 2; x++)
 			{
 				for(int z = -1; z < 2; z++)
 				{
 					glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(pos2D.x, 0, pos2D.y);
 					if(m_chunks.contains(chunkPos))
-						m_chunks.at(chunkPos).status.addWorking();
+						m_chunks.at(chunkPos).status.addReader();
 				}
 			}
 			//set the current chunk as meshing
 			// m_chunks.at(pos3D).status.setFlag(Chunk::ChunkStatus::MESHING);
 
 			m_visible_columns.insert(pos2D);
+			LOG_DEBUG("Adding chunk to render queue: " << pos2D.x << " " << pos2D.y);
 			/********
 			* PUSHING TASK TO THREAD POOL 
 			********/
@@ -303,7 +307,7 @@ void World::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
 						{
 							if (chunk_ptr == nullptr)
 								continue;
-							chunk_ptr->status.removeWorking();
+							chunk_ptr->status.removeReader();
 						}
 					}
 				}

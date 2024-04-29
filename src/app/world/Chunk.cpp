@@ -19,6 +19,7 @@ Chunk::Chunk(glm::ivec3 position)
 
 Chunk::Chunk(Chunk && other)
 :	position(other.position),
+	status(other.status),
 	m_mesh_id(other.m_mesh_id),
 	m_blocks(std::move(other.m_blocks))
 {
@@ -28,6 +29,7 @@ Chunk & Chunk::operator=(const Chunk && other)
 {
 	m_mesh_id = other.m_mesh_id;
 	m_blocks = std::move(other.m_blocks);
+	status = other.status;
 	return *this;
 }
 
@@ -72,62 +74,4 @@ glm::ivec3	Chunk::toCoord(const int & index)
 	int y = (index - x) % CHUNK_Y_SIZE;
 	int z = (index - x - y) % CHUNK_Z_SIZE;
 	return glm::ivec3(x, y, z);
-}
-
-void Chunk::ChunkStatus::addWorking()
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	m_flags |= ChunkStatus::WORKING;
-	m_counter++;
-}
-
-void Chunk::ChunkStatus::removeWorking()
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	m_counter--;
-	if (m_counter == 0)
-	{
-		m_flags ^= ChunkStatus::WORKING;
-		m_cv.notify_all();
-	}
-}
-
-void Chunk::ChunkStatus::setFlag(const uint64_t & flag)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	m_flags |= flag;
-}
-
-void Chunk::ChunkStatus::clearFlag(const uint64_t & flag)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	m_flags ^= flag;
-	if (m_flags == ChunkStatus::CLEAR)
-		m_cv.notify_all();
-}
-
-void Chunk::ChunkStatus::waitForClear()
-{
-	std::condition_variable cv;
-	std::unique_lock<std::mutex> lock(m_mutex);
-	m_cv.wait(lock, [&] {return m_flags == ChunkStatus::CLEAR; });
-	return;
-}
-
-bool Chunk::ChunkStatus::isSet(const uint64_t & flag)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return m_flags & flag;
-}
-
-bool Chunk::ChunkStatus::isClear()
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return m_flags == ChunkStatus::CLEAR;
-}
-
-bool Chunk::ChunkStatus::isReadeable()
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return m_flags == ChunkStatus::CLEAR || m_flags == ChunkStatus::WORKING;
 }
