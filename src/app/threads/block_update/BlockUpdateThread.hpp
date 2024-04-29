@@ -10,13 +10,13 @@
 
 /**
  * @brief An implementation of the thread wrapper for the thread that handles block updates
- * 
+ *
  * @details This thread will run at 20 ticks per second
  * It is in charge of updating blocks
  * As well a loading/unloading chunks
  * And of course generating new chunks
  * every function called from the loop and init function MUST be thread safe
- * 
+ *
  */
 class BlockUpdateThread : public AThreadWrapper
 {
@@ -24,8 +24,7 @@ public:
 
 	BlockUpdateThread(
 		WorldScene & worldScene,
-		VulkanAPI & vulkanAPI,
-		ThreadPool & threadPool
+		World & world
 	);
 	~BlockUpdateThread();
 
@@ -35,11 +34,8 @@ public:
 
 private:
 
-	WorldScene &	m_worldScene;
-	VulkanAPI &		m_vulkanAPI;
-	ThreadPool &	m_threadPool;
-	
-	World			m_world;
+	WorldScene	&	m_worldScene;
+	World		&	m_world;
 
 	/**
 	 * @brief WIP

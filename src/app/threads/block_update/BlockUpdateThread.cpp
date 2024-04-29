@@ -4,13 +4,10 @@
 
 BlockUpdateThread::BlockUpdateThread(
 	WorldScene & worldScene,
-	VulkanAPI & vulkanAPI,
-	ThreadPool & threadPool
+	World & world
 ):
 	m_worldScene(worldScene),
-	m_vulkanAPI(vulkanAPI),
-	m_threadPool(threadPool),
-	m_world(worldScene, m_vulkanAPI, m_threadPool)
+	m_world(world)
 {
 }
 
@@ -38,9 +35,9 @@ void BlockUpdateThread::init()
 	// 		}
 	// 	}
 	// }
-	LOG_DEBUG("AVG perlin :" << m_world.m_worldGenerator.m_avg / m_world.m_worldGenerator.m_called);
-	LOG_DEBUG("MAX perlin :" << m_world.m_worldGenerator.m_max);
-	LOG_DEBUG("MIN perlin :" << m_world.m_worldGenerator.m_min);
+	// LOG_DEBUG("AVG perlin :" << m_world.m_worldGenerator.m_avg / m_world.m_worldGenerator.m_called);
+	// LOG_DEBUG("MAX perlin :" << m_world.m_worldGenerator.m_max);
+	// LOG_DEBUG("MIN perlin :" << m_world.m_worldGenerator.m_min);
 
 	// for (auto & [pos, chunk] : m_world.chunks())
 	// {
@@ -62,6 +59,6 @@ void BlockUpdateThread::init()
 
 void BlockUpdateThread::loop()
 {
-	m_world.update(m_worldScene.camera().getPosition());
+	m_world.updateBlock(m_worldScene.camera().getPosition());
 	// LOG_INFO("PLAYER POSITION: " << m_worldScene.camera().position().x << " " << m_worldScene.camera().position().y << " " << m_worldScene.camera().position().z);
 }

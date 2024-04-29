@@ -53,7 +53,9 @@ target_sources(${PROJECT_NAME}
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
+		src/app/world/entity/Entity.cpp
 		src/app/world/World.cpp
+		src/app/world/Map.cpp
 		src/app/world/WorldGenerator.cpp
 		src/app/world/Player.cpp
 
@@ -82,6 +84,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/entity
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
