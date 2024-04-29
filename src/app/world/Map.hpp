@@ -20,7 +20,6 @@
 #include "hashes.hpp"
 #include "CreateMeshData.hpp"
 
-#define CHUNKS_PER_WORLD 16
 
 /**
  * @brief
@@ -38,8 +37,6 @@ public:
 
 	void update(glm::dvec3 playerPosition);
 
-	// std::unordered_map<glm::ivec3, Chunk> & chunks() { return m_chunks; }
-
 	WorldGenerator m_worldGenerator;
 private:
 
@@ -48,25 +45,16 @@ private:
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
+
 	std::unordered_map<glm::ivec3, Chunk>	m_chunks;
-	std::mutex								m_chunks_mutex;
-	std::unordered_set<glm::ivec3>			m_visible_chunks;
-
-
 	std::unordered_set<glm::ivec2>			m_loaded_columns;
+	std::mutex								m_chunks_mutex;
+
 	std::unordered_set<glm::ivec2>			m_visible_columns;
 	std::mutex								m_visible_columns_mutex;
 
-
-	std::unordered_set<glm::ivec3>			m_chunk_gen_set;
-	std::mutex								m_chunk_gen_set_mutex;
-
-	std::unordered_set<glm::ivec3>			m_chunk_unload_set;
-	std::mutex								m_chunk_unload_set_mutex;
-
-	std::unordered_set<glm::ivec3>			m_chunk_render_set;
-	std::mutex								m_chunk_render_set_mutex;
-
+	std::unordered_set<glm::ivec2> 			m_unload_set;
+	std::mutex								m_unload_set_mutex;
 
 
 	std::unordered_map<uint64_t, std::future<void>> m_futures;
@@ -76,12 +64,12 @@ private:
 
 	uint64_t								m_future_id = 0;
 
+	void 	loadChunks(const glm::vec3 & playerPosition);
+	void 	loadChunks(const std::vector<glm::vec3> & playerPositions);
+	void	unloadChunks(const glm::vec3 & playerPosition);
+	void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
 
-	void	doChunkGen(const int & number_of_chunks);
-	// void	doChunkLoadUnload(const int & number_of_chunks);
-	// void	addChunksToLoadUnloadQueue(const glm::vec3 & playerPosition);
+	void	renderChunks(const glm::vec3 & playerPosition);
+
 	void	addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition);
-
-	//TIMING UTILS
-
 };

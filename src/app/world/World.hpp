@@ -37,3 +37,8 @@ private:
 	std::shared_ptr<Entity> m_player;
 
 };
+
+class ClientWorld
+{
+
+};
