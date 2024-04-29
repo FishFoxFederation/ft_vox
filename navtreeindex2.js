@@ -1,5 +1,14 @@
 var NAVTREEINDEX2 =
 {
+"codestyleguide.html#autotoc_md3":[3,0],
+"codestyleguide.html#autotoc_md4":[3,0,0],
+"codestyleguide.html#autotoc_md5":[3,0,1],
+"codestyleguide.html#autotoc_md6":[3,0,2],
+"codestyleguide.html#autotoc_md7":[3,1],
+"define_8hpp.html":[10,0,1,2],
+"define_8hpp.html#a2a7abdace53c2954b6c60d5d66a52464":[10,0,1,2,3],
+"define_8hpp.html#aa6692cbfe5c70cfe5e6e334b61140c1a":[10,0,1,2,2],
+"define_8hpp.html#ae73053051efbb45c3a39751f5ce9fb36":[10,0,1,2,1],
 "define_8hpp.html#af32eedba9e693fc5d6c462fed75836f0":[10,0,1,2,0],
 "define_8hpp_source.html":[10,0,1,2],
 "dir_209d8d7e4b7bf4dfb7c512b3795ac445.html":[10,0,1,0,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX2 =
 "structQueueFamilyIndices.html#a234b1e58ad66b4ce2e09bd42c0f8409c":[9,0,27,1],
 "structQueueFamilyIndices.html#a2f4be08657178d2397981ace027b01a0":[9,0,27,2],
 "structQueueFamilyIndices.html#a44f40b1ee7642edba5edcf8c7da9a8f7":[9,0,27,3],
-"structQueueFamilyIndices.html#a652cdfabe4719ae21a701e77d57e7899":[9,0,27,0],
-"structShadowMapLight.html":[9,0,30],
-"structShadowMapLight.html#a6940614fea85b6a76426591decc9be20":[9,0,30,0],
-"structShadowMapLight.html#a76cb6649d225615cb43c91451071bd26":[9,0,30,1],
-"structShadowMapLight.html#aab1a87b60d59c37d0273bf94fa6a0655":[9,0,30,2],
-"structSwapchain_1_1CreateInfo.html":[9,0,32,0],
-"structSwapchain_1_1CreateInfo.html#a47ee25910eae6d24edb56da521303b69":[9,0,32,0,0],
-"structSwapchain_1_1CreateInfo.html#a5667c3f28b3bf53704c006fad40f034c":[9,0,32,0,3],
-"structSwapchain_1_1CreateInfo.html#a9c00a0a7b2354b178a6817008ef6b92c":[9,0,32,0,2],
-"structSwapchain_1_1CreateInfo.html#ad1c102bab8c5453ff798c6d2127d3e97":[9,0,32,0,1]
+"structQueueFamilyIndices.html#a652cdfabe4719ae21a701e77d57e7899":[9,0,27,0]
 };

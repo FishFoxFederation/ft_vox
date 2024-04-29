@@ -14,7 +14,7 @@ var searchData=
   ['threadpool_2ehpp_11',['ThreadPool.hpp',['../ThreadPool_8hpp.html',1,'']]],
   ['threads_20architecture_12',['Threads Architecture',['../threads.html',1,'']]],
   ['tiling_13',['tiling',['../structImage_1_1CreateInfo.html#a3020f400addaf0b3295127255819ec20',1,'Image::CreateInfo']]],
-  ['timer_14',['Timer',['../classTimer.html#a8e2163a0e4f62d15b2056d5d79524691',1,'Timer::Timer()'],['../classTimer.html',1,'Timer&lt; ChronoCount, HistorySize &gt;']]],
+  ['timer_14',['Timer',['../classTimer.html',1,'Timer&lt; ChronoCount, HistorySize &gt;'],['../classTimer.html#a8e2163a0e4f62d15b2056d5d79524691',1,'Timer::Timer()']]],
   ['timer_2ehpp_15',['Timer.hpp',['../Timer_8hpp.html',1,'']]],
   ['tocoord_16',['toCoord',['../classChunk.html#a17db6bae975e96ac6ee8ad02f8978a6e',1,'Chunk']]],
   ['toindex_17',['toIndex',['../classChunk.html#a3c67283dce20bb8ece67cb85e6eb4dd7',1,'Chunk']]],
@@ -25,8 +25,11 @@ var searchData=
   ['transfer_5ffamily_22',['transfer_family',['../structQueueFamilyIndices.html#a44f40b1ee7642edba5edcf8c7da9a8f7',1,'QueueFamilyIndices']]],
   ['transfer_5foperation_5fmutex_23',['transfer_operation_mutex',['../classVulkanAPI.html#a3e2a8e23d44bb3ba01152cabbfb634d0',1,'VulkanAPI']]],
   ['transfer_5fqueue_24',['transfer_queue',['../classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960',1,'VulkanAPI']]],
-  ['transform_25',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]],
-  ['transform_26',['Transform',['../classWorldScene_1_1Transform.html#a25c42b8296eb24b147b51442a68671ed',1,'WorldScene::Transform::Transform()'],['../classWorldScene_1_1Transform.html',1,'WorldScene::Transform']]],
-  ['transitionimagelayout_27',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]],
-  ['transitionlayout_28',['transitionLayout',['../classImage.html#accc61110a5c1048242212d482c63f5c8',1,'Image']]]
+  ['transform_25',['Transform',['../classWorldScene_1_1Transform.html#a25c42b8296eb24b147b51442a68671ed',1,'WorldScene::Transform']]],
+  ['transform_26',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]],
+  ['transform_27',['Transform',['../classWorldScene_1_1Transform.html',1,'WorldScene']]],
+  ['transitionimagelayout_28',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]],
+  ['transitionlayout_29',['transitionLayout',['../classImage.html#accc61110a5c1048242212d482c63f5c8',1,'Image']]],
+  ['tryaddreader_30',['tryAddReader',['../classStatus.html#a29c477f7810ac556979b35f992c71f60',1,'Status']]],
+  ['tryaddwriter_31',['tryAddWriter',['../classStatus.html#a96067e25545f6a1b512ca64747121fa0',1,'Status']]]
 ];

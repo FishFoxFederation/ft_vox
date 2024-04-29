@@ -15,9 +15,8 @@ var searchData=
   ['getmeshid_12',['getMeshID',['../classChunk.html#a9a8d9430340b16dc0dbc8d6c8e5d0ff3',1,'Chunk']]],
   ['getmeshrenderdata_13',['getMeshRenderData',['../classWorldScene.html#a31291b76be40ac58d2a7fbebdf7963e8',1,'WorldScene']]],
   ['getmousebuttonstate_14',['getMouseButtonState',['../classInput.html#ae381b13fabd937f971f55f91ad248c58',1,'Input']]],
-  ['getmutex_15',['getMutex',['../classChunk_1_1ChunkStatus.html#ae2dd010ee50e4963a4f68d490ccb12cb',1,'Chunk::ChunkStatus']]],
-  ['getpitch_16',['getPitch',['../classCamera.html#af519c0e2f46200657381b2247214eca3',1,'Camera']]],
-  ['getposition_17',['getPosition',['../classCamera.html#afc8e2102d3c22140195b9de418250628',1,'Camera::getPosition()'],['../classChunk.html#ac7a2ed68597190050622a38dc45b4665',1,'Chunk::getPosition()']]],
-  ['getrenderinfo_18',['getRenderInfo',['../classCamera.html#a9c5e4a4daa624e59727d920dcc5a10ec',1,'Camera']]],
-  ['getyaw_19',['getYaw',['../classCamera.html#a9e2016baa0b8dfdeb7df1c94661b7f82',1,'Camera']]]
+  ['getpitch_15',['getPitch',['../classCamera.html#af519c0e2f46200657381b2247214eca3',1,'Camera']]],
+  ['getposition_16',['getPosition',['../classCamera.html#afc8e2102d3c22140195b9de418250628',1,'Camera::getPosition()'],['../classChunk.html#ac7a2ed68597190050622a38dc45b4665',1,'Chunk::getPosition()']]],
+  ['getrenderinfo_17',['getRenderInfo',['../classCamera.html#a9c5e4a4daa624e59727d920dcc5a10ec',1,'Camera']]],
+  ['getyaw_18',['getYaw',['../classCamera.html#a9e2016baa0b8dfdeb7df1c94661b7f82',1,'Camera']]]
 ];

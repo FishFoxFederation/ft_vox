@@ -36,6 +36,7 @@ var annotated_dup =
     [ "Settings", "classSettings.html", "classSettings" ],
     [ "ShadowMapLight", "structShadowMapLight.html", "structShadowMapLight" ],
     [ "SingleTimeCommand", "classSingleTimeCommand.html", "classSingleTimeCommand" ],
+    [ "Status", "classStatus.html", "classStatus" ],
     [ "Swapchain", "classSwapchain.html", "classSwapchain" ],
     [ "ThreadPool", "classThreadPool.html", "classThreadPool" ],
     [ "Timer", "classTimer.html", "classTimer" ],

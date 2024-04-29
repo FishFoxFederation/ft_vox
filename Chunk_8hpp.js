@@ -1,7 +1,6 @@
 var Chunk_8hpp =
 [
     [ "Chunk", "classChunk.html", "classChunk" ],
-    [ "Chunk::ChunkStatus", "classChunk_1_1ChunkStatus.html", "classChunk_1_1ChunkStatus" ],
     [ "BLOCKS_PER_CHUNK", "Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3", null ],
     [ "CHUNK_SIZE_IVEC3", "Chunk_8hpp.html#a6f076f66a2e2b8c32529115c9c1c0a74", null ],
     [ "CHUNK_X_SIZE", "Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5", null ],

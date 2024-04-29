@@ -1,6 +1,5 @@
 var classChunk =
 [
-    [ "ChunkStatus", "classChunk_1_1ChunkStatus.html", "classChunk_1_1ChunkStatus" ],
     [ "BlockArray", "classChunk.html#a88ee5de5ab052189e31a7446d6acac1e", null ],
     [ "Chunk", "classChunk.html#a76523171d0b51437c6d1d24c5001fa6e", null ],
     [ "Chunk", "classChunk.html#af736ac12c9122c37346b980428d83c3d", null ],
@@ -15,5 +14,5 @@ var classChunk =
     [ "y", "classChunk.html#a13e0fddb7e57040210637ee07fbba9ab", null ],
     [ "z", "classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c", null ],
     [ "position", "classChunk.html#a065791312fcab1bd72ae4ce04fd6fd6a", null ],
-    [ "status", "classChunk.html#a3fbd9ecbcd13fa97494b2d4555683f61", null ]
+    [ "status", "classChunk.html#a46d6db3de4d66e2ba1e7fcfcdcf58918", null ]
 ];

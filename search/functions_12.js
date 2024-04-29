@@ -6,5 +6,7 @@ var searchData=
   ['toindex_3',['toIndex',['../classChunk.html#a3c67283dce20bb8ece67cb85e6eb4dd7',1,'Chunk']]],
   ['transform_4',['Transform',['../classWorldScene_1_1Transform.html#a25c42b8296eb24b147b51442a68671ed',1,'WorldScene::Transform']]],
   ['transitionimagelayout_5',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]],
-  ['transitionlayout_6',['transitionLayout',['../classImage.html#accc61110a5c1048242212d482c63f5c8',1,'Image']]]
+  ['transitionlayout_6',['transitionLayout',['../classImage.html#accc61110a5c1048242212d482c63f5c8',1,'Image']]],
+  ['tryaddreader_7',['tryAddReader',['../classStatus.html#a29c477f7810ac556979b35f992c71f60',1,'Status']]],
+  ['tryaddwriter_8',['tryAddWriter',['../classStatus.html#a96067e25545f6a1b512ca64747121fa0',1,'Status']]]
 ];
