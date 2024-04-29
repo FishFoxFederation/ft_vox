@@ -5,6 +5,7 @@
 #include <glm/vec3.hpp>
 #include <mutex>
 #include <condition_variable>
+#include <unordered_set>
 #include "Block.hpp"
 #include "Status.hpp"
 #include "define.hpp"
@@ -48,6 +49,7 @@ public:
 	const		glm::ivec3 position;
 
 	Status	status;
+	std::unordered_set<uint64_t>	entity_ids;
 private:
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
