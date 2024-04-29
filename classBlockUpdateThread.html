@@ -137,8 +137,8 @@ Collaboration diagram for BlockUpdateThread:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aaa07deff23590436696625188336b853"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlockUpdateThread.html#aaa07deff23590436696625188336b853">BlockUpdateThread</a> (<a class="el" href="classWorldScene.html">WorldScene</a> &amp;worldScene, <a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkanAPI, <a class="el" href="classThreadPool.html">ThreadPool</a> &amp;threadPool)</td></tr>
-<tr class="separator:aaa07deff23590436696625188336b853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9420843a34ba0faaa8b89b5687f24b7f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlockUpdateThread.html#a9420843a34ba0faaa8b89b5687f24b7f">BlockUpdateThread</a> (<a class="el" href="classWorldScene.html">WorldScene</a> &amp;worldScene, <a class="el" href="classWorld.html">World</a> &amp;world)</td></tr>
+<tr class="separator:a9420843a34ba0faaa8b89b5687f24b7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a684a203fc0a69d2c9a81cdde03fa5ecf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlockUpdateThread.html#a684a203fc0a69d2c9a81cdde03fa5ecf">~BlockUpdateThread</a> ()</td></tr>
 <tr class="separator:a684a203fc0a69d2c9a81cdde03fa5ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5e8f510884616c75e89bac2ee17b75c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBlockUpdateThread.html#ac5e8f510884616c75e89bac2ee17b75c">BlockUpdateThread</a> (<a class="el" href="classBlockUpdateThread.html">BlockUpdateThread</a> &amp;other)=delete</td></tr>
@@ -169,8 +169,8 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p >An implementation of the thread wrapper for the thread that handles block updates. </p>
 <p >This thread will run at 20 ticks per second It is in charge of updating blocks As well a loading/unloading chunks And of course generating new chunks every function called from the loop and init function MUST be thread safe </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aaa07deff23590436696625188336b853" name="aaa07deff23590436696625188336b853"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa07deff23590436696625188336b853">&#9670;&#160;</a></span>BlockUpdateThread() <span class="overload">[1/3]</span></h2>
+<a id="a9420843a34ba0faaa8b89b5687f24b7f" name="a9420843a34ba0faaa8b89b5687f24b7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9420843a34ba0faaa8b89b5687f24b7f">&#9670;&#160;</a></span>BlockUpdateThread() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -184,14 +184,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;&#160;</td>
-          <td class="paramname"><em>vulkanAPI</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classThreadPool.html">ThreadPool</a> &amp;&#160;</td>
-          <td class="paramname"><em>threadPool</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classWorld.html">World</a> &amp;&#160;</td>
+          <td class="paramname"><em>world</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

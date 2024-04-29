@@ -27,7 +27,7 @@ var searchData=
   ['chunk_5fz_5fsize_24',['CHUNK_Z_SIZE',['../Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100',1,'Chunk.hpp']]],
   ['chunkmap_25',['ChunkMap',['../CreateMeshData_8hpp.html#a1bee2be0575bb8195e4990b50a46ed21',1,'CreateMeshData.hpp']]],
   ['chunks_26',['chunks',['../classCreateMeshData.html#aad6bd289268fc6c44ffa987839700612',1,'CreateMeshData']]],
-  ['chunks_5fper_5fworld_27',['CHUNKS_PER_WORLD',['../World_8hpp.html#a8a7b3d7c895c64b2272c412c87450791',1,'World.hpp']]],
+  ['chunks_5fper_5fworld_27',['CHUNKS_PER_WORLD',['../Map_8hpp.html#a8a7b3d7c895c64b2272c412c87450791',1,'Map.hpp']]],
   ['class_5farchitecture_28',['class_architecture',['../md_docs_pages_class_architecture.html',1,'']]],
   ['class_5farchitecture_2emd_29',['class_architecture.md',['../class__architecture_8md.html',1,'']]],
   ['clear_30',['clear',['../classDescriptor.html#ac781f2e9b97d7b8803fe321e1f5d8470',1,'Descriptor::clear()'],['../classImage.html#a3a233515eb3a5f83917dc634c778db5a',1,'Image::clear()'],['../classPipeline.html#a75c3ba97f5fd9a5f77d8a5aaec28f4ab',1,'Pipeline::clear()'],['../classSwapchain.html#a3f8ee8c3ae46e537f4be8293820cf4f8',1,'Swapchain::clear()'],['../structImGuiTexture.html#a9f8a1d9d9d6086444732b94e59074375',1,'ImGuiTexture::clear()']]],

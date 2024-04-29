@@ -13,6 +13,7 @@ var classChunk =
     [ "x", "classChunk.html#a05ae613668297fefa3e36540bdb80ea1", null ],
     [ "y", "classChunk.html#a13e0fddb7e57040210637ee07fbba9ab", null ],
     [ "z", "classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c", null ],
+    [ "entity_ids", "classChunk.html#aa9be7205972b0ef732c338037f717cef", null ],
     [ "position", "classChunk.html#a065791312fcab1bd72ae4ce04fd6fd6a", null ],
     [ "status", "classChunk.html#a46d6db3de4d66e2ba1e7fcfcdcf58918", null ]
 ];
