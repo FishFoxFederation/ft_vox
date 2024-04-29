@@ -6,6 +6,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "Block.hpp"
+#include "Status.hpp"
 #include "define.hpp"
 
 #define CHUNK_Y_SIZE 256
@@ -18,36 +19,6 @@
 class Chunk
 {
 public:
-	class ChunkStatus
-	{
-	public:
-		
-		const static inline uint64_t CLEAR = 0;
-		const static inline uint64_t WORKING = 1 << 1;
-		const static inline uint64_t MESHING = 1 << 2;
-		const static inline uint64_t DELETING = 1 << 3;
-		const static inline uint64_t LOADING = 1 << 4;
-
-		ChunkStatus()
-			: m_flags(CLEAR), m_counter(0)
-		{};
-		~ChunkStatus(){};
-
-		void			waitForClear();
-		void			setFlag(const uint64_t & flag);
-		void 			clearFlag(const uint64_t & flag);
-		void			addWorking();
-		void			removeWorking();
-		bool			isSet(const uint64_t & flag);
-		bool			isClear();
-		bool			isReadeable();
-		std::mutex &	getMutex() {return m_mutex;};
-	private:
-		uint64_t				m_flags;
-		uint64_t				m_counter;
-		std::mutex				m_mutex;
-		std::condition_variable m_cv;
-	};
 
 	Chunk(glm::ivec3 position);
 
@@ -76,7 +47,7 @@ public:
 
 	const		glm::ivec3 position;
 
-	ChunkStatus	status;
+	Status	status;
 private:
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
