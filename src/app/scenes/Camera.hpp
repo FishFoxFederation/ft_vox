@@ -52,9 +52,38 @@ public:
 	Camera() = default;
 	~Camera() = default;
 
-	Camera(const Camera & camera)
+	Camera(
+		const glm::dvec3 & position,
+		double pitch,
+		double yaw
+	):
+		position(position),
+		pitch(pitch),
+		yaw(yaw),
+		up(0.0f, 1.0f, 0.0f),
+		fov(80.0f),
+		near_plane(0.01f),
+		far_plane(1000.0f)
 	{
-		std::lock_guard<std::mutex> lock(camera.m_mutex);
+	}
+
+	Camera(const Camera & camera) = delete;
+	Camera & operator=(Camera & camera) = delete;
+
+	Camera(Camera && camera):
+		position(camera.position),
+		pitch(camera.pitch),
+		yaw(camera.yaw),
+		up(camera.up),
+		fov(camera.fov),
+		near_plane(camera.near_plane),
+		far_plane(camera.far_plane)
+	{
+	}
+
+	Camera & operator=(Camera && camera)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
 		position = camera.position;
 		pitch = camera.pitch;
 		yaw = camera.yaw;
@@ -62,10 +91,8 @@ public:
 		fov = camera.fov;
 		near_plane = camera.near_plane;
 		far_plane = camera.far_plane;
+		return *this;
 	}
-	Camera(Camera && camera) = delete;
-	Camera & operator=(Camera & camera) = delete;
-	Camera & operator=(Camera && camera) = delete;
 
 	/**
 	 * @brief Move the camera with a vector. x = right, y = up, z = forward.

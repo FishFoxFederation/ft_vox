@@ -8,12 +8,14 @@ UpdateThread::UpdateThread(
 	const Settings & settings,
 	Window & window,
 	WorldScene & world_scene,
+	World & world,
 	std::chrono::nanoseconds start_time
 ):
 	AThreadWrapper(),
 	m_settings(settings),
 	m_window(window),
 	m_world_scene(world_scene),
+	m_world(world),
 	m_start_time(start_time),
 	m_last_frame_time(start_time)
 {
@@ -35,8 +37,7 @@ void UpdateThread::loop()
 {
 	updateTime();
 	readInput();
-	moveCamera();
-	rotateCamera();
+	movePlayer();
 }
 
 void UpdateThread::updateTime()
@@ -58,53 +59,53 @@ void UpdateThread::readInput()
 	m_window.input().getCursorPos(m_mouse_x, m_mouse_y);
 }
 
-void UpdateThread::moveCamera()
+void UpdateThread::movePlayer()
 {
 	glm::dvec3 move = glm::dvec3(0.0f);
 	if (m_w_key == GLFW_PRESS)
 	{
-		move += glm::dvec3(0.0f, 0.0f, 1.0f);
+		move.z += 1.0f;
 	}
 	if (m_a_key == GLFW_PRESS)
 	{
-		move += glm::dvec3(-1.0f, 0.0f, 0.0f);
+		move.x += -1.0f;
 	}
 	if (m_s_key == GLFW_PRESS)
 	{
-		move += glm::dvec3(0.0f, 0.0f, -1.0f);
+		move.z += -1.0f;
 	}
 	if (m_d_key == GLFW_PRESS)
 	{
-		move += glm::dvec3(1.0f, 0.0f, 0.0f);
+		move.x += 1.0f;
 	}
 	if (m_space_key == GLFW_PRESS)
 	{
-		move += glm::dvec3(0.0f, 1.0f, 0.0f);
+		move.y += 1.0f;
 	}
 	if (m_left_shift_key == GLFW_PRESS)
 	{
-		move += glm::dvec3(0.0f, -1.0f, 0.0f);
+		move.y += -1.0f;
 	}
+
 	if (glm::length(move) > 0.0f)
 	{
-		move = glm::normalize(move) * m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e8;
-		m_world_scene.camera().movePosition(move);
+		move = glm::normalize(move);
 	}
-}
 
-void UpdateThread::rotateCamera()
-{
-	double x_offset = m_mouse_x - m_last_mouse_x;
-	double y_offset = m_last_mouse_y - m_mouse_y;
+	// move *= m_camera_speed * static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(m_delta_time).count());
+	move *= m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e8;
+	// LOG_DEBUG("delta_time: " << static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(m_delta_time).count()));
+
+	glm::dvec2 look = glm::dvec2(m_mouse_x - m_last_mouse_x, m_mouse_y - m_last_mouse_y) * m_settings.mouseSensitivity();
 	m_last_mouse_x = m_mouse_x;
 	m_last_mouse_y = m_mouse_y;
 
-	if (m_window.input().isCursorCaptured() && (x_offset != 0.0 || y_offset != 0.0))
+	if (!m_window.input().isCursorCaptured())
 	{
-		double sensitivity = m_settings.mouseSensitivity();
-		m_world_scene.camera().moveDirection(
-			x_offset * sensitivity,
-			-y_offset * sensitivity
-		);
+		look = glm::dvec2(0.0);
 	}
+
+	m_world.updatePlayer(move, look);
+
+	m_world_scene.camera() = m_world.getCamera();
 }
