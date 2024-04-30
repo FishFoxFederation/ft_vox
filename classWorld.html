@@ -118,7 +118,7 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,128,163"/>
+<area shape="rect" title=" " alt="" coords="5,5,148,207"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -140,6 +140,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5cc73b1aa54db5da01e4004acd4fd8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10a860e06db7eae12c2d62fbbbc78b57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">updateBlock</a> (glm::dvec3 position)</td></tr>
 <tr class="separator:a10a860e06db7eae12c2d62fbbbc78b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86d86c9befe3a4a7a66d47f1a29f4bbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a86d86c9befe3a4a7a66d47f1a29f4bbb">updatePlayer</a> (const glm::dvec3 &amp;move, const glm::dvec2 &amp;look)</td></tr>
+<tr class="separator:a86d86c9befe3a4a7a66d47f1a29f4bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a548031773601fdf0e0054d0824642b31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a548031773601fdf0e0054d0824642b31">getCamera</a> ()</td></tr>
+<tr class="separator:a548031773601fdf0e0054d0824642b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf70e000805b5766ad5501f92f064c4c"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aaf70e000805b5766ad5501f92f064c4c">getPlayerPosition</a> ()</td></tr>
+<tr class="separator:aaf70e000805b5766ad5501f92f064c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad837fd51d7bfdfe752c32ea027930da0" name="ad837fd51d7bfdfe752c32ea027930da0"></a>
@@ -246,6 +252,40 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a548031773601fdf0e0054d0824642b31" name="a548031773601fdf0e0054d0824642b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a548031773601fdf0e0054d0824642b31">&#9670;&#160;</a></span>getCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCamera.html">Camera</a> World::getCamera </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf70e000805b5766ad5501f92f064c4c" name="aaf70e000805b5766ad5501f92f064c4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf70e000805b5766ad5501f92f064c4c">&#9670;&#160;</a></span>getPlayerPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 World::getPlayerPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af69b86b3ac37a2168715401267d104ab" name="af69b86b3ac37a2168715401267d104ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af69b86b3ac37a2168715401267d104ab">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
@@ -327,6 +367,34 @@ Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a86d86c9befe3a4a7a66d47f1a29f4bbb" name="a86d86c9befe3a4a7a66d47f1a29f4bbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86d86c9befe3a4a7a66d47f1a29f4bbb">&#9670;&#160;</a></span>updatePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramname"><em>move</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
+          <td class="paramname"><em>look</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

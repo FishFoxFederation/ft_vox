@@ -1,14 +1,10 @@
 var hierarchy =
 [
     [ "Application", "classApplication.html", null ],
-    [ "AThreadWrapper", "classAThreadWrapper.html", [
-      [ "BlockUpdateThread", "classBlockUpdateThread.html", null ],
-      [ "RenderThread", "classRenderThread.html", null ],
-      [ "UpdateThread", "classUpdateThread.html", null ]
-    ] ],
     [ "Atomic< T >", "classAtomic.html", null ],
     [ "Atomic< glm::vec3 >", "classAtomic.html", null ],
     [ "Block", "structBlock.html", null ],
+    [ "BlockUpdateThread", "classBlockUpdateThread.html", null ],
     [ "BlockVertex", "structBlockVertex.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "Chunk", "classChunk.html", null ],
@@ -50,6 +46,7 @@ var hierarchy =
     [ "Pipeline", "classPipeline.html", null ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],
+    [ "RenderThread", "classRenderThread.html", null ],
     [ "Settings", "classSettings.html", null ],
     [ "ShadowMapLight", "structShadowMapLight.html", null ],
     [ "SingleTimeCommand", "classSingleTimeCommand.html", null ],
@@ -64,6 +61,7 @@ var hierarchy =
       [ "IdList< uint64_t, std::shared_ptr< Entity > >", "classIdList.html", null ],
       [ "IdList< Key, Value, container, IdGen >", "classIdList.html", null ]
     ] ],
+    [ "UpdateThread", "classUpdateThread.html", null ],
     [ "ViewFrustum", "classViewFrustum.html", null ],
     [ "ViewProjMatrices", "structViewProjMatrices.html", null ],
     [ "VulaknMemoryAllocator", "classVulaknMemoryAllocator.html", null ],

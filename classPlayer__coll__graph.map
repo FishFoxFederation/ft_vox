@@ -1,5 +1,5 @@
 <map id="Player" name="Player">
-<area shape="rect" id="node1" title=" " alt="" coords="11,403,107,531"/>
-<area shape="rect" id="node2" href="$classEntity.html" title=" " alt="" coords="11,225,107,353"/>
-<area shape="rect" id="node3" href="$classTransform.html" title=" " alt="" coords="5,5,112,163"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,359,144,545"/>
+<area shape="rect" id="node2" href="$classEntity.html" title=" " alt="" coords="27,181,123,309"/>
+<area shape="rect" id="node3" href="$classTransform.html" title=" " alt="" coords="23,5,126,119"/>
 </map>

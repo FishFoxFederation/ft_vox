@@ -1,11 +1,13 @@
 <map id="src/app/world/entity/Entity.hpp" name="src/app/world/entity/Entity.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="318,5,453,45"/>
-<area shape="rect" id="node2" href="$World_8hpp.html" title=" " alt="" coords="219,101,381,126"/>
-<area shape="rect" id="node9" href="$Entity_8cpp.html" title=" " alt="" coords="405,93,539,133"/>
-<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="80,277,235,302"/>
-<area shape="rect" id="node6" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="195,181,405,221"/>
-<area shape="rect" id="node8" href="$World_8cpp.html" title=" " alt="" coords="430,189,591,214"/>
-<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="5,357,160,383"/>
-<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="184,357,280,383"/>
-<area shape="rect" id="node7" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="259,269,469,309"/>
+<area shape="rect" id="node1" title=" " alt="" coords="393,5,527,45"/>
+<area shape="rect" id="node2" href="$World_8hpp.html" title=" " alt="" coords="294,101,455,126"/>
+<area shape="rect" id="node11" href="$Entity_8cpp.html" title=" " alt="" coords="479,93,614,133"/>
+<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="240,277,395,302"/>
+<area shape="rect" id="node6" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="69,181,280,221"/>
+<area shape="rect" id="node8" href="$UpdateThread_8hpp.html" title=" " alt="" coords="355,181,509,221"/>
+<area shape="rect" id="node10" href="$World_8cpp.html" title=" " alt="" coords="534,189,695,214"/>
+<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="165,357,320,383"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="344,357,440,383"/>
+<area shape="rect" id="node7" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="5,269,216,309"/>
+<area shape="rect" id="node9" href="$UpdateThread_8cpp.html" title=" " alt="" coords="419,269,573,309"/>
 </map>

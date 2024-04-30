@@ -6,7 +6,6 @@ var annotated_dup =
       [ "hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec3_01_4" ]
     ] ],
     [ "Application", "classApplication.html", "classApplication" ],
-    [ "AThreadWrapper", "classAThreadWrapper.html", "classAThreadWrapper" ],
     [ "Atomic", "classAtomic.html", "classAtomic" ],
     [ "Block", "structBlock.html", null ],
     [ "BlockUpdateThread", "classBlockUpdateThread.html", "classBlockUpdateThread" ],

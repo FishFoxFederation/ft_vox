@@ -122,7 +122,7 @@ Collaboration diagram for Camera:</div>
 <div class="dyncontent">
 <div class="center"><img src="classCamera__coll__graph.png" border="0" usemap="#aCamera_coll__map" alt="Collaboration graph"/></div>
 <map name="aCamera_coll__map" id="aCamera_coll__map">
-<area shape="rect" title="A simple camera class." alt="" coords="5,5,129,207"/>
+<area shape="rect" title="A simple camera class." alt="" coords="5,5,128,163"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -137,36 +137,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae23af4d7cab430c77d537621cdd16b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcb96efefa7af58e3ee6534b15d4979b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#adcb96efefa7af58e3ee6534b15d4979b">~Camera</a> ()=default</td></tr>
 <tr class="separator:adcb96efefa7af58e3ee6534b15d4979b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4391264461cbef17b3b0895ad460ace0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a4391264461cbef17b3b0895ad460ace0">Camera</a> (const <a class="el" href="classCamera.html">Camera</a> &amp;camera)</td></tr>
-<tr class="separator:a4391264461cbef17b3b0895ad460ace0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2759558cc1dcf9d900f9b0bf18e24d5e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a2759558cc1dcf9d900f9b0bf18e24d5e">Camera</a> (<a class="el" href="classCamera.html">Camera</a> &amp;&amp;camera)=delete</td></tr>
-<tr class="separator:a2759558cc1dcf9d900f9b0bf18e24d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62e3ea1cb4be917bacbd727112a640d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a62e3ea1cb4be917bacbd727112a640d7">Camera</a> (const glm::dvec3 &amp;position, double pitch, double yaw)</td></tr>
+<tr class="separator:a62e3ea1cb4be917bacbd727112a640d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaf486dfc7066a7977553289b0593533"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#adaf486dfc7066a7977553289b0593533">Camera</a> (const <a class="el" href="classCamera.html">Camera</a> &amp;camera)=delete</td></tr>
+<tr class="separator:adaf486dfc7066a7977553289b0593533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32e204de0e052949fab567a981cbec12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a32e204de0e052949fab567a981cbec12">operator=</a> (<a class="el" href="classCamera.html">Camera</a> &amp;camera)=delete</td></tr>
 <tr class="separator:a32e204de0e052949fab567a981cbec12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f766f9cb267c6235541c94dc16b1e9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a3f766f9cb267c6235541c94dc16b1e9a">operator=</a> (<a class="el" href="classCamera.html">Camera</a> &amp;&amp;camera)=delete</td></tr>
-<tr class="separator:a3f766f9cb267c6235541c94dc16b1e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43b722c4b46264252db112096cb9b580"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a43b722c4b46264252db112096cb9b580">movePosition</a> (const glm::dvec3 &amp;move)</td></tr>
-<tr class="memdesc:a43b722c4b46264252db112096cb9b580"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the camera with a vector. x = right, y = up, z = forward.  <a href="classCamera.html#a43b722c4b46264252db112096cb9b580">More...</a><br /></td></tr>
-<tr class="separator:a43b722c4b46264252db112096cb9b580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5862ee1e2e3d46dc73b74b8c46cb88f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#ac5862ee1e2e3d46dc73b74b8c46cb88f">moveDirection</a> (double x_offset, double y_offset)</td></tr>
-<tr class="memdesc:ac5862ee1e2e3d46dc73b74b8c46cb88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the camera rotation from the cursor movement.  <a href="classCamera.html#ac5862ee1e2e3d46dc73b74b8c46cb88f">More...</a><br /></td></tr>
-<tr class="separator:ac5862ee1e2e3d46dc73b74b8c46cb88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf6accc669562babbd26e2ad261935ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#adf6accc669562babbd26e2ad261935ea">setPosition</a> (const glm::dvec3 &amp;position)</td></tr>
-<tr class="memdesc:adf6accc669562babbd26e2ad261935ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the position of the camera.  <a href="classCamera.html#adf6accc669562babbd26e2ad261935ea">More...</a><br /></td></tr>
-<tr class="separator:adf6accc669562babbd26e2ad261935ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6b0f6800a6d84f4c07655ef436ee0b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#ae6b0f6800a6d84f4c07655ef436ee0b3">lookAt</a> (const glm::dvec3 &amp;target)</td></tr>
-<tr class="memdesc:ae6b0f6800a6d84f4c07655ef436ee0b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pitch and yaw of the camera to look at a target.  <a href="classCamera.html#ae6b0f6800a6d84f4c07655ef436ee0b3">More...</a><br /></td></tr>
-<tr class="separator:ae6b0f6800a6d84f4c07655ef436ee0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc8e2102d3c22140195b9de418250628"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#afc8e2102d3c22140195b9de418250628">getPosition</a> () const</td></tr>
-<tr class="separator:afc8e2102d3c22140195b9de418250628"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af519c0e2f46200657381b2247214eca3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#af519c0e2f46200657381b2247214eca3">getPitch</a> () const</td></tr>
-<tr class="separator:af519c0e2f46200657381b2247214eca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e2016baa0b8dfdeb7df1c94661b7f82"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a9e2016baa0b8dfdeb7df1c94661b7f82">getYaw</a> () const</td></tr>
-<tr class="separator:a9e2016baa0b8dfdeb7df1c94661b7f82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2314a36a406bfb224fc1d48ccc9d627"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#ab2314a36a406bfb224fc1d48ccc9d627">setPitch</a> (double pitch)</td></tr>
-<tr class="separator:ab2314a36a406bfb224fc1d48ccc9d627"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae185b708c48defb404766ca01058fad3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#ae185b708c48defb404766ca01058fad3">setYaw</a> (double yaw)</td></tr>
-<tr class="separator:ae185b708c48defb404766ca01058fad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0f45d5cfdc82baeb627b4edf0bae009"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#ad0f45d5cfdc82baeb627b4edf0bae009">Camera</a> (<a class="el" href="classCamera.html">Camera</a> &amp;&amp;camera)</td></tr>
+<tr class="separator:ad0f45d5cfdc82baeb627b4edf0bae009"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fec870b0929e5e571066c165fbc3688"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a9fec870b0929e5e571066c165fbc3688">operator=</a> (<a class="el" href="classCamera.html">Camera</a> &amp;&amp;camera)</td></tr>
+<tr class="separator:a9fec870b0929e5e571066c165fbc3688"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c5e4a4daa624e59727d920dcc5a10ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCamera_1_1RenderInfo.html">RenderInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a9c5e4a4daa624e59727d920dcc5a10ec">getRenderInfo</a> (double aspect_ratio) const</td></tr>
 <tr class="separator:a9c5e4a4daa624e59727d920dcc5a10ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -174,7 +154,7 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p >A simple camera class. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae23af4d7cab430c77d537621cdd16b3f" name="ae23af4d7cab430c77d537621cdd16b3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae23af4d7cab430c77d537621cdd16b3f">&#9670;&#160;</a></span>Camera() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae23af4d7cab430c77d537621cdd16b3f">&#9670;&#160;</a></span>Camera() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -223,8 +203,50 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4391264461cbef17b3b0895ad460ace0" name="a4391264461cbef17b3b0895ad460ace0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4391264461cbef17b3b0895ad460ace0">&#9670;&#160;</a></span>Camera() <span class="overload">[2/3]</span></h2>
+<a id="a62e3ea1cb4be917bacbd727112a640d7" name="a62e3ea1cb4be917bacbd727112a640d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62e3ea1cb4be917bacbd727112a640d7">&#9670;&#160;</a></span>Camera() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Camera::Camera </td>
+          <td>(</td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pitch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>yaw</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adaf486dfc7066a7977553289b0593533" name="adaf486dfc7066a7977553289b0593533"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaf486dfc7066a7977553289b0593533">&#9670;&#160;</a></span>Camera() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -242,15 +264,15 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a2759558cc1dcf9d900f9b0bf18e24d5e" name="a2759558cc1dcf9d900f9b0bf18e24d5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2759558cc1dcf9d900f9b0bf18e24d5e">&#9670;&#160;</a></span>Camera() <span class="overload">[3/3]</span></h2>
+<a id="ad0f45d5cfdc82baeb627b4edf0bae009" name="ad0f45d5cfdc82baeb627b4edf0bae009"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0f45d5cfdc82baeb627b4edf0bae009">&#9670;&#160;</a></span>Camera() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -268,7 +290,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -276,56 +298,6 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af519c0e2f46200657381b2247214eca3" name="af519c0e2f46200657381b2247214eca3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af519c0e2f46200657381b2247214eca3">&#9670;&#160;</a></span>getPitch()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double Camera::getPitch </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afc8e2102d3c22140195b9de418250628" name="afc8e2102d3c22140195b9de418250628"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc8e2102d3c22140195b9de418250628">&#9670;&#160;</a></span>getPosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">glm::dvec3 Camera::getPosition </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a9c5e4a4daa624e59727d920dcc5a10ec" name="a9c5e4a4daa624e59727d920dcc5a10ec"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9c5e4a4daa624e59727d920dcc5a10ec">&#9670;&#160;</a></span>getRenderInfo()</h2>
 
@@ -352,122 +324,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9e2016baa0b8dfdeb7df1c94661b7f82" name="a9e2016baa0b8dfdeb7df1c94661b7f82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e2016baa0b8dfdeb7df1c94661b7f82">&#9670;&#160;</a></span>getYaw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double Camera::getYaw </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae6b0f6800a6d84f4c07655ef436ee0b3" name="ae6b0f6800a6d84f4c07655ef436ee0b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6b0f6800a6d84f4c07655ef436ee0b3">&#9670;&#160;</a></span>lookAt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Camera::lookAt </td>
-          <td>(</td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
-          <td class="paramname"><em>target</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set the pitch and yaw of the camera to look at a target. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">target</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ac5862ee1e2e3d46dc73b74b8c46cb88f" name="ac5862ee1e2e3d46dc73b74b8c46cb88f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5862ee1e2e3d46dc73b74b8c46cb88f">&#9670;&#160;</a></span>moveDirection()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Camera::moveDirection </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>x_offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>y_offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Move the camera rotation from the cursor movement. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">x_offset</td><td>x movement of the cursor. </td></tr>
-    <tr><td class="paramname">y_offset</td><td>y movement of the cursor. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a43b722c4b46264252db112096cb9b580" name="a43b722c4b46264252db112096cb9b580"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43b722c4b46264252db112096cb9b580">&#9670;&#160;</a></span>movePosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Camera::movePosition </td>
-          <td>(</td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
-          <td class="paramname"><em>move</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Move the camera with a vector. x = right, y = up, z = forward. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">move</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a3f766f9cb267c6235541c94dc16b1e9a" name="a3f766f9cb267c6235541c94dc16b1e9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f766f9cb267c6235541c94dc16b1e9a">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="a9fec870b0929e5e571066c165fbc3688" name="a9fec870b0929e5e571066c165fbc3688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fec870b0929e5e571066c165fbc3688">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -485,7 +343,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -512,84 +370,6 @@ Public Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab2314a36a406bfb224fc1d48ccc9d627" name="ab2314a36a406bfb224fc1d48ccc9d627"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2314a36a406bfb224fc1d48ccc9d627">&#9670;&#160;</a></span>setPitch()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Camera::setPitch </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>pitch</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adf6accc669562babbd26e2ad261935ea" name="adf6accc669562babbd26e2ad261935ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf6accc669562babbd26e2ad261935ea">&#9670;&#160;</a></span>setPosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Camera::setPosition </td>
-          <td>(</td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
-          <td class="paramname"><em>position</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set the position of the camera. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">position</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ae185b708c48defb404766ca01058fad3" name="ae185b708c48defb404766ca01058fad3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae185b708c48defb404766ca01058fad3">&#9670;&#160;</a></span>setYaw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Camera::setYaw </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>yaw</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

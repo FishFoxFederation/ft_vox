@@ -6,5 +6,5 @@ var classEntity =
     [ "Entity", "classEntity.html#a30c067e1de9094763c219fcc14c8419a", null ],
     [ "operator=", "classEntity.html#a7249fe016334b0529822a456c5f01de0", null ],
     [ "operator=", "classEntity.html#a38db6db3e004415d0875ac97c07ed65b", null ],
-    [ "m_transform", "classEntity.html#aeaaca110e398df9cfb0e889a74292768", null ]
+    [ "transform", "classEntity.html#a7766644984b868ccecf24b3aede7279f", null ]
 ];

@@ -120,99 +120,110 @@ $(document).ready(function(){initNavTree('World_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="CreateMeshData_8hpp.html">CreateMeshData.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="ThreadPool_8hpp.html">ThreadPool.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classWorld.html">   16</a></span><span class="keyword">class </span><a class="code hl_class" href="classWorld.html">World</a></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <a class="code hl_class" href="classWorld.html">World</a>(</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp; <a class="code hl_class" href="classWorldScene.html">WorldScene</a>,</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vulkanAPI,</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_class" href="classThreadPool.html">ThreadPool</a> &amp; threadPool</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    );</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <a class="code hl_function" href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">~World</a>();</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classWorld.html#a8e7a792ae04e9804a464746adb06f7aa">   28</a></span>    <a class="code hl_function" href="classWorld.html#a8e7a792ae04e9804a464746adb06f7aa">World</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classWorld.html#a9319f9fe52db6162be2269479d76100d">   29</a></span>    <a class="code hl_function" href="classWorld.html#a9319f9fe52db6162be2269479d76100d">World</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa">   30</a></span>    <a class="code hl_class" href="classWorld.html">World</a> &amp; <a class="code hl_function" href="classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa">operator=</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">   31</a></span>    <a class="code hl_class" href="classWorld.html">World</a> &amp; <a class="code hl_function" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">operator=</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="Camera_8hpp.html">Camera.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classWorld.html">   17</a></span><span class="keyword">class </span><a class="code hl_class" href="classWorld.html">World</a></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>{</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_class" href="classWorld.html">World</a>(</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp; <a class="code hl_class" href="classWorldScene.html">WorldScene</a>,</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vulkanAPI,</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_class" href="classThreadPool.html">ThreadPool</a> &amp; threadPool</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    );</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <a class="code hl_function" href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">~World</a>();</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classWorld.html#a8e7a792ae04e9804a464746adb06f7aa">   29</a></span>    <a class="code hl_function" href="classWorld.html#a8e7a792ae04e9804a464746adb06f7aa">World</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classWorld.html#a9319f9fe52db6162be2269479d76100d">   30</a></span>    <a class="code hl_function" href="classWorld.html#a9319f9fe52db6162be2269479d76100d">World</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa">   31</a></span>    <a class="code hl_class" href="classWorld.html">World</a> &amp; <a class="code hl_function" href="classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa">operator=</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">   32</a></span>    <a class="code hl_class" href="classWorld.html">World</a> &amp; <a class="code hl_function" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">operator=</a>(<a class="code hl_class" href="classWorld.html">World</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb">updateEntities</a>();</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">updateBlock</a>(glm::dvec3 position);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp;                            m_worldScene;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp;                             m_vulkanAPI;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <a class="code hl_class" href="classThreadPool.html">ThreadPool</a> &amp;                            m_threadPool;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_class" href="classIdList.html">IdList&lt;uint64_t, std::shared_ptr&lt;Entity&gt;</a>&gt; m_entities;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    std::shared_ptr&lt;Entity&gt; m_player;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">     *  CHUNKS AND MAP</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">    *************************************/</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <a class="code hl_class" href="classWorldGenerator.html">WorldGenerator</a>                          m_worldGenerator;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    std::unordered_map&lt;glm::ivec3, Chunk&gt;   m_chunks;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    std::unordered_set&lt;glm::ivec2&gt;          m_loaded_chunks;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    std::mutex                              m_chunks_mutex;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::unordered_set&lt;glm::ivec2&gt;          m_visible_chunks;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    std::mutex                              m_visible_chunks_mutex;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::unordered_set&lt;glm::ivec2&gt;          m_unload_set;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    std::mutex                              m_unload_set_mutex;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    std::unordered_map&lt;uint64_t, std::future&lt;void&gt;&gt; m_futures;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb">updateEntities</a>();</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">updateBlock</a>(glm::dvec3 position);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classWorld.html#a86d86c9befe3a4a7a66d47f1a29f4bbb">updatePlayer</a>(</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keyword">const</span> glm::dvec3 &amp; move,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">const</span> glm::dvec2 &amp; look</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    );</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_class" href="classCamera.html">Camera</a> <a class="code hl_function" href="classWorld.html#a548031773601fdf0e0054d0824642b31">getCamera</a>();</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    glm::dvec3 <a class="code hl_function" href="classWorld.html#aaf70e000805b5766ad5501f92f064c4c">getPlayerPosition</a>();</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp;                            m_worldScene;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp;                             m_vulkanAPI;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <a class="code hl_class" href="classThreadPool.html">ThreadPool</a> &amp;                            m_threadPool;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <a class="code hl_class" href="classIdList.html">IdList&lt;uint64_t, std::shared_ptr&lt;Entity&gt;</a>&gt; m_entities;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    std::mutex m_player_mutex;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    std::shared_ptr&lt;Player&gt; m_player;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">     *  CHUNKS AND MAP</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">    *************************************/</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <a class="code hl_class" href="classWorldGenerator.html">WorldGenerator</a>                          m_worldGenerator;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    std::unordered_map&lt;glm::ivec3, Chunk&gt;   m_chunks;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    std::unordered_set&lt;glm::ivec2&gt;          m_loaded_chunks;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    std::mutex                              m_chunks_mutex;</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    std::queue&lt;uint64_t&gt;                    m_finished_futures;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::mutex                              m_finished_futures_mutex;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    std::unordered_set&lt;glm::ivec2&gt;          m_visible_chunks;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::mutex                              m_visible_chunks_mutex;</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    uint64_t                                m_future_id = 0;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    std::unordered_set&lt;glm::ivec2&gt;          m_unload_set;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    std::mutex                              m_unload_set_mutex;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">    /*********************************************************</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">     * </span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">     *  METHODS</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">     * </span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">    *********************************************************/</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    std::unordered_map&lt;uint64_t, std::future&lt;void&gt;&gt; m_futures;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    std::queue&lt;uint64_t&gt;                    m_finished_futures;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    std::mutex                              m_finished_futures_mutex;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    uint64_t                                m_future_id = 0;</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">     *  CHUNKS AND MAP</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">    *************************************/</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keywordtype">void</span>    meshChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">    /*********************************************************</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">     *  METHODS</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">    *********************************************************/</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">     *  CHUNKS AND MAP</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">    *************************************/</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordtype">void</span>    updateChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment">     *  FUTURES</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment">     *************************************/</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordtype">void</span>    waitForFutures();</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>};</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="classClientWorld.html">  137</a></span><span class="keyword">class </span><a class="code hl_class" href="classClientWorld.html">ClientWorld</a></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>{</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>};</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keywordtype">void</span>    meshChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keywordtype">void</span>    updateChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">     *  FUTURES</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">     *************************************/</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keywordtype">void</span>    waitForFinishedFutures();</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keywordtype">void</span>    waitForFutures();</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>};</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="classClientWorld.html">  147</a></span><span class="keyword">class </span><a class="code hl_class" href="classClientWorld.html">ClientWorld</a></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>{</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>};</div>
+<div class="ttc" id="aCamera_8hpp_html"><div class="ttname"><a href="Camera_8hpp.html">Camera.hpp</a></div></div>
 <div class="ttc" id="aCreateMeshData_8hpp_html"><div class="ttname"><a href="CreateMeshData_8hpp.html">CreateMeshData.hpp</a></div></div>
 <div class="ttc" id="aEntity_8hpp_html"><div class="ttname"><a href="Entity_8hpp.html">Entity.hpp</a></div></div>
 <div class="ttc" id="aList_8hpp_html"><div class="ttname"><a href="List_8hpp.html">List.hpp</a></div></div>
@@ -220,19 +231,23 @@ $(document).ready(function(){initNavTree('World_8hpp_source.html',''); initResiz
 <div class="ttc" id="aVulkanAPI_8hpp_html"><div class="ttname"><a href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a></div></div>
 <div class="ttc" id="aWorldGenerator_8hpp_html"><div class="ttname"><a href="WorldGenerator_8hpp.html">WorldGenerator.hpp</a></div></div>
 <div class="ttc" id="aWorldScene_8hpp_html"><div class="ttname"><a href="WorldScene_8hpp.html">WorldScene.hpp</a></div></div>
-<div class="ttc" id="aclassClientWorld_html"><div class="ttname"><a href="classClientWorld.html">ClientWorld</a></div><div class="ttdef"><b>Definition:</b> World.hpp:138</div></div>
+<div class="ttc" id="aclassCamera_html"><div class="ttname"><a href="classCamera.html">Camera</a></div><div class="ttdoc">A simple camera class.</div><div class="ttdef"><b>Definition:</b> Camera.hpp:40</div></div>
+<div class="ttc" id="aclassClientWorld_html"><div class="ttname"><a href="classClientWorld.html">ClientWorld</a></div><div class="ttdef"><b>Definition:</b> World.hpp:148</div></div>
 <div class="ttc" id="aclassIdList_html"><div class="ttname"><a href="classIdList.html">IdList</a></div><div class="ttdef"><b>Definition:</b> List.hpp:32</div></div>
 <div class="ttc" id="aclassThreadPool_html"><div class="ttname"><a href="classThreadPool.html">ThreadPool</a></div><div class="ttdef"><b>Definition:</b> ThreadPool.hpp:36</div></div>
 <div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:146</div></div>
 <div class="ttc" id="aclassWorldGenerator_html"><div class="ttname"><a href="classWorldGenerator.html">WorldGenerator</a></div><div class="ttdef"><b>Definition:</b> WorldGenerator.hpp:12</div></div>
 <div class="ttc" id="aclassWorldScene_html"><div class="ttname"><a href="classWorldScene.html">WorldScene</a></div><div class="ttdoc">Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ...</div><div class="ttdef"><b>Definition:</b> WorldScene.hpp:20</div></div>
-<div class="ttc" id="aclassWorld_html"><div class="ttname"><a href="classWorld.html">World</a></div><div class="ttdef"><b>Definition:</b> World.hpp:17</div></div>
-<div class="ttc" id="aclassWorld_html_a10a860e06db7eae12c2d62fbbbc78b57"><div class="ttname"><a href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">World::updateBlock</a></div><div class="ttdeci">void updateBlock(glm::dvec3 position)</div><div class="ttdef"><b>Definition:</b> World.cpp:19</div></div>
+<div class="ttc" id="aclassWorld_html"><div class="ttname"><a href="classWorld.html">World</a></div><div class="ttdef"><b>Definition:</b> World.hpp:18</div></div>
+<div class="ttc" id="aclassWorld_html_a10a860e06db7eae12c2d62fbbbc78b57"><div class="ttname"><a href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">World::updateBlock</a></div><div class="ttdeci">void updateBlock(glm::dvec3 position)</div><div class="ttdef"><b>Definition:</b> World.cpp:23</div></div>
 <div class="ttc" id="aclassWorld_html_a2fd49185c8ef00d9f8aaf16fb7d943fa"><div class="ttname"><a href="classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa">World::operator=</a></div><div class="ttdeci">World &amp; operator=(World &amp;other)=delete</div></div>
-<div class="ttc" id="aclassWorld_html_a5cc73b1aa54db5da01e4004acd4fd8bb"><div class="ttname"><a href="classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb">World::updateEntities</a></div><div class="ttdeci">void updateEntities()</div><div class="ttdef"><b>Definition:</b> World.cpp:31</div></div>
-<div class="ttc" id="aclassWorld_html_a8c73fba541a5817fff65147ba47cd827"><div class="ttname"><a href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">World::~World</a></div><div class="ttdeci">~World()</div><div class="ttdef"><b>Definition:</b> World.cpp:15</div></div>
+<div class="ttc" id="aclassWorld_html_a548031773601fdf0e0054d0824642b31"><div class="ttname"><a href="classWorld.html#a548031773601fdf0e0054d0824642b31">World::getCamera</a></div><div class="ttdeci">Camera getCamera()</div><div class="ttdef"><b>Definition:</b> World.cpp:348</div></div>
+<div class="ttc" id="aclassWorld_html_a5cc73b1aa54db5da01e4004acd4fd8bb"><div class="ttname"><a href="classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb">World::updateEntities</a></div><div class="ttdeci">void updateEntities()</div><div class="ttdef"><b>Definition:</b> World.cpp:35</div></div>
+<div class="ttc" id="aclassWorld_html_a86d86c9befe3a4a7a66d47f1a29f4bbb"><div class="ttname"><a href="classWorld.html#a86d86c9befe3a4a7a66d47f1a29f4bbb">World::updatePlayer</a></div><div class="ttdeci">void updatePlayer(const glm::dvec3 &amp;move, const glm::dvec2 &amp;look)</div><div class="ttdef"><b>Definition:</b> World.cpp:297</div></div>
+<div class="ttc" id="aclassWorld_html_a8c73fba541a5817fff65147ba47cd827"><div class="ttname"><a href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">World::~World</a></div><div class="ttdeci">~World()</div><div class="ttdef"><b>Definition:</b> World.cpp:18</div></div>
 <div class="ttc" id="aclassWorld_html_a8e7a792ae04e9804a464746adb06f7aa"><div class="ttname"><a href="classWorld.html#a8e7a792ae04e9804a464746adb06f7aa">World::World</a></div><div class="ttdeci">World(World &amp;other)=delete</div></div>
 <div class="ttc" id="aclassWorld_html_a9319f9fe52db6162be2269479d76100d"><div class="ttname"><a href="classWorld.html#a9319f9fe52db6162be2269479d76100d">World::World</a></div><div class="ttdeci">World(World &amp;&amp;other)=delete</div></div>
+<div class="ttc" id="aclassWorld_html_aaf70e000805b5766ad5501f92f064c4c"><div class="ttname"><a href="classWorld.html#aaf70e000805b5766ad5501f92f064c4c">World::getPlayerPosition</a></div><div class="ttdeci">glm::dvec3 getPlayerPosition()</div><div class="ttdef"><b>Definition:</b> World.cpp:354</div></div>
 <div class="ttc" id="aclassWorld_html_af69b86b3ac37a2168715401267d104ab"><div class="ttname"><a href="classWorld.html#af69b86b3ac37a2168715401267d104ab">World::operator=</a></div><div class="ttdeci">World &amp; operator=(World &amp;&amp;other)=delete</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
 <div class="ttc" id="alogger_8hpp_html"><div class="ttname"><a href="logger_8hpp.html">logger.hpp</a></div></div>

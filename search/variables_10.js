@@ -13,5 +13,5 @@ var searchData=
   ['transfer_5ffamily_10',['transfer_family',['../structQueueFamilyIndices.html#a44f40b1ee7642edba5edcf8c7da9a8f7',1,'QueueFamilyIndices']]],
   ['transfer_5foperation_5fmutex_11',['transfer_operation_mutex',['../classVulkanAPI.html#a3e2a8e23d44bb3ba01152cabbfb634d0',1,'VulkanAPI']]],
   ['transfer_5fqueue_12',['transfer_queue',['../classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960',1,'VulkanAPI']]],
-  ['transform_13',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData']]]
+  ['transform_13',['transform',['../structWorldScene_1_1MeshRenderData.html#ac517fc1e260a623efa32c5992bd34689',1,'WorldScene::MeshRenderData::transform()'],['../classEntity.html#a7766644984b868ccecf24b3aede7279f',1,'Entity::transform()']]]
 ];

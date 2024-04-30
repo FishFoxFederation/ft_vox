@@ -1,20 +1,22 @@
 <map id="src/app/world/Chunk.hpp" name="src/app/world/Chunk.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="461,5,627,31"/>
-<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="5,240,157,280"/>
-<area shape="rect" id="node7" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="637,167,835,192"/>
-<area shape="rect" id="node14" href="$Chunk_8cpp.html" title=" " alt="" coords="707,86,872,111"/>
-<area shape="rect" id="node15" href="$CreateMeshData_8hpp.html" title=" " alt="" coords="457,79,631,119"/>
-<area shape="rect" id="node17" href="$WorldGenerator_8hpp.html" title=" " alt="" coords="181,167,400,192"/>
-<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="567,423,721,449"/>
-<area shape="rect" id="node6" href="$RenderThread_8cpp.html" title=" " alt="" coords="5,328,157,368"/>
-<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="492,504,647,529"/>
-<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="671,504,767,529"/>
-<area shape="rect" id="node8" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="883,328,1093,368"/>
-<area shape="rect" id="node10" href="$VulkanAPI_8cpp.html" title=" " alt="" coords="611,247,808,273"/>
+<area shape="rect" id="node1" title=" " alt="" coords="473,5,639,31"/>
+<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="248,240,400,280"/>
+<area shape="rect" id="node7" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="457,167,655,192"/>
+<area shape="rect" id="node16" href="$Chunk_8cpp.html" title=" " alt="" coords="827,86,992,111"/>
+<area shape="rect" id="node17" href="$CreateMeshData_8hpp.html" title=" " alt="" coords="627,79,802,119"/>
+<area shape="rect" id="node19" href="$WorldGenerator_8hpp.html" title=" " alt="" coords="164,167,383,192"/>
+<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="533,423,688,449"/>
+<area shape="rect" id="node6" href="$RenderThread_8cpp.html" title=" " alt="" coords="197,328,349,368"/>
+<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="459,504,613,529"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="637,504,733,529"/>
+<area shape="rect" id="node8" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="891,328,1101,368"/>
+<area shape="rect" id="node10" href="$VulkanAPI_8cpp.html" title=" " alt="" coords="661,247,859,273"/>
 <area shape="rect" id="node11" href="$chunk__mesh_8cpp.html" title=" " alt="" coords="883,240,1029,280"/>
-<area shape="rect" id="node12" href="$World_8hpp.html" title=" " alt="" coords="425,247,586,273"/>
-<area shape="rect" id="node9" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="883,416,1093,456"/>
-<area shape="rect" id="node13" href="$World_8cpp.html" title=" " alt="" coords="543,335,705,361"/>
-<area shape="rect" id="node16" href="$hashes_8hpp.html" title=" " alt="" coords="475,167,613,192"/>
-<area shape="rect" id="node18" href="$WorldGenerator_8cpp.html" title=" " alt="" coords="181,247,400,273"/>
+<area shape="rect" id="node12" href="$World_8hpp.html" title=" " alt="" coords="475,247,637,273"/>
+<area shape="rect" id="node9" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="891,416,1101,456"/>
+<area shape="rect" id="node13" href="$UpdateThread_8hpp.html" title=" " alt="" coords="712,328,867,368"/>
+<area shape="rect" id="node15" href="$World_8cpp.html" title=" " alt="" coords="475,335,637,361"/>
+<area shape="rect" id="node14" href="$UpdateThread_8cpp.html" title=" " alt="" coords="712,416,867,456"/>
+<area shape="rect" id="node18" href="$hashes_8hpp.html" title=" " alt="" coords="679,167,817,192"/>
+<area shape="rect" id="node20" href="$WorldGenerator_8cpp.html" title=" " alt="" coords="5,247,224,273"/>
 </map>

@@ -6,7 +6,7 @@ var searchData=
   ['polygon_5fmode_3',['polygon_mode',['../structPipeline_1_1CreateInfo.html#a228d42d483c49a3e93892fdae2928304',1,'Pipeline::CreateInfo']]],
   ['pool_4',['pool',['../classDescriptor.html#a837073a4ccc081a2fbb77c0acd4a549c',1,'Descriptor']]],
   ['pos_5',['pos',['../structLineVertex.html#a1dc068e612b921483967c7a1cf60f96a',1,'LineVertex::pos()'],['../structBlockVertex.html#a73131a2407e7ccc48cf5cf276f1bcb18',1,'BlockVertex::pos()']]],
-  ['position_6',['position',['../structCamera_1_1RenderInfo.html#ac48415567e0ed4b659f646513fbbf19b',1,'Camera::RenderInfo::position()'],['../classChunk.html#a065791312fcab1bd72ae4ce04fd6fd6a',1,'Chunk::position()']]],
+  ['position_6',['position',['../classTransform.html#aecfee605af55e0c6e555b5fdfd4f488a',1,'Transform::position()'],['../classChunk.html#a065791312fcab1bd72ae4ce04fd6fd6a',1,'Chunk::position()'],['../structCamera_1_1RenderInfo.html#ac48415567e0ed4b659f646513fbbf19b',1,'Camera::RenderInfo::position()']]],
   ['present_5ffamily_7',['present_family',['../structQueueFamilyIndices.html#a2f4be08657178d2397981ace027b01a0',1,'QueueFamilyIndices']]],
   ['present_5fmode_8',['present_mode',['../structSwapchain_1_1CreateInfo.html#a9c00a0a7b2354b178a6817008ef6b92c',1,'Swapchain::CreateInfo']]],
   ['present_5fmodes_9',['present_modes',['../structSwapchain_1_1SupportDetails.html#ac0f4f61750c7a405c1ab2ef0183b17bf',1,'Swapchain::SupportDetails']]],

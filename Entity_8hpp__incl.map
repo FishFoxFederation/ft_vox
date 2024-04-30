@@ -1,7 +1,9 @@
 <map id="src/app/world/entity/Entity.hpp" name="src/app/world/entity/Entity.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="171,5,306,45"/>
-<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="5,93,85,119"/>
-<area shape="rect" id="node3" title=" " alt="" coords="110,93,202,119"/>
-<area shape="rect" id="node4" title=" " alt="" coords="226,93,417,119"/>
-<area shape="rect" id="node5" title=" " alt="" coords="441,93,503,119"/>
+<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="5,167,85,192"/>
+<area shape="rect" id="node3" href="$Camera_8hpp.html" title=" " alt="" coords="193,93,284,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="110,167,202,192"/>
+<area shape="rect" id="node5" title=" " alt="" coords="307,167,498,192"/>
+<area shape="rect" id="node7" title=" " alt="" coords="359,93,420,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="226,167,283,192"/>
 </map>

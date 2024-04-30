@@ -1,4 +1,0 @@
-<map id="BlockUpdateThread" name="BlockUpdateThread">
-<area shape="rect" id="node1" title="An implementation of the thread wrapper for the thread that handles block updates." alt="" coords="5,181,168,295"/>
-<area shape="rect" id="node2" href="$classAThreadWrapper.html" title="A RAII compliant wrapper for std::jthread." alt="" coords="14,5,159,133"/>
-</map>

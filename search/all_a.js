@@ -1,8 +1,8 @@
 var searchData=
 [
   ['layout_0',['layout',['../classDescriptor.html#a55bc0ee227abcb76bd3147ce5836ab67',1,'Descriptor::layout()'],['../classPipeline.html#a608b23460b3d7e283b04cddac0df1937',1,'Pipeline::layout()']]],
-  ['level_1',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]],
-  ['level_2',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
+  ['level_1',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
+  ['level_2',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]],
   ['lighting_5fframebuffers_3',['lighting_framebuffers',['../classVulkanAPI.html#a32b2991a33a67aac18e47097c38c2257',1,'VulkanAPI']]],
   ['lighting_5frender_5fpass_4',['lighting_render_pass',['../classVulkanAPI.html#a686c7e9f200979296e890de8c2801e25',1,'VulkanAPI']]],
   ['line_5fpipeline_5',['line_pipeline',['../classVulkanAPI.html#a28868afc63f2210693107cec8cd9e73a',1,'VulkanAPI']]],
@@ -19,6 +19,5 @@ var searchData=
   ['logger_16',['logger',['../logger_8cpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp'],['../logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp']]],
   ['logger_17',['Logger',['../classLogger.html#ae588fefbe500d9061e2ca2b314aa325f',1,'Logger::Logger(const std::filesystem::path &amp;path)'],['../classLogger.html#abc41bfb031d896170c7675fa96a6b30c',1,'Logger::Logger()'],['../classLogger.html',1,'Logger']]],
   ['logger_2ecpp_18',['logger.cpp',['../logger_8cpp.html',1,'']]],
-  ['logger_2ehpp_19',['logger.hpp',['../logger_8hpp.html',1,'']]],
-  ['lookat_20',['lookAt',['../classCamera.html#ae6b0f6800a6d84f4c07655ef436ee0b3',1,'Camera']]]
+  ['logger_2ehpp_19',['logger.hpp',['../logger_8hpp.html',1,'']]]
 ];

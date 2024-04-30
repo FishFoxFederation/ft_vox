@@ -12,13 +12,10 @@ var searchData=
   ['application_2ecpp_9',['application.cpp',['../application_8cpp.html',1,'']]],
   ['application_2ehpp_10',['application.hpp',['../application_8hpp.html',1,'']]],
   ['architecture_2emd_11',['architecture.md',['../architecture_8md.html',1,'']]],
-  ['array_5flayers_12',['array_layers',['../structImage_1_1CreateInfo.html#a86115631b00251ee0c4d95cfc6cbf879',1,'Image::CreateInfo::array_layers()'],['../classImage.html#aaa95fc16a964f6f0285e7c51265b397c',1,'Image::array_layers()']]],
+  ['array_5flayers_12',['array_layers',['../classImage.html#aaa95fc16a964f6f0285e7c51265b397c',1,'Image::array_layers()'],['../structImage_1_1CreateInfo.html#a86115631b00251ee0c4d95cfc6cbf879',1,'Image::CreateInfo::array_layers()']]],
   ['aspect_5fmask_13',['aspect_mask',['../structImage_1_1CreateInfo.html#a73a5de06d37620888162186ba5282fb2',1,'Image::CreateInfo::aspect_mask()'],['../classImage.html#abfca1ef9581fd7f4797b24b67ae4300e',1,'Image::aspect_mask()']]],
-  ['athreadwrapper_14',['AThreadWrapper',['../classAThreadWrapper.html',1,'AThreadWrapper'],['../classAThreadWrapper.html#af593c6d3802ab48dc7886c4591ef92e4',1,'AThreadWrapper::AThreadWrapper(AThreadWrapper &amp;&amp;other)=delete'],['../classAThreadWrapper.html#aa8f30f547432afd95d595b715af93122',1,'AThreadWrapper::AThreadWrapper(AThreadWrapper &amp;other)=delete'],['../classAThreadWrapper.html#a19348339cbc04a1db5e6335302829586',1,'AThreadWrapper::AThreadWrapper()']]],
-  ['athreadwrapper_2ecpp_15',['AThreadWrapper.cpp',['../AThreadWrapper_8cpp.html',1,'']]],
-  ['athreadwrapper_2ehpp_16',['AThreadWrapper.hpp',['../AThreadWrapper_8hpp.html',1,'']]],
-  ['atomic_17',['Atomic',['../classAtomic.html',1,'Atomic&lt; T &gt;'],['../classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3',1,'Atomic::Atomic()=default'],['../classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1',1,'Atomic::Atomic(T value)']]],
-  ['atomic_3c_20glm_3a_3avec3_20_3e_18',['Atomic&lt; glm::vec3 &gt;',['../classAtomic.html',1,'']]],
-  ['attribute_5fdescriptions_19',['attribute_descriptions',['../structPipeline_1_1CreateInfo.html#a1cdc58779c520317193b8e4275aa0b8f',1,'Pipeline::CreateInfo']]],
-  ['average_20',['average',['../classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6',1,'History::average()'],['../classTimer.html#af188795a135958a87538a21a20423649',1,'Timer::average()']]]
+  ['atomic_14',['Atomic',['../classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3',1,'Atomic::Atomic()=default'],['../classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1',1,'Atomic::Atomic(T value)'],['../classAtomic.html',1,'Atomic&lt; T &gt;']]],
+  ['atomic_3c_20glm_3a_3avec3_20_3e_15',['Atomic&lt; glm::vec3 &gt;',['../classAtomic.html',1,'']]],
+  ['attribute_5fdescriptions_16',['attribute_descriptions',['../structPipeline_1_1CreateInfo.html#a1cdc58779c520317193b8e4275aa0b8f',1,'Pipeline::CreateInfo']]],
+  ['average_17',['average',['../classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6',1,'History::average()'],['../classTimer.html#af188795a135958a87538a21a20423649',1,'Timer::average()']]]
 ];
