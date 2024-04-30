@@ -1,15 +1,13 @@
 <map id="src/app/world/WorldGenerator.hpp" name="src/app/world/WorldGenerator.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="167,5,386,31"/>
-<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="23,79,175,119"/>
-<area shape="rect" id="node7" href="$Map_8hpp.html" title=" " alt="" coords="200,86,353,111"/>
-<area shape="rect" id="node13" href="$WorldGenerator_8cpp.html" title=" " alt="" coords="378,86,596,111"/>
-<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="100,350,255,375"/>
-<area shape="rect" id="node6" href="$RenderThread_8cpp.html" title=" " alt="" coords="23,167,175,207"/>
-<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="26,431,180,456"/>
-<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="204,431,300,456"/>
-<area shape="rect" id="node8" href="$Map_8cpp.html" title=" " alt="" coords="200,174,353,199"/>
-<area shape="rect" id="node9" href="$World_8hpp.html" title=" " alt="" coords="377,174,538,199"/>
-<area shape="rect" id="node10" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="247,255,458,295"/>
-<area shape="rect" id="node12" href="$World_8cpp.html" title=" " alt="" coords="482,262,644,287"/>
-<area shape="rect" id="node11" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="279,343,490,383"/>
+<area shape="rect" id="node1" title=" " alt="" coords="210,5,428,31"/>
+<area shape="rect" id="node2" href="$RenderThread_8hpp.html" title=" " alt="" coords="24,79,176,119"/>
+<area shape="rect" id="node7" href="$World_8hpp.html" title=" " alt="" coords="238,86,400,111"/>
+<area shape="rect" id="node11" href="$WorldGenerator_8cpp.html" title=" " alt="" coords="424,86,643,111"/>
+<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="104,262,259,287"/>
+<area shape="rect" id="node6" href="$RenderThread_8cpp.html" title=" " alt="" coords="24,167,176,207"/>
+<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="30,343,184,368"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="208,343,304,368"/>
+<area shape="rect" id="node8" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="251,167,462,207"/>
+<area shape="rect" id="node10" href="$World_8cpp.html" title=" " alt="" coords="486,174,648,199"/>
+<area shape="rect" id="node9" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="283,255,494,295"/>
 </map>

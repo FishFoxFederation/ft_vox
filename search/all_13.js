@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['update_0',['update',['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor::update()'],['../classMap.html#a0f2c8f45cb9052bd810ee70d3f14ebca',1,'Map::update()']]],
+  ['update_0',['update',['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor']]],
   ['updateblock_1',['updateBlock',['../classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57',1,'World']]],
   ['updateentities_2',['updateEntities',['../classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb',1,'World']]],
   ['updateimgui_3',['updateImGui',['../classDebugGui.html#aa849cf767818482461efa78caef2ff70',1,'DebugGui']]],
