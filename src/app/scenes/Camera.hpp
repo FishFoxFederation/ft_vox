@@ -94,65 +94,6 @@ public:
 		return *this;
 	}
 
-	/**
-	 * @brief Move the camera with a vector. x = right, y = up, z = forward.
-	 *
-	 * @param move
-	 */
-	void movePosition(const glm::dvec3 & move);
-
-	/**
-	 * @brief Move the camera rotation from the cursor movement.
-	 *
-	 * @param x_offset x movement of the cursor.
-	 * @param y_offset y movement of the cursor.
-	 */
-	void moveDirection(double x_offset, double y_offset);
-
-	/**
-	 * @brief Set the position of the camera.
-	 *
-	 * @param position
-	 */
-	void setPosition(const glm::dvec3 & position);
-
-	/**
-	 * @brief Set the pitch and yaw of the camera to look at a target.
-	 *
-	 * @param target
-	 */
-	void lookAt(const glm::dvec3 & target);
-
-	glm::dvec3 getPosition() const
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-		return position;
-	}
-
-	double getPitch() const
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-		return pitch;
-	}
-
-	double getYaw() const
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-		return yaw;
-	}
-
-	void setPitch(double pitch)
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-		this->pitch = pitch;
-	}
-
-	void setYaw(double yaw)
-	{
-		std::lock_guard<std::mutex> lock(m_mutex);
-		this->yaw = yaw;
-	}
-
 	RenderInfo getRenderInfo(double aspect_ratio) const
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);

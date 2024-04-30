@@ -40,6 +40,7 @@ void UpdateThread::loop()
 	movePlayer();
 }
 
+
 void UpdateThread::updateTime()
 {
 	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
@@ -62,39 +63,19 @@ void UpdateThread::readInput()
 void UpdateThread::movePlayer()
 {
 	glm::dvec3 move = glm::dvec3(0.0f);
-	if (m_w_key == GLFW_PRESS)
-	{
-		move.z += 1.0f;
-	}
-	if (m_a_key == GLFW_PRESS)
-	{
-		move.x += -1.0f;
-	}
-	if (m_s_key == GLFW_PRESS)
-	{
-		move.z += -1.0f;
-	}
-	if (m_d_key == GLFW_PRESS)
-	{
-		move.x += 1.0f;
-	}
-	if (m_space_key == GLFW_PRESS)
-	{
-		move.y += 1.0f;
-	}
-	if (m_left_shift_key == GLFW_PRESS)
-	{
-		move.y += -1.0f;
-	}
+	if (m_w_key == GLFW_PRESS) move.z += 1.0f;
+	if (m_a_key == GLFW_PRESS) move.x += -1.0f;
+	if (m_s_key == GLFW_PRESS) move.z += -1.0f;
+	if (m_d_key == GLFW_PRESS) move.x += 1.0f;
+	if (m_space_key == GLFW_PRESS) move.y += 1.0f;
+	if (m_left_shift_key == GLFW_PRESS) move.y += -1.0f;
 
 	if (glm::length(move) > 0.0f)
 	{
 		move = glm::normalize(move);
 	}
 
-	// move *= m_camera_speed * static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(m_delta_time).count());
-	move *= m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e8;
-	// LOG_DEBUG("delta_time: " << static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(m_delta_time).count()));
+	move *= m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e9;
 
 	glm::dvec2 look = glm::dvec2(m_mouse_x - m_last_mouse_x, m_mouse_y - m_last_mouse_y) * m_settings.mouseSensitivity();
 	m_last_mouse_x = m_mouse_x;

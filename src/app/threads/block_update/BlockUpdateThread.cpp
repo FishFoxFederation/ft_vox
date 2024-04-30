@@ -9,6 +9,7 @@ BlockUpdateThread::BlockUpdateThread(
 	m_worldScene(worldScene),
 	m_world(world)
 {
+	(void)m_worldScene;
 }
 
 BlockUpdateThread::~BlockUpdateThread()
@@ -59,6 +60,7 @@ void BlockUpdateThread::init()
 
 void BlockUpdateThread::loop()
 {
-	m_world.updateBlock(m_worldScene.camera().getPosition());
+	// m_world.updateBlock(m_worldScene.camera().getPosition());
+	m_world.updateBlock(m_world.getPlayerPosition());
 	// LOG_INFO("PLAYER POSITION: " << m_worldScene.camera().position().x << " " << m_worldScene.camera().position().y << " " << m_worldScene.camera().position().z);
 }
