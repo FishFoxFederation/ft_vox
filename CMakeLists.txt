@@ -14,7 +14,7 @@ target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
 		-g3
-		# -fsanitize=address
+		# -fsanitize=thread
 		-Wall
 		-Wextra
 		-Werror
@@ -22,10 +22,10 @@ target_compile_options(${PROJECT_NAME}
 		-Wno-missing-braces
 )
 
-# target_link_options(${PROJECT_NAME}
-# 	PRIVATE
-# 		-fsanitize=address
-# )
+target_link_options(${PROJECT_NAME}
+	PRIVATE
+		# -fsanitize=thread
+)
 
 target_sources(${PROJECT_NAME}
 	PRIVATE
