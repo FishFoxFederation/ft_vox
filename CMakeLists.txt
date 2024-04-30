@@ -62,7 +62,6 @@ target_sources(${PROJECT_NAME}
 		src/app/world/Chunk.cpp
 		src/app/world/entity/Entity.cpp
 		src/app/world/World.cpp
-		src/app/world/Map.cpp
 		src/app/world/WorldGenerator.cpp
 
 		external/imgui/imgui.cpp
