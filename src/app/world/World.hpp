@@ -139,6 +139,7 @@ private:
 	/*************************************
 	 *  FUTURES
 	 *************************************/
+	void	waitForFinishedFutures();
 	void	waitForFutures();
 
 };

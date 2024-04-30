@@ -1,30 +1,24 @@
 #include "VulkanAPI.hpp"
 #include "DebugGui.hpp"
-#include "Timer.hpp"
 
 #include <cstring>
 
 uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
 {
-	static Timer<7> timer;
 
 	if (vertices.empty())
 	{
 		return no_mesh_id;
 	}
 
-	timer.start(0);
 
 	Mesh mesh;
 	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
 	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
 	VkDeviceSize buffer_size = vertex_size + index_size;
 
-	timer.start(1);
 	// std::lock_guard<std::mutex> lock(global_mutex);
-	timer.stop(1);
 
-	timer.start(2);
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
 	createBuffer(
@@ -34,9 +28,7 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 		staging_buffer,
 		staging_buffer_memory
 	);
-	timer.stop(2);
 
-	timer.start(3);
 	void * data;
 	VK_CHECK(
 		vkMapMemory(device, staging_buffer_memory, 0, buffer_size, 0, &data),
@@ -45,9 +37,7 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	std::memcpy(data, vertices.data(), static_cast<size_t>(vertex_size));
 	std::memcpy(static_cast<char *>(data) + vertex_size, indices.data(), static_cast<size_t>(index_size));
 	vkUnmapMemory(device, staging_buffer_memory);
-	timer.stop(3);
 
-	timer.start(4);
 	createBuffer(
 		buffer_size,
 		VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
@@ -55,16 +45,11 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 		mesh.buffer,
 		mesh.buffer_memory
 	);
-	timer.stop(4);
 
-	timer.start(5);
 	copyBuffer(staging_buffer, mesh.buffer, buffer_size);
-	timer.stop(5);
 
-	timer.start(6);
 	vkDestroyBuffer(device, staging_buffer, nullptr);
 	vma.freeMemory(device, staging_buffer_memory, nullptr);
-	timer.stop(6);
 
 	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
 	mesh.index_offset = vertex_size;
@@ -77,15 +62,6 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 		mesh_id = next_mesh_id++;
 		meshes.emplace(mesh_id, mesh);
 	}
-
-	timer.stop(0);
-	DebugGui::store_mesh_time = timer.average<std::chrono::microseconds>(0);
-	DebugGui::store_mesh_mutex_wait_time = timer.average<std::chrono::microseconds>(1);
-	DebugGui::store_mesh_create_staging_buffer_time = timer.average<std::chrono::microseconds>(2);
-	DebugGui::store_mesh_memcpy_time = timer.average<std::chrono::microseconds>(3);
-	DebugGui::store_mesh_create_buffer_time = timer.average<std::chrono::microseconds>(4);
-	DebugGui::store_mesh_copy_buffer_time = timer.average<std::chrono::microseconds>(5);
-	DebugGui::store_mesh_destroy_buffer_time = timer.average<std::chrono::microseconds>(6);
 
 	return mesh_id;
 }

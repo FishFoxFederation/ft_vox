@@ -1,7 +1,6 @@
 #pragma once
 
 #include "define.hpp"
-#include "AThreadWrapper.hpp"
 #include "World.hpp"
 #include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
@@ -18,7 +17,7 @@
  * every function called from the loop and init function MUST be thread safe
  *
  */
-class BlockUpdateThread : public AThreadWrapper
+class BlockUpdateThread
 {
 public:
 
@@ -37,13 +36,21 @@ private:
 	WorldScene	&	m_worldScene;
 	World		&	m_world;
 
+	std::jthread m_thread;
+
 	/**
-	 * @brief WIP
+	 * @brief function used as the entry point for the thread
+	 *
 	 */
-	void init() override;
+	void launch();
 
 	/**
 	 * @brief WIP
 	 */
-	void loop() override;
+	void init();
+
+	/**
+	 * @brief WIP
+	 */
+	void loop();
 };

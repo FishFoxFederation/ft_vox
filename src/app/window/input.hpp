@@ -48,7 +48,11 @@ public:
 	 */
 	void getCursorPos(double& xpos, double& ypos);
 
-	bool isCursorCaptured() { return m_cursor_captured; }
+	bool isCursorCaptured()
+	{
+		std::lock_guard<std::mutex> lock(m_cursor_mutex);
+		return m_cursor_captured;
+	}
 
 private:
 
@@ -60,8 +64,8 @@ private:
 
 	double m_cursor_x;
 	double m_cursor_y;
-	std::mutex m_cursor_pos_mutex;
 	bool m_cursor_captured = false;
+	std::mutex m_cursor_mutex;
 
 	GLFWwindow* m_window;
 

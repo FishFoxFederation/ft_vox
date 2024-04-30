@@ -8,16 +8,13 @@ project(ft_vox
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
-
 add_executable(${PROJECT_NAME})
 
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
-		# -g
-		# -fsanitize=thread
-		# -g3
+		-g3
+		# -fsanitize=address
 		-Wall
 		-Wextra
 		-Werror
@@ -27,7 +24,7 @@ target_compile_options(${PROJECT_NAME}
 
 # target_link_options(${PROJECT_NAME}
 # 	PRIVATE
-# 		-fsanitize=thread
+# 		-fsanitize=address
 # )
 
 target_sources(${PROJECT_NAME}
@@ -43,7 +40,6 @@ target_sources(${PROJECT_NAME}
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
 		src/app/scenes/WorldScene.cpp
-		src/app/threads/AThreadWrapper.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp

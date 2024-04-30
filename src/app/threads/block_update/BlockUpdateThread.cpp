@@ -7,15 +7,32 @@ BlockUpdateThread::BlockUpdateThread(
 	World & world
 ):
 	m_worldScene(worldScene),
-	m_world(world)
+	m_world(world),
+	m_thread(&BlockUpdateThread::launch, this)
 {
 	(void)m_worldScene;
 }
 
 BlockUpdateThread::~BlockUpdateThread()
 {
-	this->m_thread.request_stop();
-	this->m_thread.join();
+}
+
+void BlockUpdateThread::launch()
+{
+	try
+	{
+		init();
+
+		while (!m_thread.get_stop_token().stop_requested())
+		{
+			loop();
+		}
+	}
+	catch (const std::exception & e)
+	{
+		LOG_ERROR("Thread exception: " << e.what());
+	}
+	LOG_DEBUG("Thread stopped");
 }
 
 void BlockUpdateThread::init()

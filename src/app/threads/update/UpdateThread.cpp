@@ -11,13 +11,13 @@ UpdateThread::UpdateThread(
 	World & world,
 	std::chrono::nanoseconds start_time
 ):
-	AThreadWrapper(),
 	m_settings(settings),
 	m_window(window),
 	m_world_scene(world_scene),
 	m_world(world),
 	m_start_time(start_time),
-	m_last_frame_time(start_time)
+	m_last_frame_time(start_time),
+	m_thread(&UpdateThread::launch, this)
 {
 	(void)m_start_time;
 }
@@ -26,6 +26,24 @@ UpdateThread::~UpdateThread()
 {
 	this->m_thread.request_stop();
 	this->m_thread.join();
+}
+
+void UpdateThread::launch()
+{
+	try
+	{
+		init();
+
+		while (!m_thread.get_stop_token().stop_requested())
+		{
+			loop();
+		}
+	}
+	catch (const std::exception & e)
+	{
+		LOG_ERROR("Thread exception: " << e.what());
+	}
+	LOG_DEBUG("Thread stopped");
 }
 
 void UpdateThread::init()

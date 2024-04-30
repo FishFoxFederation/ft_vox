@@ -16,20 +16,6 @@ Application::Application():
 	m_block_update_thread(m_world_scene, m_world)
 {
 	LOG_INFO("Application::Application()");
-
-	// m_world_scene.camera().setPosition(glm::dvec3(0.0f, 200.0f, 0.0f));
-	// m_world_scene.camera().lookAt(glm::dvec3(0.0f, 0.0f, 0.0f));
-
-	// int size = 10;
-	// for (int x = -size; x < size; x++)
-	// {
-	// 	for (int z = -size; z < size; z++)
-	// 	{
-	// 		// 2d circular sine wave
-	// 		int y = 3 * sin(0.4 * sqrt(x * x + z * z));
-	// 		m_world_scene.addMeshData(1, WorldScene::Transform(glm::vec3(x, y, z)));
-	// 	}
-	// }
 }
 
 Application::~Application()

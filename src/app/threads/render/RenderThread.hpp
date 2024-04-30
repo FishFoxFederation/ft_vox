@@ -1,7 +1,6 @@
 #pragma once
 
 #include "define.hpp"
-#include "AThreadWrapper.hpp"
 #include "WorldScene.hpp"
 #include "Settings.hpp"
 #include "VulkanAPI.hpp"
@@ -28,7 +27,7 @@ struct ModelMatrix_push_constant
  * Interacts with the vk::RenderAPI to draw the Scene
  * Every function called from this class MUST be thread safe
  */
-class RenderThread : public AThreadWrapper
+class RenderThread
 {
 
 public:
@@ -78,6 +77,14 @@ private:
 	std::chrono::nanoseconds m_start_time_counting_fps;
 
 
+	std::jthread m_thread;
+
+	/**
+	 * @brief function used as the entry point for the thread
+	 *
+	 */
+	void launch();
+
 	/**
 	 * @brief function used to initialize the vulkan ressources via the renderAPI
 	 *
@@ -86,13 +93,13 @@ private:
 	 * - the pipelines
 	 *
 	 */
-	void init() override;
+	void init();
 
 	/**
 	 * @brief the main loop of the thread
 	 *
 	 */
-	void loop() override;
+	void loop();
 
 	/**
 	 * @brief update the time
