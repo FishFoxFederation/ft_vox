@@ -17,18 +17,19 @@ World::World(
 
 World::~World()
 {
+	waitForFutures();
 }
 
 void World::updateBlock(glm::dvec3 position)
 {
 	updateChunks(position);
-	waitForFutures();
+	waitForFinishedFutures();
 }
 
 // void World::update(glm::dvec3 nextPlayerPosition)
 // {
 // 	updateChunks(nextPlayerPosition);
-// 	waitForFutures();
+// 	waitForFinishedFutures();
 // }
 
 void World::updateEntities()
@@ -269,7 +270,7 @@ void World::updateChunks(const glm::vec3 & playerPosition)
 	meshChunks(playerPosition);
 }
 
-void World::waitForFutures()
+void World::waitForFinishedFutures()
 {
 	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 	while(!m_finished_futures.empty())
@@ -279,6 +280,15 @@ void World::waitForFutures()
 		auto & future = m_futures.at(id);
 		future.get();
 		m_futures.erase(id);
+	}
+}
+
+void World::waitForFutures()
+{
+	while(!m_futures.empty())
+	{
+		m_futures.begin()->second.get();
+		m_futures.erase(m_futures.begin());
 	}
 }
 

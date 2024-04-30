@@ -1,7 +1,6 @@
 #pragma once
 
 #include "define.hpp"
-#include "AThreadWrapper.hpp"
 #include "window.hpp"
 #include "WorldScene.hpp"
 #include "Settings.hpp"
@@ -9,7 +8,7 @@
 
 #include <chrono>
 
-class UpdateThread : public AThreadWrapper
+class UpdateThread
 {
 public:
 
@@ -52,15 +51,23 @@ private:
 	double m_last_mouse_x;
 	double m_last_mouse_y;
 
+	std::jthread m_thread;
+
 	/**
-	 * @brief WIP
+	 * @brief function used as the entry point for the thread
+	 *
 	 */
-	void init() override;
+	void launch();
 
 	/**
 	 * @brief WIP
 	 */
-	void loop() override;
+	void init();
+
+	/**
+	 * @brief WIP
+	 */
+	void loop();
 
 	void updateTime();
 	void readInput();

@@ -204,8 +204,6 @@ public:
 
 	void create()
 	{
-		static Timer timer; timer.start();
-
 		glm::ivec3 size_block = size * CHUNK_SIZE_IVEC3;
 
 		for (int x = 0; x < size_block.x; x++)
@@ -288,8 +286,6 @@ public:
 				BLOCK_FACE_BACK
 			);
 		}
-		timer.stop();
-		DebugGui::create_mesh_time = timer.average<std::chrono::microseconds>();
 	}
 
 	void createFace(

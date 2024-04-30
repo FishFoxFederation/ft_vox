@@ -59,7 +59,7 @@ int Input::getMouseButtonState(int button)
 
 void Input::getCursorPos(double& xpos, double& ypos)
 {
-	std::lock_guard<std::mutex> lock(m_cursor_pos_mutex);
+	std::lock_guard<std::mutex> lock(m_cursor_mutex);
 	xpos = m_cursor_x;
 	ypos = m_cursor_y;
 }
@@ -83,6 +83,7 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		{
 			if (action == GLFW_PRESS)
 			{
+				std::lock_guard<std::mutex> lock(input->m_cursor_mutex);
 				if (input->m_cursor_captured)
 				{
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -99,6 +100,7 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		{
 			if (action == GLFW_PRESS)
 			{
+				std::lock_guard<std::mutex> lock(input->m_cursor_mutex);
 				if (input->m_cursor_captured)
 				{
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -139,7 +141,7 @@ void Input::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	Input* input = static_cast<Input*>(glfwGetWindowUserPointer(window));
 
-	std::lock_guard<std::mutex> lock(input->m_cursor_pos_mutex);
+	std::lock_guard<std::mutex> lock(input->m_cursor_mutex);
 	input->m_cursor_x = xpos;
 	input->m_cursor_y = ypos;
 }

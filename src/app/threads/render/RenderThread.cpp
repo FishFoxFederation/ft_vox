@@ -16,7 +16,6 @@ RenderThread::RenderThread(
 	const WorldScene & worldScene,
 	std::chrono::nanoseconds start_time
 ):
-	AThreadWrapper(),
 	m_settings(settings),
 	vk(vulkanAPI),
 	m_world_scene(worldScene),
@@ -24,7 +23,8 @@ RenderThread::RenderThread(
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_frame_count(0),
-	m_start_time_counting_fps(start_time)
+	m_start_time_counting_fps(start_time),
+	m_thread(&RenderThread::launch, this)
 {
 	(void)m_settings;
 	(void)m_start_time;
@@ -32,8 +32,24 @@ RenderThread::RenderThread(
 
 RenderThread::~RenderThread()
 {
-	this->m_thread.request_stop();
-	this->m_thread.join();
+}
+
+void RenderThread::launch()
+{
+	try
+	{
+		init();
+
+		while (!m_thread.get_stop_token().stop_requested())
+		{
+			loop();
+		}
+	}
+	catch (const std::exception & e)
+	{
+		LOG_ERROR("Thread exception: " << e.what());
+	}
+	LOG_DEBUG("Thread stopped");
 }
 
 void RenderThread::init()

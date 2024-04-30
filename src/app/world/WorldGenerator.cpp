@@ -49,7 +49,7 @@ Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
 
 			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 			{
-				
+
 				glm::ivec3 position = glm::ivec3(
 					blockX + x * CHUNK_X_SIZE,
 					blockY,
@@ -165,12 +165,12 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	float value = valueA * valueA + valueB * valueB;
 	// value /= threshold;
 
-	m_avg += value;
-	if (value > m_max)
-		m_max = value;
-	if (value < m_min)
-		m_min = value;
-	m_called++;
+	// m_avg += value;
+	// if (value > m_max)
+	// 	m_max = value;
+	// if (value < m_min)
+	// 	m_min = value;
+	// m_called++;
 
 	if (value < threshold)
 		return BlockID::Air;
