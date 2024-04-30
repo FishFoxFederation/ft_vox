@@ -15,6 +15,8 @@ add_executable(${PROJECT_NAME})
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
+		# -g
+		# -fsanitize=thread
 		# -g3
 		-Wall
 		-Wextra
@@ -22,6 +24,11 @@ target_compile_options(${PROJECT_NAME}
 		-Wpedantic
 		-Wno-missing-braces
 )
+
+# target_link_options(${PROJECT_NAME}
+# 	PRIVATE
+# 		-fsanitize=thread
+# )
 
 target_sources(${PROJECT_NAME}
 	PRIVATE
