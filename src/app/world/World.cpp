@@ -5,12 +5,12 @@ World::World(
 	VulkanAPI & vulkanAPI,
 	ThreadPool & threadPool
 )
-: m_worldScene(WorldScene),
-  m_vulkanAPI(vulkanAPI),
-  m_threadPool(threadPool),
-  m_future_id(0),
+:	m_worldScene(WorldScene),
+	m_vulkanAPI(vulkanAPI),
+	m_threadPool(threadPool),
 	m_entities(),
-	m_player(std::make_shared<Player>())
+	m_player(std::make_shared<Player>()),
+	m_future_id(0)
 {
 	m_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
 }
