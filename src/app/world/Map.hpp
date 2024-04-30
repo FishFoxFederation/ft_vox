@@ -64,12 +64,51 @@ private:
 
 	uint64_t								m_future_id = 0;
 
+	/**
+	 * @brief will load all chunks around the player
+	 * @warning you must lock m_chunks_mutex before calling this function
+	 * 
+	 * @param playerPosition 
+	 */
 	void 	loadChunks(const glm::vec3 & playerPosition);
+
+	/**
+	 * @brief will load all chunks around the players
+	 * @warning you must lock m_chunks_mutex before calling this function
+	 * 
+	 * @param playerPositions 
+	 */
 	void 	loadChunks(const std::vector<glm::vec3> & playerPositions);
+
+	/**
+	 * @brief will unload chunk that are too far from the player
+	 * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
+	 * @param playerPosition 
+	 */
 	void	unloadChunks(const glm::vec3 & playerPosition);
+
+	/**
+	 * @brief will unload chunk that are too far from the players
+	 * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
+	 * 
+	 * @param playerPositions 
+	 */
 	void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
 
-	void	renderChunks(const glm::vec3 & playerPosition);
+	/**
+	 * @brief will mesh chunks that are meshable around the player
+	 * @warning you must lock m_chunks_mutex as well as m_visible_columns_mutex
+	 * before calling this function
+	 * 
+	 * @param playerPosition 
+	 */
+	void	meshChunks(const glm::vec3 & playerPosition);
 
-	void	addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition);
+	/**
+	 * @brief Will load, unload and mesh chunks around the player
+	 * 
+	 * @param playerPosition 
+	 */
+	void 	updateChunks(const glm::vec3 & playerPosition);
+
 };
