@@ -86,39 +86,6 @@ bool ViewFrustum::sphereInFrustum(const glm::dvec3 & center, double radius) cons
 //                                                                                                           #
 //############################################################################################################
 
-void Camera::movePosition(const glm::dvec3 & move)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	glm::dvec3 displacement = move.x * glm::normalize(glm::cross(direction(), up))
-							+ move.y * up
-							+ move.z * glm::normalize(glm::dvec3(direction().x, 0.0, direction().z));
-	position += displacement;
-}
-
-void Camera::moveDirection(double x_offset, double y_offset)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-
-	// update the pitch and yaw
-	pitch = glm::clamp(pitch - y_offset, -89.0, 89.0);
-	yaw += x_offset;
-
-}
-
-void Camera::setPosition(const glm::dvec3& position)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	this->position = position;
-}
-
-void Camera::lookAt(const glm::dvec3& target)
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	glm::dvec3 direction = glm::normalize(target - position);
-	pitch = glm::degrees(asin(direction.y));
-	yaw = glm::degrees(atan2(direction.z, direction.x));
-}
-
 glm::dvec3 Camera::direction() const
 {
 	return glm::dvec3(

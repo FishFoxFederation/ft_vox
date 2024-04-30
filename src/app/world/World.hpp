@@ -41,10 +41,8 @@ public:
 		const glm::dvec3 & move,
 		const glm::dvec2 & look
 	);
-	Camera getCamera()
-	{
-		return m_player->camera();
-	}
+	Camera getCamera();
+	glm::dvec3 getPlayerPosition();
 
 private:
 	WorldScene &							m_worldScene;
@@ -53,6 +51,7 @@ private:
 
 	IdList<uint64_t, std::shared_ptr<Entity>> m_entities;
 
+	std::mutex m_player_mutex;
 	std::shared_ptr<Player> m_player;
 
 	/*************************************

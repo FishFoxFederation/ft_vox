@@ -32,15 +32,13 @@ Player::~Player()
 {
 }
 
-void Player::movePosition(
-	glm::dvec3 move
-)
+void Player::movePosition(glm::dvec3 displacement)
 {
-	static const glm::dvec3 up_vec = glm::dvec3(0.0, 1.0, 0.0);
-	glm::dvec3 dir_vec = direction();
-	glm::dvec3 displacement = move.x * glm::normalize(glm::cross(dir_vec, up_vec))
-							+ move.y * up_vec
-							+ move.z * glm::normalize(glm::dvec3(dir_vec.x, 0.0, dir_vec.z));
+	// static const glm::dvec3 up_vec = glm::dvec3(0.0, 1.0, 0.0);
+	// glm::dvec3 dir_vec = direction();
+	// glm::dvec3 displacement = move.x * glm::normalize(glm::cross(dir_vec, up_vec))
+	// 						+ move.y * up_vec
+	// 						+ move.z * glm::normalize(glm::dvec3(dir_vec.x, 0.0, dir_vec.z));
 	transform.position += displacement;
 }
 
@@ -57,4 +55,14 @@ glm::dvec3 Player::direction() const
 		sin(glm::radians(m_pitch)),
 		cos(glm::radians(m_pitch)) * sin(glm::radians(m_yaw))
 	);
+}
+
+glm::dvec3 Player::getDisplacement(glm::dvec3 move) const
+{
+	static const glm::dvec3 up_vec = glm::dvec3(0.0, 1.0, 0.0);
+	glm::dvec3 dir_vec = direction();
+	glm::dvec3 displacement = move.x * glm::normalize(glm::cross(dir_vec, up_vec))
+							+ move.y * up_vec
+							+ move.z * glm::normalize(glm::dvec3(dir_vec.x, 0.0, dir_vec.z));
+	return displacement;
 }

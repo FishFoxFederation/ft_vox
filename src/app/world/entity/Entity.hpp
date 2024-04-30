@@ -78,6 +78,8 @@ public:
 		return Camera(transform.position, m_pitch, m_yaw);
 	}
 
+	glm::dvec3 getDisplacement(glm::dvec3 move) const;
+
 private:
 
 	double m_yaw;
