@@ -14,7 +14,8 @@ Map::~Map()
 
 void Map::loadChunks(const glm::vec3 & playerPosition)
 {
-	glm::ivec2 playerChunk2D = glm::ivec2(glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3);
+	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
+	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
 	//here coords are in 2D because we are working with chunk columns
 	//when we need specific 3D coords we always use 0 Y
 	for(int x = -LOAD_DISTANCE; x < LOAD_DISTANCE; x++)
@@ -73,7 +74,11 @@ void Map::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 {
 	std::vector<glm::ivec2> playerChunks2D;
 	for (auto playerPosition : playerPositions)
-		playerChunks2D.push_back(glm::ivec2(glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3));
+	{
+		glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
+		glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
+		playerChunks2D.push_back(playerChunk2D);
+	}
 
 	for (auto & chunkPos2D : m_loaded_columns)
 	{
@@ -118,12 +123,15 @@ void Map::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 				it->second.status.addWriter();
 
 				{
+					std::lock_guard<std::mutex> lock(m_chunks_mutex);
 					std::lock_guard<std::mutex> lock2(m_visible_columns_mutex);
+					std::lock_guard<std::mutex> lock3(m_unload_set_mutex);
 
 					mesh_id = m_chunks.at(chunkPos3D).getMeshID();
 					m_chunks.erase(chunkPos3D);
 					m_loaded_columns.erase(chunkPos2D);
 					m_visible_columns.erase(chunkPos2D);
+					m_unload_set.erase(chunkPos2D);
 				}
 
 				m_worldScene.removeMesh(mesh_id);
@@ -144,13 +152,18 @@ void Map::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 
 void Map::unloadChunks(const glm::vec3 & playerPosition)
 {
-
+	unloadChunks(std::vector<glm::vec3>{playerPosition});
 }
 
-void Map::renderChunks(const glm::vec3 & playerPosition)
+void Map::meshChunks(const glm::vec3 & playerPosition)
 {
+	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
+	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
 	for(auto chunkPos2D : m_loaded_columns)
 	{
+		float distanceX = std::abs(chunkPos2D.x - playerChunk2D.x);
+		float distanceZ = std::abs(chunkPos2D.y - playerChunk2D.y);
+
 		if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE
 			&& !m_visible_columns.contains(chunkPos2D))
 		{
@@ -173,35 +186,21 @@ void Map::renderChunks(const glm::vec3 & playerPosition)
 			}
 			if (unavailable_neighbours)
 				continue;
-
-			/*********
-			 * SETTING STATUSES
-			*********/
-			//set chunks as being read
 			//this is possible and thread safe to test if they are readable and then to modify their statuses
 			//only because we have the guarantee that not other task will try to write to them
 			//since task dispatching is done in order
-			for(int x = -1; x < 2; x++)
-			{
-				for(int z = -1; z < 2; z++)
-				{
-					glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
-					if(m_chunks.contains(chunkPos))
-						m_chunks.at(chunkPos).status.addReader();
-				}
-			}
-			//set the current chunk as meshing
-			// m_chunks.at(chunkPos3D).status.setFlag(Chunk::ChunkStatus::MESHING);
 
 			m_visible_columns.insert(chunkPos2D);
-			// LOG_DEBUG("Adding chunk to render queue: " << pos2D.x << " " << pos2D.y);
+
+			//The constructor will mark the chunk as being read
+			CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
+
 			/********
 			* PUSHING TASK TO THREAD POOL
 			********/
 			uint64_t current_id = m_future_id++;
-			std::future<void> future = m_threadPool.submit([this, chunkPos2D, chunkPos3D, current_id]()
+			std::future<void> future = m_threadPool.submit([this, chunkPos3D, current_id, mesh_data = std::move(mesh_data)]() mutable
 			{
-				(void)chunkPos2D;
 				/**************************************************************
 				 * CALCULATE MESH FUNCTION
 				 **************************************************************/
@@ -209,10 +208,8 @@ void Map::renderChunks(const glm::vec3 & playerPosition)
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
 				//create all mesh data needed ( pointers to neighbors basically )
-				std::unique_lock<std::mutex> lock(m_chunks_mutex);
-				CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
-				Chunk & chunk = m_chunks.at(chunkPos3D);
-				lock.unlock();
+				// CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
+				Chunk & chunk = *mesh_data.getCenterChunk();
 
 				mesh_data.create(); //CPU intensive task to create the mesh
 				//storing mesh in the GPU
@@ -223,56 +220,35 @@ void Map::renderChunks(const glm::vec3 & playerPosition)
 				if(mesh_id != VulkanAPI::no_mesh_id)
 					m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3));
 
-				/*********************
-				 * SETTING STATUSES
-				**********************/
-				for (auto vec2D : mesh_data.chunks)
-				{
-					for (auto vec1D : vec2D)
-					{
-						for(auto & chunk_ptr : vec1D)
-						{
-							if (chunk_ptr == nullptr)
-								continue;
-							chunk_ptr->status.removeReader();
-						}
-					}
-				}
-				// chunk.status.clearFlag(Chunk::ChunkStatus::MESHING);
-
-				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 					m_finished_futures.push(current_id);
-					// LOG_DEBUG("Chunk " << i << " meshed: " << pos2D.x << " " << pos2D.y);
+					LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
 
 				}
+
+				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
+				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 			});
 			m_futures.insert(std::make_pair(current_id, std::move(future)));
 		}
 	}
 }
 
-void Map::addColumnToLoadUnloadQueue(const glm::vec3 & nextPlayerPosition)
+void Map::updateChunks(const glm::vec3 & playerPosition)
 {
+
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
 	std::lock_guard<std::mutex> lock4(m_visible_columns_mutex);
-
-
-	glm::ivec3 nextPlayerChunk = glm::ivec3(nextPlayerPosition) / CHUNK_SIZE_IVEC3;
-
-	glm::ivec2 nextPlayerChunk2D = glm::ivec2(nextPlayerChunk.x, nextPlayerChunk.z);
-
-	/**************************************************************
-	 * LOAD CHUNKS
-	 **************************************************************/
-	
+	std::lock_guard<std::mutex> lock5(m_unload_set_mutex);
+	loadChunks(playerPosition);
+	unloadChunks(playerPosition);
+	meshChunks(playerPosition);
 }
 
 void Map::update(glm::dvec3 nextPlayerPosition)
 {
-	addColumnToLoadUnloadQueue(nextPlayerPosition);
+	updateChunks(nextPlayerPosition);
 
 	{
 		std::lock_guard<std::mutex> lock(m_finished_futures_mutex);

@@ -121,6 +121,44 @@ public:
 					if (it != chunk_map.end())
 					{
 						chunks[x + 1][y + 1][z + 1] = &it->second;
+						it->second.status.addReader();
+					}
+				}
+			}
+		}
+	}
+
+	CreateMeshData(const CreateMeshData &) = delete;
+	CreateMeshData & operator=(const CreateMeshData &) = delete;
+
+	CreateMeshData(CreateMeshData && other)
+	:
+		chunks(std::move(other.chunks)),
+		vertices(std::move(other.vertices)),
+		indices(std::move(other.indices)),
+		face_data(std::move(other.face_data)),
+		size(std::move(other.size))
+	{
+		// other.chunks.clear();
+		// other.vertices.clear();
+		// other.indices.clear();
+		// other.face_data.clear();
+	}
+
+	~CreateMeshData()
+	{
+		if (chunks.empty())
+			return;
+
+		for (int x = 0; x < size.x + 2; x++)
+		{
+			for (int y = 0; y < size.y + 2; y++)
+			{
+				for (int z = 0; z < size.z + 2; z++)
+				{
+					if (chunks[x][y][z] != nullptr)
+					{
+						chunks[x][y][z]->status.removeReader();
 					}
 				}
 			}
@@ -480,6 +518,11 @@ public:
 	std::vector<std::vector<std::vector<Chunk *>>> chunks;
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
+
+	Chunk * getCenterChunk()
+	{
+		return chunks[NEUT][NEUT][NEUT];
+	}
 
 private:
 
