@@ -57,6 +57,7 @@ target_sources(${PROJECT_NAME}
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
 		src/app/world/entity/Entity.cpp
+		src/app/world/entity/HitBox.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
 

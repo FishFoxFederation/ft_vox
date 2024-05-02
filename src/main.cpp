@@ -1,5 +1,6 @@
 #include "application.hpp"
 #include "logger.hpp"
+#include "HitBox.hpp"
 
 #include <iostream>
 #include <exception>

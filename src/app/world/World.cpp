@@ -292,7 +292,20 @@ void World::waitForFutures()
 	}
 }
 
+glm::vec3 World::getBlockChunkPosition(const glm::vec3 & position)
+{
+	glm::vec3 block_chunk_position = glm::ivec3(position) % CHUNK_SIZE_IVEC3;
+	if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
+	if (block_chunk_position.y < 0) block_chunk_position.y += CHUNK_Y_SIZE;
+	if (block_chunk_position.z < 0) block_chunk_position.z += CHUNK_Z_SIZE;
 
+	return block_chunk_position;
+}
+
+glm::vec3 World::getChunkPosition(const glm::vec3 & position)
+{
+	return glm::floor(position / CHUNK_SIZE_VEC3);
+}
 
 void World::updatePlayer(
 	const glm::dvec3 & move,
@@ -301,42 +314,96 @@ void World::updatePlayer(
 {
 	std::lock_guard<std::mutex> lock(m_player_mutex);
 
-	glm::dvec3 position = m_player->transform.position;
+	// glm::dvec3 position = m_player->transform.position;
+	// glm::dvec3 displacement = m_player->getDisplacement(move);
+
+	// for (int i = 0; i < 3; i++)
+	// {
+	// 	glm::dvec3 new_position = position;
+	// 	new_position[i] += displacement[i];
+
+	// 	glm::vec3 block_position = glm::floor(new_position);
+
+	// 	glm::vec3 block_chunk_position = glm::ivec3(block_position) % CHUNK_SIZE_IVEC3;
+	// 	if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
+	// 	if (block_chunk_position.y < 0) block_chunk_position.y += CHUNK_Y_SIZE;
+	// 	if (block_chunk_position.z < 0) block_chunk_position.z += CHUNK_Z_SIZE;
+
+	// 	glm::vec3 chunk_position = glm::floor(block_position / CHUNK_SIZE_VEC3);
+	// 	glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+
+	// 	{
+	// 		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	// 		if (m_loaded_chunks.contains(chunk_position2D))
+	// 		{
+	// 			Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
+	// 			chunk.status.addReader();
+
+	// 			BlockID block_id = chunk.getBlock(block_chunk_position.x, block_chunk_position.y, block_chunk_position.z);
+	// 			if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
+	// 			{
+	// 				displacement[i] = 0.0;
+	// 			}
+
+	// 			chunk.status.removeReader();
+	// 		}
+	// 	}
+	// }
+
+	Transform transform = m_player->transform;
 	glm::dvec3 displacement = m_player->getDisplacement(move);
 
-	for (int i = 0; i < 3; i++)
+	glm::dvec3 new_position = transform.position + displacement;
+	Transform new_transform = transform;
+	new_transform.position = new_position;
+
+	// glm::vec3 block_position = glm::floor(new_position);
+	// glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
+	// glm::vec3 chunk_position = getChunkPosition(block_position);
+	// glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+
 	{
-		glm::dvec3 new_position = position;
-		new_position[i] += displacement[i];
+		std::lock_guard<std::mutex> lock(m_chunks_mutex);
 
-		glm::vec3 block_position = glm::floor(new_position);
-
-		glm::vec3 block_chunk_position = glm::ivec3(block_position) % CHUNK_SIZE_IVEC3;
-		if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
-		if (block_chunk_position.y < 0) block_chunk_position.y += CHUNK_Y_SIZE;
-		if (block_chunk_position.z < 0) block_chunk_position.z += CHUNK_Z_SIZE;
-
-		glm::vec3 chunk_position = glm::floor(block_position / CHUNK_SIZE_VEC3);
-		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
-
+		for (int x = -1; x <= 1; x++)
 		{
-			std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		for (int z = -1; z <= 1; z++)
+		{
+		for (int y = -1; y <= 2; y++)
+		{
+			glm::vec3 block_position = glm::floor(glm::dvec3(new_position.x + x, new_position.y + y, new_position.z + z));
+			glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
+			glm::vec3 chunk_position = getChunkPosition(block_position);
+			glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+
 			if (m_loaded_chunks.contains(chunk_position2D))
 			{
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 				chunk.status.addReader();
 
-				BlockID block_id = chunk.getBlock(block_chunk_position.x, block_chunk_position.y, block_chunk_position.z);
+				BlockID block_id = chunk.getBlock(block_chunk_position);
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
-					displacement[i] = 0.0;
+					if (isColliding(
+						m_player->hitbox.transform(new_transform.model()),
+						Block::getData(block_id).hitbox.transform(glm::translate(glm::mat4(1.0), block_position))
+					))
+					{
+						displacement = glm::dvec3(0.0);
+					}
+					// else
+					// {
+					// 	LOG_DEBUG("No collision detected");
+					// }
 				}
 
 				chunk.status.removeReader();
 			}
 		}
-	}
+		}
+		}
 
+	}
 
 
 	m_player->movePosition(displacement);
