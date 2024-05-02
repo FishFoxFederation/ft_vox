@@ -133,7 +133,7 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 				 * CHUNK UNLOADING FUNCTION
 				 **************************************************************/
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-				uint64_t mesh_id;
+				uint64_t mesh_scene_id, mesh_id;
 				std::unordered_map<glm::ivec3, Chunk>::iterator it;
 
 				{
@@ -151,14 +151,15 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 					std::lock_guard<std::mutex> lock2(m_visible_chunks_mutex);
 					std::lock_guard<std::mutex> lock3(m_unload_set_mutex);
 
-					mesh_id = m_chunks.at(chunkPos3D).getMeshID();
+					mesh_scene_id = m_chunks.at(chunkPos3D).getMeshID();
 					m_chunks.erase(chunkPos3D);
 					m_loaded_chunks.erase(chunkPos2D);
 					m_visible_chunks.erase(chunkPos2D);
 					m_unload_set.erase(chunkPos2D);
 				}
 
-				m_worldScene.chunk_mesh_list.remove(mesh_id);
+				mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
+				m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
 				m_vulkanAPI.destroyMesh(mesh_id);
 
 				{
@@ -245,10 +246,12 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 					mesh_data.indices.size()
 				);
 
-				chunk.setMeshID(mesh_id);
 				//adding mesh id to the scene so it is rendered
-				if(mesh_id != VulkanAPI::no_mesh_id)
-					m_worldScene.chunk_mesh_list.add(mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3));
+				if(mesh_id != IdList<uint64_t, Mesh>::invalid_id)
+				{
+					uint64_t mesh_scene_id = m_worldScene.chunk_mesh_list.insert({mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)});
+					chunk.setMeshID(mesh_scene_id);
+				}
 
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
