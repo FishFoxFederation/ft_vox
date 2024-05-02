@@ -26,12 +26,12 @@ ConnectionSocket& ConnectionSocket::operator=(ConnectionSocket&& other)
 	return *this;
 }
 
-size_t ConnectionSocket::send(const char *data, size_t size)
+ssize_t ConnectionSocket::send(const char *data, size_t size)
 {
 	return ::send(m_sockfd, data, size, MSG_DONTWAIT);
 }
 
-size_t ConnectionSocket::recv(char *data, size_t size)
+ssize_t ConnectionSocket::recv(char *data, size_t size)
 {
 	return ::recv(m_sockfd, data, size, MSG_DONTWAIT);
 }
