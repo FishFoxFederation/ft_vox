@@ -87,7 +87,7 @@ void RenderThread::loop()
 	camera_matrices.view = camera.view;
 	camera_matrices.proj = clip * camera.projection;
 
-	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.chunk_mesh_list.get();
+	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.chunk_mesh_list.values();
 	const std::vector<WorldScene::MeshRenderData> entity_meshes = m_world_scene.entity_mesh_list.get();
 
 	m_frame_count++;
@@ -127,10 +127,7 @@ void RenderThread::loop()
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
 
-	{
-		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
-		DebugGui::chunk_mesh_count = vk.meshes.size();
-	}
+	DebugGui::chunk_mesh_count = vk.meshes.size();
 
 	VK_CHECK(
 		vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
@@ -142,7 +139,7 @@ void RenderThread::loop()
 
 	// reset mesh usage by frame info
 	{
-		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+		auto lock = vk.meshes.lock();
 		for (auto & mesh : vk.meshes)
 		{
 			mesh.second.used_by_frame[vk.current_frame] = false;
@@ -209,23 +206,26 @@ void RenderThread::loop()
 
 	for (auto & chunk_mesh : chunk_meshes)
 	{
-		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
-
-		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
+		if (!vk.meshes.contains(chunk_mesh.id))
 		{
 			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
 			continue;
 		}
 
-		if (vk.meshes[chunk_mesh.id].buffer == VK_NULL_HANDLE)
+		Mesh mesh = vk.meshes.get(chunk_mesh.id);
+
+		if (mesh.buffer == VK_NULL_HANDLE)
 		{
 			LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
 			continue;
 		}
 
-		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
+		{
+			auto lock = vk.meshes.lock();
+			vk.meshes.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
+		}
 
-		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
+		const VkBuffer vertex_buffers[] = { mesh.buffer };
 		const VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(
 			vk.draw_command_buffers[vk.current_frame],
@@ -236,8 +236,8 @@ void RenderThread::loop()
 
 		vkCmdBindIndexBuffer(
 			vk.draw_command_buffers[vk.current_frame],
-			vk.meshes[chunk_mesh.id].buffer,
-			vk.meshes[chunk_mesh.id].index_offset,
+			mesh.buffer,
+			mesh.index_offset,
 			VK_INDEX_TYPE_UINT32
 		);
 
@@ -254,7 +254,7 @@ void RenderThread::loop()
 
 		vkCmdDrawIndexed(
 			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(vk.meshes[chunk_mesh.id].index_count),
+			static_cast<uint32_t>(mesh.index_count),
 			1, 0, 0, 0
 		);
 	}
@@ -310,23 +310,26 @@ void RenderThread::loop()
 
 	uint32_t triangle_count = 0;
 
-	for (auto & chunk_mesh : chunk_meshes)
+	for (auto & chunk_mesh: chunk_meshes)
 	{
-		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
-
-		if (vk.meshes.find(chunk_mesh.id) == vk.meshes.end())
+		if (!vk.meshes.contains(chunk_mesh.id))
 		{
 			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
 			continue;
 		}
 
-		if (vk.meshes[chunk_mesh.id].buffer == VK_NULL_HANDLE)
+		Mesh mesh = vk.meshes.get(chunk_mesh.id);
+
+		if (mesh.buffer == VK_NULL_HANDLE)
 		{
 			LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
 			continue;
 		}
 
-		vk.meshes[chunk_mesh.id].used_by_frame[vk.current_frame] = true;
+		{
+			auto lock = vk.meshes.lock();
+			mesh.used_by_frame[vk.current_frame] = true;
+		}
 
 		// glm::dvec3 pos = chunk_mesh.transform.position();
 		// if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
@@ -334,7 +337,7 @@ void RenderThread::loop()
 		// 	continue;
 		// }
 
-		const VkBuffer vertex_buffers[] = { vk.meshes[chunk_mesh.id].buffer };
+		const VkBuffer vertex_buffers[] = { mesh.buffer };
 		const VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(
 			vk.draw_command_buffers[vk.current_frame],
@@ -345,8 +348,8 @@ void RenderThread::loop()
 
 		vkCmdBindIndexBuffer(
 			vk.draw_command_buffers[vk.current_frame],
-			vk.meshes[chunk_mesh.id].buffer,
-			vk.meshes[chunk_mesh.id].index_offset,
+			mesh.buffer,
+			mesh.index_offset,
 			VK_INDEX_TYPE_UINT32
 		);
 
@@ -363,11 +366,11 @@ void RenderThread::loop()
 
 		vkCmdDrawIndexed(
 			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(vk.meshes[chunk_mesh.id].index_count),
+			static_cast<uint32_t>(mesh.index_count),
 			1, 0, 0, 0
 		);
 
-		triangle_count += (vk.meshes[chunk_mesh.id].index_count) / 3;
+		triangle_count += (mesh.index_count) / 3;
 	}
 	DebugGui::rendered_triangles = triangle_count;
 
@@ -392,9 +395,21 @@ void RenderThread::loop()
 
 	for (const auto & entity_mesh : entity_meshes)
 	{
-		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+		if (!vk.meshes.contains(entity_mesh.id))
+		{
+			LOG_WARNING("Mesh " << entity_mesh.id << " not found in the mesh map.");
+			continue;
+		}
 
-		const VkBuffer vertex_buffers[] = { vk.meshes[entity_mesh.id].buffer };
+		Mesh mesh = vk.meshes.get(entity_mesh.id);
+
+		if (mesh.buffer == VK_NULL_HANDLE)
+		{
+			LOG_WARNING("Mesh " << entity_mesh.id << " has a null buffer.");
+			continue;
+		}
+
+		const VkBuffer vertex_buffers[] = { mesh.buffer };
 		const VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(
 			vk.draw_command_buffers[vk.current_frame],
@@ -405,8 +420,8 @@ void RenderThread::loop()
 
 		vkCmdBindIndexBuffer(
 			vk.draw_command_buffers[vk.current_frame],
-			vk.meshes[entity_mesh.id].buffer,
-			vk.meshes[entity_mesh.id].index_offset,
+			mesh.buffer,
+			mesh.index_offset,
 			VK_INDEX_TYPE_UINT32
 		);
 
@@ -424,7 +439,7 @@ void RenderThread::loop()
 
 		vkCmdDrawIndexed(
 			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(vk.meshes[entity_mesh.id].index_count),
+			static_cast<uint32_t>(mesh.index_count),
 			1, 0, 0, 0
 		);
 	}

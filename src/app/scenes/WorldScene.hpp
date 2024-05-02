@@ -3,6 +3,7 @@
 #include "define.hpp"
 #include "logger.hpp"
 #include "Camera.hpp"
+#include "List.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -136,8 +137,10 @@ public:
 	 */
 	const Camera & camera() const { return m_camera; }
 
-	MeshList chunk_mesh_list;
+	// MeshList chunk_mesh_list;
+	IdList<uint64_t, MeshRenderData> chunk_mesh_list;
 	MeshList entity_mesh_list;
+	mutable std::mutex mesh_list_mutex;
 
 private:
 

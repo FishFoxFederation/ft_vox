@@ -62,7 +62,7 @@ VulkanAPI::~VulkanAPI()
 	ImGui::DestroyContext();
 
 	{
-		std::lock_guard<std::mutex> lock(mesh_mutex);
+		auto lock = meshes.lock();
 		for (auto & [key, mesh] : meshes)
 		{
 			vkDestroyBuffer(device, mesh.buffer, nullptr);

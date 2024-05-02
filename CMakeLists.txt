@@ -12,9 +12,9 @@ add_executable(${PROJECT_NAME})
 
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
-		-O3
+		# -O3
 		-g3
-		# -fsanitize=thread
+		-fsanitize=thread
 		-Wall
 		-Wextra
 		-Werror
@@ -24,7 +24,7 @@ target_compile_options(${PROJECT_NAME}
 
 target_link_options(${PROJECT_NAME}
 	PRIVATE
-		# -fsanitize=thread
+		-fsanitize=thread
 )
 
 target_sources(${PROJECT_NAME}

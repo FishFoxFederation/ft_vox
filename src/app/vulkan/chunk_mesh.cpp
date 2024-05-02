@@ -14,7 +14,7 @@ uint64_t VulkanAPI::storeMesh(
 
 	if (vertex_count == 0 || index_count == 0)
 	{
-		return no_mesh_id;
+		return IdList<uint64_t, Mesh>::invalid_id;
 	}
 
 
@@ -62,14 +62,16 @@ uint64_t VulkanAPI::storeMesh(
 	mesh.index_count = index_count;
 	mesh.memory_size = buffer_size;
 
-	uint64_t mesh_id;
-	{
-		std::lock_guard<std::mutex> lock(mesh_mutex);
-		mesh_id = next_mesh_id++;
-		meshes.emplace(mesh_id, mesh);
-	}
+	// uint64_t mesh_id;
+	// {
+	// 	std::lock_guard<std::mutex> lock(mesh_mutex);
+	// 	mesh_id = next_mesh_id++;
+	// 	meshes.emplace(mesh_id, mesh);
+	// }
 
-	return mesh_id;
+	// return mesh_id;
+
+	return meshes.insert(mesh);
 }
 
 void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
@@ -92,14 +94,15 @@ void VulkanAPI::destroyMeshes()
 	meshes_still_in_use.reserve(mesh_ids_to_destroy.size());
 	for (auto & id: mesh_ids_to_destroy)
 	{
-		std::lock_guard<std::mutex> lock(mesh_mutex);
-		auto mesh = meshes.find(id);
-		if (mesh != meshes.end() && mesh->second.is_used == false)
+		if (meshes.contains(id))
 		{
-			// LOG_INFO("Destroying mesh: " << id);
-			vkDestroyBuffer(device, mesh->second.buffer, nullptr);
-			vma.freeMemory(device, mesh->second.buffer_memory, nullptr);
-			meshes.erase(mesh);
+			auto mesh = meshes.get(id);
+			if (mesh.is_used == false)
+			{
+				vkDestroyBuffer(device, mesh.buffer, nullptr);
+				vma.freeMemory(device, mesh.buffer_memory, nullptr);
+				meshes.erase(id);
+			}
 		}
 		else
 		{

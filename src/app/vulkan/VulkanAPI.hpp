@@ -10,6 +10,7 @@
 #include "Pipeline.hpp"
 #include "Chunk.hpp"
 #include "CreateMeshData.hpp"
+#include "List.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -319,10 +320,7 @@ public:
 	ImGuiTexture imgui_texture;
 
 	// Meshes
-	uint64_t next_mesh_id = 1;
-	static const uint64_t no_mesh_id = 0;
-	std::unordered_map<uint64_t, Mesh> meshes;
-	std::mutex mesh_mutex;
+	IdList<uint64_t, Mesh> meshes;
 	std::vector<uint64_t> mesh_ids_to_destroy;
 
 	uint64_t cube_mesh_id;
