@@ -30,9 +30,9 @@ layout(location = 3) out float fragAO;
 
 void main()
 {
-    gl_Position = cm.projection * cm.view * pc.model * vec4(positions, 1.0);
+	gl_Position = cm.projection * cm.view * pc.model * vec4(positions, 1.0);
 
-    fragNormal = normal;
+	fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);
 
 	shadowCoords = lm.projection * lm.view * pc.model * vec4(positions, 1.0);

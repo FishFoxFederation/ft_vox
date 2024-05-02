@@ -70,7 +70,7 @@ void BlockUpdateThread::init()
 	// 	);
 	// 	if (mesh_id != VulkanAPI::no_mesh_id)
 	// 	{
-	// 		m_worldScene.addMeshData(mesh_id, glm::vec3(pos * CHUNK_SIZE));
+	// 		m_worldScene.addChunkMesh(mesh_id, glm::vec3(pos * CHUNK_SIZE));
 	// 	}
 	// }
 }

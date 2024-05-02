@@ -25,7 +25,7 @@ public:
 	{
 
 	public:
-	
+
 		Transform(
 			const glm::vec3 & position = glm::vec3(0.0f, 0.0f, 0.0f),
 			const glm::vec3 & rotation = glm::vec3(0.0f, 0.0f, 0.0f),
@@ -60,13 +60,50 @@ public:
 		glm::vec3 m_position;
 		glm::vec3 m_rotation;
 		glm::vec3 m_scale;
-	
+
 	};
 
 	struct MeshRenderData
 	{
 		uint64_t id;
 		Transform transform;
+	};
+
+	class MeshList
+	{
+
+	public:
+
+		MeshList() = default;
+		~MeshList() = default;
+
+		MeshList(const MeshList & other) = delete;
+		MeshList(MeshList && other) = delete;
+		MeshList & operator=(const MeshList & other) = delete;
+		MeshList & operator=(MeshList && other) = delete;
+
+		void add(uint64_t meshID, const Transform & transform)
+		{
+			std::lock_guard<std::mutex> lock(m_mutex);
+			m_meshes.push_back({meshID, transform});
+		}
+
+		void remove(uint64_t meshID)
+		{
+			std::lock_guard<std::mutex> lock(m_mutex);
+			std::erase_if(m_meshes, [meshID](const MeshRenderData & data) { return data.id == meshID; });
+		}
+
+		std::vector<MeshRenderData> get() const
+		{
+			std::lock_guard<std::mutex> lock(m_mutex);
+			return m_meshes;
+		}
+
+	private:
+
+		std::vector<MeshRenderData> m_meshes;
+		mutable std::mutex m_mutex;
 	};
 
 	/**
@@ -79,39 +116,17 @@ public:
 	 */
 	~WorldScene();
 
-	WorldScene(WorldScene& scene) = delete;
-	WorldScene(WorldScene&& scene) = delete;
-	WorldScene& operator=(WorldScene& scene) = delete;
-	WorldScene& operator=(WorldScene&& scene) = delete;
-
-	/**
-	 * @brief Function to add a mesh to the scene. THREAD SAFE
-	 *
-	 * @param meshID The mesh ID.
-	 * @param model The model matrix of the mesh.
-	 */
-	void addMeshData(uint64_t meshID, const Transform & transform);
-
-	/**
-	 * @brief Function to remove a mesh from the scene.
-	 *
-	 * @param meshID The mesh ID to remove.
-	 */
-	void removeMesh(uint64_t meshID);
-
-	/**
-	 * @brief Function to get the mesh data.
-	 *
-	 * @return std::vector<MeshRenderData> The mesh data.
-	 */
-	std::vector<MeshRenderData> getMeshRenderData() const;
+	WorldScene(WorldScene & scene) = delete;
+	WorldScene(WorldScene && scene) = delete;
+	WorldScene & operator=(WorldScene & scene) = delete;
+	WorldScene & operator=(WorldScene && scene) = delete;
 
 	/**
 	 * @brief Function to get the camera.
 	 *
 	 * @return A reference to the camera.
 	 */
-	Camera& camera() { return m_camera; }
+	Camera & camera() { return m_camera; }
 
 	/**
 	 * @brief Function const to get the camera.
@@ -119,12 +134,12 @@ public:
 	 * @return A const reference to the camera.
 	 *
 	 */
-	const Camera& camera() const { return m_camera; }
+	const Camera & camera() const { return m_camera; }
+
+	MeshList chunk_mesh_list;
+	MeshList entity_mesh_list;
 
 private:
-
-	std::vector<MeshRenderData> m_mesh_render_data;
-	mutable std::mutex m_mesh_render_data_mutex;
 
 	Camera m_camera;
 };

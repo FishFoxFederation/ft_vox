@@ -158,7 +158,7 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 					m_unload_set.erase(chunkPos2D);
 				}
 
-				m_worldScene.removeMesh(mesh_id);
+				m_worldScene.chunk_mesh_list.remove(mesh_id);
 				m_vulkanAPI.destroyMesh(mesh_id);
 
 				{
@@ -237,12 +237,18 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 
 				mesh_data.create(); //CPU intensive task to create the mesh
 				//storing mesh in the GPU
-				uint64_t mesh_id = m_vulkanAPI.storeMesh(mesh_data.vertices, mesh_data.indices);
+				uint64_t mesh_id = m_vulkanAPI.storeMesh(
+					mesh_data.vertices.data(),
+					mesh_data.vertices.size(),
+					sizeof(BlockVertex),
+					mesh_data.indices.data(),
+					mesh_data.indices.size()
+				);
 
 				chunk.setMeshID(mesh_id);
 				//adding mesh id to the scene so it is rendered
 				if(mesh_id != VulkanAPI::no_mesh_id)
-					m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3));
+					m_worldScene.chunk_mesh_list.add(mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3));
 
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);

@@ -72,7 +72,39 @@ struct LineVertex
 
 		return attributeDescriptions;
 	}
+};
 
+struct EntityVertex
+{
+	glm::vec3 pos;
+	glm::vec3 normal;
+
+	static VkVertexInputBindingDescription getBindingDescription()
+	{
+		VkVertexInputBindingDescription bindingDescription{};
+		bindingDescription.binding = 0;
+		bindingDescription.stride = sizeof(EntityVertex);
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return bindingDescription;
+	}
+
+	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
+	{
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
+
+		attributeDescriptions[0].binding = 0;
+		attributeDescriptions[0].location = 0;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[0].offset = offsetof(EntityVertex, pos);
+
+		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].location = 1;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[1].offset = offsetof(EntityVertex, normal);
+
+		return attributeDescriptions;
+	}
 };
 
 struct Mesh
@@ -101,6 +133,12 @@ struct ViewProjMatrices
 struct ModelMatrice
 {
 	glm::mat4 model;
+};
+
+struct EntityMatrices
+{
+	glm::mat4 model;
+	glm::vec4 color;
 };
 
 struct ShadowMapLight
@@ -181,7 +219,13 @@ public:
 
 	void recreateSwapChain(GLFWwindow * window);
 
-	uint64_t storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices);
+	uint64_t storeMesh(
+		const void * vertices,
+		const uint32_t vertex_count,
+		const uint32_t vertex_size,
+		const void * indices,
+		const uint32_t index_count
+	);
 	void	 destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void	 destroyMesh(const uint64_t & mesh_id);
 
@@ -268,6 +312,7 @@ public:
 	Pipeline skybox_pipeline;
 	Pipeline shadow_pipeline;
 	Pipeline test_image_pipeline;
+	Pipeline entity_pipeline;
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
@@ -279,6 +324,8 @@ public:
 	std::unordered_map<uint64_t, Mesh> meshes;
 	std::mutex mesh_mutex;
 	std::vector<uint64_t> mesh_ids_to_destroy;
+
+	uint64_t cube_mesh_id;
 
 	std::mutex global_mutex;
 
@@ -353,6 +400,7 @@ private:
 	void createPipelines();
 	void createFramebuffers();
 
+	void createCubeMesh();
 	void destroyMeshes();
 
 

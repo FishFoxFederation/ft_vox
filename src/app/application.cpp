@@ -16,6 +16,8 @@ Application::Application():
 	m_block_update_thread(m_world_scene, m_world)
 {
 	LOG_INFO("Application::Application()");
+
+	m_world_scene.entity_mesh_list.add(m_vulkan_api.cube_mesh_id, glm::vec3(0.0f, 220.0f, 0.0f));
 }
 
 Application::~Application()
