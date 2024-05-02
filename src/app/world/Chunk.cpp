@@ -46,6 +46,11 @@ BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const
 	return m_blocks[index];
 }
 
+BlockID Chunk::getBlock(const glm::vec3 & position) const
+{
+	return getBlock((int)position.x, (int)position.y, (int)position.z);
+}
+
 void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 {
 	int index = toIndex(x, y, z);

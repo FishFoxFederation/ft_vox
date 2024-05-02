@@ -32,8 +32,6 @@ public:
 	World & operator=(World && other) = delete;
 
 
-
-
 	void updateEntities();
 	void updateBlock(glm::dvec3 position);
 
@@ -88,6 +86,22 @@ private:
 	/*************************************
 	 *  CHUNKS AND MAP
 	*************************************/
+	/**
+	 * @brief will return the block position relative to the chunk
+	 *
+	 * @param position the position of the block in the world
+	 * @return glm::vec3
+	 */
+	static glm::vec3 	getBlockChunkPosition(const glm::vec3 & position);
+
+	/**
+	 * @brief will return the chunk position containing the block
+	 *
+	 * @param position the position of the block in the world
+	 * @return glm::vec3
+	 */
+	static glm::vec3 	getChunkPosition(const glm::vec3 & position);
+
 	/**
 	 * @brief will load all chunks around the player
 	 * @warning you must lock m_chunks_mutex before calling this function

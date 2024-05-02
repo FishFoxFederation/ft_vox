@@ -2,6 +2,7 @@
 
 #include "define.hpp"
 #include "Camera.hpp"
+#include "HitBox.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -39,12 +40,19 @@ public:
 
 };
 
+/**
+ * @brief Entity class
+ *
+ * This class represents an entity in the world
+ * The position of the entity is at the bottom center of the hitbox
+ *
+ */
 class Entity
 {
 
 public:
 
-	Entity();
+	Entity(const HitBox & hitbox);
 	virtual ~Entity();
 
 	Entity(Entity & other) = delete;
@@ -53,6 +61,7 @@ public:
 	Entity & operator=(Entity && other) = delete;
 
 	Transform transform;
+	HitBox hitbox;
 
 };
 
@@ -82,6 +91,7 @@ public:
 
 private:
 
+	glm::dvec3 m_eye_position; // the position of the eyes relative to entity position
 	double m_yaw;
 	double m_pitch;
 

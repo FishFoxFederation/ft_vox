@@ -32,6 +32,7 @@ public:
 	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
 
 	BlockID				getBlock(const int & x, const int & y, const int & z) const;
+	BlockID				getBlock(const glm::vec3 & position) const;
 	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
 
 	const glm::ivec3 &	getPosition() const {return position;};
