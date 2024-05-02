@@ -87,7 +87,8 @@ void RenderThread::loop()
 	camera_matrices.view = camera.view;
 	camera_matrices.proj = clip * camera.projection;
 
-	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.getMeshRenderData();
+	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.chunk_mesh_list.get();
+	const std::vector<WorldScene::MeshRenderData> entity_meshes = m_world_scene.entity_mesh_list.get();
 
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
@@ -369,6 +370,64 @@ void RenderThread::loop()
 		triangle_count += (vk.meshes[chunk_mesh.id].index_count) / 3;
 	}
 	DebugGui::rendered_triangles = triangle_count;
+
+
+	// Draw the entities
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> entity_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame]
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.entity_pipeline.layout,
+		0,
+		static_cast<uint32_t>(entity_descriptor_sets.size()),
+		entity_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	for (const auto & entity_mesh : entity_meshes)
+	{
+		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
+
+		const VkBuffer vertex_buffers[] = { vk.meshes[entity_mesh.id].buffer };
+		const VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(
+			vk.draw_command_buffers[vk.current_frame],
+			0, 1,
+			vertex_buffers,
+			offsets
+		);
+
+		vkCmdBindIndexBuffer(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.meshes[entity_mesh.id].buffer,
+			vk.meshes[entity_mesh.id].index_offset,
+			VK_INDEX_TYPE_UINT32
+		);
+
+		EntityMatrices entity_matrice = {};
+		entity_matrice.model = entity_mesh.transform.model();
+		entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		vkCmdPushConstants(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.entity_pipeline.layout,
+			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			0,
+			sizeof(EntityMatrices),
+			&entity_matrice
+		);
+
+		vkCmdDrawIndexed(
+			vk.draw_command_buffers[vk.current_frame],
+			static_cast<uint32_t>(vk.meshes[entity_mesh.id].index_count),
+			1, 0, 0, 0
+		);
+	}
 
 
 	// Draw the skybox

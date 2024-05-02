@@ -3,19 +3,25 @@
 
 #include <cstring>
 
-uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const std::vector<uint32_t> & indices)
+uint64_t VulkanAPI::storeMesh(
+	const void * vertices,
+	const uint32_t vertex_count,
+	const uint32_t vertex_size,
+	const void * indices,
+	const uint32_t index_count
+)
 {
 
-	if (vertices.empty())
+	if (vertex_count == 0 || index_count == 0)
 	{
 		return no_mesh_id;
 	}
 
 
 	Mesh mesh;
-	VkDeviceSize vertex_size = sizeof(vertices[0]) * vertices.size();
-	VkDeviceSize index_size = sizeof(indices[0]) * indices.size();
-	VkDeviceSize buffer_size = vertex_size + index_size;
+	VkDeviceSize vertex_buffer_size = vertex_count * vertex_size;
+	VkDeviceSize index_buffer_size = index_count * sizeof(uint32_t);
+	VkDeviceSize buffer_size = vertex_buffer_size + index_buffer_size;
 
 	// std::lock_guard<std::mutex> lock(global_mutex);
 
@@ -34,8 +40,8 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 		vkMapMemory(device, staging_buffer_memory, 0, buffer_size, 0, &data),
 		"Failed to map memory for vertex/index staging buffer."
 	);
-	std::memcpy(data, vertices.data(), static_cast<size_t>(vertex_size));
-	std::memcpy(static_cast<char *>(data) + vertex_size, indices.data(), static_cast<size_t>(index_size));
+	std::memcpy(data, vertices, static_cast<size_t>(vertex_buffer_size));
+	std::memcpy(static_cast<char *>(data) + vertex_buffer_size, indices, static_cast<size_t>(index_buffer_size));
 	vkUnmapMemory(device, staging_buffer_memory);
 
 	createBuffer(
@@ -51,9 +57,9 @@ uint64_t VulkanAPI::storeMesh(const std::vector<BlockVertex> & vertices, const s
 	vkDestroyBuffer(device, staging_buffer, nullptr);
 	vma.freeMemory(device, staging_buffer_memory, nullptr);
 
-	mesh.vertex_count = static_cast<uint32_t>(vertices.size());
-	mesh.index_offset = vertex_size;
-	mesh.index_count = static_cast<uint32_t>(indices.size());
+	mesh.vertex_count = vertex_count;
+	mesh.index_offset = vertex_buffer_size;
+	mesh.index_count = index_count;
 	mesh.memory_size = buffer_size;
 
 	uint64_t mesh_id;

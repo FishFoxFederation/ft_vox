@@ -41,6 +41,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createPipelines();
 	createFramebuffers();
 
+	createCubeMesh();
+
 	setupImgui();
 	createImGuiTexture(100, 100);
 
@@ -131,6 +133,7 @@ VulkanAPI::~VulkanAPI()
 		skybox_pipeline.clear();
 		shadow_pipeline.clear();
 		test_image_pipeline.clear();
+		entity_pipeline.clear();
 
 		swapchain.clear();
 	}
@@ -1300,6 +1303,27 @@ void VulkanAPI::createPipelines()
 
 		test_image_pipeline = Pipeline(device, pipeline_info);
 	}
+
+	{ // Entity pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/entity_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/entity_shader.frag.spv";
+		pipeline_info.binding_description = EntityVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = EntityVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(EntityMatrices) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+
+		entity_pipeline = Pipeline(device, pipeline_info);
+	}
+
 }
 
 void VulkanAPI::createFramebuffers()
@@ -1350,6 +1374,64 @@ void VulkanAPI::createFramebuffers()
 		);
 	}
 
+}
+
+void VulkanAPI::createCubeMesh()
+{
+	std::vector<EntityVertex> vertices = {
+		// right
+		{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+		{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+		{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+		{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+
+		// left
+		{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+		{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+		{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+		{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+
+		// top
+		{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+		{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+		{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+		{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+
+		// bottom
+		{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+		{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+		{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+		{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+
+		// front
+		{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+
+		// back
+		{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+		{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+		{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+		{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}}
+	};
+
+	std::vector<uint32_t> indices = {
+		0, 2, 1, 0, 3, 2,
+		4, 5, 6, 6, 7, 4,
+		8, 9, 10, 10, 11, 8,
+		12, 14, 13, 12, 15, 14,
+		16, 18, 17, 16, 19, 18,
+		20, 21, 22, 22, 23, 20
+	};
+
+	cube_mesh_id = storeMesh(
+		vertices.data(),
+		vertices.size(),
+		sizeof(EntityVertex),
+		indices.data(),
+		indices.size()
+	);
 }
 
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
