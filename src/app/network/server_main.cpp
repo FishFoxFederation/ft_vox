@@ -1,4 +1,4 @@
-#include "ConnectionSocket.hpp"
+#include "Connection.hpp"
 #include "server/ServerSocket.hpp"
 #include "Poller.hpp"
 #include <iostream>
@@ -7,11 +7,11 @@
 #include <unistd.h>
 #include <cstdlib>
 
-void send_all(std::unordered_map<uint64_t, std::string> & send_buffer, const std::string & msg, int from)
+void send_all(std::unordered_map<uint64_t, Connection> & connections, const std::string & msg, int from)
 {
-	for(auto & buffer : send_buffer)
+	for(auto & [id, client] : connections)
 	{
-		buffer.second += std::to_string(from) + ": " + msg + "\n";
+		client.queueMessage(std::to_string(from) + ": " + msg + "\n");
 	}
 }
 
@@ -19,7 +19,7 @@ int main()
 {
 	ServerSocket server(4245);
 	Poller poller;
-	std::unordered_map<uint64_t, ConnectionSocket> connections;
+	std::unordered_map<uint64_t, Connection> connections;
 	std::unordered_map<uint64_t, std::string> send_buffer;
 	uint64_t id = 0;
 	poller.add(id, server, 1);
@@ -34,7 +34,7 @@ int main()
 			if (events.second[i].data.u32 != 0)
 			{
 				std::cout << "New client connected\n";
-				ConnectionSocket connection = server.accept();
+				Connection connection(server.accept());
 				auto ret = connections.insert(std::make_pair(id++, std::move(connection)));
 				send_buffer.insert(std::make_pair(ret.first->first, ""));
 				std::cout << "New client id : " << ret.first->first << "\n";
@@ -52,22 +52,14 @@ int main()
 				if (currentClient != connections.end())
 				{
 					std::cout << "Client event\n";
-					ConnectionSocket & connection = currentClient->second;
+					Connection & connection = currentClient->second;
 					if (events.second[i].events & EPOLLIN)
 					{
-						char buffer[1024];
-						size_t size = connection.recv(buffer, sizeof(buffer));
-						buffer[size] = '\0';
-						std::string message(buffer);
-						if (message.empty())
+						connection.recv();
+						std::string message = connection.getReadBuffer().data();
+						if (message.find('\n') != std::string::npos)
 						{
-							poller.remove(connection);
-							connections.erase(currentClient);
-							send_buffer.erase(currentClient->first);
-							send_all(send_buffer, "Client disconnected", currentClient->first);
-						}
-						else
-						{
+							connection.reduceReadBuffer(message.find('\n') + 1);
 							std::cout << "Received: " << message << std::endl;
 							send_all(send_buffer, message, currentClient->first);
 						}
@@ -78,8 +70,16 @@ int main()
 						std::string & buffer = send_buffer.at(currentClient->first);
 						if (buffer.empty())
 							continue;
-						size_t size = connection.send(buffer.c_str(), buffer.size());
+						size_t size = connection.queueMessage(buffer.c_str(), buffer.size());
 						buffer.erase(0, size);
+					}
+
+					if (events.se)
+					{
+						poller.remove(connection);
+						connections.erase(currentClient);
+						send_buffer.erase(currentClient->first);
+						send_all(send_buffer, "Client disconnected", currentClient->first);
 					}
 				}
 			}
