@@ -14,8 +14,8 @@ public:
 	ConnectionSocket(ConnectionSocket&& other);
 	ConnectionSocket& operator=(ConnectionSocket&& other);
 
-	size_t send(const char *data, size_t size);
-	size_t recv(char *data, size_t size);
+	ssize_t send(const char *data, size_t size);
+	ssize_t recv(char *data, size_t size);
 protected:
 	ConnectionSocket();
 private:
