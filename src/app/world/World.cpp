@@ -158,9 +158,12 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 					m_unload_set.erase(chunkPos2D);
 				}
 
-				mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
-				m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
-				m_vulkanAPI.destroyMesh(mesh_id);
+				if (m_worldScene.chunk_mesh_list.contains(mesh_scene_id))
+				{
+					mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
+					m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
+					m_vulkanAPI.destroyMesh(mesh_id);
+				}
 
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
