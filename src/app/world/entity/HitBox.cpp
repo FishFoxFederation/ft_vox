@@ -60,26 +60,85 @@ void HitBox::insertNormals(std::vector<glm::vec3> & normals) const
 	normals.push_back(glm::normalize(glm::cross(y_axis, z_axis)));
 }
 
+// bool isColliding(
+// 	const HitBox & hitbox1,
+// 	const HitBox & hitbox2
+// )
+// {
+// 	std::vector<glm::vec3> normals;
+// 	hitbox1.insertNormals(normals);
+// 	hitbox2.insertNormals(normals);
+// 	std::vector<glm::vec3> transformed_vertices1 = hitbox1.transformedVertices();
+// 	std::vector<glm::vec3> transformed_vertices2 = hitbox2.transformedVertices();
+
+// 	for (const auto & normal : normals)
+// 	{
+// 		Projection projection1(transformed_vertices1, normal);
+// 		Projection projection2(transformed_vertices2, normal);
+// 		if (!projection1.isOverlapping(projection2))
+// 		{
+// 			return false;
+// 		}
+// 	}
+
+// 	return true;
+// }
+
 bool isColliding(
-	const HitBox & hitbox1,
-	const HitBox & hitbox2
+	const CubeHitBox & hitbox1,
+	const glm::dvec3 & position1,
+	const CubeHitBox & hitbox2,
+	const glm::dvec3 & position2
 )
 {
-	std::vector<glm::vec3> normals;
-	hitbox1.insertNormals(normals);
-	hitbox2.insertNormals(normals);
-	std::vector<glm::vec3> transformed_vertices1 = hitbox1.transformedVertices();
-	std::vector<glm::vec3> transformed_vertices2 = hitbox2.transformedVertices();
+	return
+		position1.x + hitbox1.position.x					< position2.x + hitbox2.position.x + hitbox2.size.x	&&
+		position1.x + hitbox1.position.x + hitbox1.size.x	> position2.x + hitbox2.position.x					&&
+		position1.y + hitbox1.position.y					< position2.y + hitbox2.position.y + hitbox2.size.y	&&
+		position1.y + hitbox1.position.y + hitbox1.size.y	> position2.y + hitbox2.position.y					&&
+		position1.z + hitbox1.position.z					< position2.z + hitbox2.position.z + hitbox2.size.z	&&
+		position1.z + hitbox1.position.z + hitbox1.size.z	> position2.z + hitbox2.position.z;
+}
 
-	for (const auto & normal : normals)
+glm::dvec3 getOverlap(
+	const CubeHitBox & hitbox1,
+	const glm::dvec3 & position1,
+	const CubeHitBox & hitbox2,
+	const glm::dvec3 & position2
+)
+{
+	glm::dvec3 overlap = glm::dvec3(0.0f);
+
+	if (position1.x + hitbox1.position.x < position2.x + hitbox2.position.x)
 	{
-		Projection projection1(transformed_vertices1, normal);
-		Projection projection2(transformed_vertices2, normal);
-		if (!projection1.isOverlapping(projection2))
-		{
-			return false;
-		}
+		overlap.x = position1.x + hitbox1.position.x + hitbox1.size.x - position2.x - hitbox2.position.x;
+	}
+	else
+	{
+		overlap.x = position2.x + hitbox2.position.x + hitbox2.size.x - position1.x - hitbox1.position.x;
 	}
 
-	return true;
+	if (position1.y + hitbox1.position.y < position2.y + hitbox2.position.y)
+	{
+		overlap.y = position1.y + hitbox1.position.y + hitbox1.size.y - position2.y - hitbox2.position.y;
+	}
+	else
+	{
+		overlap.y = position2.y + hitbox2.position.y + hitbox2.size.y - position1.y - hitbox1.position.y;
+	}
+
+	if (position1.z + hitbox1.position.z < position2.z + hitbox2.position.z)
+	{
+		overlap.z = position1.z + hitbox1.position.z + hitbox1.size.z - position2.z + hitbox2.position.z;
+	}
+	else
+	{
+		overlap.z = position2.z + hitbox2.position.z + hitbox2.size.z - position1.z + hitbox1.position.z;
+	}
+
+	overlap.x = std::max(0.0, overlap.x);
+	overlap.y = std::max(0.0, overlap.y);
+	overlap.z = std::max(0.0, overlap.z);
+
+	return overlap;
 }

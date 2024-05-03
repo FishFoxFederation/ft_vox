@@ -100,7 +100,45 @@ private:
  * @brief check if two hitboxes are colliding using the separating axis theorem
  *
  */
+// bool isColliding(
+// 	const HitBox & hitbox1,
+// 	const HitBox & hitbox2
+// );
+
+class CubeHitBox
+{
+
+public:
+
+	CubeHitBox(
+		const glm::dvec3 & position,
+		const glm::dvec3 & size
+	):
+		position(position),
+		size(size)
+	{
+	}
+	~CubeHitBox() = default;
+
+	CubeHitBox(const CubeHitBox & other) = default;
+	CubeHitBox(CubeHitBox && other) = default;
+	CubeHitBox & operator=(const CubeHitBox & other) = delete;
+	CubeHitBox & operator=(CubeHitBox && other) = delete;
+
+	glm::dvec3 position; // local position
+	glm::dvec3 size;
+};
+
 bool isColliding(
-	const HitBox & hitbox1,
-	const HitBox & hitbox2
+	const CubeHitBox & hitbox1,
+	const glm::dvec3 & position1,
+	const CubeHitBox & hitbox2,
+	const glm::dvec3 & position2
+);
+
+glm::dvec3 getOverlap(
+	const CubeHitBox & hitbox1,
+	const glm::dvec3 & position1,
+	const CubeHitBox & hitbox2,
+	const glm::dvec3 & position2
 );

@@ -23,7 +23,7 @@ class Entity
 
 public:
 
-	Entity(const HitBox & hitbox);
+	Entity(const CubeHitBox & hitbox);
 	virtual ~Entity();
 
 	Entity(Entity & other) = delete;
@@ -32,7 +32,7 @@ public:
 	Entity & operator=(Entity && other) = delete;
 
 	Transform transform;
-	HitBox hitbox;
+	CubeHitBox hitbox;
 
 };
 

@@ -333,71 +333,30 @@ void World::updatePlayer(
 {
 	std::lock_guard<std::mutex> lock(m_player_mutex);
 
-	// glm::dvec3 position = m_player->transform.position;
-	// glm::dvec3 displacement = m_player->getDisplacement(move);
-
-	// for (int i = 0; i < 3; i++)
-	// {
-	// 	glm::dvec3 new_position = position;
-	// 	new_position[i] += displacement[i];
-
-	// 	glm::vec3 block_position = glm::floor(new_position);
-
-	// 	glm::vec3 block_chunk_position = glm::ivec3(block_position) % CHUNK_SIZE_IVEC3;
-	// 	if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
-	// 	if (block_chunk_position.y < 0) block_chunk_position.y += CHUNK_Y_SIZE;
-	// 	if (block_chunk_position.z < 0) block_chunk_position.z += CHUNK_Z_SIZE;
-
-	// 	glm::vec3 chunk_position = glm::floor(block_position / CHUNK_SIZE_VEC3);
-	// 	glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
-
-	// 	{
-	// 		std::lock_guard<std::mutex> lock(m_chunks_mutex);
-	// 		if (m_loaded_chunks.contains(chunk_position2D))
-	// 		{
-	// 			Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-	// 			chunk.status.addReader();
-
-	// 			BlockID block_id = chunk.getBlock(block_chunk_position.x, block_chunk_position.y, block_chunk_position.z);
-	// 			if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
-	// 			{
-	// 				displacement[i] = 0.0;
-	// 			}
-
-	// 			chunk.status.removeReader();
-	// 		}
-	// 	}
-	// }
-
 	Transform transform = m_player->transform;
 	glm::dvec3 displacement = m_player->getDisplacement(move);
 
-
-	// glm::vec3 block_position = glm::floor(new_position);
-	// glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
-	// glm::vec3 chunk_position = getChunkPosition(block_position);
-	// glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
-
-	for (int i = 0; i < 3; i++)
-	{
-		glm::dvec3 new_position = transform.position;
-		new_position[i] += displacement[i];
-		Transform new_transform = transform;
-		new_transform.position[i] = new_position[i];
-
-		std::lock_guard<std::mutex> lock(m_chunks_mutex);
-
+	// for (int i = 0; i < 3; i++)
+	// {
 		for (int x = -1; x <= 1; x++)
 		{
 		for (int z = -1; z <= 1; z++)
 		{
-		for (int y = -1; y <= 2; y++)
+		for (int y = -1; y <= 1; y++)
 		{
+			glm::dvec3 new_position = transform.position;
+			// new_position[i] += displacement[i];
+			new_position += displacement;
+			Transform new_transform = transform;
+			// new_transform.position[i] = new_position[i];
+			new_transform.position = new_position;
+
 			glm::vec3 block_position = glm::floor(glm::dvec3(new_position.x + x, new_position.y + y, new_position.z + z));
 			glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
 			glm::vec3 chunk_position = getChunkPosition(block_position);
 			glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
+			std::lock_guard<std::mutex> lock(m_chunks_mutex);
 			if (m_loaded_chunks.contains(chunk_position2D))
 			{
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
@@ -406,16 +365,18 @@ void World::updatePlayer(
 				BlockID block_id = chunk.getBlock(block_chunk_position);
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
-					Transform block_transform(block_position);
-					HitBox block_hitbox = Block::getData(block_id).hitbox;
-					block_hitbox.transform.parent = &block_transform;
+					CubeHitBox block_hitbox = Block::getData(block_id).hitbox;
 
-					if (isColliding(
-						m_player->hitbox,
-						block_hitbox
-					))
+					if (isColliding(m_player->hitbox, m_player->transform.position, block_hitbox, block_position))
 					{
-						displacement[i] = 0.0;
+						glm::dvec3 overlap = getOverlap(m_player->hitbox, m_player->transform.position, block_hitbox, block_position);
+						// displacement[i] -= overlap[i];
+						displacement -= overlap;
+						LOG_DEBUG("Collision detected between player at  "
+							<< transform.position.x << "  " << transform.position.y << "  " << transform.position.z
+							<< "  and block at  " << block_position.x << "  " << block_position.y << "  " << block_position.z
+							// << "  with displacement " << i
+						);
 					}
 					// else
 					// {
@@ -429,7 +390,7 @@ void World::updatePlayer(
 		}
 		}
 
-	}
+	// }
 
 
 	m_player->movePosition(displacement);
@@ -437,7 +398,7 @@ void World::updatePlayer(
 
 	{
 		auto lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.at(m_player_entity_scene_id).model = m_player->hitbox.transform.model();
+		m_worldScene.entity_mesh_list.at(m_player_entity_scene_id).model = Transform(m_player->transform.position + m_player->hitbox.position).model();
 	}
 
 	DebugGui::player_position = m_player->transform.position;
@@ -453,4 +414,10 @@ glm::dvec3 World::getPlayerPosition()
 {
 	std::lock_guard<std::mutex> lock(m_player_mutex);
 	return m_player->transform.position;
+}
+
+void World::teleportPlayer(const glm::dvec3 & position)
+{
+	std::lock_guard<std::mutex> lock(m_player_mutex);
+	m_player->transform.position = position;
 }

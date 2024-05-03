@@ -39,7 +39,7 @@ struct Data
 	const BlockID id;
 	const TextureID texture[6];
 	const BlockProperties properties;
-	const HitBox hitbox;
+	const CubeHitBox hitbox;
 };
 
 struct Block
@@ -87,7 +87,7 @@ struct Block
 			0
 		},
 		.properties = BLOCK_PROPERTY_NONE,
-		.hitbox = HitBox({0, 0, 0}, {1, 1, 1})
+		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
 	static inline const Data Grass = {
 		.id = BlockID::Grass,
@@ -103,7 +103,7 @@ struct Block
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = HitBox({0, 0, 0}, {1, 1, 1})
+		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
 	static inline const Data Dirt = {
 		.id = BlockID::Dirt,
@@ -119,7 +119,7 @@ struct Block
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = HitBox({0, 0, 0}, {1, 1, 1})
+		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
 	static inline const Data Stone = {
 		.id = BlockID::Stone,
@@ -135,7 +135,7 @@ struct Block
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = HitBox({0, 0, 0}, {1, 1, 1})
+		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
 
 };
