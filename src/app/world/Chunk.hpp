@@ -24,7 +24,8 @@ public:
 
 	Chunk(glm::ivec3 position);
 
-	// Chunk(const Chunk & other);
+	Chunk(const Chunk & other) = delete;
+	Chunk & operator=(const Chunk & other) = delete;
 	Chunk & operator=(const Chunk && other);
 	Chunk(Chunk && other);
 	~Chunk();
