@@ -9,16 +9,19 @@ UpdateThread::UpdateThread(
 	Window & window,
 	WorldScene & world_scene,
 	World & world,
+	VulkanAPI & vulkan_api,
 	std::chrono::nanoseconds start_time
 ):
 	m_settings(settings),
 	m_window(window),
 	m_world_scene(world_scene),
 	m_world(world),
+	m_vulkan_api(vulkan_api),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_thread(&UpdateThread::launch, this)
 {
+	(void)m_vulkan_api;
 	(void)m_start_time;
 }
 

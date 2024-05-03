@@ -9,10 +9,14 @@ World::World(
 	m_vulkanAPI(vulkanAPI),
 	m_threadPool(threadPool),
 	m_entities(),
-	m_player(std::make_shared<Player>()),
+	m_player(std::make_shared<LivingEntity>()),
 	m_future_id(0)
 {
 	m_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
+
+	m_player_entity_scene_id = m_worldScene.entity_mesh_list.insert({
+		m_vulkanAPI.cube_mesh_id, {}
+	});
 }
 
 World::~World()
@@ -252,7 +256,10 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 				//adding mesh id to the scene so it is rendered
 				if(mesh_id != IdList<uint64_t, Mesh>::invalid_id)
 				{
-					uint64_t mesh_scene_id = m_worldScene.chunk_mesh_list.insert({mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)});
+					uint64_t mesh_scene_id = m_worldScene.chunk_mesh_list.insert({
+						mesh_id,
+						Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
+					});
 					chunk.setMeshID(mesh_scene_id);
 				}
 
@@ -365,16 +372,19 @@ void World::updatePlayer(
 	Transform transform = m_player->transform;
 	glm::dvec3 displacement = m_player->getDisplacement(move);
 
-	glm::dvec3 new_position = transform.position + displacement;
-	Transform new_transform = transform;
-	new_transform.position = new_position;
 
 	// glm::vec3 block_position = glm::floor(new_position);
 	// glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
 	// glm::vec3 chunk_position = getChunkPosition(block_position);
 	// glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
+	for (int i = 0; i < 3; i++)
 	{
+		glm::dvec3 new_position = transform.position;
+		new_position[i] += displacement[i];
+		Transform new_transform = transform;
+		new_transform.position[i] = new_position[i];
+
 		std::lock_guard<std::mutex> lock(m_chunks_mutex);
 
 		for (int x = -1; x <= 1; x++)
@@ -396,12 +406,16 @@ void World::updatePlayer(
 				BlockID block_id = chunk.getBlock(block_chunk_position);
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
+					Transform block_transform(block_position);
+					HitBox block_hitbox = Block::getData(block_id).hitbox;
+					block_hitbox.transform.parent = &block_transform;
+
 					if (isColliding(
-						m_player->hitbox.transform(new_transform.model()),
-						Block::getData(block_id).hitbox.transform(glm::translate(glm::mat4(1.0), block_position))
+						m_player->hitbox,
+						block_hitbox
 					))
 					{
-						displacement = glm::dvec3(0.0);
+						displacement[i] = 0.0;
 					}
 					// else
 					// {
@@ -420,6 +434,11 @@ void World::updatePlayer(
 
 	m_player->movePosition(displacement);
 	m_player->moveDirection(look.x, look.y);
+
+	{
+		auto lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.at(m_player_entity_scene_id).model = m_player->hitbox.transform.model();
+	}
 
 	DebugGui::player_position = m_player->transform.position;
 }

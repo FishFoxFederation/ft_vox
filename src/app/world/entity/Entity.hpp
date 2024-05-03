@@ -1,6 +1,7 @@
 #pragma once
 
 #include "define.hpp"
+#include "Transform.hpp"
 #include "Camera.hpp"
 #include "HitBox.hpp"
 
@@ -9,37 +10,6 @@
 
 #include <cstdint>
 
-class Transform
-{
-
-public:
-
-	Transform(
-		const glm::vec3 & position = glm::vec3(0.0f, 0.0f, 0.0f),
-		const glm::vec3 & rotation = glm::vec3(0.0f, 0.0f, 0.0f),
-		const glm::vec3 & scale = glm::vec3(1.0f, 1.0f, 1.0f)
-	):
-		position(position), rotation(rotation), scale(scale)
-	{
-	}
-
-	glm::mat4 model() const
-	{
-		glm::dmat4 model = glm::dmat4(1.0f);
-		model = glm::translate(model, position);
-		model = glm::rotate(model, rotation.x, glm::dvec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, rotation.y, glm::dvec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, rotation.z, glm::dvec3(0.0f, 0.0f, 1.0f));
-		model = glm::scale(model, scale);
-		return model;
-	}
-
-	glm::dvec3 position;
-	glm::dvec3 rotation;
-	glm::dvec3 scale;
-
-};
-
 /**
  * @brief Entity class
  *
@@ -47,6 +17,7 @@ public:
  * The position of the entity is at the bottom center of the hitbox
  *
  */
+
 class Entity
 {
 
@@ -65,18 +36,18 @@ public:
 
 };
 
-class Player: public Entity
+class LivingEntity: public Entity
 {
 
 public:
 
-	Player();
-	~Player();
+	LivingEntity();
+	~LivingEntity();
 
-	Player(Player & other) = delete;
-	Player(Player && other) = delete;
-	Player & operator=(Player & other) = delete;
-	Player & operator=(Player && other) = delete;
+	LivingEntity(LivingEntity & other) = delete;
+	LivingEntity(LivingEntity && other) = delete;
+	LivingEntity & operator=(LivingEntity & other) = delete;
+	LivingEntity & operator=(LivingEntity && other) = delete;
 
 	void movePosition(glm::dvec3 move);
 
@@ -84,17 +55,19 @@ public:
 
 	Camera camera() const
 	{
-		return Camera(transform.position, m_pitch, m_yaw);
+		return Camera(transform.position + eyePosition(), m_pitch, m_yaw);
 	}
 
 	glm::dvec3 getDisplacement(glm::dvec3 move) const;
 
+
 private:
 
-	glm::dvec3 m_eye_position; // the position of the eyes relative to entity position
 	double m_yaw;
 	double m_pitch;
 
+	glm::dvec3 eyePosition() const; // the position of the eyes relative to entity position
 	glm::dvec3 direction() const;
+	void updateTransform();
 
 };
