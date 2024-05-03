@@ -50,7 +50,8 @@ private:
 	IdList<uint64_t, std::shared_ptr<Entity>> m_entities;
 
 	std::mutex m_player_mutex;
-	std::shared_ptr<Player> m_player;
+	std::shared_ptr<LivingEntity> m_player;
+	uint64_t m_player_entity_scene_id;
 
 	/*************************************
 	 *  CHUNKS AND MAP

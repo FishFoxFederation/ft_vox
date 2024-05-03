@@ -81,14 +81,12 @@ void RenderThread::loop()
 
 	const Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
-	// DebugGui::player_position = camera.position;
-
 	ViewProjMatrices camera_matrices = {};
 	camera_matrices.view = camera.view;
 	camera_matrices.proj = clip * camera.projection;
 
 	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.chunk_mesh_list.values();
-	const std::vector<WorldScene::MeshRenderData> entity_meshes = m_world_scene.entity_mesh_list.get();
+	const std::vector<WorldScene::MeshRenderData> entity_meshes = m_world_scene.entity_mesh_list.values();
 
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
@@ -242,7 +240,7 @@ void RenderThread::loop()
 		);
 
 		ModelMatrice model_matrice = {};
-		model_matrice.model = chunk_mesh.transform.model();
+		model_matrice.model = chunk_mesh.model;
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.shadow_pipeline.layout,
@@ -354,7 +352,7 @@ void RenderThread::loop()
 		);
 
 		ModelMatrice model_matrice = {};
-		model_matrice.model = chunk_mesh.transform.model();
+		model_matrice.model = chunk_mesh.model;
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.chunk_pipeline.layout,
@@ -426,7 +424,7 @@ void RenderThread::loop()
 		);
 
 		EntityMatrices entity_matrice = {};
-		entity_matrice.model = entity_mesh.transform.model();
+		entity_matrice.model = entity_mesh.model;
 		entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],

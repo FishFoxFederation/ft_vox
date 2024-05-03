@@ -5,6 +5,7 @@
 #include "WorldScene.hpp"
 #include "Settings.hpp"
 #include "World.hpp"
+#include "VulkanAPI.hpp"
 
 #include <chrono>
 
@@ -17,6 +18,7 @@ public:
 		Window & window,
 		WorldScene & world_scene,
 		World & world,
+		VulkanAPI & vulkan_api,
 		std::chrono::nanoseconds start_time
 	);
 	~UpdateThread();
@@ -32,6 +34,7 @@ private:
 	Window & m_window;
 	WorldScene & m_world_scene;
 	World & m_world;
+	VulkanAPI & m_vulkan_api;
 
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;

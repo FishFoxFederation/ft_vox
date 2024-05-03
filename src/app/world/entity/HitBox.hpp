@@ -1,6 +1,7 @@
 #pragma once
 
 #include "define.hpp"
+#include "Transform.hpp"
 
 #include <glm/glm.hpp>
 
@@ -15,6 +16,16 @@ public:
 		min(min), max(max)
 	{
 	}
+	Projection(const std::vector<glm::vec3> & vertices, const glm::vec3 & normal):
+		min(std::numeric_limits<float>::max()), max(std::numeric_limits<float>::min())
+	{
+		for (const auto & vertex : vertices)
+		{
+			float projection = glm::dot(vertex, normal);
+			min = std::min(min, projection);
+			max = std::max(max, projection);
+		}
+	}
 	~Projection() = default;
 
 	Projection(const Projection & other);
@@ -27,8 +38,8 @@ public:
 		return min <= other.max && max >= other.min;
 	}
 
-	const float min;
-	const float max;
+	float min;
+	float max;
 
 };
 
@@ -52,7 +63,11 @@ public:
 		const glm::vec3 & position,
 		const glm::vec3 & size
 	);
-	HitBox(const std::vector<glm::vec3> & vertices);
+	HitBox(
+		const glm::vec3 & position,
+		const glm::vec3 & size,
+		const std::vector<glm::vec3> & vertices
+	);
 	~HitBox();
 
 	HitBox(const HitBox & other);
@@ -60,12 +75,24 @@ public:
 	HitBox & operator=(const HitBox & other) = delete;
 	HitBox & operator=(HitBox && other) = delete;
 
-	HitBox transform(const glm::mat4 & model) const;
+	std::vector<glm::vec3> transformedVertices() const;
 
 	void insertNormals(std::vector<glm::vec3> & normals) const;
 
+	Transform transform;
 
-	const std::vector<glm::vec3> vertices;
+private:
+
+	const std::vector<glm::vec3> m_vertices = {
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 1.0f),
+		glm::vec3(1.0f, 0.0f, 1.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
+		glm::vec3(0.0f, 1.0f, 1.0f)
+	};
 
 };
 
