@@ -41,6 +41,7 @@ public:
 	);
 	Camera getCamera();
 	glm::dvec3 getPlayerPosition();
+	void teleportPlayer(const glm::dvec3 & position);
 
 private:
 	WorldScene &							m_worldScene;

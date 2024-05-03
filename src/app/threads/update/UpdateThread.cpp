@@ -78,6 +78,11 @@ void UpdateThread::readInput()
 	m_space_key = m_window.input().getKeyState(GLFW_KEY_SPACE);
 	m_left_shift_key = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
 
+	if (m_window.input().getKeyState(GLFW_KEY_R) == GLFW_PRESS)
+	{
+		m_world.teleportPlayer(glm::dvec3(0.0, 220.0, 0.0));
+	}
+
 	m_window.input().getCursorPos(m_mouse_x, m_mouse_y);
 }
 

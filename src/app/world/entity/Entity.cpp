@@ -8,7 +8,7 @@
 //############################################################################################################
 
 Entity::Entity(
-	const HitBox & hitbox
+	const CubeHitBox & hitbox
 ):
 	hitbox(hitbox)
 {
@@ -26,13 +26,10 @@ Entity::~Entity()
 //############################################################################################################
 
 LivingEntity::LivingEntity():
-	Entity(HitBox({-0.5, 0, -0.5}, {1, 1, 1})),
+	Entity(CubeHitBox({-0.5, 0, -0.5}, {1, 1, 1})),
 	m_yaw(0.0),
 	m_pitch(0.0)
 {
-	transform.rotation_origin = glm::dvec3(0.5, 0.0, 5.0);
-
-	hitbox.transform.parent = &transform;
 }
 
 LivingEntity::~LivingEntity()
@@ -49,7 +46,7 @@ void LivingEntity::moveDirection(double x_offset, double y_offset)
 	m_yaw += x_offset;
 	m_pitch = glm::clamp(m_pitch - y_offset, -89.0, 89.0);
 
-	updateTransform();
+	// updateTransform();
 }
 
 glm::dvec3 LivingEntity::direction() const
@@ -73,13 +70,14 @@ glm::dvec3 LivingEntity::getDisplacement(glm::dvec3 move) const
 
 glm::dvec3 LivingEntity::eyePosition() const
 {
+	double eye_height = 1.6;
 	// First person view
-	// return glm::dvec3(0.0, 0.0, 0.0);
+	// return glm::dvec3(0.0, eye_height, 0.0);
 
 	// Third person view
-	const double distance = 3;
+	const double distance = 5;
 	const glm::dvec3 dir_vec = direction();
-	return glm::dvec3(0.0, 1.6, 0.0) - distance * dir_vec;
+	return glm::dvec3(0.0, eye_height, 0.0) - distance * dir_vec;
 }
 
 void LivingEntity::updateTransform()
