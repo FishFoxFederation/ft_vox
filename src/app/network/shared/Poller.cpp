@@ -48,7 +48,6 @@ void Poller::add(const uint64_t & id, const Socket & socket, const uint32_t & id
 	epoll_event event;
 	event.events = EPOLLIN | EPOLLOUT | EPOLLET;
 	event.data.u64 = id;
-	event.data.u32 = idBis;
 	if (epoll_ctl(m_epolld_fd, EPOLL_CTL_ADD, socket.m_sockfd, &event) == -1)
 		throw std::runtime_error("Failed to add socket to epoll instance");
 }

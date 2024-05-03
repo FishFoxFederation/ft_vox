@@ -9,9 +9,10 @@
 
 void send_all(std::unordered_map<uint64_t, Connection> & connections, const std::string & msg, int from)
 {
-	for(auto & [id, client] : connections)
+	for(auto & [id,client] : connections)
 	{
-		client.queueMessage(std::to_string(from) + ": " + msg + "\n");
+		if (id != from)
+			client.queueAndSendMessage(std::to_string(from) + ": " + msg);
 	}
 }
 
@@ -20,24 +21,26 @@ int main()
 	ServerSocket server(4245);
 	Poller poller;
 	std::unordered_map<uint64_t, Connection> connections;
-	std::unordered_map<uint64_t, std::string> send_buffer;
-	uint64_t id = 0;
-	poller.add(id, server, 1);
+	uint64_t id = 1;
+	poller.add(0, server, 1);
 
-	while(1)
+	bool online = true;
+	while(online)
 	{
 		std::pair<size_t, epoll_event*> events = poller.wait(-1);
 		std::cout << "New events : size :" << events.first << "\n";
 
+		std::cout << "connections size : " << connections.size() << "\n";
+
 		for(size_t i = 0; i < events.first; i++)
 		{
-			if (events.second[i].data.u32 != 0)
+			if (events.second[i].data.u64 == 0)
 			{
 				std::cout << "New client connected\n";
 				Connection connection(server.accept());
 				auto ret = connections.insert(std::make_pair(id++, std::move(connection)));
-				send_buffer.insert(std::make_pair(ret.first->first, ""));
 				std::cout << "New client id : " << ret.first->first << "\n";
+				send_all(connections, "Joined !", ret.first->first);
 				poller.add(ret.first->first, ret.first->second);
 			}
 
@@ -56,30 +59,33 @@ int main()
 					if (events.second[i].events & EPOLLIN)
 					{
 						connection.recv();
-						std::string message = connection.getReadBuffer().data();
-						if (message.find('\n') != std::string::npos)
+						if (!connection.getReadBuffer().empty())
 						{
-							connection.reduceReadBuffer(message.find('\n') + 1);
-							std::cout << "Received: " << message << std::endl;
-							send_all(send_buffer, message, currentClient->first);
+							std::string message = connection.getReadBuffer().data();
+							if (message.find('\n') != std::string::npos)
+							{
+								if (message == "exit\n")
+								{
+									online = false;
+									break;
+								}
+								connection.reduceReadBuffer(message.find('\n') + 1);
+								std::cout << "Received: " << message << std::endl;
+								send_all(connections, message, currentClient->first);
+							}
 						}
 					}
 
 					if (events.second[i].events & EPOLLOUT)
 					{
-						std::string & buffer = send_buffer.at(currentClient->first);
-						if (buffer.empty())
-							continue;
-						size_t size = connection.queueMessage(buffer.c_str(), buffer.size());
-						buffer.erase(0, size);
+						connection.sendQueue();
 					}
 
-					if (events.se)
+					if (events.second[i].events & EPOLLHUP || events.second[i].events & EPOLLRDHUP)
 					{
+						send_all(connections, "Client disconnected", currentClient->first);
 						poller.remove(connection);
 						connections.erase(currentClient);
-						send_buffer.erase(currentClient->first);
-						send_all(send_buffer, "Client disconnected", currentClient->first);
 					}
 				}
 			}
