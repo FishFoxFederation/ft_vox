@@ -28,7 +28,7 @@ ConnectionSocket& ConnectionSocket::operator=(ConnectionSocket&& other)
 
 ssize_t ConnectionSocket::send(const char *data, size_t size)
 {
-	return ::send(m_sockfd, data, size, MSG_DONTWAIT);
+	return ::send(m_sockfd, data, size, MSG_DONTWAIT | MSG_NOSIGNAL);
 }
 
 ssize_t ConnectionSocket::recv(char *data, size_t size)

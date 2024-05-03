@@ -53,11 +53,12 @@ void Connection::recv()
 	}
 }
 
-void Connection::send()
+void Connection::sendQueue()
 {
 	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
 	if (m_write_buffer.empty())
 		return;
+	std::cout << "Sending data\n";
 	ssize_t size = ConnectionSocket::send(m_write_buffer.data(), m_write_buffer.size());
 	if (size == -1)
 	{
@@ -68,4 +69,14 @@ void Connection::send()
 	}
 	else
 		m_write_buffer.erase(m_write_buffer.begin(), m_write_buffer.begin() + size);
+}
+
+void Connection::queueAndSendMessage(const std::string & msg)
+{
+	{
+		std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
+		m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
+	}
+
+	sendQueue();
 }
