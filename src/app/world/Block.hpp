@@ -39,7 +39,7 @@ struct Data
 	const BlockID id;
 	const TextureID texture[6];
 	const BlockProperties properties;
-	const CubeHitBox hitbox;
+	const HitBox hitbox;
 };
 
 struct Block
