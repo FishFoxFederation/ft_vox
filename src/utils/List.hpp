@@ -90,6 +90,18 @@ public:
 		return key;
 	}
 
+	void insert(const Key & key, const Value & value)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		container::insert(std::make_pair(key, value));
+	}
+
+	void insert(const Key & key, Value && value)
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		container::insert(std::make_pair(key, std::move(value)));
+	}
+
 	void erase(const Key & key)
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
