@@ -10,7 +10,8 @@
 Entity::Entity(
 	const HitBox & hitbox
 ):
-	hitbox(hitbox)
+	hitbox(hitbox),
+	velocity({0.0, 0.0, 0.0})
 {
 }
 
@@ -21,27 +22,24 @@ Entity::~Entity()
 
 //############################################################################################################
 //                                                                                                           #
-//                                                  LivingEntity                                                   #
+//                                                  Player                                                   #
 //                                                                                                           #
 //############################################################################################################
 
-LivingEntity::LivingEntity():
-	Entity(HitBox({-0.4, 0, -0.4}, {0.8, 2, 0.8})),
+Player::Player():
+	Entity(HitBox({-0.4, 0, -0.4}, {0.8, 1.8, 0.8})),
+	gameMode(GameMode::SPECTATOR),
+	feet({-0.4, -0.1, -0.4}, {0.8, 0.1, 0.8}),
 	m_yaw(0.0),
 	m_pitch(0.0)
 {
 }
 
-LivingEntity::~LivingEntity()
+Player::~Player()
 {
 }
 
-void LivingEntity::movePosition(glm::dvec3 displacement)
-{
-	transform.position += displacement;
-}
-
-void LivingEntity::moveDirection(double x_offset, double y_offset)
+void Player::moveDirection(double x_offset, double y_offset)
 {
 	m_yaw += x_offset;
 	m_pitch = glm::clamp(m_pitch - y_offset, -89.0, 89.0);
@@ -49,7 +47,7 @@ void LivingEntity::moveDirection(double x_offset, double y_offset)
 	// updateTransform();
 }
 
-glm::dvec3 LivingEntity::direction() const
+glm::dvec3 Player::direction() const
 {
 	return glm::normalize(glm::dvec3(
 		cos(glm::radians(m_pitch)) * cos(glm::radians(m_yaw)),
@@ -58,7 +56,7 @@ glm::dvec3 LivingEntity::direction() const
 	));
 }
 
-glm::dvec3 LivingEntity::getDisplacement(glm::dvec3 move) const
+glm::dvec3 Player::getDisplacement(glm::dvec3 move) const
 {
 	static const glm::dvec3 up_vec = glm::dvec3(0.0, 1.0, 0.0);
 	const glm::dvec3 dir_vec = direction();
@@ -68,7 +66,7 @@ glm::dvec3 LivingEntity::getDisplacement(glm::dvec3 move) const
 	return displacement;
 }
 
-glm::dvec3 LivingEntity::eyePosition() const
+glm::dvec3 Player::eyePosition() const
 {
 	double eye_height = 1.6;
 	// First person view
@@ -80,8 +78,28 @@ glm::dvec3 LivingEntity::eyePosition() const
 	return glm::dvec3(0.0, eye_height, 0.0) - distance * dir_vec;
 }
 
-void LivingEntity::updateTransform()
+void Player::updateTransform()
 {
-	// update rotation
 	transform.rotation.y = -glm::radians(m_yaw);
+}
+
+bool Player::shouldCollide() const
+{
+	return gameMode != GameMode::SPECTATOR;
+}
+
+bool Player::shouldFall() const
+{
+	return gameMode == GameMode::SURVIVAL || (gameMode == GameMode::CREATIVE && !flying);
+}
+
+void Player::startFall()
+{
+	fall_start_time = std::chrono::steady_clock::now().time_since_epoch();
+	fall_start_position = transform.position;
+}
+
+double Player::fallDuration()
+{
+	return static_cast<double>((std::chrono::steady_clock::now().time_since_epoch() - fall_start_time).count()) / 1e9;
 }

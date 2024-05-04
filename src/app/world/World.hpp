@@ -32,16 +32,29 @@ public:
 	World & operator=(World && other) = delete;
 
 
-	void updateEntities();
+	void updateEntities(
+		const double delta_time
+	);
 	void updateBlock(glm::dvec3 position);
 
 	void updatePlayer(
-		const glm::dvec3 & move,
+		const uint64_t player_id,
+		const int8_t forward,
+		const int8_t backward,
+		const int8_t left,
+		const int8_t right,
+		const int8_t up,
+		const int8_t down,
 		const glm::dvec2 & look
 	);
-	Camera getCamera();
-	glm::dvec3 getPlayerPosition();
-	void teleportPlayer(const glm::dvec3 & position);
+	void updatePlayer(
+		const uint64_t player_id,
+		std::function<void(Player &)> update
+	);
+	Camera getCamera(const uint64_t player_id);
+	glm::dvec3 getPlayerPosition(const uint64_t player_id);
+
+	uint64_t m_my_player_id;
 
 private:
 	WorldScene &							m_worldScene;
@@ -50,9 +63,7 @@ private:
 
 	IdList<uint64_t, std::shared_ptr<Entity>> m_entities;
 
-	std::mutex m_player_mutex;
-	std::shared_ptr<LivingEntity> m_player;
-	uint64_t m_player_entity_scene_id;
+	// std::shared_ptr<Player> m_player;
 
 	/*************************************
 	 *  CHUNKS AND MAP
@@ -157,6 +168,11 @@ private:
 	 *************************************/
 	void	waitForFinishedFutures();
 	void	waitForFutures();
+
+	/*************************************
+	 *  ENTITIES
+	 *************************************/
+	bool 	hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position);
 
 };
 

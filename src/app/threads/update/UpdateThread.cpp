@@ -59,6 +59,8 @@ void UpdateThread::loop()
 	updateTime();
 	readInput();
 	movePlayer();
+
+	m_world.updateEntities(static_cast<double>(m_delta_time.count()) / 1e9);
 }
 
 
@@ -78,31 +80,57 @@ void UpdateThread::readInput()
 	m_space_key = m_window.input().getKeyState(GLFW_KEY_SPACE);
 	m_left_shift_key = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
 
-	if (m_window.input().getKeyState(GLFW_KEY_R) == GLFW_PRESS)
-	{
-		m_world.teleportPlayer(glm::dvec3(0.0, 220.0, 0.0));
-	}
+	int reset = m_window.input().getKeyState(GLFW_KEY_R);
+	int gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
+	int gamemode_1 = m_window.input().getKeyState(GLFW_KEY_1);
+	int gamemode_2 = m_window.input().getKeyState(GLFW_KEY_2);
+	int fly = m_window.input().getKeyState(GLFW_KEY_F);
+
+	m_world.updatePlayer(
+		m_world.m_my_player_id,
+		[
+			reset,
+			gamemode_0,
+			gamemode_1,
+			gamemode_2,
+			fly
+		](Player & player)
+		{
+			if (reset == GLFW_PRESS)
+				player.transform.position = glm::dvec3(0.0, 220.0, 0.0);
+
+			if (gamemode_0 == GLFW_PRESS)
+			{
+				player.gameMode = Player::GameMode::SURVIVAL;
+				player.flying = false;
+				player.startFall();
+			}
+			if (gamemode_1 == GLFW_PRESS)
+			{
+				player.gameMode = Player::GameMode::CREATIVE;
+				player.startFall();
+			}
+			if (gamemode_2 == GLFW_PRESS)
+			{
+				player.gameMode = Player::GameMode::SPECTATOR;
+			}
+
+			if (fly == GLFW_PRESS)
+			{
+				if (player.flying)
+				{
+					player.startFall();
+				}
+				player.flying = !player.flying;
+			}
+		}
+	);
 
 	m_window.input().getCursorPos(m_mouse_x, m_mouse_y);
 }
 
 void UpdateThread::movePlayer()
 {
-	glm::dvec3 move = glm::dvec3(0.0f);
-	if (m_w_key == GLFW_PRESS) move.z += 1.0f;
-	if (m_a_key == GLFW_PRESS) move.x += -1.0f;
-	if (m_s_key == GLFW_PRESS) move.z += -1.0f;
-	if (m_d_key == GLFW_PRESS) move.x += 1.0f;
-	if (m_space_key == GLFW_PRESS) move.y += 1.0f;
-	if (m_left_shift_key == GLFW_PRESS) move.y += -1.0f;
-
-	if (glm::length(move) > 0.0f)
-	{
-		move = glm::normalize(move);
-	}
-
-	move *= m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e9;
-
 	glm::dvec2 look = glm::dvec2(m_mouse_x - m_last_mouse_x, m_mouse_y - m_last_mouse_y) * m_settings.mouseSensitivity();
 	m_last_mouse_x = m_mouse_x;
 	m_last_mouse_y = m_mouse_y;
@@ -112,7 +140,16 @@ void UpdateThread::movePlayer()
 		look = glm::dvec2(0.0);
 	}
 
-	m_world.updatePlayer(move, look);
+	m_world.updatePlayer(
+		m_world.m_my_player_id,
+		(m_w_key == GLFW_PRESS ? 1 : 0),
+		(m_s_key == GLFW_PRESS ? 1 : 0),
+		(m_a_key == GLFW_PRESS ? 1 : 0),
+		(m_d_key == GLFW_PRESS ? 1 : 0),
+		(m_space_key == GLFW_PRESS ? 1 : 0),
+		(m_left_shift_key == GLFW_PRESS ? 1 : 0),
+		look
+	);
 
-	m_world_scene.camera() = m_world.getCamera();
+	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
 }

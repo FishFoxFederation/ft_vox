@@ -9,14 +9,16 @@ World::World(
 	m_vulkanAPI(vulkanAPI),
 	m_threadPool(threadPool),
 	m_entities(),
-	m_player(std::make_shared<LivingEntity>()),
 	m_future_id(0)
 {
-	m_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
+	std::shared_ptr<Player> my_player = std::make_shared<Player>();
+	my_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
 
-	m_player_entity_scene_id = m_worldScene.entity_mesh_list.insert({
-		m_vulkanAPI.cube_mesh_id, {}
-	});
+	m_my_player_id = m_entities.insert(my_player);
+
+	m_worldScene.entity_mesh_list.insert(
+		m_my_player_id, {m_vulkanAPI.cube_mesh_id, {}}
+	);
 }
 
 World::~World()
@@ -35,10 +37,6 @@ void World::updateBlock(glm::dvec3 position)
 // 	updateChunks(nextPlayerPosition);
 // 	waitForFinishedFutures();
 // }
-
-void World::updateEntities()
-{
-}
 
 void World::loadChunks(const glm::vec3 & playerPosition)
 {
@@ -266,7 +264,7 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 					m_finished_futures.push(current_id);
-					LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
+					// LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
 
 				}
 
@@ -326,94 +324,168 @@ glm::vec3 World::getChunkPosition(const glm::vec3 & position)
 	return glm::floor(position / CHUNK_SIZE_VEC3);
 }
 
+void World::updateEntities(
+	const double delta_time
+)
+{
+	{
+		auto lock = m_entities.lock();
+		for (auto & [id, entity] : m_entities)
+		{
+			std::lock_guard<std::mutex> entity_lock(entity->mutex);
+
+			// apply gravity
+			if (entity->shouldFall())
+			{
+				entity->velocity.y += -9.8 * delta_time;
+			}
+
+			// check for collision with blocks
+			// each axis is checked separately to allow for sliding along walls
+			// this is valid for players and mobs, but probably not for other entities like projectiles and items
+			glm::dvec3 displacement = entity->velocity * delta_time;
+			for (int i = 0; i < 3 && entity->shouldCollide(); i++)
+			{
+				glm::dvec3 new_position = entity->transform.position;
+				new_position[i] += displacement[i];
+				if (hitboxCollisionWithBlock(entity->hitbox, new_position))
+				{
+					displacement[i] = 0.0;
+					entity->velocity[i] = 0.0;
+				}
+			}
+
+			// apply displacement
+			entity->transform.position += displacement;
+		}
+	}
+
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(m_my_player_id));
+	std::lock_guard<std::mutex> player_lock(player->mutex);
+	DebugGui::player_position = player->transform.position;
+
+	{ // update player mesh
+		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.at(m_my_player_id).model = Transform(
+			player->transform.position + player->hitbox.position,
+			glm::vec3(0.0f),
+			player->hitbox.size
+		).model();
+	}
+}
+
 void World::updatePlayer(
-	const glm::dvec3 & move,
+	const uint64_t player_id,
+	const int8_t forward,
+	const int8_t backward,
+	const int8_t left,
+	const int8_t right,
+	const int8_t up,
+	const int8_t down,
 	const glm::dvec2 & look
 )
 {
-	std::lock_guard<std::mutex> lock(m_player_mutex);
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
 
-	Transform transform = m_player->transform;
-	glm::dvec3 displacement = m_player->getDisplacement(move);
 
-	for (int i = 0; i < 3; i++)
+	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
+	// if (on_ground && !player->on_ground) // player just landed
+	// {
+	// }
+	if (!on_ground && player->on_ground) // player just started falling
 	{
-		for (int x = -1; x <= glm::ceil(m_player->hitbox.size.x); x++)
-		{
-		for (int z = -1; z <= glm::ceil(m_player->hitbox.size.z); z++)
-		{
-		for (int y = -1; y <= glm::ceil(m_player->hitbox.size.y); y++)
-		{
-			glm::dvec3 new_position = transform.position;
-			new_position[i] += displacement[i];
-			Transform new_transform = transform;
-			new_transform.position[i] = new_position[i];
+		player->startFall();
+	}
+	player->on_ground = on_ground;
 
-			glm::vec3 block_position = glm::floor(glm::dvec3(new_position.x + x, new_position.y + y, new_position.z + z));
-			glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
-			glm::vec3 chunk_position = getChunkPosition(block_position);
-			glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
-			std::lock_guard<std::mutex> lock(m_chunks_mutex);
-			if (m_loaded_chunks.contains(chunk_position2D))
+	glm::dvec3 move(right - left, up - down, forward - backward);
+	if (glm::length(move) > 0.0)
+	{
+		move = glm::normalize(move);
+	}
+	move *= player->default_speed;
+	glm::dvec3 added_velocity = player->getDisplacement(move);
+
+	if (player->gameMode != Player::GameMode::SPECTATOR && !player->flying)
+	{
+		if (player->on_ground)
+		{
+			if (up)
 			{
-				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-				chunk.status.addReader();
-
-				BlockID block_id = chunk.getBlock(block_chunk_position);
-				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
-				{
-					HitBox block_hitbox = Block::getData(block_id).hitbox;
-
-					if (isColliding(m_player->hitbox, new_position, block_hitbox, block_position))
-					{
-						displacement[i] = 0.0;
-						// LOG_DEBUG("Collision detected between player at  "
-						// 	<< new_position.x << "  " << new_position.y << "  " << new_position.z
-						// 	<< "  and block at  " << block_position.x << "  " << block_position.y << "  " << block_position.z
-						// 	<< "  with displacement " << i
-						// );
-					}
-				}
-
-				chunk.status.removeReader();
+				added_velocity.y = 50.0;
 			}
 		}
-		}
-		}
-
 	}
 
 
-	m_player->movePosition(displacement);
-	m_player->moveDirection(look.x, look.y);
+	player->velocity += added_velocity;
+	player->velocity -= player->input_velocity;
+	player->input_velocity = added_velocity;
+	player->moveDirection(look.x, look.y);
+}
 
+void World::updatePlayer(
+	const uint64_t player_id,
+	std::function<void(Player &)> update
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+	update(*player);
+}
+
+Camera World::getCamera(const uint64_t player_id)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+	return player->camera();
+}
+
+glm::dvec3 World::getPlayerPosition(const uint64_t player_id)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+	return player->transform.position;
+}
+
+bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position)
+{
+	glm::dvec3 offset = glm::dvec3(0.0);
+	for (offset.x = -1; offset.x <= glm::ceil(hitbox.size.x); offset.x++)
 	{
-		auto lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.at(m_player_entity_scene_id).model = Transform(
-			m_player->transform.position + m_player->hitbox.position,
-			glm::vec3(0.0f),
-			m_player->hitbox.size
-		).model();
+		for (offset.z = -1; offset.z <= glm::ceil(hitbox.size.z); offset.z++)
+		{
+			for (offset.y = -1; offset.y <= glm::ceil(hitbox.size.y); offset.y++)
+			{
+				glm::vec3 block_position = glm::floor(position + offset);
+				glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
+				glm::vec3 chunk_position = getChunkPosition(block_position);
+				glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+
+				std::lock_guard<std::mutex> lock(m_chunks_mutex);
+				if (m_loaded_chunks.contains(chunk_position2D))
+				{
+					Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
+					chunk.status.addReader();
+
+					BlockID block_id = chunk.getBlock(block_chunk_position);
+					if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
+					{
+						HitBox block_hitbox = Block::getData(block_id).hitbox;
+
+						if (isColliding(hitbox, position, block_hitbox, block_position))
+						{
+							chunk.status.removeReader();
+							return true;
+						}
+					}
+
+					chunk.status.removeReader();
+				}
+			}
+		}
 	}
-
-	DebugGui::player_position = m_player->transform.position;
-}
-
-Camera World::getCamera()
-{
-	std::lock_guard<std::mutex> lock(m_player_mutex);
-	return m_player->camera();
-}
-
-glm::dvec3 World::getPlayerPosition()
-{
-	std::lock_guard<std::mutex> lock(m_player_mutex);
-	return m_player->transform.position;
-}
-
-void World::teleportPlayer(const glm::dvec3 & position)
-{
-	std::lock_guard<std::mutex> lock(m_player_mutex);
-	m_player->transform.position = position;
+	return false;
 }
