@@ -336,20 +336,18 @@ void World::updatePlayer(
 	Transform transform = m_player->transform;
 	glm::dvec3 displacement = m_player->getDisplacement(move);
 
-	// for (int i = 0; i < 3; i++)
-	// {
-		for (int x = -1; x <= 1; x++)
+	for (int i = 0; i < 3; i++)
+	{
+		for (int x = -1; x <= glm::ceil(m_player->hitbox.size.x); x++)
 		{
-		for (int z = -1; z <= 1; z++)
+		for (int z = -1; z <= glm::ceil(m_player->hitbox.size.z); z++)
 		{
-		for (int y = -1; y <= 1; y++)
+		for (int y = -1; y <= glm::ceil(m_player->hitbox.size.y); y++)
 		{
 			glm::dvec3 new_position = transform.position;
-			// new_position[i] += displacement[i];
-			new_position += displacement;
+			new_position[i] += displacement[i];
 			Transform new_transform = transform;
-			// new_transform.position[i] = new_position[i];
-			new_transform.position = new_position;
+			new_transform.position[i] = new_position[i];
 
 			glm::vec3 block_position = glm::floor(glm::dvec3(new_position.x + x, new_position.y + y, new_position.z + z));
 			glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
@@ -365,23 +363,17 @@ void World::updatePlayer(
 				BlockID block_id = chunk.getBlock(block_chunk_position);
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
-					CubeHitBox block_hitbox = Block::getData(block_id).hitbox;
+					HitBox block_hitbox = Block::getData(block_id).hitbox;
 
-					if (isColliding(m_player->hitbox, m_player->transform.position, block_hitbox, block_position))
+					if (isColliding(m_player->hitbox, new_position, block_hitbox, block_position))
 					{
-						glm::dvec3 overlap = getOverlap(m_player->hitbox, m_player->transform.position, block_hitbox, block_position);
-						// displacement[i] -= overlap[i];
-						displacement -= overlap;
-						LOG_DEBUG("Collision detected between player at  "
-							<< transform.position.x << "  " << transform.position.y << "  " << transform.position.z
-							<< "  and block at  " << block_position.x << "  " << block_position.y << "  " << block_position.z
-							// << "  with displacement " << i
-						);
+						displacement[i] = 0.0;
+						// LOG_DEBUG("Collision detected between player at  "
+						// 	<< new_position.x << "  " << new_position.y << "  " << new_position.z
+						// 	<< "  and block at  " << block_position.x << "  " << block_position.y << "  " << block_position.z
+						// 	<< "  with displacement " << i
+						// );
 					}
-					// else
-					// {
-					// 	LOG_DEBUG("No collision detected");
-					// }
 				}
 
 				chunk.status.removeReader();
@@ -390,7 +382,7 @@ void World::updatePlayer(
 		}
 		}
 
-	// }
+	}
 
 
 	m_player->movePosition(displacement);
@@ -398,7 +390,11 @@ void World::updatePlayer(
 
 	{
 		auto lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.at(m_player_entity_scene_id).model = Transform(m_player->transform.position + m_player->hitbox.position).model();
+		m_worldScene.entity_mesh_list.at(m_player_entity_scene_id).model = Transform(
+			m_player->transform.position + m_player->hitbox.position,
+			glm::vec3(0.0f),
+			m_player->hitbox.size
+		).model();
 	}
 
 	DebugGui::player_position = m_player->transform.position;
