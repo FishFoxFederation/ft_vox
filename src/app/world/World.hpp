@@ -3,7 +3,7 @@
 #include "define.hpp"
 
 #include "List.hpp"
-#include "Entity.hpp"
+#include "Player.hpp"
 #include "WorldScene.hpp"
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
@@ -11,7 +11,6 @@
 #include "ThreadPool.hpp"
 #include "VulkanAPI.hpp"
 #include "Camera.hpp"
-#include "ECS.hpp"
 
 #include <unordered_map>
 
@@ -33,9 +32,7 @@ public:
 	World & operator=(World && other) = delete;
 
 
-	void updateEntities(
-		const double delta_time
-	);
+	void updateEntities();
 	void updateBlock(glm::dvec3 position);
 
 	void updatePlayer(
@@ -45,7 +42,8 @@ public:
 		const int8_t left,
 		const int8_t right,
 		const int8_t up,
-		const int8_t down
+		const int8_t down,
+		const double delta_time
 	);
 	void updatePlayer(
 		const uint64_t player_id,
@@ -61,9 +59,7 @@ private:
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
 
-	IdList<uint64_t, std::shared_ptr<Entity>> m_entities;
-	ECS										m_ecs;
-	ECS::Entity								m_player_entity;
+	IdList<uint64_t, std::shared_ptr<Player>> m_players;
 
 	/*************************************
 	 *  CHUNKS AND MAP
