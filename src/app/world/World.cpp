@@ -1,33 +1,5 @@
 #include "World.hpp"
 
-struct Test
-{
-	int a;
-	int b;
-};
-
-struct Test2
-{
-	int c;
-	int d;
-};
-
-void testSystem1(Test &)
-{
-	LOG_DEBUG("Test 1");
-}
-
-void testSystem2(Test2 &)
-{
-	LOG_DEBUG("Test 2");
-}
-
-void testSystem3(Test &, Test2 &)
-{
-	LOG_DEBUG("Test 3");
-}
-
-
 World::World(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
@@ -36,22 +8,17 @@ World::World(
 :	m_worldScene(WorldScene),
 	m_vulkanAPI(vulkanAPI),
 	m_threadPool(threadPool),
-	m_entities(),
+	m_players(),
 	m_future_id(0)
 {
 	std::shared_ptr<Player> my_player = std::make_shared<Player>();
 	my_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
 
-	m_my_player_id = m_entities.insert(my_player);
+	m_my_player_id = m_players.insert(my_player);
 
 	m_worldScene.entity_mesh_list.insert(
 		m_my_player_id, {m_vulkanAPI.cube_mesh_id, {}}
 	);
-
-
-	m_player_entity = m_ecs.createEntity();
-	m_ecs.addComponent<Test>(m_player_entity, 1, 2);
-	m_ecs.addComponent<Test2>(m_player_entity, 1, 2);
 }
 
 World::~World()
@@ -357,44 +324,111 @@ glm::vec3 World::getChunkPosition(const glm::vec3 & position)
 	return glm::floor(position / CHUNK_SIZE_VEC3);
 }
 
-void World::updateEntities(
+void World::updateEntities()
+{
+}
+
+void World::updatePlayer(
+	const uint64_t player_id,
+	const int8_t forward,
+	const int8_t backward,
+	const int8_t left,
+	const int8_t right,
+	const int8_t up,
+	const int8_t down,
 	const double delta_time
 )
 {
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+
+
+	// determine if player is on the ground or in the air and detect 
+	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
+	if (on_ground && !player->on_ground) // player just landed
 	{
-		auto lock = m_entities.lock();
-		for (auto & [id, entity] : m_entities)
+		player->jump_remaining = 1;
+		player->jumping = false;
+	}
+	if (!on_ground && player->on_ground) // player just started falling
+	{
+		player->startFall();
+	}
+	player->on_ground = on_ground;
+
+
+	// get the movement vector
+	glm::dvec3 move(right - left, 0.0, forward - backward);
+	// normalize the move vector to prevent faster diagonal movement
+	// but without the y component because we don't want to slow down the player when moving jumping
+	if (glm::length(move) > 0.0)
+		move = glm::normalize(move);
+	// transform the move vector to the player's local coordinate system
+	glm::dvec3 input_force = player->getTransformedMovement(move);
+	// set the y component of the input force
+	input_force.y = up - down;
+
+
+	double speed_factor = 1.0;
+
+	// the input force is now ready for flying
+	// but we need to modify it's y component for handling jump when walking
+	if (player->gameMode != Player::GameMode::SPECTATOR && !player->flying)
+	{
+		if (player->on_ground)
 		{
-			std::lock_guard<std::mutex> entity_lock(entity->mutex);
-
-			// apply gravity
-			if (entity->shouldFall())
+			if (up && player->jump_remaining > 0)
 			{
-				entity->velocity.y += -9.8 * delta_time;
+				player->velocity.y = player->jump_force;
+				player->jump_remaining--;
+				player->jumping = true;
 			}
+		}
 
-			// check for collision with blocks
-			// each axis is checked separately to allow for sliding along walls
-			// this is valid for players and mobs, but probably not for other entities like projectiles and items
-			glm::dvec3 displacement = entity->velocity * delta_time;
-			for (int i = 0; i < 3 && entity->shouldCollide(); i++)
-			{
-				glm::dvec3 new_position = entity->transform.position;
-				new_position[i] += displacement[i];
-				if (hitboxCollisionWithBlock(entity->hitbox, new_position))
-				{
-					displacement[i] = 0.0;
-					entity->velocity[i] = 0.0;
-				}
-			}
+		// if not flying, the y component of the input force is ignored
+		input_force.y = 0.0;
+	}
+	else
+	{
+		speed_factor *= player->fly_speed_factor;
+	}
 
-			// apply displacement
-			entity->transform.position += displacement;
+	// apply speed factors
+	if (player->sneaking)
+		speed_factor *= player->sneak_speed_factor;
+	if (player->sprinting)
+		speed_factor *= player->sprint_speed_factor;
+	if (player->jumping)
+		speed_factor *= player->jump_speed_factor;
+
+	
+	player->input_velocity = input_force * player->default_speed * speed_factor;
+
+	// apply gravity
+	if (player->shouldFall())
+	{
+		player->velocity.y += player->gravity * delta_time;
+	}
+
+	// check for collision with blocks
+	// each axis is checked separately to allow for sliding along walls
+	// this is valid for players and mobs, but probably not for other entities like projectiles and items
+	glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time;
+	for (int i = 0; i < 3 && player->shouldCollide(); i++)
+	{
+		glm::dvec3 new_position = player->transform.position;
+		new_position[i] += displacement[i];
+		if (hitboxCollisionWithBlock(player->hitbox, new_position))
+		{
+			displacement[i] = 0.0;
+			player->velocity[i] = 0.0;
 		}
 	}
 
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(m_my_player_id));
-	std::lock_guard<std::mutex> player_lock(player->mutex);
+	// apply displacement
+	player->transform.position += displacement;
+
+
 	DebugGui::player_position = player->transform.position;
 
 	{ // update player mesh
@@ -405,58 +439,6 @@ void World::updateEntities(
 			player->hitbox.size
 		).model();
 	}
-
-
-	m_ecs.forEach(testSystem1);
-	m_ecs.forEach(testSystem2);
-	m_ecs.forEach(testSystem3);
-}
-
-void World::updatePlayer(
-	const uint64_t player_id,
-	const int8_t forward,
-	const int8_t backward,
-	const int8_t left,
-	const int8_t right,
-	const int8_t up,
-	const int8_t down
-)
-{
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
-	std::lock_guard<std::mutex> lock(player->mutex);
-
-
-	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
-	// if (on_ground && !player->on_ground) // player just landed
-	// {
-	// }
-	if (!on_ground && player->on_ground) // player just started falling
-	{
-		player->startFall();
-	}
-	player->on_ground = on_ground;
-
-
-	glm::dvec3 move(right - left, up - down, forward - backward);
-	if (glm::length(move) > 0.0)
-	{
-		move = glm::normalize(move);
-	}
-	move *= player->default_speed;
-	glm::dvec3 added_velocity = player->getDisplacement(move);
-
-	if (player->gameMode != Player::GameMode::SPECTATOR && !player->flying)
-	{
-		if (player->on_ground)
-		{
-			if (up)
-			{
-				added_velocity.y = 50.0;
-			}
-		}
-	}
-
-	player->velocity += added_velocity;
 }
 
 void World::updatePlayer(
@@ -464,21 +446,21 @@ void World::updatePlayer(
 	std::function<void(Player &)> update
 )
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 	update(*player);
 }
 
 Camera World::getCamera(const uint64_t player_id)
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 	return player->camera();
 }
 
 glm::dvec3 World::getPlayerPosition(const uint64_t player_id)
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 	return player->transform.position;
 }

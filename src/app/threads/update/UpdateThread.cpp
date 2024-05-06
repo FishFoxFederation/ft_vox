@@ -59,8 +59,6 @@ void UpdateThread::loop()
 	updateTime();
 	readInput();
 	movePlayer();
-
-	m_world.updateEntities(static_cast<double>(m_delta_time.count()) / 1e9);
 }
 
 
@@ -147,7 +145,8 @@ void UpdateThread::movePlayer()
 		(m_a_key == GLFW_PRESS ? 1 : 0),
 		(m_d_key == GLFW_PRESS ? 1 : 0),
 		(m_space_key == GLFW_PRESS ? 1 : 0),
-		(m_left_shift_key == GLFW_PRESS ? 1 : 0)
+		(m_left_shift_key == GLFW_PRESS ? 1 : 0),
+		static_cast<double>(m_delta_time.count()) / 1e9
 	);
 
 	m_world.updatePlayer(

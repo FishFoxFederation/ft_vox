@@ -1,24 +1,5 @@
-#include "Entity.hpp"
+#include "Player.hpp"
 #include "logger.hpp"
-
-//############################################################################################################
-//                                                                                                           #
-//                                                  Entity                                                   #
-//                                                                                                           #
-//############################################################################################################
-
-Entity::Entity(
-	const HitBox & hitbox
-):
-	hitbox(hitbox),
-	velocity({0.0, 0.0, 0.0})
-{
-}
-
-Entity::~Entity()
-{
-}
-
 
 //############################################################################################################
 //                                                                                                           #
@@ -26,12 +7,7 @@ Entity::~Entity()
 //                                                                                                           #
 //############################################################################################################
 
-Player::Player():
-	Entity(HitBox({-0.4, 0, -0.4}, {0.8, 1.8, 0.8})),
-	gameMode(GameMode::SPECTATOR),
-	feet({-0.4, -0.1, -0.4}, {0.8, 0.1, 0.8}),
-	m_yaw(0.0),
-	m_pitch(0.0)
+Player::Player()
 {
 }
 
@@ -41,8 +17,8 @@ Player::~Player()
 
 void Player::moveDirection(double x_offset, double y_offset)
 {
-	m_yaw += x_offset;
-	m_pitch = glm::clamp(m_pitch - y_offset, -89.0, 89.0);
+	yaw += x_offset;
+	pitch = glm::clamp(pitch - y_offset, -89.0, 89.0);
 
 	// updateTransform();
 }
@@ -50,13 +26,13 @@ void Player::moveDirection(double x_offset, double y_offset)
 glm::dvec3 Player::direction() const
 {
 	return glm::normalize(glm::dvec3(
-		cos(glm::radians(m_pitch)) * cos(glm::radians(m_yaw)),
-		sin(glm::radians(m_pitch)),
-		cos(glm::radians(m_pitch)) * sin(glm::radians(m_yaw))
+		cos(glm::radians(pitch)) * cos(glm::radians(yaw)),
+		sin(glm::radians(pitch)),
+		cos(glm::radians(pitch)) * sin(glm::radians(yaw))
 	));
 }
 
-glm::dvec3 Player::getDisplacement(glm::dvec3 move) const
+glm::dvec3 Player::getTransformedMovement(glm::dvec3 move) const
 {
 	static const glm::dvec3 up_vec = glm::dvec3(0.0, 1.0, 0.0);
 	const glm::dvec3 dir_vec = direction();
@@ -70,17 +46,17 @@ glm::dvec3 Player::eyePosition() const
 {
 	double eye_height = 1.6;
 	// First person view
-	// return glm::dvec3(0.0, eye_height, 0.0);
+	return glm::dvec3(0.0, eye_height, 0.0);
 
 	// Third person view
-	const double distance = 5;
-	const glm::dvec3 dir_vec = direction();
-	return glm::dvec3(0.0, eye_height, 0.0) - distance * dir_vec;
+	// const double distance = 5;
+	// const glm::dvec3 dir_vec = direction();
+	// return glm::dvec3(0.0, eye_height, 0.0) - distance * dir_vec;
 }
 
 void Player::updateTransform()
 {
-	transform.rotation.y = -glm::radians(m_yaw);
+	transform.rotation.y = -glm::radians(yaw);
 }
 
 bool Player::shouldCollide() const
