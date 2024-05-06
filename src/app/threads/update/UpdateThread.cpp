@@ -147,8 +147,15 @@ void UpdateThread::movePlayer()
 		(m_a_key == GLFW_PRESS ? 1 : 0),
 		(m_d_key == GLFW_PRESS ? 1 : 0),
 		(m_space_key == GLFW_PRESS ? 1 : 0),
-		(m_left_shift_key == GLFW_PRESS ? 1 : 0),
-		look
+		(m_left_shift_key == GLFW_PRESS ? 1 : 0)
+	);
+
+	m_world.updatePlayer(
+		m_world.m_my_player_id,
+		[look](Player & player)
+		{
+			player.moveDirection(look.x, look.y);
+		}
 	);
 
 	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
