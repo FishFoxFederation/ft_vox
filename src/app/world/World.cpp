@@ -1,5 +1,33 @@
 #include "World.hpp"
 
+struct Test
+{
+	int a;
+	int b;
+};
+
+struct Test2
+{
+	int c;
+	int d;
+};
+
+void testSystem1(Test &)
+{
+	LOG_DEBUG("Test 1");
+}
+
+void testSystem2(Test2 &)
+{
+	LOG_DEBUG("Test 2");
+}
+
+void testSystem3(Test &, Test2 &)
+{
+	LOG_DEBUG("Test 3");
+}
+
+
 World::World(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
@@ -19,6 +47,11 @@ World::World(
 	m_worldScene.entity_mesh_list.insert(
 		m_my_player_id, {m_vulkanAPI.cube_mesh_id, {}}
 	);
+
+
+	m_player_entity = m_ecs.createEntity();
+	m_ecs.addComponent<Test>(m_player_entity, 1, 2);
+	m_ecs.addComponent<Test2>(m_player_entity, 1, 2);
 }
 
 World::~World()
@@ -372,6 +405,11 @@ void World::updateEntities(
 			player->hitbox.size
 		).model();
 	}
+
+
+	m_ecs.forEach(testSystem1);
+	m_ecs.forEach(testSystem2);
+	m_ecs.forEach(testSystem3);
 }
 
 void World::updatePlayer(
@@ -381,8 +419,7 @@ void World::updatePlayer(
 	const int8_t left,
 	const int8_t right,
 	const int8_t up,
-	const int8_t down,
-	const glm::dvec2 & look
+	const int8_t down
 )
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_entities.get(player_id));
@@ -419,11 +456,7 @@ void World::updatePlayer(
 		}
 	}
 
-
 	player->velocity += added_velocity;
-	player->velocity -= player->input_velocity;
-	player->input_velocity = added_velocity;
-	player->moveDirection(look.x, look.y);
 }
 
 void World::updatePlayer(

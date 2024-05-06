@@ -11,6 +11,7 @@
 #include "ThreadPool.hpp"
 #include "VulkanAPI.hpp"
 #include "Camera.hpp"
+#include "ECS.hpp"
 
 #include <unordered_map>
 
@@ -44,8 +45,7 @@ public:
 		const int8_t left,
 		const int8_t right,
 		const int8_t up,
-		const int8_t down,
-		const glm::dvec2 & look
+		const int8_t down
 	);
 	void updatePlayer(
 		const uint64_t player_id,
@@ -62,8 +62,8 @@ private:
 	ThreadPool &							m_threadPool;
 
 	IdList<uint64_t, std::shared_ptr<Entity>> m_entities;
-
-	// std::shared_ptr<Player> m_player;
+	ECS										m_ecs;
+	ECS::Entity								m_player_entity;
 
 	/*************************************
 	 *  CHUNKS AND MAP
