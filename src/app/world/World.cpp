@@ -412,16 +412,43 @@ void World::updatePlayer(
 
 	// check for collision with blocks
 	// each axis is checked separately to allow for sliding along walls
-	// this is valid for players and mobs, but probably not for other entities like projectiles and items
 	glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time;
-	for (int i = 0; i < 3 && player->shouldCollide(); i++)
+	if (player->shouldCollide())
 	{
-		glm::dvec3 new_position = player->transform.position;
-		new_position[i] += displacement[i];
-		if (hitboxCollisionWithBlock(player->hitbox, new_position))
+		glm::dvec3 move_x = {displacement.x, 0.0, 0.0};
+		glm::dvec3 move_y = {0.0, displacement.y, 0.0};
+		glm::dvec3 move_z = {0.0, 0.0, displacement.z};
+		glm::dvec3 move_xz = {displacement.x, 0.0, displacement.z};
+
+		bool collision_x = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_x);
+		bool collision_y = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_y);
+		bool collision_z = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_z);
+		bool collision_xz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xz);
+
+		// edge case when the player is perfectly aligned with the corner of a block
+		if (!collision_x && !collision_z && collision_xz)
 		{
-			displacement[i] = 0.0;
-			player->velocity[i] = 0.0;
+			// artificially set the collision on the axis with the smallest displacement
+			if (std::abs(displacement.x) > std::abs(displacement.z))
+				collision_z = true;
+			else
+				collision_x = true;
+		}
+		
+		if (collision_x)
+		{
+			displacement.x = 0.0;
+			player->velocity.x = 0.0;
+		}
+		if (collision_y)
+		{
+			displacement.y = 0.0;
+			player->velocity.y = 0.0;
+		}
+		if (collision_z)
+		{
+			displacement.z = 0.0;
+			player->velocity.z = 0.0;
 		}
 	}
 
