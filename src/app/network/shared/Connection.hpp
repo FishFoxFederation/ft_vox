@@ -22,8 +22,8 @@ public:
 	std::vector<char> getReadBuffer() const;
 	void	reduceReadBuffer(size_t size);
 
-	void 	recv();
-	void	sendQueue();
+	ssize_t 	recv();
+	ssize_t	sendQueue();
 private:
 	std::vector<char>	m_read_buffer;
 	mutable	std::mutex	m_read_buffer_mutex;

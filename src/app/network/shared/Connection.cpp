@@ -35,7 +35,7 @@ void Connection::reduceReadBuffer(size_t size)
 	m_read_buffer.erase(m_read_buffer.begin(), m_read_buffer.begin() + size);
 }
 
-void Connection::recv()
+ssize_t Connection::recv()
 {
 	char buffer[1024];
 	ssize_t size = ConnectionSocket::recv(buffer, sizeof(buffer));
@@ -51,9 +51,11 @@ void Connection::recv()
 		std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
 		m_read_buffer.insert(m_read_buffer.end(), buffer, buffer + size);
 	}
+
+	return size;
 }
 
-void Connection::sendQueue()
+ssize_t Connection::sendQueue()
 {
 	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
 	if (m_write_buffer.empty())
@@ -69,6 +71,7 @@ void Connection::sendQueue()
 	}
 	else
 		m_write_buffer.erase(m_write_buffer.begin(), m_write_buffer.begin() + size);
+	return size;
 }
 
 void Connection::queueAndSendMessage(const std::string & msg)
