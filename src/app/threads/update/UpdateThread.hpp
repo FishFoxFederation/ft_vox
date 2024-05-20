@@ -48,7 +48,6 @@ private:
 	int m_space_key;
 	int m_left_shift_key;
 
-	double m_camera_speed = 20.0f;
 	double m_mouse_x;
 	double m_mouse_y;
 	double m_last_mouse_x;
