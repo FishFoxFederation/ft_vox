@@ -21,7 +21,7 @@ public:
 	Poller(Poller&& other);
 	Poller& operator=(Poller&& other);
 
-	void							add(const uint64_t & id, const Socket & socket, const uint32_t & idBis = 0);
+	void							add(const uint64_t & id, const Socket & socket);
 	void							remove(const Socket & socket);
 	std::pair<size_t, epoll_event*>	wait(const int & timeout);
 private:

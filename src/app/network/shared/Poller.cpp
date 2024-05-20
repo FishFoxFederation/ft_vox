@@ -43,7 +43,7 @@ void Poller::close()
 	}
 }
 
-void Poller::add(const uint64_t & id, const Socket & socket, const uint32_t & idBis)
+void Poller::add(const uint64_t & id, const Socket & socket)
 {
 	epoll_event event;
 	event.events = EPOLLIN | EPOLLOUT | EPOLLET;

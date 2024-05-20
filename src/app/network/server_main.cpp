@@ -16,13 +16,24 @@ void send_all(std::unordered_map<uint64_t, Connection> & connections, const std:
 	}
 }
 
+void disconnect_client(std::unordered_map<uint64_t, Connection> & connections, Poller & poller, uint64_t client_id)
+{
+	auto client = connections.find(client_id);
+	if (client != connections.end())
+	{
+		send_all(connections, "Client disconnected\n", client_id);
+		poller.remove(client->second);
+		connections.erase(client);
+	}
+}
+
 int main()
 {
 	ServerSocket server(4245);
 	Poller poller;
 	std::unordered_map<uint64_t, Connection> connections;
 	uint64_t id = 1;
-	poller.add(0, server, 1);
+	poller.add(0, server);
 
 	bool online = true;
 	while(online)
@@ -40,7 +51,7 @@ int main()
 				Connection connection(server.accept());
 				auto ret = connections.insert(std::make_pair(id++, std::move(connection)));
 				std::cout << "New client id : " << ret.first->first << "\n";
-				send_all(connections, "Joined !", ret.first->first);
+				send_all(connections, "Joined !\n", ret.first->first);
 				poller.add(ret.first->first, ret.first->second);
 			}
 
@@ -58,7 +69,12 @@ int main()
 					Connection & connection = currentClient->second;
 					if (events.second[i].events & EPOLLIN)
 					{
-						connection.recv();
+						auto ret = connection.recv();
+						if (ret == 0)
+						{
+							disconnect_client(connections, poller, currentClient->first);
+							continue;
+						}
 						if (!connection.getReadBuffer().empty())
 						{
 							std::string message = connection.getReadBuffer().data();
@@ -82,11 +98,7 @@ int main()
 					}
 
 					if (events.second[i].events & EPOLLHUP || events.second[i].events & EPOLLRDHUP)
-					{
-						send_all(connections, "Client disconnected", currentClient->first);
-						poller.remove(connection);
-						connections.erase(currentClient);
-					}
+						disconnect_client(connections, poller, currentClient->first);
 				}
 			}
 		}
