@@ -119,8 +119,9 @@ Collaboration diagram for Block:</div>
 <div class="dyncontent">
 <div class="center"><img src="structBlock__coll__graph.png" border="0" usemap="#aBlock_coll__map" alt="Collaboration graph"/></div>
 <map name="aBlock_coll__map" id="aBlock_coll__map">
-<area shape="rect" title=" " alt="" coords="5,196,127,280"/>
-<area shape="rect" href="structData.html" title=" " alt="" coords="21,5,111,89"/>
+<area shape="rect" title=" " alt="" coords="5,416,127,500"/>
+<area shape="rect" href="structData.html" title=" " alt="" coords="21,225,111,309"/>
+<area shape="rect" href="classHitBox.html" title=" " alt="" coords="18,5,114,163"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -237,9 +238,10 @@ Static Public Attributes</h2></td></tr>
 <div class="line">            0,</div>
 <div class="line">            0</div>
 <div class="line">        },</div>
-<div class="line">        .properties = <a class="code hl_define" href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a></div>
+<div class="line">        .properties = <a class="code hl_define" href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a>,</div>
+<div class="line">        .hitbox = {{0, 0, 0}, {1, 1, 1}}</div>
 <div class="line">    }</div>
-<div class="ttc" id="aBlock_8hpp_html_a7208759f17440102bcbf1e3ac291858a"><div class="ttname"><a href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_NONE</div><div class="ttdef"><b>Definition:</b> Block.hpp:22</div></div>
+<div class="ttc" id="aBlock_8hpp_html_a7208759f17440102bcbf1e3ac291858a"><div class="ttname"><a href="Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a">BLOCK_PROPERTY_NONE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_NONE</div><div class="ttdef"><b>Definition:</b> Block.hpp:23</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -275,11 +277,12 @@ Static Public Attributes</h2></td></tr>
 <div class="line">        .properties =</div>
 <div class="line">            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
 <div class="line">            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
-<div class="line">            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
+<div class="line">            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a>,</div>
+<div class="line">        .hitbox = {{0, 0, 0}, {1, 1, 1}}</div>
 <div class="line">    }</div>
-<div class="ttc" id="aBlock_8hpp_html_a03f647e3fa4bbfb59dfcdf8b268cb1d4"><div class="ttname"><a href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_CUBE</div><div class="ttdef"><b>Definition:</b> Block.hpp:25</div></div>
-<div class="ttc" id="aBlock_8hpp_html_ac85a130bf23dd2f3be1d006fcb89e190"><div class="ttname"><a href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div><div class="ttdeci">#define BLOCK_PROPERTY_SOLID</div><div class="ttdef"><b>Definition:</b> Block.hpp:23</div></div>
-<div class="ttc" id="aBlock_8hpp_html_ad41d59e68570f498ab983461b86d0e03"><div class="ttname"><a href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_OPAQUE</div><div class="ttdef"><b>Definition:</b> Block.hpp:24</div></div>
+<div class="ttc" id="aBlock_8hpp_html_a03f647e3fa4bbfb59dfcdf8b268cb1d4"><div class="ttname"><a href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_CUBE</div><div class="ttdef"><b>Definition:</b> Block.hpp:26</div></div>
+<div class="ttc" id="aBlock_8hpp_html_ac85a130bf23dd2f3be1d006fcb89e190"><div class="ttname"><a href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div><div class="ttdeci">#define BLOCK_PROPERTY_SOLID</div><div class="ttdef"><b>Definition:</b> Block.hpp:24</div></div>
+<div class="ttc" id="aBlock_8hpp_html_ad41d59e68570f498ab983461b86d0e03"><div class="ttname"><a href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div><div class="ttdeci">#define BLOCK_PROPERTY_OPAQUE</div><div class="ttdef"><b>Definition:</b> Block.hpp:25</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -315,7 +318,8 @@ Static Public Attributes</h2></td></tr>
 <div class="line">        .properties =</div>
 <div class="line">            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
 <div class="line">            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
-<div class="line">            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
+<div class="line">            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a>,</div>
+<div class="line">        .hitbox = {{0, 0, 0}, {1, 1, 1}}</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
 </div>
@@ -352,7 +356,8 @@ Static Public Attributes</h2></td></tr>
 <div class="line">        .properties =</div>
 <div class="line">            <a class="code hl_define" href="Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190">BLOCK_PROPERTY_SOLID</a></div>
 <div class="line">            | <a class="code hl_define" href="Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03">BLOCK_PROPERTY_OPAQUE</a></div>
-<div class="line">            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a></div>
+<div class="line">            | <a class="code hl_define" href="Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4">BLOCK_PROPERTY_CUBE</a>,</div>
+<div class="line">        .hitbox = {{0, 0, 0}, {1, 1, 1}}</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
 </div>

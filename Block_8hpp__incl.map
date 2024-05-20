@@ -1,6 +1,11 @@
 <map id="src/app/world/Block.hpp" name="src/app/world/Block.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="57,5,218,31"/>
-<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="5,79,85,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="110,79,165,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="189,79,248,104"/>
+<area shape="rect" id="node1" title=" " alt="" coords="203,5,365,31"/>
+<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="5,225,85,251"/>
+<area shape="rect" id="node3" href="$HitBox_8hpp.html" title=" " alt="" coords="201,79,287,104"/>
+<area shape="rect" id="node8" title=" " alt="" coords="333,152,392,177"/>
+<area shape="rect" id="node9" title=" " alt="" coords="362,79,417,104"/>
+<area shape="rect" id="node4" href="$Transform_8hpp.html" title=" " alt="" coords="153,152,258,177"/>
+<area shape="rect" id="node5" title=" " alt="" coords="411,225,503,251"/>
+<area shape="rect" id="node6" title=" " alt="" coords="110,225,301,251"/>
+<area shape="rect" id="node7" title=" " alt="" coords="325,225,387,251"/>
 </map>

@@ -107,6 +107,7 @@ $(document).ready(function(){initNavTree('classWorld.html',''); initResizable();
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classWorld-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">World Class Reference</div></div>
 </div><!--header-->
@@ -118,7 +119,7 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,148,207"/>
+<area shape="rect" title=" " alt="" coords="5,5,148,236"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -140,12 +141,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5cc73b1aa54db5da01e4004acd4fd8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10a860e06db7eae12c2d62fbbbc78b57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">updateBlock</a> (glm::dvec3 position)</td></tr>
 <tr class="separator:a10a860e06db7eae12c2d62fbbbc78b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86d86c9befe3a4a7a66d47f1a29f4bbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a86d86c9befe3a4a7a66d47f1a29f4bbb">updatePlayer</a> (const glm::dvec3 &amp;move, const glm::dvec2 &amp;look)</td></tr>
-<tr class="separator:a86d86c9befe3a4a7a66d47f1a29f4bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a548031773601fdf0e0054d0824642b31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a548031773601fdf0e0054d0824642b31">getCamera</a> ()</td></tr>
-<tr class="separator:a548031773601fdf0e0054d0824642b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf70e000805b5766ad5501f92f064c4c"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aaf70e000805b5766ad5501f92f064c4c">getPlayerPosition</a> ()</td></tr>
-<tr class="separator:aaf70e000805b5766ad5501f92f064c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4fd79d62eca820ff565c3f45bf0a37b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af4fd79d62eca820ff565c3f45bf0a37b">updatePlayer</a> (const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time)</td></tr>
+<tr class="separator:af4fd79d62eca820ff565c3f45bf0a37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af77441ac7b7725596b84877315505bea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af77441ac7b7725596b84877315505bea">updatePlayer</a> (const uint64_t player_id, std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt; update)</td></tr>
+<tr class="separator:af77441ac7b7725596b84877315505bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66e149c5bb444aeaff5a5cbf2cd59239"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239">getCamera</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:a66e149c5bb444aeaff5a5cbf2cd59239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cc5e2a278febb7118b5c2b3a2300fd9"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a0cc5e2a278febb7118b5c2b3a2300fd9">getPlayerPosition</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:a0cc5e2a278febb7118b5c2b3a2300fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a2c48d3676bee7471ec1d5ec463585aa1"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a2c48d3676bee7471ec1d5ec463585aa1">m_my_player_id</a></td></tr>
+<tr class="separator:a2c48d3676bee7471ec1d5ec463585aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad837fd51d7bfdfe752c32ea027930da0" name="ad837fd51d7bfdfe752c32ea027930da0"></a>
@@ -252,8 +260,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a548031773601fdf0e0054d0824642b31" name="a548031773601fdf0e0054d0824642b31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a548031773601fdf0e0054d0824642b31">&#9670;&#160;</a></span>getCamera()</h2>
+<a id="a66e149c5bb444aeaff5a5cbf2cd59239" name="a66e149c5bb444aeaff5a5cbf2cd59239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66e149c5bb444aeaff5a5cbf2cd59239">&#9670;&#160;</a></span>getCamera()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +269,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classCamera.html">Camera</a> World::getCamera </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -269,8 +278,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aaf70e000805b5766ad5501f92f064c4c" name="aaf70e000805b5766ad5501f92f064c4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf70e000805b5766ad5501f92f064c4c">&#9670;&#160;</a></span>getPlayerPosition()</h2>
+<a id="a0cc5e2a278febb7118b5c2b3a2300fd9" name="a0cc5e2a278febb7118b5c2b3a2300fd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc5e2a278febb7118b5c2b3a2300fd9">&#9670;&#160;</a></span>getPlayerPosition()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,7 +287,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">glm::dvec3 World::getPlayerPosition </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -373,8 +383,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a86d86c9befe3a4a7a66d47f1a29f4bbb" name="a86d86c9befe3a4a7a66d47f1a29f4bbb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86d86c9befe3a4a7a66d47f1a29f4bbb">&#9670;&#160;</a></span>updatePlayer()</h2>
+<a id="af4fd79d62eca820ff565c3f45bf0a37b" name="af4fd79d62eca820ff565c3f45bf0a37b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4fd79d62eca820ff565c3f45bf0a37b">&#9670;&#160;</a></span>updatePlayer() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -382,19 +392,98 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void World::updatePlayer </td>
           <td>(</td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
-          <td class="paramname"><em>move</em>, </td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
-          <td class="paramname"><em>look</em>&#160;</td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>forward</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>backward</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>up</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>down</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>delta_time</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af77441ac7b7725596b84877315505bea" name="af77441ac7b7725596b84877315505bea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af77441ac7b7725596b84877315505bea">&#9670;&#160;</a></span>updatePlayer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>update</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2c48d3676bee7471ec1d5ec463585aa1" name="a2c48d3676bee7471ec1d5ec463585aa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c48d3676bee7471ec1d5ec463585aa1">&#9670;&#160;</a></span>m_my_player_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t World::m_my_player_id</td>
         </tr>
       </table>
 </div><div class="memdoc">

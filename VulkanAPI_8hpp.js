@@ -2,9 +2,11 @@ var VulkanAPI_8hpp =
 [
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", "structQueueFamilyIndices" ],
     [ "LineVertex", "structLineVertex.html", "structLineVertex" ],
+    [ "EntityVertex", "structEntityVertex.html", "structEntityVertex" ],
     [ "Mesh", "structMesh.html", "structMesh" ],
     [ "ViewProjMatrices", "structViewProjMatrices.html", "structViewProjMatrices" ],
     [ "ModelMatrice", "structModelMatrice.html", "structModelMatrice" ],
+    [ "EntityMatrices", "structEntityMatrices.html", "structEntityMatrices" ],
     [ "ShadowMapLight", "structShadowMapLight.html", "structShadowMapLight" ],
     [ "ImGuiTexture", "structImGuiTexture.html", "structImGuiTexture" ],
     [ "VulkanAPI", "classVulkanAPI.html", "classVulkanAPI" ],

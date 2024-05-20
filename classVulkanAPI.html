@@ -108,7 +108,6 @@ $(document).ready(function(){initNavTree('classVulkanAPI.html',''); initResizabl
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classVulkanAPI-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">VulkanAPI Class Reference</div></div>
 </div><!--header-->
@@ -120,14 +119,16 @@ Collaboration diagram for VulkanAPI:</div>
 <div class="dyncontent">
 <div class="center"><img src="classVulkanAPI__coll__graph.png" border="0" usemap="#aVulkanAPI_coll__map" alt="Collaboration graph"/></div>
 <map name="aVulkanAPI_coll__map" id="aVulkanAPI_coll__map">
-<area shape="rect" title=" " alt="" coords="495,460,664,867"/>
-<area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,71,191,258"/>
-<area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,115,359,214"/>
-<area shape="rect" href="classSwapchain.html" title=" " alt="" coords="384,42,567,287"/>
-<area shape="rect" href="classImage.html" title=" " alt="" coords="591,5,725,324"/>
-<area shape="rect" href="classDescriptor.html" title=" " alt="" coords="761,49,867,280"/>
-<area shape="rect" href="classPipeline.html" title=" " alt="" coords="957,71,1053,258"/>
-<area shape="rect" href="structImGuiTexture.html" title=" " alt="" coords="1093,57,1225,273"/>
+<area shape="rect" title=" " alt="" coords="612,564,781,956"/>
+<area shape="rect" href="classVulaknMemoryAllocator.html" title=" " alt="" coords="5,175,191,362"/>
+<area shape="rect" href="structQueueFamilyIndices.html" title=" " alt="" coords="215,219,359,318"/>
+<area shape="rect" href="classSwapchain.html" title=" " alt="" coords="384,146,567,391"/>
+<area shape="rect" href="classImage.html" title=" " alt="" coords="591,109,725,428"/>
+<area shape="rect" href="classDescriptor.html" title=" " alt="" coords="761,153,867,384"/>
+<area shape="rect" href="classPipeline.html" title=" " alt="" coords="957,175,1053,362"/>
+<area shape="rect" href="structImGuiTexture.html" title=" " alt="" coords="1093,161,1225,377"/>
+<area shape="rect" href="classIdList.html" title=" " alt="" coords="1249,161,1416,377"/>
+<area shape="rect" title=" " alt="" coords="1263,5,1402,60"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -151,8 +152,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5cf827ed1548a6c79b7c0113cf726892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581">recreateSwapChain</a> (GLFWwindow *<a class="el" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>)</td></tr>
 <tr class="separator:acb1a97c9af39c7527966e3f8eb5f7581"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a916d17d1a713268c205279c4e4685b80"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a916d17d1a713268c205279c4e4685b80">storeMesh</a> (const std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt; &amp;vertices, const std::vector&lt; uint32_t &gt; &amp;indices)</td></tr>
-<tr class="separator:a916d17d1a713268c205279c4e4685b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dbaba5ed78714b88d3f052d0b8ebc12"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a7dbaba5ed78714b88d3f052d0b8ebc12">storeMesh</a> (const void *vertices, const uint32_t vertex_count, const uint32_t vertex_size, const void *indices, const uint32_t index_count)</td></tr>
+<tr class="separator:a7dbaba5ed78714b88d3f052d0b8ebc12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64487d489c2c83eda603848f99c53826"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a64487d489c2c83eda603848f99c53826">destroyMeshes</a> (const std::vector&lt; uint64_t &gt; &amp;mesh_ids)</td></tr>
 <tr class="separator:a64487d489c2c83eda603848f99c53826"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad27846b71139eb87106408bd25940dbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ad27846b71139eb87106408bd25940dbb">destroyMesh</a> (const uint64_t &amp;mesh_id)</td></tr>
@@ -280,25 +281,20 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a34f25aa629476800fbf6acb0e6400d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8f0c464acae09cabfc3631aaa50304a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPipeline.html">Pipeline</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#ae8f0c464acae09cabfc3631aaa50304a">test_image_pipeline</a></td></tr>
 <tr class="separator:ae8f0c464acae09cabfc3631aaa50304a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa722fadde782da66e3c87930aa1c0617"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPipeline.html">Pipeline</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aa722fadde782da66e3c87930aa1c0617">entity_pipeline</a></td></tr>
+<tr class="separator:aa722fadde782da66e3c87930aa1c0617"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a940a7401cf07be24321fb4135242ed02"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a940a7401cf07be24321fb4135242ed02">imgui_descriptor_pool</a></td></tr>
 <tr class="separator:a940a7401cf07be24321fb4135242ed02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a612c4d0c482f50a0f59bbd88469b6645"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structImGuiTexture.html">ImGuiTexture</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a612c4d0c482f50a0f59bbd88469b6645">imgui_texture</a></td></tr>
 <tr class="separator:a612c4d0c482f50a0f59bbd88469b6645"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ebdad6fe938979f82df36ab8796a6c7"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a6ebdad6fe938979f82df36ab8796a6c7">next_mesh_id</a> = 1</td></tr>
-<tr class="separator:a6ebdad6fe938979f82df36ab8796a6c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafa409bfcd712145122ed4539a06aa4c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, <a class="el" href="structMesh.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#aafa409bfcd712145122ed4539a06aa4c">meshes</a></td></tr>
-<tr class="separator:aafa409bfcd712145122ed4539a06aa4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afec7c006633bbca151891603c8968495"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#afec7c006633bbca151891603c8968495">mesh_mutex</a></td></tr>
-<tr class="separator:afec7c006633bbca151891603c8968495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e4499b996e5cc302f3bd35437086c92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIdList.html">IdList</a>&lt; uint64_t, <a class="el" href="structMesh.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a0e4499b996e5cc302f3bd35437086c92">meshes</a></td></tr>
+<tr class="separator:a0e4499b996e5cc302f3bd35437086c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af077051ab8c2e9346f85ebef42b87f5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a">mesh_ids_to_destroy</a></td></tr>
 <tr class="separator:af077051ab8c2e9346f85ebef42b87f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af620c1c039315ba3962c5ca935530fbb"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#af620c1c039315ba3962c5ca935530fbb">cube_mesh_id</a></td></tr>
+<tr class="separator:af620c1c039315ba3962c5ca935530fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12d94d7daef95cd6ed0451e9a9cc69d4"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">global_mutex</a></td></tr>
 <tr class="separator:a12d94d7daef95cd6ed0451e9a9cc69d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a2f39e64fdb127b3c55df158878c0e1d4"><td class="memItemLeft" align="right" valign="top">static const uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVulkanAPI.html#a2f39e64fdb127b3c55df158878c0e1d4">no_mesh_id</a> = 0</td></tr>
-<tr class="separator:a2f39e64fdb127b3c55df158878c0e1d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0847afa3a3335e05c44922686174d17b" name="a0847afa3a3335e05c44922686174d17b"></a>
@@ -593,8 +589,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a916d17d1a713268c205279c4e4685b80" name="a916d17d1a713268c205279c4e4685b80"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a916d17d1a713268c205279c4e4685b80">&#9670;&#160;</a></span>storeMesh()</h2>
+<a id="a7dbaba5ed78714b88d3f052d0b8ebc12" name="a7dbaba5ed78714b88d3f052d0b8ebc12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dbaba5ed78714b88d3f052d0b8ebc12">&#9670;&#160;</a></span>storeMesh()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -602,14 +598,32 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">uint64_t VulkanAPI::storeMesh </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const void *&#160;</td>
           <td class="paramname"><em>vertices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>indices</em>&#160;</td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>vertex_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>vertex_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>indices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>index_count</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -860,6 +874,20 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af620c1c039315ba3962c5ca935530fbb" name="af620c1c039315ba3962c5ca935530fbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af620c1c039315ba3962c5ca935530fbb">&#9670;&#160;</a></span>cube_mesh_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t VulkanAPI::cube_mesh_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a23a980bd3a491a0ea5a09d395e345202" name="a23a980bd3a491a0ea5a09d395e345202"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a23a980bd3a491a0ea5a09d395e345202">&#9670;&#160;</a></span>current_frame</h2>
 
@@ -924,6 +952,20 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;VkCommandBuffer&gt; VulkanAPI::draw_command_buffers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa722fadde782da66e3c87930aa1c0617" name="aa722fadde782da66e3c87930aa1c0617"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa722fadde782da66e3c87930aa1c0617">&#9670;&#160;</a></span>entity_pipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classPipeline.html">Pipeline</a> VulkanAPI::entity_pipeline</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1224,66 +1266,16 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afec7c006633bbca151891603c8968495" name="afec7c006633bbca151891603c8968495"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afec7c006633bbca151891603c8968495">&#9670;&#160;</a></span>mesh_mutex</h2>
+<a id="a0e4499b996e5cc302f3bd35437086c92" name="a0e4499b996e5cc302f3bd35437086c92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e4499b996e5cc302f3bd35437086c92">&#9670;&#160;</a></span>meshes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::mutex VulkanAPI::mesh_mutex</td>
+          <td class="memname"><a class="el" href="classIdList.html">IdList</a>&lt;uint64_t, <a class="el" href="structMesh.html">Mesh</a>&gt; VulkanAPI::meshes</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aafa409bfcd712145122ed4539a06aa4c" name="aafa409bfcd712145122ed4539a06aa4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafa409bfcd712145122ed4539a06aa4c">&#9670;&#160;</a></span>meshes</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;uint64_t, <a class="el" href="structMesh.html">Mesh</a>&gt; VulkanAPI::meshes</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6ebdad6fe938979f82df36ab8796a6c7" name="a6ebdad6fe938979f82df36ab8796a6c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ebdad6fe938979f82df36ab8796a6c7">&#9670;&#160;</a></span>next_mesh_id</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t VulkanAPI::next_mesh_id = 1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2f39e64fdb127b3c55df158878c0e1d4" name="a2f39e64fdb127b3c55df158878c0e1d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f39e64fdb127b3c55df158878c0e1d4">&#9670;&#160;</a></span>no_mesh_id</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint64_t VulkanAPI::no_mesh_id = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

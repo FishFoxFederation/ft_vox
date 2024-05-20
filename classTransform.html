@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('classTransform.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="Entity_8hpp_source.html">Entity.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="Transform_8hpp_source.html">Transform.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Transform:</div>
 <div class="dyncontent">
@@ -125,10 +125,10 @@ Collaboration diagram for Transform:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a16290cebb1caa35d13b6b797a9657898"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransform.html#a16290cebb1caa35d13b6b797a9657898">Transform</a> (const glm::vec3 &amp;<a class="el" href="classTransform.html#aecfee605af55e0c6e555b5fdfd4f488a">position</a>=glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3 &amp;<a class="el" href="classTransform.html#a936da2a177bd9dec2a5e14c30865dff8">rotation</a>=glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3 &amp;<a class="el" href="classTransform.html#a0bf3cd626be4c099ce455ff809761c1c">scale</a>=glm::vec3(1.0f, 1.0f, 1.0f))</td></tr>
-<tr class="separator:a16290cebb1caa35d13b6b797a9657898"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd190a993ac80892bba3fe8be3f2f6e2"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransform.html#afd190a993ac80892bba3fe8be3f2f6e2">model</a> () const</td></tr>
-<tr class="separator:afd190a993ac80892bba3fe8be3f2f6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af696e75facb2a07a842e7a28b14f3665"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransform.html#af696e75facb2a07a842e7a28b14f3665">Transform</a> (const glm::vec3 &amp;<a class="el" href="classTransform.html#aecfee605af55e0c6e555b5fdfd4f488a">position</a>=glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3 &amp;<a class="el" href="classTransform.html#a936da2a177bd9dec2a5e14c30865dff8">rotation</a>=glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3 &amp;<a class="el" href="classTransform.html#a0bf3cd626be4c099ce455ff809761c1c">scale</a>=glm::vec3(1.0f, 1.0f, 1.0f), const <a class="el" href="classTransform.html">Transform</a> *<a class="el" href="classTransform.html#a6daf7add1e082d558b538c1a64c17aa5">parent</a>=nullptr)</td></tr>
+<tr class="separator:af696e75facb2a07a842e7a28b14f3665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf51c49f1336ab5ae045ac9609715d8"><td class="memItemLeft" align="right" valign="top">glm::dmat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransform.html#afcf51c49f1336ab5ae045ac9609715d8">model</a> () const</td></tr>
+<tr class="separator:afcf51c49f1336ab5ae045ac9609715d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -138,10 +138,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a936da2a177bd9dec2a5e14c30865dff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bf3cd626be4c099ce455ff809761c1c"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransform.html#a0bf3cd626be4c099ce455ff809761c1c">scale</a></td></tr>
 <tr class="separator:a0bf3cd626be4c099ce455ff809761c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6daf7add1e082d558b538c1a64c17aa5"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classTransform.html">Transform</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransform.html#a6daf7add1e082d558b538c1a64c17aa5">parent</a></td></tr>
+<tr class="separator:a6daf7add1e082d558b538c1a64c17aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a16290cebb1caa35d13b6b797a9657898" name="a16290cebb1caa35d13b6b797a9657898"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16290cebb1caa35d13b6b797a9657898">&#9670;&#160;</a></span>Transform()</h2>
+<a id="af696e75facb2a07a842e7a28b14f3665" name="af696e75facb2a07a842e7a28b14f3665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af696e75facb2a07a842e7a28b14f3665">&#9670;&#160;</a></span>Transform()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -165,7 +167,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const glm::vec3 &amp;&#160;</td>
-          <td class="paramname"><em>scale</em> = <code>glm::vec3(1.0f,&#160;1.0f,&#160;1.0f)</code>&#160;</td>
+          <td class="paramname"><em>scale</em> = <code>glm::vec3(1.0f,&#160;1.0f,&#160;1.0f)</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classTransform.html">Transform</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -183,8 +191,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="afd190a993ac80892bba3fe8be3f2f6e2" name="afd190a993ac80892bba3fe8be3f2f6e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd190a993ac80892bba3fe8be3f2f6e2">&#9670;&#160;</a></span>model()</h2>
+<a id="afcf51c49f1336ab5ae045ac9609715d8" name="afcf51c49f1336ab5ae045ac9609715d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcf51c49f1336ab5ae045ac9609715d8">&#9670;&#160;</a></span>model()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -193,7 +201,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">glm::mat4 Transform::model </td>
+          <td class="memname">glm::dmat4 Transform::model </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -209,6 +217,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6daf7add1e082d558b538c1a64c17aa5" name="a6daf7add1e082d558b538c1a64c17aa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6daf7add1e082d558b538c1a64c17aa5">&#9670;&#160;</a></span>parent</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classTransform.html">Transform</a>* Transform::parent</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aecfee605af55e0c6e555b5fdfd4f488a" name="aecfee605af55e0c6e555b5fdfd4f488a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aecfee605af55e0c6e555b5fdfd4f488a">&#9670;&#160;</a></span>position</h2>
 
@@ -252,7 +274,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/app/world/entity/<a class="el" href="Entity_8hpp_source.html">Entity.hpp</a></li>
+<li>src/app/world/entity/<a class="el" href="Transform_8hpp_source.html">Transform.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

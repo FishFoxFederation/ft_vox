@@ -114,6 +114,7 @@ $(document).ready(function(){initNavTree('Block_8hpp.html',''); initResizable();
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="define_8hpp_source.html">define.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="HitBox_8hpp_source.html">HitBox.hpp</a>&quot;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -121,10 +122,15 @@ Include dependency graph for Block.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="Block_8hpp__incl.png" border="0" usemap="#asrc_2app_2world_2Block_8hpp" alt=""/></div>
 <map name="asrc_2app_2world_2Block_8hpp" id="asrc_2app_2world_2Block_8hpp">
-<area shape="rect" title=" " alt="" coords="57,5,218,31"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="5,79,85,104"/>
-<area shape="rect" title=" " alt="" coords="110,79,165,104"/>
-<area shape="rect" title=" " alt="" coords="189,79,248,104"/>
+<area shape="rect" title=" " alt="" coords="203,5,365,31"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="5,225,85,251"/>
+<area shape="rect" href="HitBox_8hpp.html" title=" " alt="" coords="201,79,287,104"/>
+<area shape="rect" title=" " alt="" coords="333,152,392,177"/>
+<area shape="rect" title=" " alt="" coords="362,79,417,104"/>
+<area shape="rect" href="Transform_8hpp.html" title=" " alt="" coords="153,152,258,177"/>
+<area shape="rect" title=" " alt="" coords="411,225,503,251"/>
+<area shape="rect" title=" " alt="" coords="110,225,301,251"/>
+<area shape="rect" title=" " alt="" coords="325,225,387,251"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -132,27 +138,27 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="Block_8hpp__dep__incl.png" border="0" usemap="#asrc_2app_2world_2Block_8hppdep" alt=""/></div>
 <map name="asrc_2app_2world_2Block_8hppdep" id="asrc_2app_2world_2Block_8hppdep">
-<area shape="rect" title=" " alt="" coords="603,5,765,31"/>
+<area shape="rect" title=" " alt="" coords="590,5,751,31"/>
 <area shape="rect" href="VulkanAPI_8cpp.html" title=" " alt="" coords="5,321,203,346"/>
-<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="601,79,767,104"/>
-<area shape="rect" href="WorldGenerator_8hpp.html" title=" " alt="" coords="841,159,1060,185"/>
-<area shape="rect" href="RenderThread_8hpp.html" title=" " alt="" coords="849,313,1001,353"/>
-<area shape="rect" href="VulkanAPI_8hpp.html" title=" " alt="" coords="237,240,435,265"/>
-<area shape="rect" href="Chunk_8cpp.html" title=" " alt="" coords="601,159,767,185"/>
-<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="402,152,577,192"/>
-<area shape="rect" href="application_8hpp.html" title=" " alt="" coords="441,497,596,522"/>
-<area shape="rect" href="RenderThread_8cpp.html" title=" " alt="" coords="965,401,1117,441"/>
-<area shape="rect" href="application_8cpp.html" title=" " alt="" coords="367,577,521,603"/>
-<area shape="rect" href="main_8cpp.html" title=" " alt="" coords="545,577,641,603"/>
-<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="213,401,424,441"/>
-<area shape="rect" href="chunk__mesh_8cpp.html" title=" " alt="" coords="227,313,373,353"/>
-<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="550,321,711,346"/>
-<area shape="rect" href="BlockUpdateThread_8cpp.html" title=" " alt="" coords="207,489,417,529"/>
-<area shape="rect" href="UpdateThread_8hpp.html" title=" " alt="" coords="736,401,891,441"/>
-<area shape="rect" href="World_8cpp.html" title=" " alt="" coords="550,409,711,434"/>
-<area shape="rect" href="UpdateThread_8cpp.html" title=" " alt="" coords="736,489,891,529"/>
-<area shape="rect" href="hashes_8hpp.html" title=" " alt="" coords="459,240,597,265"/>
-<area shape="rect" href="WorldGenerator_8cpp.html" title=" " alt="" coords="963,240,1181,265"/>
+<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="588,79,753,104"/>
+<area shape="rect" href="WorldGenerator_8hpp.html" title=" " alt="" coords="828,159,1047,185"/>
+<area shape="rect" href="RenderThread_8hpp.html" title=" " alt="" coords="755,313,907,353"/>
+<area shape="rect" href="VulkanAPI_8hpp.html" title=" " alt="" coords="252,240,449,265"/>
+<area shape="rect" href="Chunk_8cpp.html" title=" " alt="" coords="588,159,753,185"/>
+<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="389,152,563,192"/>
+<area shape="rect" href="application_8hpp.html" title=" " alt="" coords="517,497,672,522"/>
+<area shape="rect" href="RenderThread_8cpp.html" title=" " alt="" coords="856,401,1008,441"/>
+<area shape="rect" href="application_8cpp.html" title=" " alt="" coords="443,577,597,603"/>
+<area shape="rect" href="main_8cpp.html" title=" " alt="" coords="621,577,717,603"/>
+<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="283,401,493,441"/>
+<area shape="rect" href="UpdateThread_8hpp.html" title=" " alt="" coords="104,401,259,441"/>
+<area shape="rect" href="chunk__mesh_8cpp.html" title=" " alt="" coords="277,313,424,353"/>
+<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="569,321,730,346"/>
+<area shape="rect" href="BlockUpdateThread_8cpp.html" title=" " alt="" coords="283,489,493,529"/>
+<area shape="rect" href="UpdateThread_8cpp.html" title=" " alt="" coords="104,489,259,529"/>
+<area shape="rect" href="World_8cpp.html" title=" " alt="" coords="569,409,730,434"/>
+<area shape="rect" href="hashes_8hpp.html" title=" " alt="" coords="473,240,612,265"/>
+<area shape="rect" href="WorldGenerator_8cpp.html" title=" " alt="" coords="929,240,1148,265"/>
 </map>
 </div>
 </div>

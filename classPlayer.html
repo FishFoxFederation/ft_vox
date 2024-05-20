@@ -106,33 +106,34 @@ $(document).ready(function(){initNavTree('classPlayer.html',''); initResizable()
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classPlayer-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Player Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="Entity_8hpp_source.html">Entity.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for Player:</div>
-<div class="dyncontent">
-<div class="center"><img src="classPlayer__inherit__graph.png" border="0" usemap="#aPlayer_inherit__map" alt="Inheritance graph"/></div>
-<map name="aPlayer_inherit__map" id="aPlayer_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,196,144,383"/>
-<area shape="rect" href="classEntity.html" title=" " alt="" coords="27,5,123,148"/>
-</map>
-</div>
+<p><code>#include &lt;<a class="el" href="Player_8hpp_source.html">Player.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Player:</div>
 <div class="dyncontent">
 <div class="center"><img src="classPlayer__coll__graph.png" border="0" usemap="#aPlayer_coll__map" alt="Collaboration graph"/></div>
 <map name="aPlayer_coll__map" id="aPlayer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,359,144,545"/>
-<area shape="rect" href="classEntity.html" title=" " alt="" coords="27,181,123,309"/>
-<area shape="rect" href="classTransform.html" title=" " alt="" coords="23,5,126,119"/>
+<area shape="rect" title=" " alt="" coords="57,240,251,632"/>
+<area shape="rect" href="classTransform.html" title=" " alt="" coords="5,27,108,141"/>
+<area shape="rect" href="classHitBox.html" title=" " alt="" coords="205,5,301,163"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a72e63c4dee307c57567fe40a08bb292d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292d">GameMode</a> { <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292da1089b25a43df6bce533f9729d6640317">SURVIVAL</a>
+, <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452">CREATIVE</a>
+, <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19">SPECTATOR</a>
+ }</td></tr>
+<tr class="separator:a72e63c4dee307c57567fe40a08bb292d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:affe0cc3cb714f6deb4e62f0c0d3f1fd8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#affe0cc3cb714f6deb4e62f0c0d3f1fd8">Player</a> ()</td></tr>
@@ -147,34 +148,96 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1e9d0d69ea3b3e666f97e784292d953c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f7fb772781161391c078b9a0070d1a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPlayer.html">Player</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a5f7fb772781161391c078b9a0070d1a4">operator=</a> (<a class="el" href="classPlayer.html">Player</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:a5f7fb772781161391c078b9a0070d1a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa620d57fddfc69ee24fc6b5d901b3535"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aa620d57fddfc69ee24fc6b5d901b3535">movePosition</a> (glm::dvec3 move)</td></tr>
-<tr class="separator:aa620d57fddfc69ee24fc6b5d901b3535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01c1cb041b540e4d657b6c2f5df149c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a01c1cb041b540e4d657b6c2f5df149c1">moveDirection</a> (double x_offset, double y_offset)</td></tr>
 <tr class="separator:a01c1cb041b540e4d657b6c2f5df149c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad67555e55c817db8a320c80fdaf75dbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ad67555e55c817db8a320c80fdaf75dbf">camera</a> () const</td></tr>
 <tr class="separator:ad67555e55c817db8a320c80fdaf75dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b274295c94912aa7d84d94476c4ad0a"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a9b274295c94912aa7d84d94476c4ad0a">getDisplacement</a> (glm::dvec3 move) const</td></tr>
-<tr class="separator:a9b274295c94912aa7d84d94476c4ad0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classEntity"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classEntity')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classEntity.html">Entity</a></td></tr>
-<tr class="memitem:a980f368aa07ce358583982821533a54a inherit pub_methods_classEntity"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#a980f368aa07ce358583982821533a54a">Entity</a> ()</td></tr>
-<tr class="separator:a980f368aa07ce358583982821533a54a inherit pub_methods_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf6d3f7cb1b2ba029b6b048a395cc8ae inherit pub_methods_classEntity"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#adf6d3f7cb1b2ba029b6b048a395cc8ae">~Entity</a> ()</td></tr>
-<tr class="separator:adf6d3f7cb1b2ba029b6b048a395cc8ae inherit pub_methods_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a670bde1e0fd6d04a4da38c9b2d8b37ca inherit pub_methods_classEntity"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#a670bde1e0fd6d04a4da38c9b2d8b37ca">Entity</a> (<a class="el" href="classEntity.html">Entity</a> &amp;other)=delete</td></tr>
-<tr class="separator:a670bde1e0fd6d04a4da38c9b2d8b37ca inherit pub_methods_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30c067e1de9094763c219fcc14c8419a inherit pub_methods_classEntity"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#a30c067e1de9094763c219fcc14c8419a">Entity</a> (<a class="el" href="classEntity.html">Entity</a> &amp;&amp;other)=delete</td></tr>
-<tr class="separator:a30c067e1de9094763c219fcc14c8419a inherit pub_methods_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38db6db3e004415d0875ac97c07ed65b inherit pub_methods_classEntity"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEntity.html">Entity</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#a38db6db3e004415d0875ac97c07ed65b">operator=</a> (<a class="el" href="classEntity.html">Entity</a> &amp;other)=delete</td></tr>
-<tr class="separator:a38db6db3e004415d0875ac97c07ed65b inherit pub_methods_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7249fe016334b0529822a456c5f01de0 inherit pub_methods_classEntity"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEntity.html">Entity</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#a7249fe016334b0529822a456c5f01de0">operator=</a> (<a class="el" href="classEntity.html">Entity</a> &amp;&amp;other)=delete</td></tr>
-<tr class="separator:a7249fe016334b0529822a456c5f01de0 inherit pub_methods_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa7dd1bda58f8f5ba21087b099ddbd2f"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#afa7dd1bda58f8f5ba21087b099ddbd2f">getTransformedMovement</a> (glm::dvec3 move) const</td></tr>
+<tr class="separator:afa7dd1bda58f8f5ba21087b099ddbd2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee30f8cfd8ace63acd9534cf902aa6a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aee30f8cfd8ace63acd9534cf902aa6a4">shouldCollide</a> () const</td></tr>
+<tr class="separator:aee30f8cfd8ace63acd9534cf902aa6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55caf512b6d6b3682b59bff8531da250"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a55caf512b6d6b3682b59bff8531da250">shouldFall</a> () const</td></tr>
+<tr class="separator:a55caf512b6d6b3682b59bff8531da250"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a789d13921a74984b368b20ffd0f82680"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a789d13921a74984b368b20ffd0f82680">startFall</a> ()</td></tr>
+<tr class="separator:a789d13921a74984b368b20ffd0f82680"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba91222919c620dde688186c4d758241"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aba91222919c620dde688186c4d758241">fallDuration</a> ()</td></tr>
+<tr class="separator:aba91222919c620dde688186c4d758241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_classEntity"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classEntity')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classEntity.html">Entity</a></td></tr>
-<tr class="memitem:a7766644984b868ccecf24b3aede7279f inherit pub_attribs_classEntity"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTransform.html">Transform</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEntity.html#a7766644984b868ccecf24b3aede7279f">transform</a></td></tr>
-<tr class="separator:a7766644984b868ccecf24b3aede7279f inherit pub_attribs_classEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a3b9c92200177ccc5ab23fc2c8f436b98"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a3b9c92200177ccc5ab23fc2c8f436b98">mutex</a></td></tr>
+<tr class="separator:a3b9c92200177ccc5ab23fc2c8f436b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ad689468b2763f5b735a5e4fb78113"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292d">Player::GameMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a39ad689468b2763f5b735a5e4fb78113">gameMode</a> = <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19">GameMode::SPECTATOR</a></td></tr>
+<tr class="separator:a39ad689468b2763f5b735a5e4fb78113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51abadfb0aa236bcb754b23a60288bb5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a51abadfb0aa236bcb754b23a60288bb5">default_speed</a> = 4.0</td></tr>
+<tr class="separator:a51abadfb0aa236bcb754b23a60288bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1c35173486925d13e32f78eaf02e55e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ad1c35173486925d13e32f78eaf02e55e">sprint_speed_factor</a> = 1.5</td></tr>
+<tr class="separator:ad1c35173486925d13e32f78eaf02e55e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc1c67389d87936bfdffcc3c6e56a185"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#acc1c67389d87936bfdffcc3c6e56a185">sneak_speed_factor</a> = 0.3</td></tr>
+<tr class="separator:acc1c67389d87936bfdffcc3c6e56a185"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a524bbb599b86a71c30377d6e80e196dd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a524bbb599b86a71c30377d6e80e196dd">fly_speed_factor</a> = 3.0</td></tr>
+<tr class="separator:a524bbb599b86a71c30377d6e80e196dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2d24b4dd54f1185c3f4404ed095a2b5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aa2d24b4dd54f1185c3f4404ed095a2b5">jump_speed_factor</a> = 1.1</td></tr>
+<tr class="separator:aa2d24b4dd54f1185c3f4404ed095a2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a917e00c68233d0d719b764e0ca8dfca7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a917e00c68233d0d719b764e0ca8dfca7">jump_force</a> = 10.0</td></tr>
+<tr class="separator:a917e00c68233d0d719b764e0ca8dfca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea78fd8cb75bda147dcd592d259a2a4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a2ea78fd8cb75bda147dcd592d259a2a4">gravity</a> = -30.0</td></tr>
+<tr class="separator:a2ea78fd8cb75bda147dcd592d259a2a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51098c4bc3a16a6c76947828e6f81528"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a51098c4bc3a16a6c76947828e6f81528">on_ground</a> = false</td></tr>
+<tr class="separator:a51098c4bc3a16a6c76947828e6f81528"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9084b2ce7b780355ab0dd3b6df0ead19"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a9084b2ce7b780355ab0dd3b6df0ead19">flying</a> = false</td></tr>
+<tr class="separator:a9084b2ce7b780355ab0dd3b6df0ead19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a890a5185f4b2ed7cf01949557a2213ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a890a5185f4b2ed7cf01949557a2213ee">sneaking</a> = false</td></tr>
+<tr class="separator:a890a5185f4b2ed7cf01949557a2213ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f126c4eb73164722430f85dd2e4f1d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a5f126c4eb73164722430f85dd2e4f1d4">sprinting</a> = false</td></tr>
+<tr class="separator:a5f126c4eb73164722430f85dd2e4f1d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a226de302724871714a91df1190a8e893"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a226de302724871714a91df1190a8e893">jumping</a> = false</td></tr>
+<tr class="separator:a226de302724871714a91df1190a8e893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bbab5a2f0739cb231d161e9ed479b9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTransform.html">Transform</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d">transform</a> = <a class="el" href="classTransform.html">Transform</a>({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0})</td></tr>
+<tr class="separator:a2bbab5a2f0739cb231d161e9ed479b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa47053be56466d5290fb346782946529"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHitBox.html">HitBox</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aa47053be56466d5290fb346782946529">hitbox</a> = <a class="el" href="classHitBox.html">HitBox</a>({-0.4, 0, -0.4}, {0.8, 1.8, 0.8})</td></tr>
+<tr class="separator:aa47053be56466d5290fb346782946529"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5a2f3c133a4a93dd19965007bba82de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHitBox.html">HitBox</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ad5a2f3c133a4a93dd19965007bba82de">feet</a> = <a class="el" href="classHitBox.html">HitBox</a>({-0.4, -0.01, -0.4}, {0.8, 0.1, 0.8})</td></tr>
+<tr class="separator:ad5a2f3c133a4a93dd19965007bba82de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa467fcbbb25423c22972d0f520e94fd1"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aa467fcbbb25423c22972d0f520e94fd1">velocity</a> = glm::dvec3(0.0)</td></tr>
+<tr class="separator:aa467fcbbb25423c22972d0f520e94fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accd1f9737d5f42960d61ede6b6680b1c"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#accd1f9737d5f42960d61ede6b6680b1c">input_velocity</a> = glm::dvec3(0.0)</td></tr>
+<tr class="separator:accd1f9737d5f42960d61ede6b6680b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3bc5504d2ac3d8fd40354c7e92c1656"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ae3bc5504d2ac3d8fd40354c7e92c1656">jump_remaining</a> = 1</td></tr>
+<tr class="separator:ae3bc5504d2ac3d8fd40354c7e92c1656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a349f074eedf387a35ce879738022bf42"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a349f074eedf387a35ce879738022bf42">yaw</a> = 0.0</td></tr>
+<tr class="separator:a349f074eedf387a35ce879738022bf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affddc950dc472ad3dfd65e752957d946"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#affddc950dc472ad3dfd65e752957d946">pitch</a> = 0.0</td></tr>
+<tr class="separator:affddc950dc472ad3dfd65e752957d946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a72e63c4dee307c57567fe40a08bb292d" name="a72e63c4dee307c57567fe40a08bb292d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72e63c4dee307c57567fe40a08bb292d">&#9670;&#160;</a></span>GameMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292d">Player::GameMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a72e63c4dee307c57567fe40a08bb292da1089b25a43df6bce533f9729d6640317" name="a72e63c4dee307c57567fe40a08bb292da1089b25a43df6bce533f9729d6640317"></a>SURVIVAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452" name="a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452"></a>CREATIVE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19" name="a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19"></a>SPECTATOR&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="affe0cc3cb714f6deb4e62f0c0d3f1fd8" name="affe0cc3cb714f6deb4e62f0c0d3f1fd8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#affe0cc3cb714f6deb4e62f0c0d3f1fd8">&#9670;&#160;</a></span>Player() <span class="overload">[1/3]</span></h2>
@@ -288,14 +351,31 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a9b274295c94912aa7d84d94476c4ad0a" name="a9b274295c94912aa7d84d94476c4ad0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b274295c94912aa7d84d94476c4ad0a">&#9670;&#160;</a></span>getDisplacement()</h2>
+<a id="aba91222919c620dde688186c4d758241" name="aba91222919c620dde688186c4d758241"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba91222919c620dde688186c4d758241">&#9670;&#160;</a></span>fallDuration()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::dvec3 Player::getDisplacement </td>
+          <td class="memname">double Player::fallDuration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa7dd1bda58f8f5ba21087b099ddbd2f" name="afa7dd1bda58f8f5ba21087b099ddbd2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa7dd1bda58f8f5ba21087b099ddbd2f">&#9670;&#160;</a></span>getTransformedMovement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 Player::getTransformedMovement </td>
           <td>(</td>
           <td class="paramtype">glm::dvec3&#160;</td>
           <td class="paramname"><em>move</em></td><td>)</td>
@@ -328,24 +408,6 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa620d57fddfc69ee24fc6b5d901b3535" name="aa620d57fddfc69ee24fc6b5d901b3535"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa620d57fddfc69ee24fc6b5d901b3535">&#9670;&#160;</a></span>movePosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Player::movePosition </td>
-          <td>(</td>
-          <td class="paramtype">glm::dvec3&#160;</td>
-          <td class="paramname"><em>move</em></td><td>)</td>
-          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -404,9 +466,369 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="aee30f8cfd8ace63acd9534cf902aa6a4" name="aee30f8cfd8ace63acd9534cf902aa6a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee30f8cfd8ace63acd9534cf902aa6a4">&#9670;&#160;</a></span>shouldCollide()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::shouldCollide </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a55caf512b6d6b3682b59bff8531da250" name="a55caf512b6d6b3682b59bff8531da250"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55caf512b6d6b3682b59bff8531da250">&#9670;&#160;</a></span>shouldFall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::shouldFall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a789d13921a74984b368b20ffd0f82680" name="a789d13921a74984b368b20ffd0f82680"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a789d13921a74984b368b20ffd0f82680">&#9670;&#160;</a></span>startFall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Player::startFall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a51abadfb0aa236bcb754b23a60288bb5" name="a51abadfb0aa236bcb754b23a60288bb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51abadfb0aa236bcb754b23a60288bb5">&#9670;&#160;</a></span>default_speed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::default_speed = 4.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad5a2f3c133a4a93dd19965007bba82de" name="ad5a2f3c133a4a93dd19965007bba82de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5a2f3c133a4a93dd19965007bba82de">&#9670;&#160;</a></span>feet</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classHitBox.html">HitBox</a> Player::feet = <a class="el" href="classHitBox.html">HitBox</a>({-0.4, -0.01, -0.4}, {0.8, 0.1, 0.8})</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a524bbb599b86a71c30377d6e80e196dd" name="a524bbb599b86a71c30377d6e80e196dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a524bbb599b86a71c30377d6e80e196dd">&#9670;&#160;</a></span>fly_speed_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::fly_speed_factor = 3.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9084b2ce7b780355ab0dd3b6df0ead19" name="a9084b2ce7b780355ab0dd3b6df0ead19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9084b2ce7b780355ab0dd3b6df0ead19">&#9670;&#160;</a></span>flying</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::flying = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a39ad689468b2763f5b735a5e4fb78113" name="a39ad689468b2763f5b735a5e4fb78113"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ad689468b2763f5b735a5e4fb78113">&#9670;&#160;</a></span>gameMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292d">Player::GameMode</a> Player::gameMode = <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19">GameMode::SPECTATOR</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ea78fd8cb75bda147dcd592d259a2a4" name="a2ea78fd8cb75bda147dcd592d259a2a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ea78fd8cb75bda147dcd592d259a2a4">&#9670;&#160;</a></span>gravity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::gravity = -30.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa47053be56466d5290fb346782946529" name="aa47053be56466d5290fb346782946529"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa47053be56466d5290fb346782946529">&#9670;&#160;</a></span>hitbox</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classHitBox.html">HitBox</a> Player::hitbox = <a class="el" href="classHitBox.html">HitBox</a>({-0.4, 0, -0.4}, {0.8, 1.8, 0.8})</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="accd1f9737d5f42960d61ede6b6680b1c" name="accd1f9737d5f42960d61ede6b6680b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accd1f9737d5f42960d61ede6b6680b1c">&#9670;&#160;</a></span>input_velocity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 Player::input_velocity = glm::dvec3(0.0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a917e00c68233d0d719b764e0ca8dfca7" name="a917e00c68233d0d719b764e0ca8dfca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a917e00c68233d0d719b764e0ca8dfca7">&#9670;&#160;</a></span>jump_force</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::jump_force = 10.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae3bc5504d2ac3d8fd40354c7e92c1656" name="ae3bc5504d2ac3d8fd40354c7e92c1656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3bc5504d2ac3d8fd40354c7e92c1656">&#9670;&#160;</a></span>jump_remaining</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Player::jump_remaining = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa2d24b4dd54f1185c3f4404ed095a2b5" name="aa2d24b4dd54f1185c3f4404ed095a2b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2d24b4dd54f1185c3f4404ed095a2b5">&#9670;&#160;</a></span>jump_speed_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::jump_speed_factor = 1.1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a226de302724871714a91df1190a8e893" name="a226de302724871714a91df1190a8e893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a226de302724871714a91df1190a8e893">&#9670;&#160;</a></span>jumping</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::jumping = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3b9c92200177ccc5ab23fc2c8f436b98" name="a3b9c92200177ccc5ab23fc2c8f436b98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b9c92200177ccc5ab23fc2c8f436b98">&#9670;&#160;</a></span>mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex Player::mutex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a51098c4bc3a16a6c76947828e6f81528" name="a51098c4bc3a16a6c76947828e6f81528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51098c4bc3a16a6c76947828e6f81528">&#9670;&#160;</a></span>on_ground</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::on_ground = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="affddc950dc472ad3dfd65e752957d946" name="affddc950dc472ad3dfd65e752957d946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affddc950dc472ad3dfd65e752957d946">&#9670;&#160;</a></span>pitch</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::pitch = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc1c67389d87936bfdffcc3c6e56a185" name="acc1c67389d87936bfdffcc3c6e56a185"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc1c67389d87936bfdffcc3c6e56a185">&#9670;&#160;</a></span>sneak_speed_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::sneak_speed_factor = 0.3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a890a5185f4b2ed7cf01949557a2213ee" name="a890a5185f4b2ed7cf01949557a2213ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a890a5185f4b2ed7cf01949557a2213ee">&#9670;&#160;</a></span>sneaking</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::sneaking = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad1c35173486925d13e32f78eaf02e55e" name="ad1c35173486925d13e32f78eaf02e55e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1c35173486925d13e32f78eaf02e55e">&#9670;&#160;</a></span>sprint_speed_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::sprint_speed_factor = 1.5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5f126c4eb73164722430f85dd2e4f1d4" name="a5f126c4eb73164722430f85dd2e4f1d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f126c4eb73164722430f85dd2e4f1d4">&#9670;&#160;</a></span>sprinting</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::sprinting = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2bbab5a2f0739cb231d161e9ed479b9d" name="a2bbab5a2f0739cb231d161e9ed479b9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bbab5a2f0739cb231d161e9ed479b9d">&#9670;&#160;</a></span>transform</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classTransform.html">Transform</a> Player::transform = <a class="el" href="classTransform.html">Transform</a>({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0})</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa467fcbbb25423c22972d0f520e94fd1" name="aa467fcbbb25423c22972d0f520e94fd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa467fcbbb25423c22972d0f520e94fd1">&#9670;&#160;</a></span>velocity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 Player::velocity = glm::dvec3(0.0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a349f074eedf387a35ce879738022bf42" name="a349f074eedf387a35ce879738022bf42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a349f074eedf387a35ce879738022bf42">&#9670;&#160;</a></span>yaw</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Player::yaw = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/app/world/entity/<a class="el" href="Entity_8hpp_source.html">Entity.hpp</a></li>
-<li>src/app/world/entity/<a class="el" href="Entity_8cpp.html">Entity.cpp</a></li>
+<li>src/app/world/entity/<a class="el" href="Player_8hpp_source.html">Player.hpp</a></li>
+<li>src/app/world/entity/<a class="el" href="Player_8cpp.html">Player.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
