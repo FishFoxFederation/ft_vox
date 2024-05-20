@@ -44,7 +44,7 @@ void UpdateThread::launch()
 	}
 	catch (const std::exception & e)
 	{
-		LOG_ERROR("Thread exception: " << e.what());
+		LOG_ERROR("UPDATE THREAD Thread exception: " << e.what());
 	}
 	LOG_DEBUG("Thread stopped");
 }
@@ -71,12 +71,28 @@ void UpdateThread::updateTime()
 
 void UpdateThread::readInput()
 {
-	m_w_key = m_window.input().getKeyState(GLFW_KEY_W);
-	m_a_key = m_window.input().getKeyState(GLFW_KEY_A);
-	m_s_key = m_window.input().getKeyState(GLFW_KEY_S);
-	m_d_key = m_window.input().getKeyState(GLFW_KEY_D);
-	m_space_key = m_window.input().getKeyState(GLFW_KEY_SPACE);
-	m_left_shift_key = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
+	int move_forward_key_status = m_window.input().getKeyState(GLFW_KEY_W);
+	int move_left_key_status = m_window.input().getKeyState(GLFW_KEY_A);
+	int move_backward_key_status = m_window.input().getKeyState(GLFW_KEY_S);
+	int move_right_key_status = m_window.input().getKeyState(GLFW_KEY_D);
+	int jump_key_status = m_window.input().getKeyState(GLFW_KEY_SPACE);
+	int sneak_key_status = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
+	int attack_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_LEFT);
+	int use_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
+
+	m_move_forward = (move_forward_key_status == GLFW_PRESS) ? 1 : 0;
+	m_move_left = (move_left_key_status == GLFW_PRESS) ? 1 : 0;
+	m_move_backward = (move_backward_key_status == GLFW_PRESS) ? 1 : 0;
+	m_move_right = (move_right_key_status == GLFW_PRESS) ? 1 : 0;
+	m_jump = (jump_key_status == GLFW_PRESS) ? 1 : 0;
+	m_sneak = (sneak_key_status == GLFW_PRESS) ? 1 : 0;
+	m_attack = (attack_key_status == GLFW_PRESS) ? 1 : 0;
+	m_use = (use_key_status == GLFW_PRESS) ? 1 : 0;
+
+	if (m_attack)
+	{
+		m_world.playerAttack(m_world.m_my_player_id);
+	}
 
 	int reset = m_window.input().getKeyState(GLFW_KEY_R);
 	int gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
@@ -138,14 +154,14 @@ void UpdateThread::movePlayer()
 		look = glm::dvec2(0.0);
 	}
 
-	m_world.updatePlayer(
+	m_world.updatePlayerPosition(
 		m_world.m_my_player_id,
-		(m_w_key == GLFW_PRESS ? 1 : 0),
-		(m_s_key == GLFW_PRESS ? 1 : 0),
-		(m_a_key == GLFW_PRESS ? 1 : 0),
-		(m_d_key == GLFW_PRESS ? 1 : 0),
-		(m_space_key == GLFW_PRESS ? 1 : 0),
-		(m_left_shift_key == GLFW_PRESS ? 1 : 0),
+		m_move_forward,
+		m_move_backward,
+		m_move_left,
+		m_move_right,
+		m_jump,
+		m_sneak,
 		static_cast<double>(m_delta_time.count()) / 1e9
 	);
 

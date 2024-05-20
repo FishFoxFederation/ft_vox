@@ -30,7 +30,7 @@ void BlockUpdateThread::launch()
 	}
 	catch (const std::exception & e)
 	{
-		LOG_ERROR("Thread exception: " << e.what());
+		LOG_ERROR(" BLOCKUPDATE Thread exception: " << e.what());
 	}
 	LOG_DEBUG("Thread stopped");
 }

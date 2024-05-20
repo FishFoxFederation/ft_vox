@@ -99,6 +99,7 @@ void VulkanAPI::destroyMeshes()
 			auto mesh = meshes.get(id);
 			if (mesh.is_used == false)
 			{
+				LOG_DEBUG("Destroying mesh " << id);
 				vkDestroyBuffer(device, mesh.buffer, nullptr);
 				vma.freeMemory(device, mesh.buffer_memory, nullptr);
 				meshes.erase(id);

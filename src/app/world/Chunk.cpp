@@ -59,6 +59,11 @@ void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 	//REGENERATE MESH HERE
 }
 
+void Chunk::setBlock(const glm::vec3 & position, BlockID block)
+{
+	setBlock((int)position.x, (int)position.y, (int)position.z, block);
+}
+
 const uint64_t & Chunk::getMeshID() const
 {
 	return m_mesh_id;

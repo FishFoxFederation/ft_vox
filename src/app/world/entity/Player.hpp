@@ -32,6 +32,9 @@ public:
 
 	glm::dvec3 getTransformedMovement(glm::dvec3 move) const;
 
+	glm::dvec3 eyePosition() const; // the position of the eyes relative to entity position
+	glm::dvec3 direction() const;
+
 	bool shouldCollide() const;
 	bool shouldFall() const;
 
@@ -79,8 +82,5 @@ private:
 	std::chrono::nanoseconds fall_start_time = std::chrono::nanoseconds(0);
 	glm::dvec3 fall_start_position = glm::dvec3(0.0);
 
-	glm::dvec3 eyePosition() const; // the position of the eyes relative to entity position
-	glm::dvec3 direction() const;
 	void updateTransform();
-
 };

@@ -35,7 +35,7 @@ public:
 	void updateEntities();
 	void updateBlock(glm::dvec3 position);
 
-	void updatePlayer(
+	void updatePlayerPosition(
 		const uint64_t player_id,
 		const int8_t forward,
 		const int8_t backward,
@@ -45,6 +45,7 @@ public:
 		const int8_t down,
 		const double delta_time
 	);
+	void playerAttack(const uint64_t player_id);
 	void updatePlayer(
 		const uint64_t player_id,
 		std::function<void(Player &)> update
@@ -55,6 +56,7 @@ public:
 	uint64_t m_my_player_id;
 
 private:
+
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
@@ -82,6 +84,9 @@ private:
 	std::mutex								m_finished_futures_mutex;
 
 	uint64_t								m_future_id = 0;
+
+	std::queue<std::pair<glm::vec3, BlockID>> m_blocks_to_set;
+	std::mutex								m_blocks_to_set_mutex;
 
 
 
@@ -152,11 +157,20 @@ private:
 	void	meshChunks(const glm::vec3 & playerPosition);
 
 	/**
+	 * @brief will mesh a chunk
+	 *
+	 * @param chunkPosition
+	 */
+	void 	meshChunk(const glm::ivec2 & chunkPosition);
+
+	/**
 	 * @brief Will load, unload and mesh chunks around the player
 	 *
 	 * @param playerPosition
 	 */
 	void 	updateChunks(const glm::vec3 & playerPosition);
+
+	void 	doBlockSets();
 
 
 	/*************************************
@@ -168,7 +182,8 @@ private:
 	/*************************************
 	 *  ENTITIES
 	 *************************************/
-	bool 	hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position);
+	bool hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position);
+	std::optional<glm::vec3> rayCast(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance);
 
 };
 
