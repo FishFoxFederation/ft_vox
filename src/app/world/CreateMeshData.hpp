@@ -109,6 +109,7 @@ public:
 		),
 		size(size)
 	{
+		// LOG_INFO("CREATE MESH DATA CONSTRUCTOR " << __LINE__);
 		for (int x = -1; x <= size.x; x++)
 		{
 			for (int y = -1; y <= size.y; y++)
@@ -139,17 +140,37 @@ public:
 		face_data(std::move(other.face_data)),
 		size(std::move(other.size))
 	{
-		// other.chunks.clear();
-		// other.vertices.clear();
-		// other.indices.clear();
-		// other.face_data.clear();
+		other.chunks.clear();
+		other.vertices.clear();
+		other.indices.clear();
+		other.face_data.clear();
+	}
+
+	CreateMeshData & operator=(CreateMeshData && other)
+	{
+		if (this != &other)
+		{
+			chunks = std::move(other.chunks);
+			vertices = std::move(other.vertices);
+			indices = std::move(other.indices);
+			face_data = std::move(other.face_data);
+			size = std::move(other.size);
+
+			other.chunks.clear();
+			other.vertices.clear();
+			other.indices.clear();
+			other.face_data.clear();
+		}
+
+		return *this;
 	}
 
 	~CreateMeshData()
 	{
+
 		if (chunks.empty())
 			return;
-
+		// LOG_INFO("CREATE MESH DATA DESTRUCTOR " << __LINE__);
 		for (int x = 0; x < size.x + 2; x++)
 		{
 			for (int y = 0; y < size.y + 2; y++)
@@ -163,6 +184,7 @@ public:
 				}
 			}
 		}
+
 	}
 
 	enum
@@ -422,7 +444,7 @@ public:
 						}
 
 						glm::vec2 tex_coord = { saved_offset[dim_1], saved_offset[dim_2] };
-						// tex_coord = {1.0f, 1.0f};
+						tex_coord = {1.0f, 1.0f};
 
 						for (int i = 0; i < 4; i++)
 						{

@@ -58,6 +58,8 @@ bool Status::tryAddReader()
 void Status::removeReader()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
+	if (m_readers == 0)
+		LOG_CRITICAL("BIG BIG MISTAKE YOU'VE MADE");
 	m_readers--;
 	if (m_readers == 0)
 		m_cv.notify_all();
@@ -84,6 +86,8 @@ bool Status::tryAddWriter()
 void Status::removeWriter()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
+	if (m_writers == 0)
+		LOG_CRITICAL("BIG BIG MISTAKE YOU'VE MADE");
 	m_writers--;
 	m_cv.notify_all();
 }

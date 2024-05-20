@@ -41,12 +41,14 @@ private:
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
-	int m_w_key;
-	int m_a_key;
-	int m_s_key;
-	int m_d_key;
-	int m_space_key;
-	int m_left_shift_key;
+	int m_move_forward;
+	int m_move_left;
+	int m_move_backward;
+	int m_move_right;
+	int m_jump;
+	int m_sneak;
+	int m_attack;
+	int m_use;
 
 	double m_mouse_x;
 	double m_mouse_y;
