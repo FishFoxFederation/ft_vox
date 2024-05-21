@@ -447,7 +447,7 @@ public:
 						}
 
 						glm::vec2 tex_coord = { saved_offset[dim_1], saved_offset[dim_2] };
-						tex_coord = {1.0f, 1.0f};
+						// tex_coord = {1.0f, 1.0f};
 
 						for (int i = 0; i < 4; i++)
 						{

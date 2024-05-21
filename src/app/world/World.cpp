@@ -443,14 +443,9 @@ void World::updatePlayerPosition(
 	// but we need to modify it's y component for handling jump when walking
 	if (player->gameMode != Player::GameMode::SPECTATOR && !player->flying)
 	{
-		if (player->on_ground)
+		if (up && player->canJump())
 		{
-			if (up && player->jump_remaining > 0)
-			{
-				player->velocity.y = player->jump_force;
-				player->jump_remaining--;
-				player->jumping = true;
-			}
+			player->startJump();
 		}
 
 		// if not flying, the y component of the input force is ignored
@@ -543,6 +538,10 @@ void World::playerAttack(
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 
+	if (!player->canAttack())
+		return;
+	player->startAttack();
+
 	glm::dvec3 position = player->transform.position + player->eyePosition();
 	glm::dvec3 direction = player->direction();
 	std::optional<glm::vec3> hit = rayCastOnBlock(position, direction, 5.0);
@@ -564,7 +563,7 @@ void World::playerAttack(
 
 			if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 			{
-				LOG_DEBUG("Block hit: " << block_position.x << " " << block_position.y << " " << block_position.z << " = " << int(block_id));
+				// LOG_DEBUG("Block hit: " << block_position.x << " " << block_position.y << " " << block_position.z << " = " << int(block_id));
 
 				std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
 				m_blocks_to_set.push({block_position, Block::Air.id});

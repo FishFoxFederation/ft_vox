@@ -79,3 +79,29 @@ double Player::fallDuration()
 {
 	return static_cast<double>((std::chrono::steady_clock::now().time_since_epoch() - fall_start_time).count()) / 1e9;
 }
+
+bool Player::canJump() const
+{
+	return on_ground
+		&& jump_remaining > 0
+		&& std::chrono::steady_clock::now().time_since_epoch() - last_jump_time > jump_delai;
+}
+
+void Player::startJump()
+{
+	velocity.y = jump_force;
+	jump_remaining--;
+	jumping = true;
+	last_jump_time = std::chrono::steady_clock::now().time_since_epoch();
+}
+
+bool Player::canAttack() const
+{
+	return gameMode != GameMode::SPECTATOR
+		&& std::chrono::steady_clock::now().time_since_epoch() - last_attack_time > attack_delai;
+}
+
+void Player::startAttack()
+{
+	last_attack_time = std::chrono::steady_clock::now().time_since_epoch();
+}
