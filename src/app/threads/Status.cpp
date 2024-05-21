@@ -1,7 +1,7 @@
 #include "Status.hpp"
 
 Status::Status()
-	: m_writers(0), m_readers(0)
+	: m_writer(0), m_readers(0)
 {
 
 }
@@ -12,42 +12,42 @@ Status::~Status()
 }
 
 Status::Status(const Status & other)
-: m_writers(other.m_writers), m_readers(other.m_readers)
+: m_writer(other.m_writer), m_readers(other.m_readers)
 {
 
 }
 
 Status & Status::operator=(const Status & other)
 {
-	m_writers = other.m_writers;
+	m_writer = other.m_writer;
 	m_readers = other.m_readers;
 	return *this;
 }
 
 Status::Status(Status && other)
-: m_writers(other.m_writers), m_readers(other.m_readers)
+: m_writer(other.m_writer), m_readers(other.m_readers)
 {
 
 }
 
 Status & Status::operator=(Status && other)
 {
-	m_writers = other.m_writers;
+	m_writer = other.m_writer;
 	m_readers = other.m_readers;
 	return *this;
 }
 
-void Status::addReader()
+void Status::lock_shared()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	m_cv.wait(lock, [this](){return m_writers == 0;});
+	m_cv.wait(lock, [this](){return m_writer == 0;});
 	m_readers++;
 }
 
-bool Status::tryAddReader()
+bool Status::try_lock_shared()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	if (m_writers == 0)
+	if (m_writer == 0)
 	{
 		m_readers++;
 		return true;
@@ -55,7 +55,7 @@ bool Status::tryAddReader()
 	return false;
 }
 
-void Status::removeReader()
+void Status::unlock_shared()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
 	if (m_readers == 0)
@@ -65,55 +65,53 @@ void Status::removeReader()
 		m_cv.notify_all();
 }
 
-void Status::addWriter()
+void Status::lock()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	m_cv.wait(lock, [this](){return m_writers == 0 && m_readers == 0;});
-	m_writers++;
+	m_cv.wait(lock, [this](){return m_writer == 0 && m_readers == 0;});
+	m_writer = 1;
 }
 
-bool Status::tryAddWriter()
+bool Status::try_lock()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	if (m_writers == 0 && m_readers == 0)
+	if (m_writer == 0 && m_readers == 0)
 	{
-		m_writers++;
+		m_writer = 1;
 		return true;
 	}
 	return false;
 }
 
-void Status::removeWriter()
+void Status::unlock()
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	if (m_writers == 0)
+	if (m_writer == 0)
 		LOG_CRITICAL("BIG BIG MISTAKE YOU'VE MADE");
-	m_writers--;
+	m_writer = 0;
 	m_cv.notify_all();
 }
 
-bool Status::hasWriters() const
+bool Status::isLocked() const
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	return m_writers > 0;
+	return m_writer > 0;
 }
 
-bool Status::hasReaders() const
+bool Status::isShareLocked() const
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
 	return m_readers > 0;
 }
 
-bool Status::isReadable() const
+bool Status::isLockable() const
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	if(m_writers < 0)
-		LOG_DEBUG("OK I FUCKED UP");
-	return m_writers == 0;
+	return m_writer == 0 && m_readers == 0;
 }
 
-bool Status::isWritable() const
+bool Status::isShareLockable() const
 {
 	std::unique_lock<std::mutex> lock(m_mutex);
-	return m_writers == 0 && m_readers == 0;
+	return m_writer == 0;
 }

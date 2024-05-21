@@ -59,7 +59,7 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 				if (it != m_chunks.end())
 					continue;
 				auto ret = m_chunks.insert(std::make_pair(chunkPos3D, Chunk(chunkPos3D)));
-				ret.first->second.status.addWriter();
+				ret.first->second.status.lock();
 
 				uint64_t current_id = m_future_id++;
 				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id]()
@@ -75,7 +75,7 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 						m_loaded_chunks.insert(chunkPos2D);
 						m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())) = std::move(chunk);
 						//line under is commented because the new chunk that is being moved in has a blank status
-						// m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.removeWriter();
+						// m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.unlock();
 					}
 
 					{
@@ -148,7 +148,7 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 				}
 
 				//will block and wait
-				it->second.status.addWriter();
+				it->second.status.lock();
 
 				{
 					std::lock_guard<std::mutex> lock(m_chunks_mutex);
@@ -216,7 +216,7 @@ void World::meshChunk(const glm::ivec2 & chunkPos2D)
 		for(int z = -1; z < 2; z++)
 		{
 			glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
-			if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isReadable())
+			if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
 			{
 				unavailable_neighbours = true;
 				break;
@@ -345,18 +345,18 @@ void World::doBlockSets()
 				LOG_DEBUG("BEFORE AT");
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 				LOG_DEBUG("AFTER AT");
-			// 	if (chunk.status.hasReaders())
+			// 	if (chunk.status.isShareLocked())
 			// 		LOG_DEBUG("Chunk has readers");
-			// 	if (chunk.status.hasWriters())
+			// 	if (chunk.status.isLocked())
 			// 		LOG_DEBUG("Chunk has writers");
-			// if (chunk.status.tryAddWriter() == false)
+			// if (chunk.status.try_lock() == false)
 			// {
 			// 	LOG_DEBUG("Chunk is busy");
 			// 	return;
 			// }
-				chunk.status.addWriter();
+				chunk.status.lock();
 				chunk.setBlock(block_chunk_position, block_id);
-				chunk.status.removeWriter();
+				chunk.status.unlock();
 
 				m_visible_chunks.erase(chunk_position2D);
 				if (block_chunk_position.x == 0)
@@ -581,9 +581,9 @@ void World::playerAttack(
 		{
 			Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 
-			chunk.status.addReader();
+			chunk.status.lock_shared();
 			BlockID block_id = chunk.getBlock(block_chunk_position);
-			chunk.status.removeReader();
+			chunk.status.unlock_shared();
 
 			if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 			{
@@ -644,9 +644,9 @@ bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & p
 				{
 					Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 
-					chunk.status.addReader();
+					chunk.status.lock_shared();
 					BlockID block_id = chunk.getBlock(block_chunk_position);
-					chunk.status.removeReader();
+					chunk.status.unlock_shared();
 
 					if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 					{
@@ -682,9 +682,9 @@ std::optional<glm::vec3>  World::rayCast(const glm::vec3 & origin, const glm::ve
 			{
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 
-				chunk.status.addReader();
+				chunk.status.lock_shared();
 				BlockID block_id = chunk.getBlock(block_chunk_position);
-				chunk.status.removeReader();
+				chunk.status.unlock_shared();
 
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{

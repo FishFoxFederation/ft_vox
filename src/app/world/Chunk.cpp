@@ -35,8 +35,10 @@ Chunk & Chunk::operator=(const Chunk && other)
 
 Chunk::~Chunk()
 {
-	if (!this->status.hasWriters())
-		this->status.addWriter();
+	if (!status.isLocked())
+	{
+		status.lock();
+	}
 }
 
 BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const
