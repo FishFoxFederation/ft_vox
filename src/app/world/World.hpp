@@ -183,7 +183,7 @@ private:
 	 *  ENTITIES
 	 *************************************/
 	bool hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position);
-	std::optional<glm::vec3> rayCast(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance);
+	std::optional<glm::vec3> rayCastOnBlock(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance);
 
 };
 
