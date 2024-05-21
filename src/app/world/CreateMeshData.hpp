@@ -122,7 +122,7 @@ public:
 					if (it != chunk_map.end())
 					{
 						chunks[x + 1][y + 1][z + 1] = &it->second;
-						it->second.status.addReader();
+						it->second.status.lock_shared();
 					}
 				}
 			}
@@ -179,7 +179,7 @@ public:
 				{
 					if (chunks[x][y][z] != nullptr)
 					{
-						chunks[x][y][z]->status.removeReader();
+						chunks[x][y][z]->status.unlock_shared();
 					}
 				}
 			}

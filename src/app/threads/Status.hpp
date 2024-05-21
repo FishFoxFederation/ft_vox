@@ -20,7 +20,7 @@ public:
 	 * @brief adds a reader to the status
 	 * @warning WILL BLOCK until it can add a reader
 	 */
-	void addReader();
+	void lock_shared();
 
 	/**
 	 * @brief Tries to add a reader to the status, will NOT block
@@ -28,18 +28,18 @@ public:
 	 * @return true if it added a reader \\
 	 * @return false if it did not add a reader
 	 */
-	bool tryAddReader();
+	bool try_lock_shared();
 
 	/**
 	 * @brief removes a reader from the status
 	 */
-	void removeReader();
+	void unlock_shared();
 
 	/**
 	 * @brief adds a writer to the status
 	 * @warning WILL BLOCK until it can add a writer
 	 */
-	void addWriter();
+	void lock();
 
 	/**
 	 * @brief Tries to add a writer to the status, will NOT block
@@ -47,20 +47,20 @@ public:
 	 * @return true if it added a writer \\
 	 * @return false if it did not add a writer
 	 */
-	bool tryAddWriter();
+	bool try_lock();
 
 	/**
 	 * @brief removes a writer from the status
 	 */
-	void removeWriter();
+	void unlock();
 
-	bool hasWriters() const;
-	bool hasReaders() const;
-	bool isReadable() const;
-	bool isWritable() const;
+	bool isLocked() const;
+	bool isShareLocked() const;
+	bool isLockable() const;
+	bool isShareLockable() const;
 
 private:
-	int m_writers;
+	int m_writer;
 	int m_readers;
 	mutable std::mutex m_mutex ;
 	std::condition_variable m_cv;	
