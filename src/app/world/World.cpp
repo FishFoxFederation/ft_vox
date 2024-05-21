@@ -29,9 +29,7 @@ World::~World()
 void World::updateBlock(glm::dvec3 position)
 {
 	updateChunks(position);
-	LOG_DEBUG("UPDATED CHUNKS");
 	waitForFinishedFutures();
-	LOG_DEBUG("WAITED FOR FUTURES");
 }
 
 // void World::update(glm::dvec3 nextPlayerPosition)
@@ -244,24 +242,20 @@ void World::meshChunk(const glm::ivec2 & chunkPos2D)
 		 * CALCULATE MESH FUNCTION
 		 **************************************************************/
 		// LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
-		// std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+		std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
 		//create all mesh data needed ( pointers to neighbors basically )
 		// CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
-		LOG_DEBUG(__LINE__);
 		Chunk & chunk = *mesh_data.getCenterChunk();
-		LOG_DEBUG(__LINE__);
 
 		uint64_t old_mesh_scene_id;
 
 		//destroy old mesh if it exists
 		old_mesh_scene_id = chunk.getMeshID();
-		LOG_DEBUG(__LINE__);
 
 
 		mesh_data.create(); //CPU intensive task to create the mesh
 		//storing mesh in the GPU
-		LOG_DEBUG(__LINE__);
 		uint64_t mesh_id = m_vulkanAPI.storeMesh(
 			mesh_data.vertices.data(),
 			mesh_data.vertices.size(),
@@ -269,7 +263,6 @@ void World::meshChunk(const glm::ivec2 & chunkPos2D)
 			mesh_data.indices.data(),
 			mesh_data.indices.size()
 		);
-		LOG_DEBUG(__LINE__);
 
 		//adding mesh id to the scene so it is rendered
 		if(mesh_id != IdList<uint64_t, Mesh>::invalid_id)
@@ -280,7 +273,6 @@ void World::meshChunk(const glm::ivec2 & chunkPos2D)
 			});
 			chunk.setMeshID(mesh_scene_id);
 		}
-		LOG_DEBUG(__LINE__);
 
 		if (m_worldScene.chunk_mesh_list.contains(old_mesh_scene_id))
 		{
@@ -288,18 +280,17 @@ void World::meshChunk(const glm::ivec2 & chunkPos2D)
 			m_worldScene.chunk_mesh_list.erase(old_mesh_scene_id);
 			m_vulkanAPI.destroyMesh(mesh_id);
 		}
-		LOG_DEBUG(__LINE__);
 
 		{
 			std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 			m_finished_futures.push(current_id);
-			LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
-
+			// LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
 		}
-		LOG_DEBUG(__LINE__);
 
-		// std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-		// DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
+		mesh_data.unlock();
+
+		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
+		DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 	});
 	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
@@ -311,11 +302,8 @@ void World::updateChunks(const glm::vec3 & playerPosition)
 	std::lock_guard<std::mutex> lock4(m_visible_chunks_mutex);
 	std::lock_guard<std::mutex> lock5(m_unload_set_mutex);
 	loadChunks(playerPosition);
-	LOG_DEBUG("LOADED CHUNKS");
 	unloadChunks(playerPosition);
-	LOG_DEBUG("UNLOADED CHUNKS");
 	meshChunks(playerPosition);
-	LOG_DEBUG("MESHED CHUNKS");
 	doBlockSets();
 }
 
@@ -342,18 +330,7 @@ void World::doBlockSets()
 
 			if (m_loaded_chunks.contains(chunk_position2D))
 			{
-				LOG_DEBUG("BEFORE AT");
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-				LOG_DEBUG("AFTER AT");
-			// 	if (chunk.status.isShareLocked())
-			// 		LOG_DEBUG("Chunk has readers");
-			// 	if (chunk.status.isLocked())
-			// 		LOG_DEBUG("Chunk has writers");
-			// if (chunk.status.try_lock() == false)
-			// {
-			// 	LOG_DEBUG("Chunk is busy");
-			// 	return;
-			// }
 				chunk.status.lock();
 				chunk.setBlock(block_chunk_position, block_id);
 				chunk.status.unlock();
@@ -375,7 +352,7 @@ void World::doBlockSets()
 			m_finished_futures.push(current_id);
 		}
 	});
-
+	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
 void World::waitForFinishedFutures()
@@ -568,7 +545,7 @@ void World::playerAttack(
 
 	glm::dvec3 position = player->transform.position + player->eyePosition();
 	glm::dvec3 direction = player->direction();
-	std::optional<glm::vec3> hit = rayCast(position, direction, 5.0);
+	std::optional<glm::vec3> hit = rayCastOnBlock(position, direction, 5.0);
 	if (hit.has_value())
 	{
 		glm::vec3 block_position = hit.value();
@@ -595,10 +572,10 @@ void World::playerAttack(
 
 		}
 	}
-	else
-	{
-		LOG_DEBUG("No block hit");
-	}
+	// else
+	// {
+	// 	LOG_DEBUG("No block hit");
+	// }
 }
 
 void World::updatePlayer(
@@ -664,7 +641,7 @@ bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & p
 	return false;
 }
 
-std::optional<glm::vec3>  World::rayCast(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance)
+std::optional<glm::vec3>  World::rayCastOnBlock(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance)
 {
 	glm::vec3 position = origin;
 	glm::vec3 direction_normalized = glm::normalize(direction);
@@ -688,7 +665,7 @@ std::optional<glm::vec3>  World::rayCast(const glm::vec3 & origin, const glm::ve
 
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
-					// for now treat all blocks as solid cubes
+					// for now treat all blocks as cubes
 					return block_position;
 				}
 

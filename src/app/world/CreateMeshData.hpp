@@ -167,10 +167,13 @@ public:
 
 	~CreateMeshData()
 	{
+		unlock();
+	}
 
+	void unlock()
+	{
 		if (chunks.empty())
 			return;
-		// LOG_INFO("CREATE MESH DATA DESTRUCTOR " << __LINE__);
 		for (int x = 0; x < size.x + 2; x++)
 		{
 			for (int y = 0; y < size.y + 2; y++)
@@ -184,7 +187,7 @@ public:
 				}
 			}
 		}
-
+		chunks.clear();
 	}
 
 	enum
