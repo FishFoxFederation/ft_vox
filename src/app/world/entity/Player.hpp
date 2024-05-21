@@ -38,8 +38,14 @@ public:
 	bool shouldCollide() const;
 	bool shouldFall() const;
 
+	bool canJump() const;
+	void startJump();
+
 	void startFall();
 	double fallDuration();
+
+	bool canAttack() const;
+	void startAttack();
 
 	std::mutex mutex;
 
@@ -81,6 +87,12 @@ private:
 
 	std::chrono::nanoseconds fall_start_time = std::chrono::nanoseconds(0);
 	glm::dvec3 fall_start_position = glm::dvec3(0.0);
+
+	std::chrono::nanoseconds last_jump_time = std::chrono::steady_clock::now().time_since_epoch();
+	std::chrono::milliseconds jump_delai = std::chrono::milliseconds(500);
+
+	std::chrono::nanoseconds last_attack_time = std::chrono::steady_clock::now().time_since_epoch();
+	std::chrono::milliseconds attack_delai = std::chrono::milliseconds(200);
 
 	void updateTransform();
 };
