@@ -14,6 +14,7 @@ class Socket
 {
 public:
 	virtual ~Socket();
+	int getFd() const;
 
 	Socket(const Socket& other) = delete;
 	Socket& operator=(const Socket& other) = delete;

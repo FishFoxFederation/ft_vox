@@ -1,7 +1,7 @@
 #include "Connection.hpp"
 
-Connection::Connection(ConnectionSocket && connection)
-: ConnectionSocket(std::move(connection))
+Connection::Connection(std::shared_ptr<Socket> socket)
+: m_socket(socket)
 {
 }
 
@@ -10,20 +10,24 @@ Connection::~Connection()
 }
 
 Connection::Connection(Connection&& other)
-: ConnectionSocket(std::move(other))
+: m_socket(std::move(other.m_socket))
 {
+	m_read_buffer = std::move(other.m_read_buffer);
+	m_write_buffer = std::move(other.m_write_buffer);
 }
 
 Connection& Connection::operator=(Connection&& other)
 {
 	if (this != &other)
 	{
-		ConnectionSocket::operator=(std::move(other));
+		m_socket = std::move(other.m_socket);
+		m_read_buffer = std::move(other.m_read_buffer);
+		m_write_buffer = std::move(other.m_write_buffer);
 	}
 	return *this;
 }
 
-std::vector<char> Connection::getReadBuffer() const
+std::vector<uint8_t> Connection::getReadBuffer() const
 {
 	std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
 	return m_read_buffer;
@@ -38,7 +42,7 @@ void Connection::reduceReadBuffer(size_t size)
 ssize_t Connection::recv()
 {
 	char buffer[1024];
-	ssize_t size = ConnectionSocket::recv(buffer, sizeof(buffer));
+	ssize_t size = ::recv(m_socket->getFd(), buffer, sizeof(buffer), MSG_DONTWAIT);
 	if (size == -1)
 	{
 		if (errno != EAGAIN && errno != EWOULDBLOCK)
@@ -61,7 +65,7 @@ ssize_t Connection::sendQueue()
 	if (m_write_buffer.empty())
 		return;
 	std::cout << "Sending data\n";
-	ssize_t size = ConnectionSocket::send(m_write_buffer.data(), m_write_buffer.size());
+	ssize_t size = ::send(m_socket->getFd(), m_write_buffer.data(), m_write_buffer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (size == -1)
 	{
 		if (errno != EAGAIN && errno != EWOULDBLOCK)
@@ -74,12 +78,11 @@ ssize_t Connection::sendQueue()
 	return size;
 }
 
-void Connection::queueAndSendMessage(const std::string & msg)
+void Connection::queueAndSendMessage(const std::vector<uint8_t> & msg)
 {
 	{
 		std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
 		m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
 	}
-
 	sendQueue();
 }

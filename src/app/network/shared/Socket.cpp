@@ -42,3 +42,8 @@ void Socket::close()
 		m_sockfd = -1;
 	}
 }
+
+int Socket::getFd() const
+{
+	return m_sockfd;
+}
