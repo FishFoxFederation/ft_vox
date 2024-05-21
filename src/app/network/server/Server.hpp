@@ -8,6 +8,8 @@
 #include "ServerSocket.hpp"
 #include "Connection.hpp"
 #include "Poller.hpp"
+#include "PacketFactory.hpp"
+#include "IncomingPacketList.hpp"
 
 class Server
 {
@@ -26,6 +28,13 @@ public:
 	 */
 	void run();
 
+	void stop();
+
+	void send(std::shared_ptr<IPacket> packet);
+	void sendAll(std::shared_ptr<IPacket> packet);
+
+	IncomingPacketList & get_incoming_packets();
+
 	class ClientDisconnected : public std::exception
 	{
 	public:
@@ -40,9 +49,11 @@ public:
 	};
 private:
 
-	bool										m_running;
+	std::atomic<bool>							m_running;
 	Poller										m_poller;
 	ServerSocket								m_server_socket;
+	PacketFactory							&	m_packet_factory;
+	IncomingPacketList							m_incoming_packets;
 	std::unordered_map<uint64_t, Connection>	m_connections;
 
 

@@ -1,12 +1,18 @@
 #include "Server.hpp"
 
-Server::Server(int port) : m_running(true), m_server_socket(port)
+Server::Server(int port)
+: m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::getInstance())
 {
 	m_poller.add(0, m_server_socket);
 }
 
 Server::~Server()
 {
+}
+
+void Server::stop()
+{
+	m_running = false;
 }
 
 void Server::run()
@@ -29,7 +35,7 @@ void Server::run()
 				Connection connection(m_server_socket.accept());
 				auto ret = m_connections.insert(std::make_pair(get_new_id(), std::move(connection)));
 				LOG_INFO("New client id : " + std::to_string(ret.first->first));
-				m_poller.add(ret.first->first, ret.first->second);
+				m_poller.add(ret.first->first, ret.first->second.getSocket());
 			}
 
 			/**********************************************
@@ -58,7 +64,7 @@ void Server::run()
 				catch (const ClientDisconnected & e)
 				{
 					LOG_INFO("Client disconnected :" + std::to_string(e.id()));
-					m_poller.remove(currentClient->second);
+					m_poller.remove(currentClient->second.getSocket());
 					m_connections.erase(currentClient);
 				}
 			}
@@ -90,6 +96,14 @@ int Server::read_data(Connection & connection, uint64_t id)
 			throw ClientDisconnected(id);
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
+		std::vector<uint8_t> & buffer = connection.getReadBufferRef();
+		auto ret = m_packet_factory.getPacketType(buffer.data(), buffer.size());
+		if (ret.first)
+		{
+			auto packet = m_packet_factory.CreatePacket(ret.second, buffer.data());
+			connection.reduceReadBuffer(m_packet_factory.getSize(ret.second));
+			m_incoming_packets.push(packet);
+		}
 	}
 	catch (const std::runtime_error & e)
 	{
@@ -112,4 +126,27 @@ int Server::send_data(Connection & connection, uint64_t id)
 		throw ClientDisconnected(id);
 	}
 	return ret;
+}
+
+void Server::send(std::shared_ptr<IPacket> packet)
+{
+	auto currentClient = m_connections.find(packet->GetConnectionId());
+
+	if (currentClient == m_connections.end())
+	{
+		LOG_ERROR("Client not found");
+		return;
+	}
+
+	std::vector<uint8_t> buffer(packet->Size());
+	packet->Serialize(buffer.data());
+	currentClient->second.queueAndSendMessage(buffer);
+}
+
+void Server::sendAll(std::shared_ptr<IPacket> packet)
+{
+	std::vector<uint8_t> buffer(packet->Size());
+	packet->Serialize(buffer.data());
+	for (auto & [id, connection] : m_connections)
+		connection.queueAndSendMessage(buffer);
 }

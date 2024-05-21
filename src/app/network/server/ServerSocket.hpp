@@ -2,6 +2,7 @@
 
 #include "Socket.hpp"
 #include <cstring>
+#include <memory>
 #include <netdb.h>
 #include <netinet/tcp.h>
 
@@ -22,7 +23,7 @@ public:
 	ServerSocket(ServerSocket&& other);
 	ServerSocket& operator=(ServerSocket&& other);
 
-	ConnectionSocket accept();
+	std::shared_ptr<Socket> accept();
 private:
 
 };

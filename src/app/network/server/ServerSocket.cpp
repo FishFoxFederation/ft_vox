@@ -55,7 +55,7 @@ ServerSocket& ServerSocket::operator=(ServerSocket&& other)
 	return *this;
 }
 
-ConnectionSocket ServerSocket::accept()
+std::shared_ptr<ConnectionSocket> ServerSocket::accept()
 {
 	struct sockaddr_storage their_addr;
 	socklen_t addr_size = sizeof(their_addr);
@@ -63,5 +63,5 @@ ConnectionSocket ServerSocket::accept()
 	if (new_fd == -1)
 		throw std::runtime_error("Failed to accept connection");
 		
-	return ConnectionSocket(new_fd);
+	return (std::make_shared<ConnectionSocket>(new_fd));
 }
