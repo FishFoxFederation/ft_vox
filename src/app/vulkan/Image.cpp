@@ -411,7 +411,7 @@ Image::Image(
 		view_create_info.subresourceRange.baseArrayLayer = 0;
 		view_create_info.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
 
-		if (files_count > 0)
+		if (files_count > 1)
 		{
 			view_create_info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
 		}

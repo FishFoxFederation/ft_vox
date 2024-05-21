@@ -46,6 +46,7 @@ public:
 		const double delta_time
 	);
 	void playerAttack(const uint64_t player_id);
+	void playerAttack_dda(const uint64_t player_id);
 	void updatePlayer(
 		const uint64_t player_id,
 		std::function<void(Player &)> update
@@ -183,7 +184,26 @@ private:
 	 *  ENTITIES
 	 *************************************/
 	bool hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position);
+
+	/*************************************
+	 *  RAYCAST
+	 *************************************/
 	std::optional<glm::vec3> rayCastOnBlock(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance);
+
+	struct RayCastOnBlockResult
+	{
+		bool hit;
+		glm::vec3 block_position;
+		glm::vec3 normal;
+		glm::vec3 hit_position;
+		BlockID block;
+	};
+
+	RayCastOnBlockResult rayCastOnBlock_dda(
+		const glm::vec3 & origin,
+		const glm::vec3 & direction,
+		const double max_distance
+	);
 
 };
 
