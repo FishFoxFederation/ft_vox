@@ -67,10 +67,10 @@ void RenderThread::loop()
 
 	updateTime();
 
-	int width, height;
-	glfwGetFramebufferSize(vk.window, &width, &height);
+	int window_width, window_height;
+	glfwGetFramebufferSize(vk.window, &window_width, &window_height);
 
-	const double aspect_ratio = static_cast<double>(width) / static_cast<double>(height);
+	const double aspect_ratio = static_cast<double>(window_width) / static_cast<double>(window_height);
 
 	const glm::mat4 clip = glm::mat4(
 		1.0f, 0.0f, 0.0f, 0.0f,
@@ -476,6 +476,47 @@ void RenderThread::loop()
 	vkCmdDraw(
 		vk.draw_command_buffers[vk.current_frame],
 		36,
+		1,
+		0,
+		0
+	);
+
+
+	// Draw gui
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> gui_descriptor_sets = {
+		vk.crosshair_image_descriptor.set
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.gui_pipeline.layout,
+		0,
+		static_cast<uint32_t>(gui_descriptor_sets.size()),
+		gui_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	GuiTextureData gui_texture_data = {};
+	gui_texture_data.window_size = glm::vec2(window_width, window_height);
+	gui_texture_data.position = glm::vec2(0.0);
+	gui_texture_data.size = glm::vec2(window_width, window_height);
+
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.gui_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(GuiTextureData),
+		&gui_texture_data
+	);
+
+	vkCmdDraw(
+		vk.draw_command_buffers[vk.current_frame],
+		6,
 		1,
 		0,
 		0

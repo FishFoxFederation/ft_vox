@@ -149,6 +149,13 @@ struct ShadowMapLight
 	glm::mat4 model;
 };
 
+struct GuiTextureData
+{
+	glm::vec2 window_size;
+	glm::vec2 position;
+	glm::vec2 size;
+};
+
 struct ImGuiTexture
 {
 	VkImage image;
@@ -279,6 +286,8 @@ public:
 	Image skybox_cube_map;
 	Image shadow_map_depth_attachement;
 
+	Image crosshair_image;
+
 	// Uniform buffers for the camera matrices
 	std::vector<VkBuffer> camera_uniform_buffers;
 	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
@@ -304,6 +313,7 @@ public:
 	Descriptor shadow_map_descriptor;
 	Descriptor test_image_descriptor;
 	Descriptor sun_descriptor;
+	Descriptor crosshair_image_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
@@ -314,6 +324,7 @@ public:
 	Pipeline shadow_pipeline;
 	Pipeline test_image_pipeline;
 	Pipeline entity_pipeline;
+	Pipeline gui_pipeline;
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
@@ -392,6 +403,7 @@ private:
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
 	void createFrustumLineBuffers();
+	void createTextureImage(const std::string & file_path);
 
 	void createDescriptors();
 	void createRenderPass();

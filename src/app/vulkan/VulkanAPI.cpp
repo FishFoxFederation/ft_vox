@@ -35,6 +35,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 		"assets/textures/skybox/back.jpg"
 	}, 512);
 	createFrustumLineBuffers();
+	createTextureImage("assets/textures/gui/crosshair.png");
 
 	createDescriptors();
 	createRenderPass();
@@ -120,6 +121,7 @@ VulkanAPI::~VulkanAPI()
 		shadow_map_depth_attachement.clear();
 		block_textures.clear();
 		skybox_cube_map.clear();
+		crosshair_image.clear();
 
 		camera_descriptor.clear();
 		block_textures_descriptor.clear();
@@ -127,6 +129,7 @@ VulkanAPI::~VulkanAPI()
 		shadow_map_descriptor.clear();
 		test_image_descriptor.clear();
 		sun_descriptor.clear();
+		crosshair_image_descriptor.clear();
 
 		chunk_pipeline.clear();
 		line_pipeline.clear();
@@ -134,6 +137,7 @@ VulkanAPI::~VulkanAPI()
 		shadow_pipeline.clear();
 		test_image_pipeline.clear();
 		entity_pipeline.clear();
+		gui_pipeline.clear();
 
 		swapchain.clear();
 	}
@@ -937,6 +941,25 @@ void VulkanAPI::createFrustumLineBuffers()
 	}
 }
 
+void VulkanAPI::createTextureImage(const std::string & file_path)
+{
+	{ // crosshair
+		Image::CreateInfo image_info = {};
+		image_info.file_paths = {file_path};
+		image_info.extent = {32, 32};
+		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.create_view = true;
+		image_info.create_sampler = true;
+
+		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+		crosshair_image = Image(device, physical_device, command_buffer, image_info);
+	}
+}
+
 void VulkanAPI::createDescriptors()
 {
 	{ // Camera descriptor
@@ -1063,6 +1086,28 @@ void VulkanAPI::createDescriptors()
 			device,
 			shadow_map_depth_attachement.view,
 			shadow_map_depth_attachement.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		);
+	}
+
+	{ // CrossHair image descriptor
+		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+		sampler_layout_binding.binding = 0;
+		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding.descriptorCount = 1;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { sampler_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		crosshair_image_descriptor = Descriptor(device, descriptor_info);
+
+		crosshair_image_descriptor.update(
+			device,
+			crosshair_image.view,
+			crosshair_image.sampler,
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		);
 	}
@@ -1322,6 +1367,24 @@ void VulkanAPI::createPipelines()
 		pipeline_info.render_pass = lighting_render_pass;
 
 		entity_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // Gui pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = swapchain.extent;
+		pipeline_info.vert_path = "shaders/gui_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/gui_shader.frag.spv";
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			crosshair_image_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(GuiTextureData) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+
+		gui_pipeline = Pipeline(device, pipeline_info);
 	}
 
 }

@@ -91,7 +91,7 @@ void UpdateThread::readInput()
 
 	if (m_attack)
 	{
-		m_world.playerAttack(m_world.m_my_player_id);
+		m_world.playerAttack_dda(m_world.m_my_player_id);
 	}
 
 	int reset = m_window.input().getKeyState(GLFW_KEY_R);

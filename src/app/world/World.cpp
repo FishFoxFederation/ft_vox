@@ -577,6 +577,37 @@ void World::playerAttack(
 	// }
 }
 
+void World::playerAttack_dda(
+	const uint64_t player_id
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+
+	if (!player->canAttack())
+		return;
+	player->startAttack();
+
+
+	glm::dvec3 position = player->transform.position + player->eyePosition();
+	glm::dvec3 direction = player->direction();
+	RayCastOnBlockResult raycast = rayCastOnBlock_dda(position, direction, 5.0);
+	if (raycast.hit)
+	{
+		LOG_DEBUG("Block hit: "
+			<< raycast.block_position.x << " " << raycast.block_position.y << " " << raycast.block_position.z
+			<< " = " << int(raycast.block)
+		);
+
+		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		m_blocks_to_set.push({raycast.block_position, Block::Air.id});
+	}
+	else
+	{
+		LOG_DEBUG("No block hit");
+	}
+}
+
 void World::updatePlayer(
 	const uint64_t player_id,
 	std::function<void(Player &)> update
@@ -675,4 +706,87 @@ std::optional<glm::vec3>  World::rayCastOnBlock(const glm::vec3 & origin, const 
 	}
 
 	return std::nullopt;
+}
+
+World::RayCastOnBlockResult World::rayCastOnBlock_dda(
+	const glm::vec3 & origin,
+	const glm::vec3 & direction,
+	const double max_distance
+)
+{
+	glm::vec3 position = origin;
+	glm::vec3 direction_normalized = glm::normalize(direction);
+	glm::vec3 block_position = glm::floor(position);
+
+	// step is sign of the direction
+	glm::vec3 step = glm::sign(direction_normalized);
+	// delta is the distance between blocks
+	// but the distance is wrong, only the relation between the components is important
+	glm::vec3 delta = glm::abs(1.0f / direction_normalized);
+	// side_dist is the distance from the current position to the next block
+	glm::vec3 side_dist = glm::abs(glm::fract(position) - 1.0f) * delta;
+
+
+	for (float d = 0.0f; d < max_distance; d += 0.1f)
+	{
+		LOG_DEBUG("raycast block_position: " << block_position.x << " " << block_position.y << " " << block_position.z);
+		glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
+		glm::vec3 chunk_position = getChunkPosition(block_position);
+		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+		{
+			std::lock_guard<std::mutex> lock(m_chunks_mutex);
+			if (m_loaded_chunks.contains(chunk_position2D))
+			{
+				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
+
+				BlockID block_id;
+				{
+					std::lock_guard<Status> lock(chunk.status);
+					block_id = chunk.getBlock(block_chunk_position);
+				}
+
+				glm::vec3 normal = glm::vec3(0.0f);
+				glm::vec3 hit_position = glm::vec3(0.0f);
+
+				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
+				{
+					// for now treat all blocks as cubes
+					return {
+						true,
+						block_position,
+						normal,
+						hit_position,
+						block_id
+					};
+				}
+			}
+		}
+
+		// find the axis with the smallest side_dist
+		int axis = 0;
+		if (side_dist.y < side_dist.x)
+		{
+			axis = 1;
+			if (side_dist.z < side_dist.y)
+				axis = 2;
+		}
+		else if (side_dist.z < side_dist.x)
+		{
+			axis = 2;
+		}
+
+		// increment the side_dist
+		side_dist[axis] += delta[axis];
+
+		// increment the offset
+		block_position[axis] += step[axis];
+	}
+
+	return {
+		false,
+		glm::vec3(0.0f),
+		glm::vec3(0.0f),
+		glm::vec3(0.0f),
+		BlockID::Air
+	};
 }
