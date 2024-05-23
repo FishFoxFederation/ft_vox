@@ -90,6 +90,7 @@ private:
 
 	std::chrono::nanoseconds last_jump_time = std::chrono::steady_clock::now().time_since_epoch();
 	std::chrono::milliseconds jump_delai = std::chrono::milliseconds(500);
+	std::chrono::milliseconds jump_delai_after_fall = std::chrono::milliseconds(100);
 
 	std::chrono::nanoseconds last_attack_time = std::chrono::steady_clock::now().time_since_epoch();
 	std::chrono::milliseconds attack_delai = std::chrono::milliseconds(200);

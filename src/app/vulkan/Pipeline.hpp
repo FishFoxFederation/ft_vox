@@ -41,6 +41,10 @@ public:
 		std::vector<VkPushConstantRange> push_constant_ranges = {};
 
 		VkRenderPass render_pass = VK_NULL_HANDLE;
+
+		std::vector<VkDynamicState> dynamic_states = {};
+
+		bool enable_alpha_blending = false;
 	};
 
 	Pipeline():
@@ -107,6 +111,12 @@ public:
 		input_assembly.primitiveRestartEnable = VK_FALSE;
 
 
+		VkPipelineDynamicStateCreateInfo dynamic_state{};
+		dynamic_state.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		dynamic_state.dynamicStateCount = static_cast<uint32_t>(create_info.dynamic_states.size());
+		dynamic_state.pDynamicStates = create_info.dynamic_states.data();
+
+
 		VkViewport viewport = {};
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
@@ -122,9 +132,15 @@ public:
 		VkPipelineViewportStateCreateInfo viewport_state = {};
 		viewport_state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		viewport_state.viewportCount = 1;
-		viewport_state.pViewports = &viewport;
 		viewport_state.scissorCount = 1;
-		viewport_state.pScissors = &scissor;
+		if (std::find(create_info.dynamic_states.begin(), create_info.dynamic_states.end(), VK_DYNAMIC_STATE_VIEWPORT) == create_info.dynamic_states.end())
+		{
+			viewport_state.pViewports = &viewport;
+		}
+		if (std::find(create_info.dynamic_states.begin(), create_info.dynamic_states.end(), VK_DYNAMIC_STATE_SCISSOR) == create_info.dynamic_states.end())
+		{
+			viewport_state.pScissors = &scissor;
+		}
 
 
 		VkPipelineRasterizationStateCreateInfo rasterizer = {};
@@ -149,6 +165,17 @@ public:
 		VkPipelineColorBlendAttachmentState color_blend_attachment = {};
 		color_blend_attachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
 		color_blend_attachment.blendEnable = VK_FALSE;
+
+		if (create_info.enable_alpha_blending)
+		{
+			color_blend_attachment.blendEnable = VK_TRUE;
+			color_blend_attachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			color_blend_attachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+			color_blend_attachment.colorBlendOp = VK_BLEND_OP_ADD;
+			color_blend_attachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+			color_blend_attachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+			color_blend_attachment.alphaBlendOp = VK_BLEND_OP_ADD;
+		}
 
 		std::vector<VkPipelineColorBlendAttachmentState> color_blend_attachments(create_info.color_formats.size(), color_blend_attachment);
 
@@ -204,6 +231,7 @@ public:
 		pipeline_info.pMultisampleState = &multisampling;
 		pipeline_info.pColorBlendState = &color_blending;
 		pipeline_info.pDepthStencilState = &depth_stencil;
+		pipeline_info.pDynamicState = &dynamic_state;
 		pipeline_info.layout = layout;
 
 		if (create_info.render_pass == VK_NULL_HANDLE)
