@@ -1371,7 +1371,7 @@ void VulkanAPI::createPipelines()
 
 	{ // Gui pipeline
 		Pipeline::CreateInfo pipeline_info = {};
-		pipeline_info.extent = swapchain.extent;
+		pipeline_info.extent = color_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/gui_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/gui_shader.frag.spv";
 		pipeline_info.color_formats = { color_attachement.format };
@@ -1383,6 +1383,8 @@ void VulkanAPI::createPipelines()
 			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(GuiTextureData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
+		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_VIEWPORT };
+		pipeline_info.enable_alpha_blending = true;
 
 		gui_pipeline = Pipeline(device, pipeline_info);
 	}

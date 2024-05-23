@@ -500,19 +500,18 @@ void RenderThread::loop()
 		nullptr
 	);
 
-	GuiTextureData gui_texture_data = {};
-	gui_texture_data.window_size = glm::vec2(window_width, window_height);
-	gui_texture_data.position = glm::vec2(0.0);
-	gui_texture_data.size = glm::vec2(window_width, window_height);
+	float min_size = std::min(vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height);
+	float size = min_size / 40.0f;
 
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.gui_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(GuiTextureData),
-		&gui_texture_data
-	);
+	VkViewport viewport = {};
+	viewport.x = static_cast<float>(vk.color_attachement.extent2D.width / 2 - (size / 2));
+	viewport.y = static_cast<float>(vk.color_attachement.extent2D.height / 2 - (size / 2));
+	viewport.width = size;
+	viewport.height = size;
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+
+	vkCmdSetViewport(vk.draw_command_buffers[vk.current_frame], 0, 1, &viewport);
 
 	vkCmdDraw(
 		vk.draw_command_buffers[vk.current_frame],

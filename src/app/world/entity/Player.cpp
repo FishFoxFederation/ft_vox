@@ -82,7 +82,7 @@ double Player::fallDuration()
 
 bool Player::canJump() const
 {
-	return on_ground
+	return (on_ground || std::chrono::steady_clock::now().time_since_epoch() - fall_start_time < jump_delai_after_fall)
 		&& jump_remaining > 0
 		&& std::chrono::steady_clock::now().time_since_epoch() - last_jump_time > jump_delai;
 }
