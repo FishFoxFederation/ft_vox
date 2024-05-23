@@ -13,6 +13,7 @@
 #include "Camera.hpp"
 
 #include <unordered_map>
+#include <shared_mutex>
 
 class World
 {
@@ -45,8 +46,18 @@ public:
 		const int8_t down,
 		const double delta_time
 	);
-	void playerAttack(const uint64_t player_id);
-	void playerAttack_dda(const uint64_t player_id);
+	void updatePlayerCamera(
+		const uint64_t player_id,
+		const double x_offset,
+		const double y_offset
+	);
+	void updatePlayerTargetBlock(
+		const uint64_t player_id
+	);
+	void playerAttack(
+		const uint64_t player_id,
+		bool attack
+	);
 	void updatePlayer(
 		const uint64_t player_id,
 		std::function<void(Player &)> update
@@ -188,18 +199,7 @@ private:
 	/*************************************
 	 *  RAYCAST
 	 *************************************/
-	std::optional<glm::vec3> rayCastOnBlock(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance);
-
-	struct RayCastOnBlockResult
-	{
-		bool hit;
-		glm::vec3 block_position;
-		glm::vec3 normal;
-		glm::vec3 hit_position;
-		BlockID block;
-	};
-
-	RayCastOnBlockResult rayCastOnBlock_dda(
+	RayCastOnBlockResult rayCastOnBlock(
 		const glm::vec3 & origin,
 		const glm::vec3 & direction,
 		const double max_distance

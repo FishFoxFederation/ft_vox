@@ -89,10 +89,7 @@ void UpdateThread::readInput()
 	m_attack = (attack_key_status == GLFW_PRESS) ? 1 : 0;
 	m_use = (use_key_status == GLFW_PRESS) ? 1 : 0;
 
-	if (m_attack)
-	{
-		m_world.playerAttack_dda(m_world.m_my_player_id);
-	}
+	m_world.playerAttack(m_world.m_my_player_id, m_attack);
 
 	int reset = m_window.input().getKeyState(GLFW_KEY_R);
 	int gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
@@ -165,13 +162,17 @@ void UpdateThread::movePlayer()
 		static_cast<double>(m_delta_time.count()) / 1e9
 	);
 
-	m_world.updatePlayer(
+	m_world.updatePlayerCamera(
 		m_world.m_my_player_id,
-		[look](Player & player)
-		{
-			player.moveDirection(look.x, look.y);
-		}
+		look.x,
+		look.y
 	);
+
+	if (m_current_time - m_last_target_block_update_time > m_target_block_update_interval)
+	{
+		m_world.updatePlayerTargetBlock(m_world.m_my_player_id);
+		m_last_target_block_update_time = m_current_time;
+	}
 
 	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
 }
