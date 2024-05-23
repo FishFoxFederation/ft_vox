@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <mutex>
+#include <optional>
 
 /**
  * @brief Class to hold the world scene. The instance of this class will be
@@ -96,6 +97,20 @@ public:
 	 */
 	const Camera & camera() const { return m_camera; }
 
+	/**
+	 * @brief Function to set the target block.
+	 *
+	 * @param target_block The position of the block the camera is looking at. Can be std::nullopt.
+	 */
+	void setTargetBlock(const std::optional<glm::ivec3> & target_block) { m_target_block = target_block; }
+
+	/**
+	 * @brief Function to get the target block.
+	 *
+	 * @return The position of the block the camera is looking at.
+	 */
+	std::optional<glm::ivec3> targetBlock() const { return m_target_block; }
+
 	// MeshList chunk_mesh_list;
 	IdList<uint64_t, MeshRenderData> chunk_mesh_list;
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
@@ -103,4 +118,7 @@ public:
 private:
 
 	Camera m_camera;
+
+	// position of the block the camera is looking at
+	std::optional<glm::ivec3> m_target_block;
 };

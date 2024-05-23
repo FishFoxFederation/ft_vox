@@ -4,12 +4,24 @@
 #include "Transform.hpp"
 #include "Camera.hpp"
 #include "HitBox.hpp"
+#include "Block.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <cstdint>
+#include <chrono>
+#include <mutex>
+#include <optional>
 
+struct RayCastOnBlockResult
+{
+	bool hit;
+	glm::vec3 block_position;
+	glm::vec3 normal;
+	glm::vec3 hit_position;
+	BlockID block;
+};
 class Player
 {
 
@@ -82,6 +94,8 @@ public:
 
 	double yaw = 0.0;
 	double pitch = 0.0;
+
+	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id};
 
 private:
 

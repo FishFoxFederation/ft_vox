@@ -531,81 +531,66 @@ void World::updatePlayerPosition(
 	}
 }
 
-void World::playerAttack(
+void World::updatePlayerCamera(
+	const uint64_t player_id,
+	const double x_offset,
+	const double y_offset
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::unique_lock<std::mutex> guard(player->mutex);
+
+	player->moveDirection(x_offset, y_offset);
+}
+
+void World::updatePlayerTargetBlock(
 	const uint64_t player_id
 )
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
-	std::lock_guard<std::mutex> lock(player->mutex);
-
-	if (!player->canAttack())
-		return;
-	player->startAttack();
+	std::unique_lock<std::mutex> guard(player->mutex);
 
 	glm::dvec3 position = player->transform.position + player->eyePosition();
 	glm::dvec3 direction = player->direction();
-	std::optional<glm::vec3> hit = rayCastOnBlock(position, direction, 5.0);
-	if (hit.has_value())
+	guard.unlock();
+
+	RayCastOnBlockResult raycast = rayCastOnBlock(position, direction, 5.0);
+
+	std::optional<glm::vec3> target_block = raycast.hit ? std::make_optional(raycast.block_position) : std::nullopt;
+
+	m_worldScene.setTargetBlock(target_block);
+
+	guard.lock();
+	player->targeted_block = raycast;
+}
+
+void World::playerAttack(
+	const uint64_t player_id,
+	bool attack
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::unique_lock<std::mutex> guard(player->mutex);
+
+
+	if (!attack || !player->canAttack())
+		return;
+	player->startAttack();
+
+	if (player->targeted_block.hit)
 	{
-		glm::vec3 block_position = hit.value();
-		glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
-		glm::vec3 chunk_position = getChunkPosition(block_position);
-		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+		// LOG_DEBUG("Block hit: "
+		// 	<< player->targeted_block.block_position.x << " " << player->targeted_block.block_position.y << " " << player->targeted_block.block_position.z
+		// 	<< " = " << int(player->targeted_block.block)
+		// );
 
-		std::lock_guard<std::mutex> lock(m_chunks_mutex);
-		if (m_loaded_chunks.contains(chunk_position2D))
-		{
-			Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-
-			chunk.status.lock_shared();
-			BlockID block_id = chunk.getBlock(block_chunk_position);
-			chunk.status.unlock_shared();
-
-			if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
-			{
-				// LOG_DEBUG("Block hit: " << block_position.x << " " << block_position.y << " " << block_position.z << " = " << int(block_id));
-
-				std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
-				m_blocks_to_set.push({block_position, Block::Air.id});
-			}
-
-		}
+		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
 	}
 	// else
 	// {
 	// 	LOG_DEBUG("No block hit");
 	// }
-}
-
-void World::playerAttack_dda(
-	const uint64_t player_id
-)
-{
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
-	std::lock_guard<std::mutex> lock(player->mutex);
-
-	if (!player->canAttack())
-		return;
-	player->startAttack();
-
-
-	glm::dvec3 position = player->transform.position + player->eyePosition();
-	glm::dvec3 direction = player->direction();
-	RayCastOnBlockResult raycast = rayCastOnBlock_dda(position, direction, 5.0);
-	if (raycast.hit)
-	{
-		LOG_DEBUG("Block hit: "
-			<< raycast.block_position.x << " " << raycast.block_position.y << " " << raycast.block_position.z
-			<< " = " << int(raycast.block)
-		);
-
-		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
-		m_blocks_to_set.push({raycast.block_position, Block::Air.id});
-	}
-	else
-	{
-		LOG_DEBUG("No block hit");
-	}
 }
 
 void World::updatePlayer(
@@ -671,44 +656,7 @@ bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & p
 	return false;
 }
 
-std::optional<glm::vec3>  World::rayCastOnBlock(const glm::vec3 & origin, const glm::vec3 & direction, const double max_distance)
-{
-	glm::vec3 position = origin;
-	glm::vec3 direction_normalized = glm::normalize(direction);
-
-	for (float d = 0.0f; d < max_distance; d += 0.1f)
-	{
-		glm::vec3 block_position = glm::floor(position);
-		glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
-		glm::vec3 chunk_position = getChunkPosition(block_position);
-		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
-
-		{
-			std::lock_guard<std::mutex> lock(m_chunks_mutex);
-			if (m_loaded_chunks.contains(chunk_position2D))
-			{
-				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-
-				chunk.status.lock_shared();
-				BlockID block_id = chunk.getBlock(block_chunk_position);
-				chunk.status.unlock_shared();
-
-				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
-				{
-					// for now treat all blocks as cubes
-					return block_position;
-				}
-
-			}
-		}
-
-		position = origin + direction_normalized * d;
-	}
-
-	return std::nullopt;
-}
-
-World::RayCastOnBlockResult World::rayCastOnBlock_dda(
+RayCastOnBlockResult World::rayCastOnBlock(
 	const glm::vec3 & origin,
 	const glm::vec3 & direction,
 	const double max_distance
@@ -727,23 +675,22 @@ World::RayCastOnBlockResult World::rayCastOnBlock_dda(
 	glm::vec3 side_dist = glm::abs(glm::fract(position) - 1.0f) * delta;
 
 
-	for (float d = 0.0f; d < max_distance; d += 0.1f)
+	for (float d = 0.0f; d < max_distance; d += 0.5f)
 	{
-		LOG_DEBUG("raycast block_position: " << block_position.x << " " << block_position.y << " " << block_position.z);
+		// LOG_DEBUG("raycast block_position: " << block_position.x << " " << block_position.y << " " << block_position.z);
 		glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
 		glm::vec3 chunk_position = getChunkPosition(block_position);
 		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 		{
+			// LOG_DEBUG("locking m_chunks_mutex");
 			std::lock_guard<std::mutex> lock(m_chunks_mutex);
 			if (m_loaded_chunks.contains(chunk_position2D))
 			{
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 
-				BlockID block_id;
-				{
-					std::lock_guard<Status> lock(chunk.status);
-					block_id = chunk.getBlock(block_chunk_position);
-				}
+				chunk.status.lock_shared();
+				BlockID block_id = chunk.getBlock(block_chunk_position);
+				chunk.status.unlock_shared();
 
 				glm::vec3 normal = glm::vec3(0.0f);
 				glm::vec3 hit_position = glm::vec3(0.0f);

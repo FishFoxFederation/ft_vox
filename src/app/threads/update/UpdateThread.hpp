@@ -55,6 +55,9 @@ private:
 	double m_last_mouse_x;
 	double m_last_mouse_y;
 
+	std::chrono::nanoseconds m_last_target_block_update_time = std::chrono::nanoseconds(0);
+	std::chrono::milliseconds m_target_block_update_interval = std::chrono::milliseconds(10);
+
 	std::jthread m_thread;
 
 	/**
