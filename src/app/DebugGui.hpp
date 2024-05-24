@@ -106,6 +106,7 @@ public:
 	void updateImGui();
 
 	static inline std::atomic<uint32_t> fps = 0;
+	static inline std::atomic<uint32_t> ups = 0;
 	static inline std::atomic<uint64_t> rendered_triangles = 0;
 	static inline std::atomic<uint64_t> gpu_allocated_memory = 0;
 
@@ -135,5 +136,4 @@ public:
 	static inline std::atomic<double> store_mesh_create_buffer_time;
 	static inline std::atomic<double> store_mesh_copy_buffer_time;
 	static inline std::atomic<double> store_mesh_destroy_buffer_time;
-
 };

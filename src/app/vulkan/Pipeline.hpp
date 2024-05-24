@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <optional>
+#include <algorithm>
 
 class Pipeline
 {

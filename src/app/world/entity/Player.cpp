@@ -97,8 +97,7 @@ void Player::startJump()
 
 bool Player::canAttack() const
 {
-	return gameMode != GameMode::SPECTATOR
-		&& std::chrono::steady_clock::now().time_since_epoch() - last_attack_time > attack_delai;
+	return std::chrono::steady_clock::now().time_since_epoch() - last_attack_time > attack_delai;
 }
 
 void Player::startAttack()

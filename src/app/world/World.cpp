@@ -410,7 +410,6 @@ void World::updatePlayerPosition(
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 
-
 	// determine if player is on the ground or in the air and detect
 	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
 	if (on_ground && !player->on_ground) // player just landed
@@ -548,11 +547,10 @@ void World::updatePlayerTargetBlock(
 )
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
-	std::unique_lock<std::mutex> guard(player->mutex);
+	std::lock_guard<std::mutex> guard(player->mutex);
 
 	glm::dvec3 position = player->transform.position + player->eyePosition();
 	glm::dvec3 direction = player->direction();
-	guard.unlock();
 
 	RayCastOnBlockResult raycast = rayCastOnBlock(position, direction, 5.0);
 
@@ -560,7 +558,6 @@ void World::updatePlayerTargetBlock(
 
 	m_worldScene.setTargetBlock(target_block);
 
-	guard.lock();
 	player->targeted_block = raycast;
 }
 
@@ -571,7 +568,6 @@ void World::playerAttack(
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
 	std::unique_lock<std::mutex> guard(player->mutex);
-
 
 	if (!attack || !player->canAttack())
 		return;
@@ -656,6 +652,11 @@ bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & p
 	return false;
 }
 
+float pyth(float x, float y)
+{
+	return std::sqrt(x * x + y * y);
+}
+
 RayCastOnBlockResult World::rayCastOnBlock(
 	const glm::vec3 & origin,
 	const glm::vec3 & direction,
@@ -663,17 +664,25 @@ RayCastOnBlockResult World::rayCastOnBlock(
 )
 {
 	glm::vec3 position = origin;
-	glm::vec3 direction_normalized = glm::normalize(direction);
+	glm::vec3 dir = glm::normalize(direction);
 	glm::vec3 block_position = glm::floor(position);
 
+	auto debug_block = m_worldScene.debugBlocks();
+	debug_block.clear();
+
 	// step is sign of the direction
-	glm::vec3 step = glm::sign(direction_normalized);
-	// delta is the distance between blocks
-	// but the distance is wrong, only the relation between the components is important
-	glm::vec3 delta = glm::abs(1.0f / direction_normalized);
+	glm::vec3 step = glm::sign(dir);
+	// delta is the distance between blocks following the direction vector
+	// glm::vec3 delta = glm::abs(1.0f / dir);
+	glm::vec3 delta{
+		step.x * pyth(dir.x, pyth(dir.y, dir.z)),
+		step.y * pyth(dir.y, pyth(dir.x, dir.z)),
+		step.z * pyth(dir.z, pyth(dir.x, dir.y))
+	};
 	// side_dist is the distance from the current position to the next block
 	glm::vec3 side_dist = glm::abs(glm::fract(position) - 1.0f) * delta;
 
+	debug_block.push_back({origin + delta, 0.1f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)});
 
 	for (float d = 0.0f; d < max_distance; d += 0.5f)
 	{
@@ -682,7 +691,6 @@ RayCastOnBlockResult World::rayCastOnBlock(
 		glm::vec3 chunk_position = getChunkPosition(block_position);
 		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 		{
-			// LOG_DEBUG("locking m_chunks_mutex");
 			std::lock_guard<std::mutex> lock(m_chunks_mutex);
 			if (m_loaded_chunks.contains(chunk_position2D))
 			{
@@ -698,6 +706,7 @@ RayCastOnBlockResult World::rayCastOnBlock(
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
 					// for now treat all blocks as cubes
+					m_worldScene.setDebugBlock(debug_block);
 					return {
 						true,
 						block_position,
@@ -725,10 +734,11 @@ RayCastOnBlockResult World::rayCastOnBlock(
 		// increment the side_dist
 		side_dist[axis] += delta[axis];
 
-		// increment the offset
+		// increment the position
 		block_position[axis] += step[axis];
 	}
 
+	m_worldScene.setDebugBlock(debug_block);
 	return {
 		false,
 		glm::vec3(0.0f),

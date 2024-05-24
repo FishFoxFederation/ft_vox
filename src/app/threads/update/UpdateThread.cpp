@@ -19,6 +19,8 @@ UpdateThread::UpdateThread(
 	m_vulkan_api(vulkan_api),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
+	m_update_count(0),
+	m_start_time_counting_ups(start_time),
 	m_thread(&UpdateThread::launch, this)
 {
 	(void)m_vulkan_api;
@@ -61,12 +63,19 @@ void UpdateThread::loop()
 	movePlayer();
 }
 
-
 void UpdateThread::updateTime()
 {
 	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
 	m_delta_time = m_current_time - m_last_frame_time;
 	m_last_frame_time = m_current_time;
+
+	m_update_count++;
+	if (m_current_time - m_start_time_counting_ups >= std::chrono::seconds(1))
+	{
+		DebugGui::ups = static_cast<double>(m_update_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_ups).count();
+		m_update_count = 0;
+		m_start_time_counting_ups = m_current_time;
+	}
 }
 
 void UpdateThread::readInput()
@@ -151,6 +160,12 @@ void UpdateThread::movePlayer()
 		look = glm::dvec2(0.0);
 	}
 
+	// if (m_current_time - m_last_target_block_update_time > m_target_block_update_interval)
+	// {
+		m_world.updatePlayerTargetBlock(m_world.m_my_player_id);
+	// 	m_last_target_block_update_time = m_current_time;
+	// }
+
 	m_world.updatePlayerPosition(
 		m_world.m_my_player_id,
 		m_move_forward,
@@ -167,12 +182,6 @@ void UpdateThread::movePlayer()
 		look.x,
 		look.y
 	);
-
-	if (m_current_time - m_last_target_block_update_time > m_target_block_update_interval)
-	{
-		m_world.updatePlayerTargetBlock(m_world.m_my_player_id);
-		m_last_target_block_update_time = m_current_time;
-	}
 
 	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
 }
