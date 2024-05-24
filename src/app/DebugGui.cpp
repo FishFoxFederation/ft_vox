@@ -54,7 +54,7 @@ void DebugGui::updateImGui()
 				}
 				if (ImGui::CollapsingHeader("Update Thread"))
 				{
-					ImGui::Text("Fps: %d", fps.load());
+					ImGui::Text("Ups: %d", ups.load());
 				}
 				if (ImGui::CollapsingHeader("Block Update Thread"))
 				{
@@ -82,10 +82,10 @@ void DebugGui::updateImGui()
 
 				ImGui::EndTabItem();
 			}
-			
+
 			ImGui::EndTabBar();
 		}
-	
+
 	}
 	ImGui::End();
 }

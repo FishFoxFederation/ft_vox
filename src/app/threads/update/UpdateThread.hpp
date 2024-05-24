@@ -41,6 +41,10 @@ private:
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
+	// For DebugGui
+	int m_update_count;
+	std::chrono::nanoseconds m_start_time_counting_ups;
+
 	int m_move_forward;
 	int m_move_left;
 	int m_move_backward;

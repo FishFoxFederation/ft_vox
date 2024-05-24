@@ -117,6 +117,7 @@ void RenderThread::loop()
 	);
 
 	std::optional<glm::ivec3> target_block = m_world_scene.targetBlock();
+	auto debug_blocks = m_world_scene.debugBlocks();
 
 
 	//############################################################################################################
@@ -449,7 +450,8 @@ void RenderThread::loop()
 	if (target_block.has_value())
 	{
 		const glm::vec3 target_block_position = glm::vec3(target_block.value());
-		const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block_position);
+		const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.02f));
+		const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block_position - glm::vec3(0.01)) * target_block_scale;
 
 		EntityMatrices target_block_matrice = {};
 		target_block_matrice.model = target_block_model;
@@ -461,6 +463,34 @@ void RenderThread::loop()
 			0,
 			sizeof(EntityMatrices),
 			&target_block_matrice
+		);
+
+		vkCmdDrawIndexed(
+			vk.draw_command_buffers[vk.current_frame],
+			36,
+			1,
+			0,
+			0,
+			0
+		);
+	}
+
+	for (auto & data: debug_blocks)
+	{
+		const glm::vec3 size = glm::vec3(data.size);
+		const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
+		const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
+
+		EntityMatrices block_matrice = {};
+		block_matrice.model = block_model;
+		block_matrice.color = data.color;
+		vkCmdPushConstants(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.entity_pipeline.layout,
+			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			0,
+			sizeof(EntityMatrices),
+			&block_matrice
 		);
 
 		vkCmdDrawIndexed(

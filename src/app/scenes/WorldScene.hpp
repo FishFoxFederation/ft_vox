@@ -102,14 +102,48 @@ public:
 	 *
 	 * @param target_block The position of the block the camera is looking at. Can be std::nullopt.
 	 */
-	void setTargetBlock(const std::optional<glm::ivec3> & target_block) { m_target_block = target_block; }
+	void setTargetBlock(const std::optional<glm::vec3> & target_block)
+	{
+		std::lock_guard<std::mutex> lock(m_target_block_mutex);
+		m_target_block = target_block;
+	}
 
 	/**
 	 * @brief Function to get the target block.
 	 *
 	 * @return The position of the block the camera is looking at.
 	 */
-	std::optional<glm::ivec3> targetBlock() const { return m_target_block; }
+	std::optional<glm::vec3> targetBlock() const
+	{
+		std::lock_guard<std::mutex> lock(m_target_block_mutex);
+		return m_target_block;
+	}
+
+	struct DebugBlock
+	{
+		glm::vec3 position;
+		float size;
+		glm::vec4 color;
+	};
+
+	void setDebugBlock(const std::vector<DebugBlock> & debug_block)
+	{
+		std::lock_guard<std::mutex> lock(m_debug_block_mutex);
+		m_debug_block = debug_block;
+	}
+
+	void clearDebugBlocks()
+	{
+		std::lock_guard<std::mutex> lock(m_debug_block_mutex);
+		m_debug_block.clear();
+	}
+
+	std::vector<DebugBlock> debugBlocks() const
+	{
+		std::lock_guard<std::mutex> lock(m_debug_block_mutex);
+		return m_debug_block;
+	}
+
 
 	// MeshList chunk_mesh_list;
 	IdList<uint64_t, MeshRenderData> chunk_mesh_list;
@@ -120,5 +154,8 @@ private:
 	Camera m_camera;
 
 	// position of the block the camera is looking at
-	std::optional<glm::ivec3> m_target_block;
+	std::optional<glm::vec3> m_target_block;
+	mutable std::mutex m_target_block_mutex;
+	std::vector<DebugBlock> m_debug_block;
+	mutable std::mutex m_debug_block_mutex;
 };
