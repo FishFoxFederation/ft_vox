@@ -46,7 +46,7 @@ std::pair<bool, packetType> PacketFactory::getPacketType(const uint8_t * buffer,
 	return std::make_pair(false, packetType::CONNECTION);
 }
 
-PacketFactory& PacketFactory::getInstance()
+PacketFactory& PacketFactory::GetInstance()
 {
 	static PacketFactory instance;
 	return instance;

@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 Server::Server(int port)
-: m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::getInstance())
+: m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::GetInstance())
 {
 	m_poller.add(0, m_server_socket);
 }
@@ -96,12 +96,12 @@ int Server::read_data(Connection & connection, uint64_t id)
 			throw ClientDisconnected(id);
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
-		std::vector<uint8_t> & buffer = connection.getReadBufferRef();
-		auto ret = m_packet_factory.getPacketType(buffer.data(), buffer.size());
-		if (ret.first)
+		const std::vector<uint8_t> & buffer = connection.getReadBufferRef();
+		auto packetRet = m_packet_factory.getPacketType(buffer.data(), buffer.size());
+		if (packetRet.first)
 		{
-			auto packet = m_packet_factory.CreatePacket(ret.second, buffer.data());
-			connection.reduceReadBuffer(m_packet_factory.getSize(ret.second));
+			auto packet = m_packet_factory.CreatePacket(packetRet.second, buffer.data());
+			connection.reduceReadBuffer(m_packet_factory.getSize(packetRet.second));
 			m_incoming_packets.push(packet);
 		}
 	}

@@ -7,7 +7,7 @@ class ConnectionPacket : public IPacket
 {
 public:
 	ConnectionPacket();
-	ConnectionPacket(uint8_t id, glm::vec3 position);
+	ConnectionPacket(uint32_t id, glm::vec3 position);
 	~ConnectionPacket();
 
 	ConnectionPacket(const ConnectionPacket& other) = delete;
@@ -23,14 +23,14 @@ public:
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	void		Handle(World& world) const override;
+	void		Handle(const HandleArgs & args) const override;
 
-	uint8_t		GetId() const;
+	uint32_t		GetId() const;
 	glm::vec3	GetPosition() const;
 
-	void		SetId(uint8_t id);
+	void		SetId(uint32_t id);
 	void		SetPosition(glm::vec3 position);
 private:
-	uint8_t		m_id;
+	uint32_t		m_id;
 	glm::vec3	m_position;
 };

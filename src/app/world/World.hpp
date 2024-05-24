@@ -66,6 +66,15 @@ public:
 		const uint64_t player_id,
 		std::function<void(Player &)> update
 	);
+
+	//Server side 
+	uint64_t	createPlayer(const glm::vec3 & position);
+
+	//Client side
+	void		addPlayer(const uint64_t player_id, const glm::vec3 & position);
+
+	void		updatePlayerPosition(const uint64_t player_id, const glm::vec3 & position);
+
 	Camera getCamera(const uint64_t player_id);
 	glm::dvec3 getPlayerPosition(const uint64_t player_id);
 
@@ -77,7 +86,7 @@ private:
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
 
-	IdList<uint64_t, std::shared_ptr<Player>> m_players;
+	std::unordered_map<uint64_t, std::shared_ptr<Player>> m_players;
 
 	/*************************************
 	 *  CHUNKS AND MAP

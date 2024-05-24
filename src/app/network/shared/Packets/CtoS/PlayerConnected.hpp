@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../IPacket.hpp"
+#include "IPacket.hpp"
 #include "ConnectionPacket.hpp"
 
 class PlayerConnectedPacket : public IPacket
@@ -21,10 +21,16 @@ public:
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	void		Handle(Server & server) const override
+	void		Handle(const HandleArgs & args) const override
 	{
-		
-	}
+		//code executed inside the server
+		if (args.env == HandleArgs::Env::SERVER)
+		{
+			static uint8_t id = 0;
+			std::shared_ptr<ConnectionPacket> packet = std::make_shared<ConnectionPacket>(id++, glm::vec3(0, 255, 0));
+			packet->SetConnectionId(GetConnectionId());
 
-	uint64_t	GetConnectionId() const;
+			args.server->send(packet);
+		}
+	}
 };
