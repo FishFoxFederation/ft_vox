@@ -31,7 +31,7 @@ public:
 
 	std::pair<bool, packetType> getPacketType(const uint8_t * buffer, const size_t & size) const;
 
-	static PacketFactory& getInstance();
+	static PacketFactory& GetInstance();
 private:
 	PacketFactory();
 	std::unordered_map<packetType, std::shared_ptr<IPacket>> m_packets;	

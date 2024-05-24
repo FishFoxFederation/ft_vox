@@ -30,8 +30,8 @@ int main()
 				std::cout << "Packet is null" << std::endl;
 				continue;
 			}
-
-			packet->Handle(server);
+			struct IPacket::HandleArgs args = {&server, IPacket::HandleArgs::Env::SERVER, nullptr};
+			packet->Handle(args);
 		}
 	}
 }

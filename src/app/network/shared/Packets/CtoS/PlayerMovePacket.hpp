@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../IPacket.hpp"
+#include "IPacket.hpp"
 
 class PlayerMovePacket : public IPacket
 {
@@ -21,7 +21,7 @@ public:
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	void Handle(World& world) const override;
+	void Handle(const HandleArgs & args) const override;
 
 	uint8_t GetId() const;
 	glm::vec3 GetPosition() const;

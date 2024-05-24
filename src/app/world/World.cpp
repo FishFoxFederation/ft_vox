@@ -14,7 +14,7 @@ World::World(
 	std::shared_ptr<Player> my_player = std::make_shared<Player>();
 	my_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
 
-	m_my_player_id = m_players.insert(my_player);
+	// m_players.insert(std::make_pmy_player);
 
 	m_worldScene.entity_mesh_list.insert(
 		m_my_player_id, {m_vulkanAPI.cube_mesh_id, {}}
@@ -407,7 +407,7 @@ void World::updatePlayerPosition(
 	const double delta_time
 )
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 
 	// determine if player is on the ground or in the air and detect
@@ -525,7 +525,6 @@ void World::updatePlayerPosition(
 	// apply displacement
 	player->transform.position += displacement;
 
-
 	DebugGui::player_position = player->transform.position;
 
 	{ // update player mesh
@@ -632,21 +631,21 @@ void World::updatePlayer(
 	std::function<void(Player &)> update
 )
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 	update(*player);
 }
 
 Camera World::getCamera(const uint64_t player_id)
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 	return player->camera();
 }
 
 glm::dvec3 World::getPlayerPosition(const uint64_t player_id)
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 	return player->transform.position;
 }

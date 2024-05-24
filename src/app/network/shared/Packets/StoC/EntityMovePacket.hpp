@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../IPacket.hpp"
+#include "IPacket.hpp"
 #include "glm/vec3.hpp"
 
 class EntityMovePacket : public IServerToClientPacket
@@ -22,7 +22,7 @@ class EntityMovePacket : public IServerToClientPacket
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	void		Handle(World& world) const override;
+	void		Handle(const HandleArgs & args) const override;
 
 	uint32_t	GetId() const;
 	glm::vec3	GetPosition() const;
