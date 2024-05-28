@@ -652,11 +652,6 @@ bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & p
 	return false;
 }
 
-float pyth(float x, float y)
-{
-	return std::sqrt(x * x + y * y);
-}
-
 RayCastOnBlockResult World::rayCastOnBlock(
 	const glm::vec3 & origin,
 	const glm::vec3 & direction,
@@ -667,26 +662,25 @@ RayCastOnBlockResult World::rayCastOnBlock(
 	glm::vec3 dir = glm::normalize(direction);
 	glm::vec3 block_position = glm::floor(position);
 
-	auto debug_block = m_worldScene.debugBlocks();
-	debug_block.clear();
-
-	// step is sign of the direction
+	// step is sign of the direction (used to step through the block grid)
 	glm::vec3 step = glm::sign(dir);
 	// delta is the distance between blocks following the direction vector
-	// glm::vec3 delta = glm::abs(1.0f / dir);
 	glm::vec3 delta{
-		step.x * pyth(dir.x, pyth(dir.y, dir.z)),
-		step.y * pyth(dir.y, pyth(dir.x, dir.z)),
-		step.z * pyth(dir.z, pyth(dir.x, dir.y))
+		glm::length(dir * glm::abs(1.0f / dir.x)),
+		glm::length(dir * glm::abs(1.0f / dir.y)),
+		glm::length(dir * glm::abs(1.0f / dir.z))
 	};
 	// side_dist is the distance from the current position to the next block
-	glm::vec3 side_dist = glm::abs(glm::fract(position) - 1.0f) * delta;
+	glm::vec3 side_dist{
+		(dir.x > 0.0f ? (block_position.x + 1.0f - position.x) : (position.x - block_position.x)) * delta.x,
+		(dir.y > 0.0f ? (block_position.y + 1.0f - position.y) : (position.y - block_position.y)) * delta.y,
+		(dir.z > 0.0f ? (block_position.z + 1.0f - position.z) : (position.z - block_position.z)) * delta.z
+	};
 
-	debug_block.push_back({origin + delta, 0.1f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)});
-
-	for (float d = 0.0f; d < max_distance; d += 0.5f)
+	int axis = -1;
+	float min_side_dist = 0.0f;
+	while (min_side_dist < max_distance)
 	{
-		// LOG_DEBUG("raycast block_position: " << block_position.x << " " << block_position.y << " " << block_position.z);
 		glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
 		glm::vec3 chunk_position = getChunkPosition(block_position);
 		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
@@ -700,26 +694,34 @@ RayCastOnBlockResult World::rayCastOnBlock(
 				BlockID block_id = chunk.getBlock(block_chunk_position);
 				chunk.status.unlock_shared();
 
-				glm::vec3 normal = glm::vec3(0.0f);
-				glm::vec3 hit_position = glm::vec3(0.0f);
-
 				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
 					// for now treat all blocks as cubes
-					m_worldScene.setDebugBlock(debug_block);
+					glm::vec3 normal = glm::vec3(0.0f);
+					bool inside_block = false;
+					if (axis != -1)
+						normal[axis] = -step[axis];
+					else
+					{
+						inside_block = true;
+					}
+
+					const glm::vec3 hit_position = position + dir * min_side_dist;
+
 					return {
 						true,
 						block_position,
 						normal,
 						hit_position,
-						block_id
+						block_id,
+						inside_block
 					};
 				}
 			}
 		}
 
 		// find the axis with the smallest side_dist
-		int axis = 0;
+		axis = 0;
 		if (side_dist.y < side_dist.x)
 		{
 			axis = 1;
@@ -731,19 +733,22 @@ RayCastOnBlockResult World::rayCastOnBlock(
 			axis = 2;
 		}
 
+		// save the minimum side_dist
+		min_side_dist = side_dist[axis];
+
 		// increment the side_dist
 		side_dist[axis] += delta[axis];
 
-		// increment the position
+		// increment the block position
 		block_position[axis] += step[axis];
 	}
 
-	m_worldScene.setDebugBlock(debug_block);
 	return {
 		false,
 		glm::vec3(0.0f),
 		glm::vec3(0.0f),
 		glm::vec3(0.0f),
-		BlockID::Air
+		BlockID::Air,
+		false
 	};
 }
