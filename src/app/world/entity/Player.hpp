@@ -60,6 +60,9 @@ public:
 	bool canAttack() const;
 	void startAttack();
 
+	bool canUse() const;
+	void startUse();
+
 	std::mutex mutex;
 
 	enum class GameMode
@@ -109,6 +112,9 @@ private:
 
 	std::chrono::nanoseconds last_attack_time = std::chrono::steady_clock::now().time_since_epoch();
 	std::chrono::milliseconds attack_delai = std::chrono::milliseconds(200);
+
+	std::chrono::nanoseconds last_use_time = std::chrono::steady_clock::now().time_since_epoch();
+	std::chrono::milliseconds use_delai = std::chrono::milliseconds(200);
 
 	void updateTransform();
 };

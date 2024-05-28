@@ -104,3 +104,13 @@ void Player::startAttack()
 {
 	last_attack_time = std::chrono::steady_clock::now().time_since_epoch();
 }
+
+bool Player::canUse() const
+{
+	return std::chrono::steady_clock::now().time_since_epoch() - last_use_time > use_delai;
+}
+
+void Player::startUse()
+{
+	last_use_time = std::chrono::steady_clock::now().time_since_epoch();
+}

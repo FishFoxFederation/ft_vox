@@ -567,7 +567,7 @@ void World::playerAttack(
 )
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
-	std::unique_lock<std::mutex> guard(player->mutex);
+	std::lock_guard<std::mutex> guard(player->mutex);
 
 	if (!attack || !player->canAttack())
 		return;
@@ -587,6 +587,36 @@ void World::playerAttack(
 	// {
 	// 	LOG_DEBUG("No block hit");
 	// }
+}
+
+void World::playerUse(
+	const uint64_t player_id,
+	bool use
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::lock_guard<std::mutex> guard(player->mutex);
+
+	if (!use || !player->canUse())
+		return;
+	player->startUse();
+
+	if (player->targeted_block.hit)
+	{
+		glm::vec3 block_placed_position = player->targeted_block.block_position + player->targeted_block.normal;
+
+		// check collision with player
+		if (isColliding(
+			player->hitbox,
+			player->transform.position,
+			Block::getData(player->targeted_block.block).hitbox,
+			block_placed_position
+		))
+			return;
+
+		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		m_blocks_to_set.push({block_placed_position, Block::Stone.id});
+	}
 }
 
 void World::updatePlayer(
