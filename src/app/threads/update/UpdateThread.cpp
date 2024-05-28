@@ -99,6 +99,7 @@ void UpdateThread::readInput()
 	m_use = (use_key_status == GLFW_PRESS) ? 1 : 0;
 
 	m_world.playerAttack(m_world.m_my_player_id, m_attack);
+	m_world.playerUse(m_world.m_my_player_id, m_use);
 
 	int reset = m_window.input().getKeyState(GLFW_KEY_R);
 	int gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
@@ -160,11 +161,11 @@ void UpdateThread::movePlayer()
 		look = glm::dvec2(0.0);
 	}
 
-	// if (m_current_time - m_last_target_block_update_time > m_target_block_update_interval)
-	// {
+	if (m_current_time - m_last_target_block_update_time > m_target_block_update_interval)
+	{
 		m_world.updatePlayerTargetBlock(m_world.m_my_player_id);
-	// 	m_last_target_block_update_time = m_current_time;
-	// }
+		m_last_target_block_update_time = m_current_time;
+	}
 
 	m_world.updatePlayerPosition(
 		m_world.m_my_player_id,
