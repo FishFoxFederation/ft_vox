@@ -116,7 +116,7 @@ void RenderThread::loop()
 		sun_near, sun_far
 	);
 
-	std::optional<glm::ivec3> target_block = m_world_scene.targetBlock();
+	std::optional<glm::vec3> target_block = m_world_scene.targetBlock();
 	auto debug_blocks = m_world_scene.debugBlocks();
 
 

@@ -21,6 +21,7 @@ struct RayCastOnBlockResult
 	glm::vec3 normal;
 	glm::vec3 hit_position;
 	BlockID block;
+	bool inside_block;
 };
 class Player
 {
@@ -95,7 +96,7 @@ public:
 	double yaw = 0.0;
 	double pitch = 0.0;
 
-	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id};
+	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id, false};
 
 private:
 
