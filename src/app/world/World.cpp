@@ -477,15 +477,19 @@ void World::updatePlayerPosition(
 	glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time;
 	if (player->shouldCollide())
 	{
-		glm::dvec3 move_x = {displacement.x, 0.0, 0.0};
-		glm::dvec3 move_y = {0.0, displacement.y, 0.0};
-		glm::dvec3 move_z = {0.0, 0.0, displacement.z};
-		glm::dvec3 move_xz = {displacement.x, 0.0, displacement.z};
+		const glm::dvec3 move_x = {displacement.x, 0.0, 0.0};
+		const glm::dvec3 move_y = {0.0, displacement.y, 0.0};
+		const glm::dvec3 move_z = {0.0, 0.0, displacement.z};
+		const glm::dvec3 move_xz = {displacement.x, 0.0, displacement.z};
+		const glm::dvec3 move_yz = {0.0, displacement.y, displacement.z};
+		const glm::dvec3 move_xy = {displacement.x, displacement.y, 0.0};
 
 		bool collision_x = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_x);
 		bool collision_y = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_y);
 		bool collision_z = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_z);
 		bool collision_xz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xz);
+		bool collision_yz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_yz);
+		bool collision_xy = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xy);
 
 		// edge case when the player is perfectly aligned with the corner of a block
 		if (!collision_x && !collision_z && collision_xz)
@@ -495,6 +499,10 @@ void World::updatePlayerPosition(
 				collision_z = true;
 			else
 				collision_x = true;
+		}
+		if ((!collision_x && !collision_y && collision_xy) || (!collision_y && !collision_z && collision_yz))
+		{
+			collision_y = true;
 		}
 
 		if (collision_x)
