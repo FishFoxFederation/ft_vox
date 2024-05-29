@@ -519,6 +519,7 @@ void VulkanAPI::createLogicalDevice()
 	VkPhysicalDeviceFeatures device_features = {};
 	device_features.samplerAnisotropy = VK_TRUE;
 	device_features.fillModeNonSolid = VK_TRUE;
+	device_features.wideLines = VK_TRUE;
 
 	VkDeviceCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -1284,6 +1285,11 @@ void VulkanAPI::createPipelines()
 		pipeline_info.descriptor_set_layouts = {
 			camera_descriptor.layout
 		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_LINE_WIDTH };
 
 		line_pipeline = Pipeline(device, pipeline_info);
 	}
