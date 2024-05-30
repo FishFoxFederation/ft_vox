@@ -86,3 +86,18 @@ void Connection::queueAndSendMessage(const std::vector<uint8_t> & msg)
 	}
 	sendQueue();
 }
+
+const Socket & Connection::getSocket() const
+{
+	return *m_socket;
+}
+
+const uint64_t & Connection::getConnectionId() const
+{
+	return m_connection_id;
+}
+
+void Connection::setConnectionId(const uint64_t & connection_id)
+{
+	m_connection_id = connection_id;
+}

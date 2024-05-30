@@ -7,7 +7,6 @@
 #include "World.hpp"
 #include "VulkanAPI.hpp"
 #include "Client.hpp"
-
 #include <chrono>
 
 class UpdateThread
@@ -87,4 +86,5 @@ private:
 	void readInput();
 
 	void movePlayer();
+	void handlePackets();
 };

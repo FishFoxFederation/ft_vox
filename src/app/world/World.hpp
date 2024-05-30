@@ -73,7 +73,7 @@ public:
 	//Client side
 	void		addPlayer(const uint64_t player_id, const glm::vec3 & position);
 
-	void		updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & displacement);
+	void		updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & position);
 	void		applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & displacement);
 
 	Camera getCamera(const uint64_t player_id);

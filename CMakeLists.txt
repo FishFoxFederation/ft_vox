@@ -60,6 +60,9 @@ target_sources(${PROJECT_NAME}
 		src/app/world/entity/HitBox.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
+		src/app/network/client/Client.cpp
+		src/app/network/server/Server.cpp
+		src/app/network/shared/packets/PacketFactory.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -87,6 +90,13 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/entity
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/client
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/server
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets/CtoS
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets/StoC
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb

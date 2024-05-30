@@ -1,9 +1,16 @@
 #pragma once
 
 #include <memory>
-#include "World.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
+
+#include "Connection.hpp"
+struct HandleArgs;
+
+enum class packetType : uint32_t
+{
+	CONNECTION = 0,
+	PLAYER_MOVE = 1,
+	ENTITY_MOVE = 2
+};
 
 class IPacket
 {
@@ -15,23 +22,13 @@ public:
 	IPacket(IPacket&&) = delete;
 	IPacket& operator=(IPacket&&) = delete;
 
-	virtual void		Serialize(uint8_t * buffer) const = 0;
-	void				ExtractMessage(Connection & connection);
-	virtual uint32_t	Size() const = 0;
+	virtual void			Serialize(uint8_t * buffer) const = 0;
+	void					ExtractMessage(Connection & connection);
+	virtual uint32_t		Size() const = 0;
+	virtual enum packetType	GetType() const = 0;
 	virtual std::shared_ptr<IPacket> Clone() const = 0;
 
-	struct HandleArgs
-	{
-		union {
-			Server * server;
-			Client * client;
-		};
-		enum class Env { SERVER, CLIENT };
-		Env env;
-		World * world;
-	};
-
-	virtual void	Handle(const HandleArgs & args) const = 0;
+	// virtual void	Handle(const HandleArgs & args) const = 0;
 
 
 	uint64_t		GetConnectionId() const { return m_connection_id; }

@@ -7,6 +7,7 @@
 #include "ClientSocket.hpp"
 #include "Connection.hpp"
 #include "IncomingPacketList.hpp"
+#include "PacketFactory.hpp"
 
 class Client
 {
@@ -32,7 +33,8 @@ public:
 		}
 	};
 
-	std::shared_ptr<IPacket> pop_packet();
+	std::shared_ptr<IPacket>	popPacket();
+	size_t						getQueueSize() const;
 private:
 	
 	bool					m_running;
@@ -40,6 +42,7 @@ private:
 	std::shared_ptr<Socket>	m_client_socket;
 	Connection				m_connection;
 	IncomingPacketList		m_incoming_packets;
+	PacketFactory &			m_packet_factory = PacketFactory::GetInstance();
 
 	int		read_data();
 	int		send_data();

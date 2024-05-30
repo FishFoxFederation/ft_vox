@@ -98,7 +98,7 @@ int Server::read_data(Connection & connection, uint64_t id)
 		// and packet handling as well as dispatching tasks
 		const std::vector<uint8_t> & buffer = connection.getReadBufferRef();
 		auto packetRet = m_packet_factory.getPacketType(buffer.data(), buffer.size());
-		if (packetRet.first)
+	if (packetRet.first)
 		{
 			auto packet = m_packet_factory.CreatePacket(packetRet.second, buffer.data());
 			connection.reduceReadBuffer(m_packet_factory.getSize(packetRet.second));

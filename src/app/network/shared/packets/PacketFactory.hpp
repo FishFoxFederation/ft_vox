@@ -4,15 +4,7 @@
 
 #include "ConnectionPacket.hpp"
 #include "PlayerMovePacket.hpp"
-#include "EntityMovePacket.hpp"
-
-
-enum class packetType : uint32_t
-{
-	CONNECTION = 0,
-	PLAYER_MOVE = 1,
-	ENTITY_MOVE = 2
-};
+// #include "EntityMovePacket.hpp"
 
 class PacketFactory
 {
@@ -30,6 +22,7 @@ public:
 	ssize_t getSize(packetType id) const;
 
 	std::pair<bool, packetType> getPacketType(const uint8_t * buffer, const size_t & size) const;
+	std::pair<bool, std::shared_ptr<IPacket> > extractPacket(Connection & connection);
 
 	static PacketFactory& GetInstance();
 private:

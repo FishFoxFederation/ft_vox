@@ -21,6 +21,7 @@ public:
 	void						push(std::shared_ptr<IPacket> packet);
 	std::shared_ptr<IPacket>	pop();
 	size_t						size() const;
+	bool						empty() const;
 private:
 	std::queue<std::shared_ptr<IPacket>>	m_packets;
 	mutable std::mutex						m_mutex;

@@ -42,3 +42,9 @@ size_t IncomingPacketList::size() const
 	std::lock_guard<std::mutex> lock(m_mutex);
 	return m_packets.size();
 }
+
+bool IncomingPacketList::empty() const
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_packets.empty();
+}

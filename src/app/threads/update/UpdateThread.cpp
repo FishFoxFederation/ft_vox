@@ -1,7 +1,6 @@
 #include "UpdateThread.hpp"
 #include "logger.hpp"
 #include "DebugGui.hpp"
-#include "Packets.hpp"
 
 #include <unistd.h>
 
@@ -64,7 +63,7 @@ void UpdateThread::loop()
 	updateTime();
 	readInput();
 	movePlayer();
-	//handle received packets
+	handlePackets();
 }
 
 void UpdateThread::updateTime()
@@ -182,8 +181,8 @@ void UpdateThread::movePlayer()
 		static_cast<double>(m_delta_time.count()) / 1e9
 	);
 
-	// m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
-	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
+	m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
+	// auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
 
 	// m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
 	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
@@ -195,4 +194,20 @@ void UpdateThread::movePlayer()
 	);
 
 	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
+}
+
+void handlePackets()
+{
+	int i = 0;
+	while (i < 10 && m_client.getQueueSize())
+	{
+		auto packet = m_client.popPacket();
+
+		struct IPacket::HandleArgs args = {
+			&m_client,
+			IPacket::HandleArgs::Env::CLIENT,
+			&m_world
+		};
+		packet->Handle(args);
+	}
 }
