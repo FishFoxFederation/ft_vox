@@ -19,6 +19,7 @@ public:
 	Client(Client&& other) = delete;
 	Client& operator=(Client&& other) = delete;
 
+	void runOnce(const int & timeout = -1);
 	void run();
 
 	class ServerDisconnected : public std::exception
