@@ -512,12 +512,8 @@ void RenderThread::loop()
 			VK_INDEX_TYPE_UINT32
 		);
 
-		// const glm::vec3 target_block_position = target_block.value();
-		// const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.02f));
-		// const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block_position - glm::vec3(0.01)) * target_block_scale;
-
 		ModelMatrice target_block_matrice = {};
-		target_block_matrice.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 220.0f, 0.0f));
+		target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value());
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.line_pipeline.layout,
