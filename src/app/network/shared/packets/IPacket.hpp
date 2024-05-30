@@ -5,9 +5,6 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
-// class Server;
-
-
 class IPacket
 {
 public:
