@@ -28,8 +28,8 @@ public:
 	ssize_t					sendQueue();
 
 
-	const Socket&		getSocket() const;
-	const uint64_t		getConnectionId() const;
+	const Socket &		getSocket() const;
+	const uint64_t &	getConnectionId() const;
 	void				setConnectionId(const uint64_t & connection_id);
 private:
 
