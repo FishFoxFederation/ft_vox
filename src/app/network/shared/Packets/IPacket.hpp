@@ -5,7 +5,7 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
-class Server;
+// class Server;
 
 
 class IPacket

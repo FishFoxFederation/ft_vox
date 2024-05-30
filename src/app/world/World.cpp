@@ -14,7 +14,8 @@ World::World(
 	std::shared_ptr<Player> my_player = std::make_shared<Player>();
 	my_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
 
-	// m_players.insert(std::make_pmy_player);
+	m_my_player_id = 1;
+	m_players.insert(std::make_pair(m_my_player_id, my_player));
 
 	m_worldScene.entity_mesh_list.insert(
 		m_my_player_id, {m_vulkanAPI.cube_mesh_id, {}}
@@ -396,7 +397,48 @@ void World::updateEntities()
 {
 }
 
-void World::updatePlayerPosition(
+void World::applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & displacement)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+
+	// apply displacement
+	player->transform.position += displacement;
+
+	DebugGui::player_position = player->transform.position;
+
+	{ // update player mesh
+		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.at(player_id).model = Transform(
+			player->transform.position + player->hitbox.position,
+			glm::vec3(0.0f),
+			player->hitbox.size
+		).model();
+	}
+}
+
+void World::updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & position)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
+	std::lock_guard<std::mutex> lock(player->mutex);
+
+	// apply displacement
+	player->transform.position = position;
+
+	DebugGui::player_position = player->transform.position;
+
+	{ // update player mesh
+		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.at(player_id).model = Transform(
+			player->transform.position + player->hitbox.position,
+			glm::vec3(0.0f),
+			player->hitbox.size
+		).model();
+	}
+}
+
+
+std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 	const uint64_t player_id,
 	const int8_t forward,
 	const int8_t backward,
@@ -409,6 +451,8 @@ void World::updatePlayerPosition(
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
+
+	std::pair<glm::vec3, glm::vec3> result;
 
 	// determine if player is on the ground or in the air and detect
 	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
@@ -521,19 +565,97 @@ void World::updatePlayerPosition(
 			player->velocity.z = 0.0;
 		}
 	}
+	result.first = player->transform.position;
+	result.second = displacement;
+	return result;
+}
 
-	// apply displacement
-	player->transform.position += displacement;
+void World::updatePlayerCamera(
+	const uint64_t player_id,
+	const double x_offset,
+	const double y_offset
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::unique_lock<std::mutex> guard(player->mutex);
 
-	DebugGui::player_position = player->transform.position;
+	player->moveDirection(x_offset, y_offset);
+}
 
-	{ // update player mesh
-		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.at(m_my_player_id).model = Transform(
-			player->transform.position + player->hitbox.position,
-			glm::vec3(0.0f),
-			player->hitbox.size
-		).model();
+void World::updatePlayerTargetBlock(
+	const uint64_t player_id
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::lock_guard<std::mutex> guard(player->mutex);
+
+	glm::dvec3 position = player->transform.position + player->eyePosition();
+	glm::dvec3 direction = player->direction();
+
+	RayCastOnBlockResult raycast = rayCastOnBlock(position, direction, 5.0);
+
+	std::optional<glm::vec3> target_block = raycast.hit ? std::make_optional(raycast.block_position) : std::nullopt;
+
+	m_worldScene.setTargetBlock(target_block);
+
+	player->targeted_block = raycast;
+}
+
+void World::playerAttack(
+	const uint64_t player_id,
+	bool attack
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::lock_guard<std::mutex> guard(player->mutex);
+
+	if (!attack || !player->canAttack())
+		return;
+	player->startAttack();
+
+	if (player->targeted_block.hit)
+	{
+		// LOG_DEBUG("Block hit: "
+		// 	<< player->targeted_block.block_position.x << " " << player->targeted_block.block_position.y << " " << player->targeted_block.block_position.z
+		// 	<< " = " << int(player->targeted_block.block)
+		// );
+
+		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
+	}
+	// else
+	// {
+	// 	LOG_DEBUG("No block hit");
+	// }
+}
+
+void World::playerUse(
+	const uint64_t player_id,
+	bool use
+)
+{
+	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.get(player_id));
+	std::lock_guard<std::mutex> guard(player->mutex);
+
+	if (!use || !player->canUse())
+		return;
+	player->startUse();
+
+	if (player->targeted_block.hit)
+	{
+		glm::vec3 block_placed_position = player->targeted_block.block_position + player->targeted_block.normal;
+
+		// check collision with player
+		if (isColliding(
+			player->hitbox,
+			player->transform.position,
+			Block::getData(player->targeted_block.block).hitbox,
+			block_placed_position
+		))
+			return;
+
+		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		m_blocks_to_set.push({block_placed_position, Block::Stone.id});
 	}
 }
 

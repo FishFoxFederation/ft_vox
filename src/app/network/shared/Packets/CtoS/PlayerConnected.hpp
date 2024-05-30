@@ -21,16 +21,12 @@ public:
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	void		Handle(const HandleArgs & args) const override
-	{
-		//code executed inside the server
-		if (args.env == HandleArgs::Env::SERVER)
-		{
-			static uint8_t id = 0;
-			std::shared_ptr<ConnectionPacket> packet = std::make_shared<ConnectionPacket>(id++, glm::vec3(0, 255, 0));
-			packet->SetConnectionId(GetConnectionId());
+	void		Handle(const HandleArgs & args) const override;
+	
 
-			args.server->send(packet);
-		}
-	}
+	uint8_t GetId() const;
+
+	void setId(uint8_t id);
+private:
+	uint8_t		m_id;
 };
