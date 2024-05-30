@@ -36,7 +36,7 @@ public:
 	void updateEntities();
 	void updateBlock(glm::dvec3 position);
 
-	void updatePlayerPosition(
+	std::pair<glm::vec3, glm::vec3> calculatePlayerMovement(
 		const uint64_t player_id,
 		const int8_t forward,
 		const int8_t backward,
@@ -73,7 +73,8 @@ public:
 	//Client side
 	void		addPlayer(const uint64_t player_id, const glm::vec3 & position);
 
-	void		updatePlayerPosition(const uint64_t player_id, const glm::vec3 & position);
+	void		updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & displacement);
+	void		applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & displacement);
 
 	Camera getCamera(const uint64_t player_id);
 	glm::dvec3 getPlayerPosition(const uint64_t player_id);

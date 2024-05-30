@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../IPacket.hpp"
+#include "IPacket.hpp"
 #include "glm/vec3.hpp"
 
 class ConnectionPacket : public IPacket

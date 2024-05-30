@@ -4,6 +4,7 @@
 #include <iostream>
 
 Application::Application():
+	m_client("localhost", 4245),
 	m_start_time(std::chrono::steady_clock::now().time_since_epoch()),
 	m_settings(),
 	m_world_scene(),

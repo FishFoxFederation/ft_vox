@@ -10,6 +10,7 @@
 #include "VulkanAPI.hpp"
 #include "BlockUpdateThread.hpp"
 #include "ThreadPool.hpp"
+#include "Client.hpp"
 
 #include <chrono>
 
@@ -27,6 +28,7 @@ private:
 
 	std::chrono::nanoseconds m_start_time;
 
+	Client				m_client;
 	Settings			m_settings;
 	WorldScene			m_world_scene;
 	Window				m_window;

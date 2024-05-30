@@ -1,10 +1,12 @@
 #include "UpdateThread.hpp"
 #include "logger.hpp"
 #include "DebugGui.hpp"
+#include "Packets.hpp"
 
 #include <unistd.h>
 
 UpdateThread::UpdateThread(
+	Client & client,
 	const Settings & settings,
 	Window & window,
 	WorldScene & world_scene,
@@ -12,6 +14,7 @@ UpdateThread::UpdateThread(
 	VulkanAPI & vulkan_api,
 	std::chrono::nanoseconds start_time
 ):
+	m_client(client),
 	m_settings(settings),
 	m_window(window),
 	m_world_scene(world_scene),
@@ -61,6 +64,7 @@ void UpdateThread::loop()
 	updateTime();
 	readInput();
 	movePlayer();
+	//handle received packets
 }
 
 void UpdateThread::updateTime()
@@ -167,7 +171,7 @@ void UpdateThread::movePlayer()
 		m_last_target_block_update_time = m_current_time;
 	}
 
-	m_world.updatePlayerPosition(
+	glm::vec3 displacement = m_world.calculatePlayerMovementPosition(
 		m_world.m_my_player_id,
 		m_move_forward,
 		m_move_backward,
@@ -177,6 +181,12 @@ void UpdateThread::movePlayer()
 		m_sneak,
 		static_cast<double>(m_delta_time.count()) / 1e9
 	);
+
+	// m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
+	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
+
+	// m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
+	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
 
 	m_world.updatePlayerCamera(
 		m_world.m_my_player_id,

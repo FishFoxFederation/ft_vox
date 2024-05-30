@@ -6,6 +6,7 @@
 #include "Settings.hpp"
 #include "World.hpp"
 #include "VulkanAPI.hpp"
+#include "Client.hpp"
 
 #include <chrono>
 
@@ -14,6 +15,7 @@ class UpdateThread
 public:
 
 	UpdateThread(
+		Client & client,
 		const Settings & settings,
 		Window & window,
 		WorldScene & world_scene,
@@ -30,6 +32,7 @@ public:
 
 private:
 
+	Client & m_client;
 	const Settings & m_settings;
 	Window & m_window;
 	WorldScene & m_world_scene;
