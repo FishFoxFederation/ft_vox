@@ -1273,12 +1273,11 @@ void VulkanAPI::createPipelines()
 
 	{ // line pipeline
 		Pipeline::CreateInfo pipeline_info = {};
-		pipeline_info.extent = swapchain.extent;
+		pipeline_info.extent = color_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/line_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/line_shader.frag.spv";
 		pipeline_info.binding_description = LineVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = LineVertex::getAttributeDescriptions();
-		pipeline_info.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
 		pipeline_info.polygon_mode = VK_POLYGON_MODE_LINE;
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
