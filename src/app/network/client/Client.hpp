@@ -22,6 +22,7 @@ public:
 
 	void runOnce(const int & timeout = -1);
 	void run();
+	void sendPacket(std::shared_ptr<IPacket> packet);
 
 	class ServerDisconnected : public std::exception
 	{

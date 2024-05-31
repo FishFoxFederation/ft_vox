@@ -1,18 +1,22 @@
 #include "Connection.hpp"
 #include "server/Server.hpp"
 #include "PacketFactory.hpp"
+#include "ServerPacketHandler.hpp"
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <unistd.h>
 #include <cstdlib>
 #include <thread>
+#include "logger.hpp"
 
 
 
 int main()
 {
+	LOG_INFO("Server started");
 	Server server(4245);
+	ServerPacketHandler packet_handler(server);
 	std::thread server_thread([&server](){
 		server.run();
 	});
@@ -30,8 +34,8 @@ int main()
 				std::cout << "Packet is null" << std::endl;
 				continue;
 			}
-			struct IPacket::HandleArgs args = {&server, IPacket::HandleArgs::Env::SERVER, nullptr};
-			packet->Handle(args);
+
+			packet_handler.handlePacket(packet);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include "PlayerConnectedPacket.hpp"
 #include "ConnectionPacket.hpp"
 #include "PlayerMovePacket.hpp"
 // #include "EntityMovePacket.hpp"
@@ -17,15 +18,13 @@ public:
 	PacketFactory(PacketFactory&& other) = delete;
 	PacketFactory& operator=(PacketFactory&& other) = delete;
 
-	std::shared_ptr<IPacket> CreatePacket(packetType id, const uint8_t * buffer);
+	ssize_t getSize(IPacket::Type id) const;
 
-	ssize_t getSize(packetType id) const;
-
-	std::pair<bool, packetType> getPacketType(const uint8_t * buffer, const size_t & size) const;
+	std::pair<bool, IPacket::Type> getPacketType(const uint8_t * buffer, const size_t & size) const;
 	std::pair<bool, std::shared_ptr<IPacket> > extractPacket(Connection & connection);
 
 	static PacketFactory& GetInstance();
 private:
 	PacketFactory();
-	std::unordered_map<packetType, std::shared_ptr<IPacket>> m_packets;	
+	std::unordered_map<IPacket::Type, std::shared_ptr<IPacket>> m_packets;	
 };

@@ -19,6 +19,8 @@ UpdateThread::UpdateThread(
 	m_world_scene(world_scene),
 	m_world(world),
 	m_vulkan_api(vulkan_api),
+	m_client(client),
+	m_packet_handler(client, world),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_update_count(0),
@@ -170,7 +172,7 @@ void UpdateThread::movePlayer()
 		m_last_target_block_update_time = m_current_time;
 	}
 
-	glm::vec3 displacement = m_world.calculatePlayerMovementPosition(
+	auto [position, displacement]  = m_world.calculatePlayerMovement(
 		m_world.m_my_player_id,
 		m_move_forward,
 		m_move_backward,
@@ -181,13 +183,11 @@ void UpdateThread::movePlayer()
 		static_cast<double>(m_delta_time.count()) / 1e9
 	);
 
-	m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
-	// auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
+	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
+	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
+	m_client.sendPacket(packet);
 
-	// m_world.updatePlayerPosition(m_world.m_my_player_id, displacement);
-	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, displacement);
-
-	m_world.updatePlayerCamera(
+	m_world.updatePlayer(
 		m_world.m_my_player_id,
 		look.x,
 		look.y
@@ -196,18 +196,12 @@ void UpdateThread::movePlayer()
 	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
 }
 
-void handlePackets()
+void UpdateThread::handlePackets()
 {
 	int i = 0;
 	while (i < 10 && m_client.getQueueSize())
 	{
 		auto packet = m_client.popPacket();
-
-		struct IPacket::HandleArgs args = {
-			&m_client,
-			IPacket::HandleArgs::Env::CLIENT,
-			&m_world
-		};
-		packet->Handle(args);
+		m_packet_handler.handlePacket(packet);
 	}
 }

@@ -1,12 +1,12 @@
 #pragma once
 
 #include "IPacket.hpp"
-#include "ConnectionPacket.hpp"
 
 class PlayerConnectedPacket : public IPacket
 {
 public:
 	PlayerConnectedPacket();
+	PlayerConnectedPacket(const uint8_t & id);
 	virtual ~PlayerConnectedPacket();
 
 	PlayerConnectedPacket(const PlayerConnectedPacket& other) = delete;
@@ -15,14 +15,12 @@ public:
 	PlayerConnectedPacket(PlayerConnectedPacket&& other);
 	PlayerConnectedPacket& operator=(PlayerConnectedPacket&& other);
 
-	void		Serialize(uint8_t * buffer) const override;
-	void		Deserialize(const uint8_t * buffer) override;
-	uint32_t	Size() const override;
+	virtual void		Serialize(uint8_t * buffer) const override;
+	virtual void		Deserialize(const uint8_t * buffer) override;
+	virtual uint32_t	Size() const override;
+	virtual IPacket::Type GetType() const override;
 
 	std::shared_ptr<IPacket> Clone() const override;
-
-	void		Handle(const HandleArgs & args) const override;
-	
 
 	uint8_t GetId() const;
 

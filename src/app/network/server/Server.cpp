@@ -4,6 +4,7 @@ Server::Server(int port)
 : m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::GetInstance())
 {
 	m_poller.add(0, m_server_socket);
+	LOG_INFO("Server started on port " + std::to_string(port));
 }
 
 Server::~Server()
@@ -96,13 +97,11 @@ int Server::read_data(Connection & connection, uint64_t id)
 			throw ClientDisconnected(id);
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
-		const std::vector<uint8_t> & buffer = connection.getReadBufferRef();
-		auto packetRet = m_packet_factory.getPacketType(buffer.data(), buffer.size());
-	if (packetRet.first)
+		auto ret = m_packet_factory.extractPacket(connection);
+		if (ret.first)
 		{
-			auto packet = m_packet_factory.CreatePacket(packetRet.second, buffer.data());
-			connection.reduceReadBuffer(m_packet_factory.getSize(packetRet.second));
-			m_incoming_packets.push(packet);
+			LOG_INFO("Packet received :" + std::to_string((uint32_t)ret.second->GetType()));
+			m_incoming_packets.push(ret.second);
 		}
 	}
 	catch (const std::runtime_error & e)
@@ -118,7 +117,7 @@ int Server::send_data(Connection & connection, uint64_t id)
 	try
 	{
 		ret = connection.sendQueue();
-		if (ret = 0)
+		if (ret == 0)
 			throw ClientDisconnected(id);
 	}
 	catch (const std::runtime_error & e)
@@ -137,7 +136,7 @@ void Server::send(std::shared_ptr<IPacket> packet)
 		LOG_ERROR("Client not found");
 		return;
 	}
-
+	LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
 	currentClient->second.queueAndSendMessage(buffer);
@@ -149,4 +148,13 @@ void Server::sendAll(std::shared_ptr<IPacket> packet)
 	packet->Serialize(buffer.data());
 	for (auto & [id, connection] : m_connections)
 		connection.queueAndSendMessage(buffer);
+}
+
+void Server::sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id)
+{
+	std::vector<uint8_t> buffer(packet->Size());
+	packet->Serialize(buffer.data());
+	for (auto & [current_id, connection] : m_connections)
+		if (current_id != id)
+			connection.queueAndSendMessage(buffer);
 }

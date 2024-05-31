@@ -13,17 +13,16 @@ public:
 	ConnectionPacket(const ConnectionPacket& other) = delete;
 	ConnectionPacket& operator=(const ConnectionPacket& other) = delete;
 
-	ConnectionPacket(ConnectionPacket&& other) = delete;
-	ConnectionPacket& operator=(ConnectionPacket&& other) = delete;
+	ConnectionPacket(ConnectionPacket&& other);
+	ConnectionPacket& operator=(ConnectionPacket&& other);
 
 
 	virtual void		Serialize(uint8_t * buffer) const override;
 	virtual void		Deserialize(const uint8_t * buffer) override;
 	virtual uint32_t	Size() const override;
+	virtual IPacket::Type GetType() const override;
 
 	virtual std::shared_ptr<IPacket> Clone() const override;
-
-	virtual void		Handle(const HandleArgs & args) const override;
 
 	uint32_t	GetId() const;
 	glm::vec3	GetPosition() const;

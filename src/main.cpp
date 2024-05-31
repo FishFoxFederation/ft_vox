@@ -5,12 +5,19 @@
 #include <iostream>
 #include <exception>
 
-int main(void)
+int main(int argc, char **argv)
 {
 	// logger.setTimestamp(false);
 	logger.setLevel(Logger::DEBUG);
 	try
 	{
+		std::string ip = IP_ADDRESS;
+		int port = PORT;
+		if (argc == 3)
+		{
+			ip = argv[1];
+			port = std::stoi(argv[2]);
+		}
 		Application app;
 
 		app.run();

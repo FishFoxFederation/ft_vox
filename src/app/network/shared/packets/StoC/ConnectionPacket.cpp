@@ -9,6 +9,21 @@ ConnectionPacket::ConnectionPacket(uint32_t id, glm::vec3 position)
 {
 }
 
+ConnectionPacket::ConnectionPacket(ConnectionPacket && other)
+	: m_id(other.m_id), m_position(other.m_position)
+{
+}
+
+ConnectionPacket & ConnectionPacket::operator=(ConnectionPacket && other)
+{
+	if (this != &other)
+	{
+		m_id = other.m_id;
+		m_position = other.m_position;
+	}
+	return *this;
+}
+
 ConnectionPacket::~ConnectionPacket()
 {
 }
@@ -35,12 +50,12 @@ std::shared_ptr<IPacket> ConnectionPacket::Clone() const
 	return std::make_shared<ConnectionPacket>();
 }
 
-void ConnectionPacket::Handle(const HandleArgs & args) const
+IPacket::Type ConnectionPacket::GetType() const
 {
-	//here we are in the client side
-	if (args.env == HandleArgs::Env::CLIENT)
-	{
-		args.world->m_my_player_id = m_id;
-		args.world->addPlayer(m_id, m_position);
-	}
+	return IPacket::Type::CONNECTION;
+}
+
+uint32_t ConnectionPacket::GetId() const
+{
+	return m_id;
 }

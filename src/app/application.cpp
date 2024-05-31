@@ -4,8 +4,8 @@
 #include <iostream>
 
 Application::Application():
-	m_client("localhost", 4245),
 	m_start_time(std::chrono::steady_clock::now().time_since_epoch()),
+	m_client(IP_ADDRESS, PORT),
 	m_settings(),
 	m_world_scene(),
 	m_window("Vox", 800, 600),
@@ -13,7 +13,7 @@ Application::Application():
 	m_thread_pool(),
 	m_world(m_world_scene, m_vulkan_api, m_thread_pool),
 	m_render_thread(m_settings, m_vulkan_api, m_world_scene, m_start_time),
-	m_update_thread(m_settings, m_window, m_world_scene, m_world, m_vulkan_api, m_start_time),
+	m_update_thread(m_client, m_settings, m_window, m_world_scene, m_world, m_vulkan_api, m_start_time),
 	m_block_update_thread(m_world_scene, m_world),
 	m_network_thread(m_client)
 {

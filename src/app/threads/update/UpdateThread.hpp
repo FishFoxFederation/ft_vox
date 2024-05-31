@@ -7,6 +7,7 @@
 #include "World.hpp"
 #include "VulkanAPI.hpp"
 #include "Client.hpp"
+#include "ClientPacketHandler.hpp"
 #include <chrono>
 
 class UpdateThread
@@ -31,12 +32,14 @@ public:
 
 private:
 
-	Client & m_client;
 	const Settings & m_settings;
 	Window & m_window;
 	WorldScene & m_world_scene;
 	World & m_world;
 	VulkanAPI & m_vulkan_api;
+	Client & m_client;
+	ClientPacketHandler m_packet_handler;
+
 
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;

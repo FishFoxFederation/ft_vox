@@ -3,6 +3,7 @@
 #include "define.hpp"
 #include <unordered_map>
 #include <exception>
+#include <atomic>
 
 #include "logger.hpp"
 #include "ServerSocket.hpp"
@@ -32,8 +33,9 @@ public:
 
 	void send(std::shared_ptr<IPacket> packet);
 	void sendAll(std::shared_ptr<IPacket> packet);
+	void sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id);
 
-	IncomingPacketList & get_incoming_packets();
+	IncomingPacketList & get_incoming_packets() { return m_incoming_packets; }
 
 	class ClientDisconnected : public std::exception
 	{
