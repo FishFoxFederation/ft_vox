@@ -16,60 +16,68 @@ void Server::stop()
 	m_running = false;
 }
 
+void Server::runOnce(int timeout)
+{
+	auto [events_size, events] = m_poller.wait(timeout);
+
+	/**********************************************
+	 * Handle new events
+	 * ********************************************/
+	for(size_t i = 0; i < events_size; i++)
+	{
+		/**********************************************
+		*	Handle new connections
+		**********************************************/
+		if (events[i].data.u64 == 0)
+		{
+			LOG_INFO("New client connected");
+			Connection connection(m_server_socket.accept());
+			auto ret = m_connections.insert(std::make_pair(get_new_id(), std::move(connection)));
+			LOG_INFO("New client id : " + std::to_string(ret.first->first));
+			m_poller.add(ret.first->first, ret.first->second.getSocket());
+		}
+
+		/**********************************************
+		 * Handle existing connections
+		 * 			- Read data
+		 * 			- Send data
+		 * 			- Terminate connections
+		 * ********************************************/
+		else
+		{
+			auto current_event = events[i].events;
+			auto currentClient = m_connections.find(events[i].data.u64);
+			if (currentClient == m_connections.end())
+			{
+				LOG_ERROR("Client not found");
+				continue;
+			}
+			try {
+				if (current_event & EPOLLIN)
+					read_data(currentClient->second, currentClient->first);
+				if (current_event & EPOLLOUT)
+					send_data(currentClient->second, currentClient->first);
+				if (current_event & EPOLLERR || current_event & EPOLLHUP)
+				{
+					LOG_INFO("EPOLLERR or EPOLLHUP");
+					throw ClientDisconnected(currentClient->first);
+				}
+			} 
+			catch (const ClientDisconnected & e)
+			{
+				LOG_INFO("Client disconnected :" + std::to_string(e.id()));
+				m_poller.remove(currentClient->second.getSocket());
+				m_connections.erase(currentClient);
+			}
+		}
+	}
+}
+
 void Server::run()
 {
 	while(m_running)
 	{
-		auto [events_size, events] = m_poller.wait(-1);
-
-		/**********************************************
-		 * Handle new events
-		 * ********************************************/
-		for(size_t i = 0; i < events_size; i++)
-		{
-			/**********************************************
-			*	Handle new connections
-			**********************************************/
-			if (events[i].data.u64 == 0)
-			{
-				LOG_INFO("New client connected");
-				Connection connection(m_server_socket.accept());
-				auto ret = m_connections.insert(std::make_pair(get_new_id(), std::move(connection)));
-				LOG_INFO("New client id : " + std::to_string(ret.first->first));
-				m_poller.add(ret.first->first, ret.first->second.getSocket());
-			}
-
-			/**********************************************
-			 * Handle existing connections
-			 * 			- Read data
-			 * 			- Send data
-			 * 			- Terminate connections
-			 * ********************************************/
-			else
-			{
-				auto current_event = events[i].events;
-				auto currentClient = m_connections.find(events[i].data.u64);
-				if (currentClient == m_connections.end())
-				{
-					LOG_ERROR("Client not found");
-					continue;
-				}
-				try {
-					if (current_event & EPOLLIN)
-						read_data(currentClient->second, currentClient->first);
-					if (current_event & EPOLLOUT)
-						send_data(currentClient->second, currentClient->first);
-					if (current_event & EPOLLERR || current_event & EPOLLHUP)
-						throw ClientDisconnected(currentClient->first);
-				} 
-				catch (const ClientDisconnected & e)
-				{
-					LOG_INFO("Client disconnected :" + std::to_string(e.id()));
-					m_poller.remove(currentClient->second.getSocket());
-					m_connections.erase(currentClient);
-				}
-			}
-		}
+		runOnce(1000);
 	}
 }
 
@@ -95,6 +103,7 @@ int Server::read_data(Connection & connection, uint64_t id)
 		ret = connection.recv();
 		if (ret == 0)
 			throw ClientDisconnected(id);
+		LOG_INFO("Data received");
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
 		auto ret = m_packet_factory.extractPacket(connection);
@@ -116,6 +125,9 @@ int Server::send_data(Connection & connection, uint64_t id)
 	ssize_t ret;
 	try
 	{
+		if( !connection.dataToSend() )
+			return 0;
+		LOG_INFO("sending data");
 		ret = connection.sendQueue();
 		if (ret == 0)
 			throw ClientDisconnected(id);

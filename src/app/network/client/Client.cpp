@@ -45,7 +45,10 @@ int Client::read_data()
 			throw ServerDisconnected();
 		auto ret = m_packet_factory.extractPacket(m_connection);
 		if (ret.first)
+		{
+			LOG_INFO("RECEIVED NEW PACKET");
 			m_incoming_packets.push(ret.second);
+		}
 	}
 	catch (const std::runtime_error & e)
 	{
@@ -58,6 +61,8 @@ int Client::send_data()
 {
 	ssize_t size;
 	try {
+		if( !m_connection.dataToSend() )
+			return 0;
 		size = m_connection.sendQueue();
 		if (size == 0)
 			throw ServerDisconnected();

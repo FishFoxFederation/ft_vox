@@ -28,6 +28,7 @@ public:
 	 * you might wanna run this in a separate thread
 	 */
 	void run();
+	void runOnce(int timeout);
 
 	void stop();
 

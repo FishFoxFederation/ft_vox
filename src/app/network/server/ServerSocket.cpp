@@ -12,7 +12,7 @@ ServerSocket::ServerSocket(int port)
 
 	if ((ret = getaddrinfo(NULL, std::to_string(port).c_str(), &hints, &servinfo)) != 0)
 		throw std::runtime_error(gai_strerror(ret));
-	
+
 	for (p = servinfo; p != NULL; p = p->ai_next)
 	{
 		if ((m_sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
@@ -20,6 +20,11 @@ ServerSocket::ServerSocket(int port)
 
 		int yes = 1;
 		if (setsockopt(m_sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
+			throw std::runtime_error("Failed to set socket options");
+		
+		//disable nagle
+		int flag = 1;
+		if (setsockopt(m_sockfd, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int)) == -1)
 			throw std::runtime_error("Failed to set socket options");
 
 		if (bind(m_sockfd, p->ai_addr, p->ai_addrlen) == -1)
