@@ -10,6 +10,8 @@ NetworkThread::NetworkThread(
 
 NetworkThread::~NetworkThread()
 {
+	this->m_thread.request_stop();
+	this->m_thread.join();
 }
 
 void NetworkThread::launch()
@@ -37,5 +39,5 @@ void NetworkThread::init()
 
 void NetworkThread::loop()
 {
-	m_client.runOnce();
+	m_client.runOnce(10);
 }

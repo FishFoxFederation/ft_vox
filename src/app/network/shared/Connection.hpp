@@ -25,6 +25,7 @@ public:
 	std::vector<uint8_t>			getReadBuffer() const;
 	const std::vector<uint8_t> &	getReadBufferRef() const;
 	void					reduceReadBuffer(size_t size);
+	bool					dataToSend() const;
 	ssize_t 				recv();
 	ssize_t					sendQueue();
 
@@ -38,6 +39,6 @@ private:
 	std::vector<uint8_t>	m_read_buffer;
 	mutable	std::mutex		m_read_buffer_mutex;
 	std::vector<uint8_t>	m_write_buffer;
-	std::mutex				m_write_buffer_mutex;
+	mutable std::mutex		m_write_buffer_mutex;
 	uint64_t				m_connection_id;
 };

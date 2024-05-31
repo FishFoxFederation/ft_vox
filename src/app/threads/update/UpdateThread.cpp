@@ -64,7 +64,10 @@ void UpdateThread::loop()
 {
 	updateTime();
 	readInput();
-	movePlayer();
+	//only move player every 20 ms
+	static auto last_move = std::chrono::steady_clock::now();
+	if (std::chrono::steady_clock::now() - last_move > std::chrono::milliseconds(20))
+		movePlayer();
 	handlePackets();
 }
 
@@ -184,8 +187,11 @@ void UpdateThread::movePlayer()
 	);
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
-	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
-	m_client.sendPacket(packet);
+	if (displacement != glm::vec3(0.0))
+	{
+		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
+		m_client.sendPacket(packet);
+	}
 
 	m_world.updatePlayer(
 		m_world.m_my_player_id,

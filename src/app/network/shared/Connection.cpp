@@ -107,3 +107,9 @@ void Connection::setConnectionId(const uint64_t & connection_id)
 {
 	m_connection_id = connection_id;
 }
+
+bool Connection::dataToSend() const
+{
+	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
+	return !m_write_buffer.empty();
+}
