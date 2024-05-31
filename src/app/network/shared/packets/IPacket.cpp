@@ -4,6 +4,17 @@ IPacket::IPacket()
 {
 }
 
+IPacket::IPacket(IPacket && other)
+{
+	m_connection_id = other.m_connection_id;
+}
+
+IPacket & IPacket::operator=(IPacket && other)
+{
+	m_connection_id = other.m_connection_id;
+	return *this;
+}
+
 IPacket::~IPacket()
 {
 }

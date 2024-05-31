@@ -6,6 +6,7 @@
 #include <memory>
 #include "ConnectionSocket.hpp"
 #include "Socket.hpp"
+#include "logger.hpp"
 
 class Connection
 {
@@ -21,7 +22,7 @@ public:
 
 	void					queueAndSendMessage(const std::vector<uint8_t> & msg);
 
-	std::vector<uint8_t>	getReadBuffer() const;
+	std::vector<uint8_t>			getReadBuffer() const;
 	const std::vector<uint8_t> &	getReadBufferRef() const;
 	void					reduceReadBuffer(size_t size);
 	ssize_t 				recv();

@@ -33,6 +33,11 @@ std::vector<uint8_t> Connection::getReadBuffer() const
 	return m_read_buffer;
 }
 
+const std::vector<uint8_t> & Connection::getReadBufferRef() const
+{
+	return m_read_buffer;
+}
+
 void Connection::reduceReadBuffer(size_t size)
 {
 	std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
@@ -63,14 +68,15 @@ ssize_t Connection::sendQueue()
 {
 	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
 	if (m_write_buffer.empty())
-		return;
-	std::cout << "Sending data\n";
+		return 0;
+	LOG_INFO("Sending data");
 	ssize_t size = ::send(m_socket->getFd(), m_write_buffer.data(), m_write_buffer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (size == -1)
 	{
 		if (errno != EAGAIN && errno != EWOULDBLOCK)
 		{
-			throw std::runtime_error("Error while sending data");
+			LOG_ERROR("Error while sending data: " + std::string(strerror(errno)));
+			throw std::runtime_error("Error while sending data: " + std::string(strerror(errno)));
 		}
 	}
 	else

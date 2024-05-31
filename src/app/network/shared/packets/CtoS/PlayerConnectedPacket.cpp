@@ -1,6 +1,11 @@
-#include "PlayerConnected.hpp"
+#include "PlayerConnectedPacket.hpp"
 
 PlayerConnectedPacket::PlayerConnectedPacket()
+{
+}
+
+PlayerConnectedPacket::PlayerConnectedPacket(const uint8_t & id)
+	: m_id(id)
 {
 }
 
@@ -34,21 +39,14 @@ uint32_t PlayerConnectedPacket::Size() const
 	return sizeof(uint8_t);
 }
 
-std::shared_ptr<IPacket> PlayerConnectedPacket::Clone() const
+IPacket::Type PlayerConnectedPacket::GetType() const
 {
-	return std::make_shared<PlayerConnectedPacket>(*this);
+	return IPacket::Type::PLAYER_CONNECTED;
 }
 
-void PlayerConnectedPacket::Handle(const HandleArgs & args) const
+std::shared_ptr<IPacket> PlayerConnectedPacket::Clone() const
 {
-	//code executed inside the server
-	if (args.env == HandleArgs::Env::SERVER)
-	{
-		std::shared_ptr<ConnectionPacket> packet = std::make_shared<ConnectionPacket>(m_id, glm::vec3(0, 255, 0));
-		packet->SetConnectionId(GetConnectionId());
-
-		args.server->sendAll(packet);
-	}
+	return std::make_shared<PlayerConnectedPacket>();
 }
 
 uint8_t PlayerConnectedPacket::GetId() const

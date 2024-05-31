@@ -22,7 +22,6 @@ class EntityMovePacket : public IServerToClientPacket
 
 	virtual std::shared_ptr<IPacket> Clone() const override;
 
-	virtual void		Handle(const HandleArgs & args) const override;
 
 	uint32_t	GetId() const;
 	glm::vec3	GetPosition() const;

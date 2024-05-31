@@ -68,3 +68,21 @@ int Client::send_data()
 	}
 	return 0;
 }
+
+void Client::sendPacket(std::shared_ptr<IPacket> packet)
+{
+	LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
+	std::vector<uint8_t> buffer(packet->Size());
+	packet->Serialize(buffer.data());
+	m_connection.queueAndSendMessage(buffer);
+}
+
+std::shared_ptr<IPacket> Client::popPacket()
+{
+	return m_incoming_packets.pop();
+}
+
+size_t Client::getQueueSize() const
+{
+	return m_incoming_packets.size();
+}

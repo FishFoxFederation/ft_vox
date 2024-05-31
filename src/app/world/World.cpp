@@ -11,15 +11,8 @@ World::World(
 	m_players(),
 	m_future_id(0)
 {
-	std::shared_ptr<Player> my_player = std::make_shared<Player>();
-	my_player->transform.position = glm::dvec3(0.0, 220.0, 0.0);
-
 	m_my_player_id = 1;
-	m_players.insert(std::make_pair(m_my_player_id, my_player));
-
-	m_worldScene.entity_mesh_list.insert(
-		m_my_player_id, {m_vulkanAPI.cube_mesh_id, {}}
-	);
+	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
 }
 
 World::~World()
@@ -910,4 +903,15 @@ RayCastOnBlockResult World::rayCastOnBlock(
 		BlockID::Air,
 		false
 	};
+}
+
+void World::addPlayer(const uint64_t player_id, const glm::vec3 & position)
+{
+	std::shared_ptr<Player> player = std::make_shared<Player>();
+	player->transform.position = position;
+	m_players.insert(std::make_pair(player_id, player));
+
+	m_worldScene.entity_mesh_list.insert(
+		player_id, {m_vulkanAPI.cube_mesh_id, {}}
+	);
 }

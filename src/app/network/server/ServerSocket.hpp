@@ -23,7 +23,7 @@ public:
 	ServerSocket(ServerSocket&& other);
 	ServerSocket& operator=(ServerSocket&& other);
 
-	std::shared_ptr<Socket> accept();
+	std::shared_ptr<ConnectionSocket> accept();
 private:
 
 };

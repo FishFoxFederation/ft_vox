@@ -5,6 +5,9 @@
 #include <netdb.h>
 #include <netinet/tcp.h>
 
+
+#include "logger.hpp"
+
 class ClientSocket : public Socket
 {
 public:
