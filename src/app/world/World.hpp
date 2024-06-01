@@ -55,17 +55,22 @@ public:
 	void updatePlayerTargetBlock(
 		const uint64_t player_id
 	);
-	void playerAttack(
+	std::pair<bool, glm::vec3> playerAttack(
 		const uint64_t player_id,
 		bool attack
 	);
-	void playerUse(
+	std::pair<bool, glm::vec3> playerUse(
 		const uint64_t player_id,
 		bool use
 	);
 	void updatePlayer(
 		const uint64_t player_id,
 		std::function<void(Player &)> update
+	);
+
+	void modifyBlock(
+		const glm::vec3 & position,
+		const BlockID & block_id
 	);
 
 	//Server side 
@@ -82,6 +87,7 @@ public:
 	glm::dvec3 getPlayerPosition(const uint64_t player_id);
 
 	uint64_t m_my_player_id;
+
 
 private:
 

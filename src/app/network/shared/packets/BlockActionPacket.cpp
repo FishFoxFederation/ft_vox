@@ -4,7 +4,7 @@ BlockActionPacket::BlockActionPacket()
 {
 }
 
-BlockActionPacket::BlockActionPacket(BlockID block_id, glm::ivec3 position, Action action)
+BlockActionPacket::BlockActionPacket(BlockID block_id, glm::vec3 position, Action action)
 : m_block_id(block_id), m_position(position), m_action(action)
 {
 }
@@ -65,6 +65,8 @@ void BlockActionPacket::Serialize(uint8_t * buffer) const
 
 void BlockActionPacket::Deserialize(const uint8_t * buffer)
 {
+	buffer += sizeof(uint32_t);
+
 	memcpy(&m_block_id, buffer, sizeof(m_block_id));
 	buffer += sizeof(m_block_id);
 
@@ -95,7 +97,7 @@ BlockID BlockActionPacket::GetBlockID() const
 	return m_block_id;
 }
 
-glm::ivec3 BlockActionPacket::GetPosition() const
+glm::vec3 BlockActionPacket::GetPosition() const
 {
 	return m_position;
 }
@@ -110,7 +112,7 @@ void BlockActionPacket::SetBlockID(BlockID block_id)
 	m_block_id = block_id;
 }
 
-void BlockActionPacket::SetPosition(glm::ivec3 position)
+void BlockActionPacket::SetPosition(glm::vec3 position)
 {
 	m_position = position;
 }

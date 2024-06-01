@@ -12,7 +12,7 @@ public:
 	};
 
 	BlockActionPacket();
-	BlockActionPacket(BlockID block_id, glm::ivec3 position, Action action);
+	BlockActionPacket(BlockID block_id, glm::vec3 position, Action action);
 	~BlockActionPacket();
 
 	BlockActionPacket(const BlockActionPacket& other);
@@ -30,14 +30,14 @@ public:
 	virtual std::shared_ptr<IPacket> Clone() const override;
 
 	BlockID	GetBlockID() const;
-	glm::ivec3	GetPosition() const;
+	glm::vec3	GetPosition() const;
 	Action	GetAction() const;
 
 	void	SetBlockID(BlockID block_id);
-	void	SetPosition(glm::ivec3 position);
+	void	SetPosition(glm::vec3 position);
 	void	SetAction(Action action);
 private:
 	BlockID		m_block_id;
-	glm::ivec3	m_position;
+	glm::vec3	m_position;
 	Action		m_action;
 };
