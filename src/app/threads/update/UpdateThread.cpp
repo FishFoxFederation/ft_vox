@@ -111,8 +111,19 @@ void UpdateThread::readInput()
 	m_attack = (attack_key_status == GLFW_PRESS) ? 1 : 0;
 	m_use = (use_key_status == GLFW_PRESS) ? 1 : 0;
 
-	m_world.playerAttack(m_world.m_my_player_id, m_attack);
-	m_world.playerUse(m_world.m_my_player_id, m_use);
+	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
+	if (ret.first)
+	{
+		LOG_INFO("Attack" << ret.second.x << " " << ret.second.y << " " << ret.second.z);
+		auto packet = std::make_shared<BlockActionPacket>(BlockID::Air, ret.second, BlockActionPacket::Action::PLACE);
+		m_client.sendPacket(packet);
+	}
+	ret = m_world.playerUse(m_world.m_my_player_id, m_use);
+	if (ret.first)
+	{
+		auto packet = std::make_shared<BlockActionPacket>(BlockID::Stone, ret.second, BlockActionPacket::Action::PLACE);
+		m_client.sendPacket(packet);
+	}
 
 	int reset = m_window.input().getKeyState(GLFW_KEY_R);
 	int gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);

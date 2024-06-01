@@ -589,7 +589,7 @@ void World::updatePlayerTargetBlock(
 	player->targeted_block = raycast;
 }
 
-void World::playerAttack(
+std::pair<bool, glm::vec3> World::playerAttack(
 	const uint64_t player_id,
 	bool attack
 )
@@ -598,7 +598,7 @@ void World::playerAttack(
 	std::lock_guard<std::mutex> guard(player->mutex);
 
 	if (!attack || !player->canAttack())
-		return;
+		return {false, glm::vec3(0.0)};
 	player->startAttack();
 
 	if (player->targeted_block.hit)
@@ -608,16 +608,18 @@ void World::playerAttack(
 		// 	<< " = " << int(player->targeted_block.block)
 		// );
 
-		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
-		m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
+		// std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		// m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
+		return std::make_pair(true, player->targeted_block.block_position);
 	}
 	// else
 	// {
 	// 	LOG_DEBUG("No block hit");
 	// }
+	return std::make_pair(false, glm::vec3(0.0));
 }
 
-void World::playerUse(
+std::pair<bool, glm::vec3> World::playerUse(
 	const uint64_t player_id,
 	bool use
 )
@@ -626,7 +628,7 @@ void World::playerUse(
 	std::lock_guard<std::mutex> guard(player->mutex);
 
 	if (!use || !player->canUse())
-		return;
+		return {false, glm::vec3(0.0)};
 	player->startUse();
 
 	if (player->targeted_block.hit)
@@ -640,11 +642,13 @@ void World::playerUse(
 			Block::getData(player->targeted_block.block).hitbox,
 			block_placed_position
 		))
-			return;
+			return {false, glm::vec3(0.0)};
 
-		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
-		m_blocks_to_set.push({block_placed_position, Block::Stone.id});
+		// std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		// m_blocks_to_set.push({block_placed_position, Block::Stone.id});
+		return {true, block_placed_position};
 	}
+	return {false, glm::vec3(0.0)};
 }
 
 void World::updatePlayerCamera(
@@ -855,4 +859,10 @@ void World::removePlayer(const uint64_t player_id)
 		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
 		m_worldScene.entity_mesh_list.erase(player_id);
 	}
+}
+
+void World::modifyBlock(const glm::vec3 & position, const BlockID & block_id)
+{
+	std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+	m_blocks_to_set.push({position, block_id});
 }

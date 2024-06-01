@@ -64,6 +64,6 @@ void ClientPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacke
 
 void ClientPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)
 {
-	//idk
-	(void)packet;
+	LOG_INFO("Block action: " << packet->GetPosition().x << " " << packet->GetPosition().y << " " << packet->GetPosition().z << " ");
+	m_world.modifyBlock(packet->GetPosition(), packet->GetBlockID());
 }
