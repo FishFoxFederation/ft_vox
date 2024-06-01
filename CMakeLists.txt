@@ -74,6 +74,7 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/packets/PacketFactory.cpp
 		src/app/network/shared/packets/IncomingPacketList.cpp
 		src/app/network/shared/packets/IPacket.cpp
+		src/app/network/shared/packets/DisconnectPacket.cpp
 		src/app/network/shared/packets/CtoS/PlayerConnectedPacket.cpp
 		src/app/network/shared/packets/CtoS/PlayerMovePacket.cpp
 		src/app/network/shared/packets/StoC/ConnectionPacket.cpp
@@ -191,6 +192,7 @@ target_sources(server
 		src/app/network/shared/packets/PacketFactory.cpp
 		src/app/network/shared/packets/IncomingPacketList.cpp
 		src/app/network/shared/packets/IPacket.cpp
+		src/app/network/shared/packets/DisconnectPacket.cpp
 		src/app/network/shared/packets/CtoS/PlayerConnectedPacket.cpp
 		src/app/network/shared/packets/CtoS/PlayerMovePacket.cpp
 		src/app/network/shared/packets/StoC/ConnectionPacket.cpp

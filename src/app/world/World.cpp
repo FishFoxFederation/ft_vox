@@ -419,7 +419,6 @@ void World::updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & p
 	// apply displacement
 	player->transform.position = position;
 
-	DebugGui::player_position = player->transform.position;
 
 	{ // update player mesh
 		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
@@ -431,6 +430,8 @@ void World::updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & p
 	}
 	if (player_id == m_my_player_id)
 	{
+		DebugGui::player_position = player->transform.position;
+
 		// update camera
 		m_worldScene.camera() = player->camera();
 	}
@@ -917,7 +918,28 @@ void World::addPlayer(const uint64_t player_id, const glm::vec3 & position)
 	player->transform.position = position;
 	m_players.insert(std::make_pair(player_id, player));
 
-	m_worldScene.entity_mesh_list.insert(
-		player_id, {m_vulkanAPI.cube_mesh_id, {}}
-	);
+	{
+		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.insert(
+			player_id, {
+				m_vulkanAPI.cube_mesh_id, Transform(
+					player->transform.position + player->hitbox.position,
+					glm::vec3(0.0f),
+					player->hitbox.size
+				).model()
+			}
+		);
+	}
+}
+
+void World::removePlayer(const uint64_t player_id)
+{
+	std::shared_ptr<Player> player = m_players.at(player_id);
+	std::lock_guard<std::mutex> lock(player->mutex);
+
+	m_players.erase(player_id);
+	{
+		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.erase(player_id);
+	}
 }

@@ -3,6 +3,7 @@
 #include "PlayerMovePacket.hpp"
 #include "PlayerConnectedPacket.hpp"
 #include "ConnectionPacket.hpp"
+#include "DisconnectPacket.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 

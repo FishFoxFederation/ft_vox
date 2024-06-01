@@ -73,6 +73,7 @@ public:
 
 	//Client side
 	void		addPlayer(const uint64_t player_id, const glm::vec3 & position);
+	void		removePlayer(const uint64_t player_id);
 
 	void		updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & position);
 	void		applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & displacement);

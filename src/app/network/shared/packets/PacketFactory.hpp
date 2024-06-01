@@ -5,6 +5,7 @@
 #include "PlayerConnectedPacket.hpp"
 #include "ConnectionPacket.hpp"
 #include "PlayerMovePacket.hpp"
+#include "DisconnectPacket.hpp"
 // #include "EntityMovePacket.hpp"
 
 class PacketFactory

@@ -66,7 +66,10 @@ void Server::runOnce(int timeout)
 			} 
 			catch (const ClientDisconnected & e)
 			{
-				LOG_INFO("Client disconnected :" + std::to_string(e.id()));
+				LOG_INFO("Client disconnected : id: " << e.id() << " pushing disconnect packet");
+				auto packet = std::make_shared<DisconnectPacket>();
+				packet->SetConnectionId(e.id());
+				m_incoming_packets.push(packet);
 				m_poller.remove(currentClient->second.getSocket());
 				m_connections.erase(currentClient);
 			}
@@ -105,13 +108,15 @@ int Server::read_data(Connection & connection, uint64_t id)
 		ret = connection.recv();
 		if (ret == 0)
 			throw ClientDisconnected(id);
-		LOG_INFO("Data received");
+		// LOG_INFO("Data received");
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
 		auto ret = m_packet_factory.extractPacket(connection);
 		if (ret.first)
 		{
-			LOG_INFO("Packet received :" + std::to_string((uint32_t)ret.second->GetType()));
+			// LOG_INFO("Packet received :" + std::to_string((uint32_t)ret.second->GetType()));
+			if (ret.second->GetConnectionId() != id)
+				LOG_ERROR("Packet connection id does not match connection id");
 			m_incoming_packets.push(ret.second);
 		}
 	}

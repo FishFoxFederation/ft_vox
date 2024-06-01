@@ -27,6 +27,7 @@ PlayerMovePacket & PlayerMovePacket::operator=(PlayerMovePacket && other)
 		m_id = other.m_id;
 		m_position = other.m_position;
 		m_displacement = other.m_displacement;
+		::IPacket::operator=(std::move(other));
 	}
 	return *this;
 }
