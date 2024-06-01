@@ -6,8 +6,8 @@ var searchData=
   ['generatechunkcolumn_3',['generateChunkColumn',['../classWorldGenerator.html#a3abe115df8c1963918707f43cd920092',1,'WorldGenerator']]],
   ['generatefullchunk_4',['generateFullChunk',['../classWorldGenerator.html#abcc94f56394d38f96df5b3ffd6afe104',1,'WorldGenerator']]],
   ['get_5',['get',['../classAtomic.html#ab99d547bb71994618d7f55f1002f09da',1,'Atomic::get()'],['../classWorldScene_1_1MeshList.html#ab5fd5ff7ec6c38f72a0b98a6713a0a69',1,'WorldScene::MeshList::get()'],['../classIdList.html#a7e939a9ac873e13ea125d963ad13c426',1,'IdList::get()']]],
-  ['getambientocclusion_6',['getAmbientOcclusion',['../classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f',1,'CreateMeshData::getAmbientOcclusion(const glm::ivec3 &amp;pos, const int dim_1, const int dim_2)'],['../classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d',1,'CreateMeshData::getAmbientOcclusion(BlockID side_1, BlockID side_2, BlockID corner)']]],
-  ['getattributedescriptions_7',['getAttributeDescriptions',['../structEntityVertex.html#ace5f65960f7d1b398627d28aca3404d8',1,'EntityVertex::getAttributeDescriptions()'],['../structBlockVertex.html#a9e1a1cbc55aedd23e233d95d4e9f2a04',1,'BlockVertex::getAttributeDescriptions()'],['../structLineVertex.html#a869bd88f621422e1cbc9b09d23cfde99',1,'LineVertex::getAttributeDescriptions()']]],
+  ['getambientocclusion_6',['getAmbientOcclusion',['../classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d',1,'CreateMeshData::getAmbientOcclusion(BlockID side_1, BlockID side_2, BlockID corner)'],['../classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f',1,'CreateMeshData::getAmbientOcclusion(const glm::ivec3 &amp;pos, const int dim_1, const int dim_2)']]],
+  ['getattributedescriptions_7',['getAttributeDescriptions',['../structLineVertex.html#a869bd88f621422e1cbc9b09d23cfde99',1,'LineVertex::getAttributeDescriptions()'],['../structEntityVertex.html#ace5f65960f7d1b398627d28aca3404d8',1,'EntityVertex::getAttributeDescriptions()'],['../structBlockVertex.html#a9e1a1cbc55aedd23e233d95d4e9f2a04',1,'BlockVertex::getAttributeDescriptions()']]],
   ['getbindingdescription_8',['getBindingDescription',['../structLineVertex.html#a9a70417722eb0feff0dbe568fb766ee0',1,'LineVertex::getBindingDescription()'],['../structEntityVertex.html#af1a2ffda8d39b205a7e059c2a8dd770b',1,'EntityVertex::getBindingDescription()'],['../structBlockVertex.html#a4f8e5ec8212be46c0db7115e7ccd323f',1,'BlockVertex::getBindingDescription()']]],
   ['getblock_9',['getBlock',['../classChunk.html#ad3e99d768a4ba79aac8a87709c0be630',1,'Chunk::getBlock(const int &amp;x, const int &amp;y, const int &amp;z) const'],['../classChunk.html#a41bed81003d244e6f50cbaa729f05223',1,'Chunk::getBlock(const glm::vec3 &amp;position) const']]],
   ['getcamera_10',['getCamera',['../classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239',1,'World']]],
@@ -31,5 +31,7 @@ var searchData=
   ['graphics_5ffamily_28',['graphics_family',['../structQueueFamilyIndices.html#a234b1e58ad66b4ce2e09bd42c0f8409c',1,'QueueFamilyIndices']]],
   ['graphics_5fqueue_29',['graphics_queue',['../classVulkanAPI.html#a3d2e2ba32d12d350853d6de00770eab9',1,'VulkanAPI']]],
   ['grass_30',['Grass',['../structBlock.html#a338b278d25bcdf19adda3fe4508bf401',1,'Block::Grass()'],['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaac9a63596f76a62bb9f61a5dd7c0d25',1,'Grass():&#160;Block.hpp']]],
-  ['gravity_31',['gravity',['../classPlayer.html#a2ea78fd8cb75bda147dcd592d259a2a4',1,'Player']]]
+  ['gravity_31',['gravity',['../classPlayer.html#a2ea78fd8cb75bda147dcd592d259a2a4',1,'Player']]],
+  ['gui_5fpipeline_32',['gui_pipeline',['../classVulkanAPI.html#ab403f885edda5e49b103e2b5c25f88d5',1,'VulkanAPI']]],
+  ['guitexturedata_33',['GuiTextureData',['../structGuiTextureData.html',1,'']]]
 ];

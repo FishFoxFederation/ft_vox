@@ -17,6 +17,8 @@ var classCreateMeshData =
     [ "getAmbientOcclusion", "classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f", null ],
     [ "getCenterChunk", "classCreateMeshData.html#ae0710be0cb569300cfa85a7ea5cb40df", null ],
     [ "operator=", "classCreateMeshData.html#a6e8613853f81f95ab78969e93e74b2f3", null ],
+    [ "operator=", "classCreateMeshData.html#aa5c4ae7f350dad41549cd551805fde57", null ],
+    [ "unlock", "classCreateMeshData.html#ad38f0692830fb519424088722614e4a4", null ],
     [ "chunks", "classCreateMeshData.html#aad6bd289268fc6c44ffa987839700612", null ],
     [ "indices", "classCreateMeshData.html#a0fcd2d65556456c67a8125b8e4733511", null ],
     [ "vertices", "classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2", null ]

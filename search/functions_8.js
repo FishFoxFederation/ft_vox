@@ -5,10 +5,12 @@ var searchData=
   ['image_2',['Image',['../classImage.html#a58edd1c45b4faeb5f789b0d036d02313',1,'Image::Image()'],['../classImage.html#a20a5cb82bbecd48bdcea519bf53bc051',1,'Image::Image(const Image &amp;)=delete'],['../classImage.html#ab3d72c4c60d06ca1c897dd58526a8702',1,'Image::Image(Image &amp;&amp;other) noexcept'],['../classImage.html#aa4fb6cbaa00822c5afa8e40b2c870a9a',1,'Image::Image(VkDevice device, VkPhysicalDevice physical_device, SingleTimeCommand &amp;command_buffer, const CreateInfo &amp;create_info)']]],
   ['input_3',['Input',['../classInput.html#aa895b31518ef527a6463c70fb4709097',1,'Input']]],
   ['input_4',['input',['../classWindow.html#a82f1bcd7398902a364b803e6a4377fae',1,'Window']]],
-  ['insert_5',['insert',['../classIdList.html#a9f13a6e2c7b0ad078aec1ed58731aae2',1,'IdList::insert(const Value &amp;value)'],['../classIdList.html#a5ae7d76de56fe94f1831bd1c6e834ecb',1,'IdList::insert(Value &amp;&amp;value)'],['../classIdList.html#a74c071b70b6ecca184fd950f8e7d8417',1,'IdList::insert(const Key &amp;key, const Value &amp;value)'],['../classIdList.html#a7a325affc5650075383909a95651034b',1,'IdList::insert(const Key &amp;key, Value &amp;&amp;value)']]],
+  ['insert_5',['insert',['../classIdList.html#a9f13a6e2c7b0ad078aec1ed58731aae2',1,'IdList::insert(const Value &amp;value)'],['../classIdList.html#a7a325affc5650075383909a95651034b',1,'IdList::insert(const Key &amp;key, Value &amp;&amp;value)'],['../classIdList.html#a74c071b70b6ecca184fd950f8e7d8417',1,'IdList::insert(const Key &amp;key, const Value &amp;value)'],['../classIdList.html#a5ae7d76de56fe94f1831bd1c6e834ecb',1,'IdList::insert(Value &amp;&amp;value)']]],
   ['iscolliding_6',['isColliding',['../HitBox_8cpp.html#a49282f4311182dadcdddb5d87879738e',1,'isColliding(const HitBox &amp;hitbox1, const glm::dvec3 &amp;position1, const HitBox &amp;hitbox2, const glm::dvec3 &amp;position2):&#160;HitBox.cpp'],['../HitBox_8hpp.html#a49282f4311182dadcdddb5d87879738e',1,'isColliding(const HitBox &amp;hitbox1, const glm::dvec3 &amp;position1, const HitBox &amp;hitbox2, const glm::dvec3 &amp;position2):&#160;HitBox.cpp']]],
   ['iscomplete_7',['isComplete',['../structQueueFamilyIndices.html#a652cdfabe4719ae21a701e77d57e7899',1,'QueueFamilyIndices']]],
   ['iscursorcaptured_8',['isCursorCaptured',['../classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda',1,'Input']]],
-  ['isreadable_9',['isReadable',['../classStatus.html#a0f4efa234a9cdd6be88eb04f73cdb15b',1,'Status']]],
-  ['iswritable_10',['isWritable',['../classStatus.html#a6e044a2f0873c2b1cbb99c30abb632fe',1,'Status']]]
+  ['islockable_9',['isLockable',['../classStatus.html#aa164dbd052f1208125fd678b6cafd51b',1,'Status']]],
+  ['islocked_10',['isLocked',['../classStatus.html#a9c8830c8a44acd4d18baccae5f395306',1,'Status']]],
+  ['issharelockable_11',['isShareLockable',['../classStatus.html#a533a5c6cc5c5feffb49a95f121767a02',1,'Status']]],
+  ['issharelocked_12',['isShareLocked',['../classStatus.html#a5c02329b1d3f6298c988a007a361f47d',1,'Status']]]
 ];

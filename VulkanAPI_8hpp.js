@@ -8,6 +8,7 @@ var VulkanAPI_8hpp =
     [ "ModelMatrice", "structModelMatrice.html", "structModelMatrice" ],
     [ "EntityMatrices", "structEntityMatrices.html", "structEntityMatrices" ],
     [ "ShadowMapLight", "structShadowMapLight.html", "structShadowMapLight" ],
+    [ "GuiTextureData", "structGuiTextureData.html", "structGuiTextureData" ],
     [ "ImGuiTexture", "structImGuiTexture.html", "structImGuiTexture" ],
     [ "VulkanAPI", "classVulkanAPI.html", "classVulkanAPI" ],
     [ "GLFW_INCLUDE_VULKAN", "VulkanAPI_8hpp.html#ab91f325a54d3e35fe831a86d6382c2a9", null ]

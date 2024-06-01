@@ -120,9 +120,10 @@ Collaboration diagram for Player:</div>
 <div class="dyncontent">
 <div class="center"><img src="classPlayer__coll__graph.png" border="0" usemap="#aPlayer_coll__map" alt="Collaboration graph"/></div>
 <map name="aPlayer_coll__map" id="aPlayer_coll__map">
-<area shape="rect" title=" " alt="" coords="57,240,251,632"/>
+<area shape="rect" title=" " alt="" coords="156,240,349,603"/>
 <area shape="rect" href="classTransform.html" title=" " alt="" coords="5,27,108,141"/>
 <area shape="rect" href="classHitBox.html" title=" " alt="" coords="205,5,301,163"/>
+<area shape="rect" href="structRayCastOnBlockResult.html" title=" " alt="" coords="325,20,487,148"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -154,14 +155,30 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad67555e55c817db8a320c80fdaf75dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa7dd1bda58f8f5ba21087b099ddbd2f"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#afa7dd1bda58f8f5ba21087b099ddbd2f">getTransformedMovement</a> (glm::dvec3 move) const</td></tr>
 <tr class="separator:afa7dd1bda58f8f5ba21087b099ddbd2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c0a8d33917213524d34950943606b24"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a4c0a8d33917213524d34950943606b24">eyePosition</a> () const</td></tr>
+<tr class="separator:a4c0a8d33917213524d34950943606b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333e44206106f4585180041030d3cd00"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a333e44206106f4585180041030d3cd00">direction</a> () const</td></tr>
+<tr class="separator:a333e44206106f4585180041030d3cd00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee30f8cfd8ace63acd9534cf902aa6a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aee30f8cfd8ace63acd9534cf902aa6a4">shouldCollide</a> () const</td></tr>
 <tr class="separator:aee30f8cfd8ace63acd9534cf902aa6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55caf512b6d6b3682b59bff8531da250"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a55caf512b6d6b3682b59bff8531da250">shouldFall</a> () const</td></tr>
 <tr class="separator:a55caf512b6d6b3682b59bff8531da250"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cb36c5bd5069fc72552aeec05cc5fca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a2cb36c5bd5069fc72552aeec05cc5fca">canJump</a> () const</td></tr>
+<tr class="separator:a2cb36c5bd5069fc72552aeec05cc5fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9df196a5b35729edaeef70101461bbd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a9df196a5b35729edaeef70101461bbd8">startJump</a> ()</td></tr>
+<tr class="separator:a9df196a5b35729edaeef70101461bbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a789d13921a74984b368b20ffd0f82680"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a789d13921a74984b368b20ffd0f82680">startFall</a> ()</td></tr>
 <tr class="separator:a789d13921a74984b368b20ffd0f82680"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba91222919c620dde688186c4d758241"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aba91222919c620dde688186c4d758241">fallDuration</a> ()</td></tr>
 <tr class="separator:aba91222919c620dde688186c4d758241"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12ef01e1a26542218229c2b6a4a1d17e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a12ef01e1a26542218229c2b6a4a1d17e">canAttack</a> () const</td></tr>
+<tr class="separator:a12ef01e1a26542218229c2b6a4a1d17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1afc183ab0030ef3fd0f76f66aa421a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a1afc183ab0030ef3fd0f76f66aa421a5">startAttack</a> ()</td></tr>
+<tr class="separator:a1afc183ab0030ef3fd0f76f66aa421a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60c19c665bddaa431f7c61aba55d3d41"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a60c19c665bddaa431f7c61aba55d3d41">canUse</a> () const</td></tr>
+<tr class="separator:a60c19c665bddaa431f7c61aba55d3d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3733354eaf71b26f23344fe257c3d943"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a3733354eaf71b26f23344fe257c3d943">startUse</a> ()</td></tr>
+<tr class="separator:a3733354eaf71b26f23344fe257c3d943"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -209,6 +226,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a349f074eedf387a35ce879738022bf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affddc950dc472ad3dfd65e752957d946"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#affddc950dc472ad3dfd65e752957d946">pitch</a> = 0.0</td></tr>
 <tr class="separator:affddc950dc472ad3dfd65e752957d946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fbacb030211a06f1342a56603b51802"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRayCastOnBlockResult.html">RayCastOnBlockResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a7fbacb030211a06f1342a56603b51802">targeted_block</a> {false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id, false}</td></tr>
+<tr class="separator:a7fbacb030211a06f1342a56603b51802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a72e63c4dee307c57567fe40a08bb292d" name="a72e63c4dee307c57567fe40a08bb292d"></a>
@@ -347,6 +366,91 @@ Public Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a12ef01e1a26542218229c2b6a4a1d17e" name="a12ef01e1a26542218229c2b6a4a1d17e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12ef01e1a26542218229c2b6a4a1d17e">&#9670;&#160;</a></span>canAttack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::canAttack </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2cb36c5bd5069fc72552aeec05cc5fca" name="a2cb36c5bd5069fc72552aeec05cc5fca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cb36c5bd5069fc72552aeec05cc5fca">&#9670;&#160;</a></span>canJump()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::canJump </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60c19c665bddaa431f7c61aba55d3d41" name="a60c19c665bddaa431f7c61aba55d3d41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60c19c665bddaa431f7c61aba55d3d41">&#9670;&#160;</a></span>canUse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::canUse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a333e44206106f4585180041030d3cd00" name="a333e44206106f4585180041030d3cd00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a333e44206106f4585180041030d3cd00">&#9670;&#160;</a></span>direction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 Player::direction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4c0a8d33917213524d34950943606b24" name="a4c0a8d33917213524d34950943606b24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c0a8d33917213524d34950943606b24">&#9670;&#160;</a></span>eyePosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 Player::eyePosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -500,6 +604,23 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1afc183ab0030ef3fd0f76f66aa421a5" name="a1afc183ab0030ef3fd0f76f66aa421a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1afc183ab0030ef3fd0f76f66aa421a5">&#9670;&#160;</a></span>startAttack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Player::startAttack </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a789d13921a74984b368b20ffd0f82680" name="a789d13921a74984b368b20ffd0f82680"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a789d13921a74984b368b20ffd0f82680">&#9670;&#160;</a></span>startFall()</h2>
 
@@ -508,6 +629,40 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void Player::startFall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9df196a5b35729edaeef70101461bbd8" name="a9df196a5b35729edaeef70101461bbd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9df196a5b35729edaeef70101461bbd8">&#9670;&#160;</a></span>startJump()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Player::startJump </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3733354eaf71b26f23344fe257c3d943" name="a3733354eaf71b26f23344fe257c3d943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3733354eaf71b26f23344fe257c3d943">&#9670;&#160;</a></span>startUse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Player::startUse </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -778,6 +933,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool Player::sprinting = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7fbacb030211a06f1342a56603b51802" name="a7fbacb030211a06f1342a56603b51802"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fbacb030211a06f1342a56603b51802">&#9670;&#160;</a></span>targeted_block</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structRayCastOnBlockResult.html">RayCastOnBlockResult</a> Player::targeted_block {false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id, false}</td>
         </tr>
       </table>
 </div><div class="memdoc">

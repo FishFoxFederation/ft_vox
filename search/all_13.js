@@ -1,13 +1,19 @@
 var searchData=
 [
-  ['update_0',['update',['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor']]],
-  ['updateblock_1',['updateBlock',['../classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57',1,'World']]],
-  ['updateentities_2',['updateEntities',['../classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb',1,'World']]],
-  ['updateimgui_3',['updateImGui',['../classDebugGui.html#aa849cf767818482461efa78caef2ff70',1,'DebugGui']]],
-  ['updateplayer_4',['updatePlayer',['../classWorld.html#af4fd79d62eca820ff565c3f45bf0a37b',1,'World::updatePlayer(const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time)'],['../classWorld.html#af77441ac7b7725596b84877315505bea',1,'World::updatePlayer(const uint64_t player_id, std::function&lt; void(Player &amp;)&gt; update)']]],
-  ['updatethread_5',['UpdateThread',['../classUpdateThread.html',1,'UpdateThread'],['../classUpdateThread.html#abeff9e2677451afe227e2a7981cc8961',1,'UpdateThread::UpdateThread(const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, World &amp;world, VulkanAPI &amp;vulkan_api, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]],
-  ['updatethread_2ecpp_6',['UpdateThread.cpp',['../UpdateThread_8cpp.html',1,'']]],
-  ['updatethread_2ehpp_7',['UpdateThread.hpp',['../UpdateThread_8hpp.html',1,'']]],
-  ['usage_8',['usage',['../structImage_1_1CreateInfo.html#aac48dd32aae5bac47a262927516a9f81',1,'Image::CreateInfo']]],
-  ['used_5fby_5fframe_9',['used_by_frame',['../structMesh.html#ae9c8ca91934b5f535e62d2637a3d400a',1,'Mesh']]]
+  ['unlock_0',['unlock',['../classStatus.html#acfccc37966909280673cb73ea8cbbd83',1,'Status::unlock()'],['../classCreateMeshData.html#ad38f0692830fb519424088722614e4a4',1,'CreateMeshData::unlock()']]],
+  ['unlock_5fshared_1',['unlock_shared',['../classStatus.html#ae13734a6357c21bce8d1ac8e340bafe5',1,'Status']]],
+  ['update_2',['update',['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor']]],
+  ['updateblock_3',['updateBlock',['../classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57',1,'World']]],
+  ['updateentities_4',['updateEntities',['../classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb',1,'World']]],
+  ['updateimgui_5',['updateImGui',['../classDebugGui.html#aa849cf767818482461efa78caef2ff70',1,'DebugGui']]],
+  ['updateplayer_6',['updatePlayer',['../classWorld.html#af77441ac7b7725596b84877315505bea',1,'World']]],
+  ['updateplayercamera_7',['updatePlayerCamera',['../classWorld.html#a90f0215ebdb31f244829f5a16f408b81',1,'World']]],
+  ['updateplayerposition_8',['updatePlayerPosition',['../classWorld.html#a292eea3d599f7d2040bd02693ab9969c',1,'World']]],
+  ['updateplayertargetblock_9',['updatePlayerTargetBlock',['../classWorld.html#aad35ec43ee6bb3ae3fd96d10465ed055',1,'World']]],
+  ['updatethread_10',['UpdateThread',['../classUpdateThread.html',1,'UpdateThread'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete'],['../classUpdateThread.html#abeff9e2677451afe227e2a7981cc8961',1,'UpdateThread::UpdateThread(const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, World &amp;world, VulkanAPI &amp;vulkan_api, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete']]],
+  ['updatethread_2ecpp_11',['UpdateThread.cpp',['../UpdateThread_8cpp.html',1,'']]],
+  ['updatethread_2ehpp_12',['UpdateThread.hpp',['../UpdateThread_8hpp.html',1,'']]],
+  ['ups_13',['ups',['../classDebugGui.html#a9324388f937008f1670d57e780ccf7e1',1,'DebugGui']]],
+  ['usage_14',['usage',['../structImage_1_1CreateInfo.html#aac48dd32aae5bac47a262927516a9f81',1,'Image::CreateInfo']]],
+  ['used_5fby_5fframe_15',['used_by_frame',['../structMesh.html#ae9c8ca91934b5f535e62d2637a3d400a',1,'Mesh']]]
 ];

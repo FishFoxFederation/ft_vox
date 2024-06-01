@@ -13,7 +13,7 @@ var searchData=
   ['shadow_5fpipeline_10',['shadow_pipeline',['../classVulkanAPI.html#a34f25aa629476800fbf6acb0e6400d0f',1,'VulkanAPI']]],
   ['shadow_5frender_5fpass_11',['shadow_render_pass',['../classVulkanAPI.html#adb8f28d802477d4121965de04856ddd0',1,'VulkanAPI']]],
   ['single_5ftime_5fcommand_5ffence_12',['single_time_command_fence',['../classVulkanAPI.html#a10a2d2c305087b878e1518437fd6ca4e',1,'VulkanAPI']]],
-  ['size_13',['size',['../classHitBox.html#a63004c4f5e9e4de73e676ec9731a4d4b',1,'HitBox']]],
+  ['size_13',['size',['../structWorldScene_1_1DebugBlock.html#a213d46944238d13c1e61a7a6efdde18e',1,'WorldScene::DebugBlock::size()'],['../structGuiTextureData.html#aab3ce22724c357c35624ad1b91e67f39',1,'GuiTextureData::size()'],['../classHitBox.html#a63004c4f5e9e4de73e676ec9731a4d4b',1,'HitBox::size()']]],
   ['skybox_5fcube_5fmap_14',['skybox_cube_map',['../classVulkanAPI.html#a8ed172aa7168c80fb7610bb311a386ae',1,'VulkanAPI']]],
   ['skybox_5fpipeline_15',['skybox_pipeline',['../classVulkanAPI.html#a44ee7e85011c6fdb0d0c14526d1fa59c',1,'VulkanAPI']]],
   ['sneak_5fspeed_5ffactor_16',['sneak_speed_factor',['../classPlayer.html#acc1c67389d87936bfdffcc3c6e56a185',1,'Player']]],

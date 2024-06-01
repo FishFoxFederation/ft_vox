@@ -1,12 +1,16 @@
 <map id="src/app/world/entity/Player.hpp" name="src/app/world/entity/Player.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="283,5,417,45"/>
-<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="306,240,386,265"/>
-<area shape="rect" id="node3" href="$Transform_8hpp.html" title=" " alt="" coords="297,167,403,192"/>
-<area shape="rect" id="node4" title=" " alt="" coords="469,240,561,265"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,240,196,265"/>
-<area shape="rect" id="node6" title=" " alt="" coords="615,240,677,265"/>
-<area shape="rect" id="node7" href="$Camera_8hpp.html" title=" " alt="" coords="131,167,222,192"/>
-<area shape="rect" id="node9" href="$HitBox_8hpp.html" title=" " alt="" coords="398,93,483,119"/>
-<area shape="rect" id="node8" title=" " alt="" coords="220,240,277,265"/>
-<area shape="rect" id="node10" title=" " alt="" coords="478,167,537,192"/>
+<area shape="rect" id="node1" title=" " alt="" coords="341,5,475,45"/>
+<area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="445,313,525,339"/>
+<area shape="rect" id="node3" href="$Transform_8hpp.html" title=" " alt="" coords="126,240,231,265"/>
+<area shape="rect" id="node4" title=" " alt="" coords="306,313,398,339"/>
+<area shape="rect" id="node5" title=" " alt="" coords="91,313,282,339"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,313,67,339"/>
+<area shape="rect" id="node7" href="$Camera_8hpp.html" title=" " alt="" coords="307,240,397,265"/>
+<area shape="rect" id="node8" title=" " alt="" coords="621,313,678,339"/>
+<area shape="rect" id="node9" href="$HitBox_8hpp.html" title=" " alt="" coords="365,167,451,192"/>
+<area shape="rect" id="node11" href="$Block_8hpp.html" title=" " alt="" coords="449,93,527,119"/>
+<area shape="rect" id="node13" title=" " alt="" coords="757,93,819,119"/>
+<area shape="rect" id="node14" title=" " alt="" coords="843,93,909,119"/>
+<area shape="rect" id="node10" title=" " alt="" coords="523,240,581,265"/>
+<area shape="rect" id="node12" title=" " alt="" coords="526,167,581,192"/>
 </map>

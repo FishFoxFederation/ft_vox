@@ -1,5 +1,6 @@
 <map id="Player" name="Player">
-<area shape="rect" id="node1" title=" " alt="" coords="57,240,251,632"/>
+<area shape="rect" id="node1" title=" " alt="" coords="156,240,349,603"/>
 <area shape="rect" id="node2" href="$classTransform.html" title=" " alt="" coords="5,27,108,141"/>
 <area shape="rect" id="node3" href="$classHitBox.html" title=" " alt="" coords="205,5,301,163"/>
+<area shape="rect" id="node4" href="$structRayCastOnBlockResult.html" title=" " alt="" coords="325,20,487,148"/>
 </map>

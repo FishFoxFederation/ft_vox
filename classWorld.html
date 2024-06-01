@@ -119,7 +119,7 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,148,236"/>
+<area shape="rect" title=" " alt="" coords="5,5,168,221"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -141,8 +141,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5cc73b1aa54db5da01e4004acd4fd8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10a860e06db7eae12c2d62fbbbc78b57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57">updateBlock</a> (glm::dvec3 position)</td></tr>
 <tr class="separator:a10a860e06db7eae12c2d62fbbbc78b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4fd79d62eca820ff565c3f45bf0a37b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af4fd79d62eca820ff565c3f45bf0a37b">updatePlayer</a> (const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time)</td></tr>
-<tr class="separator:af4fd79d62eca820ff565c3f45bf0a37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a292eea3d599f7d2040bd02693ab9969c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a292eea3d599f7d2040bd02693ab9969c">updatePlayerPosition</a> (const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time)</td></tr>
+<tr class="separator:a292eea3d599f7d2040bd02693ab9969c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90f0215ebdb31f244829f5a16f408b81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a90f0215ebdb31f244829f5a16f408b81">updatePlayerCamera</a> (const uint64_t player_id, const double x_offset, const double y_offset)</td></tr>
+<tr class="separator:a90f0215ebdb31f244829f5a16f408b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad35ec43ee6bb3ae3fd96d10465ed055"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aad35ec43ee6bb3ae3fd96d10465ed055">updatePlayerTargetBlock</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:aad35ec43ee6bb3ae3fd96d10465ed055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48881bc1e2708b0202c899cfa1f813ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a48881bc1e2708b0202c899cfa1f813ee">playerAttack</a> (const uint64_t player_id, bool attack)</td></tr>
+<tr class="separator:a48881bc1e2708b0202c899cfa1f813ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7f4b708a4d2edb00d9809267be8b051"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ac7f4b708a4d2edb00d9809267be8b051">playerUse</a> (const uint64_t player_id, bool use)</td></tr>
+<tr class="separator:ac7f4b708a4d2edb00d9809267be8b051"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af77441ac7b7725596b84877315505bea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af77441ac7b7725596b84877315505bea">updatePlayer</a> (const uint64_t player_id, std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt; update)</td></tr>
 <tr class="separator:af77441ac7b7725596b84877315505bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66e149c5bb444aeaff5a5cbf2cd59239"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239">getCamera</a> (const uint64_t player_id)</td></tr>
@@ -348,6 +356,62 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a48881bc1e2708b0202c899cfa1f813ee" name="a48881bc1e2708b0202c899cfa1f813ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48881bc1e2708b0202c899cfa1f813ee">&#9670;&#160;</a></span>playerAttack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::playerAttack </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>attack</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac7f4b708a4d2edb00d9809267be8b051" name="ac7f4b708a4d2edb00d9809267be8b051"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7f4b708a4d2edb00d9809267be8b051">&#9670;&#160;</a></span>playerUse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::playerUse </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a10a860e06db7eae12c2d62fbbbc78b57" name="a10a860e06db7eae12c2d62fbbbc78b57"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a10a860e06db7eae12c2d62fbbbc78b57">&#9670;&#160;</a></span>updateBlock()</h2>
 
@@ -383,14 +447,76 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af4fd79d62eca820ff565c3f45bf0a37b" name="af4fd79d62eca820ff565c3f45bf0a37b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4fd79d62eca820ff565c3f45bf0a37b">&#9670;&#160;</a></span>updatePlayer() <span class="overload">[1/2]</span></h2>
+<a id="af77441ac7b7725596b84877315505bea" name="af77441ac7b7725596b84877315505bea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af77441ac7b7725596b84877315505bea">&#9670;&#160;</a></span>updatePlayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void World::updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>update</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a90f0215ebdb31f244829f5a16f408b81" name="a90f0215ebdb31f244829f5a16f408b81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90f0215ebdb31f244829f5a16f408b81">&#9670;&#160;</a></span>updatePlayerCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::updatePlayerCamera </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>x_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>y_offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a292eea3d599f7d2040bd02693ab9969c" name="a292eea3d599f7d2040bd02693ab9969c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a292eea3d599f7d2040bd02693ab9969c">&#9670;&#160;</a></span>updatePlayerPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::updatePlayerPosition </td>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em>, </td>
@@ -447,28 +573,18 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af77441ac7b7725596b84877315505bea" name="af77441ac7b7725596b84877315505bea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af77441ac7b7725596b84877315505bea">&#9670;&#160;</a></span>updatePlayer() <span class="overload">[2/2]</span></h2>
+<a id="aad35ec43ee6bb3ae3fd96d10465ed055" name="aad35ec43ee6bb3ae3fd96d10465ed055"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad35ec43ee6bb3ae3fd96d10465ed055">&#9670;&#160;</a></span>updatePlayerTargetBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void World::updatePlayer </td>
+          <td class="memname">void World::updatePlayerTargetBlock </td>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
-          <td class="paramname"><em>player_id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt;&#160;</td>
-          <td class="paramname"><em>update</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

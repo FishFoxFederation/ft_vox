@@ -11,6 +11,7 @@ var classChunk =
     [ "getPosition", "classChunk.html#ac7a2ed68597190050622a38dc45b4665", null ],
     [ "operator=", "classChunk.html#ace5c9e74ac7d1c5804c9bdf476661602", null ],
     [ "operator=", "classChunk.html#a1aa05761525f889a89edb7a8f61c6da8", null ],
+    [ "setBlock", "classChunk.html#aa779f4e8dfbe6bb2ed478b5f8e2c8e71", null ],
     [ "setBlock", "classChunk.html#a039e0832d7569b13673c8b4e47c5842d", null ],
     [ "setMeshID", "classChunk.html#a8d912dafdab6b2d1eada1bb86240531c", null ],
     [ "x", "classChunk.html#a05ae613668297fefa3e36540bdb80ea1", null ],
