@@ -5,6 +5,7 @@ PacketFactory::PacketFactory()
 	m_packets.insert(std::make_pair(IPacket::Type::CONNECTION, std::make_shared<ConnectionPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::PLAYER_CONNECTED, std::make_shared<PlayerConnectedPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::PLAYER_MOVE, std::make_shared<PlayerMovePacket>()));
+	m_packets.insert(std::make_pair(IPacket::Type::DISCONNECT, std::make_shared<DisconnectPacket>()));
 }
 
 PacketFactory::~PacketFactory()

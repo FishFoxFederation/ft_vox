@@ -50,6 +50,7 @@ public:
 	private:
 		uint64_t m_id;
 	};
+
 private:
 
 	std::atomic<bool>							m_running;

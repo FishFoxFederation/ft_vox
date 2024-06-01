@@ -15,12 +15,13 @@ public:
 		CONNECTION = 0,
 		PLAYER_CONNECTED = 1,
 		PLAYER_MOVE = 2,
-		ENTITY_MOVE = 3
+		ENTITY_MOVE = 3,
+		DISCONNECT = 4,
 	};
 	virtual ~IPacket();
 
-	IPacket(const IPacket&) = delete;
-	IPacket& operator=(const IPacket&) = delete;
+	IPacket(const IPacket&);
+	IPacket& operator=(const IPacket&);
 	IPacket(IPacket&&);
 	IPacket& operator=(IPacket&&);
 

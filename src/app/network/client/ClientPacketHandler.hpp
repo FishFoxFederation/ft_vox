@@ -22,7 +22,7 @@ private:
 	Client &	m_client;
 	World &		m_world;
 
-	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
 	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
 	void handlePlayerConnectedPacket(std::shared_ptr<PlayerConnectedPacket> packet);
+	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
 };
