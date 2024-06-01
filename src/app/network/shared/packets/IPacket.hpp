@@ -17,6 +17,7 @@ public:
 		PLAYER_MOVE = 2,
 		ENTITY_MOVE = 3,
 		DISCONNECT = 4,
+		BLOCK_ACTION = 5,
 	};
 	virtual ~IPacket();
 

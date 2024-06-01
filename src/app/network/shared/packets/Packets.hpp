@@ -4,6 +4,7 @@
 #include "PlayerConnectedPacket.hpp"
 #include "ConnectionPacket.hpp"
 #include "DisconnectPacket.hpp"
+#include "BlockActionPacket.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 

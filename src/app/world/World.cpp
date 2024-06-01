@@ -922,13 +922,14 @@ void World::addPlayer(const uint64_t player_id, const glm::vec3 & position)
 		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
 		m_worldScene.entity_mesh_list.insert(
 			player_id, {
-				m_vulkanAPI.cube_mesh_id, Transform(
-					player->transform.position + player->hitbox.position,
-					glm::vec3(0.0f),
-					player->hitbox.size
-				).model()
+				m_vulkanAPI.cube_mesh_id, {}
 			}
 		);
+		m_worldScene.entity_mesh_list.at(player_id).model = Transform(
+			player->transform.position + player->hitbox.position,
+			glm::vec3(0.0f),
+			player->hitbox.size
+		).model();
 	}
 }
 
