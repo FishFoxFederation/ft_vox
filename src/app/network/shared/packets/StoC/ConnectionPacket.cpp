@@ -30,19 +30,32 @@ ConnectionPacket::~ConnectionPacket()
 
 void ConnectionPacket::Serialize(uint8_t * buffer) const
 {
-	memcpy(buffer, &m_id, sizeof(uint32_t));
-	memcpy(buffer + sizeof(uint32_t), &m_position, sizeof(glm::vec3));
+
+	uint32_t type = static_cast<uint32_t>(GetType());
+	memcpy(buffer, &type, sizeof(uint32_t));
+	buffer += sizeof(uint32_t);
+
+	memcpy(buffer, &m_id, sizeof(m_id));
+	buffer += sizeof(m_id);
+
+	memcpy(buffer, &m_position, sizeof(m_position));
+	buffer += sizeof(m_position);
 }
 
 void ConnectionPacket::Deserialize(const uint8_t * buffer)
 {
-	memcpy(&m_id, buffer, sizeof(uint32_t));
-	memcpy(&m_position, buffer + sizeof(uint32_t), sizeof(glm::vec3));
+	buffer += sizeof(uint32_t);
+
+	memcpy(&m_id, buffer, sizeof(m_id));
+	buffer += sizeof(m_id);
+
+	memcpy(&m_position, buffer, sizeof(m_position));
+	buffer += sizeof(glm::vec3);
 }
 
 uint32_t ConnectionPacket::Size() const
 {
-	return sizeof(uint32_t) + sizeof(glm::vec3);
+	return sizeof(IPacket::Type) + sizeof(m_id) + sizeof(m_position);
 }
 
 std::shared_ptr<IPacket> ConnectionPacket::Clone() const
@@ -58,4 +71,19 @@ IPacket::Type ConnectionPacket::GetType() const
 uint32_t ConnectionPacket::GetId() const
 {
 	return m_id;
+}
+
+glm::vec3 ConnectionPacket::GetPosition() const
+{
+	return m_position;
+}
+
+void ConnectionPacket::SetId(uint32_t id)
+{
+	m_id = id;
+}
+
+void ConnectionPacket::SetPosition(glm::vec3 position)
+{
+	m_position = position;
 }

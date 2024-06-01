@@ -23,7 +23,8 @@ public:
 	World(
 		WorldScene & WorldScene,
 		VulkanAPI & vulkanAPI,
-		ThreadPool & threadPool
+		ThreadPool & threadPool,
+		uint64_t my_player_id = 0
 	);
 	~World();
 
@@ -44,7 +45,7 @@ public:
 		const int8_t right,
 		const int8_t up,
 		const int8_t down,
-		const double delta_time
+		const double delta_time_second
 	);
 	void updatePlayerCamera(
 		const uint64_t player_id,

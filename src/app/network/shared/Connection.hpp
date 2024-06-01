@@ -24,6 +24,7 @@ public:
 
 	std::vector<uint8_t>			getReadBuffer() const;
 	const std::vector<uint8_t> &	getReadBufferRef() const;
+	std::mutex & 			getReadBufferMutex();
 	void					reduceReadBuffer(size_t size);
 	bool					dataToSend() const;
 	ssize_t 				recv();

@@ -18,6 +18,7 @@ public:
 
 private:
 	Server &	m_server;
+	std::map<uint64_t, glm::vec3> m_player_positions;
 
 	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
 	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);

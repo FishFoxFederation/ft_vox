@@ -58,16 +58,27 @@ void UpdateThread::launch()
 void UpdateThread::init()
 {
 	LOG_INFO("UpdateThread launched :" << gettid());
+	auto packet = std::make_shared<ConnectionPacket>(m_world.m_my_player_id, m_world.getPlayerPosition(m_world.m_my_player_id));
+	m_client.sendPacket(packet);
 }
 
 void UpdateThread::loop()
 {
+	m_client.runOnce(10);
 	updateTime();
 	readInput();
 	//only move player every 20 ms
 	static auto last_move = std::chrono::steady_clock::now();
+	if (std::chrono::steady_clock::now() - last_move > std::chrono::milliseconds(1))
+	{
+		//only move player every 20 ms
+	static auto last_move = std::chrono::steady_clock::now();
 	if (std::chrono::steady_clock::now() - last_move > std::chrono::milliseconds(20))
 		movePlayer();
+		last_move = std::chrono::steady_clock::now();
+	}
+
+	handlePackets();
 	handlePackets();
 }
 
@@ -160,6 +171,8 @@ void UpdateThread::readInput()
 
 void UpdateThread::movePlayer()
 {
+	auto static last_time = std::chrono::steady_clock::now();
+	auto now = std::chrono::steady_clock::now();
 	glm::dvec2 look = glm::dvec2(m_mouse_x - m_last_mouse_x, m_mouse_y - m_last_mouse_y) * m_settings.mouseSensitivity();
 	m_last_mouse_x = m_mouse_x;
 	m_last_mouse_y = m_mouse_y;
@@ -175,6 +188,7 @@ void UpdateThread::movePlayer()
 		m_last_target_block_update_time = m_current_time;
 	}
 
+	auto [position, displacement]  = m_world.calculatePlayerMovement(
 	auto [position, displacement]  = m_world.calculatePlayerMovement(
 		m_world.m_my_player_id,
 		m_move_forward,

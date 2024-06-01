@@ -46,7 +46,7 @@ int Client::read_data()
 		auto ret = m_packet_factory.extractPacket(m_connection);
 		if (ret.first)
 		{
-			LOG_INFO("RECEIVED NEW PACKET");
+			// LOG_INFO("RECEIVED NEW PACKET");
 			m_incoming_packets.push(ret.second);
 		}
 	}
@@ -76,7 +76,7 @@ int Client::send_data()
 
 void Client::sendPacket(std::shared_ptr<IPacket> packet)
 {
-	LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
+	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
 	m_connection.queueAndSendMessage(buffer);

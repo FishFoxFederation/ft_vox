@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 Server::Server(int port)
-: m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::GetInstance())
+: m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::GetInstance()), m_ids_counter(1)
 {
 	m_poller.add(0, m_server_socket);
 	LOG_INFO("Server started on port " + std::to_string(port));
@@ -32,9 +32,10 @@ void Server::runOnce(int timeout)
 		{
 			LOG_INFO("New client connected");
 			Connection connection(m_server_socket.accept());
-			auto ret = m_connections.insert(std::make_pair(get_new_id(), std::move(connection)));
-			LOG_INFO("New client id : " + std::to_string(ret.first->first));
-			m_poller.add(ret.first->first, ret.first->second.getSocket());
+			connection.setConnectionId(get_new_id());
+			auto ret = m_connections.insert(std::make_pair(connection.getConnectionId(), std::move(connection)));
+			LOG_INFO("New client id : " << std::to_string(ret.first->second.getConnectionId()));
+			m_poller.add(ret.first->second.getConnectionId(), ret.first->second.getSocket());
 		}
 
 		/**********************************************
@@ -85,15 +86,16 @@ uint64_t Server::get_new_id()
 {
 	// id generator extremely advanced code do not touch
 	//	or pay me pizza
-	while (1)
-	{
-		// If the counter is 0, increment it to 1 because the id 0 is reserved for the server socket
-		if (m_ids_counter == 0)
-			m_ids_counter++;
-		if (!m_connections.contains(m_ids_counter))
-			return m_ids_counter++;
-		m_ids_counter++;
-	}
+	// while (1)
+	// {
+	// 	// If the counter is 0, increment it to 1 because the id 0 is reserved for the server socket
+	// 	if (m_ids_counter == 0)
+	// 		m_ids_counter++;
+	// 	if (!m_connections.contains(m_ids_counter))
+	// 		return m_ids_counter++;
+	// 	m_ids_counter++;
+	// }
+	return m_ids_counter++;
 }
 
 int Server::read_data(Connection & connection, uint64_t id)

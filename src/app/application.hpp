@@ -20,7 +20,7 @@ class Application
 
 public:
 
-	Application();
+	Application(const int & player_id, const std::string & ip_address, const int & port);
 	~Application();
 
 	void run();
@@ -39,5 +39,5 @@ private:
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
 	BlockUpdateThread	m_block_update_thread;
-	NetworkThread		m_network_thread;
+	// NetworkThread		m_network_thread;
 };
