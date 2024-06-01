@@ -26,4 +26,9 @@ private:
 	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
 	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
+	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
+
+
+	void mirrorPacket(std::shared_ptr<IPacket> packet);
+	void relayPacket(std::shared_ptr<IPacket> packet);
 };

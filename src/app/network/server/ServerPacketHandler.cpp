@@ -28,6 +28,11 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 			handleDisconnectPacket(std::dynamic_pointer_cast<DisconnectPacket>(packet));
 			break;
 		}
+		case IPacket::Type::BLOCK_ACTION:
+		{
+			mirrorPacket(packet);
+			break;
+		}
 		default:
 		{
 			break;
@@ -39,7 +44,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 {
 
 	//send new player to all other players
-	auto packet_to_send = std::make_shared<PlayerConnectedPacket>(packet->GetId());
+	auto packet_to_send = std::make_shared<ConnectionPacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_server.sendAllExcept(packet_to_send, packet->GetConnectionId());
 
@@ -47,7 +52,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	//send all other players to new player
 	for(auto & player : m_player_positions)
 	{
-		auto packet_to_send = std::make_shared<PlayerConnectedPacket>(player.first);
+		auto packet_to_send = std::make_shared<ConnectionPacket>(player.first, player.second);
 		packet_to_send->SetConnectionId(packet->GetConnectionId());
 		m_server.send(packet_to_send);
 	}
@@ -85,4 +90,14 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_server.sendAll(packet_to_send);
 	m_player_positions[packet->GetId()] = packet->GetPosition();
+}
+
+void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)
+{
+	m_server.sendAll(packet);
+}
+
+void ServerPacketHandler::relayPacket(std::shared_ptr<IPacket> packet)
+{
+	m_server.sendAllExcept(packet, packet->GetConnectionId());
 }

@@ -4,7 +4,7 @@ PlayerConnectedPacket::PlayerConnectedPacket()
 {
 }
 
-PlayerConnectedPacket::PlayerConnectedPacket(const uint8_t & id)
+PlayerConnectedPacket::PlayerConnectedPacket(const uint32_t & id)
 	: m_id(id)
 {
 }
@@ -30,14 +30,15 @@ void PlayerConnectedPacket::Serialize(uint8_t * buffer) const
 	memcpy(buffer, &type, sizeof(uint32_t));
 	buffer += sizeof(uint32_t);
 
-	buffer[0] = m_id;
+	memcpy(buffer, &m_id, sizeof(m_id));
 }
 
 void PlayerConnectedPacket::Deserialize(const uint8_t * buffer)
 {
+	//skipping type
 	buffer += sizeof(uint32_t);
 
-	m_id = buffer[0];
+	memcpy(&m_id, buffer, sizeof(m_id));
 }
 
 uint32_t PlayerConnectedPacket::Size() const
@@ -55,12 +56,12 @@ std::shared_ptr<IPacket> PlayerConnectedPacket::Clone() const
 	return std::make_shared<PlayerConnectedPacket>();
 }
 
-uint8_t PlayerConnectedPacket::GetId() const
+uint32_t PlayerConnectedPacket::GetId() const
 {
 	return m_id;
 }
 
-void PlayerConnectedPacket::setId(uint8_t id)
+void PlayerConnectedPacket::setId(uint32_t id)
 {
 	m_id = id;
 }

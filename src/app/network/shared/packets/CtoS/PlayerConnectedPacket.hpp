@@ -6,7 +6,7 @@ class PlayerConnectedPacket : public IPacket
 {
 public:
 	PlayerConnectedPacket();
-	PlayerConnectedPacket(const uint8_t & id);
+	PlayerConnectedPacket(const uint32_t & id);
 	virtual ~PlayerConnectedPacket();
 
 	PlayerConnectedPacket(const PlayerConnectedPacket& other) = delete;
@@ -22,9 +22,9 @@ public:
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	uint8_t GetId() const;
+	uint32_t GetId() const;
 
-	void setId(uint8_t id);
+	void setId(uint32_t id);
 private:
-	uint8_t		m_id;
+	uint32_t	m_id;
 };
