@@ -1,10 +1,6 @@
 var searchData=
 [
-  ['load_5fdistance_0',['LOAD_DISTANCE',['../define_8hpp.html#af32eedba9e693fc5d6c462fed75836f0',1,'define.hpp']]],
-  ['log_5fcritical_1',['LOG_CRITICAL',['../logger_8hpp.html#a4091a2d7d849a8b5eded40d8723b8768',1,'logger.hpp']]],
-  ['log_5fdebug_2',['LOG_DEBUG',['../logger_8hpp.html#a754b3d074e0af4ad3c7b918dd77ecb2d',1,'logger.hpp']]],
-  ['log_5ferror_3',['LOG_ERROR',['../logger_8hpp.html#ad4a9117ce894e3319e903142347a0f63',1,'logger.hpp']]],
-  ['log_5finfo_4',['LOG_INFO',['../logger_8hpp.html#a378e28bfcb78d17285210d6bbb70a083',1,'logger.hpp']]],
-  ['log_5ftrace_5',['LOG_TRACE',['../logger_8hpp.html#a58c994180e09d2f6400133b19b1d7036',1,'logger.hpp']]],
-  ['log_5fwarning_6',['LOG_WARNING',['../logger_8hpp.html#afef5ff03ea272d388345cf47148953d4',1,'logger.hpp']]]
+  ['glfw_5finclude_5fvulkan_0',['GLFW_INCLUDE_VULKAN',['../VulkanAPI_8hpp.html#ab91f325a54d3e35fe831a86d6382c2a9',1,'VulkanAPI.hpp']]],
+  ['glm_5fenable_5fexperimental_1',['GLM_ENABLE_EXPERIMENTAL',['../CreateMeshData_8hpp.html#abd75661fe7969e19439052a5f69ba5d1',1,'CreateMeshData.hpp']]],
+  ['glm_5fforce_5fradians_2',['GLM_FORCE_RADIANS',['../Perlin_8hpp.html#a816ab7d5c2ce1f0a01216042837beb93',1,'Perlin.hpp']]]
 ];

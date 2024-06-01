@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['threads_20architecture_0',['Threads Architecture',['../threads.html',1,'']]]
+  ['style_20guide_0',['Style guide',['../styleguide.html',1,'']]]
 ];

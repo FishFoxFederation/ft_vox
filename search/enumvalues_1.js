@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['creative_0',['CREATIVE',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452',1,'Player']]],
-  ['critical_1',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]]
+  ['block_5faction_0',['BLOCK_ACTION',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae',1,'IPacket']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['render_20loop_0',['Render Loop',['../render_loop.html',1,'']]]
+  ['our_20architecture_0',['Our Architecture',['../md_docs_pages_architecture.html',1,'']]]
 ];

@@ -1,0 +1,11 @@
+<map id="IPacket" name="IPacket">
+<area shape="rect" id="node1" title=" " alt="" coords="555,5,694,265"/>
+<area shape="rect" id="node2" href="$classBlockActionPacket.html" title=" " alt="" coords="5,335,164,537"/>
+<area shape="rect" id="node3" href="$classConnectionPacket.html" title=" " alt="" coords="189,335,343,537"/>
+<area shape="rect" id="node4" href="$classDisconnectPacket.html" title=" " alt="" coords="367,313,522,559"/>
+<area shape="rect" id="node5" href="$classIClientToServerPacket.html" title=" " alt="" coords="546,416,703,456"/>
+<area shape="rect" id="node6" href="$classIServerToClientPacket.html" title=" " alt="" coords="727,416,885,456"/>
+<area shape="rect" id="node8" href="$classPlayerConnectedPacket.html" title=" " alt="" coords="909,313,1095,559"/>
+<area shape="rect" id="node9" href="$classPlayerMovePacket.html" title=" " alt="" coords="1119,335,1277,537"/>
+<area shape="rect" id="node7" href="$classEntityMovePacket.html" title=" " alt="" coords="741,607,871,647"/>
+</map>

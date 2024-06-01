@@ -1,9 +1,10 @@
 <map id="src/app/window/window.hpp" name="src/app/window/window.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="179,5,365,31"/>
-<area shape="rect" id="node2" href="$application_8hpp.html" title=" " alt="" coords="80,174,235,199"/>
-<area shape="rect" id="node5" href="$UpdateThread_8hpp.html" title=" " alt="" coords="195,79,349,119"/>
-<area shape="rect" id="node7" href="$window_8cpp.html" title=" " alt="" coords="374,86,559,111"/>
-<area shape="rect" id="node3" href="$application_8cpp.html" title=" " alt="" coords="5,255,160,280"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title=" " alt="" coords="184,255,280,280"/>
-<area shape="rect" id="node6" href="$UpdateThread_8cpp.html" title=" " alt="" coords="259,167,413,207"/>
+<area shape="rect" id="node1" title=" " alt="" coords="291,5,477,31"/>
+<area shape="rect" id="node2" href="$application_8hpp.html" title=" " alt="" coords="192,174,347,199"/>
+<area shape="rect" id="node6" href="$UpdateThread_8hpp.html" title=" " alt="" coords="307,79,461,119"/>
+<area shape="rect" id="node8" href="$window_8cpp.html" title=" " alt="" coords="486,86,671,111"/>
+<area shape="rect" id="node3" href="$alternative__main_8cpp.html" title=" " alt="" coords="5,255,168,280"/>
+<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="192,255,347,280"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="371,255,467,280"/>
+<area shape="rect" id="node7" href="$UpdateThread_8cpp.html" title=" " alt="" coords="371,167,525,207"/>
 </map>

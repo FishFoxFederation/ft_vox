@@ -50,6 +50,16 @@ var NAVTREE =
         [ "Useful links", "docstyleguide.html#autotoc_md13", null ]
       ] ]
     ] ],
+    [ "Network", "md_docs_pages_network.html", [
+      [ "Intro", "md_docs_pages_network.html#autotoc_md15", null ],
+      [ "Layers", "md_docs_pages_network.html#autotoc_md16", [
+        [ "Sockets, Connections and Poller", "md_docs_pages_network.html#autotoc_md17", null ],
+        [ "Commands", "md_docs_pages_network.html#autotoc_md18", [
+          [ "Command Factory", "md_docs_pages_network.html#autotoc_md19", null ],
+          [ "autotoc_md20", "md_docs_pages_network.html#autotoc_md20", null ]
+        ] ]
+      ] ]
+    ] ],
     [ "Render Loop", "render_loop.html", [
       [ "Main rendering", "render_loop.html#main_rendering", null ],
       [ "Swapchain", "render_loop.html#swapchain", null ],
@@ -59,11 +69,11 @@ var NAVTREE =
     ] ],
     [ "Style guide", "styleguide.html", null ],
     [ "Threads Architecture", "threads.html", [
-      [ "Main thread", "threads.html#autotoc_md14", null ],
-      [ "Update Thread", "threads.html#autotoc_md15", null ],
-      [ "Render Thread", "threads.html#autotoc_md16", null ],
-      [ "Block Update Thread", "threads.html#autotoc_md17", null ],
-      [ "Thread pool", "threads.html#autotoc_md18", null ]
+      [ "Main thread", "threads.html#autotoc_md21", null ],
+      [ "Update Thread", "threads.html#autotoc_md22", null ],
+      [ "Render Thread", "threads.html#autotoc_md23", null ],
+      [ "Block Update Thread", "threads.html#autotoc_md24", null ],
+      [ "Thread pool", "threads.html#autotoc_md25", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -82,7 +92,8 @@ var NAVTREE =
         [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
-        [ "Enumerator", "functions_eval.html", null ]
+        [ "Enumerator", "functions_eval.html", null ],
+        [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -101,10 +112,12 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"BlockUpdateThread_8cpp.html",
-"classIdList.html#a7a325affc5650075383909a95651034b",
-"classVulkanAPI.html#a3f8d472b0563d698d14b40a18acce612",
-"input_8hpp_source.html"
+"BlockActionPacket_8cpp.html",
+"classChunk.html#af736ac12c9122c37346b980428d83c3d",
+"classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda",
+"classSwapchain.html#a751b92128dbbe0cc199b8207a8123796",
+"functions_e.html",
+"structSwapchain_1_1SupportDetails.html#a2a4f0f958367aff61916f25a008953a5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

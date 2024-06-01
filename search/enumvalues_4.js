@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['grass_0',['Grass',['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaac9a63596f76a62bb9f61a5dd7c0d25',1,'Block.hpp']]]
+  ['entity_5fmove_0',['ENTITY_MOVE',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a0300ccc0483b1d5e763bb84e013ba702',1,'IPacket']]],
+  ['error_1',['ERROR',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa3ce1bbeb15a3d8e29e4c5e75492a781b',1,'Logger']]]
 ];

@@ -8,7 +8,10 @@ var hierarchy =
     [ "BlockVertex", "structBlockVertex.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "Chunk", "classChunk.html", null ],
+    [ "Client", "classClient.html", null ],
+    [ "ClientPacketHandler", "classClientPacketHandler.html", null ],
     [ "ClientWorld", "classClientWorld.html", null ],
+    [ "Connection", "classConnection.html", null ],
     [ "Descriptor::CreateInfo", "structDescriptor_1_1CreateInfo.html", null ],
     [ "Image::CreateInfo", "structImage_1_1CreateInfo.html", null ],
     [ "Pipeline::CreateInfo", "structPipeline_1_1CreateInfo.html", null ],
@@ -21,6 +24,10 @@ var hierarchy =
     [ "ECS", "classECS.html", null ],
     [ "EntityMatrices", "structEntityMatrices.html", null ],
     [ "EntityVertex", "structEntityVertex.html", null ],
+    [ "std::exception", null, [
+      [ "Client::ServerDisconnected", "classClient_1_1ServerDisconnected.html", null ],
+      [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ]
+    ] ],
     [ "GuiTextureData", "structGuiTextureData.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
     [ "std::hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", null ],
@@ -34,7 +41,19 @@ var hierarchy =
     [ "IdGenerator< uint64_t >", "classIdGenerator.html", null ],
     [ "Image", "classImage.html", null ],
     [ "ImGuiTexture", "structImGuiTexture.html", null ],
+    [ "IncomingPacketList", "classIncomingPacketList.html", null ],
     [ "Input", "classInput.html", null ],
+    [ "IPacket", "classIPacket.html", [
+      [ "BlockActionPacket", "classBlockActionPacket.html", null ],
+      [ "ConnectionPacket", "classConnectionPacket.html", null ],
+      [ "DisconnectPacket", "classDisconnectPacket.html", null ],
+      [ "IClientToServerPacket", "classIClientToServerPacket.html", null ],
+      [ "IServerToClientPacket", "classIServerToClientPacket.html", [
+        [ "EntityMovePacket", "classEntityMovePacket.html", null ]
+      ] ],
+      [ "PlayerConnectedPacket", "classPlayerConnectedPacket.html", null ],
+      [ "PlayerMovePacket", "classPlayerMovePacket.html", null ]
+    ] ],
     [ "JoinThreads", "classJoinThreads.html", null ],
     [ "LineVertex", "structLineVertex.html", null ],
     [ "Logger", "classLogger.html", null ],
@@ -43,19 +62,29 @@ var hierarchy =
     [ "WorldScene::MeshRenderData", "structWorldScene_1_1MeshRenderData.html", null ],
     [ "ModelMatrice", "structModelMatrice.html", null ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
+    [ "NetworkThread", "classNetworkThread.html", null ],
     [ "std::ofstream", null, [
       [ "FileOutput", "classFileOutput.html", null ]
     ] ],
+    [ "PacketFactory", "classPacketFactory.html", null ],
     [ "Perlin", "classPerlin.html", null ],
     [ "Pipeline", "classPipeline.html", null ],
     [ "Player", "classPlayer.html", null ],
+    [ "Poller", "classPoller.html", null ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", null ],
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],
     [ "RenderThread", "classRenderThread.html", null ],
+    [ "Server", "classServer.html", null ],
+    [ "ServerPacketHandler", "classServerPacketHandler.html", null ],
     [ "Settings", "classSettings.html", null ],
     [ "ShadowMapLight", "structShadowMapLight.html", null ],
     [ "SingleTimeCommand", "classSingleTimeCommand.html", null ],
+    [ "Socket", "classSocket.html", [
+      [ "ClientSocket", "classClientSocket.html", null ],
+      [ "ConnectionSocket", "classConnectionSocket.html", null ],
+      [ "ServerSocket", "classServerSocket.html", null ]
+    ] ],
     [ "Status", "classStatus.html", null ],
     [ "Swapchain::SupportDetails", "structSwapchain_1_1SupportDetails.html", null ],
     [ "Swapchain", "classSwapchain.html", null ],
@@ -64,7 +93,6 @@ var hierarchy =
     [ "Transform", "classTransform.html", null ],
     [ "std::unordered_map", null, [
       [ "IdList< uint64_t, Mesh >", "classIdList.html", null ],
-      [ "IdList< uint64_t, std::shared_ptr< Player > >", "classIdList.html", null ],
       [ "IdList< uint64_t, WorldScene::MeshRenderData >", "classIdList.html", null ],
       [ "IdList< Key, Value, container, IdGen >", "classIdList.html", null ]
     ] ],

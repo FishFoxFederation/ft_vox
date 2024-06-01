@@ -16,7 +16,7 @@ var searchData=
   ['threadpool_2ehpp_13',['ThreadPool.hpp',['../ThreadPool_8hpp.html',1,'']]],
   ['threads_20architecture_14',['Threads Architecture',['../threads.html',1,'']]],
   ['tiling_15',['tiling',['../structImage_1_1CreateInfo.html#a3020f400addaf0b3295127255819ec20',1,'Image::CreateInfo']]],
-  ['timer_16',['Timer',['../classTimer.html',1,'Timer&lt; ChronoCount, HistorySize &gt;'],['../classTimer.html#a8e2163a0e4f62d15b2056d5d79524691',1,'Timer::Timer()']]],
+  ['timer_16',['Timer',['../classTimer.html#a8e2163a0e4f62d15b2056d5d79524691',1,'Timer::Timer()'],['../classTimer.html',1,'Timer&lt; ChronoCount, HistorySize &gt;']]],
   ['timer_2ehpp_17',['Timer.hpp',['../Timer_8hpp.html',1,'']]],
   ['tocoord_18',['toCoord',['../classChunk.html#a17db6bae975e96ac6ee8ad02f8978a6e',1,'Chunk']]],
   ['toindex_19',['toIndex',['../classChunk.html#a3c67283dce20bb8ece67cb85e6eb4dd7',1,'Chunk']]],
@@ -33,5 +33,6 @@ var searchData=
   ['transitionimagelayout_30',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]],
   ['transitionlayout_31',['transitionLayout',['../classImage.html#accc61110a5c1048242212d482c63f5c8',1,'Image']]],
   ['try_5flock_32',['try_lock',['../classStatus.html#aa01d58908a9c84614bbfd0db352ccab4',1,'Status']]],
-  ['try_5flock_5fshared_33',['try_lock_shared',['../classStatus.html#a2dc3f38c68d1264ee9a0e9c088b907b0',1,'Status']]]
+  ['try_5flock_5fshared_33',['try_lock_shared',['../classStatus.html#a2dc3f38c68d1264ee9a0e9c088b907b0',1,'Status']]],
+  ['type_34',['Type',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569',1,'IPacket']]]
 ];

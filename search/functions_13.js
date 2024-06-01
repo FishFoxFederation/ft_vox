@@ -8,7 +8,7 @@ var searchData=
   ['updateimgui_5',['updateImGui',['../classDebugGui.html#aa849cf767818482461efa78caef2ff70',1,'DebugGui']]],
   ['updateplayer_6',['updatePlayer',['../classWorld.html#af77441ac7b7725596b84877315505bea',1,'World']]],
   ['updateplayercamera_7',['updatePlayerCamera',['../classWorld.html#a90f0215ebdb31f244829f5a16f408b81',1,'World']]],
-  ['updateplayerposition_8',['updatePlayerPosition',['../classWorld.html#a292eea3d599f7d2040bd02693ab9969c',1,'World']]],
+  ['updateplayerposition_8',['updatePlayerPosition',['../classWorld.html#a5e0e08053583b9789c4b8d85908b8137',1,'World']]],
   ['updateplayertargetblock_9',['updatePlayerTargetBlock',['../classWorld.html#aad35ec43ee6bb3ae3fd96d10465ed055',1,'World']]],
-  ['updatethread_10',['UpdateThread',['../classUpdateThread.html#abeff9e2677451afe227e2a7981cc8961',1,'UpdateThread::UpdateThread(const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, World &amp;world, VulkanAPI &amp;vulkan_api, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]]
+  ['updatethread_10',['UpdateThread',['../classUpdateThread.html#a682081234cf360e91e5e6304779df47b',1,'UpdateThread::UpdateThread(Client &amp;client, const Settings &amp;settings, Window &amp;window, WorldScene &amp;world_scene, World &amp;world, VulkanAPI &amp;vulkan_api, std::chrono::nanoseconds start_time)'],['../classUpdateThread.html#ac4c818b0e4646770c22f3f095b251517',1,'UpdateThread::UpdateThread(UpdateThread &amp;other)=delete'],['../classUpdateThread.html#a67633683c42a680171e9de4cb55e673b',1,'UpdateThread::UpdateThread(UpdateThread &amp;&amp;other)=delete']]]
 ];

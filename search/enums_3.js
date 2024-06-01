@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['level_0',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]]
+  ['gamemode_0',['GameMode',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292d',1,'Player']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['neg_0',['NEG',['../classCreateMeshData.html#a5f075a1c439c7a4316214c1e1ad759a0a0d7537a73d1445406d9ca3a7b36121d7',1,'CreateMeshData']]],
-  ['neut_1',['NEUT',['../classCreateMeshData.html#a5f075a1c439c7a4316214c1e1ad759a0af464f33765f31f59f6f7886ae4f85926',1,'CreateMeshData']]]
+  ['max_0',['MAX',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12',1,'Logger']]]
 ];

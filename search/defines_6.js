@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['stb_5fimage_5fimplementation_0',['STB_IMAGE_IMPLEMENTATION',['../Image_8cpp.html#a18372412ad2fc3ce1e3240b3cf0efe78',1,'Image.cpp']]]
+  ['max_5fbacklog_0',['MAX_BACKLOG',['../ServerSocket_8hpp.html#ad5765300a9df69229ca7cf5bd438ce73',1,'ServerSocket.hpp']]]
 ];

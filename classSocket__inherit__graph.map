@@ -1,0 +1,6 @@
+<map id="Socket" name="Socket">
+<area shape="rect" id="node1" title=" " alt="" coords="177,5,281,207"/>
+<area shape="rect" id="node2" href="$classClientSocket.html" title=" " alt="" coords="5,277,128,405"/>
+<area shape="rect" id="node3" href="$classConnectionSocket.html" title=" " alt="" coords="152,255,307,427"/>
+<area shape="rect" id="node4" href="$classServerSocket.html" title=" " alt="" coords="331,269,458,412"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="src/app/network/shared/packets/BlockActionPacket.hpp" name="src/app/network/shared/packets/BlockActionPacket.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="243,5,453,45"/>
+<area shape="rect" id="node2" href="$BlockActionPacket_8cpp.html" title=" " alt="" coords="139,93,349,133"/>
+<area shape="rect" id="node3" href="$Packets_8hpp.html" title=" " alt="" coords="374,93,533,133"/>
+<area shape="rect" id="node4" href="$ClientPacketHandler_8hpp.html" title=" " alt="" coords="271,181,441,221"/>
+<area shape="rect" id="node12" href="$ServerPacketHandler_8hpp.html" title=" " alt="" coords="465,181,639,221"/>
+<area shape="rect" id="node5" href="$ClientPacketHandler_8cpp.html" title=" " alt="" coords="87,269,257,309"/>
+<area shape="rect" id="node6" href="$UpdateThread_8hpp.html" title=" " alt="" coords="281,269,436,309"/>
+<area shape="rect" id="node7" href="$application_8hpp.html" title=" " alt="" coords="192,365,347,390"/>
+<area shape="rect" id="node11" href="$UpdateThread_8cpp.html" title=" " alt="" coords="371,357,525,397"/>
+<area shape="rect" id="node8" href="$alternative__main_8cpp.html" title=" " alt="" coords="5,445,168,471"/>
+<area shape="rect" id="node9" href="$application_8cpp.html" title=" " alt="" coords="192,445,347,471"/>
+<area shape="rect" id="node10" href="$main_8cpp.html" title=" " alt="" coords="371,445,467,471"/>
+<area shape="rect" id="node13" href="$ServerPacketHandler_8cpp.html" title=" " alt="" coords="463,269,638,309"/>
+<area shape="rect" id="node14" href="$server__main_8cpp.html" title=" " alt="" coords="663,269,817,309"/>
+</map>
