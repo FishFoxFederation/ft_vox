@@ -22,6 +22,6 @@ IPacket::~IPacket()
 void IPacket::ExtractMessage(Connection & connection)
 {
 	m_connection_id = connection.getConnectionId();
-	Deserialize(connection.getReadBufferRef().data());
+	Deserialize(connection.getReadBuffer().data());
 	connection.reduceReadBuffer(Size());
 }

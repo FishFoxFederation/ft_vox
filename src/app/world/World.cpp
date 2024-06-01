@@ -3,7 +3,8 @@
 World::World(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
-	ThreadPool & threadPool
+	ThreadPool & threadPool,
+	uint64_t my_player_id
 )
 :	m_worldScene(WorldScene),
 	m_vulkanAPI(vulkanAPI),
@@ -11,7 +12,7 @@ World::World(
 	m_players(),
 	m_future_id(0)
 {
-	m_my_player_id = 1;
+	m_my_player_id = my_player_id;
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
 }
 
@@ -428,6 +429,11 @@ void World::updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & p
 			player->hitbox.size
 		).model();
 	}
+	if (player_id == m_my_player_id)
+	{
+		// update camera
+		m_worldScene.camera() = player->camera();
+	}
 }
 
 
@@ -439,7 +445,7 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 	const int8_t right,
 	const int8_t up,
 	const int8_t down,
-	const double delta_time
+	const double delta_time_second
 )
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
@@ -506,12 +512,12 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 	// apply gravity
 	if (player->shouldFall())
 	{
-		player->velocity.y += player->gravity * delta_time;
+		player->velocity.y += player->gravity * delta_time_second;
 	}
 
 	// check for collision with blocks
 	// each axis is checked separately to allow for sliding along walls
-	glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time;
+	glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time_second;
 	if (player->shouldCollide())
 	{
 		const glm::dvec3 move_x = {displacement.x, 0.0, 0.0};

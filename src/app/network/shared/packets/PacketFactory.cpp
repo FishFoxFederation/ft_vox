@@ -28,17 +28,28 @@ std::pair<bool, IPacket::Type> PacketFactory::getPacketType(const uint8_t * buff
 		return std::make_pair(false, IPacket::Type::CONNECTION);
 	}
 	uint32_t id = *reinterpret_cast<const uint32_t*>(buffer);
-	if (id >= static_cast<uint32_t>(IPacket::Type::CONNECTION) && id <= static_cast<uint32_t>(IPacket::Type::ENTITY_MOVE))
+	try {
+		IPacket::Type type = static_cast<IPacket::Type>(id);
+
+		return std::make_pair(m_packets.at(type)->Size() <= size, type);
+	}
+	catch (const std::out_of_range & e)
 	{
-		return std::make_pair(true, static_cast<IPacket::Type>(id));
+		LOG_ERROR("PacketFactory::getPacketType: " << e.what());
+		return std::make_pair(false, IPacket::Type::CONNECTION);
 	}
 	return std::make_pair(false, IPacket::Type::CONNECTION);
 }
 
 std::pair<bool, std::shared_ptr<IPacket>> PacketFactory::extractPacket(Connection & connection)
 {
-	const std::vector<uint8_t> & buffer = connection.getReadBufferRef();
-	auto packetRet = getPacketType(buffer.data(), buffer.size());
+	std::pair<bool, IPacket::Type> packetRet;
+	{
+		std::lock_guard<std::mutex> lock(connection.getReadBufferMutex());
+		const std::vector<uint8_t> & buffer = connection.getReadBufferRef();
+		packetRet = getPacketType(buffer.data(), buffer.size());
+	}
+
 	std::pair<bool, std::shared_ptr<IPacket>> ret = std::make_pair(false, nullptr);
 	if (packetRet.first)
 	{

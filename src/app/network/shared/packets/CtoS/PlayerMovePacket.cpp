@@ -37,21 +37,41 @@ PlayerMovePacket::~PlayerMovePacket()
 
 void PlayerMovePacket::Serialize(uint8_t * buffer) const
 {
+	uint32_t type = static_cast<uint32_t>(GetType());
+	memcpy(buffer, &type, sizeof(uint32_t));
+	buffer += sizeof(uint32_t);
+
 	buffer[0] = m_id;
-	memccpy(buffer + sizeof(uint8_t), &m_position, sizeof(glm::vec3), sizeof(glm::vec3));
-	memccpy(buffer + sizeof(uint8_t) + sizeof(glm::vec3), &m_displacement, sizeof(glm::vec3), sizeof(glm::vec3));
+	buffer += sizeof(uint8_t);
+
+	memcpy(buffer, &m_position, sizeof(glm::vec3));
+	buffer += sizeof(glm::vec3);
+	
+	memcpy(buffer, &m_displacement, sizeof(glm::vec3));
+
+	// LOG_INFO("SERIALIZE: id: " << (int)m_id << "\n position: " << m_position.x << " " << m_position.y << " " << m_position.z << "\n displacement: " << m_displacement.x << " " << m_displacement.y << " " << m_displacement.z);
 }
 
 void PlayerMovePacket::Deserialize(const uint8_t * buffer)
 {
+	buffer += sizeof(uint32_t);
+
 	m_id = buffer[0];
-	memccpy(&m_position, buffer + sizeof(uint8_t), sizeof(glm::vec3), sizeof(glm::vec3));
-	memccpy(&m_displacement, buffer + sizeof(uint8_t) + sizeof(glm::vec3), sizeof(glm::vec3), sizeof(glm::vec3));
+	buffer += sizeof(uint8_t);
+
+	memcpy(&m_position, buffer, sizeof(glm::vec3));
+	buffer += sizeof(glm::vec3);
+
+	memcpy(&m_displacement, buffer, sizeof(glm::vec3));
+	buffer += sizeof(glm::vec3);
+
+	// LOG_INFO("DESERIALIZE: id: " << (int)m_id << "\n position: " << m_position.x << " " << m_position.y << " " << m_position.z << "\n displacement: " << m_displacement.x << " " << m_displacement.y << " " << m_displacement.z);
 }
 
 uint32_t PlayerMovePacket::Size() const
 {
-	return sizeof(uint8_t) + sizeof(glm::vec3) * 2;
+	// packet type + id + position + displacement
+	return sizeof(uint32_t) + sizeof(uint8_t) + sizeof(glm::vec3) * 2;
 }
 
 IPacket::Type PlayerMovePacket::GetType() const

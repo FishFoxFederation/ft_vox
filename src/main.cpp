@@ -13,12 +13,18 @@ int main(int argc, char **argv)
 	{
 		std::string ip = IP_ADDRESS;
 		int port = PORT;
-		if (argc == 3)
+		int player_id = 1;
+		if (argc == 4)
 		{
 			ip = argv[1];
 			port = std::stoi(argv[2]);
+			player_id = std::stoi(argv[3]);
 		}
-		Application app;
+		if (argc == 2)
+		{
+			player_id = std::stoi(argv[1]);
+		}
+		Application app(player_id, ip, port);
 
 		app.run();
 	}

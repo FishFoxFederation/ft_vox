@@ -28,7 +28,6 @@ int main()
 		if (incoming_packets.size() > 0)
 		{
 			auto packet = incoming_packets.pop();
-			std::cout << "Packet received" << std::endl;
 
 			if (packet.get() == nullptr)
 			{

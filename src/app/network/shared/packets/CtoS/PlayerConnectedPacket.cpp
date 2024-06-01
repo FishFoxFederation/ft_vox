@@ -26,17 +26,23 @@ PlayerConnectedPacket& PlayerConnectedPacket::operator=(PlayerConnectedPacket&& 
 
 void PlayerConnectedPacket::Serialize(uint8_t * buffer) const
 {
+	uint32_t type = static_cast<uint32_t>(GetType());
+	memcpy(buffer, &type, sizeof(uint32_t));
+	buffer += sizeof(uint32_t);
+
 	buffer[0] = m_id;
 }
 
 void PlayerConnectedPacket::Deserialize(const uint8_t * buffer)
 {
+	buffer += sizeof(uint32_t);
+
 	m_id = buffer[0];
 }
 
 uint32_t PlayerConnectedPacket::Size() const
 {
-	return sizeof(uint8_t);
+	return sizeof(IPacket::Type) + sizeof(m_id);
 }
 
 IPacket::Type PlayerConnectedPacket::GetType() const

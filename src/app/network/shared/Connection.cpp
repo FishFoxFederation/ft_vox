@@ -10,7 +10,7 @@ Connection::~Connection()
 }
 
 Connection::Connection(Connection&& other)
-: m_socket(std::move(other.m_socket))
+: m_socket(std::move(other.m_socket)), m_connection_id(other.m_connection_id)
 {
 	m_read_buffer = std::move(other.m_read_buffer);
 	m_write_buffer = std::move(other.m_write_buffer);
@@ -21,6 +21,7 @@ Connection& Connection::operator=(Connection&& other)
 	if (this != &other)
 	{
 		m_socket = std::move(other.m_socket);
+		m_connection_id = other.m_connection_id;
 		m_read_buffer = std::move(other.m_read_buffer);
 		m_write_buffer = std::move(other.m_write_buffer);
 	}
@@ -69,7 +70,7 @@ ssize_t Connection::sendQueue()
 	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
 	if (m_write_buffer.empty())
 		return 0;
-	LOG_INFO("Sending data");
+	// LOG_INFO("Sending data");
 	ssize_t size = ::send(m_socket->getFd(), m_write_buffer.data(), m_write_buffer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (size == -1)
 	{
@@ -112,4 +113,9 @@ bool Connection::dataToSend() const
 {
 	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
 	return !m_write_buffer.empty();
+}
+
+std::mutex & Connection::getReadBufferMutex()
+{
+	return m_read_buffer_mutex;
 }
