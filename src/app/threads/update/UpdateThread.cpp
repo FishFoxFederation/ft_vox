@@ -13,7 +13,6 @@ UpdateThread::UpdateThread(
 	VulkanAPI & vulkan_api,
 	std::chrono::nanoseconds start_time
 ):
-	m_client(client),
 	m_settings(settings),
 	m_window(window),
 	m_world_scene(world_scene),
@@ -69,16 +68,11 @@ void UpdateThread::loop()
 	readInput();
 	//only move player every 20 ms
 	static auto last_move = std::chrono::steady_clock::now();
-	if (std::chrono::steady_clock::now() - last_move > std::chrono::milliseconds(1))
-	{
-		//only move player every 20 ms
-	static auto last_move = std::chrono::steady_clock::now();
 	if (std::chrono::steady_clock::now() - last_move > std::chrono::milliseconds(20))
+	{
 		movePlayer();
 		last_move = std::chrono::steady_clock::now();
 	}
-
-	handlePackets();
 	handlePackets();
 }
 
@@ -189,7 +183,6 @@ void UpdateThread::movePlayer()
 	}
 
 	auto [position, displacement]  = m_world.calculatePlayerMovement(
-	auto [position, displacement]  = m_world.calculatePlayerMovement(
 		m_world.m_my_player_id,
 		m_move_forward,
 		m_move_backward,
@@ -197,7 +190,7 @@ void UpdateThread::movePlayer()
 		m_move_right,
 		m_jump,
 		m_sneak,
-		static_cast<double>(m_delta_time.count()) / 1e9
+		static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(now - last_time).count() / 1000.0)
 	);
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
@@ -207,13 +200,14 @@ void UpdateThread::movePlayer()
 		m_client.sendPacket(packet);
 	}
 
-	m_world.updatePlayer(
+	m_world.updatePlayerCamera(
 		m_world.m_my_player_id,
 		look.x,
 		look.y
 	);
 
 	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
+	last_time = now;
 }
 
 void UpdateThread::handlePackets()
