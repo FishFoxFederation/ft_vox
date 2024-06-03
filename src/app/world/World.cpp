@@ -439,7 +439,7 @@ void World::updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & 
 }
 
 
-std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
+std::pair<glm::dvec3, glm::dvec3> World::calculatePlayerMovement(
 	const uint64_t player_id,
 	const int8_t forward,
 	const int8_t backward,
@@ -453,14 +453,13 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 
-	std::pair<glm::vec3, glm::vec3> result;
+	std::pair<glm::dvec3, glm::dvec3> result;
 
 	// determine if player is on the ground or in the air and detect
 	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
 	if (on_ground && !player->on_ground) // player just landed
 	{
 		player->jump_remaining = 1;
-		DebugGui::player_jump_remaining = player->jump_remaining;
 		player->jumping = false;
 	}
 	if (!on_ground && player->on_ground) // player just started falling
@@ -468,7 +467,6 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 		player->startFall();
 	}
 	player->on_ground = on_ground;
-	DebugGui::player_on_ground = on_ground;
 
 
 	// get the movement vector
@@ -559,8 +557,7 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 		}
 		if (collision_y)
 		{
-			// displacement.y = glm::fract(player->transform.position.y);
-			displacement.y = 0.0;
+			displacement.y = -(player->transform.position.y - glm::floor(player->transform.position.y));
 			player->velocity.y = 0.0;
 		}
 		if (collision_z)
@@ -586,7 +583,7 @@ void World::updatePlayerTargetBlock(
 
 	RayCastOnBlockResult raycast = rayCastOnBlock(position, direction, 5.0);
 
-	std::optional<glm::vec3> target_block = raycast.hit ? std::make_optional(raycast.block_position) : std::nullopt;
+	std::optional<glm::vec3> target_block = raycast.hit && !raycast.inside_block ? std::make_optional(raycast.block_position) : std::nullopt;
 
 	m_worldScene.setTargetBlock(target_block);
 

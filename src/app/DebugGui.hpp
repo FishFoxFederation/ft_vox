@@ -136,7 +136,4 @@ public:
 	static inline std::atomic<double> store_mesh_create_buffer_time;
 	static inline std::atomic<double> store_mesh_copy_buffer_time;
 	static inline std::atomic<double> store_mesh_destroy_buffer_time;
-
-	static inline std::atomic<bool> player_on_ground = false;
-	static inline std::atomic<int> player_jump_remaining = 1;
 };
