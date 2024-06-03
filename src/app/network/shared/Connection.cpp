@@ -48,21 +48,31 @@ void Connection::reduceReadBuffer(size_t size)
 ssize_t Connection::recv()
 {
 	char buffer[1024];
-	ssize_t size = ::recv(m_socket->getFd(), buffer, sizeof(buffer), MSG_DONTWAIT);
-	if (size == -1)
+	ssize_t total_size = 0;
+	while (1)
 	{
-		if (errno != EAGAIN && errno != EWOULDBLOCK)
+		ssize_t size = ::recv(m_socket->getFd(), buffer, sizeof(buffer), MSG_DONTWAIT);
+		if (size == -1)
 		{
-			throw std::runtime_error("Error while receiving data");
+			if (errno != EAGAIN && errno != EWOULDBLOCK)
+			{
+				throw std::runtime_error("Error while receiving data");
+			}
+			else 
+				break;
 		}
+		if (size == 0)
+		{
+			return 0;
+		}
+		else
+		{
+			std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
+			m_read_buffer.insert(m_read_buffer.end(), buffer, buffer + size);
+		}
+		total_size += size;
 	}
-	else
-	{
-		std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
-		m_read_buffer.insert(m_read_buffer.end(), buffer, buffer + size);
-	}
-
-	return size;
+	return total_size;
 }
 
 ssize_t Connection::sendQueue()
