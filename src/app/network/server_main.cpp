@@ -56,7 +56,7 @@ int main()
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 		last_time += duration.count();
 		last_time_count++;
-		std::cout << "Time: " << duration.count() << "ms" << std::endl;
-		std::cout << "Avg time: " << last_time / last_time_count << "ms, PacketCount: " << packet_count << std::endl;
+		// std::cout << "Time: " << duration.count() << "ms" << std::endl;
+		// std::cout << "Avg time: " << last_time / last_time_count << "ms, PacketCount: " << packet_count << std::endl;
 	}
 }

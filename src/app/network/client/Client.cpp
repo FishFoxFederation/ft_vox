@@ -43,11 +43,12 @@ int Client::read_data()
 		size = m_connection.recv();
 		if (size == 0)
 			throw ServerDisconnected();
+
 		auto ret = m_packet_factory.extractPacket(m_connection);
-		if (ret.first)
+		while (ret.first)
 		{
-			// LOG_INFO("RECEIVED NEW PACKET");
 			m_incoming_packets.push(ret.second);
+			ret = m_packet_factory.extractPacket(m_connection);
 		}
 	}
 	catch (const std::runtime_error & e)

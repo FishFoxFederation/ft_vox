@@ -26,12 +26,15 @@ ssize_t PacketFactory::getSize(IPacket::Type id) const
 
 std::pair<bool, IPacket::Type> PacketFactory::getPacketType(const uint8_t * buffer, const size_t & size) const
 {
-	if (size < sizeof(uint32_t))
+	if (size < sizeof(IPacket::Type))
 	{
 		return std::make_pair(false, IPacket::Type::CONNECTION);
 	}
-	uint32_t id = *reinterpret_cast<const uint32_t*>(buffer);
+	uint32_t id = 0;
+	memcpy(&id, buffer, sizeof(IPacket::Type));
 	try {
+		if (id >= static_cast<uint32_t>(IPacket::Type::ENUM_MAX))
+			throw std::out_of_range("PacketFactory::getPacketType: Packet type out of range");
 		IPacket::Type type = static_cast<IPacket::Type>(id);
 
 		return std::make_pair(m_packets.at(type)->Size() <= size, type);
