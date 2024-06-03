@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['calculateplayermovement_0',['calculatePlayerMovement',['../classWorld.html#aaa960111fe2dca3246fde6a5f2c28465',1,'World']]],
+  ['calculateplayermovement_0',['calculatePlayerMovement',['../classWorld.html#a43685e2f25c3d146aac66e9eac80c815',1,'World']]],
   ['camera_1',['camera',['../classWorldScene.html#a71505cd83b2a2e9735a71cee2e353de9',1,'WorldScene']]],
   ['camera_2',['Camera',['../classCamera.html#ad0f45d5cfdc82baeb627b4edf0bae009',1,'Camera::Camera(Camera &amp;&amp;camera)'],['../classCamera.html#adaf486dfc7066a7977553289b0593533',1,'Camera::Camera(const Camera &amp;camera)=delete'],['../classCamera.html#a62e3ea1cb4be917bacbd727112a640d7',1,'Camera::Camera(const glm::dvec3 &amp;position, double pitch, double yaw)']]],
   ['camera_3',['camera',['../classPlayer.html#ad67555e55c817db8a320c80fdaf75dbf',1,'Player::camera()'],['../classWorldScene.html#ad5100ff8f3edb4b7e9cbf65240169f05',1,'WorldScene::camera()']]],

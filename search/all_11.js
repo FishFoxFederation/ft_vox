@@ -100,9 +100,9 @@ var searchData=
   ['surface_97',['surface',['../classVulkanAPI.html#afe362f2320ed6115d2eb627efed9d530',1,'VulkanAPI']]],
   ['surface_5fformat_98',['surface_format',['../structSwapchain_1_1CreateInfo.html#a5667c3f28b3bf53704c006fad40f034c',1,'Swapchain::CreateInfo']]],
   ['survival_99',['SURVIVAL',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292da1089b25a43df6bce533f9729d6640317',1,'Player']]],
-  ['swapchain_100',['swapchain',['../classSwapchain.html#a751b92128dbbe0cc199b8207a8123796',1,'Swapchain']]],
-  ['swapchain_101',['Swapchain',['../classSwapchain.html',1,'Swapchain'],['../classSwapchain.html#a04ba7da3842a1f7da16bb854dd89d65a',1,'Swapchain::Swapchain(Swapchain &amp;&amp;other) noexcept'],['../classSwapchain.html#a30927e6bfaa0444297b3ba2958893b93',1,'Swapchain::Swapchain(const Swapchain &amp;)=delete'],['../classSwapchain.html#a04b93a4607fdc211c3018ab02489f26f',1,'Swapchain::Swapchain(VkDevice device, VkPhysicalDevice physical_device, VkSurfaceKHR surface, CreateInfo create_info)'],['../classSwapchain.html#ac17a8879535f88e5ff3b4635392cefa1',1,'Swapchain::Swapchain()']]],
-  ['swapchain_102',['swapchain',['../classVulkanAPI.html#a6605ae5a44cb5327a1633051b00cbd3f',1,'VulkanAPI']]],
+  ['swapchain_100',['Swapchain',['../classSwapchain.html#ac17a8879535f88e5ff3b4635392cefa1',1,'Swapchain::Swapchain()'],['../classSwapchain.html',1,'Swapchain']]],
+  ['swapchain_101',['swapchain',['../classVulkanAPI.html#a6605ae5a44cb5327a1633051b00cbd3f',1,'VulkanAPI::swapchain()'],['../classSwapchain.html#a751b92128dbbe0cc199b8207a8123796',1,'Swapchain::swapchain()']]],
+  ['swapchain_102',['Swapchain',['../classSwapchain.html#a04ba7da3842a1f7da16bb854dd89d65a',1,'Swapchain::Swapchain(Swapchain &amp;&amp;other) noexcept'],['../classSwapchain.html#a30927e6bfaa0444297b3ba2958893b93',1,'Swapchain::Swapchain(const Swapchain &amp;)=delete'],['../classSwapchain.html#a04b93a4607fdc211c3018ab02489f26f',1,'Swapchain::Swapchain(VkDevice device, VkPhysicalDevice physical_device, VkSurfaceKHR surface, CreateInfo create_info)']]],
   ['swapchain_2ecpp_103',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
   ['swapchain_2ehpp_104',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
 ];

@@ -6,7 +6,7 @@ var classWorld =
     [ "World", "classWorld.html#a9319f9fe52db6162be2269479d76100d", null ],
     [ "addPlayer", "classWorld.html#a41357416f6d0b5b5f519373ee5aa3cb1", null ],
     [ "applyPlayerMovement", "classWorld.html#a6474a75218be8e3e57c0ce492280e04a", null ],
-    [ "calculatePlayerMovement", "classWorld.html#aaa960111fe2dca3246fde6a5f2c28465", null ],
+    [ "calculatePlayerMovement", "classWorld.html#a43685e2f25c3d146aac66e9eac80c815", null ],
     [ "createPlayer", "classWorld.html#a531a6dc272ae40375e83cc2f63513195", null ],
     [ "getCamera", "classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239", null ],
     [ "getPlayerPosition", "classWorld.html#a0cc5e2a278febb7118b5c2b3a2300fd9", null ],
