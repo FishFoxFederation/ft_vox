@@ -37,7 +37,7 @@ public:
 	void updateEntities();
 	void updateBlock(glm::dvec3 position);
 
-	std::pair<glm::vec3, glm::vec3> calculatePlayerMovement(
+	std::pair<glm::dvec3, glm::dvec3> calculatePlayerMovement(
 		const uint64_t player_id,
 		const int8_t forward,
 		const int8_t backward,

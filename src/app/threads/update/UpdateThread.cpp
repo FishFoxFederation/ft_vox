@@ -216,10 +216,10 @@ void UpdateThread::movePlayer()
 	);
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
-	if (displacement != glm::vec3(0.0))
+	if (displacement != glm::dvec3(0.0))
 	{
-		glm::vec3 new_position = position + displacement;
-		LOG_DEBUG("I want to go to " << new_position.x << " " << new_position.y << " " << new_position.z);
+		// glm::vec3 new_position = position + displacement;
+		// LOG_DEBUG("I want to go to " << new_position.x << " " << new_position.y << " " << new_position.z);
 		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
 		m_client.sendPacket(packet);
 	}
