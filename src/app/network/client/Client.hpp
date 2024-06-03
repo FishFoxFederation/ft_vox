@@ -36,6 +36,8 @@ public:
 
 	std::shared_ptr<IPacket>	popPacket();
 	size_t						getQueueSize() const;
+
+	std::unordered_map<uint64_t, std::chrono::time_point<std::chrono::high_resolution_clock>> m_pings;
 private:
 	
 	bool					m_running;

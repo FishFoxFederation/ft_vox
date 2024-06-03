@@ -7,6 +7,7 @@ PacketFactory::PacketFactory()
 	m_packets.insert(std::make_pair(IPacket::Type::PLAYER_MOVE, std::make_shared<PlayerMovePacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::DISCONNECT, std::make_shared<DisconnectPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::BLOCK_ACTION, std::make_shared<BlockActionPacket>()));
+	m_packets.insert(std::make_pair(IPacket::Type::PING, std::make_shared<PingPacket>()));
 }
 
 PacketFactory::~PacketFactory()

@@ -27,4 +27,5 @@ private:
 	void handlePlayerConnectedPacket(std::shared_ptr<PlayerConnectedPacket> packet);
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
 	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
+	void handlePingPacket(std::shared_ptr<PingPacket> packet);
 };

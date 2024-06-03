@@ -33,6 +33,11 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 			mirrorPacket(packet);
 			break;
 		}
+		case IPacket::Type::PING:
+		{
+			m_server.send(packet);
+			break;
+		}
 		default:
 		{
 			break;

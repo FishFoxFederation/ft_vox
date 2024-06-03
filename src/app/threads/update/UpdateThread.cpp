@@ -101,6 +101,7 @@ void UpdateThread::readInput()
 	int sneak_key_status = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
 	int attack_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_LEFT);
 	int use_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
+	int ping_key_status = m_window.input().getKeyState(GLFW_KEY_P);
 
 	m_move_forward = (move_forward_key_status == GLFW_PRESS) ? 1 : 0;
 	m_move_left = (move_left_key_status == GLFW_PRESS) ? 1 : 0;
@@ -110,6 +111,17 @@ void UpdateThread::readInput()
 	m_sneak = (sneak_key_status == GLFW_PRESS) ? 1 : 0;
 	m_attack = (attack_key_status == GLFW_PRESS) ? 1 : 0;
 	m_use = (use_key_status == GLFW_PRESS) ? 1 : 0;
+	m_ping = (ping_key_status == GLFW_PRESS && m_ping == 0) ? 1 : 0;
+
+
+	if (m_ping)
+	{
+		uint64_t id = std::rand();
+
+		auto packet = std::make_shared<PingPacket>(id);
+		m_client.m_pings[id] = std::chrono::high_resolution_clock::now();
+		m_client.sendPacket(packet);
+	}
 
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
 	if (ret.first)

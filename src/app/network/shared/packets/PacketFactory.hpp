@@ -7,6 +7,7 @@
 #include "PlayerMovePacket.hpp"
 #include "DisconnectPacket.hpp"
 #include "BlockActionPacket.hpp"
+#include "PingPacket.hpp"
 // #include "EntityMovePacket.hpp"
 
 class PacketFactory

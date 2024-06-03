@@ -32,6 +32,8 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 	case IPacket::Type::BLOCK_ACTION:
 		handleBlockActionPacket(std::dynamic_pointer_cast<BlockActionPacket>(packet));
 		break;
+	case IPacket::Type::PING:
+		handlePingPacket(std::dynamic_pointer_cast<PingPacket>(packet));
 	default:
 		break;
 	}
@@ -66,4 +68,13 @@ void ClientPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPac
 {
 	LOG_INFO("Block action: " << packet->GetPosition().x << " " << packet->GetPosition().y << " " << packet->GetPosition().z << " ");
 	m_world.modifyBlock(packet->GetPosition(), packet->GetBlockID());
+}
+
+void ClientPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
+{
+	auto now = std::chrono::high_resolution_clock::now();
+	auto duration = now - m_client.m_pings[packet->GetId()];
+
+	LOG_INFO("Ping: " << packet->GetId() << " " << duration.count() / 1e6 << "ms");
+	m_client.m_pings.erase(packet->GetId());
 }
