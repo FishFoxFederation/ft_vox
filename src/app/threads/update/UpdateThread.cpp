@@ -9,7 +9,7 @@ UpdateThread::UpdateThread(
 	const Settings & settings,
 	Window & window,
 	WorldScene & world_scene,
-	World & world,
+	ClientWorld & world,
 	VulkanAPI & vulkan_api,
 	std::chrono::nanoseconds start_time
 ):

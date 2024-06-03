@@ -4,7 +4,7 @@
 #include "window.hpp"
 #include "WorldScene.hpp"
 #include "Settings.hpp"
-#include "World.hpp"
+#include "ClientWorld.hpp"
 #include "VulkanAPI.hpp"
 #include "Client.hpp"
 #include "ClientPacketHandler.hpp"
@@ -19,7 +19,7 @@ public:
 		const Settings & settings,
 		Window & window,
 		WorldScene & world_scene,
-		World & world,
+		ClientWorld & world,
 		VulkanAPI & vulkan_api,
 		std::chrono::nanoseconds start_time
 	);
@@ -35,7 +35,7 @@ private:
 	const Settings & m_settings;
 	Window & m_window;
 	WorldScene & m_world_scene;
-	World & m_world;
+	ClientWorld & m_world;
 	VulkanAPI & m_vulkan_api;
 	Client & m_client;
 	ClientPacketHandler m_packet_handler;

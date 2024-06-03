@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Packets.hpp"
-#include "World.hpp"
+#include "ClientWorld.hpp"
 
 class ServerPacketHandler
 {

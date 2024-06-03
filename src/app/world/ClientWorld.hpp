@@ -15,23 +15,23 @@
 #include <unordered_map>
 #include <shared_mutex>
 
-class World
+class ClientWorld
 {
 
 public:
 
-	World(
+	ClientWorld(
 		WorldScene & WorldScene,
 		VulkanAPI & vulkanAPI,
 		ThreadPool & threadPool,
 		uint64_t my_player_id = 0
 	);
-	~World();
+	~ClientWorld();
 
-	World(World & other) = delete;
-	World(World && other) = delete;
-	World & operator=(World & other) = delete;
-	World & operator=(World && other) = delete;
+	ClientWorld(ClientWorld & other) = delete;
+	ClientWorld(ClientWorld && other) = delete;
+	ClientWorld & operator=(ClientWorld & other) = delete;
+	ClientWorld & operator=(ClientWorld && other) = delete;
 
 
 	void updateEntities();
@@ -226,10 +226,5 @@ private:
 		const glm::vec3 & direction,
 		const double max_distance
 	);
-
-};
-
-class ClientWorld
-{
 
 };

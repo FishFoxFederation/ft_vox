@@ -1,6 +1,6 @@
-#include "World.hpp"
+#include "ClientWorld.hpp"
 
-World::World(
+ClientWorld::ClientWorld(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
 	ThreadPool & threadPool,
@@ -16,24 +16,24 @@ World::World(
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
 }
 
-World::~World()
+ClientWorld::~ClientWorld()
 {
 	waitForFutures();
 }
 
-void World::updateBlock(glm::dvec3 position)
+void ClientWorld::updateBlock(glm::dvec3 position)
 {
 	updateChunks(position);
 	waitForFinishedFutures();
 }
 
-// void World::update(glm::dvec3 nextPlayerPosition)
+// void ClientWorld::update(glm::dvec3 nextPlayerPosition)
 // {
 // 	updateChunks(nextPlayerPosition);
 // 	waitForFinishedFutures();
 // }
 
-void World::loadChunks(const glm::vec3 & playerPosition)
+void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 {
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
@@ -85,13 +85,13 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 	}
 }
 
-void World::loadChunks(const std::vector<glm::vec3> & playerPositions)
+void ClientWorld::loadChunks(const std::vector<glm::vec3> & playerPositions)
 {
 	for (auto playerPosition : playerPositions)
 		loadChunks(playerPosition);
 }
 
-void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
+void ClientWorld::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 {
 	std::vector<glm::ivec2> playerChunks2D;
 	for (auto playerPosition : playerPositions)
@@ -175,12 +175,12 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 	}
 }
 
-void World::unloadChunks(const glm::vec3 & playerPosition)
+void ClientWorld::unloadChunks(const glm::vec3 & playerPosition)
 {
 	unloadChunks(std::vector<glm::vec3>{playerPosition});
 }
 
-void World::meshChunks(const glm::vec3 & playerPosition)
+void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 {
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
@@ -197,7 +197,7 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 	}
 }
 
-void World::meshChunk(const glm::ivec2 & chunkPos2D)
+void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 {
 	glm::ivec3 chunkPos3D = glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
 	/********
@@ -290,7 +290,7 @@ void World::meshChunk(const glm::ivec2 & chunkPos2D)
 	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
-void World::updateChunks(const glm::vec3 & playerPosition)
+void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 {
 	// static std::chrono::steady_clock::time_point last_update = std::chrono::steady_clock::now();
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
@@ -302,7 +302,7 @@ void World::updateChunks(const glm::vec3 & playerPosition)
 	doBlockSets();
 }
 
-void World::doBlockSets()
+void ClientWorld::doBlockSets()
 {
 	{
 		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
@@ -350,7 +350,7 @@ void World::doBlockSets()
 	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
-void World::waitForFinishedFutures()
+void ClientWorld::waitForFinishedFutures()
 {
 	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 	while(!m_finished_futures.empty())
@@ -363,7 +363,7 @@ void World::waitForFinishedFutures()
 	}
 }
 
-void World::waitForFutures()
+void ClientWorld::waitForFutures()
 {
 	while(!m_futures.empty())
 	{
@@ -372,7 +372,7 @@ void World::waitForFutures()
 	}
 }
 
-glm::vec3 World::getBlockChunkPosition(const glm::vec3 & position)
+glm::vec3 ClientWorld::getBlockChunkPosition(const glm::vec3 & position)
 {
 	glm::vec3 block_chunk_position = glm::ivec3(position) % CHUNK_SIZE_IVEC3;
 	if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
@@ -382,16 +382,16 @@ glm::vec3 World::getBlockChunkPosition(const glm::vec3 & position)
 	return block_chunk_position;
 }
 
-glm::vec3 World::getChunkPosition(const glm::vec3 & position)
+glm::vec3 ClientWorld::getChunkPosition(const glm::vec3 & position)
 {
 	return glm::floor(position / CHUNK_SIZE_VEC3);
 }
 
-void World::updateEntities()
+void ClientWorld::updateEntities()
 {
 }
 
-void World::applyPlayerMovement(const uint64_t & player_id, const glm::dvec3 & displacement)
+void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dvec3 & displacement)
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
@@ -411,7 +411,7 @@ void World::applyPlayerMovement(const uint64_t & player_id, const glm::dvec3 & d
 	}
 }
 
-void World::updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & position)
+void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & position)
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
@@ -439,7 +439,7 @@ void World::updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & 
 }
 
 
-std::pair<glm::dvec3, glm::dvec3> World::calculatePlayerMovement(
+std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	const uint64_t player_id,
 	const int8_t forward,
 	const int8_t backward,
@@ -571,7 +571,7 @@ std::pair<glm::dvec3, glm::dvec3> World::calculatePlayerMovement(
 	return result;
 }
 
-void World::updatePlayerTargetBlock(
+void ClientWorld::updatePlayerTargetBlock(
 	const uint64_t player_id
 )
 {
@@ -590,7 +590,7 @@ void World::updatePlayerTargetBlock(
 	player->targeted_block = raycast;
 }
 
-std::pair<bool, glm::vec3> World::playerAttack(
+std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 	const uint64_t player_id,
 	bool attack
 )
@@ -620,7 +620,7 @@ std::pair<bool, glm::vec3> World::playerAttack(
 	return std::make_pair(false, glm::vec3(0.0));
 }
 
-std::pair<bool, glm::vec3> World::playerUse(
+std::pair<bool, glm::vec3> ClientWorld::playerUse(
 	const uint64_t player_id,
 	bool use
 )
@@ -652,7 +652,7 @@ std::pair<bool, glm::vec3> World::playerUse(
 	return {false, glm::vec3(0.0)};
 }
 
-void World::updatePlayerCamera(
+void ClientWorld::updatePlayerCamera(
 	const uint64_t player_id,
 	const double x_offset,
 	const double y_offset
@@ -664,7 +664,7 @@ void World::updatePlayerCamera(
 	player->moveDirection(x_offset, y_offset);
 }
 
-void World::updatePlayer(
+void ClientWorld::updatePlayer(
 	const uint64_t player_id,
 	std::function<void(Player &)> update
 )
@@ -674,21 +674,21 @@ void World::updatePlayer(
 	update(*player);
 }
 
-Camera World::getCamera(const uint64_t player_id)
+Camera ClientWorld::getCamera(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
 	std::lock_guard<std::mutex> lock(player->mutex);
 	return player->camera();
 }
 
-glm::dvec3 World::getPlayerPosition(const uint64_t player_id)
+glm::dvec3 ClientWorld::getPlayerPosition(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
 	std::lock_guard<std::mutex> lock(player->mutex);
 	return player->transform.position;
 }
 
-bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position)
+bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position)
 {
 	glm::dvec3 offset = glm::dvec3(0.0);
 	for (offset.x = -1; offset.x <= glm::ceil(hitbox.size.x); offset.x++)
@@ -727,7 +727,7 @@ bool World::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & p
 	return false;
 }
 
-RayCastOnBlockResult World::rayCastOnBlock(
+RayCastOnBlockResult ClientWorld::rayCastOnBlock(
 	const glm::vec3 & origin,
 	const glm::vec3 & direction,
 	const double max_distance
@@ -828,7 +828,7 @@ RayCastOnBlockResult World::rayCastOnBlock(
 	};
 }
 
-void World::addPlayer(const uint64_t player_id, const glm::dvec3 & position)
+void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & position)
 {
 	std::shared_ptr<Player> player = std::make_shared<Player>();
 	player->transform.position = position;
@@ -850,7 +850,7 @@ void World::addPlayer(const uint64_t player_id, const glm::dvec3 & position)
 	}
 }
 
-void World::removePlayer(const uint64_t player_id)
+void ClientWorld::removePlayer(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
 	std::lock_guard<std::mutex> lock(player->mutex);
@@ -862,7 +862,7 @@ void World::removePlayer(const uint64_t player_id)
 	}
 }
 
-void World::modifyBlock(const glm::vec3 & position, const BlockID & block_id)
+void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockID & block_id)
 {
 	std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
 	m_blocks_to_set.push({position, block_id});
