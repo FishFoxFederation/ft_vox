@@ -51,6 +51,7 @@ var annotated_dup =
     [ "NetworkThread", "classNetworkThread.html", "classNetworkThread" ],
     [ "PacketFactory", "classPacketFactory.html", "classPacketFactory" ],
     [ "Perlin", "classPerlin.html", "classPerlin" ],
+    [ "PingPacket", "classPingPacket.html", "classPingPacket" ],
     [ "Pipeline", "classPipeline.html", "classPipeline" ],
     [ "Player", "classPlayer.html", "classPlayer" ],
     [ "PlayerConnectedPacket", "classPlayerConnectedPacket.html", "classPlayerConnectedPacket" ],

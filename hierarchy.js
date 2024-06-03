@@ -51,6 +51,7 @@ var hierarchy =
       [ "IServerToClientPacket", "classIServerToClientPacket.html", [
         [ "EntityMovePacket", "classEntityMovePacket.html", null ]
       ] ],
+      [ "PingPacket", "classPingPacket.html", null ],
       [ "PlayerConnectedPacket", "classPlayerConnectedPacket.html", null ],
       [ "PlayerMovePacket", "classPlayerMovePacket.html", null ]
     ] ],

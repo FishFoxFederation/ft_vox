@@ -11,5 +11,6 @@ var classClient =
     [ "popPacket", "classClient.html#abee92871a623dd53e5fce8b74e1e9b07", null ],
     [ "run", "classClient.html#ae0bc335d720265d4d6e8a72cf7a2a9aa", null ],
     [ "runOnce", "classClient.html#af888552c0bffe55dad7dfb0b8cd25d8a", null ],
-    [ "sendPacket", "classClient.html#a3ab0ece7e17a254489b2f9d3c6460dee", null ]
+    [ "sendPacket", "classClient.html#a3ab0ece7e17a254489b2f9d3c6460dee", null ],
+    [ "m_pings", "classClient.html#a6ac49c33d688d99c42ed0f78e1efe79c", null ]
 ];

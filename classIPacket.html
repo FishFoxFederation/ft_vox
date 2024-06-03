@@ -121,14 +121,15 @@ Inheritance diagram for IPacket:</div>
 <div class="dyncontent">
 <div class="center"><img src="classIPacket__inherit__graph.png" border="0" usemap="#aIPacket_inherit__map" alt="Inheritance graph"/></div>
 <map name="aIPacket_inherit__map" id="aIPacket_inherit__map">
-<area shape="rect" title=" " alt="" coords="555,5,694,265"/>
+<area shape="rect" title=" " alt="" coords="646,5,785,265"/>
 <area shape="rect" href="classBlockActionPacket.html" title=" " alt="" coords="5,335,164,537"/>
 <area shape="rect" href="classConnectionPacket.html" title=" " alt="" coords="189,335,343,537"/>
 <area shape="rect" href="classDisconnectPacket.html" title=" " alt="" coords="367,313,522,559"/>
 <area shape="rect" href="classIClientToServerPacket.html" title=" " alt="" coords="546,416,703,456"/>
 <area shape="rect" href="classIServerToClientPacket.html" title=" " alt="" coords="727,416,885,456"/>
-<area shape="rect" href="classPlayerConnectedPacket.html" title=" " alt="" coords="909,313,1095,559"/>
-<area shape="rect" href="classPlayerMovePacket.html" title=" " alt="" coords="1119,335,1277,537"/>
+<area shape="rect" href="classPingPacket.html" title=" " alt="" coords="909,313,1023,559"/>
+<area shape="rect" href="classPlayerConnectedPacket.html" title=" " alt="" coords="1047,313,1234,559"/>
+<area shape="rect" href="classPlayerMovePacket.html" title=" " alt="" coords="1258,335,1415,537"/>
 <area shape="rect" href="classEntityMovePacket.html" title=" " alt="" coords="741,607,871,647"/>
 </map>
 </div>
@@ -151,6 +152,8 @@ Public Types</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462">DISCONNECT</a> = 4
 , <a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae">BLOCK_ACTION</a> = 5
+, <a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1">PING</a> = 6
+, <a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d">ENUM_MAX</a>
 <br />
  }</td></tr>
 <tr class="separator:a45e74ba6b0b68c66035a48c641a6a569"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,6 +224,8 @@ Protected Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="a45e74ba6b0b68c66035a48c641a6a569a0300ccc0483b1d5e763bb84e013ba702" name="a45e74ba6b0b68c66035a48c641a6a569a0300ccc0483b1d5e763bb84e013ba702"></a>ENTITY_MOVE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462" name="a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462"></a>DISCONNECT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae" name="a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae"></a>BLOCK_ACTION&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1" name="a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1"></a>PING&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d" name="a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d"></a>ENUM_MAX&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -336,7 +341,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBlockActionPacket.html#affec17729f69e795053bb6a6171475db">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a87a8b066fc617f9d56bedc72c3013a2b">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#ac42bf5390c649565b2ef954e7a5e6a96">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#ac714aeb97e9010974a9a18958c08c3eb">DisconnectPacket</a>, and <a class="el" href="classConnectionPacket.html#a03df2a961b5e8ba2f6d93fae8f3f6099">ConnectionPacket</a>.</p>
+<p>Implemented in <a class="el" href="classBlockActionPacket.html#affec17729f69e795053bb6a6171475db">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a87a8b066fc617f9d56bedc72c3013a2b">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#ac42bf5390c649565b2ef954e7a5e6a96">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#ac714aeb97e9010974a9a18958c08c3eb">DisconnectPacket</a>, <a class="el" href="classPingPacket.html#a7ea98aa702c6baff333b920cb5f3917e">PingPacket</a>, and <a class="el" href="classConnectionPacket.html#a03df2a961b5e8ba2f6d93fae8f3f6099">ConnectionPacket</a>.</p>
 
 </div>
 </div>
@@ -364,7 +369,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBlockActionPacket.html#a8f54bac30c70f779bea9011dbae7912d">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a5bae229e2abf6799a84bc0c2cd0921e3">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#a662bbe58c188c390a7ced3d00dceebdb">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#ae251517d74f378ee7a15299cd5db4f4a">DisconnectPacket</a>, and <a class="el" href="classConnectionPacket.html#a713cf4fcaf41e9c93689f858d83df6e1">ConnectionPacket</a>.</p>
+<p>Implemented in <a class="el" href="classBlockActionPacket.html#a8f54bac30c70f779bea9011dbae7912d">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a5bae229e2abf6799a84bc0c2cd0921e3">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#a662bbe58c188c390a7ced3d00dceebdb">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#ae251517d74f378ee7a15299cd5db4f4a">DisconnectPacket</a>, <a class="el" href="classPingPacket.html#a14af60f82feb375962a50222dcdbc868">PingPacket</a>, and <a class="el" href="classConnectionPacket.html#a713cf4fcaf41e9c93689f858d83df6e1">ConnectionPacket</a>.</p>
 
 </div>
 </div>
@@ -434,7 +439,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBlockActionPacket.html#aa00414b878a3c85ef70b97bed6ac6d95">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a8757dcd601110c17612336199b07baa2">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#a1c9c2b7777dc999c84505127e188c454">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#a008bbcca630d9d0cdfa6be851ad68047">DisconnectPacket</a>, and <a class="el" href="classConnectionPacket.html#ad58ff94b4e9a6fb89816fdd6c95cb744">ConnectionPacket</a>.</p>
+<p>Implemented in <a class="el" href="classBlockActionPacket.html#aa00414b878a3c85ef70b97bed6ac6d95">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a8757dcd601110c17612336199b07baa2">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#a1c9c2b7777dc999c84505127e188c454">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#a008bbcca630d9d0cdfa6be851ad68047">DisconnectPacket</a>, <a class="el" href="classPingPacket.html#a66830ec578950d75949284ee74434af6">PingPacket</a>, and <a class="el" href="classConnectionPacket.html#ad58ff94b4e9a6fb89816fdd6c95cb744">ConnectionPacket</a>.</p>
 
 </div>
 </div>
@@ -498,7 +503,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBlockActionPacket.html#a321e453c1238fa49df4159c928126f6a">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#aa48ab90647bbeea44dec0a07771a78c5">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#ad6bff2b41dcdc29fbe789b2c0728adea">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#a02c09d43072dce1d045a87e5d54ea506">DisconnectPacket</a>, and <a class="el" href="classConnectionPacket.html#ac93d7d0907ae5c73b53ce57da0fed1f7">ConnectionPacket</a>.</p>
+<p>Implemented in <a class="el" href="classBlockActionPacket.html#a321e453c1238fa49df4159c928126f6a">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#aa48ab90647bbeea44dec0a07771a78c5">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#ad6bff2b41dcdc29fbe789b2c0728adea">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#a02c09d43072dce1d045a87e5d54ea506">DisconnectPacket</a>, <a class="el" href="classPingPacket.html#a691cea170732c3b7988d5881c854b870">PingPacket</a>, and <a class="el" href="classConnectionPacket.html#ac93d7d0907ae5c73b53ce57da0fed1f7">ConnectionPacket</a>.</p>
 
 </div>
 </div>
@@ -551,7 +556,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBlockActionPacket.html#ae8fe1333d1c242660f9bb8ec34f6e492">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#acafe9882606b8e7498c6fc82b5777c7a">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#aa68b459e03702ff467096ef3ccf7f4c8">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#a0a2bfeb980d50e0c4b16e72c0f2b5b04">DisconnectPacket</a>, and <a class="el" href="classConnectionPacket.html#a029517aae3f38a53392c1111637a993b">ConnectionPacket</a>.</p>
+<p>Implemented in <a class="el" href="classBlockActionPacket.html#ae8fe1333d1c242660f9bb8ec34f6e492">BlockActionPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#acafe9882606b8e7498c6fc82b5777c7a">PlayerConnectedPacket</a>, <a class="el" href="classPlayerMovePacket.html#aa68b459e03702ff467096ef3ccf7f4c8">PlayerMovePacket</a>, <a class="el" href="classDisconnectPacket.html#a0a2bfeb980d50e0c4b16e72c0f2b5b04">DisconnectPacket</a>, <a class="el" href="classPingPacket.html#a072672d4fafd4763a3513a63a473aa1d">PingPacket</a>, and <a class="el" href="classConnectionPacket.html#a029517aae3f38a53392c1111637a993b">ConnectionPacket</a>.</p>
 
 </div>
 </div>

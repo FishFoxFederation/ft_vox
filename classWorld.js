@@ -4,8 +4,8 @@ var classWorld =
     [ "~World", "classWorld.html#a8c73fba541a5817fff65147ba47cd827", null ],
     [ "World", "classWorld.html#a8e7a792ae04e9804a464746adb06f7aa", null ],
     [ "World", "classWorld.html#a9319f9fe52db6162be2269479d76100d", null ],
-    [ "addPlayer", "classWorld.html#ab9e0bf4b90b64d6eb6bdcf4e6f6125a0", null ],
-    [ "applyPlayerMovement", "classWorld.html#a09c0d77ba28010787f590a69eab6d4ee", null ],
+    [ "addPlayer", "classWorld.html#a41357416f6d0b5b5f519373ee5aa3cb1", null ],
+    [ "applyPlayerMovement", "classWorld.html#a6474a75218be8e3e57c0ce492280e04a", null ],
     [ "calculatePlayerMovement", "classWorld.html#aaa960111fe2dca3246fde6a5f2c28465", null ],
     [ "createPlayer", "classWorld.html#a531a6dc272ae40375e83cc2f63513195", null ],
     [ "getCamera", "classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239", null ],
@@ -20,7 +20,7 @@ var classWorld =
     [ "updateEntities", "classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb", null ],
     [ "updatePlayer", "classWorld.html#af77441ac7b7725596b84877315505bea", null ],
     [ "updatePlayerCamera", "classWorld.html#a90f0215ebdb31f244829f5a16f408b81", null ],
-    [ "updatePlayerPosition", "classWorld.html#a5e0e08053583b9789c4b8d85908b8137", null ],
+    [ "updatePlayerPosition", "classWorld.html#ab56066fe20cde9c08630f0ca26fa4984", null ],
     [ "updatePlayerTargetBlock", "classWorld.html#aad35ec43ee6bb3ae3fd96d10465ed055", null ],
     [ "m_my_player_id", "classWorld.html#a2c48d3676bee7471ec1d5ec463585aa1", null ]
 ];

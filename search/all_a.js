@@ -1,8 +1,8 @@
 var searchData=
 [
   ['layout_0',['layout',['../classDescriptor.html#a55bc0ee227abcb76bd3147ce5836ab67',1,'Descriptor::layout()'],['../classPipeline.html#a608b23460b3d7e283b04cddac0df1937',1,'Pipeline::layout()']]],
-  ['level_1',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
-  ['level_2',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]],
+  ['level_1',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]],
+  ['level_2',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
   ['lighting_5fframebuffers_3',['lighting_framebuffers',['../classVulkanAPI.html#a32b2991a33a67aac18e47097c38c2257',1,'VulkanAPI']]],
   ['lighting_5frender_5fpass_4',['lighting_render_pass',['../classVulkanAPI.html#a686c7e9f200979296e890de8c2801e25',1,'VulkanAPI']]],
   ['line_5fpipeline_5',['line_pipeline',['../classVulkanAPI.html#a28868afc63f2210693107cec8cd9e73a',1,'VulkanAPI']]],

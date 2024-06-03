@@ -157,14 +157,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a37a2e027c57cd27ae4ebf0872a110998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a531a6dc272ae40375e83cc2f63513195"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a531a6dc272ae40375e83cc2f63513195">createPlayer</a> (const glm::vec3 &amp;position)</td></tr>
 <tr class="separator:a531a6dc272ae40375e83cc2f63513195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9e0bf4b90b64d6eb6bdcf4e6f6125a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ab9e0bf4b90b64d6eb6bdcf4e6f6125a0">addPlayer</a> (const uint64_t player_id, const glm::vec3 &amp;position)</td></tr>
-<tr class="separator:ab9e0bf4b90b64d6eb6bdcf4e6f6125a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41357416f6d0b5b5f519373ee5aa3cb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a41357416f6d0b5b5f519373ee5aa3cb1">addPlayer</a> (const uint64_t player_id, const glm::dvec3 &amp;position)</td></tr>
+<tr class="separator:a41357416f6d0b5b5f519373ee5aa3cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add8814ff29c249e9655bcb23140dc960"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#add8814ff29c249e9655bcb23140dc960">removePlayer</a> (const uint64_t player_id)</td></tr>
 <tr class="separator:add8814ff29c249e9655bcb23140dc960"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e0e08053583b9789c4b8d85908b8137"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a5e0e08053583b9789c4b8d85908b8137">updatePlayerPosition</a> (const uint64_t &amp;player_id, const glm::vec3 &amp;position)</td></tr>
-<tr class="separator:a5e0e08053583b9789c4b8d85908b8137"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09c0d77ba28010787f590a69eab6d4ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a09c0d77ba28010787f590a69eab6d4ee">applyPlayerMovement</a> (const uint64_t &amp;player_id, const glm::vec3 &amp;displacement)</td></tr>
-<tr class="separator:a09c0d77ba28010787f590a69eab6d4ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab56066fe20cde9c08630f0ca26fa4984"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ab56066fe20cde9c08630f0ca26fa4984">updatePlayerPosition</a> (const uint64_t &amp;player_id, const glm::dvec3 &amp;position)</td></tr>
+<tr class="separator:ab56066fe20cde9c08630f0ca26fa4984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6474a75218be8e3e57c0ce492280e04a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a6474a75218be8e3e57c0ce492280e04a">applyPlayerMovement</a> (const uint64_t &amp;player_id, const glm::dvec3 &amp;displacement)</td></tr>
+<tr class="separator:a6474a75218be8e3e57c0ce492280e04a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66e149c5bb444aeaff5a5cbf2cd59239"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239">getCamera</a> (const uint64_t player_id)</td></tr>
 <tr class="separator:a66e149c5bb444aeaff5a5cbf2cd59239"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cc5e2a278febb7118b5c2b3a2300fd9"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a0cc5e2a278febb7118b5c2b3a2300fd9">getPlayerPosition</a> (const uint64_t player_id)</td></tr>
@@ -286,8 +286,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab9e0bf4b90b64d6eb6bdcf4e6f6125a0" name="ab9e0bf4b90b64d6eb6bdcf4e6f6125a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9e0bf4b90b64d6eb6bdcf4e6f6125a0">&#9670;&#160;</a></span>addPlayer()</h2>
+<a id="a41357416f6d0b5b5f519373ee5aa3cb1" name="a41357416f6d0b5b5f519373ee5aa3cb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41357416f6d0b5b5f519373ee5aa3cb1">&#9670;&#160;</a></span>addPlayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -301,7 +301,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
           <td class="paramname"><em>position</em>&#160;</td>
         </tr>
         <tr>
@@ -314,8 +314,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a09c0d77ba28010787f590a69eab6d4ee" name="a09c0d77ba28010787f590a69eab6d4ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09c0d77ba28010787f590a69eab6d4ee">&#9670;&#160;</a></span>applyPlayerMovement()</h2>
+<a id="a6474a75218be8e3e57c0ce492280e04a" name="a6474a75218be8e3e57c0ce492280e04a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6474a75218be8e3e57c0ce492280e04a">&#9670;&#160;</a></span>applyPlayerMovement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -329,7 +329,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
           <td class="paramname"><em>displacement</em>&#160;</td>
         </tr>
         <tr>
@@ -711,8 +711,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5e0e08053583b9789c4b8d85908b8137" name="a5e0e08053583b9789c4b8d85908b8137"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e0e08053583b9789c4b8d85908b8137">&#9670;&#160;</a></span>updatePlayerPosition()</h2>
+<a id="ab56066fe20cde9c08630f0ca26fa4984" name="ab56066fe20cde9c08630f0ca26fa4984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab56066fe20cde9c08630f0ca26fa4984">&#9670;&#160;</a></span>updatePlayerPosition()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -726,7 +726,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
           <td class="paramname"><em>position</em>&#160;</td>
         </tr>
         <tr>

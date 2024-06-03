@@ -13,5 +13,7 @@ var dir_421217b41e5966097508df44681d819e =
     [ "IPositionPacket.hpp", "IPositionPacket_8hpp.html", null ],
     [ "PacketFactory.cpp", "PacketFactory_8cpp.html", null ],
     [ "PacketFactory.hpp", "PacketFactory_8hpp.html", "PacketFactory_8hpp" ],
-    [ "Packets.hpp", "Packets_8hpp.html", null ]
+    [ "Packets.hpp", "Packets_8hpp.html", null ],
+    [ "PingPacket.cpp", "PingPacket_8cpp.html", null ],
+    [ "PingPacket.hpp", "PingPacket_8hpp.html", "PingPacket_8hpp" ]
 ];

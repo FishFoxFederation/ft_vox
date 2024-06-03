@@ -1,5 +1,5 @@
 <map id="src/app/DebugGui.hpp" name="src/app/DebugGui.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="691,5,842,31"/>
+<area shape="rect" id="node1" title=" " alt="" coords="717,5,867,31"/>
 <area shape="rect" id="node2" href="$DebugGui_8cpp.html" title=" " alt="" coords="34,86,185,111"/>
 <area shape="rect" id="node3" href="$Camera_8cpp.html" title=" " alt="" coords="209,86,393,111"/>
 <area shape="rect" id="node4" href="$WorldScene_8cpp.html" title=" " alt="" coords="418,86,627,111"/>
@@ -11,6 +11,7 @@
 <area shape="rect" id="node17" href="$chunk__mesh_8cpp.html" title=" " alt="" coords="1465,240,1612,280"/>
 <area shape="rect" id="node18" href="$CreateMeshData_8hpp.html" title=" " alt="" coords="1018,79,1193,119"/>
 <area shape="rect" id="node30" href="$WorldGenerator_8hpp.html" title=" " alt="" coords="435,167,653,192"/>
+<area shape="rect" id="node32" href="$Player_8cpp.html" title=" " alt="" coords="1909,79,2043,119"/>
 <area shape="rect" id="node6" href="$application_8hpp.html" title=" " alt="" coords="497,511,652,537"/>
 <area shape="rect" id="node10" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="469,416,680,456"/>
 <area shape="rect" id="node7" href="$alternative__main_8cpp.html" title=" " alt="" coords="311,592,473,617"/>

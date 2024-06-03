@@ -6,7 +6,9 @@ var classIPacket =
       [ "PLAYER_MOVE", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a09615e47f229c3d2725c924d0af4a0ce", null ],
       [ "ENTITY_MOVE", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a0300ccc0483b1d5e763bb84e013ba702", null ],
       [ "DISCONNECT", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462", null ],
-      [ "BLOCK_ACTION", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae", null ]
+      [ "BLOCK_ACTION", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae", null ],
+      [ "PING", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1", null ],
+      [ "ENUM_MAX", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d", null ]
     ] ],
     [ "~IPacket", "classIPacket.html#ac1213f746277104a05b1dfa86ca505bb", null ],
     [ "IPacket", "classIPacket.html#aebd08dc223b5854f99c1dbadf3bc132e", null ],
