@@ -5,7 +5,7 @@ PlayerMovePacket::PlayerMovePacket()
 {
 }
 
-PlayerMovePacket::PlayerMovePacket(uint8_t id, glm::vec3 position, glm::vec3 displacement)
+PlayerMovePacket::PlayerMovePacket(uint8_t id, glm::dvec3 position, glm::dvec3 displacement)
 	: m_id(id), m_position(position), m_displacement(displacement)
 {
 }
@@ -45,10 +45,10 @@ void PlayerMovePacket::Serialize(uint8_t * buffer) const
 	buffer[0] = m_id;
 	buffer += sizeof(uint8_t);
 
-	memcpy(buffer, &m_position, sizeof(glm::vec3));
-	buffer += sizeof(glm::vec3);
-	
-	memcpy(buffer, &m_displacement, sizeof(glm::vec3));
+	memcpy(buffer, &m_position, sizeof(glm::dvec3));
+	buffer += sizeof(glm::dvec3);
+
+	memcpy(buffer, &m_displacement, sizeof(glm::dvec3));
 
 	// LOG_INFO("SERIALIZE: id: " << (int)m_id << "\n position: " << m_position.x << " " << m_position.y << " " << m_position.z << "\n displacement: " << m_displacement.x << " " << m_displacement.y << " " << m_displacement.z);
 }
@@ -60,11 +60,11 @@ void PlayerMovePacket::Deserialize(const uint8_t * buffer)
 	m_id = buffer[0];
 	buffer += sizeof(uint8_t);
 
-	memcpy(&m_position, buffer, sizeof(glm::vec3));
-	buffer += sizeof(glm::vec3);
+	memcpy(&m_position, buffer, sizeof(glm::dvec3));
+	buffer += sizeof(glm::dvec3);
 
-	memcpy(&m_displacement, buffer, sizeof(glm::vec3));
-	buffer += sizeof(glm::vec3);
+	memcpy(&m_displacement, buffer, sizeof(glm::dvec3));
+	buffer += sizeof(glm::dvec3);
 
 	// LOG_INFO("DESERIALIZE: id: " << (int)m_id << "\n position: " << m_position.x << " " << m_position.y << " " << m_position.z << "\n displacement: " << m_displacement.x << " " << m_displacement.y << " " << m_displacement.z);
 }
@@ -72,7 +72,7 @@ void PlayerMovePacket::Deserialize(const uint8_t * buffer)
 uint32_t PlayerMovePacket::Size() const
 {
 	// packet type + id + position + displacement
-	return sizeof(uint32_t) + sizeof(uint8_t) + sizeof(glm::vec3) * 2;
+	return sizeof(uint32_t) + sizeof(uint8_t) + sizeof(glm::dvec3) * 2;
 }
 
 IPacket::Type PlayerMovePacket::GetType() const
@@ -90,12 +90,12 @@ uint8_t PlayerMovePacket::GetId() const
 	return m_id;
 }
 
-glm::vec3 PlayerMovePacket::GetPosition() const
+glm::dvec3 PlayerMovePacket::GetPosition() const
 {
 	return m_position;
 }
 
-glm::vec3 PlayerMovePacket::GetDisplacement() const
+glm::dvec3 PlayerMovePacket::GetDisplacement() const
 {
 	return m_displacement;
 }
@@ -105,12 +105,12 @@ void PlayerMovePacket::SetId(uint8_t id)
 	m_id = id;
 }
 
-void PlayerMovePacket::SetPosition(glm::vec3 position)
+void PlayerMovePacket::SetPosition(glm::dvec3 position)
 {
 	m_position = position;
 }
 
-void PlayerMovePacket::SetDisplacement(glm::vec3 displacement)
+void PlayerMovePacket::SetDisplacement(glm::dvec3 displacement)
 {
 	m_displacement = displacement;
 }

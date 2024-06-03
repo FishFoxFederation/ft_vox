@@ -55,6 +55,9 @@ void DebugGui::updateImGui()
 				if (ImGui::CollapsingHeader("Update Thread"))
 				{
 					ImGui::Text("Ups: %d", ups.load());
+
+					ImGui::Text("Player on ground: %d", player_on_ground.load());
+					ImGui::Text("Player jump remaining: %d", player_on_ground.load());
 				}
 				if (ImGui::CollapsingHeader("Block Update Thread"))
 				{

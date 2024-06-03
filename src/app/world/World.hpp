@@ -73,15 +73,15 @@ public:
 		const BlockID & block_id
 	);
 
-	//Server side 
+	//Server side
 	uint64_t	createPlayer(const glm::vec3 & position);
 
 	//Client side
-	void		addPlayer(const uint64_t player_id, const glm::vec3 & position);
+	void		addPlayer(const uint64_t player_id, const glm::dvec3 & position);
 	void		removePlayer(const uint64_t player_id);
 
-	void		updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & position);
-	void		applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & displacement);
+	void		updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & position);
+	void		applyPlayerMovement(const uint64_t & player_id, const glm::dvec3 & displacement);
 
 	Camera getCamera(const uint64_t player_id);
 	glm::dvec3 getPlayerPosition(const uint64_t player_id);

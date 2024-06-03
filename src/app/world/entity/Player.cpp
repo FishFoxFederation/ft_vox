@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "logger.hpp"
+#include "DebugGui.hpp"
 
 //############################################################################################################
 //                                                                                                           #
@@ -91,6 +92,7 @@ void Player::startJump()
 {
 	velocity.y = jump_force;
 	jump_remaining--;
+	DebugGui::player_jump_remaining = jump_remaining;
 	jumping = true;
 	last_jump_time = std::chrono::steady_clock::now().time_since_epoch();
 }

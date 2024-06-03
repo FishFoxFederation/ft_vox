@@ -114,7 +114,6 @@ void UpdateThread::readInput()
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
 	if (ret.first)
 	{
-		LOG_INFO("Attack" << ret.second.x << " " << ret.second.y << " " << ret.second.z);
 		auto packet = std::make_shared<BlockActionPacket>(BlockID::Air, ret.second, BlockActionPacket::Action::PLACE);
 		m_client.sendPacket(packet);
 	}
@@ -207,6 +206,8 @@ void UpdateThread::movePlayer()
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
 	if (displacement != glm::vec3(0.0))
 	{
+		glm::vec3 new_position = position + displacement;
+		LOG_DEBUG("I want to go to " << new_position.x << " " << new_position.y << " " << new_position.z);
 		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
 		m_client.sendPacket(packet);
 	}
