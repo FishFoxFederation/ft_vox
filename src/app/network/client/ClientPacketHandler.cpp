@@ -2,7 +2,7 @@
 
 ClientPacketHandler::ClientPacketHandler(
 	Client & client,
-	World & world)
+	ClientWorld & world)
 :	m_client(client),
 	m_world(world)
 {

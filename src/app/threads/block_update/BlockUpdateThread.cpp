@@ -4,7 +4,7 @@
 
 BlockUpdateThread::BlockUpdateThread(
 	WorldScene & worldScene,
-	World & world
+	ClientWorld & world
 ):
 	m_worldScene(worldScene),
 	m_world(world),

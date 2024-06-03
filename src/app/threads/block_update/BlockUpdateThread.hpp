@@ -1,7 +1,7 @@
 #pragma once
 
 #include "define.hpp"
-#include "World.hpp"
+#include "ClientWorld.hpp"
 #include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
 #include "ThreadPool.hpp"
@@ -23,7 +23,7 @@ public:
 
 	BlockUpdateThread(
 		WorldScene & worldScene,
-		World & world
+		ClientWorld & world
 	);
 	~BlockUpdateThread();
 
@@ -34,7 +34,7 @@ public:
 private:
 
 	WorldScene	&	m_worldScene;
-	World		&	m_world;
+	ClientWorld		&	m_world;
 
 	std::jthread m_thread;
 
