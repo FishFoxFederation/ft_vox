@@ -11,11 +11,12 @@
 #include "ThreadPool.hpp"
 #include "VulkanAPI.hpp"
 #include "Camera.hpp"
+#include "World.hpp"
 
 #include <unordered_map>
 #include <shared_mutex>
 
-class ClientWorld
+class ClientWorld : public World
 {
 
 public:
@@ -95,15 +96,12 @@ private:
 	VulkanAPI &								m_vulkanAPI;
 	ThreadPool &							m_threadPool;
 
-	std::unordered_map<uint64_t, std::shared_ptr<Player>> m_players;
 
 	/*************************************
 	 *  CHUNKS AND MAP
 	*************************************/
 	WorldGenerator							m_worldGenerator;
-	std::unordered_map<glm::ivec3, Chunk>	m_chunks;
 	std::unordered_set<glm::ivec2>			m_loaded_chunks;
-	std::mutex								m_chunks_mutex;
 
 	std::unordered_set<glm::ivec2>			m_visible_chunks;
 	std::mutex								m_visible_chunks_mutex;
@@ -134,21 +132,6 @@ private:
 	/*************************************
 	 *  CHUNKS AND MAP
 	*************************************/
-	/**
-	 * @brief will return the block position relative to the chunk
-	 *
-	 * @param position the position of the block in the world
-	 * @return glm::vec3
-	 */
-	static glm::vec3 	getBlockChunkPosition(const glm::vec3 & position);
-
-	/**
-	 * @brief will return the chunk position containing the block
-	 *
-	 * @param position the position of the block in the world
-	 * @return glm::vec3
-	 */
-	static glm::vec3 	getChunkPosition(const glm::vec3 & position);
 
 	/**
 	 * @brief will load all chunks around the player
