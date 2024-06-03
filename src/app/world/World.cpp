@@ -391,7 +391,7 @@ void World::updateEntities()
 {
 }
 
-void World::applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & displacement)
+void World::applyPlayerMovement(const uint64_t & player_id, const glm::dvec3 & displacement)
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
@@ -411,7 +411,7 @@ void World::applyPlayerMovement(const uint64_t & player_id, const glm::vec3 & di
 	}
 }
 
-void World::updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & position)
+void World::updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & position)
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
@@ -419,6 +419,7 @@ void World::updatePlayerPosition(const uint64_t & player_id, const glm::vec3 & p
 	// apply displacement
 	player->transform.position = position;
 
+	DebugGui::player_position = player->transform.position;
 
 	{ // update player mesh
 		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
@@ -459,6 +460,7 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 	if (on_ground && !player->on_ground) // player just landed
 	{
 		player->jump_remaining = 1;
+		DebugGui::player_jump_remaining = player->jump_remaining;
 		player->jumping = false;
 	}
 	if (!on_ground && player->on_ground) // player just started falling
@@ -466,6 +468,7 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 		player->startFall();
 	}
 	player->on_ground = on_ground;
+	DebugGui::player_on_ground = on_ground;
 
 
 	// get the movement vector
@@ -556,6 +559,7 @@ std::pair<glm::vec3, glm::vec3> World::calculatePlayerMovement(
 		}
 		if (collision_y)
 		{
+			// displacement.y = glm::fract(player->transform.position.y);
 			displacement.y = 0.0;
 			player->velocity.y = 0.0;
 		}
@@ -827,7 +831,7 @@ RayCastOnBlockResult World::rayCastOnBlock(
 	};
 }
 
-void World::addPlayer(const uint64_t player_id, const glm::vec3 & position)
+void World::addPlayer(const uint64_t player_id, const glm::dvec3 & position)
 {
 	std::shared_ptr<Player> player = std::make_shared<Player>();
 	player->transform.position = position;

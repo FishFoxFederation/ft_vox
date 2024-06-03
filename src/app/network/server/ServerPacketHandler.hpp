@@ -18,7 +18,7 @@ public:
 
 private:
 	Server &	m_server;
-	std::map<uint64_t, glm::vec3> m_player_positions;
+	std::map<uint64_t, glm::dvec3> m_player_positions;
 	std::map<uint64_t, uint64_t> m_player_to_connection_id;
 	std::map<uint64_t, uint64_t> m_connection_to_player_id;
 

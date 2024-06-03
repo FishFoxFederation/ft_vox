@@ -52,7 +52,7 @@ void ClientPacketHandler::handlePlayerConnectedPacket(std::shared_ptr<PlayerConn
 
 void ClientPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
-	// LOG_DEBUG("RECEIVED POS: " << packet->GetPosition().x << " " << packet->GetPosition().y << " " << packet->GetPosition().z);
+	LOG_DEBUG("RECEIVED POS: " << packet->GetPosition().x << " " << packet->GetPosition().y << " " << packet->GetPosition().z);
 	m_world.updatePlayerPosition(packet->GetId(), packet->GetPosition() + packet->GetDisplacement());
 }
 

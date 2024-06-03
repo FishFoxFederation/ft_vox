@@ -7,7 +7,7 @@ class PlayerMovePacket : public IPacket
 {
 public:
 	PlayerMovePacket();
-	PlayerMovePacket(uint8_t id, glm::vec3 position, glm::vec3 displacement);
+	PlayerMovePacket(uint8_t id, glm::dvec3 position, glm::dvec3 displacement);
 	~PlayerMovePacket();
 
 	PlayerMovePacket(const PlayerMovePacket& other);
@@ -24,14 +24,14 @@ public:
 	virtual std::shared_ptr<IPacket> Clone() const override;
 
 	uint8_t GetId() const;
-	glm::vec3 GetPosition() const;
-	glm::vec3 GetDisplacement() const;
+	glm::dvec3 GetPosition() const;
+	glm::dvec3 GetDisplacement() const;
 
 	void SetId(uint8_t id);
-	void SetPosition(glm::vec3 position);
-	void SetDisplacement(glm::vec3 displacement);
+	void SetPosition(glm::dvec3 position);
+	void SetDisplacement(glm::dvec3 displacement);
 private:
 	uint8_t		m_id;
-	glm::vec3	m_position;
-	glm::vec3	m_displacement;
+	glm::dvec3	m_position;
+	glm::dvec3	m_displacement;
 };
