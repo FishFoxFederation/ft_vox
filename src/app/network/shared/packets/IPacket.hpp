@@ -18,6 +18,7 @@ public:
 		ENTITY_MOVE = 3,
 		DISCONNECT = 4,
 		BLOCK_ACTION = 5,
+		PING = 6,
 	};
 	virtual ~IPacket();
 

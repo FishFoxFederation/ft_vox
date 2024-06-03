@@ -58,6 +58,7 @@ private:
 	int m_sneak;
 	int m_attack;
 	int m_use;
+	int m_ping;
 
 	double m_mouse_x;
 	double m_mouse_y;

@@ -5,6 +5,7 @@
 #include "ConnectionPacket.hpp"
 #include "DisconnectPacket.hpp"
 #include "BlockActionPacket.hpp"
+#include "PingPacket.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 
