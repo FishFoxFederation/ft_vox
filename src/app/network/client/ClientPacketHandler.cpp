@@ -54,7 +54,8 @@ void ClientPacketHandler::handlePlayerConnectedPacket(std::shared_ptr<PlayerConn
 
 void ClientPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
-	LOG_DEBUG("RECEIVED POS: " << packet->GetPosition().x << " " << packet->GetPosition().y << " " << packet->GetPosition().z);
+	glm::vec3 new_pos = packet->GetPosition() + packet->GetDisplacement();
+	LOG_DEBUG("RECEIVED POS: " << new_pos.x << " " << new_pos.y << " " << new_pos.z);
 	m_world.updatePlayerPosition(packet->GetId(), packet->GetPosition() + packet->GetDisplacement());
 }
 

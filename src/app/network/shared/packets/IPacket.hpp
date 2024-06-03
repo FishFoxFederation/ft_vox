@@ -19,6 +19,7 @@ public:
 		DISCONNECT = 4,
 		BLOCK_ACTION = 5,
 		PING = 6,
+		ENUM_MAX,
 	};
 	virtual ~IPacket();
 

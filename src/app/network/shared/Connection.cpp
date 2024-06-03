@@ -61,7 +61,7 @@ ssize_t Connection::recv()
 			else 
 				break;
 		}
-		if (size == 0)
+		else if (size == 0)
 		{
 			return 0;
 		}
