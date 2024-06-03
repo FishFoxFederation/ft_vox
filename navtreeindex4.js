@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"functions_d.html":[10,3,0,3],
 "functions_e.html":[10,3,0,4],
 "functions_enum.html":[10,3,4],
 "functions_eval.html":[10,3,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "structSwapchain_1_1CreateInfo.html#a47ee25910eae6d24edb56da521303b69":[10,0,63,0,0],
 "structSwapchain_1_1CreateInfo.html#a5667c3f28b3bf53704c006fad40f034c":[10,0,63,0,3],
 "structSwapchain_1_1CreateInfo.html#a9c00a0a7b2354b178a6817008ef6b92c":[10,0,63,0,2],
-"structSwapchain_1_1CreateInfo.html#ad1c102bab8c5453ff798c6d2127d3e97":[10,0,63,0,1],
-"structSwapchain_1_1SupportDetails.html":[10,0,63,1]
+"structSwapchain_1_1CreateInfo.html#ad1c102bab8c5453ff798c6d2127d3e97":[10,0,63,0,1]
 };

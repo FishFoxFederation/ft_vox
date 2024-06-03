@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['gamemode_0',['gameMode',['../classPlayer.html#a39ad689468b2763f5b735a5e4fb78113',1,'Player']]],
-  ['gamemode_1',['GameMode',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292d',1,'Player']]],
+  ['gamemode_0',['GameMode',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292d',1,'Player']]],
+  ['gamemode_1',['gameMode',['../classPlayer.html#a39ad689468b2763f5b735a5e4fb78113',1,'Player']]],
   ['generatechunk_2',['generateChunk',['../classWorldGenerator.html#a60e7c3bf3ac192d924afdea2fe59760d',1,'WorldGenerator']]],
   ['generatechunkcolumn_3',['generateChunkColumn',['../classWorldGenerator.html#a3abe115df8c1963918707f43cd920092',1,'WorldGenerator']]],
   ['generatefullchunk_4',['generateFullChunk',['../classWorldGenerator.html#abcc94f56394d38f96df5b3ffd6afe104',1,'WorldGenerator']]],
@@ -31,7 +31,7 @@ var searchData=
   ['getpackettype_28',['getPacketType',['../classPacketFactory.html#a2dad142701bd858bc64249a9041c386b',1,'PacketFactory']]],
   ['getplayerid_29',['GetPlayerId',['../classDisconnectPacket.html#a62a35702451b644a608cc475f2054a7a',1,'DisconnectPacket']]],
   ['getplayerposition_30',['getPlayerPosition',['../classWorld.html#a0cc5e2a278febb7118b5c2b3a2300fd9',1,'World']]],
-  ['getposition_31',['GetPosition',['../classPlayerMovePacket.html#a7dfd9cf105a55271f15c71e1ebdd80d7',1,'PlayerMovePacket::GetPosition()'],['../classConnectionPacket.html#adbdbabc4c20cf29d5e6442c3b3c0327d',1,'ConnectionPacket::GetPosition()'],['../classBlockActionPacket.html#afc78d3a5e412416f671c7fbc87657ca9',1,'BlockActionPacket::GetPosition()']]],
+  ['getposition_31',['GetPosition',['../classPlayerMovePacket.html#a7dfd9cf105a55271f15c71e1ebdd80d7',1,'PlayerMovePacket::GetPosition()'],['../classConnectionPacket.html#adbdbabc4c20cf29d5e6442c3b3c0327d',1,'ConnectionPacket::GetPosition()'],['../classBlockActionPacket.html#a43c1a22b128c4a647a7d7aa4b40613d8',1,'BlockActionPacket::GetPosition()']]],
   ['getposition_32',['getPosition',['../classChunk.html#ac7a2ed68597190050622a38dc45b4665',1,'Chunk']]],
   ['getqueuesize_33',['getQueueSize',['../classClient.html#a60dbe62e5dd63b3308318f5aa952daa7',1,'Client']]],
   ['getreadbuffer_34',['getReadBuffer',['../classConnection.html#ac24346a1f9185b6aeda7668c690e5d71',1,'Connection']]],

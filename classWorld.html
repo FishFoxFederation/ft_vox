@@ -147,12 +147,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a90f0215ebdb31f244829f5a16f408b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad35ec43ee6bb3ae3fd96d10465ed055"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aad35ec43ee6bb3ae3fd96d10465ed055">updatePlayerTargetBlock</a> (const uint64_t player_id)</td></tr>
 <tr class="separator:aad35ec43ee6bb3ae3fd96d10465ed055"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48881bc1e2708b0202c899cfa1f813ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a48881bc1e2708b0202c899cfa1f813ee">playerAttack</a> (const uint64_t player_id, bool attack)</td></tr>
-<tr class="separator:a48881bc1e2708b0202c899cfa1f813ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7f4b708a4d2edb00d9809267be8b051"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ac7f4b708a4d2edb00d9809267be8b051">playerUse</a> (const uint64_t player_id, bool use)</td></tr>
-<tr class="separator:ac7f4b708a4d2edb00d9809267be8b051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27aa95a15d3efef2bfba93ab48f53161"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a27aa95a15d3efef2bfba93ab48f53161">playerAttack</a> (const uint64_t player_id, bool attack)</td></tr>
+<tr class="separator:a27aa95a15d3efef2bfba93ab48f53161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4091951e756e5d8a1726ce43a744ea0"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af4091951e756e5d8a1726ce43a744ea0">playerUse</a> (const uint64_t player_id, bool use)</td></tr>
+<tr class="separator:af4091951e756e5d8a1726ce43a744ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af77441ac7b7725596b84877315505bea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af77441ac7b7725596b84877315505bea">updatePlayer</a> (const uint64_t player_id, std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt; update)</td></tr>
 <tr class="separator:af77441ac7b7725596b84877315505bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37a2e027c57cd27ae4ebf0872a110998"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a37a2e027c57cd27ae4ebf0872a110998">modifyBlock</a> (const glm::vec3 &amp;position, const <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp;block_id)</td></tr>
+<tr class="separator:a37a2e027c57cd27ae4ebf0872a110998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a531a6dc272ae40375e83cc2f63513195"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a531a6dc272ae40375e83cc2f63513195">createPlayer</a> (const glm::vec3 &amp;position)</td></tr>
 <tr class="separator:a531a6dc272ae40375e83cc2f63513195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9e0bf4b90b64d6eb6bdcf4e6f6125a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ab9e0bf4b90b64d6eb6bdcf4e6f6125a0">addPlayer</a> (const uint64_t player_id, const glm::vec3 &amp;position)</td></tr>
@@ -458,6 +460,34 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a37a2e027c57cd27ae4ebf0872a110998" name="a37a2e027c57cd27ae4ebf0872a110998"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37a2e027c57cd27ae4ebf0872a110998">&#9670;&#160;</a></span>modifyBlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::modifyBlock </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp;&#160;</td>
+          <td class="paramname"><em>block_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af69b86b3ac37a2168715401267d104ab" name="af69b86b3ac37a2168715401267d104ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af69b86b3ac37a2168715401267d104ab">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
@@ -510,14 +540,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a48881bc1e2708b0202c899cfa1f813ee" name="a48881bc1e2708b0202c899cfa1f813ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48881bc1e2708b0202c899cfa1f813ee">&#9670;&#160;</a></span>playerAttack()</h2>
+<a id="a27aa95a15d3efef2bfba93ab48f53161" name="a27aa95a15d3efef2bfba93ab48f53161"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27aa95a15d3efef2bfba93ab48f53161">&#9670;&#160;</a></span>playerAttack()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void World::playerAttack </td>
+          <td class="memname">std::pair&lt; bool, glm::vec3 &gt; World::playerAttack </td>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em>, </td>
@@ -538,14 +568,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac7f4b708a4d2edb00d9809267be8b051" name="ac7f4b708a4d2edb00d9809267be8b051"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7f4b708a4d2edb00d9809267be8b051">&#9670;&#160;</a></span>playerUse()</h2>
+<a id="af4091951e756e5d8a1726ce43a744ea0" name="af4091951e756e5d8a1726ce43a744ea0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4091951e756e5d8a1726ce43a744ea0">&#9670;&#160;</a></span>playerUse()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void World::playerUse </td>
+          <td class="memname">std::pair&lt; bool, glm::vec3 &gt; World::playerUse </td>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em>, </td>

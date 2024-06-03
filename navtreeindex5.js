@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"structSwapchain_1_1SupportDetails.html":[10,0,63,1],
 "structSwapchain_1_1SupportDetails.html#a2a4f0f958367aff61916f25a008953a5":[10,0,63,1,1],
 "structSwapchain_1_1SupportDetails.html#a3e6ebb1faa79aa2509f1b701b516f4c6":[10,0,63,1,0],
 "structSwapchain_1_1SupportDetails.html#ac0f4f61750c7a405c1ab2ef0183b17bf":[10,0,63,1,2],

@@ -116,8 +116,8 @@ var NAVTREEINDEX =
 "classChunk.html#af736ac12c9122c37346b980428d83c3d",
 "classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda",
 "classSwapchain.html#a751b92128dbbe0cc199b8207a8123796",
-"functions_e.html",
-"structSwapchain_1_1SupportDetails.html#a2a4f0f958367aff61916f25a008953a5"
+"functions_d.html",
+"structSwapchain_1_1SupportDetails.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
