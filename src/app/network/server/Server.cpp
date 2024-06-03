@@ -105,10 +105,11 @@ int Server::read_data(Connection & connection, uint64_t id)
 {
 	ssize_t ret;
 	try {
+
 		ret = connection.recv();
 		if (ret == 0)
 			throw ClientDisconnected(id);
-		// LOG_INFO("Data received");
+		LOG_INFO("Data received");
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
 		auto ret = m_packet_factory.extractPacket(connection);
@@ -132,6 +133,7 @@ int Server::send_data(Connection & connection, uint64_t id)
 	ssize_t ret;
 	try
 	{
+		LOG_INFO("Sending data");
 		if( !connection.dataToSend() )
 			return 0;
 		LOG_INFO("sending data");
