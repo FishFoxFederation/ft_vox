@@ -63,7 +63,7 @@ void UpdateThread::init()
 
 void UpdateThread::loop()
 {
-	m_client.runOnce(10);
+	m_client.runOnce(1);
 	updateTime();
 	readInput();
 	//only move player every 20 ms
