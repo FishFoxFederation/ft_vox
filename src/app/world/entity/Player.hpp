@@ -78,8 +78,8 @@ public:
 	double sneak_speed_factor = 0.3;
 	double fly_speed_factor = 3.0;
 	double jump_speed_factor = 1.1;
-	double jump_force = 5.0;
-	double gravity = -10.0;
+	double jump_force = 10.0;
+	double gravity = -30.0;
 
 
 	bool on_ground = false;
