@@ -46,6 +46,11 @@ uint32_t PlayerConnectedPacket::Size() const
 	return sizeof(IPacket::Type) + sizeof(m_player_id);
 }
 
+bool PlayerConnectedPacket::HasDynamicSize() const
+{
+	return false;
+}
+
 IPacket::Type PlayerConnectedPacket::GetType() const
 {
 	return IPacket::Type::PLAYER_CONNECTED;

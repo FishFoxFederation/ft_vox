@@ -2,6 +2,7 @@
 
 
 #include "Packets.hpp"
+#include "Client.hpp"
 #include "ClientWorld.hpp"
 #include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
@@ -28,4 +29,5 @@ private:
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
 	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
 	void handlePingPacket(std::shared_ptr<PingPacket> packet);
+	void handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet);
 };

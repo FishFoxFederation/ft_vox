@@ -49,18 +49,18 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 {
 
 	//send new player to all other players
-	auto packet_to_send = std::make_shared<ConnectionPacket>(*packet);
+	std::shared_ptr<IPacket> packet_to_send = std::make_shared<ConnectionPacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_server.sendAllExcept(packet_to_send, packet->GetConnectionId());
 
 
 	//send all other players to new player
-	for(auto & player : m_player_positions)
-	{
-		auto packet_to_send = std::make_shared<ConnectionPacket>(player.first, player.second);
-		packet_to_send->SetConnectionId(packet->GetConnectionId());
-		m_server.send(packet_to_send);
-	}
+	std::vector<PlayerListPacket::PlayerInfo> players;
+	for(auto player : m_player_positions)
+		players.push_back(PlayerListPacket::PlayerInfo{player.first, player.second});
+	packet_to_send = std::make_shared<PlayerListPacket>(players);
+	packet_to_send->SetConnectionId(packet->GetConnectionId());
+	m_server.send(packet_to_send);
 
 	//add new player to list
 	m_player_positions[packet->GetPlayerId()] = packet->GetPosition();

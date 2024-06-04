@@ -2,13 +2,7 @@
 
 #include <unordered_map>
 
-#include "PlayerConnectedPacket.hpp"
-#include "ConnectionPacket.hpp"
-#include "PlayerMovePacket.hpp"
-#include "DisconnectPacket.hpp"
-#include "BlockActionPacket.hpp"
-#include "PingPacket.hpp"
-// #include "EntityMovePacket.hpp"
+#include "Packets.hpp"
 
 class PacketFactory
 {

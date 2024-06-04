@@ -8,6 +8,7 @@ PacketFactory::PacketFactory()
 	m_packets.insert(std::make_pair(IPacket::Type::DISCONNECT, std::make_shared<DisconnectPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::BLOCK_ACTION, std::make_shared<BlockActionPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::PING, std::make_shared<PingPacket>()));
+	m_packets.insert(std::make_pair(IPacket::Type::PLAYER_LIST, std::make_shared<PlayerListPacket>()));
 }
 
 PacketFactory::~PacketFactory()
@@ -45,15 +46,15 @@ PacketFactory::packetInfo PacketFactory::getPacketInfo(const uint8_t * buffer, c
 
 	IPacket::Type type = static_cast<IPacket::Type>(packet_type);
 
-	ssize_t packet_size = 0;
+	size_t packet_size = 0;
 
 	//extract the packet size if the packet has a dynamic size
 	if (m_packets.at(type)->HasDynamicSize())
 	{
-		if (size < sizeof(IPacket::Type) + sizeof(ssize_t))
+		if (size < sizeof(IPacket::Type) + sizeof(size_t))
 			return retInfo;
 
-		memcpy(&packet_size, buffer + sizeof(IPacket::Type), sizeof(ssize_t));
+		memcpy(&packet_size, buffer + sizeof(IPacket::Type), sizeof(size_t));
 	}
 	else
 		packet_size = m_packets.at(type)->Size();

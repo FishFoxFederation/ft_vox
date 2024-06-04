@@ -82,6 +82,11 @@ uint32_t BlockActionPacket::Size() const
 	return sizeof(IPacket::Type) + sizeof(m_block_id) + sizeof(m_position) + sizeof(m_action);
 }
 
+bool BlockActionPacket::HasDynamicSize() const
+{
+	return false;
+}
+
 IPacket::Type BlockActionPacket::GetType() const
 {
 	return IPacket::Type::BLOCK_ACTION;

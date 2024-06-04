@@ -17,6 +17,7 @@ public:
 	void		Serialize(uint8_t * buffer) const override;
 	void		Deserialize(const uint8_t * buffer) override;
 	uint32_t	Size() const override;
+	bool		HasDynamicSize() const override;
 	enum Type	GetType() const override;
 	std::shared_ptr<IPacket> Clone() const override;
 

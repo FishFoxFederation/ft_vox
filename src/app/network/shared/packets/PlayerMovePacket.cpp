@@ -75,6 +75,11 @@ uint32_t PlayerMovePacket::Size() const
 	return sizeof(uint32_t) + sizeof(uint8_t) + sizeof(glm::dvec3) * 2;
 }
 
+bool PlayerMovePacket::HasDynamicSize() const
+{
+	return false;
+}
+
 IPacket::Type PlayerMovePacket::GetType() const
 {
 	return IPacket::Type::PLAYER_MOVE;

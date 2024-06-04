@@ -34,6 +34,9 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		break;
 	case IPacket::Type::PING:
 		handlePingPacket(std::dynamic_pointer_cast<PingPacket>(packet));
+	case IPacket::Type::PLAYER_LIST:
+		handlePlayerListPacket(std::dynamic_pointer_cast<PlayerListPacket>(packet));
+		break;
 	default:
 		break;
 	}
@@ -78,4 +81,10 @@ void ClientPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
 
 	LOG_INFO("Ping: " << packet->GetId() << " " << duration.count() / 1e6 << "ms");
 	m_client.m_pings.erase(packet->GetId());
+}
+
+void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet)
+{
+	for (auto player : packet->GetPlayers())
+		m_world.addPlayer(player.id, player.position);
 }
