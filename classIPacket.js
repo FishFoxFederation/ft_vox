@@ -8,6 +8,7 @@ var classIPacket =
       [ "DISCONNECT", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462", null ],
       [ "BLOCK_ACTION", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae", null ],
       [ "PING", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1", null ],
+      [ "PLAYER_LIST", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569aa933b4eab2f8c05c250a78452a4475ef", null ],
       [ "ENUM_MAX", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d", null ]
     ] ],
     [ "~IPacket", "classIPacket.html#ac1213f746277104a05b1dfa86ca505bb", null ],
@@ -19,6 +20,7 @@ var classIPacket =
     [ "ExtractMessage", "classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f", null ],
     [ "GetConnectionId", "classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67", null ],
     [ "GetType", "classIPacket.html#ab710cd5faf4a0420d6a27ae8763fe4cc", null ],
+    [ "HasDynamicSize", "classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21", null ],
     [ "operator=", "classIPacket.html#aafed1fd2c2d33e71402e66385e77e21f", null ],
     [ "operator=", "classIPacket.html#a4369f658f6d1ac11ba4a6101931df110", null ],
     [ "Serialize", "classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78", null ],

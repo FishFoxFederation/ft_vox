@@ -1,7 +1,8 @@
 var searchData=
 [
   ['handlepacket_0',['handlePacket',['../classClientPacketHandler.html#a22c52a4de7ad9a3a6b7c25d330371bb7',1,'ClientPacketHandler::handlePacket()'],['../classServerPacketHandler.html#a535a960a122f86ddb234f76827612fc2',1,'ServerPacketHandler::handlePacket()']]],
-  ['hasproperty_1',['hasProperty',['../structBlock.html#a4eb13c88e8e43b8c2e3a7c2f328e8893',1,'Block']]],
-  ['height_2',['height',['../structImGuiTexture.html#a66c085d7946ee7eddd64faf5ee263326',1,'ImGuiTexture']]],
-  ['hitbox_3',['HitBox',['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default']]]
+  ['hasdynamicsize_1',['HasDynamicSize',['../classBlockActionPacket.html#a3a3e1a4a81f58fb508fa6bb3637fd728',1,'BlockActionPacket::HasDynamicSize()'],['../classConnectionPacket.html#a21ce6f087b28082ef530eac4b1f75ec6',1,'ConnectionPacket::HasDynamicSize()'],['../classDisconnectPacket.html#a80f268e74bb11f14075e21fa58323516',1,'DisconnectPacket::HasDynamicSize()'],['../classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21',1,'IPacket::HasDynamicSize()'],['../classPingPacket.html#a49cd0a5c95666f2b170e822e93acd275',1,'PingPacket::HasDynamicSize()'],['../classPlayerConnectedPacket.html#a4b908ce0eb4148e17ac55d4a096038a5',1,'PlayerConnectedPacket::HasDynamicSize()'],['../classPlayerListPacket.html#a610831a4721165bfa49a3a8c2530d9c3',1,'PlayerListPacket::HasDynamicSize()'],['../classPlayerMovePacket.html#ab3d76cb1db6cf3040acd6c6bbb1ab1d4',1,'PlayerMovePacket::HasDynamicSize()']]],
+  ['hasproperty_2',['hasProperty',['../structBlock.html#a4eb13c88e8e43b8c2e3a7c2f328e8893',1,'Block']]],
+  ['height_3',['height',['../structImGuiTexture.html#a66c085d7946ee7eddd64faf5ee263326',1,'ImGuiTexture']]],
+  ['hitbox_4',['HitBox',['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default']]]
 ];

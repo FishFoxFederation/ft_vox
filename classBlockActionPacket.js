@@ -14,6 +14,7 @@ var classBlockActionPacket =
     [ "GetBlockID", "classBlockActionPacket.html#abd5da236bd0bb9f38712e4e8ae4049ac", null ],
     [ "GetPosition", "classBlockActionPacket.html#a43c1a22b128c4a647a7d7aa4b40613d8", null ],
     [ "GetType", "classBlockActionPacket.html#aa00414b878a3c85ef70b97bed6ac6d95", null ],
+    [ "HasDynamicSize", "classBlockActionPacket.html#a3a3e1a4a81f58fb508fa6bb3637fd728", null ],
     [ "operator=", "classBlockActionPacket.html#a66b30a23d5bb794cff7f90c71dd1d4fa", null ],
     [ "operator=", "classBlockActionPacket.html#ad8ddf0f651d665ffce45091927dcae9b", null ],
     [ "Serialize", "classBlockActionPacket.html#a321e453c1238fa49df4159c928126f6a", null ],

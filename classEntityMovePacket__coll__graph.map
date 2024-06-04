@@ -1,5 +1,4 @@
 <map id="EntityMovePacket" name="EntityMovePacket">
-<area shape="rect" id="node1" title=" " alt="" coords="19,401,149,441"/>
-<area shape="rect" id="node2" href="$classIServerToClientPacket.html" title=" " alt="" coords="5,313,163,353"/>
-<area shape="rect" id="node3" href="$classIPacket.html" title=" " alt="" coords="15,5,153,265"/>
+<area shape="rect" id="node1" title=" " alt="" coords="19,93,149,133"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,163,45"/>
 </map>

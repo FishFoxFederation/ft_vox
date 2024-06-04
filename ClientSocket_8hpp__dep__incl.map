@@ -1,20 +1,16 @@
 <map id="src/app/network/client/ClientSocket.hpp" name="src/app/network/client/ClientSocket.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="714,5,865,45"/>
-<area shape="rect" id="node2" href="$Client_8hpp.html" title=" " alt="" coords="627,93,778,133"/>
-<area shape="rect" id="node18" href="$ClientSocket_8cpp.html" title=" " alt="" coords="802,93,953,133"/>
-<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="519,453,673,478"/>
-<area shape="rect" id="node7" href="$Client_8cpp.html" title=" " alt="" coords="887,181,1038,221"/>
-<area shape="rect" id="node8" href="$Packets_8hpp.html" title=" " alt="" coords="410,181,569,221"/>
-<area shape="rect" id="node11" href="$UpdateThread_8hpp.html" title=" " alt="" coords="681,357,836,397"/>
-<area shape="rect" id="node16" href="$NetworkThread_8hpp.html" title=" " alt="" coords="621,181,784,221"/>
-<area shape="rect" id="node4" href="$alternative__main_8cpp.html" title=" " alt="" coords="332,533,495,559"/>
-<area shape="rect" id="node5" href="$application_8cpp.html" title=" " alt="" coords="519,533,673,559"/>
-<area shape="rect" id="node6" href="$main_8cpp.html" title=" " alt="" coords="697,533,793,559"/>
-<area shape="rect" id="node9" href="$ClientPacketHandler_8hpp.html" title=" " alt="" coords="405,269,574,309"/>
-<area shape="rect" id="node13" href="$ServerPacketHandler_8hpp.html" title=" " alt="" coords="206,269,381,309"/>
-<area shape="rect" id="node10" href="$ClientPacketHandler_8cpp.html" title=" " alt="" coords="405,357,574,397"/>
-<area shape="rect" id="node12" href="$UpdateThread_8cpp.html" title=" " alt="" coords="697,445,852,485"/>
-<area shape="rect" id="node14" href="$ServerPacketHandler_8cpp.html" title=" " alt="" coords="26,357,201,397"/>
-<area shape="rect" id="node15" href="$server__main_8cpp.html" title=" " alt="" coords="225,357,380,397"/>
-<area shape="rect" id="node17" href="$NetworkThread_8cpp.html" title=" " alt="" coords="649,269,812,309"/>
+<area shape="rect" id="node1" title=" " alt="" coords="415,5,566,45"/>
+<area shape="rect" id="node2" href="$Client_8hpp.html" title=" " alt="" coords="329,93,479,133"/>
+<area shape="rect" id="node14" href="$ClientSocket_8cpp.html" title=" " alt="" coords="503,93,654,133"/>
+<area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="192,365,347,390"/>
+<area shape="rect" id="node7" href="$Client_8cpp.html" title=" " alt="" coords="147,181,298,221"/>
+<area shape="rect" id="node8" href="$ClientPacketHandler_8hpp.html" title=" " alt="" coords="510,181,679,221"/>
+<area shape="rect" id="node10" href="$UpdateThread_8hpp.html" title=" " alt="" coords="688,269,843,309"/>
+<area shape="rect" id="node12" href="$NetworkThread_8hpp.html" title=" " alt="" coords="323,181,485,221"/>
+<area shape="rect" id="node4" href="$alternative__main_8cpp.html" title=" " alt="" coords="5,445,168,471"/>
+<area shape="rect" id="node5" href="$application_8cpp.html" title=" " alt="" coords="192,445,347,471"/>
+<area shape="rect" id="node6" href="$main_8cpp.html" title=" " alt="" coords="371,445,467,471"/>
+<area shape="rect" id="node9" href="$ClientPacketHandler_8cpp.html" title=" " alt="" coords="494,269,663,309"/>
+<area shape="rect" id="node11" href="$UpdateThread_8cpp.html" title=" " alt="" coords="688,357,843,397"/>
+<area shape="rect" id="node13" href="$NetworkThread_8cpp.html" title=" " alt="" coords="307,269,469,309"/>
 </map>

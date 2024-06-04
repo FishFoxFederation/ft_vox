@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classWorldScene.html" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="5,5,97,31"/>
+<area shape="rect" id="node1" href="$classWorld.html" title=" " alt="" coords="5,5,60,31"/>
+<area shape="rect" id="node2" href="$classClientWorld.html" title=" " alt="" coords="108,5,196,31"/>
 </map>

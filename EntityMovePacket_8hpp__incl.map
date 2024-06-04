@@ -1,5 +1,5 @@
-<map id="src/app/network/shared/packets/StoC/EntityMovePacket.hpp" name="src/app/network/shared/packets/StoC/EntityMovePacket.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="737,5,975,45"/>
+<map id="src/app/network/shared/packets/EntityMovePacket.hpp" name="src/app/network/shared/packets/EntityMovePacket.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="753,5,959,45"/>
 <area shape="rect" id="node2" href="$IPacket_8hpp.html" title=" " alt="" coords="752,93,843,119"/>
 <area shape="rect" id="node24" title=" " alt="" coords="867,93,965,119"/>
 <area shape="rect" id="node3" title=" " alt="" coords="907,460,975,485"/>

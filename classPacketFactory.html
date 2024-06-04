@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classPacketFactory.html',''); initResi
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classPacketFactory-members.html">List of all members</a>  </div>
@@ -119,7 +120,7 @@ Collaboration diagram for PacketFactory:</div>
 <div class="dyncontent">
 <div class="center"><img src="classPacketFactory__coll__graph.png" border="0" usemap="#aPacketFactory_coll__map" alt="Collaboration graph"/></div>
 <map name="aPacketFactory_coll__map" id="aPacketFactory_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,144,177"/>
+<area shape="rect" title=" " alt="" coords="5,5,144,148"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -135,11 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a76581a4400550cc3f3da935ce0112f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf5f3d56e11944ee849ee817a8b3509e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPacketFactory.html">PacketFactory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPacketFactory.html#adf5f3d56e11944ee849ee817a8b3509e">operator=</a> (<a class="el" href="classPacketFactory.html">PacketFactory</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:adf5f3d56e11944ee849ee817a8b3509e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0556418edb433abe57107ef5e1806d7c"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPacketFactory.html#a0556418edb433abe57107ef5e1806d7c">getSize</a> (<a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569">IPacket::Type</a> id) const</td></tr>
-<tr class="separator:a0556418edb433abe57107ef5e1806d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dad142701bd858bc64249a9041c386b"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569">IPacket::Type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPacketFactory.html#a2dad142701bd858bc64249a9041c386b">getPacketType</a> (const uint8_t *buffer, const size_t &amp;size) const</td></tr>
-<tr class="separator:a2dad142701bd858bc64249a9041c386b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5d085d064bc559c1a08231fcdae51b0"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, std::shared_ptr&lt; <a class="el" href="classIPacket.html">IPacket</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPacketFactory.html#ad5d085d064bc559c1a08231fcdae51b0">extractPacket</a> (<a class="el" href="classConnection.html">Connection</a> &amp;connection)</td></tr>
+<tr class="memdesc:ad5d085d064bc559c1a08231fcdae51b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Will try to extract a packet from the connection's buffer.  <a href="classPacketFactory.html#ad5d085d064bc559c1a08231fcdae51b0">More...</a><br /></td></tr>
 <tr class="separator:ad5d085d064bc559c1a08231fcdae51b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -234,6 +232,15 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Will try to extract a packet from the connection's buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">connection</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair containing a bool indicating if the extraction was sucessful and a shared pointer to the packet </dd></dl>
+
 </div>
 </div>
 <a id="afa072497d682c55cd567e6be204194c3" name="afa072497d682c55cd567e6be204194c3"></a>
@@ -257,52 +264,6 @@ Static Public Member Functions</h2></td></tr>
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2dad142701bd858bc64249a9041c386b" name="a2dad142701bd858bc64249a9041c386b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2dad142701bd858bc64249a9041c386b">&#9670;&#160;</a></span>getPacketType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; bool, <a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569">IPacket::Type</a> &gt; PacketFactory::getPacketType </td>
-          <td>(</td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0556418edb433abe57107ef5e1806d7c" name="a0556418edb433abe57107ef5e1806d7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0556418edb433abe57107ef5e1806d7c">&#9670;&#160;</a></span>getSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t PacketFactory::getSize </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569">IPacket::Type</a>&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>
@@ -360,8 +321,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/app/network/shared/packets/<a class="el" href="PacketFactory_8hpp_source.html">PacketFactory.hpp</a></li>
-<li>src/app/network/shared/packets/<a class="el" href="PacketFactory_8cpp.html">PacketFactory.cpp</a></li>
+<li>src/app/network/shared/<a class="el" href="PacketFactory_8hpp_source.html">PacketFactory.hpp</a></li>
+<li>src/app/network/shared/<a class="el" href="PacketFactory_8cpp.html">PacketFactory.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

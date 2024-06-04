@@ -7,11 +7,12 @@ var classPlayerConnectedPacket =
     [ "PlayerConnectedPacket", "classPlayerConnectedPacket.html#ac57a3571e42be4847feabf22e98ae0ec", null ],
     [ "Clone", "classPlayerConnectedPacket.html#a87a8b066fc617f9d56bedc72c3013a2b", null ],
     [ "Deserialize", "classPlayerConnectedPacket.html#a5bae229e2abf6799a84bc0c2cd0921e3", null ],
-    [ "GetId", "classPlayerConnectedPacket.html#a5508e6c5f4341a8280d032f24dc3b2b2", null ],
+    [ "GetPlayerId", "classPlayerConnectedPacket.html#a65df640a46e0782990e1c6603881c89c", null ],
     [ "GetType", "classPlayerConnectedPacket.html#a8757dcd601110c17612336199b07baa2", null ],
+    [ "HasDynamicSize", "classPlayerConnectedPacket.html#a4b908ce0eb4148e17ac55d4a096038a5", null ],
     [ "operator=", "classPlayerConnectedPacket.html#ad70420eb79d828f39c482ebd972ee829", null ],
     [ "operator=", "classPlayerConnectedPacket.html#afe080d9d6771cc14bea1619a62f0bbaf", null ],
     [ "Serialize", "classPlayerConnectedPacket.html#aa48ab90647bbeea44dec0a07771a78c5", null ],
-    [ "setId", "classPlayerConnectedPacket.html#ab3135a0e978e2b6778475db11cdcd41c", null ],
+    [ "SetPlayerId", "classPlayerConnectedPacket.html#a1f51fc714843b6fa54610c418bba640f", null ],
     [ "Size", "classPlayerConnectedPacket.html#acafe9882606b8e7498c6fc82b5777c7a", null ]
 ];

@@ -46,13 +46,13 @@ var hierarchy =
       [ "BlockActionPacket", "classBlockActionPacket.html", null ],
       [ "ConnectionPacket", "classConnectionPacket.html", null ],
       [ "DisconnectPacket", "classDisconnectPacket.html", null ],
-      [ "IClientToServerPacket", "classIClientToServerPacket.html", null ],
-      [ "IServerToClientPacket", "classIServerToClientPacket.html", [
-        [ "EntityMovePacket", "classEntityMovePacket.html", null ]
-      ] ],
       [ "PingPacket", "classPingPacket.html", null ],
       [ "PlayerConnectedPacket", "classPlayerConnectedPacket.html", null ],
+      [ "PlayerListPacket", "classPlayerListPacket.html", null ],
       [ "PlayerMovePacket", "classPlayerMovePacket.html", null ]
+    ] ],
+    [ "IServerToClientPacket", null, [
+      [ "EntityMovePacket", "classEntityMovePacket.html", null ]
     ] ],
     [ "JoinThreads", "classJoinThreads.html", null ],
     [ "LineVertex", "structLineVertex.html", null ],
@@ -70,6 +70,7 @@ var hierarchy =
     [ "Perlin", "classPerlin.html", null ],
     [ "Pipeline", "classPipeline.html", null ],
     [ "Player", "classPlayer.html", null ],
+    [ "PlayerListPacket::PlayerInfo", "structPlayerListPacket_1_1PlayerInfo.html", null ],
     [ "Poller", "classPoller.html", null ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", null ],

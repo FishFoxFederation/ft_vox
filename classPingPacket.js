@@ -9,6 +9,7 @@ var classPingPacket =
     [ "Deserialize", "classPingPacket.html#a14af60f82feb375962a50222dcdbc868", null ],
     [ "GetId", "classPingPacket.html#a3d9fa32fca80897bf292d1286a97b36f", null ],
     [ "GetType", "classPingPacket.html#a66830ec578950d75949284ee74434af6", null ],
+    [ "HasDynamicSize", "classPingPacket.html#a49cd0a5c95666f2b170e822e93acd275", null ],
     [ "operator=", "classPingPacket.html#ab10a0f8e0cbef0e481d3796d6c5ab1bf", null ],
     [ "operator=", "classPingPacket.html#a95388799546472b6ad545fda53e380f9", null ],
     [ "Serialize", "classPingPacket.html#a691cea170732c3b7988d5881c854b870", null ],
