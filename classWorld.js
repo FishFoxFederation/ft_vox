@@ -1,26 +1,13 @@
 var classWorld =
 [
-    [ "World", "classWorld.html#adafb385c8481ae96d5ce5b630c3cb2b6", null ],
+    [ "World", "classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8", null ],
     [ "~World", "classWorld.html#a8c73fba541a5817fff65147ba47cd827", null ],
     [ "World", "classWorld.html#a8e7a792ae04e9804a464746adb06f7aa", null ],
     [ "World", "classWorld.html#a9319f9fe52db6162be2269479d76100d", null ],
-    [ "addPlayer", "classWorld.html#a41357416f6d0b5b5f519373ee5aa3cb1", null ],
-    [ "applyPlayerMovement", "classWorld.html#a6474a75218be8e3e57c0ce492280e04a", null ],
-    [ "calculatePlayerMovement", "classWorld.html#a43685e2f25c3d146aac66e9eac80c815", null ],
-    [ "createPlayer", "classWorld.html#a531a6dc272ae40375e83cc2f63513195", null ],
-    [ "getCamera", "classWorld.html#a66e149c5bb444aeaff5a5cbf2cd59239", null ],
-    [ "getPlayerPosition", "classWorld.html#a0cc5e2a278febb7118b5c2b3a2300fd9", null ],
-    [ "modifyBlock", "classWorld.html#a37a2e027c57cd27ae4ebf0872a110998", null ],
     [ "operator=", "classWorld.html#af69b86b3ac37a2168715401267d104ab", null ],
     [ "operator=", "classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa", null ],
-    [ "playerAttack", "classWorld.html#a27aa95a15d3efef2bfba93ab48f53161", null ],
-    [ "playerUse", "classWorld.html#af4091951e756e5d8a1726ce43a744ea0", null ],
-    [ "removePlayer", "classWorld.html#add8814ff29c249e9655bcb23140dc960", null ],
-    [ "updateBlock", "classWorld.html#a10a860e06db7eae12c2d62fbbbc78b57", null ],
-    [ "updateEntities", "classWorld.html#a5cc73b1aa54db5da01e4004acd4fd8bb", null ],
-    [ "updatePlayer", "classWorld.html#af77441ac7b7725596b84877315505bea", null ],
-    [ "updatePlayerCamera", "classWorld.html#a90f0215ebdb31f244829f5a16f408b81", null ],
-    [ "updatePlayerPosition", "classWorld.html#ab56066fe20cde9c08630f0ca26fa4984", null ],
-    [ "updatePlayerTargetBlock", "classWorld.html#aad35ec43ee6bb3ae3fd96d10465ed055", null ],
-    [ "m_my_player_id", "classWorld.html#a2c48d3676bee7471ec1d5ec463585aa1", null ]
+    [ "m_chunks", "classWorld.html#a62624381a8908ab4aeb41ec788d30d1a", null ],
+    [ "m_chunks_mutex", "classWorld.html#a7fced6f101ff215e8818cffedf858ebb", null ],
+    [ "m_players", "classWorld.html#a9b6166c32096dff1f9e29a78743945f1", null ],
+    [ "m_players_mutex", "classWorld.html#ac8905e640eda96df40ba2f5eca926417", null ]
 ];

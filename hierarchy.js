@@ -10,7 +10,6 @@ var hierarchy =
     [ "Chunk", "classChunk.html", null ],
     [ "Client", "classClient.html", null ],
     [ "ClientPacketHandler", "classClientPacketHandler.html", null ],
-    [ "ClientWorld", "classClientWorld.html", null ],
     [ "Connection", "classConnection.html", null ],
     [ "Descriptor::CreateInfo", "structDescriptor_1_1CreateInfo.html", null ],
     [ "Image::CreateInfo", "structImage_1_1CreateInfo.html", null ],
@@ -103,7 +102,9 @@ var hierarchy =
     [ "VulaknMemoryAllocator", "classVulaknMemoryAllocator.html", null ],
     [ "VulkanAPI", "classVulkanAPI.html", null ],
     [ "Window", "classWindow.html", null ],
-    [ "World", "classWorld.html", null ],
+    [ "World", "classWorld.html", [
+      [ "ClientWorld", "classClientWorld.html", null ]
+    ] ],
     [ "WorldGenerator", "classWorldGenerator.html", null ],
     [ "WorldScene", "classWorldScene.html", null ]
 ];

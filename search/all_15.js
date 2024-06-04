@@ -9,7 +9,7 @@ var searchData=
   ['window_6',['Window',['../classWindow.html#ad7cd97b52e2a93c394402f2f084fcb1b',1,'Window']]],
   ['window_2ecpp_7',['window.cpp',['../window_8cpp.html',1,'']]],
   ['window_2ehpp_8',['window.hpp',['../window_8hpp.html',1,'']]],
-  ['world_9',['World',['../classWorld.html',1,'World'],['../classWorld.html#a9319f9fe52db6162be2269479d76100d',1,'World::World(World &amp;&amp;other)=delete'],['../classWorld.html#a8e7a792ae04e9804a464746adb06f7aa',1,'World::World(World &amp;other)=delete'],['../classWorld.html#adafb385c8481ae96d5ce5b630c3cb2b6',1,'World::World(WorldScene &amp;WorldScene, VulkanAPI &amp;vulkanAPI, ThreadPool &amp;threadPool, uint64_t my_player_id=0)']]],
+  ['world_9',['World',['../classWorld.html',1,'World'],['../classWorld.html#a9319f9fe52db6162be2269479d76100d',1,'World::World(World &amp;&amp;other)=delete'],['../classWorld.html#a8e7a792ae04e9804a464746adb06f7aa',1,'World::World(World &amp;other)=delete'],['../classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8',1,'World::World()']]],
   ['world_2ecpp_10',['World.cpp',['../World_8cpp.html',1,'']]],
   ['world_2ehpp_11',['World.hpp',['../World_8hpp.html',1,'']]],
   ['world_5fy_5fmax_12',['WORLD_Y_MAX',['../define_8hpp.html#a2a7abdace53c2954b6c60d5d66a52464',1,'define.hpp']]],

@@ -7,7 +7,7 @@ var searchData=
   ['remove_4',['remove',['../classWorldScene_1_1MeshList.html#a9e93bc9609709b9afc3a8c29101ed2c2',1,'WorldScene::MeshList::remove()'],['../classPoller.html#a70cea12024b34cd521d14e6474e8c89b',1,'Poller::remove()']]],
   ['removecomponent_5',['removeComponent',['../classECS.html#a8d8404847c1131d60dd9f6020263b64f',1,'ECS']]],
   ['removeentity_6',['removeEntity',['../classECS.html#a3185922d90a0f054841088bbc37c875f',1,'ECS']]],
-  ['removeplayer_7',['removePlayer',['../classWorld.html#add8814ff29c249e9655bcb23140dc960',1,'World']]],
+  ['removeplayer_7',['removePlayer',['../classClientWorld.html#ab5d44cde6ec584aa13cc20e23f627cea',1,'ClientWorld']]],
   ['render_20loop_8',['Render Loop',['../render_loop.html',1,'']]],
   ['render_5fdistance_9',['RENDER_DISTANCE',['../define_8hpp.html#aa6692cbfe5c70cfe5e6e334b61140c1a',1,'define.hpp']]],
   ['render_5floop_2emd_10',['render_loop.md',['../render__loop_8md.html',1,'']]],

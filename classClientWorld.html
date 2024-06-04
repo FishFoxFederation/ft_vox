@@ -105,21 +105,718 @@ $(document).ready(function(){initNavTree('classClientWorld.html',''); initResiza
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="classClientWorld-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">ClientWorld Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="World_8hpp_source.html">World.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="ClientWorld_8hpp_source.html">ClientWorld.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ClientWorld:</div>
+<div class="dyncontent">
+<div class="center"><img src="classClientWorld__inherit__graph.png" border="0" usemap="#aClientWorld_inherit__map" alt="Inheritance graph"/></div>
+<map name="aClientWorld_inherit__map" id="aClientWorld_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,269,196,485"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,221"/>
+</map>
+</div>
 <div class="dynheader">
 Collaboration diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__coll__graph.png" border="0" usemap="#aClientWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aClientWorld_coll__map" id="aClientWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,97,45"/>
+<area shape="rect" title=" " alt="" coords="5,269,196,485"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,221"/>
 </map>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/app/world/<a class="el" href="World_8hpp_source.html">World.hpp</a></li>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac1a7059e5882410e5f882e239c1bc5a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#ac1a7059e5882410e5f882e239c1bc5a5">ClientWorld</a> (<a class="el" href="classWorldScene.html">WorldScene</a> &amp;<a class="el" href="classWorldScene.html">WorldScene</a>, <a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkanAPI, <a class="el" href="classThreadPool.html">ThreadPool</a> &amp;threadPool, uint64_t my_player_id=0)</td></tr>
+<tr class="separator:ac1a7059e5882410e5f882e239c1bc5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a906723ee7a94d67937f57f1fc3d320c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2">~ClientWorld</a> ()</td></tr>
+<tr class="separator:a906723ee7a94d67937f57f1fc3d320c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c76d0cf45ce665a46c5f0c28b33e0cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">ClientWorld</a> (<a class="el" href="classClientWorld.html">ClientWorld</a> &amp;other)=delete</td></tr>
+<tr class="separator:a3c76d0cf45ce665a46c5f0c28b33e0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2509dff67daeeeb0ee9286ec46aad71"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71">ClientWorld</a> (<a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&amp;other)=delete</td></tr>
+<tr class="separator:ae2509dff67daeeeb0ee9286ec46aad71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a041fb65a6c3188a57a7d5f1d68660ca6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6">operator=</a> (<a class="el" href="classClientWorld.html">ClientWorld</a> &amp;other)=delete</td></tr>
+<tr class="separator:a041fb65a6c3188a57a7d5f1d68660ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef09acc81148b113eed7332cdd7c4fa8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">operator=</a> (<a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&amp;other)=delete</td></tr>
+<tr class="separator:aef09acc81148b113eed7332cdd7c4fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51cba826d6ee2909fd71070af6451c5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a">updateEntities</a> ()</td></tr>
+<tr class="separator:a51cba826d6ee2909fd71070af6451c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c674a4aad2e0f04a26813940a77d45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">updateBlock</a> (glm::dvec3 position)</td></tr>
+<tr class="separator:a33c674a4aad2e0f04a26813940a77d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a311ae115a5f778d3dbe6ba1ac40a145b"><td class="memItemLeft" align="right" valign="top">std::pair&lt; glm::dvec3, glm::dvec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b">calculatePlayerMovement</a> (const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time_second)</td></tr>
+<tr class="separator:a311ae115a5f778d3dbe6ba1ac40a145b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fc5217d0b6d449d3ec9f1bb08fead5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d">updatePlayerCamera</a> (const uint64_t player_id, const double x_offset, const double y_offset)</td></tr>
+<tr class="separator:a5fc5217d0b6d449d3ec9f1bb08fead5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23026d1f22c925ce84a857dfdf5ad1ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a23026d1f22c925ce84a857dfdf5ad1ee">updatePlayerTargetBlock</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:a23026d1f22c925ce84a857dfdf5ad1ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6af9215e00db9f81aa57c372f94076ba"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a6af9215e00db9f81aa57c372f94076ba">playerAttack</a> (const uint64_t player_id, bool attack)</td></tr>
+<tr class="separator:a6af9215e00db9f81aa57c372f94076ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d0b57d1ea29ac3171d6e2171f7622f4"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a9d0b57d1ea29ac3171d6e2171f7622f4">playerUse</a> (const uint64_t player_id, bool use)</td></tr>
+<tr class="separator:a9d0b57d1ea29ac3171d6e2171f7622f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f620b1218a121e9da762980863a81bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a4f620b1218a121e9da762980863a81bd">updatePlayer</a> (const uint64_t player_id, std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt; update)</td></tr>
+<tr class="separator:a4f620b1218a121e9da762980863a81bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba77edcc6093915f6df289bf88e8acd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7">modifyBlock</a> (const glm::vec3 &amp;position, const <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp;block_id)</td></tr>
+<tr class="separator:aba77edcc6093915f6df289bf88e8acd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af78a9ed84b89171654b282666c51baf9"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">createPlayer</a> (const glm::vec3 &amp;position)</td></tr>
+<tr class="separator:af78a9ed84b89171654b282666c51baf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75d4842d4a395c63c3c3c05b3f6a352f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f">addPlayer</a> (const uint64_t player_id, const glm::dvec3 &amp;position)</td></tr>
+<tr class="separator:a75d4842d4a395c63c3c3c05b3f6a352f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5d44cde6ec584aa13cc20e23f627cea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#ab5d44cde6ec584aa13cc20e23f627cea">removePlayer</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:ab5d44cde6ec584aa13cc20e23f627cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cd752b37c26a7e4cd171ba780809bf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a3cd752b37c26a7e4cd171ba780809bf2">updatePlayerPosition</a> (const uint64_t &amp;player_id, const glm::dvec3 &amp;position)</td></tr>
+<tr class="separator:a3cd752b37c26a7e4cd171ba780809bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d5fcfb66258c5fc0cd611c24e8e3d8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d">applyPlayerMovement</a> (const uint64_t &amp;player_id, const glm::dvec3 &amp;displacement)</td></tr>
+<tr class="separator:a1d5fcfb66258c5fc0cd611c24e8e3d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf9929d0310650c8d517efcd7110f05a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a">getCamera</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:aaf9929d0310650c8d517efcd7110f05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ff03b7be1e020be0d27863f221cb50"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50">getPlayerPosition</a> (const uint64_t player_id)</td></tr>
+<tr class="separator:a99ff03b7be1e020be0d27863f221cb50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
+<tr class="memitem:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a> ()</td></tr>
+<tr class="separator:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c73fba541a5817fff65147ba47cd827 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a8c73fba541a5817fff65147ba47cd827">~World</a> ()</td></tr>
+<tr class="separator:a8c73fba541a5817fff65147ba47cd827 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e7a792ae04e9804a464746adb06f7aa inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a8e7a792ae04e9804a464746adb06f7aa">World</a> (<a class="el" href="classWorld.html">World</a> &amp;other)=delete</td></tr>
+<tr class="separator:a8e7a792ae04e9804a464746adb06f7aa inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9319f9fe52db6162be2269479d76100d inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9319f9fe52db6162be2269479d76100d">World</a> (<a class="el" href="classWorld.html">World</a> &amp;&amp;other)=delete</td></tr>
+<tr class="separator:a9319f9fe52db6162be2269479d76100d inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fd49185c8ef00d9f8aaf16fb7d943fa inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld.html">World</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa">operator=</a> (<a class="el" href="classWorld.html">World</a> &amp;other)=delete</td></tr>
+<tr class="separator:a2fd49185c8ef00d9f8aaf16fb7d943fa inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af69b86b3ac37a2168715401267d104ab inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld.html">World</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">operator=</a> (<a class="el" href="classWorld.html">World</a> &amp;&amp;other)=delete</td></tr>
+<tr class="separator:af69b86b3ac37a2168715401267d104ab inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aef2faefc960964a89102ebbe9c0c037a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">m_my_player_id</a></td></tr>
+<tr class="separator:aef2faefc960964a89102ebbe9c0c037a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_static_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
+<tr class="memitem:aa961013e17cb789650f0fffca826ee38 inherit pro_static_methods_classWorld"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aa961013e17cb789650f0fffca826ee38">getBlockChunkPosition</a> (const glm::vec3 &amp;position)</td></tr>
+<tr class="memdesc:aa961013e17cb789650f0fffca826ee38 inherit pro_static_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return the block position relative to the chunk  <a href="classWorld.html#aa961013e17cb789650f0fffca826ee38">More...</a><br /></td></tr>
+<tr class="separator:aa961013e17cb789650f0fffca826ee38 inherit pro_static_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pro_static_methods_classWorld"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">getChunkPosition</a> (const glm::vec3 &amp;position)</td></tr>
+<tr class="memdesc:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pro_static_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return the chunk position containing the block  <a href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">More...</a><br /></td></tr>
+<tr class="separator:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pro_static_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classWorld')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classWorld.html">World</a></td></tr>
+<tr class="memitem:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, std::shared_ptr&lt; <a class="el" href="classPlayer.html">Player</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9b6166c32096dff1f9e29a78743945f1">m_players</a></td></tr>
+<tr class="separator:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8905e640eda96df40ba2f5eca926417 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ac8905e640eda96df40ba2f5eca926417">m_players_mutex</a></td></tr>
+<tr class="separator:ac8905e640eda96df40ba2f5eca926417 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62624381a8908ab4aeb41ec788d30d1a inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a62624381a8908ab4aeb41ec788d30d1a">m_chunks</a></td></tr>
+<tr class="separator:a62624381a8908ab4aeb41ec788d30d1a inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fced6f101ff215e8818cffedf858ebb inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a7fced6f101ff215e8818cffedf858ebb">m_chunks_mutex</a></td></tr>
+<tr class="separator:a7fced6f101ff215e8818cffedf858ebb inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac1a7059e5882410e5f882e239c1bc5a5" name="ac1a7059e5882410e5f882e239c1bc5a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1a7059e5882410e5f882e239c1bc5a5">&#9670;&#160;</a></span>ClientWorld() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ClientWorld::ClientWorld </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classWorldScene.html">WorldScene</a> &amp;&#160;</td>
+          <td class="paramname"><em>WorldScene</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;&#160;</td>
+          <td class="paramname"><em>vulkanAPI</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classThreadPool.html">ThreadPool</a> &amp;&#160;</td>
+          <td class="paramname"><em>threadPool</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>my_player_id</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a906723ee7a94d67937f57f1fc3d320c2" name="a906723ee7a94d67937f57f1fc3d320c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a906723ee7a94d67937f57f1fc3d320c2">&#9670;&#160;</a></span>~ClientWorld()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ClientWorld::~ClientWorld </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c76d0cf45ce665a46c5f0c28b33e0cf" name="a3c76d0cf45ce665a46c5f0c28b33e0cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c76d0cf45ce665a46c5f0c28b33e0cf">&#9670;&#160;</a></span>ClientWorld() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ClientWorld::ClientWorld </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae2509dff67daeeeb0ee9286ec46aad71" name="ae2509dff67daeeeb0ee9286ec46aad71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2509dff67daeeeb0ee9286ec46aad71">&#9670;&#160;</a></span>ClientWorld() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ClientWorld::ClientWorld </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a75d4842d4a395c63c3c3c05b3f6a352f" name="a75d4842d4a395c63c3c3c05b3f6a352f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75d4842d4a395c63c3c3c05b3f6a352f">&#9670;&#160;</a></span>addPlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::addPlayer </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d5fcfb66258c5fc0cd611c24e8e3d8d" name="a1d5fcfb66258c5fc0cd611c24e8e3d8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d5fcfb66258c5fc0cd611c24e8e3d8d">&#9670;&#160;</a></span>applyPlayerMovement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::applyPlayerMovement </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramname"><em>displacement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a311ae115a5f778d3dbe6ba1ac40a145b" name="a311ae115a5f778d3dbe6ba1ac40a145b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a311ae115a5f778d3dbe6ba1ac40a145b">&#9670;&#160;</a></span>calculatePlayerMovement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; glm::dvec3, glm::dvec3 &gt; ClientWorld::calculatePlayerMovement </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>forward</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>backward</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>up</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int8_t&#160;</td>
+          <td class="paramname"><em>down</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>delta_time_second</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af78a9ed84b89171654b282666c51baf9" name="af78a9ed84b89171654b282666c51baf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af78a9ed84b89171654b282666c51baf9">&#9670;&#160;</a></span>createPlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t ClientWorld::createPlayer </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf9929d0310650c8d517efcd7110f05a" name="aaf9929d0310650c8d517efcd7110f05a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf9929d0310650c8d517efcd7110f05a">&#9670;&#160;</a></span>getCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCamera.html">Camera</a> ClientWorld::getCamera </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a99ff03b7be1e020be0d27863f221cb50" name="a99ff03b7be1e020be0d27863f221cb50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ff03b7be1e020be0d27863f221cb50">&#9670;&#160;</a></span>getPlayerPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::dvec3 ClientWorld::getPlayerPosition </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba77edcc6093915f6df289bf88e8acd7" name="aba77edcc6093915f6df289bf88e8acd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba77edcc6093915f6df289bf88e8acd7">&#9670;&#160;</a></span>modifyBlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::modifyBlock </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp;&#160;</td>
+          <td class="paramname"><em>block_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aef09acc81148b113eed7332cdd7c4fa8" name="aef09acc81148b113eed7332cdd7c4fa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef09acc81148b113eed7332cdd7c4fa8">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp; ClientWorld::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a041fb65a6c3188a57a7d5f1d68660ca6" name="a041fb65a6c3188a57a7d5f1d68660ca6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a041fb65a6c3188a57a7d5f1d68660ca6">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp; ClientWorld::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6af9215e00db9f81aa57c372f94076ba" name="a6af9215e00db9f81aa57c372f94076ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6af9215e00db9f81aa57c372f94076ba">&#9670;&#160;</a></span>playerAttack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; bool, glm::vec3 &gt; ClientWorld::playerAttack </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>attack</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9d0b57d1ea29ac3171d6e2171f7622f4" name="a9d0b57d1ea29ac3171d6e2171f7622f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d0b57d1ea29ac3171d6e2171f7622f4">&#9670;&#160;</a></span>playerUse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; bool, glm::vec3 &gt; ClientWorld::playerUse </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab5d44cde6ec584aa13cc20e23f627cea" name="ab5d44cde6ec584aa13cc20e23f627cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5d44cde6ec584aa13cc20e23f627cea">&#9670;&#160;</a></span>removePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::removePlayer </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a33c674a4aad2e0f04a26813940a77d45" name="a33c674a4aad2e0f04a26813940a77d45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33c674a4aad2e0f04a26813940a77d45">&#9670;&#160;</a></span>updateBlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updateBlock </td>
+          <td>(</td>
+          <td class="paramtype">glm::dvec3&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a51cba826d6ee2909fd71070af6451c5a" name="a51cba826d6ee2909fd71070af6451c5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51cba826d6ee2909fd71070af6451c5a">&#9670;&#160;</a></span>updateEntities()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updateEntities </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f620b1218a121e9da762980863a81bd" name="a4f620b1218a121e9da762980863a81bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f620b1218a121e9da762980863a81bd">&#9670;&#160;</a></span>updatePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updatePlayer </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>update</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fc5217d0b6d449d3ec9f1bb08fead5d" name="a5fc5217d0b6d449d3ec9f1bb08fead5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fc5217d0b6d449d3ec9f1bb08fead5d">&#9670;&#160;</a></span>updatePlayerCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updatePlayerCamera </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>x_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>y_offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3cd752b37c26a7e4cd171ba780809bf2" name="a3cd752b37c26a7e4cd171ba780809bf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cd752b37c26a7e4cd171ba780809bf2">&#9670;&#160;</a></span>updatePlayerPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updatePlayerPosition </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>player_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23026d1f22c925ce84a857dfdf5ad1ee" name="a23026d1f22c925ce84a857dfdf5ad1ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23026d1f22c925ce84a857dfdf5ad1ee">&#9670;&#160;</a></span>updatePlayerTargetBlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updatePlayerTargetBlock </td>
+          <td>(</td>
+          <td class="paramtype">const uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aef2faefc960964a89102ebbe9c0c037a" name="aef2faefc960964a89102ebbe9c0c037a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef2faefc960964a89102ebbe9c0c037a">&#9670;&#160;</a></span>m_my_player_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t ClientWorld::m_my_player_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>src/app/world/<a class="el" href="ClientWorld_8hpp_source.html">ClientWorld.hpp</a></li>
+<li>src/app/world/<a class="el" href="ClientWorld_8cpp.html">ClientWorld.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
