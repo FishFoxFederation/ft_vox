@@ -70,6 +70,11 @@ bool Player::shouldFall() const
 	return gameMode == GameMode::SURVIVAL || (gameMode == GameMode::CREATIVE && !flying);
 }
 
+bool Player::isFlying() const
+{
+	return gameMode == GameMode::SPECTATOR || (gameMode == GameMode::CREATIVE && flying);
+}
+
 void Player::startFall()
 {
 	fall_start_time = std::chrono::steady_clock::now().time_since_epoch();

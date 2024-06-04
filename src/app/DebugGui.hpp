@@ -111,6 +111,7 @@ public:
 	static inline std::atomic<uint64_t> gpu_allocated_memory = 0;
 
 	static inline Atomic<glm::vec3> player_position;
+	static inline std::atomic<double> player_velocity;
 
 	// Render Thread times
 	static inline History<float, 100> frame_time_history;

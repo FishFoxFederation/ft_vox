@@ -50,6 +50,7 @@ public:
 
 	bool shouldCollide() const;
 	bool shouldFall() const;
+	bool isFlying() const;
 
 	bool canJump() const;
 	void startJump();
@@ -77,8 +78,8 @@ public:
 	double sneak_speed_factor = 0.3;
 	double fly_speed_factor = 3.0;
 	double jump_speed_factor = 1.1;
-	double jump_force = 10.0;
-	double gravity = -30.0;
+	double jump_force = 5.0;
+	double gravity = -10.0;
 
 
 	bool on_ground = false;
@@ -92,7 +93,6 @@ public:
 	HitBox feet = HitBox({-0.4, -0.01, -0.4}, {0.8, 0.1, 0.8});
 
 	glm::dvec3 velocity = glm::dvec3(0.0);
-	glm::dvec3 input_velocity = glm::dvec3(0.0);
 
 	int jump_remaining = 1;
 
