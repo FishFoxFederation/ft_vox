@@ -79,9 +79,9 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/packets/PingPacket.cpp
 		src/app/network/shared/packets/DisconnectPacket.cpp
 		src/app/network/shared/packets/BlockActionPacket.cpp
-		src/app/network/shared/packets/CtoS/PlayerConnectedPacket.cpp
-		src/app/network/shared/packets/CtoS/PlayerMovePacket.cpp
-		src/app/network/shared/packets/StoC/ConnectionPacket.cpp
+		src/app/network/shared/packets/PlayerConnectedPacket.cpp
+		src/app/network/shared/packets/PlayerMovePacket.cpp
+		src/app/network/shared/packets/ConnectionPacket.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -115,8 +115,6 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets/CtoS
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets/StoC
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
@@ -200,9 +198,9 @@ target_sources(server
 		src/app/network/shared/packets/BlockActionPacket.cpp
 		src/app/network/shared/packets/IPacket.cpp
 		src/app/network/shared/packets/DisconnectPacket.cpp
-		src/app/network/shared/packets/CtoS/PlayerConnectedPacket.cpp
-		src/app/network/shared/packets/CtoS/PlayerMovePacket.cpp
-		src/app/network/shared/packets/StoC/ConnectionPacket.cpp
+		src/app/network/shared/packets/PlayerConnectedPacket.cpp
+		src/app/network/shared/packets/PlayerMovePacket.cpp
+		src/app/network/shared/packets/ConnectionPacket.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -236,8 +234,6 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets/CtoS
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets/StoC
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb

@@ -63,13 +63,13 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	}
 
 	//add new player to list
-	m_player_positions[packet->GetId()] = packet->GetPosition();
+	m_player_positions[packet->GetPlayerId()] = packet->GetPosition();
 
 	//add new player to connection id map
-	m_player_to_connection_id[packet->GetId()] = packet->GetConnectionId();
-	m_connection_to_player_id[packet->GetConnectionId()] = packet->GetId();
+	m_player_to_connection_id[packet->GetPlayerId()] = packet->GetConnectionId();
+	m_connection_to_player_id[packet->GetConnectionId()] = packet->GetPlayerId();
 
-	LOG_INFO("NEW PLAYER ID: " << packet->GetId());
+	LOG_INFO("NEW PLAYER ID: " << packet->GetPlayerId());
 }
 
 void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet)
@@ -94,7 +94,7 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 	auto packet_to_send = std::make_shared<PlayerMovePacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_server.sendAll(packet_to_send);
-	m_player_positions[packet->GetId()] = packet->GetPosition();
+	m_player_positions[packet->GetPlayerId()] = packet->GetPosition();
 }
 
 void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)

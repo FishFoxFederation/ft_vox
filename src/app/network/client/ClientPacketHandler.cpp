@@ -41,8 +41,8 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 
 void ClientPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet)
 {
-	LOG_INFO("Player connected: " << packet->GetId());
-	m_world.addPlayer(packet->GetId(), packet->GetPosition());
+	LOG_INFO("Player connected: " << packet->GetPlayerId());
+	m_world.addPlayer(packet->GetPlayerId(), packet->GetPosition());
 }
 
 void ClientPacketHandler::handlePlayerConnectedPacket(std::shared_ptr<PlayerConnectedPacket> packet)
@@ -56,7 +56,7 @@ void ClientPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 {
 	// glm::vec3 new_pos = packet->GetPosition() + packet->GetDisplacement();
 	// LOG_DEBUG("RECEIVED POS: " << new_pos.x << " " << new_pos.y << " " << new_pos.z);
-	m_world.updatePlayerPosition(packet->GetId(), packet->GetPosition() + packet->GetDisplacement());
+	m_world.updatePlayerPosition(packet->GetPlayerId(), packet->GetPosition() + packet->GetDisplacement());
 }
 
 void ClientPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet)
