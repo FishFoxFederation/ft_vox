@@ -95,7 +95,7 @@ bool Player::canJump() const
 
 void Player::startJump()
 {
-	velocity.y = jump_force;
+	// velocity.y = jump_force;
 	jump_remaining--;
 	jumping = true;
 	last_jump_time = std::chrono::steady_clock::now().time_since_epoch();
