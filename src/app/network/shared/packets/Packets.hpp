@@ -7,6 +7,7 @@
 #include "BlockActionPacket.hpp"
 #include "PingPacket.hpp"
 #include "PlayerListPacket.hpp"
+#include "ChunkPacket.hpp"
 
 
 /**

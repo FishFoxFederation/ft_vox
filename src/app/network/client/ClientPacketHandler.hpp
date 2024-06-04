@@ -30,4 +30,5 @@ private:
 	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
 	void handlePingPacket(std::shared_ptr<PingPacket> packet);
 	void handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet);
+	void handleChunkPacket(std::shared_ptr<ChunkPacket> packet);
 };

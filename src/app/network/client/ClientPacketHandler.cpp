@@ -37,6 +37,9 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 	case IPacket::Type::PLAYER_LIST:
 		handlePlayerListPacket(std::dynamic_pointer_cast<PlayerListPacket>(packet));
 		break;
+	case IPacket::Type::CHUNK:
+		handleChunkPacket(std::dynamic_pointer_cast<ChunkPacket>(packet));
+		break;
 	default:
 		break;
 	}
@@ -87,4 +90,10 @@ void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacke
 {
 	for (auto player : packet->GetPlayers())
 		m_world.addPlayer(player.id, player.position);
+}
+
+void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
+{
+	Chunk chunk = packet->GetChunk();
+	m_world.addChunk(std::move(chunk));
 }

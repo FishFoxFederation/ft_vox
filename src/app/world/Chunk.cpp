@@ -10,12 +10,17 @@ Chunk::Chunk(glm::ivec3 position)
 		m_blocks[i] = BlockID::Air;
 }
 
-// Chunk::Chunk(const Chunk & other)
-// :	position(other.position),
-// 	m_mesh_id(other.m_mesh_id),
-// 	m_blocks(other.m_blocks)
-// {
-// }
+Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks)
+: position(position), m_mesh_id(0), m_blocks(blocks)
+{
+}
+
+Chunk::Chunk(const Chunk & other)
+:	position(other.position),
+	m_mesh_id(other.m_mesh_id),
+	m_blocks(other.m_blocks)
+{
+}
 
 Chunk::Chunk(Chunk && other)
 :	position(other.position),
@@ -39,6 +44,16 @@ Chunk::~Chunk()
 	{
 		status.lock();
 	}
+}
+
+Chunk::BlockArray & Chunk::getBlocks()
+{
+	return m_blocks;
+}
+
+const Chunk::BlockArray & Chunk::getBlocks() const
+{
+	return m_blocks;
 }
 
 BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const

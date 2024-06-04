@@ -92,9 +92,11 @@ public:
 	Camera getCamera(const uint64_t player_id);
 	glm::dvec3 getPlayerPosition(const uint64_t player_id);
 
+
+	void		addChunk(Chunk chunk);
+
+
 	uint64_t m_my_player_id;
-
-
 private:
 
 	WorldScene &							m_worldScene;
