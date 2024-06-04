@@ -456,6 +456,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	player->on_ground = on_ground;
 
 
+
 	// get the movement vector
 	glm::dvec3 move(right - left, 0.0, forward - backward);
 	// normalize the move vector to prevent faster diagonal movement
@@ -463,50 +464,87 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	if (glm::length(move) > 0.0)
 		move = glm::normalize(move);
 	// transform the move vector to the player's local coordinate system
-	glm::dvec3 input_force = player->getTransformedMovement(move);
+	move = player->getTransformedMovement(move);
 	// set the y component of the input force
-	input_force.y = up - down;
 
 
-	double speed_factor = 1.0;
+	glm::dvec3 displacement;
 
-	// the input force is now ready for flying
-	// but we need to modify it's y component for handling jump when walking
-	if (player->gameMode != Player::GameMode::SPECTATOR && !player->flying)
+	// if player is walking
+	if (player->isFlying() == false)
 	{
+		double acc = 1.0;
+		double ground_friction = 0.7;
+		double air_friction = 0.9;
+		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
+
 		if (up && player->canJump())
 		{
 			player->startJump();
 		}
 
-		// if not flying, the y component of the input force is ignored
-		input_force.y = 0.0;
-	}
-	else
-	{
-		speed_factor *= player->fly_speed_factor;
-	}
-
-	// apply speed factors
-	if (player->sneaking)
-		speed_factor *= player->sneak_speed_factor;
-	if (player->sprinting)
-		speed_factor *= player->sprint_speed_factor;
-	if (player->jumping)
-		speed_factor *= player->jump_speed_factor;
-
-
-	player->input_velocity = input_force * player->default_speed * speed_factor;
-
-	// apply gravity
-	if (player->shouldFall())
-	{
 		player->velocity.y += player->gravity * delta_time_second;
+
+		player->velocity += move * acc * delta_time_second;
+		player->velocity -= (player->velocity * friction) * delta_time_second;
+
+		displacement = player->velocity;
+	}
+	else // if player is flying
+	{
+		double acc = 10.0;
+		double drag = 0.5;
+
+		move.y = up - down;
+
+		player->velocity += move * acc;
+		player->velocity *= drag;
+
+		displacement = player->velocity * delta_time_second;
+
 	}
 
-	// check for collision with blocks
-	// each axis is checked separately to allow for sliding along walls
-	glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time_second;
+
+	// double speed_factor = 1.0;
+
+	// // the input force is now ready for flying
+	// // but we need to modify it's y component for handling jump when walking
+	// if (player->gameMode != Player::GameMode::SPECTATOR && !player->flying)
+	// {
+	// 	if (up && player->canJump())
+	// 	{
+	// 		player->startJump();
+	// 	}
+
+	// 	// if not flying, the y component of the input force is ignored
+	// 	input_force.y = 0.0;
+	// }
+	// else
+	// {
+	// 	speed_factor *= player->fly_speed_factor;
+	// }
+
+	// // apply speed factors
+	// if (player->sneaking)
+	// 	speed_factor *= player->sneak_speed_factor;
+	// if (player->sprinting)
+	// 	speed_factor *= player->sprint_speed_factor;
+	// if (player->jumping)
+	// 	speed_factor *= player->jump_speed_factor;
+
+
+	// player->input_velocity = input_force * player->default_speed * speed_factor;
+
+	// // apply gravity
+	// if (player->shouldFall())
+	// {
+	// 	player->velocity.y += player->gravity * delta_time_second;
+	// }
+
+	// // check for collision with blocks
+	// // each axis is checked separately to allow for sliding along walls
+	// glm::dvec3 displacement = (player->velocity + player->input_velocity) * delta_time_second;
+
 	if (player->shouldCollide())
 	{
 		const glm::dvec3 move_x = {displacement.x, 0.0, 0.0};
@@ -553,6 +591,9 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 			player->velocity.z = 0.0;
 		}
 	}
+
+	DebugGui::player_velocity = glm::length(player->velocity);
+
 	result.first = player->transform.position;
 	result.second = displacement;
 	return result;
