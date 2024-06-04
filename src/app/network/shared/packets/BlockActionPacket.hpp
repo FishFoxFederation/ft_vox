@@ -22,20 +22,25 @@ public:
 	BlockActionPacket& operator=(BlockActionPacket&& other);
 
 
-	virtual void			Serialize(uint8_t * buffer) const override;
-	virtual void			Deserialize(const uint8_t * buffer) override;
-	virtual uint32_t		Size() const override;
-	virtual IPacket::Type	GetType() const override;
+	void			Serialize(uint8_t * buffer) const override;
+	void			Deserialize(const uint8_t * buffer) override;
+	uint32_t		Size() const override;
+	bool			HasDynamicSize() const override;
+	IPacket::Type	GetType() const override;
 
-	virtual std::shared_ptr<IPacket> Clone() const override;
+	std::shared_ptr<IPacket> Clone() const override;
 
-	BlockID	GetBlockID() const;
+	/*******************************
+	 * ATTRIBUTES
+	 * *****************************/
+
+	BlockID		GetBlockID() const;
 	glm::vec3	GetPosition() const;
-	Action	GetAction() const;
+	Action		GetAction() const;
 
-	void	SetBlockID(BlockID block_id);
-	void	SetPosition(glm::vec3 position);
-	void	SetAction(Action action);
+	void		SetBlockID(BlockID block_id);
+	void		SetPosition(glm::vec3 position);
+	void		SetAction(Action action);
 private:
 	BlockID		m_block_id;
 	glm::vec3	m_position;

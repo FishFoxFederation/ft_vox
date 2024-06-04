@@ -73,6 +73,11 @@ uint32_t ConnectionPacket::Size() const
 	return sizeof(IPacket::Type) + sizeof(m_player_id) + sizeof(m_position);
 }
 
+bool ConnectionPacket::HasDynamicSize() const
+{
+	return false;
+}
+
 std::shared_ptr<IPacket> ConnectionPacket::Clone() const
 {
 	return std::make_shared<ConnectionPacket>();

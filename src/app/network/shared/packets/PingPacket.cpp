@@ -61,6 +61,11 @@ uint32_t PingPacket::Size() const
 	return sizeof(IPacket::Type) + sizeof(m_id);
 }
 
+bool PingPacket::HasDynamicSize() const
+{
+	return false;
+}
+
 IPacket::Type PingPacket::GetType() const
 {
 	return IPacket::Type::PING;

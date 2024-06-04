@@ -57,6 +57,11 @@ uint32_t DisconnectPacket::Size() const
 	return sizeof(IPacket::Type) + sizeof(m_player_id);
 }
 
+bool DisconnectPacket::HasDynamicSize() const
+{
+	return false;
+}
+
 IPacket::Type DisconnectPacket::GetType() const
 {
 	return IPacket::Type::DISCONNECT;
