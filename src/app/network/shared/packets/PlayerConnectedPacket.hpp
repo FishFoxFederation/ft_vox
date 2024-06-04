@@ -15,16 +15,21 @@ public:
 	PlayerConnectedPacket(PlayerConnectedPacket&& other);
 	PlayerConnectedPacket& operator=(PlayerConnectedPacket&& other);
 
-	virtual void		Serialize(uint8_t * buffer) const override;
-	virtual void		Deserialize(const uint8_t * buffer) override;
-	virtual uint32_t	Size() const override;
-	virtual IPacket::Type GetType() const override;
+	virtual void			Serialize(uint8_t * buffer) const override;
+	virtual void			Deserialize(const uint8_t * buffer) override;
+	virtual uint32_t		Size() const override;
+	virtual bool			HasDynamicSize() const override;
+	virtual IPacket::Type	GetType() const override;
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	uint32_t GetId() const;
 
-	void setId(uint32_t id);
+	/*******************************
+	 * ATTRIBUTES
+	 * *****************************/
+	uint32_t	GetPlayerId() const;
+
+	void		SetPlayerId(uint32_t id);
 private:
-	uint32_t	m_id;
+	uint32_t	m_player_id;
 };

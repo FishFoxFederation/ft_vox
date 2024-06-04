@@ -12,13 +12,13 @@ class IPacket
 public:
 	enum class Type : uint32_t
 	{
-		CONNECTION = 0,
-		PLAYER_CONNECTED = 1,
-		PLAYER_MOVE = 2,
-		ENTITY_MOVE = 3,
-		DISCONNECT = 4,
-		BLOCK_ACTION = 5,
-		PING = 6,
+		CONNECTION,
+		PLAYER_CONNECTED,
+		PLAYER_MOVE,
+		ENTITY_MOVE,
+		DISCONNECT,
+		BLOCK_ACTION,
+		PING,
 		ENUM_MAX,
 	};
 	virtual ~IPacket();
@@ -31,6 +31,7 @@ public:
 	virtual void			Serialize(uint8_t * buffer) const = 0;
 	void					ExtractMessage(Connection & connection);
 	virtual uint32_t		Size() const = 0;
+	virtual bool			HasDynamicSize() const = 0;
 	virtual enum Type	GetType() const = 0;
 	virtual std::shared_ptr<IPacket> Clone() const = 0;
 
