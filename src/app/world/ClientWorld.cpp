@@ -474,32 +474,39 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	if (player->isFlying() == false)
 	{
 		double acc = 1.5;
-		double ground_friction = 0.7;
-		double air_friction = 0.99;
+		double ground_friction = 20.0;
+		double air_friction = 1.0;
 		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
+
+		double jump_force = 0.2;
+		double gravity = -0.6;
 
 		if (up && player->canJump())
 		{
 			player->startJump();
-			player->velocity.y = player->jump_force;
+			player->velocity.y = jump_force;
 		}
 
-		player->velocity.y += player->gravity * delta_time_second;
-		player->velocity = (player->velocity + move * acc) * friction;
+		player->velocity.y += gravity * delta_time_second;
 
-		displacement = player->velocity * delta_time_second;
+		player->velocity += move * acc * delta_time_second;
+
+		displacement = player->velocity;
+
+		player->velocity *= (1.0 - glm::min(delta_time_second * friction, 1.0));
 	}
 	else // if player is flying
 	{
-		double acc = 10.0;
-		double drag = 0.5;
+		double acc = 5.0;
+		double drag = 20.0;
 
 		move.y = up - down;
 
-		player->velocity += move * acc;
-		player->velocity *= drag;
+		player->velocity += move * acc * delta_time_second;
 
-		displacement = player->velocity * delta_time_second;
+		displacement = player->velocity;
+
+		player->velocity *= (1.0 - glm::min(delta_time_second * drag, 1.0));
 
 	}
 
