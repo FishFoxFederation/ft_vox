@@ -34,6 +34,15 @@ void ClientWorld::updateBlock(glm::dvec3 position)
 // 	waitForFinishedFutures();
 // }
 
+void ClientWorld::addChunk(Chunk chunk)
+{
+	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+
+	glm::ivec3 chunk_position = chunk.getPosition();
+	m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
+	m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
+}
+
 void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 {
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
@@ -297,8 +306,8 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
 	std::lock_guard<std::mutex> lock4(m_visible_chunks_mutex);
 	std::lock_guard<std::mutex> lock5(m_unload_set_mutex);
-	loadChunks(playerPosition);
-	unloadChunks(playerPosition);
+	// loadChunks(playerPosition);
+	// unloadChunks(playerPosition);
 	meshChunks(playerPosition);
 	doBlockSets();
 }

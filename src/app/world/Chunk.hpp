@@ -21,17 +21,19 @@
 class Chunk
 {
 public:
+	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
 
 	Chunk(glm::ivec3 position);
+	Chunk(const glm::ivec3 & position, const BlockArray & blocks);
 
-	Chunk(const Chunk & other) = delete;
+	Chunk(const Chunk & other);
 	Chunk & operator=(const Chunk & other) = delete;
 	Chunk & operator=(const Chunk && other);
 	Chunk(Chunk && other);
 	~Chunk();
 
-	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
-
+	BlockArray &		getBlocks();
+	const BlockArray &	getBlocks() const;
 	BlockID				getBlock(const int & x, const int & y, const int & z) const;
 	BlockID				getBlock(const glm::vec3 & position) const;
 	void				setBlock(const int & x, const int & y, const int & z, BlockID block);

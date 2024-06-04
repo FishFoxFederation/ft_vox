@@ -20,6 +20,7 @@ public:
 		BLOCK_ACTION,
 		PING,
 		PLAYER_LIST,
+		CHUNK,
 		ENUM_MAX,
 	};
 	const static inline uint32_t STATIC_HEADER_SIZE = sizeof(Type);
