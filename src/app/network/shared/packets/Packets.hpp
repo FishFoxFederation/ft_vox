@@ -8,6 +8,7 @@
 #include "PingPacket.hpp"
 #include "PlayerListPacket.hpp"
 #include "ChunkPacket.hpp"
+#include "ChunkRequestPacket.hpp"
 
 
 /**

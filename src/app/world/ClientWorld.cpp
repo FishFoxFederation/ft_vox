@@ -36,6 +36,7 @@ void ClientWorld::updateBlock(glm::dvec3 position)
 
 void ClientWorld::addChunk(Chunk chunk)
 {
+	return;
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
 
 	glm::ivec3 chunk_position = chunk.getPosition();
@@ -43,17 +44,17 @@ void ClientWorld::addChunk(Chunk chunk)
 	m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
 
 	//set all neighbors as not visible to force a mesh update
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x - 1, chunk_position.z + 1));
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x - 1, chunk_position.z));
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x - 1, chunk_position.z - 1));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z + 1));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z - 1));
 
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x + 1, chunk_position.z + 1));
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x + 1, chunk_position.z));
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x + 1, chunk_position.z - 1));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z + 1));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z - 1));
 
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x, chunk_position.z + 1));
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x, chunk_position.z));
-	m_visible_chunks.erase(glm::ivec2(chunk_position.x, chunk_position.z - 1));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z + 1));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z));
+	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z - 1));
 }
 
 void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
@@ -168,13 +169,11 @@ void ClientWorld::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 
 				{
 					std::lock_guard<std::mutex> lock(m_chunks_mutex);
-					std::lock_guard<std::mutex> lock2(m_visible_chunks_mutex);
 					std::lock_guard<std::mutex> lock3(m_unload_set_mutex);
 
 					mesh_scene_id = m_chunks.at(chunkPos3D).getMeshID();
 					m_chunks.erase(chunkPos3D);
 					m_loaded_chunks.erase(chunkPos2D);
-					m_visible_chunks.erase(chunkPos2D);
 					m_unload_set.erase(chunkPos2D);
 				}
 
@@ -209,15 +208,23 @@ void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
 	for(auto chunkPos2D : m_loaded_chunks)
 	{
+		Chunk & chunk = m_chunks.at(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
+		if (chunk.status.isShareLockable())
+			chunk.status.lock_shared();
+		else
+			continue;
 		float distanceX = std::abs(chunkPos2D.x - playerChunk2D.x);
 		float distanceZ = std::abs(chunkPos2D.y - playerChunk2D.y);
 
 		if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE
-			&& !m_visible_chunks.contains(chunkPos2D))
+			&& !chunk.isMeshed())
 		{
 			// LOG_INFO("Meshing chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
+			chunk.status.unlock_shared();
 			meshChunk(chunkPos2D);
+			continue;
 		}
+		chunk.status.unlock_shared();
 	}
 }
 
@@ -228,25 +235,24 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	 * CHECKING IF NEIGHBOURS EXIST AND ARE AVAILABLE
 	********/
 	bool unavailable_neighbours = false;
-	// for(int x = -1; x < 2; x++)
-	// {
-	// 	for(int z = -1; z < 2; z++)
-	// 	{
-	// 		glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
-	// 		if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
-	// 		{
-	// 			unavailable_neighbours = true;
-	// 			break;
-	// 		}
-	// 	}
-	// }
+	for(int x = -1; x < 2; x++)
+	{
+		for(int z = -1; z < 2; z++)
+		{
+			glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
+			if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
+			{
+				unavailable_neighbours = true;
+				break;
+			}
+		}
+	}
 	if (unavailable_neighbours)
 		return;
 	//this is possible and thread safe to test if they are readable and then to modify their statuses
 	//only because we have the guarantee that not other task will try to write to them
 	//since task dispatching is done in order
 
-	m_visible_chunks.insert(chunkPos2D);
 
 	//The constructor will mark the chunk as being read
 	CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
@@ -266,7 +272,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		//create all mesh data needed ( pointers to neighbors basically )
 		// CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
 		Chunk & chunk = *mesh_data.getCenterChunk();
-
+		chunk.setMeshed(true);
 		uint64_t old_mesh_scene_id;
 
 		//destroy old mesh if it exists
@@ -318,7 +324,6 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 {
 	// static std::chrono::steady_clock::time_point last_update = std::chrono::steady_clock::now();
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
-	std::lock_guard<std::mutex> lock4(m_visible_chunks_mutex);
 	std::lock_guard<std::mutex> lock5(m_unload_set_mutex);
 	// loadChunks(playerPosition);
 	// unloadChunks(playerPosition);
@@ -337,7 +342,6 @@ void ClientWorld::doBlockSets()
 	std::future<void> future = m_threadPool.submit([this, current_id]()
 	{
 		std::lock_guard<std::mutex> lock(m_chunks_mutex);
-		std::lock_guard<std::mutex> lock2(m_visible_chunks_mutex);
 		std::lock_guard<std::mutex> lock3(m_blocks_to_set_mutex);
 		while(!m_blocks_to_set.empty())
 		{
@@ -352,17 +356,17 @@ void ClientWorld::doBlockSets()
 				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 				chunk.status.lock();
 				chunk.setBlock(block_chunk_position, block_id);
+				chunk.setMeshed(false);
 				chunk.status.unlock();
 
-				m_visible_chunks.erase(chunk_position2D);
 				if (block_chunk_position.x == 0)
-					m_visible_chunks.erase(glm::ivec2(chunk_position2D.x - 1, chunk_position2D.y));
+					setChunkNotMeshed(glm::ivec2(chunk_position2D.x - 1, chunk_position2D.y));
 				if (block_chunk_position.x == CHUNK_X_SIZE - 1)
-					m_visible_chunks.erase(glm::ivec2(chunk_position2D.x + 1, chunk_position2D.y));
+					setChunkNotMeshed(glm::ivec2(chunk_position2D.x + 1, chunk_position2D.y));
 				if (block_chunk_position.z == 0)
-					m_visible_chunks.erase(glm::ivec2(chunk_position2D.x, chunk_position2D.y - 1));
+					setChunkNotMeshed(glm::ivec2(chunk_position2D.x, chunk_position2D.y - 1));
 				if (block_chunk_position.z == CHUNK_Z_SIZE - 1)
-					m_visible_chunks.erase(glm::ivec2(chunk_position2D.x, chunk_position2D.y + 1));
+					setChunkNotMeshed(glm::ivec2(chunk_position2D.x, chunk_position2D.y + 1));
 			}
 		}
 
@@ -881,18 +885,24 @@ bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dve
 				glm::vec3 chunk_position = getChunkPosition(block_position);
 				glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
-				// LOG_DEBUG("Lock m_chunks_mutex");
+				Chunk * chunk = nullptr;
+				{
+					// LOG_DEBUG("Lock m_chunks_mutex");
 				// double start = std::chrono::steady_clock::now().time_since_epoch().count();
 				std::lock_guard<std::mutex> lock(m_chunks_mutex);
-				// double end = std::chrono::steady_clock::now().time_since_epoch().count();
+					// double end = std::chrono::steady_clock::now().time_since_epoch().count();
 				// LOG_DEBUG("Lock m_chunks_mutex done in " << (end - start) / 1e6 << " ms");
 				if (m_loaded_chunks.contains(chunk_position2D))
-				{
-					Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
+					{
+						chunk = &m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
+					}
+					else
+						continue;
+				}
 
-					chunk.status.lock_shared();
-					BlockID block_id = chunk.getBlock(block_chunk_position);
-					chunk.status.unlock_shared();
+					chunk->status.lock_shared();
+					BlockID block_id = chunk->getBlock(block_chunk_position);
+					chunk->status.unlock_shared();
 
 					if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 					{
@@ -903,7 +913,6 @@ bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dve
 							return true;
 						}
 					}
-				}
 			}
 		}
 	}
@@ -1049,4 +1058,15 @@ void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockID & block_
 {
 	std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
 	m_blocks_to_set.push({position, block_id});
+}
+
+void ClientWorld::setChunkNotMeshed(const glm::ivec2 & chunk_position)
+{
+	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	if (m_loaded_chunks.contains(chunk_position))
+	{
+		Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.y));
+		std::lock_guard<Status> lock2(chunk.status);
+		chunk.setMeshed(false);
+	}
 }

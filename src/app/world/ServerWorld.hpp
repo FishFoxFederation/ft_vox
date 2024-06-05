@@ -17,6 +17,10 @@ public:
 
 	Chunk &			getChunk(const glm::ivec3 & chunk_position);
 	const Chunk &	getChunk(const glm::ivec3 & chunk_position) const;
+	
+	Chunk & 		getAndLoadChunk(const glm::ivec3 & chunk_position);
+
+	void			loadChunk(const glm::ivec3 & chunk_position);
 
 	void			setBlock(const glm::vec3 & position, BlockID block);
 private:

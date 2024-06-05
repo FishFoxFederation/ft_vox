@@ -76,6 +76,7 @@ void UpdateThread::loop()
 		last_move = std::chrono::steady_clock::now();
 	}
 	handlePackets();
+	// m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
 
 	m_world.updateMobs(m_delta_time.count() / 1e9);
 }
@@ -220,7 +221,7 @@ void UpdateThread::movePlayer()
 	);
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
-	if (displacement != glm::dvec3(0.0))
+	if (displacement.length() > 0.0001)
 	{
 		// glm::vec3 new_position = position + displacement;
 		// LOG_DEBUG("I want to go to " << new_position.x << " " << new_position.y << " " << new_position.z);

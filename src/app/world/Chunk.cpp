@@ -111,6 +111,16 @@ void Chunk::setMeshID(const uint64_t & mesh_id)
 	m_mesh_id = mesh_id;
 }
 
+bool Chunk::isMeshed() const
+{
+	return meshed;
+}
+
+void Chunk::setMeshed(bool meshed)
+{
+	this->meshed = meshed;
+}
+
 int Chunk::toIndex(const int & x, const int & y, const int & z)
 {
 	return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
