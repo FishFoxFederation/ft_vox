@@ -2,6 +2,7 @@
 #include "server/Server.hpp"
 #include "PacketFactory.hpp"
 #include "ServerPacketHandler.hpp"
+#include "ServerWorld.hpp"
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -16,6 +17,7 @@ int main()
 {
 	LOG_INFO("Server started");
 	Server server(4245);
+	ServerWorld world;
 	ServerPacketHandler packet_handler(server);
 	// std::thread server_thread([&server](){
 	// 	server.run();
