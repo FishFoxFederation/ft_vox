@@ -107,7 +107,6 @@ private:
 	/*************************************
 	 *  CHUNKS AND MAP
 	*************************************/
-	WorldGenerator							m_worldGenerator;
 	std::unordered_set<glm::ivec2>			m_loaded_chunks;
 
 	std::unordered_set<glm::ivec2>			m_visible_chunks;

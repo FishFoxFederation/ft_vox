@@ -2,12 +2,14 @@
 
 #include "Packets.hpp"
 #include "Server.hpp"
-#include "ClientWorld.hpp"
+#include "ServerWorld.hpp"
+
+#include <map>
 
 class ServerPacketHandler
 {
 public:
-	ServerPacketHandler(Server & server);
+	ServerPacketHandler(Server & server, ServerWorld & world);
 	~ServerPacketHandler();
 
 	ServerPacketHandler(const ServerPacketHandler& other) = delete;
@@ -19,9 +21,10 @@ public:
 
 private:
 	Server &	m_server;
-	std::map<uint64_t, glm::dvec3> m_player_positions;
-	std::map<uint64_t, uint64_t> m_player_to_connection_id;
-	std::map<uint64_t, uint64_t> m_connection_to_player_id;
+	ServerWorld & m_world;
+	std::unordered_map<uint64_t, glm::dvec3> m_player_positions;
+	std::unordered_map<uint64_t, uint64_t> m_player_to_connection_id;
+	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
 
 
 	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);

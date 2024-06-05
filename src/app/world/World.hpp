@@ -35,7 +35,8 @@ protected:
 	uint64_t												m_mob_id = 0;
 
 	std::unordered_map<glm::ivec3, Chunk>					m_chunks;
-	std::mutex											m_chunks_mutex;
+	mutable std::mutex										m_chunks_mutex;
+	WorldGenerator										m_world_generator;
 
 	/**
 	 * @brief will return the block position relative to the chunk

@@ -18,7 +18,7 @@ int main()
 	LOG_INFO("Server started");
 	Server server(4245);
 	ServerWorld world;
-	ServerPacketHandler packet_handler(server);
+	ServerPacketHandler packet_handler(server, world);
 	// std::thread server_thread([&server](){
 	// 	server.run();
 	// });
