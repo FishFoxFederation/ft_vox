@@ -20,8 +20,11 @@ void Player::moveDirection(double x_offset, double y_offset)
 {
 	yaw += x_offset;
 	pitch = glm::clamp(pitch - y_offset, -89.0, 89.0);
+}
 
-	// updateTransform();
+Camera Player::camera() const
+{
+	return Camera(transform.position + eyePosition(), pitch, yaw);
 }
 
 glm::dvec3 Player::direction() const
@@ -95,7 +98,6 @@ bool Player::canJump() const
 
 void Player::startJump()
 {
-	// velocity.y = jump_force;
 	jump_remaining--;
 	jumping = true;
 	last_jump_time = std::chrono::steady_clock::now().time_since_epoch();

@@ -5,7 +5,7 @@
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
 #include "ThreadPool.hpp"
-#include "glm/vec3.hpp"
+#include "Mob.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -29,6 +29,11 @@ public:
 protected:
 	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
 	std::mutex												m_players_mutex;
+
+	std::unordered_map<uint64_t, std::shared_ptr<Mob>>		m_mobs;
+	std::mutex												m_mobs_mutex;
+	uint64_t												m_mob_id = 0;
+
 	std::unordered_map<glm::ivec3, Chunk>					m_chunks;
 	std::mutex											m_chunks_mutex;
 

@@ -69,6 +69,11 @@ public:
 		std::function<void(Player &)> update
 	);
 
+	void createMob();
+	void updateMobs(
+		const double delta_time_second
+	);
+
 	void modifyBlock(
 		const glm::vec3 & position,
 		const BlockID & block_id
