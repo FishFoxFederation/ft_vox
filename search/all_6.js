@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['gamemode_0',['gameMode',['../classPlayer.html#a39ad689468b2763f5b735a5e4fb78113',1,'Player']]],
-  ['gamemode_1',['GameMode',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292d',1,'Player']]],
+  ['gamemode_0',['GameMode',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292d',1,'Player']]],
+  ['gamemode_1',['gameMode',['../classPlayer.html#a39ad689468b2763f5b735a5e4fb78113',1,'Player']]],
   ['generatechunk_2',['generateChunk',['../classWorldGenerator.html#a60e7c3bf3ac192d924afdea2fe59760d',1,'WorldGenerator']]],
   ['generatechunkcolumn_3',['generateChunkColumn',['../classWorldGenerator.html#a3abe115df8c1963918707f43cd920092',1,'WorldGenerator']]],
   ['generatefullchunk_4',['generateFullChunk',['../classWorldGenerator.html#abcc94f56394d38f96df5b3ffd6afe104',1,'WorldGenerator']]],

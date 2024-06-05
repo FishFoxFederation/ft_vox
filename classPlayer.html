@@ -163,6 +163,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aee30f8cfd8ace63acd9534cf902aa6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55caf512b6d6b3682b59bff8531da250"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a55caf512b6d6b3682b59bff8531da250">shouldFall</a> () const</td></tr>
 <tr class="separator:a55caf512b6d6b3682b59bff8531da250"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebf1ad14c05b62b1545b09ca60d5c201"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aebf1ad14c05b62b1545b09ca60d5c201">isFlying</a> () const</td></tr>
+<tr class="separator:aebf1ad14c05b62b1545b09ca60d5c201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cb36c5bd5069fc72552aeec05cc5fca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a2cb36c5bd5069fc72552aeec05cc5fca">canJump</a> () const</td></tr>
 <tr class="separator:a2cb36c5bd5069fc72552aeec05cc5fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9df196a5b35729edaeef70101461bbd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a9df196a5b35729edaeef70101461bbd8">startJump</a> ()</td></tr>
@@ -218,8 +220,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad5a2f3c133a4a93dd19965007bba82de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa467fcbbb25423c22972d0f520e94fd1"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aa467fcbbb25423c22972d0f520e94fd1">velocity</a> = glm::dvec3(0.0)</td></tr>
 <tr class="separator:aa467fcbbb25423c22972d0f520e94fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd1f9737d5f42960d61ede6b6680b1c"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#accd1f9737d5f42960d61ede6b6680b1c">input_velocity</a> = glm::dvec3(0.0)</td></tr>
-<tr class="separator:accd1f9737d5f42960d61ede6b6680b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3bc5504d2ac3d8fd40354c7e92c1656"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ae3bc5504d2ac3d8fd40354c7e92c1656">jump_remaining</a> = 1</td></tr>
 <tr class="separator:ae3bc5504d2ac3d8fd40354c7e92c1656"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a349f074eedf387a35ce879738022bf42"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a349f074eedf387a35ce879738022bf42">yaw</a> = 0.0</td></tr>
@@ -483,6 +483,23 @@ Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">glm::dvec3&#160;</td>
           <td class="paramname"><em>move</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aebf1ad14c05b62b1545b09ca60d5c201" name="aebf1ad14c05b62b1545b09ca60d5c201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebf1ad14c05b62b1545b09ca60d5c201">&#9670;&#160;</a></span>isFlying()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::isFlying </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -765,20 +782,6 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classHitBox.html">HitBox</a> Player::hitbox = <a class="el" href="classHitBox.html">HitBox</a>({-0.4, 0, -0.4}, {0.8, 1.8, 0.8})</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="accd1f9737d5f42960d61ede6b6680b1c" name="accd1f9737d5f42960d61ede6b6680b1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accd1f9737d5f42960d61ede6b6680b1c">&#9670;&#160;</a></span>input_velocity</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">glm::dvec3 Player::input_velocity = glm::dvec3(0.0)</td>
         </tr>
       </table>
 </div><div class="memdoc">
