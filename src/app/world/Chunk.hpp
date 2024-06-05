@@ -27,7 +27,7 @@ public:
 	Chunk(const glm::ivec3 & position, const BlockArray & blocks);
 
 	Chunk(const Chunk & other);
-	Chunk & operator=(const Chunk & other) = delete;
+	Chunk & operator=(const Chunk & other);
 	Chunk & operator=(const Chunk && other);
 	Chunk(Chunk && other);
 	~Chunk();
@@ -39,7 +39,8 @@ public:
 	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
 	void 				setBlock(const glm::vec3 & position, BlockID block);
 
-	const glm::ivec3 &	getPosition() const {return position;};
+	const glm::ivec3 &	getPosition() const;
+	void 				setPosition(const glm::ivec3 & position);
 
 	const int & 		x()const {return position.x;};
 	const int & 		y()const {return position.y;};
@@ -52,11 +53,11 @@ public:
 	static  int			toIndex(const int & x, const int & y, const int & z);
 	static	glm::ivec3	toCoord(const int & index);
 
-	const		glm::ivec3 position;
 
 	Status	status;
 	std::unordered_set<uint64_t>	entity_ids;
 private:
+	glm::ivec3	position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
 };

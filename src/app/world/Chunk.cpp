@@ -23,15 +23,25 @@ Chunk::Chunk(const Chunk & other)
 }
 
 Chunk::Chunk(Chunk && other)
-:	position(other.position),
-	status(other.status),
+:	status(other.status),
+	position(other.position),
 	m_mesh_id(other.m_mesh_id),
 	m_blocks(std::move(other.m_blocks))
 {
 }
 
+Chunk & Chunk::operator=(const Chunk & other)
+{
+	position = other.position;
+	m_mesh_id = other.m_mesh_id;
+	m_blocks = other.m_blocks;
+	status = other.status;
+	return *this;
+}
+
 Chunk & Chunk::operator=(const Chunk && other)
 {
+	position = other.position;
 	m_mesh_id = other.m_mesh_id;
 	m_blocks = std::move(other.m_blocks);
 	status = other.status;
@@ -79,6 +89,16 @@ void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 void Chunk::setBlock(const glm::vec3 & position, BlockID block)
 {
 	setBlock((int)position.x, (int)position.y, (int)position.z, block);
+}
+
+const glm::ivec3 & Chunk::getPosition() const
+{
+	return position;
+}
+
+void Chunk::setPosition(const glm::ivec3 & position)
+{
+	this->position = position;
 }
 
 const uint64_t & Chunk::getMeshID() const
