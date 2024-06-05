@@ -73,9 +73,9 @@ BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const
 	return m_blocks[index];
 }
 
-BlockID Chunk::getBlock(const glm::vec3 & position) const
+BlockID Chunk::getBlock(const glm::ivec3 & position) const
 {
-	return getBlock((int)position.x, (int)position.y, (int)position.z);
+	return getBlock(position.x, position.y, position.z);
 }
 
 void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
@@ -86,9 +86,9 @@ void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 	//REGENERATE MESH HERE
 }
 
-void Chunk::setBlock(const glm::vec3 & position, BlockID block)
+void Chunk::setBlock(const glm::ivec3 & position, BlockID block)
 {
-	setBlock((int)position.x, (int)position.y, (int)position.z, block);
+	setBlock(position.x, position.y, position.z, block);
 }
 
 const glm::ivec3 & Chunk::getPosition() const

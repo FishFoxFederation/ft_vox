@@ -41,6 +41,19 @@ void ClientWorld::addChunk(Chunk chunk)
 	glm::ivec3 chunk_position = chunk.getPosition();
 	m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
 	m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
+
+	//set all neighbors as not visible to force a mesh update
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x - 1, chunk_position.z + 1));
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x - 1, chunk_position.z));
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x - 1, chunk_position.z - 1));
+
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x + 1, chunk_position.z + 1));
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x + 1, chunk_position.z));
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x + 1, chunk_position.z - 1));
+
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x, chunk_position.z + 1));
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x, chunk_position.z));
+	m_visible_chunks.erase(glm::ivec2(chunk_position.x, chunk_position.z - 1));
 }
 
 void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
@@ -72,7 +85,7 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 					 **************************************************************/
 					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 					// LOG_DEBUG("Loading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
-					Chunk chunk = m_worldGenerator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
+					Chunk chunk = m_world_generator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
 					{
 						std::lock_guard<std::mutex> lock(m_chunks_mutex);
 						m_loaded_chunks.insert(chunkPos2D);
@@ -202,6 +215,7 @@ void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 		if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE
 			&& !m_visible_chunks.contains(chunkPos2D))
 		{
+			// LOG_INFO("Meshing chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
 			meshChunk(chunkPos2D);
 		}
 	}
@@ -214,18 +228,18 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	 * CHECKING IF NEIGHBOURS EXIST AND ARE AVAILABLE
 	********/
 	bool unavailable_neighbours = false;
-	for(int x = -1; x < 2; x++)
-	{
-		for(int z = -1; z < 2; z++)
-		{
-			glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
-			if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
-			{
-				unavailable_neighbours = true;
-				break;
-			}
-		}
-	}
+	// for(int x = -1; x < 2; x++)
+	// {
+	// 	for(int z = -1; z < 2; z++)
+	// 	{
+	// 		glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
+	// 		if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
+	// 		{
+	// 			unavailable_neighbours = true;
+	// 			break;
+	// 		}
+	// 	}
+	// }
 	if (unavailable_neighbours)
 		return;
 	//this is possible and thread safe to test if they are readable and then to modify their statuses
@@ -382,8 +396,6 @@ void ClientWorld::waitForFutures()
 	}
 }
 
-
-
 void ClientWorld::updateEntities()
 {
 }
@@ -410,6 +422,8 @@ void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dve
 
 void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dvec3 & position)
 {
+	if (!m_players.contains(player_id))
+		return;
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
 	std::lock_guard<std::mutex> lock(player->mutex);
 

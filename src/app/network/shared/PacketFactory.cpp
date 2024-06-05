@@ -9,6 +9,7 @@ PacketFactory::PacketFactory()
 	m_packets.insert(std::make_pair(IPacket::Type::BLOCK_ACTION, std::make_shared<BlockActionPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::PING, std::make_shared<PingPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::PLAYER_LIST, std::make_shared<PlayerListPacket>()));
+	m_packets.insert(std::make_pair(IPacket::Type::CHUNK, std::make_shared<ChunkPacket>()));
 }
 
 PacketFactory::~PacketFactory()

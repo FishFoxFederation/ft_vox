@@ -10,5 +10,15 @@ public:
 	ServerWorld();
 	~ServerWorld();
 
+	ServerWorld(ServerWorld & other) = delete;
+	ServerWorld(ServerWorld && other) = delete;
+	ServerWorld & operator=(ServerWorld & other) = delete;
+	ServerWorld & operator=(ServerWorld && other) = delete;
+
+	Chunk &			getChunk(const glm::ivec3 & chunk_position);
+	const Chunk &	getChunk(const glm::ivec3 & chunk_position) const;
+
+	void			setBlock(const glm::vec3 & position, BlockID block);
 private:
+
 };

@@ -63,6 +63,11 @@ void ChunkPacket::Deserialize(const uint8_t * buffer)
 {
 	buffer += sizeof(IPacket::STATIC_HEADER_SIZE);
 
+	std::memcpy(&m_chunk_pos, buffer, sizeof(m_chunk_pos));
+	buffer += sizeof(m_chunk_pos);
+
+	std::memcpy(&m_blocks, buffer, sizeof(m_blocks));
+	buffer += sizeof(m_blocks);
 }
 
 uint32_t ChunkPacket::Size() const

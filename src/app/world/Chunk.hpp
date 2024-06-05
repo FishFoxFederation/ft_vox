@@ -35,9 +35,9 @@ public:
 	BlockArray &		getBlocks();
 	const BlockArray &	getBlocks() const;
 	BlockID				getBlock(const int & x, const int & y, const int & z) const;
-	BlockID				getBlock(const glm::vec3 & position) const;
+	BlockID				getBlock(const glm::ivec3 & position) const;
 	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
-	void 				setBlock(const glm::vec3 & position, BlockID block);
+	void 				setBlock(const glm::ivec3 & position, BlockID block);
 
 	const glm::ivec3 &	getPosition() const;
 	void 				setPosition(const glm::ivec3 & position);
