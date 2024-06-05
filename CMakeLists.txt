@@ -61,6 +61,7 @@ target_sources(${PROJECT_NAME}
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
+		src/app/world/ServerWorld.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
 		src/app/network/client/Client.cpp
@@ -184,6 +185,7 @@ target_sources(server
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
+		src/app/world/ServerWorld.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
 		src/app/network/client/Client.cpp
