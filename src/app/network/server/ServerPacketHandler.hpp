@@ -3,8 +3,11 @@
 #include "Packets.hpp"
 #include "Server.hpp"
 #include "ServerWorld.hpp"
+#include "glm/glm.hpp"
 
-#include <map>
+#include <unordered_map>
+
+#define SERVER_LOAD_DISTANCE 5
 
 class ServerPacketHandler
 {
@@ -31,6 +34,7 @@ private:
 	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
 	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
+	void handleChunkRequestPacket(std::shared_ptr<ChunkRequestPacket> packet);
 
 
 	void mirrorPacket(std::shared_ptr<IPacket> packet);

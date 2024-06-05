@@ -93,7 +93,8 @@ public:
 	glm::dvec3 getPlayerPosition(const uint64_t player_id);
 
 
-	void		addChunk(Chunk chunk);
+	void					addChunk(Chunk chunk);
+	std::vector<glm::ivec3> getNeededChunks(const glm::vec3 & playerPosition);
 
 
 	uint64_t m_my_player_id;
@@ -109,8 +110,8 @@ private:
 	*************************************/
 	std::unordered_set<glm::ivec2>			m_loaded_chunks;
 
-	std::unordered_set<glm::ivec2>			m_visible_chunks;
-	std::mutex								m_visible_chunks_mutex;
+	// std::unordered_set<glm::ivec2>			m_visible_chunks;
+	// std::mutex								m_visible_chunks_mutex;
 
 	std::unordered_set<glm::ivec2> 			m_unload_set;
 	std::mutex								m_unload_set_mutex;
@@ -194,6 +195,8 @@ private:
 	void 	updateChunks(const glm::vec3 & playerPosition);
 
 	void 	doBlockSets();
+
+	void	setChunkNotMeshed(const glm::ivec2 & chunkPosition);
 
 
 	/*************************************

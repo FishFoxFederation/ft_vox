@@ -77,6 +77,7 @@ void BlockUpdateThread::init()
 
 void BlockUpdateThread::loop()
 {
+	(void)m_world;
 	// m_world.updateBlock(m_worldScene.camera().getPosition());
 	m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
 	// LOG_INFO("PLAYER POSITION: " << m_worldScene.camera().position().x << " " << m_worldScene.camera().position().y << " " << m_worldScene.camera().position().z);

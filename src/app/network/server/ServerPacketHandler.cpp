@@ -33,6 +33,11 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 			handleBlockActionPacket(std::dynamic_pointer_cast<BlockActionPacket>(packet));
 			break;
 		}
+		case IPacket::Type::CHUNK_REQUEST:
+		{
+			handleChunkRequestPacket(std::dynamic_pointer_cast<ChunkRequestPacket>(packet));
+			break;
+		}
 		case IPacket::Type::PING:
 		{
 			m_server.send(packet);
@@ -40,6 +45,7 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		}
 		default:
 		{
+			LOG_INFO("Unknown packet type: " << static_cast<int>(packet->GetType()));
 			break;
 		}
 	}
@@ -125,6 +131,28 @@ void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPac
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_world.setBlock(packet->GetPosition(), packet->GetBlockID());
 	m_server.sendAll(packet_to_send);
+}
+
+void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestPacket> packet)
+{
+	(void)packet;
+	// auto current_connection_id = packet->GetConnectionId();
+	// // auto current_player_id = m_connection_to_player_id.at(current_connection_id);
+	// // glm::vec3 player_position = m_player_positions.at(current_player_id);
+
+	// glm::ivec3 chunk_pos = packet->GetChunkPos();
+	// // glm::ivec3 player_chunk_pos = player_position / CHUNK_SIZE_VEC3;
+
+	// // if (glm::distance(chunk_pos, player_chunk_pos) > SERVER_LOAD_DISTANCE)
+	// // {
+	// // 	LOG_INFO("Chunk request out of range: " << chunk_pos.x << " " << chunk_pos.y << " " << chunk_pos.z);
+	// // 	return;
+	// // }
+
+	// Chunk & chunk = m_world.getAndLoadChunk(chunk_pos);
+	// auto packet_to_send = std::make_shared<ChunkPacket>(chunk);
+	// packet_to_send->SetConnectionId(current_connection_id);
+	// m_server.send(packet_to_send);
 }
 
 void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)

@@ -122,7 +122,10 @@ public:
 					if (it != chunk_map.end())
 					{
 						chunks[x + 1][y + 1][z + 1] = &it->second;
-						it->second.status.lock_shared();
+						if (x == 0 && y == 0 && z == 0)
+							it->second.status.lock();
+						else
+							it->second.status.lock_shared();
 					}
 				}
 			}
@@ -182,7 +185,10 @@ public:
 				{
 					if (chunks[x][y][z] != nullptr)
 					{
-						chunks[x][y][z]->status.unlock_shared();
+						if (x == NEUT && y == NEUT && z == NEUT)
+							chunks[x][y][z]->status.unlock();
+						else
+							chunks[x][y][z]->status.unlock_shared();
 					}
 				}
 			}

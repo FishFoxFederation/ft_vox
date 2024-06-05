@@ -50,6 +50,9 @@ public:
 	const uint64_t	&	getMeshID() const;
 	void				setMeshID(const uint64_t & mesh_id);
 
+	bool				isMeshed() const;
+	void				setMeshed(bool meshed);
+
 	static  int			toIndex(const int & x, const int & y, const int & z);
 	static	glm::ivec3	toCoord(const int & index);
 
@@ -57,6 +60,7 @@ public:
 	Status	status;
 	std::unordered_set<uint64_t>	entity_ids;
 private:
+	bool 		meshed = false;
 	glm::ivec3	position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
