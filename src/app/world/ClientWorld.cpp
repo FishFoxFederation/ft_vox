@@ -1,4 +1,5 @@
 #include "ClientWorld.hpp"
+#include "DebugGui.hpp"
 
 ClientWorld::ClientWorld(
 	WorldScene & WorldScene,
@@ -437,7 +438,11 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	const double delta_time_second
 )
 {
-	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
+	std::shared_ptr<Player> player;
+	{
+		std::lock_guard<std::mutex> lock(m_players_mutex);
+		player = m_players.at(player_id);
+	}
 	std::lock_guard<std::mutex> lock(player->mutex);
 
 	std::pair<glm::dvec3, glm::dvec3> result;
@@ -465,7 +470,6 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 		move = glm::normalize(move);
 	// transform the move vector to the player's local coordinate system
 	move = player->getTransformedMovement(move);
-	// set the y component of the input force
 
 
 	glm::dvec3 displacement;
@@ -473,13 +477,13 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	// if player is walking
 	if (player->isFlying() == false)
 	{
-		double acc = 1.5;
-		double ground_friction = 20.0;
-		double air_friction = 1.0;
+		double acc = DebugGui::acceleration;
+		double ground_friction = DebugGui::ground_friction;
+		double air_friction = DebugGui::air_friction;
 		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
 
-		double jump_force = 0.2;
-		double gravity = -0.6;
+		double jump_force = DebugGui::jump_force;
+		double gravity = -DebugGui::gravity;
 
 		if (up && player->canJump())
 		{
@@ -491,20 +495,20 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 
 		player->velocity += move * acc * delta_time_second;
 
-		displacement = player->velocity;
+		displacement = player->velocity * delta_time_second;
 
 		player->velocity *= (1.0 - glm::min(delta_time_second * friction, 1.0));
 	}
 	else // if player is flying
 	{
-		double acc = 5.0;
-		double drag = 20.0;
+		double acc = 100.0;
+		double drag = 10.0;
 
 		move.y = up - down;
 
 		player->velocity += move * acc * delta_time_second;
 
-		displacement = player->velocity;
+		displacement = player->velocity * delta_time_second;
 
 		player->velocity *= (1.0 - glm::min(delta_time_second * drag, 1.0));
 
@@ -557,6 +561,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 		}
 	}
 
+	DebugGui::player_velocity_vec = player->velocity;
 	DebugGui::player_velocity = glm::length(player->velocity);
 
 	result.first = player->transform.position;
@@ -667,6 +672,160 @@ void ClientWorld::updatePlayer(
 	update(*player);
 }
 
+void ClientWorld::createMob()
+{
+	std::lock_guard<std::mutex> lock(m_mobs_mutex);
+
+	std::shared_ptr<Mob> mob = std::make_shared<Mob>();
+	mob->transform.position = glm::dvec3(0.0, 220.0, 0.0);
+	uint64_t mob_id = m_mob_id++;
+	m_mobs.insert(std::make_pair(mob_id, mob));
+
+	{
+		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		m_worldScene.entity_mesh_list.insert(
+			mob_id,
+			{
+				m_vulkanAPI.cube_mesh_id,
+				Transform(
+					mob->transform.position + mob->hitbox.position,
+					glm::vec3(0.0f),
+					mob->hitbox.size
+				).model()
+			}
+		);
+	}
+}
+
+void ClientWorld::updateMobs(
+	const double delta_time_second
+)
+{
+	std::shared_ptr<Player> player;
+	{
+		std::lock_guard<std::mutex> lock1(m_players_mutex);
+		player = m_players.at(m_my_player_id);
+	}
+	std::lock_guard<std::mutex> lock2(player->mutex);
+
+
+
+	std::lock_guard<std::mutex> lock(m_mobs_mutex);
+	for (auto & [id, mob] : m_mobs)
+	{
+		std::lock_guard<std::mutex> lock(mob->mutex);
+
+		{
+			glm::dvec3 chunk_position3D = getChunkPosition(mob->transform.position);
+			glm::ivec2 chunk_position2D = glm::ivec2(chunk_position3D.x, chunk_position3D.z);
+			std::lock_guard<std::mutex> lock(m_chunks_mutex);
+			if (m_loaded_chunks.contains(chunk_position2D) == false)
+				continue;
+		}
+
+		// determine if mob is on the ground or in the air and detect
+		bool on_ground = hitboxCollisionWithBlock(mob->feet, mob->transform.position);
+		if (on_ground && !mob->on_ground) // mob just landed
+		{
+			mob->jump_remaining = 1;
+			mob->jumping = false;
+		}
+		if (!on_ground && mob->on_ground) // mob just started falling
+		{
+			mob->startFall();
+		}
+		mob->on_ground = on_ground;
+
+
+		// get the movement vector
+		glm::dvec3 move(0.0, 0.0, 0.0);
+		// normalize the move vector to prevent faster diagonal movement
+		// but without the y component because we don't want to slow down the mob when moving jumping
+		if (glm::length(move) > 0.0)
+			move = glm::normalize(move);
+
+		bool jump = true;
+
+		double acc = 30.0;
+		double ground_friction = 10.0;
+		double air_friction = 0.8;
+		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
+
+		double jump_force = 9.0;
+		double gravity = -25.0;
+
+		if (jump && mob->canJump())
+		{
+			mob->startJump();
+			mob->velocity.y = jump_force;
+		}
+
+		mob->velocity.y += gravity * delta_time_second;
+
+		mob->velocity += move * acc * delta_time_second;
+
+		glm::dvec3 displacement = mob->velocity * delta_time_second;
+
+		mob->velocity *= (1.0 - glm::min(delta_time_second * friction, 1.0));
+
+		// collision detection
+		const glm::dvec3 move_x = {displacement.x, 0.0, 0.0};
+		const glm::dvec3 move_y = {0.0, displacement.y, 0.0};
+		const glm::dvec3 move_z = {0.0, 0.0, displacement.z};
+		const glm::dvec3 move_xz = {displacement.x, 0.0, displacement.z};
+		const glm::dvec3 move_yz = {0.0, displacement.y, displacement.z};
+		const glm::dvec3 move_xy = {displacement.x, displacement.y, 0.0};
+
+		bool collision_x = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_x);
+		bool collision_y = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_y);
+		bool collision_z = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_z);
+		bool collision_xz = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_xz);
+		bool collision_yz = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_yz);
+		bool collision_xy = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_xy);
+		// edge case when the mob is perfectly aligned with the corner of a block
+		if (!collision_x && !collision_z && collision_xz)
+		{
+			// artificially set the collision on the axis with the smallest displacement
+			if (std::abs(displacement.x) > std::abs(displacement.z))
+				collision_z = true;
+			else
+				collision_x = true;
+		}
+		if ((!collision_x && !collision_y && collision_xy) || (!collision_y && !collision_z && collision_yz))
+		{
+			collision_y = true;
+		}
+
+		if (collision_x)
+		{
+			displacement.x = 0.0;
+			mob->velocity.x = 0.0;
+		}
+		if (collision_y)
+		{
+			displacement.y = -(mob->transform.position.y - glm::floor(mob->transform.position.y));
+			mob->velocity.y = 0.0;
+		}
+		if (collision_z)
+		{
+			displacement.z = 0.0;
+			mob->velocity.z = 0.0;
+		}
+
+		mob->transform.position += displacement;
+		// LOG_DEBUG("Mob position: " << mob->transform.position.x << " " << mob->transform.position.y << " " << mob->transform.position.z);
+
+		{ // update mob mesh
+			auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+			m_worldScene.entity_mesh_list.at(id).model = Transform(
+				mob->transform.position + mob->hitbox.position,
+				glm::vec3(0.0f),
+				mob->hitbox.size
+			).model();
+		}
+	}
+}
+
 Camera ClientWorld::getCamera(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
@@ -683,6 +842,7 @@ glm::dvec3 ClientWorld::getPlayerPosition(const uint64_t player_id)
 
 bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position)
 {
+
 	glm::dvec3 offset = glm::dvec3(0.0);
 	for (offset.x = -1; offset.x <= glm::ceil(hitbox.size.x); offset.x++)
 	{
@@ -695,7 +855,11 @@ bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dve
 				glm::vec3 chunk_position = getChunkPosition(block_position);
 				glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
+				// LOG_DEBUG("Lock m_chunks_mutex");
+				// double start = std::chrono::steady_clock::now().time_since_epoch().count();
 				std::lock_guard<std::mutex> lock(m_chunks_mutex);
+				// double end = std::chrono::steady_clock::now().time_since_epoch().count();
+				// LOG_DEBUG("Lock m_chunks_mutex done in " << (end - start) / 1e6 << " ms");
 				if (m_loaded_chunks.contains(chunk_position2D))
 				{
 					Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));

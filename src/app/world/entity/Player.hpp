@@ -38,10 +38,7 @@ public:
 
 	void moveDirection(double x_offset, double y_offset);
 
-	Camera camera() const
-	{
-		return Camera(transform.position + eyePosition(), pitch, yaw);
-	}
+	Camera camera() const;
 
 	glm::dvec3 getTransformedMovement(glm::dvec3 move) const;
 
