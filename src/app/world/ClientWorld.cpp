@@ -723,6 +723,8 @@ void ClientWorld::updateMobs(
 				continue;
 		}
 
+		mob->target_position = player->transform.position;
+
 		// determine if mob is on the ground or in the air and detect
 		bool on_ground = hitboxCollisionWithBlock(mob->feet, mob->transform.position);
 		if (on_ground && !mob->on_ground) // mob just landed
@@ -736,15 +738,14 @@ void ClientWorld::updateMobs(
 		}
 		mob->on_ground = on_ground;
 
+		glm::dvec3 diff = mob->target_position - mob->transform.position;
 
 		// get the movement vector
-		glm::dvec3 move(0.0, 0.0, 0.0);
+		glm::dvec3 move{diff.x, 0.0, diff.z};
 		// normalize the move vector to prevent faster diagonal movement
 		// but without the y component because we don't want to slow down the mob when moving jumping
 		if (glm::length(move) > 0.0)
 			move = glm::normalize(move);
-
-		bool jump = true;
 
 		double acc = 30.0;
 		double ground_friction = 10.0;
@@ -754,10 +755,11 @@ void ClientWorld::updateMobs(
 		double jump_force = 9.0;
 		double gravity = -25.0;
 
-		if (jump && mob->canJump())
+		if (mob->should_jump && mob->canJump())
 		{
 			mob->startJump();
 			mob->velocity.y = jump_force;
+			mob->should_jump = false;
 		}
 
 		mob->velocity.y += gravity * delta_time_second;
@@ -800,6 +802,7 @@ void ClientWorld::updateMobs(
 		{
 			displacement.x = 0.0;
 			mob->velocity.x = 0.0;
+			mob->should_jump = true;
 		}
 		if (collision_y)
 		{
@@ -810,10 +813,10 @@ void ClientWorld::updateMobs(
 		{
 			displacement.z = 0.0;
 			mob->velocity.z = 0.0;
+			mob->should_jump = true;
 		}
 
 		mob->transform.position += displacement;
-		// LOG_DEBUG("Mob position: " << mob->transform.position.x << " " << mob->transform.position.y << " " << mob->transform.position.z);
 
 		{ // update mob mesh
 			auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
