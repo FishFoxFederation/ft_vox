@@ -11,6 +11,7 @@ PacketFactory::PacketFactory()
 	m_packets.insert(std::make_pair(IPacket::Type::PLAYER_LIST, std::make_shared<PlayerListPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::CHUNK, std::make_shared<ChunkPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::CHUNK_REQUEST, std::make_shared<ChunkRequestPacket>()));
+	m_packets.insert(std::make_pair(IPacket::Type::CHUNK_UNLOAD, std::make_shared<ChunkUnloadPacket>()));
 }
 
 PacketFactory::~PacketFactory()

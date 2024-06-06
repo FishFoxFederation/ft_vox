@@ -40,6 +40,9 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 	case IPacket::Type::CHUNK:
 		handleChunkPacket(std::dynamic_pointer_cast<ChunkPacket>(packet));
 		break;
+	case IPacket::Type::CHUNK_UNLOAD:
+		handleChunkUnloadPacket(std::dynamic_pointer_cast<ChunkUnloadPacket>(packet));
+		break;
 	default:
 		break;
 	}
@@ -98,4 +101,9 @@ void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 	std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(packet->GetChunk());
 	LOG_INFO("Received chunk pos " << chunk->getPosition().x << " " << chunk->getPosition().y << " " << chunk->getPosition().z);
 	m_world.addChunk(std::move(chunk));
+}
+
+void ClientPacketHandler::handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet)
+{
+	m_world.removeChunk(packet->GetChunkPosition());
 }

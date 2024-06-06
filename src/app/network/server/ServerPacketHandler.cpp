@@ -154,6 +154,13 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 			packet_to_send->SetConnectionId(packet->GetConnectionId());
 			m_server.send(packet_to_send);
 		}
+
+		for (auto chunk : chunk_data.chunks_to_unload)
+		{
+			auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk);
+			packet_to_send->SetConnectionId(packet->GetConnectionId());
+			m_server.send(packet_to_send);
+		}
 	}
 }
 
