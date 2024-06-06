@@ -58,6 +58,12 @@ void ClientWorld::addChunk(std::shared_ptr<Chunk> chunk)
 	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z - 1));
 }
 
+void ClientWorld::removeChunk(const glm::ivec3 & chunkPosition)
+{
+	std::lock_guard<std::mutex> lock(m_loaded_chunks_mutex);
+	unloadChunk(chunkPosition);
+}
+
 void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 {
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
@@ -132,7 +138,6 @@ void ClientWorld::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 	std::vector<glm::ivec2> chunks_to_unload;
 	for (auto & chunkPos2D : m_loaded_chunks)
 	{
-		const glm::ivec3 chunkPos3D = glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
 		bool to_unload = true;
 		for (auto & playerChunk2D : playerChunks2D)
 		{
@@ -147,56 +152,59 @@ void ClientWorld::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 		}
 
 		if (to_unload)
-		{
-			LOG_DEBUG("Unloading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
-			std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
 			chunks_to_unload.push_back(chunkPos2D);
-			{
-				std::lock_guard<std::mutex> lock(m_chunks_mutex);
-				m_chunks.erase(chunkPos3D);
-			}
-			if (chunk == nullptr)
-				continue;
-			uint64_t current_id = m_future_id++;
-			std::future<void> future = m_threadPool.submit([this, chunk, current_id]()
-			{
-				/**************************************************************
-				 * CHUNK UNLOADING FUNCTION
-				 **************************************************************/
-				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-				uint64_t mesh_scene_id, mesh_id;
-
-				//will block and wait
-				std::lock_guard<Status> lock(chunk->status);
-
-				mesh_scene_id = chunk->getMeshID();
-
-				if (m_worldScene.chunk_mesh_list.contains(mesh_scene_id))
-				{
-					mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
-					m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
-					m_vulkanAPI.destroyMesh(mesh_id);
-				}
-
-				{
-					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
-					m_finished_futures.push(current_id);
-				}
-
-				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-				DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
-			});
-			m_futures.insert(std::make_pair(current_id, std::move(future)));
-		}
 	}
 
 	for (auto & chunkPos2D : chunks_to_unload)
-		m_loaded_chunks.erase(chunkPos2D);
+		unloadChunk(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
 }
 
 void ClientWorld::unloadChunks(const glm::vec3 & playerPosition)
 {
 	unloadChunks(std::vector<glm::vec3>{playerPosition});
+}
+
+void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
+{
+	std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
+	{
+		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		m_chunks.erase(chunkPos3D);
+	}
+	m_loaded_chunks.erase(glm::ivec2(chunkPos3D.x, chunkPos3D.z));
+
+	if (chunk == nullptr)
+		return;
+	uint64_t current_id = m_future_id++;
+	std::future<void> future = m_threadPool.submit([this, chunk, current_id]()
+	{
+		/**************************************************************
+		 * CHUNK UNLOADING FUNCTION
+		 **************************************************************/
+		std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+		uint64_t mesh_scene_id, mesh_id;
+
+		//will block and wait
+		std::lock_guard<Status> lock(chunk->status);
+
+		mesh_scene_id = chunk->getMeshID();
+
+		if (m_worldScene.chunk_mesh_list.contains(mesh_scene_id))
+		{
+			mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
+			m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
+			m_vulkanAPI.destroyMesh(mesh_id);
+		}
+
+		{
+			std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+			m_finished_futures.push(current_id);
+		}
+
+		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
+		DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
+	});
+	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
 void ClientWorld::meshChunks(const glm::vec3 & playerPosition)

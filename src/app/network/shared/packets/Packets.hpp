@@ -9,6 +9,7 @@
 #include "PlayerListPacket.hpp"
 #include "ChunkPacket.hpp"
 #include "ChunkRequestPacket.hpp"
+#include "ChunkUnloadPacket.hpp"
 
 
 /**

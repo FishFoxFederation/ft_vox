@@ -94,6 +94,7 @@ public:
 
 
 	void					addChunk(std::shared_ptr<Chunk> chunk);
+	void					removeChunk(const glm::ivec3 & chunkPosition);
 	std::vector<glm::ivec3> getNeededChunks(const glm::vec3 & playerPosition);
 
 
@@ -175,6 +176,7 @@ private:
 	 */
 	void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
 
+	void 	unloadChunk(const glm::ivec3 & chunkPosition);
 	/**
 	 * @brief will mesh chunks that are meshable around the player
 	 * @warning you must lock m_chunks_mutex as well as m_visible_chunks_mutex

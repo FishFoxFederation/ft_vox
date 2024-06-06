@@ -85,6 +85,7 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/packets/PlayerListPacket.cpp
 		src/app/network/shared/packets/ChunkPacket.cpp
 		src/app/network/shared/packets/ChunkRequestPacket.cpp
+		src/app/network/shared/packets/ChunkUnloadPacket.cpp
 		src/app/network/shared/packets/PlayerMovePacket.cpp
 		src/app/network/shared/packets/ConnectionPacket.cpp
 
@@ -209,6 +210,7 @@ target_sources(server
 		src/app/network/shared/packets/PlayerListPacket.cpp
 		src/app/network/shared/packets/ChunkPacket.cpp
 		src/app/network/shared/packets/ChunkRequestPacket.cpp
+		src/app/network/shared/packets/ChunkUnloadPacket.cpp
 		src/app/network/shared/packets/PlayerMovePacket.cpp
 		src/app/network/shared/packets/ConnectionPacket.cpp
 
