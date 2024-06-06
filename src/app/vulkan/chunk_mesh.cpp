@@ -103,10 +103,10 @@ void VulkanAPI::destroyMeshes()
 				vma.freeMemory(device, mesh.buffer_memory, nullptr);
 				meshes.erase(id);
 			}
-		}
-		else
-		{
-			meshes_still_in_use.push_back(id);
+			else
+			{
+				meshes_still_in_use.push_back(id);
+			}
 		}
 	}
 	mesh_ids_to_destroy = std::move(meshes_still_in_use);
