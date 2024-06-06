@@ -35,7 +35,7 @@ Chunk & Chunk::operator=(const Chunk & other)
 	position = other.position;
 	m_mesh_id = other.m_mesh_id;
 	m_blocks = other.m_blocks;
-	status = other.status;
+	// status = other.status;
 	return *this;
 }
 
@@ -44,7 +44,7 @@ Chunk & Chunk::operator=(const Chunk && other)
 	position = other.position;
 	m_mesh_id = other.m_mesh_id;
 	m_blocks = std::move(other.m_blocks);
-	status = other.status;
+	// status = other.status;
 	return *this;
 }
 
