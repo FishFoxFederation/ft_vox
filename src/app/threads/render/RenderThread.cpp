@@ -1,6 +1,6 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
-#include "Perlin.hpp"
+#include "Model.hpp"
 
 #include <iostream>
 #include <array>
@@ -87,6 +87,7 @@ void RenderThread::loop()
 
 	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.chunk_mesh_list.values();
 	const std::vector<WorldScene::MeshRenderData> entity_meshes = m_world_scene.entity_mesh_list.values();
+	const std::vector<WorldScene::PlayerRenderData> players = m_world_scene.getPlayers();
 
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
@@ -473,6 +474,52 @@ void RenderThread::loop()
 		);
 	}
 
+	// Draw the players
+	for (const auto & player : players)
+	{
+		// Chest
+		drawPlayerBodyPart(
+			vk.player_chest_mesh_id,
+			player.model * PlayerModel::chestModel(),
+			glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)
+		);
+
+		// Head
+		drawPlayerBodyPart(
+			vk.player_head_mesh_id,
+			player.model * PlayerModel::headModel(),
+			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)
+		);
+
+		// Left leg
+		drawPlayerBodyPart(
+			vk.player_leg_mesh_id,
+			player.model * PlayerModel::leftLegModel(),
+			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+		);
+
+		// Right leg
+		drawPlayerBodyPart(
+			vk.player_leg_mesh_id,
+			player.model * PlayerModel::rightLegModel(),
+			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+		);
+
+		// Left arm
+		drawPlayerBodyPart(
+			vk.player_arm_mesh_id,
+			player.model * PlayerModel::leftArmModel(),
+			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+		);
+
+		// Right arm
+		drawPlayerBodyPart(
+			vk.player_arm_mesh_id,
+			player.model * PlayerModel::rightArmModel(),
+			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+		);
+	}
+
 
 	// Draw the targeted block
 	if (target_block.has_value())
@@ -493,7 +540,7 @@ void RenderThread::loop()
 			0,
 			nullptr
 		);
-		
+
 		Mesh mesh = vk.meshes.get(vk.cube_mesh_id);
 
 		const VkBuffer vertex_buffers[] = { mesh.buffer };
@@ -927,4 +974,47 @@ void RenderThread::updateTime()
 	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
 	m_delta_time = m_current_time - m_last_frame_time;
 	m_last_frame_time = m_current_time;
+}
+
+void RenderThread::drawPlayerBodyPart(
+	const uint64_t mesh_id,
+	const glm::mat4 & model,
+	const glm::vec4 & color
+)
+{
+	Mesh mesh = vk.meshes.get(mesh_id);
+
+	const VkBuffer vertex_buffers[] = { mesh.buffer };
+	const VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(
+		vk.draw_command_buffers[vk.current_frame],
+		0, 1,
+		vertex_buffers,
+		offsets
+	);
+
+	vkCmdBindIndexBuffer(
+		vk.draw_command_buffers[vk.current_frame],
+		mesh.buffer,
+		mesh.index_offset,
+		VK_INDEX_TYPE_UINT32
+	);
+
+	EntityMatrices player_matrice = {};
+	player_matrice.model = model;
+	player_matrice.color = color;
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.entity_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+		0,
+		sizeof(EntityMatrices),
+		&player_matrice
+	);
+
+	vkCmdDrawIndexed(
+		vk.draw_command_buffers[vk.current_frame],
+		static_cast<uint32_t>(mesh.index_count),
+		1, 0, 0, 0
+	);
 }
