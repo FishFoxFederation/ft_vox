@@ -39,6 +39,11 @@ const std::vector<uint8_t> & Connection::getReadBufferRef() const
 	return m_read_buffer;
 }
 
+const std::vector<uint8_t> & Connection::getWriteBufferRef() const
+{
+	return m_write_buffer;
+}
+
 void Connection::reduceReadBuffer(size_t size)
 {
 	std::lock_guard<std::mutex> lock(m_read_buffer_mutex);

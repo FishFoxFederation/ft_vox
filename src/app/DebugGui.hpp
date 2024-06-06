@@ -144,4 +144,7 @@ public:
 	static inline std::atomic<double> store_mesh_create_buffer_time;
 	static inline std::atomic<double> store_mesh_copy_buffer_time;
 	static inline std::atomic<double> store_mesh_destroy_buffer_time;
+
+	static inline std::atomic<size_t> send_buffer_size;
+	static inline std::atomic<size_t> recv_buffer_size;
 };

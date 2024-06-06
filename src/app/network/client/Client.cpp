@@ -50,6 +50,7 @@ int Client::read_data()
 			m_incoming_packets.push(ret.second);
 			ret = m_packet_factory.extractPacket(m_connection);
 		}
+		DebugGui::recv_buffer_size = m_connection.getReadBufferRef().size();
 	}
 	catch (const std::runtime_error & e)
 	{
@@ -67,6 +68,7 @@ int Client::send_data()
 		size = m_connection.sendQueue();
 		if (size == 0)
 			throw ServerDisconnected();
+		DebugGui::send_buffer_size = m_connection.getWriteBufferRef().size();
 	}
 	catch (const std::runtime_error & e)
 	{

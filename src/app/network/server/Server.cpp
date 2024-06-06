@@ -112,12 +112,12 @@ int Server::read_data(Connection & connection, uint64_t id)
 		//insert code for detecting new packets
 		// and packet handling as well as dispatching tasks
 		auto ret = m_packet_factory.extractPacket(connection);
-		if (ret.first)
+		while (ret.first)
 		{
-			// LOG_INFO("Packet received :" + std::to_string((uint32_t)ret.second->GetType()));
 			if (ret.second->GetConnectionId() != id)
 				LOG_ERROR("Packet connection id does not match connection id");
 			m_incoming_packets.push(ret.second);
+			ret = m_packet_factory.extractPacket(connection);
 		}
 	}
 	catch (const std::runtime_error & e)
