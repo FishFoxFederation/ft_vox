@@ -24,6 +24,26 @@ const Chunk & ServerWorld::getChunk(const glm::ivec3 & chunk_position) const
 	return m_chunks.at(chunk_position);
 }
 
+Chunk & ServerWorld::getAndLoadChunk(const glm::ivec3 & chunk_position)
+{
+	std::unordered_map<glm::ivec3, Chunk>::iterator it;
+	{
+		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		it = m_chunks.find(chunk_position);
+	}
+
+	if (it == m_chunks.end())
+	{
+		loadChunk(chunk_position);
+		{
+			std::lock_guard<std::mutex> lock(m_chunks_mutex);
+			it = m_chunks.find(chunk_position);
+		}
+	}
+	
+	return it->second;
+}
+
 void ServerWorld::setBlock(const glm::vec3 & position, BlockID block)
 {
 	glm::ivec3 chunk_position = getChunkPosition(position);
@@ -32,4 +52,13 @@ void ServerWorld::setBlock(const glm::vec3 & position, BlockID block)
 	Chunk & chunk = getChunk(chunk_position);
 	std::lock_guard<Status> lock(chunk.status);
 	chunk.setBlock(block_chunk_position, block);
+}
+
+void ServerWorld::loadChunk(const glm::ivec3 & chunk_position)
+{
+	Chunk chunk(m_world_generator.generateChunkColumn(chunk_position.x, chunk_position.z));
+	{
+		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		m_chunks.insert({chunk_position, std::move(chunk)});
+	}
 }

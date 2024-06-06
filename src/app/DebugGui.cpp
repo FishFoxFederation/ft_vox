@@ -53,6 +53,11 @@ void DebugGui::updateImGui()
 				jump_force.store(jump_force_);
 				gravity.store(gravity_);
 
+				ImGui::Separator();
+				
+				ImGui::Text("Send buffer size: %ld", send_buffer_size.load());
+				ImGui::Text("Recv buffer size: %ld", recv_buffer_size.load());
+
 				ImGui::EndTabItem();
 			}
 

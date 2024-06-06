@@ -26,18 +26,6 @@ public:
 	World & operator=(World & other) = delete;
 	World & operator=(World && other) = delete;
 
-protected:
-	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
-	std::mutex												m_players_mutex;
-
-	std::unordered_map<uint64_t, std::shared_ptr<Mob>>		m_mobs;
-	std::mutex												m_mobs_mutex;
-	uint64_t												m_mob_id = 0;
-
-	std::unordered_map<glm::ivec3, Chunk>					m_chunks;
-	mutable std::mutex										m_chunks_mutex;
-	WorldGenerator										m_world_generator;
-
 	/**
 	 * @brief will return the block position relative to the chunk
 	 *
@@ -53,4 +41,18 @@ protected:
 	 * @return glm::vec3
 	 */
 	static glm::vec3 	getChunkPosition(const glm::vec3 & position);
+
+	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position) const;
+protected:
+	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
+	std::mutex												m_players_mutex;
+
+	std::unordered_map<uint64_t, std::shared_ptr<Mob>>		m_mobs;
+	std::mutex												m_mobs_mutex;
+	uint64_t												m_mob_id = 0;
+
+	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>>	m_chunks;
+	mutable std::mutex										m_chunks_mutex;
+	WorldGenerator										m_world_generator;
+
 };

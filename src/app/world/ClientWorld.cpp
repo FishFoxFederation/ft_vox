@@ -36,12 +36,13 @@ void ClientWorld::updateBlock(glm::dvec3 position)
 
 void ClientWorld::addChunk(Chunk chunk)
 {
-	return;
-	std::lock_guard<std::mutex> lock(m_chunks_mutex);
-
 	glm::ivec3 chunk_position = chunk.getPosition();
-	m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
-	m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
+	{
+		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+
+		m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
+		m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
+	}
 
 	//set all neighbors as not visible to force a mesh update
 	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z + 1));
@@ -209,9 +210,7 @@ void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 	for(auto chunkPos2D : m_loaded_chunks)
 	{
 		Chunk & chunk = m_chunks.at(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
-		if (chunk.status.isShareLockable())
-			chunk.status.lock_shared();
-		else
+		if(chunk.status.try_lock_shared() == false)
 			continue;
 		float distanceX = std::abs(chunkPos2D.x - playerChunk2D.x);
 		float distanceZ = std::abs(chunkPos2D.y - playerChunk2D.y);
@@ -235,18 +234,18 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	 * CHECKING IF NEIGHBOURS EXIST AND ARE AVAILABLE
 	********/
 	bool unavailable_neighbours = false;
-	for(int x = -1; x < 2; x++)
-	{
-		for(int z = -1; z < 2; z++)
-		{
-			glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
-			if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
-			{
-				unavailable_neighbours = true;
-				break;
-			}
-		}
-	}
+	// for(int x = -1; x < 2; x++)
+	// {
+	// 	for(int z = -1; z < 2; z++)
+	// 	{
+	// 		glm::ivec3 chunkPos = glm::ivec3(x, 0, z) + glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
+	// 		if(!m_chunks.contains(chunkPos) || !m_chunks.at(chunkPos).status.isShareLockable())
+	// 		{
+	// 			unavailable_neighbours = true;
+	// 			break;
+	// 		}
+	// 	}
+	// }
 	if (unavailable_neighbours)
 		return;
 	//this is possible and thread safe to test if they are readable and then to modify their statuses
@@ -266,7 +265,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		/**************************************************************
 		 * CALCULATE MESH FUNCTION
 		 **************************************************************/
-		// LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
+		LOG_DEBUG("Meshing chunk: " << chunkPos3D.x << " " << chunkPos3D.y);
 		std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
 		//create all mesh data needed ( pointers to neighbors basically )
@@ -325,6 +324,7 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 	// static std::chrono::steady_clock::time_point last_update = std::chrono::steady_clock::now();
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
 	std::lock_guard<std::mutex> lock5(m_unload_set_mutex);
+	std::lock_guard<std::mutex> lock6(m_blocks_to_set_mutex);
 	// loadChunks(playerPosition);
 	// unloadChunks(playerPosition);
 	meshChunks(playerPosition);
@@ -334,48 +334,59 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 void ClientWorld::doBlockSets()
 {
 	{
-		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
-		if (m_blocks_to_set.empty())
-			return;
+		// std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		// if (m_blocks_to_set.empty())
+			// return;
 	}
-	uint64_t current_id = m_future_id++;
-	std::future<void> future = m_threadPool.submit([this, current_id]()
-	{
-		std::lock_guard<std::mutex> lock(m_chunks_mutex);
-		std::lock_guard<std::mutex> lock3(m_blocks_to_set_mutex);
-		while(!m_blocks_to_set.empty())
+	// uint64_t current_id = m_future_id++;
+	// std::future<void> future = m_threadPool.submit([this, current_id]()
+	// {
+		while(1)
 		{
-			auto [position, block_id] = m_blocks_to_set.front();
-			m_blocks_to_set.pop();
-			glm::vec3 block_chunk_position = getBlockChunkPosition(position);
-			glm::vec3 chunk_position = getChunkPosition(position);
-			glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
-
-			if (m_loaded_chunks.contains(chunk_position2D))
+			glm::vec3 position;
+			BlockID block_id;
+			glm::vec3 block_chunk_position;
+			glm::vec3 chunk_position;
+			glm::ivec2 chunk_position2D;
+			Chunk * chunk;
 			{
-				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-				chunk.status.lock();
-				chunk.setBlock(block_chunk_position, block_id);
-				chunk.setMeshed(false);
-				chunk.status.unlock();
-
-				if (block_chunk_position.x == 0)
-					setChunkNotMeshed(glm::ivec2(chunk_position2D.x - 1, chunk_position2D.y));
-				if (block_chunk_position.x == CHUNK_X_SIZE - 1)
-					setChunkNotMeshed(glm::ivec2(chunk_position2D.x + 1, chunk_position2D.y));
-				if (block_chunk_position.z == 0)
-					setChunkNotMeshed(glm::ivec2(chunk_position2D.x, chunk_position2D.y - 1));
-				if (block_chunk_position.z == CHUNK_Z_SIZE - 1)
-					setChunkNotMeshed(glm::ivec2(chunk_position2D.x, chunk_position2D.y + 1));
+				// std::lock_guard<std::mutex> lock(m_chunks_mutex);
+				// std::lock_guard<std::mutex> lock3(m_blocks_to_set_mutex);
+				if (m_blocks_to_set.empty())
+					break;
+				auto ret_pair = m_blocks_to_set.front();
+				m_blocks_to_set.pop();
+				position = ret_pair.first;
+				block_id = ret_pair.second;
+				block_chunk_position = getBlockChunkPosition(position);
+				chunk_position = getChunkPosition(position);
+				chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+				if (!m_loaded_chunks.contains(chunk_position2D))
+					return;
+				chunk = &m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
 			}
+
+			chunk->status.lock();
+			chunk->setBlock(block_chunk_position, block_id);
+			chunk->setMeshed(false);
+			chunk->status.unlock();
+
+			if (block_chunk_position.x == 0)
+				setChunkNotMeshed(glm::ivec2(chunk_position2D.x - 1, chunk_position2D.y));
+			if (block_chunk_position.x == CHUNK_X_SIZE - 1)
+				setChunkNotMeshed(glm::ivec2(chunk_position2D.x + 1, chunk_position2D.y));
+			if (block_chunk_position.z == 0)
+				setChunkNotMeshed(glm::ivec2(chunk_position2D.x, chunk_position2D.y - 1));
+			if (block_chunk_position.z == CHUNK_Z_SIZE - 1)
+				setChunkNotMeshed(glm::ivec2(chunk_position2D.x, chunk_position2D.y + 1));
 		}
 
-		{
-			std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
-			m_finished_futures.push(current_id);
-		}
-	});
-	m_futures.insert(std::make_pair(current_id, std::move(future)));
+		// {
+			// std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+			// m_finished_futures.push(current_id);
+		// }
+	// });
+	// m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
 void ClientWorld::waitForFinishedFutures()
@@ -1062,11 +1073,9 @@ void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockID & block_
 
 void ClientWorld::setChunkNotMeshed(const glm::ivec2 & chunk_position)
 {
-	std::lock_guard<std::mutex> lock(m_chunks_mutex);
-	if (m_loaded_chunks.contains(chunk_position))
-	{
-		Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.y));
-		std::lock_guard<Status> lock2(chunk.status);
-		chunk.setMeshed(false);
-	}
+	std::shared_ptr<Chunk> chunk = getChunk(glm::ivec3(chunk_position.x, 0, chunk_position.y));
+	if (!chunk)
+		return;
+	std::lock_guard<Status> lock2(chunk->status);
+	chunk->setMeshed(false);
 }

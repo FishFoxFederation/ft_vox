@@ -3,6 +3,7 @@
 #include "define.hpp"
 #include <memory>
 
+#include "DebugGui.hpp"
 #include "Poller.hpp"
 #include "ClientSocket.hpp"
 #include "Connection.hpp"

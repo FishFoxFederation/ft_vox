@@ -37,7 +37,7 @@ int main()
 			if (packet_count > max_packet)
 			{
 				max_packet = packet_count;
-				std::cout << "Max packet: " << max_packet << std::endl;
+				// std::cout << "Max packet: " << max_packet << std::endl;
 			}
 			auto packet = incoming_packets.pop();
 
