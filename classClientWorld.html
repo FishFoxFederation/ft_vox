@@ -119,8 +119,8 @@ Inheritance diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__inherit__graph.png" border="0" usemap="#aClientWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aClientWorld_inherit__map" id="aClientWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,269,196,485"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,221"/>
+<area shape="rect" title=" " alt="" coords="5,313,196,529"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,265"/>
 </map>
 </div>
 <div class="dynheader">
@@ -128,8 +128,8 @@ Collaboration diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__coll__graph.png" border="0" usemap="#aClientWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aClientWorld_coll__map" id="aClientWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,269,196,485"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,221"/>
+<area shape="rect" title=" " alt="" coords="5,313,196,529"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,265"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -163,6 +163,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9d0b57d1ea29ac3171d6e2171f7622f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f620b1218a121e9da762980863a81bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a4f620b1218a121e9da762980863a81bd">updatePlayer</a> (const uint64_t player_id, std::function&lt; void(<a class="el" href="classPlayer.html">Player</a> &amp;)&gt; update)</td></tr>
 <tr class="separator:a4f620b1218a121e9da762980863a81bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb218b2a8ad54ecef9672a47ce3523d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8">createMob</a> ()</td></tr>
+<tr class="separator:adb218b2a8ad54ecef9672a47ce3523d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5266ea08f07e22e6c050114d8936db96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a5266ea08f07e22e6c050114d8936db96">updateMobs</a> (const double delta_time_second)</td></tr>
+<tr class="separator:a5266ea08f07e22e6c050114d8936db96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba77edcc6093915f6df289bf88e8acd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7">modifyBlock</a> (const glm::vec3 &amp;position, const <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp;block_id)</td></tr>
 <tr class="separator:aba77edcc6093915f6df289bf88e8acd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78a9ed84b89171654b282666c51baf9"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">createPlayer</a> (const glm::vec3 &amp;position)</td></tr>
@@ -212,6 +216,12 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8905e640eda96df40ba2f5eca926417 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ac8905e640eda96df40ba2f5eca926417">m_players_mutex</a></td></tr>
 <tr class="separator:ac8905e640eda96df40ba2f5eca926417 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9befd190fce3a87e810b479bbfad356f inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, std::shared_ptr&lt; <a class="el" href="classMob.html">Mob</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9befd190fce3a87e810b479bbfad356f">m_mobs</a></td></tr>
+<tr class="separator:a9befd190fce3a87e810b479bbfad356f inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31ea2f70b814860d8c6ab6195a2c56d6 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a31ea2f70b814860d8c6ab6195a2c56d6">m_mobs_mutex</a></td></tr>
+<tr class="separator:a31ea2f70b814860d8c6ab6195a2c56d6 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68f2a105f272c329cf2c6ba4d2b38e05 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05">m_mob_id</a> = 0</td></tr>
+<tr class="separator:a68f2a105f272c329cf2c6ba4d2b38e05 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62624381a8908ab4aeb41ec788d30d1a inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a62624381a8908ab4aeb41ec788d30d1a">m_chunks</a></td></tr>
 <tr class="separator:a62624381a8908ab4aeb41ec788d30d1a inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fced6f101ff215e8818cffedf858ebb inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a7fced6f101ff215e8818cffedf858ebb">m_chunks_mutex</a></td></tr>
@@ -442,6 +452,23 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb218b2a8ad54ecef9672a47ce3523d8" name="adb218b2a8ad54ecef9672a47ce3523d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb218b2a8ad54ecef9672a47ce3523d8">&#9670;&#160;</a></span>createMob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::createMob </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -684,6 +711,24 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void ClientWorld::updateEntities </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5266ea08f07e22e6c050114d8936db96" name="a5266ea08f07e22e6c050114d8936db96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5266ea08f07e22e6c050114d8936db96">&#9670;&#160;</a></span>updateMobs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updateMobs </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>delta_time_second</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

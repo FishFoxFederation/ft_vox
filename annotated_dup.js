@@ -44,6 +44,7 @@ var annotated_dup =
     [ "LineVertex", "structLineVertex.html", "structLineVertex" ],
     [ "Logger", "classLogger.html", "classLogger" ],
     [ "Mesh", "structMesh.html", "structMesh" ],
+    [ "Mob", "classMob.html", "classMob" ],
     [ "ModelMatrice", "structModelMatrice.html", "structModelMatrice" ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", "structModelMatrix__push__constant" ],
     [ "NetworkThread", "classNetworkThread.html", "classNetworkThread" ],

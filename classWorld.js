@@ -8,6 +8,9 @@ var classWorld =
     [ "operator=", "classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa", null ],
     [ "m_chunks", "classWorld.html#a62624381a8908ab4aeb41ec788d30d1a", null ],
     [ "m_chunks_mutex", "classWorld.html#a7fced6f101ff215e8818cffedf858ebb", null ],
+    [ "m_mob_id", "classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05", null ],
+    [ "m_mobs", "classWorld.html#a9befd190fce3a87e810b479bbfad356f", null ],
+    [ "m_mobs_mutex", "classWorld.html#a31ea2f70b814860d8c6ab6195a2c56d6", null ],
     [ "m_players", "classWorld.html#a9b6166c32096dff1f9e29a78743945f1", null ],
     [ "m_players_mutex", "classWorld.html#ac8905e640eda96df40ba2f5eca926417", null ]
 ];

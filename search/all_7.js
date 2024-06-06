@@ -13,7 +13,7 @@ var searchData=
   ['history_3c_20float_2c_201000_20_3e_10',['History&lt; float, 1000 &gt;',['../classHistory.html',1,'']]],
   ['hit_11',['hit',['../structRayCastOnBlockResult.html#af41c76ea3f31a96aed257117fd225555',1,'RayCastOnBlockResult']]],
   ['hit_5fposition_12',['hit_position',['../structRayCastOnBlockResult.html#a1b2c364f714039f75448327f8761323e',1,'RayCastOnBlockResult']]],
-  ['hitbox_13',['hitbox',['../classPlayer.html#aa47053be56466d5290fb346782946529',1,'Player::hitbox()'],['../structData.html#a13ca4e62b7ef5bc1fb3e56b1de438d7a',1,'Data::hitbox()']]],
+  ['hitbox_13',['hitbox',['../classPlayer.html#aa47053be56466d5290fb346782946529',1,'Player::hitbox()'],['../classMob.html#a0c11b0314eced9673f0ce74792361b4c',1,'Mob::hitbox()'],['../structData.html#a13ca4e62b7ef5bc1fb3e56b1de438d7a',1,'Data::hitbox()']]],
   ['hitbox_14',['HitBox',['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)'],['../classHitBox.html',1,'HitBox']]],
   ['hitbox_2ecpp_15',['HitBox.cpp',['../HitBox_8cpp.html',1,'']]],
   ['hitbox_2ehpp_16',['HitBox.hpp',['../HitBox_8hpp.html',1,'']]]

@@ -60,6 +60,7 @@ var hierarchy =
     [ "Mesh", "structMesh.html", null ],
     [ "WorldScene::MeshList", "classWorldScene_1_1MeshList.html", null ],
     [ "WorldScene::MeshRenderData", "structWorldScene_1_1MeshRenderData.html", null ],
+    [ "Mob", "classMob.html", null ],
     [ "ModelMatrice", "structModelMatrice.html", null ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
     [ "NetworkThread", "classNetworkThread.html", null ],

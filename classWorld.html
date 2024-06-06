@@ -120,8 +120,8 @@ Inheritance diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__inherit__graph.png" border="0" usemap="#aWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aWorld_inherit__map" id="aWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="13,5,188,221"/>
-<area shape="rect" href="classClientWorld.html" title=" " alt="" coords="5,269,196,485"/>
+<area shape="rect" title=" " alt="" coords="13,5,188,265"/>
+<area shape="rect" href="classClientWorld.html" title=" " alt="" coords="5,313,196,529"/>
 </map>
 </div>
 <div class="dynheader">
@@ -129,7 +129,7 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,180,221"/>
+<area shape="rect" title=" " alt="" coords="5,5,180,265"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -163,6 +163,12 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a9b6166c32096dff1f9e29a78743945f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8905e640eda96df40ba2f5eca926417"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ac8905e640eda96df40ba2f5eca926417">m_players_mutex</a></td></tr>
 <tr class="separator:ac8905e640eda96df40ba2f5eca926417"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9befd190fce3a87e810b479bbfad356f"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, std::shared_ptr&lt; <a class="el" href="classMob.html">Mob</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9befd190fce3a87e810b479bbfad356f">m_mobs</a></td></tr>
+<tr class="separator:a9befd190fce3a87e810b479bbfad356f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31ea2f70b814860d8c6ab6195a2c56d6"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a31ea2f70b814860d8c6ab6195a2c56d6">m_mobs_mutex</a></td></tr>
+<tr class="separator:a31ea2f70b814860d8c6ab6195a2c56d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68f2a105f272c329cf2c6ba4d2b38e05"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05">m_mob_id</a> = 0</td></tr>
+<tr class="separator:a68f2a105f272c329cf2c6ba4d2b38e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62624381a8908ab4aeb41ec788d30d1a"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a62624381a8908ab4aeb41ec788d30d1a">m_chunks</a></td></tr>
 <tr class="separator:a62624381a8908ab4aeb41ec788d30d1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fced6f101ff215e8818cffedf858ebb"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a7fced6f101ff215e8818cffedf858ebb">m_chunks_mutex</a></td></tr>
@@ -412,6 +418,72 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::mutex World::m_chunks_mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a68f2a105f272c329cf2c6ba4d2b38e05" name="a68f2a105f272c329cf2c6ba4d2b38e05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68f2a105f272c329cf2c6ba4d2b38e05">&#9670;&#160;</a></span>m_mob_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t World::m_mob_id = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9befd190fce3a87e810b479bbfad356f" name="a9befd190fce3a87e810b479bbfad356f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9befd190fce3a87e810b479bbfad356f">&#9670;&#160;</a></span>m_mobs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;uint64_t, std::shared_ptr&lt;<a class="el" href="classMob.html">Mob</a>&gt; &gt; World::m_mobs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a31ea2f70b814860d8c6ab6195a2c56d6" name="a31ea2f70b814860d8c6ab6195a2c56d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31ea2f70b814860d8c6ab6195a2c56d6">&#9670;&#160;</a></span>m_mobs_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex World::m_mobs_mutex</td>
         </tr>
       </table>
   </td>

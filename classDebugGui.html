@@ -119,7 +119,7 @@ Collaboration diagram for DebugGui:</div>
 <div class="dyncontent">
 <div class="center"><img src="classDebugGui__coll__graph.png" border="0" usemap="#aDebugGui_coll__map" alt="Collaboration graph"/></div>
 <map name="aDebugGui_coll__map" id="aDebugGui_coll__map">
-<area shape="rect" title=" " alt="" coords="139,269,354,588"/>
+<area shape="rect" title=" " alt="" coords="163,269,330,515"/>
 <area shape="rect" href="classAtomic.html" title=" " alt="" coords="5,5,152,133"/>
 <area shape="rect" href="classHistory.html" title=" " alt="" coords="176,13,317,126"/>
 <area shape="rect" href="classHistory.html" title=" " alt="" coords="369,13,517,126"/>
@@ -147,8 +147,20 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a41587c9a96dcd6592953dd1ea8255218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a5f88dfe8444bcbffb320128d3e906e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classAtomic.html">Atomic</a>&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a2a5f88dfe8444bcbffb320128d3e906e">player_position</a></td></tr>
 <tr class="separator:a2a5f88dfe8444bcbffb320128d3e906e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a534caf562206036d66f3a896f10409b5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classAtomic.html">Atomic</a>&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a534caf562206036d66f3a896f10409b5">player_velocity_vec</a></td></tr>
+<tr class="separator:a534caf562206036d66f3a896f10409b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae630bf16ed5917994648e49ea5f640d0"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ae630bf16ed5917994648e49ea5f640d0">player_velocity</a></td></tr>
 <tr class="separator:ae630bf16ed5917994648e49ea5f640d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0944be2c6916360cabf49840ac981e07"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a0944be2c6916360cabf49840ac981e07">acceleration</a> = 30.0</td></tr>
+<tr class="separator:a0944be2c6916360cabf49840ac981e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3502b38b6e03b93983878d66c586c426"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a3502b38b6e03b93983878d66c586c426">ground_friction</a> = 10.0</td></tr>
+<tr class="separator:a3502b38b6e03b93983878d66c586c426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a079eca13812a187d99638bc6be5507c5"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a079eca13812a187d99638bc6be5507c5">air_friction</a> = 0.8</td></tr>
+<tr class="separator:a079eca13812a187d99638bc6be5507c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c2203392d3096aef6478913206f32c6"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a8c2203392d3096aef6478913206f32c6">jump_force</a> = 9.0</td></tr>
+<tr class="separator:a8c2203392d3096aef6478913206f32c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7234c4932cd124625e563cde627b61d8"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a7234c4932cd124625e563cde627b61d8">gravity</a> = 25.0</td></tr>
+<tr class="separator:a7234c4932cd124625e563cde627b61d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac39ff26773e3f64810069871933c01da"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">frame_time_history</a></td></tr>
 <tr class="separator:ac39ff26773e3f64810069871933c01da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29e6325358b57a6c69acccbdcf0e379e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">cpu_time_history</a></td></tr>
@@ -238,6 +250,50 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0944be2c6916360cabf49840ac981e07" name="a0944be2c6916360cabf49840ac981e07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0944be2c6916360cabf49840ac981e07">&#9670;&#160;</a></span>acceleration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::acceleration = 30.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a079eca13812a187d99638bc6be5507c5" name="a079eca13812a187d99638bc6be5507c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a079eca13812a187d99638bc6be5507c5">&#9670;&#160;</a></span>air_friction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::air_friction = 0.8</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a151b13be29dbaa17be07342f088726fe" name="a151b13be29dbaa17be07342f088726fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a151b13be29dbaa17be07342f088726fe">&#9670;&#160;</a></span>chunk_count_history</h2>
 
@@ -502,6 +558,72 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7234c4932cd124625e563cde627b61d8" name="a7234c4932cd124625e563cde627b61d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7234c4932cd124625e563cde627b61d8">&#9670;&#160;</a></span>gravity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::gravity = 25.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3502b38b6e03b93983878d66c586c426" name="a3502b38b6e03b93983878d66c586c426"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3502b38b6e03b93983878d66c586c426">&#9670;&#160;</a></span>ground_friction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::ground_friction = 10.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c2203392d3096aef6478913206f32c6" name="a8c2203392d3096aef6478913206f32c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c2203392d3096aef6478913206f32c6">&#9670;&#160;</a></span>jump_force</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;double&gt; DebugGui::jump_force = 9.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2a5f88dfe8444bcbffb320128d3e906e" name="a2a5f88dfe8444bcbffb320128d3e906e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2a5f88dfe8444bcbffb320128d3e906e">&#9670;&#160;</a></span>player_position</h2>
 
@@ -535,6 +657,28 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::atomic&lt;double&gt; DebugGui::player_velocity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a534caf562206036d66f3a896f10409b5" name="a534caf562206036d66f3a896f10409b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a534caf562206036d66f3a896f10409b5">&#9670;&#160;</a></span>player_velocity_vec</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classAtomic.html">Atomic</a>&lt;glm::vec3&gt; DebugGui::player_velocity_vec</td>
         </tr>
       </table>
   </td>
