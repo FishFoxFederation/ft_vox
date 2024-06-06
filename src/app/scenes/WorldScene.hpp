@@ -5,6 +5,7 @@
 #include "Transform.hpp"
 #include "Camera.hpp"
 #include "List.hpp"
+#include "Model.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,6 +13,8 @@
 #include <vector>
 #include <mutex>
 #include <optional>
+#include <map>
+#include <algorithm>
 
 /**
  * @brief Class to hold the world scene. The instance of this class will be
@@ -28,6 +31,11 @@ public:
 	{
 		uint64_t id;
 		glm::dmat4 model;
+	};
+
+	struct PlayerRenderData
+	{
+		glm::mat4 model;
 	};
 
 	class MeshList
@@ -102,22 +110,19 @@ public:
 	 *
 	 * @param target_block The position of the block the camera is looking at. Can be std::nullopt.
 	 */
-	void setTargetBlock(const std::optional<glm::vec3> & target_block)
-	{
-		std::lock_guard<std::mutex> lock(m_target_block_mutex);
-		m_target_block = target_block;
-	}
+	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 
 	/**
 	 * @brief Function to get the target block.
 	 *
 	 * @return The position of the block the camera is looking at.
 	 */
-	std::optional<glm::vec3> targetBlock() const
-	{
-		std::lock_guard<std::mutex> lock(m_target_block_mutex);
-		return m_target_block;
-	}
+	std::optional<glm::vec3> targetBlock() const;
+
+	void addPlayer(uint64_t player_id, glm::mat4 model);
+	void removePlayer(uint64_t player_id);
+	void updatePlayer(uint64_t player_id, glm::mat4 model);
+	std::vector<PlayerRenderData> getPlayers() const;
 
 	struct DebugBlock
 	{
@@ -126,23 +131,9 @@ public:
 		glm::vec4 color;
 	};
 
-	void setDebugBlock(const std::vector<DebugBlock> & debug_block)
-	{
-		std::lock_guard<std::mutex> lock(m_debug_block_mutex);
-		m_debug_block = debug_block;
-	}
-
-	void clearDebugBlocks()
-	{
-		std::lock_guard<std::mutex> lock(m_debug_block_mutex);
-		m_debug_block.clear();
-	}
-
-	std::vector<DebugBlock> debugBlocks() const
-	{
-		std::lock_guard<std::mutex> lock(m_debug_block_mutex);
-		return m_debug_block;
-	}
+	void setDebugBlock(const std::vector<DebugBlock> & debug_block);
+	void clearDebugBlocks();
+	std::vector<DebugBlock> debugBlocks() const;
 
 
 	// MeshList chunk_mesh_list;
@@ -156,6 +147,10 @@ private:
 	// position of the block the camera is looking at
 	std::optional<glm::vec3> m_target_block;
 	mutable std::mutex m_target_block_mutex;
+
 	std::vector<DebugBlock> m_debug_block;
 	mutable std::mutex m_debug_block_mutex;
+
+	std::map<uint64_t, PlayerRenderData> m_players;
+	mutable std::mutex m_player_mutex;
 };

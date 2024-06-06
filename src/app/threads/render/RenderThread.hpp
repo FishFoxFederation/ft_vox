@@ -107,4 +107,10 @@ private:
 	 */
 	void updateTime();
 
+	void drawPlayerBodyPart(
+		const uint64_t mesh_id,
+		const glm::mat4 & model,
+		const glm::vec4 & color
+	);
+
 };

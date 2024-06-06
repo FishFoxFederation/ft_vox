@@ -50,12 +50,12 @@ glm::dvec3 Player::eyePosition() const
 {
 	double eye_height = 1.6;
 	// First person view
-	return glm::dvec3(0.0, eye_height, 0.0);
+	// return glm::dvec3(0.0, eye_height, 0.0);
 
 	// Third person view
-	// const double distance = 5;
-	// const glm::dvec3 dir_vec = direction();
-	// return glm::dvec3(0.0, eye_height, 0.0) - distance * dir_vec;
+	const double distance = 5;
+	const glm::dvec3 dir_vec = direction();
+	return glm::dvec3(0.0, eye_height, 0.0) - distance * dir_vec;
 }
 
 void Player::updateTransform()

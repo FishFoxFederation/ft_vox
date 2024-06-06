@@ -1,6 +1,7 @@
 #include "VulkanAPI.hpp"
 #include "logger.hpp"
 #include "Block.hpp"
+#include "Model.hpp"
 
 #include <stb_image.h>
 
@@ -42,7 +43,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createPipelines();
 	createFramebuffers();
 
-	createCubeMesh();
+	createMeshes();
 
 	setupImgui();
 	createImGuiTexture(100, 100);
@@ -1446,62 +1447,105 @@ void VulkanAPI::createFramebuffers()
 
 }
 
-void VulkanAPI::createCubeMesh()
+void VulkanAPI::createMeshes()
 {
-	std::vector<EntityVertex> vertices = {
-		// right
-		{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
-		{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-		{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-		{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+	{ // create cube mesh
+		std::vector<EntityVertex> vertices = {
+			// right
+			{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+			{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+			{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+			{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
 
-		// left
-		{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
-		{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
-		{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
-		{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+			// left
+			{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+			{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+			{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+			{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
 
-		// top
-		{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-		{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-		{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-		{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+			// top
+			{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+			{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+			{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+			{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
 
-		// bottom
-		{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
-		{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
-		{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
-		{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+			// bottom
+			{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+			{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+			{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+			{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
 
-		// front
-		{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-		{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-		{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-		{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+			// front
+			{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+			{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+			{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+			{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
 
-		// back
-		{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-		{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-		{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-		{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}}
-	};
+			// back
+			{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+			{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+			{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+			{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}}
+		};
 
-	std::vector<uint32_t> indices = {
-		0, 2, 1, 0, 3, 2,
-		4, 5, 6, 6, 7, 4,
-		8, 9, 10, 10, 11, 8,
-		12, 14, 13, 12, 15, 14,
-		16, 18, 17, 16, 19, 18,
-		20, 21, 22, 22, 23, 20
-	};
+		std::vector<uint32_t> indices = {
+			0, 2, 1, 0, 3, 2,
+			4, 5, 6, 6, 7, 4,
+			8, 9, 10, 10, 11, 8,
+			12, 14, 13, 12, 15, 14,
+			16, 18, 17, 16, 19, 18,
+			20, 21, 22, 22, 23, 20
+		};
 
-	cube_mesh_id = storeMesh(
-		vertices.data(),
-		vertices.size(),
-		sizeof(EntityVertex),
-		indices.data(),
-		indices.size()
-	);
+		cube_mesh_id = storeMesh(
+			vertices.data(),
+			vertices.size(),
+			sizeof(EntityVertex),
+			indices.data(),
+			indices.size()
+		);
+	}
+
+	{ // create player mesh
+		std::vector<PlayerModel::Vertex> vertices;
+		std::vector<uint32_t> indices;
+
+		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::CHEST);
+		player_chest_mesh_id = storeMesh(
+			vertices.data(),
+			vertices.size(),
+			sizeof(PlayerModel::Vertex),
+			indices.data(),
+			indices.size()
+		);
+
+		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::HEAD);
+		player_head_mesh_id = storeMesh(
+			vertices.data(),
+			vertices.size(),
+			sizeof(PlayerModel::Vertex),
+			indices.data(),
+			indices.size()
+		);
+
+		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::LEG);
+		player_leg_mesh_id = storeMesh(
+			vertices.data(),
+			vertices.size(),
+			sizeof(PlayerModel::Vertex),
+			indices.data(),
+			indices.size()
+		);
+
+		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::ARM);
+		player_arm_mesh_id = storeMesh(
+			vertices.data(),
+			vertices.size(),
+			sizeof(PlayerModel::Vertex),
+			indices.data(),
+			indices.size()
+		);
+	}
 }
 
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)

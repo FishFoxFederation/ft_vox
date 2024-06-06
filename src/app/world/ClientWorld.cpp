@@ -438,12 +438,13 @@ void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dve
 	DebugGui::player_position = player->transform.position;
 
 	{ // update player mesh
-		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.at(player_id).model = Transform(
-			player->transform.position + player->hitbox.position,
-			glm::vec3(0.0f),
-			player->hitbox.size
-		).model();
+		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		// m_worldScene.entity_mesh_list.at(player_id).model = Transform(
+		// 	player->transform.position + player->hitbox.position,
+		// 	glm::vec3(0.0f),
+		// 	player->hitbox.size
+		// ).model();
+		m_worldScene.updatePlayer(player_id, player->transform.model());
 	}
 }
 
@@ -458,12 +459,13 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 	player->transform.position = position;
 
 	{ // update player mesh
-		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.at(player_id).model = Transform(
-			player->transform.position + player->hitbox.position,
-			glm::vec3(0.0f),
-			player->hitbox.size
-		).model();
+		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
+		// m_worldScene.entity_mesh_list.at(player_id).model = Transform(
+		// 	player->transform.position + player->hitbox.position,
+		// 	glm::vec3(0.0f),
+		// 	player->hitbox.size
+		// ).model();
+		m_worldScene.updatePlayer(player_id, player->transform.model());
 	}
 	if (player_id == m_my_player_id)
 	{
@@ -1036,17 +1038,18 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 
 	{
 		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.insert(
-			player_id,
-			{
-				m_vulkanAPI.cube_mesh_id,
-				Transform(
-					player->transform.position + player->hitbox.position,
-					glm::vec3(0.0f),
-					player->hitbox.size
-				).model()
-			}
-		);
+		// m_worldScene.entity_mesh_list.insert(
+		// 	player_id,
+		// 	{
+		// 		m_vulkanAPI.cube_mesh_id,
+		// 		Transform(
+		// 			player->transform.position + player->hitbox.position,
+		// 			glm::vec3(0.0f),
+		// 			player->hitbox.size
+		// 		).model()
+		// 	}
+		// );
+		m_worldScene.addPlayer(player_id, player->transform.model());
 	}
 }
 

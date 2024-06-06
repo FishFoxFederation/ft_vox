@@ -335,6 +335,11 @@ public:
 
 	uint64_t cube_mesh_id;
 
+	uint64_t player_chest_mesh_id;
+	uint64_t player_head_mesh_id;
+	uint64_t player_leg_mesh_id;
+	uint64_t player_arm_mesh_id;
+
 	std::mutex global_mutex;
 
 
@@ -409,7 +414,7 @@ private:
 	void createPipelines();
 	void createFramebuffers();
 
-	void createCubeMesh();
+	void createMeshes();
 	void destroyMeshes();
 
 
