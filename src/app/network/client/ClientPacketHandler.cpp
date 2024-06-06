@@ -94,7 +94,8 @@ void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacke
 
 void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
-	Chunk chunk = packet->GetChunk();
-	LOG_INFO("Received chunk pos " << chunk.getPosition().x << " " << chunk.getPosition().y << " " << chunk.getPosition().z);
+	(void)packet;
+	std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(packet->GetChunk());
+	LOG_INFO("Received chunk pos " << chunk->getPosition().x << " " << chunk->getPosition().y << " " << chunk->getPosition().z);
 	m_world.addChunk(std::move(chunk));
 }

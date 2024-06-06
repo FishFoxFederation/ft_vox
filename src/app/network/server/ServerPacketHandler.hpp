@@ -4,10 +4,9 @@
 #include "Server.hpp"
 #include "ServerWorld.hpp"
 #include "glm/glm.hpp"
+#include "server_define.hpp"
 
 #include <unordered_map>
-
-#define SERVER_LOAD_DISTANCE 5
 
 class ServerPacketHandler
 {

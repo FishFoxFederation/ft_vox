@@ -78,7 +78,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 		for (int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
 		{
 			glm::ivec3 chunkPos(x + CurrentPlayerChunkPosition.x, 0, z + CurrentPlayerChunkPosition.z);
-			packet_to_send = std::make_shared<ChunkPacket>(m_world.getAndLoadChunk(chunkPos));
+			packet_to_send = std::make_shared<ChunkPacket>(*m_world.getAndLoadChunk(chunkPos));
 			packet_to_send->SetConnectionId(CurrentConnectionId);
 			m_server.send(packet_to_send);
 		}
@@ -131,10 +131,30 @@ void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacke
 void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
 	// LOG_INFO("Player move: " << packet->GetId());
+
+	glm::vec3 old_position = m_player_positions[packet->GetPlayerId()];
+	glm::vec3 new_position = packet->GetPosition();
+
+	//send move to everyone	
 	auto packet_to_send = std::make_shared<PlayerMovePacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_server.sendAll(packet_to_send);
-	m_player_positions[packet->GetPlayerId()] = packet->GetPosition();
+
+	m_player_positions[packet->GetPlayerId()] = new_position;
+
+	//if player changed chunk, re trigger the chunk load/unload
+	glm::ivec3 old_chunk = m_world.getChunkPosition(old_position);
+	glm::ivec3 new_chunk = m_world.getChunkPosition(new_position);
+	if (old_chunk != new_chunk)
+	{
+		auto chunk_data = m_world.getChunksToUnload(old_position, new_position);
+		for (auto chunk : chunk_data.chunks_to_load)
+		{
+			auto packet_to_send = std::make_shared<ChunkPacket>(*chunk);
+			packet_to_send->SetConnectionId(packet->GetConnectionId());
+			m_server.send(packet_to_send);
+		}
+	}
 }
 
 void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)

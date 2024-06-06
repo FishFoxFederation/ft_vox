@@ -84,7 +84,7 @@ namespace std
 	};
 }
 
-typedef std::unordered_map<glm::ivec3, Chunk> ChunkMap;
+typedef std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> ChunkMap;
 
 class CreateMeshData
 {
@@ -98,8 +98,9 @@ public:
 	 * @param size the number of chunks to create the mesh data
 	 * @param chunk_map the chunk map
 	 */
-	CreateMeshData(const glm::ivec3 & pos, const glm::ivec3 & size, ChunkMap & chunk_map):
-		chunks(size.x + 2, std::vector<std::vector<Chunk *>>(size.y + 2, std::vector<Chunk *>(size.z + 2, nullptr))),
+	CreateMeshData(const glm::ivec3 & pos, const glm::ivec3 & size, ChunkMap & chunk_map)
+	:
+		chunks(size.x + 2, std::vector<std::vector<std::shared_ptr<Chunk> > >(size.y + 2, std::vector<std::shared_ptr<Chunk>>(size.z + 2, nullptr))),
 		face_data(
 			size.x * CHUNK_X_SIZE,
 			std::vector<std::vector<FaceData>>(
@@ -109,6 +110,8 @@ public:
 		),
 		size(size)
 	{
+
+		// LOG_INFO("chunk map size: " << chunk_map.size());
 		// LOG_INFO("CREATE MESH DATA CONSTRUCTOR " << __LINE__);
 		for (int x = -1; x <= size.x; x++)
 		{
@@ -117,15 +120,20 @@ public:
 				for (int z = -1; z <= size.z; z++)
 				{
 					glm::ivec3 chunk_pos = pos + glm::ivec3(x, y, z);
-					const auto & it = chunk_map.find(chunk_pos);
+					auto it = chunk_map.find(chunk_pos);
+					// LOG_INFO("CHUNK " << chunk_pos.x << " " << chunk_pos.y << " " << chunk_pos.z << " " << (it == chunk_map.end() ? "NOT FOUND" : "FOUND"));
 
 					if (it != chunk_map.end())
 					{
-						chunks[x + 1][y + 1][z + 1] = &it->second;
+						// LOG_INFO("CHUNK FOUND " << chunk_pos.x << " " << chunk_pos.y << " " << chunk_pos.z);
+						chunks[x + 1][y + 1][z + 1] = it->second;
 						if (x == 0 && y == 0 && z == 0)
-							it->second.status.lock();
+						{
+							// LOG_DEBUG("LOCKING CENTER CHUNK");
+							it->second->status.lock();
+						}
 						else
-							it->second.status.lock_shared();
+							it->second->status.lock_shared();
 					}
 				}
 			}
@@ -542,11 +550,11 @@ public:
 				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID);
 	}
 
-	std::vector<std::vector<std::vector<Chunk *>>> chunks;
+	std::vector<std::vector<std::vector<std::shared_ptr<Chunk>>>> chunks;
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
 
-	Chunk * getCenterChunk()
+	std::shared_ptr<Chunk> getCenterChunk()
 	{
 		return chunks[NEUT][NEUT][NEUT];
 	}

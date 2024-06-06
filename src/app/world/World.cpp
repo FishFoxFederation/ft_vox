@@ -26,10 +26,25 @@ glm::vec3 World::getChunkPosition(const glm::vec3 & position)
 std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position) const
 {
 	std::lock_guard<std::mutex> lock(m_chunks_mutex);
-	auto it = m_chunks.find(glm::ivec3(position));
+	auto it = m_chunks.find(position);
 	if (it != m_chunks.end())
 	{
 		return it->second;
 	}
 	return nullptr;
+}
+
+void World::insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk)
+{
+	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
+	if (!ret.second)
+	{
+		LOG_ERROR("Failed to insert chunk");
+	}
+
+	if (!m_chunks.contains(position))
+	{
+		LOG_CRITICAL("IDK WTF");
+	}
 }

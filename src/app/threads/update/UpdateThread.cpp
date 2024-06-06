@@ -76,7 +76,7 @@ void UpdateThread::loop()
 		last_move = std::chrono::steady_clock::now();
 	}
 	handlePackets();
-	// m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
+	m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
 
 	m_world.updateMobs(m_delta_time.count() / 1e9);
 }

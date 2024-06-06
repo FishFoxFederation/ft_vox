@@ -6,10 +6,10 @@
 #include "logger.hpp"
 #include "ThreadPool.hpp"
 #include "Mob.hpp"
+#include "hashes.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
-#include <glm/gtx/hash.hpp>
 
 
 #include <unordered_map>
@@ -43,6 +43,7 @@ public:
 	static glm::vec3 	getChunkPosition(const glm::vec3 & position);
 
 	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position) const;
+	void 					insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
 protected:
 	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
 	std::mutex												m_players_mutex;
