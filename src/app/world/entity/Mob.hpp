@@ -46,7 +46,9 @@ public:
 
 	int jump_remaining = 1;
 
-	glm::dvec3 target_pos = glm::dvec3(0.0);
+	glm::dvec3 target_position = glm::dvec3(0.0);
+
+	bool should_jump = false;
 
 private:
 
