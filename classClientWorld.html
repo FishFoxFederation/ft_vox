@@ -119,8 +119,8 @@ Inheritance diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__inherit__graph.png" border="0" usemap="#aClientWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aClientWorld_inherit__map" id="aClientWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,313,196,529"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,265"/>
+<area shape="rect" title=" " alt="" coords="5,357,196,573"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,189,309"/>
 </map>
 </div>
 <div class="dynheader">
@@ -128,8 +128,9 @@ Collaboration diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__coll__graph.png" border="0" usemap="#aClientWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aClientWorld_coll__map" id="aClientWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="5,313,196,529"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,188,265"/>
+<area shape="rect" title=" " alt="" coords="5,520,196,736"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,181,189,471"/>
+<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="15,5,187,119"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -183,6 +184,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaf9929d0310650c8d517efcd7110f05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99ff03b7be1e020be0d27863f221cb50"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50">getPlayerPosition</a> (const uint64_t player_id)</td></tr>
 <tr class="separator:a99ff03b7be1e020be0d27863f221cb50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204e9e1edf450416eaa081171c08e6ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a204e9e1edf450416eaa081171c08e6ab">addChunk</a> (std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
+<tr class="separator:a204e9e1edf450416eaa081171c08e6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe665919a07f30afaece37189ac7b361"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#abe665919a07f30afaece37189ac7b361">removeChunk</a> (const glm::ivec3 &amp;chunkPosition)</td></tr>
+<tr class="separator:abe665919a07f30afaece37189ac7b361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0f3bce19e6ccd73922fa70740508688"><td class="memItemLeft" align="right" valign="top">std::vector&lt; glm::ivec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#ac0f3bce19e6ccd73922fa70740508688">getNeededChunks</a> (const glm::vec3 &amp;playerPosition)</td></tr>
+<tr class="separator:ac0f3bce19e6ccd73922fa70740508688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0795485822cc9d84e6061ca726e0ecc8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8">localGetChunk</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="separator:a0795485822cc9d84e6061ca726e0ecc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
 <tr class="memitem:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a> ()</td></tr>
 <tr class="separator:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,6 +205,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2fd49185c8ef00d9f8aaf16fb7d943fa inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af69b86b3ac37a2168715401267d104ab inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld.html">World</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">operator=</a> (<a class="el" href="classWorld.html">World</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:af69b86b3ac37a2168715401267d104ab inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77cd7a90b8768b6e34f0f4937b96cda4 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a77cd7a90b8768b6e34f0f4937b96cda4">getChunk</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="separator:a77cd7a90b8768b6e34f0f4937b96cda4 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfd5f2a2c19381826debe4d0b5ac3c50 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#acfd5f2a2c19381826debe4d0b5ac3c50">insertChunk</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
+<tr class="separator:acfd5f2a2c19381826debe4d0b5ac3c50 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -204,13 +217,13 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_static_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
-<tr class="memitem:aa961013e17cb789650f0fffca826ee38 inherit pro_static_methods_classWorld"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aa961013e17cb789650f0fffca826ee38">getBlockChunkPosition</a> (const glm::vec3 &amp;position)</td></tr>
-<tr class="memdesc:aa961013e17cb789650f0fffca826ee38 inherit pro_static_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return the block position relative to the chunk  <a href="classWorld.html#aa961013e17cb789650f0fffca826ee38">More...</a><br /></td></tr>
-<tr class="separator:aa961013e17cb789650f0fffca826ee38 inherit pro_static_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pro_static_methods_classWorld"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">getChunkPosition</a> (const glm::vec3 &amp;position)</td></tr>
-<tr class="memdesc:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pro_static_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return the chunk position containing the block  <a href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">More...</a><br /></td></tr>
-<tr class="separator:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pro_static_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
+<tr class="memitem:aa961013e17cb789650f0fffca826ee38 inherit pub_static_methods_classWorld"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#aa961013e17cb789650f0fffca826ee38">getBlockChunkPosition</a> (const glm::vec3 &amp;position)</td></tr>
+<tr class="memdesc:aa961013e17cb789650f0fffca826ee38 inherit pub_static_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return the block position relative to the chunk  <a href="classWorld.html#aa961013e17cb789650f0fffca826ee38">More...</a><br /></td></tr>
+<tr class="separator:aa961013e17cb789650f0fffca826ee38 inherit pub_static_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pub_static_methods_classWorld"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">getChunkPosition</a> (const glm::vec3 &amp;position)</td></tr>
+<tr class="memdesc:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pub_static_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">will return the chunk position containing the block  <a href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">More...</a><br /></td></tr>
+<tr class="separator:ae27a9fda577f8532ab2c2e2a84a212e6 inherit pub_static_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classWorld')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classWorld.html">World</a></td></tr>
 <tr class="memitem:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, std::shared_ptr&lt; <a class="el" href="classPlayer.html">Player</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9b6166c32096dff1f9e29a78743945f1">m_players</a></td></tr>
 <tr class="separator:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,10 +235,12 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a31ea2f70b814860d8c6ab6195a2c56d6 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68f2a105f272c329cf2c6ba4d2b38e05 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05">m_mob_id</a> = 0</td></tr>
 <tr class="separator:a68f2a105f272c329cf2c6ba4d2b38e05 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62624381a8908ab4aeb41ec788d30d1a inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a62624381a8908ab4aeb41ec788d30d1a">m_chunks</a></td></tr>
-<tr class="separator:a62624381a8908ab4aeb41ec788d30d1a inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe23d5e9f0c87a03212fad1b73249926 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afe23d5e9f0c87a03212fad1b73249926">m_chunks</a></td></tr>
+<tr class="separator:afe23d5e9f0c87a03212fad1b73249926 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fced6f101ff215e8818cffedf858ebb inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a7fced6f101ff215e8818cffedf858ebb">m_chunks_mutex</a></td></tr>
 <tr class="separator:a7fced6f101ff215e8818cffedf858ebb inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47cc090d4ed08b81df6748abb8daea0e inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorldGenerator.html">WorldGenerator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a47cc090d4ed08b81df6748abb8daea0e">m_world_generator</a></td></tr>
+<tr class="separator:a47cc090d4ed08b81df6748abb8daea0e inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac1a7059e5882410e5f882e239c1bc5a5" name="ac1a7059e5882410e5f882e239c1bc5a5"></a>
@@ -338,6 +353,24 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a204e9e1edf450416eaa081171c08e6ab" name="a204e9e1edf450416eaa081171c08e6ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a204e9e1edf450416eaa081171c08e6ab">&#9670;&#160;</a></span>addChunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::addChunk </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td>
+          <td class="paramname"><em>chunk</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a75d4842d4a395c63c3c3c05b3f6a352f" name="a75d4842d4a395c63c3c3c05b3f6a352f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a75d4842d4a395c63c3c3c05b3f6a352f">&#9670;&#160;</a></span>addPlayer()</h2>
 
@@ -511,6 +544,24 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ac0f3bce19e6ccd73922fa70740508688" name="ac0f3bce19e6ccd73922fa70740508688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0f3bce19e6ccd73922fa70740508688">&#9670;&#160;</a></span>getNeededChunks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; glm::ivec3 &gt; ClientWorld::getNeededChunks </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>playerPosition</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a99ff03b7be1e020be0d27863f221cb50" name="a99ff03b7be1e020be0d27863f221cb50"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99ff03b7be1e020be0d27863f221cb50">&#9670;&#160;</a></span>getPlayerPosition()</h2>
 
@@ -523,6 +574,24 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0795485822cc9d84e6061ca726e0ecc8" name="a0795485822cc9d84e6061ca726e0ecc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0795485822cc9d84e6061ca726e0ecc8">&#9670;&#160;</a></span>localGetChunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; ClientWorld::localGetChunk </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -659,6 +728,24 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe665919a07f30afaece37189ac7b361" name="abe665919a07f30afaece37189ac7b361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe665919a07f30afaece37189ac7b361">&#9670;&#160;</a></span>removeChunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::removeChunk </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>chunkPosition</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

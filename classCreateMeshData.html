@@ -140,7 +140,7 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a49d413b60a8e005b36083e958a849bb3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a49d413b60a8e005b36083e958a849bb3">CreateMeshData</a> (const glm::ivec3 &amp;pos, const glm::ivec3 &amp;size, <a class="el" href="CreateMeshData_8hpp.html#a1bee2be0575bb8195e4990b50a46ed21">ChunkMap</a> &amp;chunk_map)</td></tr>
+<tr class="memitem:a49d413b60a8e005b36083e958a849bb3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a49d413b60a8e005b36083e958a849bb3">CreateMeshData</a> (const glm::ivec3 &amp;pos, const glm::ivec3 &amp;size, <a class="el" href="CreateMeshData_8hpp.html#ae1731276a4c3053e478351f184bc96ba">ChunkMap</a> &amp;chunk_map)</td></tr>
 <tr class="memdesc:a49d413b60a8e005b36083e958a849bb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="structMesh.html">Mesh</a> <a class="el" href="structData.html">Data</a> object.  <a href="classCreateMeshData.html#a49d413b60a8e005b36083e958a849bb3">More...</a><br /></td></tr>
 <tr class="separator:a49d413b60a8e005b36083e958a849bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c554cdb8dbb4456c5680d90848c0647"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a7c554cdb8dbb4456c5680d90848c0647">CreateMeshData</a> (const <a class="el" href="classCreateMeshData.html">CreateMeshData</a> &amp;)=delete</td></tr>
@@ -167,13 +167,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adc423bbf0cc48e6d4e7ee86c10bd1c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a570c9ca0e96d4663d69a4c14282fc95d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d">getAmbientOcclusion</a> (<a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> side_1, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> side_2, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> corner)</td></tr>
 <tr class="separator:a570c9ca0e96d4663d69a4c14282fc95d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0710be0cb569300cfa85a7ea5cb40df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html">Chunk</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#ae0710be0cb569300cfa85a7ea5cb40df">getCenterChunk</a> ()</td></tr>
-<tr class="separator:ae0710be0cb569300cfa85a7ea5cb40df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fb32c66a7f3e692bb8ce61addc3b506"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a0fb32c66a7f3e692bb8ce61addc3b506">getCenterChunk</a> ()</td></tr>
+<tr class="separator:a0fb32c66a7f3e692bb8ce61addc3b506"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aad6bd289268fc6c44ffa987839700612"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::vector&lt; <a class="el" href="classChunk.html">Chunk</a> * &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#aad6bd289268fc6c44ffa987839700612">chunks</a></td></tr>
-<tr class="separator:aad6bd289268fc6c44ffa987839700612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a140c6938511a12eab9cd515cc8e76e10"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::vector&lt; std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a140c6938511a12eab9cd515cc8e76e10">chunks</a></td></tr>
+<tr class="separator:a140c6938511a12eab9cd515cc8e76e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2a205bdefb6e79d75abcd60c3a249f2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2">vertices</a></td></tr>
 <tr class="separator:ac2a205bdefb6e79d75abcd60c3a249f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fcd2d65556456c67a8125b8e4733511"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a0fcd2d65556456c67a8125b8e4733511">indices</a></td></tr>
@@ -251,7 +251,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="CreateMeshData_8hpp.html#a1bee2be0575bb8195e4990b50a46ed21">ChunkMap</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="CreateMeshData_8hpp.html#ae1731276a4c3053e478351f184bc96ba">ChunkMap</a> &amp;&#160;</td>
           <td class="paramname"><em>chunk_map</em>&#160;</td>
         </tr>
         <tr>
@@ -612,8 +612,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae0710be0cb569300cfa85a7ea5cb40df" name="ae0710be0cb569300cfa85a7ea5cb40df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0710be0cb569300cfa85a7ea5cb40df">&#9670;&#160;</a></span>getCenterChunk()</h2>
+<a id="a0fb32c66a7f3e692bb8ce61addc3b506" name="a0fb32c66a7f3e692bb8ce61addc3b506"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fb32c66a7f3e692bb8ce61addc3b506">&#9670;&#160;</a></span>getCenterChunk()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -622,7 +622,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classChunk.html">Chunk</a> * CreateMeshData::getCenterChunk </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; CreateMeshData::getCenterChunk </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -715,14 +715,14 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="aad6bd289268fc6c44ffa987839700612" name="aad6bd289268fc6c44ffa987839700612"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad6bd289268fc6c44ffa987839700612">&#9670;&#160;</a></span>chunks</h2>
+<a id="a140c6938511a12eab9cd515cc8e76e10" name="a140c6938511a12eab9cd515cc8e76e10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a140c6938511a12eab9cd515cc8e76e10">&#9670;&#160;</a></span>chunks</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::vector&lt;std::vector&lt;<a class="el" href="classChunk.html">Chunk</a> *&gt; &gt; &gt; CreateMeshData::chunks</td>
+          <td class="memname">std::vector&lt;std::vector&lt;std::vector&lt;std::shared_ptr&lt;<a class="el" href="classChunk.html">Chunk</a>&gt; &gt; &gt; &gt; CreateMeshData::chunks</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -119,10 +119,11 @@ Collaboration diagram for DebugGui:</div>
 <div class="dyncontent">
 <div class="center"><img src="classDebugGui__coll__graph.png" border="0" usemap="#aDebugGui_coll__map" alt="Collaboration graph"/></div>
 <map name="aDebugGui_coll__map" id="aDebugGui_coll__map">
-<area shape="rect" title=" " alt="" coords="163,269,330,515"/>
+<area shape="rect" title=" " alt="" coords="261,269,427,515"/>
 <area shape="rect" href="classAtomic.html" title=" " alt="" coords="5,5,152,133"/>
 <area shape="rect" href="classHistory.html" title=" " alt="" coords="176,13,317,126"/>
 <area shape="rect" href="classHistory.html" title=" " alt="" coords="369,13,517,126"/>
+<area shape="rect" href="classHistory.html" title=" " alt="" coords="547,13,698,126"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -195,6 +196,14 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:aab1723a676ea4f26cc3797dfd6853a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82835a5a2a0b6b833486e1b0805d1d4a"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a82835a5a2a0b6b833486e1b0805d1d4a">store_mesh_destroy_buffer_time</a></td></tr>
 <tr class="separator:a82835a5a2a0b6b833486e1b0805d1d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38c2a9471df24801e08258428f0c211c"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a38c2a9471df24801e08258428f0c211c">send_buffer_size</a></td></tr>
+<tr class="separator:a38c2a9471df24801e08258428f0c211c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa39cb77942e9188045e0330b86ff1aa"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#aaa39cb77942e9188045e0330b86ff1aa">recv_buffer_size</a></td></tr>
+<tr class="separator:aaa39cb77942e9188045e0330b86ff1aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b0de618f45732353e808e8f176b727d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; size_t, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a9b0de618f45732353e808e8f176b727d">send_history</a></td></tr>
+<tr class="separator:a9b0de618f45732353e808e8f176b727d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9177e7d239f517bc41ea041f934c0c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; size_t, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#afb9177e7d239f517bc41ea041f934c0c">recv_history</a></td></tr>
+<tr class="separator:afb9177e7d239f517bc41ea041f934c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a23e2594d0e7208444ffc46c8b34a5e37" name="a23e2594d0e7208444ffc46c8b34a5e37"></a>
@@ -690,6 +699,50 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aaa39cb77942e9188045e0330b86ff1aa" name="aaa39cb77942e9188045e0330b86ff1aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa39cb77942e9188045e0330b86ff1aa">&#9670;&#160;</a></span>recv_buffer_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;size_t&gt; DebugGui::recv_buffer_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb9177e7d239f517bc41ea041f934c0c" name="afb9177e7d239f517bc41ea041f934c0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9177e7d239f517bc41ea041f934c0c">&#9670;&#160;</a></span>recv_history</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classHistory.html">History</a>&lt;size_t, 100&gt; DebugGui::recv_history</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adaf81c06685c6ec69beaf6270e399a13" name="adaf81c06685c6ec69beaf6270e399a13"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adaf81c06685c6ec69beaf6270e399a13">&#9670;&#160;</a></span>rendered_triangles</h2>
 
@@ -701,6 +754,50 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::atomic&lt;uint64_t&gt; DebugGui::rendered_triangles = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38c2a9471df24801e08258428f0c211c" name="a38c2a9471df24801e08258428f0c211c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38c2a9471df24801e08258428f0c211c">&#9670;&#160;</a></span>send_buffer_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;size_t&gt; DebugGui::send_buffer_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9b0de618f45732353e808e8f176b727d" name="a9b0de618f45732353e808e8f176b727d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b0de618f45732353e808e8f176b727d">&#9670;&#160;</a></span>send_history</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classHistory.html">History</a>&lt;size_t, 100&gt; DebugGui::send_history</td>
         </tr>
       </table>
   </td>

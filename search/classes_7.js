@@ -6,5 +6,6 @@ var searchData=
   ['history_3',['History',['../classHistory.html',1,'']]],
   ['history_3c_20float_2c_20100_20_3e_4',['History&lt; float, 100 &gt;',['../classHistory.html',1,'']]],
   ['history_3c_20float_2c_201000_20_3e_5',['History&lt; float, 1000 &gt;',['../classHistory.html',1,'']]],
-  ['hitbox_6',['HitBox',['../classHitBox.html',1,'']]]
+  ['history_3c_20size_5ft_2c_20100_20_3e_6',['History&lt; size_t, 100 &gt;',['../classHistory.html',1,'']]],
+  ['hitbox_7',['HitBox',['../classHitBox.html',1,'']]]
 ];

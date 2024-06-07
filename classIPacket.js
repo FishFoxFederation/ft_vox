@@ -9,6 +9,9 @@ var classIPacket =
       [ "BLOCK_ACTION", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae", null ],
       [ "PING", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1", null ],
       [ "PLAYER_LIST", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569aa933b4eab2f8c05c250a78452a4475ef", null ],
+      [ "CHUNK", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ac8e8e43935c45683be5302fa7329182a", null ],
+      [ "CHUNK_REQUEST", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a3d9c91ce3c1f8480bbc2f2044602436c", null ],
+      [ "CHUNK_UNLOAD", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a2611071c97c8fcbf9552751c77bffdfa", null ],
       [ "ENUM_MAX", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d", null ]
     ] ],
     [ "~IPacket", "classIPacket.html#ac1213f746277104a05b1dfa86ca505bb", null ],

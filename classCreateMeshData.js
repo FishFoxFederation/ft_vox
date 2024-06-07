@@ -15,11 +15,11 @@ var classCreateMeshData =
     [ "createFace", "classCreateMeshData.html#aa7f45ff2e999fe0217ee8a2638645f47", null ],
     [ "getAmbientOcclusion", "classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d", null ],
     [ "getAmbientOcclusion", "classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f", null ],
-    [ "getCenterChunk", "classCreateMeshData.html#ae0710be0cb569300cfa85a7ea5cb40df", null ],
+    [ "getCenterChunk", "classCreateMeshData.html#a0fb32c66a7f3e692bb8ce61addc3b506", null ],
     [ "operator=", "classCreateMeshData.html#a6e8613853f81f95ab78969e93e74b2f3", null ],
     [ "operator=", "classCreateMeshData.html#aa5c4ae7f350dad41549cd551805fde57", null ],
     [ "unlock", "classCreateMeshData.html#ad38f0692830fb519424088722614e4a4", null ],
-    [ "chunks", "classCreateMeshData.html#aad6bd289268fc6c44ffa987839700612", null ],
+    [ "chunks", "classCreateMeshData.html#a140c6938511a12eab9cd515cc8e76e10", null ],
     [ "indices", "classCreateMeshData.html#a0fcd2d65556456c67a8125b8e4733511", null ],
     [ "vertices", "classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2", null ]
 ];

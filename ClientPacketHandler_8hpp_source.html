@@ -140,7 +140,9 @@ $(document).ready(function(){initNavTree('ClientPacketHandler_8hpp_source.html',
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">void</span> handleBlockActionPacket(std::shared_ptr&lt;BlockActionPacket&gt; packet);</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">void</span> handlePingPacket(std::shared_ptr&lt;PingPacket&gt; packet);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> handlePlayerListPacket(std::shared_ptr&lt;PlayerListPacket&gt; packet);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>};</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> handleChunkPacket(std::shared_ptr&lt;ChunkPacket&gt; packet);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> handleChunkUnloadPacket(std::shared_ptr&lt;ChunkUnloadPacket&gt; packet);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>};</div>
 <div class="ttc" id="aClientWorld_8hpp_html"><div class="ttname"><a href="ClientWorld_8hpp.html">ClientWorld.hpp</a></div></div>
 <div class="ttc" id="aClient_8hpp_html"><div class="ttname"><a href="Client_8hpp.html">Client.hpp</a></div></div>
 <div class="ttc" id="aPackets_8hpp_html"><div class="ttname"><a href="Packets_8hpp.html">Packets.hpp</a></div></div>
@@ -154,7 +156,7 @@ $(document).ready(function(){initNavTree('ClientPacketHandler_8hpp_source.html',
 <div class="ttc" id="aclassClientPacketHandler_html_aa0c2adbe6e1078014aa548d4c49533d4"><div class="ttname"><a href="classClientPacketHandler.html#aa0c2adbe6e1078014aa548d4c49533d4">ClientPacketHandler::~ClientPacketHandler</a></div><div class="ttdeci">~ClientPacketHandler()</div><div class="ttdef"><b>Definition:</b> ClientPacketHandler.cpp:12</div></div>
 <div class="ttc" id="aclassClientPacketHandler_html_ac550a5096d4cb0faf3d21722d7844454"><div class="ttname"><a href="classClientPacketHandler.html#ac550a5096d4cb0faf3d21722d7844454">ClientPacketHandler::operator=</a></div><div class="ttdeci">ClientPacketHandler &amp; operator=(const ClientPacketHandler &amp;other)=delete</div></div>
 <div class="ttc" id="aclassClientWorld_html"><div class="ttname"><a href="classClientWorld.html">ClientWorld</a></div><div class="ttdef"><b>Definition:</b> ClientWorld.hpp:20</div></div>
-<div class="ttc" id="aclassClient_html"><div class="ttname"><a href="classClient.html">Client</a></div><div class="ttdef"><b>Definition:</b> Client.hpp:13</div></div>
+<div class="ttc" id="aclassClient_html"><div class="ttname"><a href="classClient.html">Client</a></div><div class="ttdef"><b>Definition:</b> Client.hpp:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

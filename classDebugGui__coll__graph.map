@@ -1,6 +1,7 @@
 <map id="DebugGui" name="DebugGui">
-<area shape="rect" id="node1" title=" " alt="" coords="163,269,330,515"/>
+<area shape="rect" id="node1" title=" " alt="" coords="261,269,427,515"/>
 <area shape="rect" id="node2" href="$classAtomic.html" title=" " alt="" coords="5,5,152,133"/>
 <area shape="rect" id="node3" href="$classHistory.html" title=" " alt="" coords="176,13,317,126"/>
 <area shape="rect" id="node4" href="$classHistory.html" title=" " alt="" coords="369,13,517,126"/>
+<area shape="rect" id="node5" href="$classHistory.html" title=" " alt="" coords="547,13,698,126"/>
 </map>

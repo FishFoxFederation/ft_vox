@@ -8,6 +8,7 @@ var hierarchy =
     [ "BlockVertex", "structBlockVertex.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "Chunk", "classChunk.html", null ],
+    [ "ServerWorld::ChunkLoadUnloadData", "structServerWorld_1_1ChunkLoadUnloadData.html", null ],
     [ "Client", "classClient.html", null ],
     [ "ClientPacketHandler", "classClientPacketHandler.html", null ],
     [ "Connection", "classConnection.html", null ],
@@ -34,6 +35,7 @@ var hierarchy =
     [ "History< T, N >", "classHistory.html", null ],
     [ "History< float, 100 >", "classHistory.html", null ],
     [ "History< float, 1000 >", "classHistory.html", null ],
+    [ "History< size_t, 100 >", "classHistory.html", null ],
     [ "HitBox", "classHitBox.html", null ],
     [ "IdGenerator< IdType >", "classIdGenerator.html", null ],
     [ "IdGenerator< Key >", "classIdGenerator.html", null ],
@@ -44,6 +46,9 @@ var hierarchy =
     [ "Input", "classInput.html", null ],
     [ "IPacket", "classIPacket.html", [
       [ "BlockActionPacket", "classBlockActionPacket.html", null ],
+      [ "ChunkPacket", "classChunkPacket.html", null ],
+      [ "ChunkRequestPacket", "classChunkRequestPacket.html", null ],
+      [ "ChunkUnloadPacket", "classChunkUnloadPacket.html", null ],
       [ "ConnectionPacket", "classConnectionPacket.html", null ],
       [ "DisconnectPacket", "classDisconnectPacket.html", null ],
       [ "PingPacket", "classPingPacket.html", null ],
@@ -105,7 +110,8 @@ var hierarchy =
     [ "VulkanAPI", "classVulkanAPI.html", null ],
     [ "Window", "classWindow.html", null ],
     [ "World", "classWorld.html", [
-      [ "ClientWorld", "classClientWorld.html", null ]
+      [ "ClientWorld", "classClientWorld.html", null ],
+      [ "ServerWorld", "classServerWorld.html", null ]
     ] ],
     [ "WorldGenerator", "classWorldGenerator.html", null ],
     [ "WorldScene", "classWorldScene.html", null ]

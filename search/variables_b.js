@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['m_5fchunks_0',['m_chunks',['../classWorld.html#a62624381a8908ab4aeb41ec788d30d1a',1,'World']]],
+  ['m_5fchunks_0',['m_chunks',['../classWorld.html#afe23d5e9f0c87a03212fad1b73249926',1,'World']]],
   ['m_5fchunks_5fmutex_1',['m_chunks_mutex',['../classWorld.html#a7fced6f101ff215e8818cffedf858ebb',1,'World']]],
   ['m_5fconnection_5fid_2',['m_connection_id',['../classIPacket.html#ae667321d40f435d76873821e52745436',1,'IPacket']]],
   ['m_5fmob_5fid_3',['m_mob_id',['../classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05',1,'World']]],
@@ -11,15 +11,16 @@ var searchData=
   ['m_5fplayers_8',['m_players',['../classWorld.html#a9b6166c32096dff1f9e29a78743945f1',1,'World']]],
   ['m_5fplayers_5fmutex_9',['m_players_mutex',['../classWorld.html#ac8905e640eda96df40ba2f5eca926417',1,'World']]],
   ['m_5fsockfd_10',['m_sockfd',['../classSocket.html#a19f1c10c450b4f50d335b55dcdc9d6d8',1,'Socket']]],
-  ['main_5frender_5ffinished_5fsemaphores_11',['main_render_finished_semaphores',['../classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71',1,'VulkanAPI']]],
-  ['mapped_5fmemory_12',['mapped_memory',['../structImGuiTexture.html#a9e4e3e36fd24067f4efc48a3f6e57688',1,'ImGuiTexture']]],
-  ['max_5fframes_5fin_5fflight_13',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
-  ['memory_14',['memory',['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()']]],
-  ['memory_5fproperties_15',['memory_properties',['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo']]],
-  ['memory_5fsize_16',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],
-  ['mesh_5fids_5fto_5fdestroy_17',['mesh_ids_to_destroy',['../classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a',1,'VulkanAPI']]],
-  ['meshes_18',['meshes',['../classVulkanAPI.html#a0e4499b996e5cc302f3bd35437086c92',1,'VulkanAPI']]],
-  ['mip_5flevels_19',['mip_levels',['../structImage_1_1CreateInfo.html#a4ca21901d453d2e5e3958d74d3f2cad6',1,'Image::CreateInfo::mip_levels()'],['../classImage.html#abb630a854e037463e527f46d65371c3e',1,'Image::mip_levels()']]],
-  ['model_20',['model',['../structWorldScene_1_1MeshRenderData.html#a33226daebed590f617a7fe43ec8e0176',1,'WorldScene::MeshRenderData::model()'],['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5',1,'ModelMatrice::model()'],['../structEntityMatrices.html#a8d194c819c768c87c8e093100dccfd8c',1,'EntityMatrices::model()'],['../structShadowMapLight.html#a6940614fea85b6a76426591decc9be20',1,'ShadowMapLight::model()']]],
-  ['mutex_21',['mutex',['../classMob.html#ad5de364b982d66d7b0b3df3fcfdb761e',1,'Mob::mutex()'],['../classPlayer.html#a3b9c92200177ccc5ab23fc2c8f436b98',1,'Player::mutex()']]]
+  ['m_5fworld_5fgenerator_11',['m_world_generator',['../classWorld.html#a47cc090d4ed08b81df6748abb8daea0e',1,'World']]],
+  ['main_5frender_5ffinished_5fsemaphores_12',['main_render_finished_semaphores',['../classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71',1,'VulkanAPI']]],
+  ['mapped_5fmemory_13',['mapped_memory',['../structImGuiTexture.html#a9e4e3e36fd24067f4efc48a3f6e57688',1,'ImGuiTexture']]],
+  ['max_5fframes_5fin_5fflight_14',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
+  ['memory_15',['memory',['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()']]],
+  ['memory_5fproperties_16',['memory_properties',['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo']]],
+  ['memory_5fsize_17',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],
+  ['mesh_5fids_5fto_5fdestroy_18',['mesh_ids_to_destroy',['../classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a',1,'VulkanAPI']]],
+  ['meshes_19',['meshes',['../classVulkanAPI.html#a0e4499b996e5cc302f3bd35437086c92',1,'VulkanAPI']]],
+  ['mip_5flevels_20',['mip_levels',['../structImage_1_1CreateInfo.html#a4ca21901d453d2e5e3958d74d3f2cad6',1,'Image::CreateInfo::mip_levels()'],['../classImage.html#abb630a854e037463e527f46d65371c3e',1,'Image::mip_levels()']]],
+  ['model_21',['model',['../structWorldScene_1_1MeshRenderData.html#a33226daebed590f617a7fe43ec8e0176',1,'WorldScene::MeshRenderData::model()'],['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5',1,'ModelMatrice::model()'],['../structEntityMatrices.html#a8d194c819c768c87c8e093100dccfd8c',1,'EntityMatrices::model()'],['../structShadowMapLight.html#a6940614fea85b6a76426591decc9be20',1,'ShadowMapLight::model()']]],
+  ['mutex_22',['mutex',['../classMob.html#ad5de364b982d66d7b0b3df3fcfdb761e',1,'Mob::mutex()'],['../classPlayer.html#a3b9c92200177ccc5ab23fc2c8f436b98',1,'Player::mutex()']]]
 ];
