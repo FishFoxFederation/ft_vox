@@ -457,8 +457,6 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 	// apply displacement
 	player->transform.position = position;
 
-	DebugGui::player_position = player->transform.position;
-
 	{ // update player mesh
 		auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
 		m_worldScene.entity_mesh_list.at(player_id).model = Transform(

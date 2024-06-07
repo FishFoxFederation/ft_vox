@@ -221,10 +221,10 @@ void UpdateThread::movePlayer()
 	);
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
-	if (displacement.length() > 0.0001)
+	if (glm::length(displacement) > 0.01)
 	{
 		// glm::vec3 new_position = position + displacement;
-		// LOG_DEBUG("I want to go to " << new_position.x << " " << new_position.y << " " << new_position.z);
+		// LOG_DEBUG("DISPLACEMENT LENGTH: " << displacement.length());
 		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
 		m_client.sendPacket(packet);
 	}
