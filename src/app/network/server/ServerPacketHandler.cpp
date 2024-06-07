@@ -145,8 +145,13 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 	//if player changed chunk, re trigger the chunk load/unload
 	glm::ivec3 old_chunk = m_world.getChunkPosition(old_position);
 	glm::ivec3 new_chunk = m_world.getChunkPosition(new_position);
+
+	//for now ignore if player goes above or under the world
+	old_chunk.y = 0;
+	new_chunk.y = 0;
 	if (old_chunk != new_chunk)
 	{
+		LOG_INFO("Player moved to new chunk: " << new_chunk.x << " " << new_chunk.y << " " << new_chunk.z);
 		auto chunk_data = m_world.getChunksToUnload(old_position, new_position);
 		for (auto chunk : chunk_data.chunks_to_load)
 		{

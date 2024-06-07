@@ -1,3 +1,3 @@
 #pragma once
 
-#define SERVER_LOAD_DISTANCE 5
+#define SERVER_LOAD_DISTANCE 7

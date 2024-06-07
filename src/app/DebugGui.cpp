@@ -55,9 +55,6 @@ void DebugGui::updateImGui()
 
 				ImGui::Separator();
 				
-				ImGui::Text("Send buffer size: %ld", send_buffer_size.load());
-				ImGui::Text("Recv buffer size: %ld", recv_buffer_size.load());
-
 				ImGui::EndTabItem();
 			}
 
@@ -110,6 +107,18 @@ void DebugGui::updateImGui()
 				ImGui::EndTabItem();
 			}
 
+			if (ImGui::BeginTabItem("Network"))
+			{
+				ImGui::Text("Send buffer size: %ld", send_buffer_size.load());
+				ImGui::Text("Recv buffer size: %ld", recv_buffer_size.load());
+
+				{
+					// auto lock = send_history.lock();
+					// ImGui::PlotHistogram("Send usage", send_history.data(), send_history.size());
+				}
+
+				ImGui::EndTabItem();
+			}
 			ImGui::EndTabBar();
 		}
 

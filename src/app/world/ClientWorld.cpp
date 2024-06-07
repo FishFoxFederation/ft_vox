@@ -258,10 +258,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 	// LOG_INFO("Meshing chunk: " << chunkPos3D.x << " " << chunkPos3D.z);
 
-	std::shared_ptr<Chunk> chunk = nullptr;
-	std::shared_ptr<Chunk> chunk_local = nullptr;
-
-	chunk = getChunk(chunkPos3D);
+	std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
 
 	//The constructor will mark the chunk as being read
 	//create all mesh data needed ( pointers to neighbors basically )
@@ -554,7 +551,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	}
 	else // if player is flying
 	{
-		double acc = 1000.0;
+		double acc = 100.0;
 		double drag = 10.0;
 
 		move.y = up - down;

@@ -147,4 +147,7 @@ public:
 
 	static inline std::atomic<size_t> send_buffer_size;
 	static inline std::atomic<size_t> recv_buffer_size;
+
+	static inline History<size_t, 100> send_history;
+	static inline History<size_t, 100> recv_history;
 };

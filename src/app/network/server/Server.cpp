@@ -154,7 +154,7 @@ void Server::send(std::shared_ptr<IPacket> packet)
 		LOG_ERROR("Client not found");
 		return;
 	}
-	LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
+	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
 	currentClient->second.queueAndSendMessage(buffer);
