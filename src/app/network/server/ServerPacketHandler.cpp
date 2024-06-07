@@ -57,6 +57,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	uint32_t CurrentPlayerId = packet->GetPlayerId();
 	glm::vec3 CurrentPlayerPosition = packet->GetPosition();
 	glm::vec3 CurrentPlayerChunkPosition = m_world.getChunkPosition(CurrentPlayerPosition);
+	CurrentPlayerChunkPosition.y = 0;
 
 	//send new player to all other players
 	std::shared_ptr<IPacket> packet_to_send = std::make_shared<ConnectionPacket>(*packet);
@@ -77,27 +78,14 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	{
 		for (int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
 		{
-			glm::ivec3 chunkPos(x + CurrentPlayerChunkPosition.x, 0, z + CurrentPlayerChunkPosition.z);
+			glm::vec3 chunkPos(x + CurrentPlayerChunkPosition.x, 0, z + CurrentPlayerChunkPosition.z);
+			if (glm::distance(CurrentPlayerChunkPosition, chunkPos) >= SERVER_LOAD_DISTANCE)
+				continue;
 			packet_to_send = std::make_shared<ChunkPacket>(*m_world.getAndLoadChunk(chunkPos));
 			packet_to_send->SetConnectionId(CurrentConnectionId);
 			m_server.send(packet_to_send);
 		}
 	}
-	// packet_to_send = std::make_shared<ChunkPacket>(m_world.getChunk(glm::ivec3(0, 0, 0)));
-	// packet_to_send->SetConnectionId(CurrentConnectionId);
-	// m_server.send(packet_to_send);
-
-	// packet_to_send = std::make_shared<ChunkPacket>(m_world.getChunk(glm::ivec3(0, 0, 1)));
-	// packet_to_send->SetConnectionId(CurrentConnectionId);
-	// m_server.send(packet_to_send);
-
-	// packet_to_send = std::make_shared<ChunkPacket>(m_world.getChunk(glm::ivec3(1, 0, 0)));
-	// packet_to_send->SetConnectionId(CurrentConnectionId);
-	// m_server.send(packet_to_send);
-
-	// packet_to_send = std::make_shared<ChunkPacket>(m_world.getChunk(glm::ivec3(1, 0, 1)));
-	// packet_to_send->SetConnectionId(CurrentConnectionId);
-	// m_server.send(packet_to_send);
 
 
 
