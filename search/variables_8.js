@@ -18,5 +18,6 @@ var searchData=
   ['instance_15',['instance',['../classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742',1,'VulkanAPI']]],
   ['invalid_5fid_16',['invalid_id',['../classIdGenerator.html#a635fdd48caf37fda5a5ece71e949625a',1,'IdGenerator::invalid_id()'],['../classIdList.html#ab579e561ccd74c9c16b217e094de3c00',1,'IdList::invalid_id()']]],
   ['is_5fcube_5fmap_17',['is_cube_map',['../structImage_1_1CreateInfo.html#af953d7c96232acf9e4ec8f998e4933d7',1,'Image::CreateInfo']]],
-  ['is_5fused_18',['is_used',['../structMesh.html#a8ea5a0edf71dfc56e666db22e049a161',1,'Mesh']]]
+  ['is_5fused_18',['is_used',['../structMesh.html#a8ea5a0edf71dfc56e666db22e049a161',1,'Mesh']]],
+  ['is_5fwalking_19',['is_walking',['../structWorldScene_1_1PlayerRenderData.html#a9445d8ff7a08f9a18a689facdffe54bc',1,'WorldScene::PlayerRenderData']]]
 ];

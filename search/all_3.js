@@ -6,7 +6,7 @@ var searchData=
   ['debug_3',['DEBUG',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fabdc8d840ac4b73e1bd3212184af8f85e',1,'Logger']]],
   ['debug_5fmessenger_4',['debug_messenger',['../classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e',1,'VulkanAPI']]],
   ['debugblock_5',['DebugBlock',['../structWorldScene_1_1DebugBlock.html',1,'WorldScene']]],
-  ['debugblocks_6',['debugBlocks',['../classWorldScene.html#acbc4a7cbb6193f34c05f9435292163ed',1,'WorldScene']]],
+  ['debugblocks_6',['debugBlocks',['../classWorldScene.html#aa30c05b2a0f01c1b9ba0be17fa80f732',1,'WorldScene']]],
   ['debuggui_7',['DebugGui',['../classDebugGui.html',1,'DebugGui'],['../classDebugGui.html#a23e2594d0e7208444ffc46c8b34a5e37',1,'DebugGui::DebugGui()']]],
   ['debuggui_2ecpp_8',['DebugGui.cpp',['../DebugGui_8cpp.html',1,'']]],
   ['debuggui_2ehpp_9',['DebugGui.hpp',['../DebugGui_8hpp.html',1,'']]],
@@ -35,9 +35,10 @@ var searchData=
   ['disconnectpacket_32',['DisconnectPacket',['../classDisconnectPacket.html',1,'DisconnectPacket'],['../classDisconnectPacket.html#a4e59088ea19edff71f5f8448c2ffa8d0',1,'DisconnectPacket::DisconnectPacket(DisconnectPacket &amp;&amp;other)'],['../classDisconnectPacket.html#af87b9c06ab910752e742ac20a4ea93aa',1,'DisconnectPacket::DisconnectPacket()'],['../classDisconnectPacket.html#a07da316298ff176a99d6829b7be74fd0',1,'DisconnectPacket::DisconnectPacket(uint32_t player_id)'],['../classDisconnectPacket.html#ab40aba2804ab0dea47f591d71ae34a53',1,'DisconnectPacket::DisconnectPacket(const DisconnectPacket &amp;other)']]],
   ['disconnectpacket_2ecpp_33',['DisconnectPacket.cpp',['../DisconnectPacket_8cpp.html',1,'']]],
   ['disconnectpacket_2ehpp_34',['DisconnectPacket.hpp',['../DisconnectPacket_8hpp.html',1,'']]],
-  ['docs_20style_20guide_35',['Docs Style guide',['../docstyleguide.html',1,'']]],
-  ['docs_5fstyle_5fguide_2emd_36',['docs_style_guide.md',['../docs__style__guide_8md.html',1,'']]],
-  ['draw_5fcommand_5fbuffers_37',['draw_command_buffers',['../classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907',1,'VulkanAPI']]],
-  ['dynamic_5fheader_5fsize_38',['DYNAMIC_HEADER_SIZE',['../classIPacket.html#aa1fbb981153d0de919c84d235613a65c',1,'IPacket']]],
-  ['dynamic_5fstates_39',['dynamic_states',['../structPipeline_1_1CreateInfo.html#a7f5176bb1185e2f0b2da53af19e3fa22',1,'Pipeline::CreateInfo']]]
+  ['dmat_35',['dmat',['../classMat4.html#ac58529fdf443319bb6406eed968ad222',1,'Mat4']]],
+  ['docs_20style_20guide_36',['Docs Style guide',['../docstyleguide.html',1,'']]],
+  ['docs_5fstyle_5fguide_2emd_37',['docs_style_guide.md',['../docs__style__guide_8md.html',1,'']]],
+  ['draw_5fcommand_5fbuffers_38',['draw_command_buffers',['../classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907',1,'VulkanAPI']]],
+  ['dynamic_5fheader_5fsize_39',['DYNAMIC_HEADER_SIZE',['../classIPacket.html#aa1fbb981153d0de919c84d235613a65c',1,'IPacket']]],
+  ['dynamic_5fstates_40',['dynamic_states',['../structPipeline_1_1CreateInfo.html#a7f5176bb1185e2f0b2da53af19e3fa22',1,'Pipeline::CreateInfo']]]
 ];

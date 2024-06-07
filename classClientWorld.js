@@ -8,6 +8,7 @@ var classClientWorld =
     [ "addPlayer", "classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f", null ],
     [ "applyPlayerMovement", "classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d", null ],
     [ "calculatePlayerMovement", "classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b", null ],
+    [ "changePlayerViewMode", "classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285", null ],
     [ "createMob", "classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8", null ],
     [ "createPlayer", "classClientWorld.html#af78a9ed84b89171654b282666c51baf9", null ],
     [ "getCamera", "classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a", null ],

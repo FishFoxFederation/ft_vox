@@ -5,16 +5,20 @@ var classPlayer =
       [ "CREATIVE", "classPlayer.html#a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452", null ],
       [ "SPECTATOR", "classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19", null ]
     ] ],
+    [ "ViewMode", "classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8", [
+      [ "FIRST_PERSON", "classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8a25cddcf7d5a6ec236403ee4a5ad8c00f", null ],
+      [ "THIRD_PERSON_BACK", "classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8a5ab0e529c894afbf4bc850f1122df09b", null ]
+    ] ],
     [ "Player", "classPlayer.html#affe0cc3cb714f6deb4e62f0c0d3f1fd8", null ],
     [ "~Player", "classPlayer.html#a749d2c00e1fe0f5c2746f7505a58c062", null ],
     [ "Player", "classPlayer.html#af8c2ecab491983e5749611255927d15d", null ],
     [ "Player", "classPlayer.html#a6beeb56865b114413e5d6a75a9c1e289", null ],
     [ "camera", "classPlayer.html#ad67555e55c817db8a320c80fdaf75dbf", null ],
+    [ "cameraPosition", "classPlayer.html#a14bf2e254bd533631ac85fb498e4ac94", null ],
     [ "canAttack", "classPlayer.html#a12ef01e1a26542218229c2b6a4a1d17e", null ],
     [ "canJump", "classPlayer.html#a2cb36c5bd5069fc72552aeec05cc5fca", null ],
     [ "canUse", "classPlayer.html#a60c19c665bddaa431f7c61aba55d3d41", null ],
     [ "direction", "classPlayer.html#a333e44206106f4585180041030d3cd00", null ],
-    [ "eyePosition", "classPlayer.html#a4c0a8d33917213524d34950943606b24", null ],
     [ "fallDuration", "classPlayer.html#aba91222919c620dde688186c4d758241", null ],
     [ "getTransformedMovement", "classPlayer.html#afa7dd1bda58f8f5ba21087b099ddbd2f", null ],
     [ "isFlying", "classPlayer.html#aebf1ad14c05b62b1545b09ca60d5c201", null ],
@@ -28,6 +32,7 @@ var classPlayer =
     [ "startJump", "classPlayer.html#a9df196a5b35729edaeef70101461bbd8", null ],
     [ "startUse", "classPlayer.html#a3733354eaf71b26f23344fe257c3d943", null ],
     [ "default_speed", "classPlayer.html#a51abadfb0aa236bcb754b23a60288bb5", null ],
+    [ "eye_position", "classPlayer.html#a4aa598a0fee6173977120bd5ea70206a", null ],
     [ "feet", "classPlayer.html#ad5a2f3c133a4a93dd19965007bba82de", null ],
     [ "fly_speed_factor", "classPlayer.html#a524bbb599b86a71c30377d6e80e196dd", null ],
     [ "flying", "classPlayer.html#a9084b2ce7b780355ab0dd3b6df0ead19", null ],
@@ -48,5 +53,6 @@ var classPlayer =
     [ "targeted_block", "classPlayer.html#a7fbacb030211a06f1342a56603b51802", null ],
     [ "transform", "classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d", null ],
     [ "velocity", "classPlayer.html#aa467fcbbb25423c22972d0f520e94fd1", null ],
+    [ "view_mode", "classPlayer.html#aac46fc99a79a19b208a7057f7814225d", null ],
     [ "yaw", "classPlayer.html#a349f074eedf387a35ce879738022bf42", null ]
 ];

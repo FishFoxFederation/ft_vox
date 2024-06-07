@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['y_0',['Y',['../classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a57cec4137b614c87cb4e24a3d003a3e0',1,'CreateMeshData']]],
-  ['y_1',['y',['../classChunk.html#a13e0fddb7e57040210637ee07fbba9ab',1,'Chunk']]],
-  ['yaw_2',['yaw',['../classPlayer.html#a349f074eedf387a35ce879738022bf42',1,'Player']]]
+  ['x_0',['x',['../classChunk.html#a05ae613668297fefa3e36540bdb80ea1',1,'Chunk']]],
+  ['x_1',['X',['../classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a02129bb861061d1a052c592e2dc6b383',1,'CreateMeshData']]]
 ];

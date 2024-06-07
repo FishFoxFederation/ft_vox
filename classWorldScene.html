@@ -123,7 +123,7 @@ Collaboration diagram for WorldScene:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldScene__coll__graph.png" border="0" usemap="#aWorldScene_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_coll__map" id="aWorldScene_coll__map">
-<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="29,432,175,663"/>
+<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="29,432,175,707"/>
 <area shape="rect" href="classIdList.html" title=" " alt="" coords="5,124,199,355"/>
 <area shape="rect" title=" " alt="" coords="24,5,180,75"/>
 </map>
@@ -136,6 +136,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene_1_1MeshList.html">MeshList</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1MeshRenderData.html">MeshRenderData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -166,12 +168,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba9acd92f94920f1ee870a735b38b0c8"><td class="memItemLeft" align="right" valign="top">std::optional&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aba9acd92f94920f1ee870a735b38b0c8">targetBlock</a> () const</td></tr>
 <tr class="memdesc:aba9acd92f94920f1ee870a735b38b0c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get the target block.  <a href="classWorldScene.html#aba9acd92f94920f1ee870a735b38b0c8">More...</a><br /></td></tr>
 <tr class="separator:aba9acd92f94920f1ee870a735b38b0c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a718802069c22ec6a63e06eacb09f0150"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a718802069c22ec6a63e06eacb09f0150">getPlayers</a> () const</td></tr>
+<tr class="separator:a718802069c22ec6a63e06eacb09f0150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4af382fc1d4b7db877a750b07ceaf4b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a4af382fc1d4b7db877a750b07ceaf4b6">setDebugBlock</a> (const std::vector&lt; <a class="el" href="structWorldScene_1_1DebugBlock.html">DebugBlock</a> &gt; &amp;debug_block)</td></tr>
 <tr class="separator:a4af382fc1d4b7db877a750b07ceaf4b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39f2d721590c28dcf1bd9723298cdd98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a39f2d721590c28dcf1bd9723298cdd98">clearDebugBlocks</a> ()</td></tr>
 <tr class="separator:a39f2d721590c28dcf1bd9723298cdd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbc4a7cbb6193f34c05f9435292163ed"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structWorldScene_1_1DebugBlock.html">DebugBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#acbc4a7cbb6193f34c05f9435292163ed">debugBlocks</a> () const</td></tr>
-<tr class="separator:acbc4a7cbb6193f34c05f9435292163ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa30c05b2a0f01c1b9ba0be17fa80f732"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structWorldScene_1_1DebugBlock.html">DebugBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aa30c05b2a0f01c1b9ba0be17fa80f732">debugBlocks</a> () const</td></tr>
+<tr class="separator:aa30c05b2a0f01c1b9ba0be17fa80f732"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -179,6 +183,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a375d67e327f3d44016f47e62ba3b6230"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39a8384c40aa13380dcae1d593e6f3cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIdList.html">IdList</a>&lt; uint64_t, <a class="el" href="structWorldScene_1_1MeshRenderData.html">MeshRenderData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a39a8384c40aa13380dcae1d593e6f3cb">entity_mesh_list</a></td></tr>
 <tr class="separator:a39a8384c40aa13380dcae1d593e6f3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec9e9052db57d23eafa3acf6d1562baa"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint64_t, <a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aec9e9052db57d23eafa3acf6d1562baa">m_players</a></td></tr>
+<tr class="separator:aec9e9052db57d23eafa3acf6d1562baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf887b601d55415fb9259d47f5a4fa43"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aaf887b601d55415fb9259d47f5a4fa43">m_player_mutex</a></td></tr>
+<tr class="separator:aaf887b601d55415fb9259d47f5a4fa43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class to hold the world scene. The instance of this class will be accessed by multiple threads so it will include synchronization logic. </p>
@@ -336,9 +344,6 @@ Public Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void WorldScene::clearDebugBlocks </td>
@@ -347,36 +352,40 @@ Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="acbc4a7cbb6193f34c05f9435292163ed" name="acbc4a7cbb6193f34c05f9435292163ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbc4a7cbb6193f34c05f9435292163ed">&#9670;&#160;</a></span>debugBlocks()</h2>
+<a id="aa30c05b2a0f01c1b9ba0be17fa80f732" name="aa30c05b2a0f01c1b9ba0be17fa80f732"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa30c05b2a0f01c1b9ba0be17fa80f732">&#9670;&#160;</a></span>debugBlocks()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="structWorldScene_1_1DebugBlock.html">DebugBlock</a> &gt; WorldScene::debugBlocks </td>
+          <td class="memname">std::vector&lt; <a class="el" href="structWorldScene_1_1DebugBlock.html">WorldScene::DebugBlock</a> &gt; WorldScene::debugBlocks </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a718802069c22ec6a63e06eacb09f0150" name="a718802069c22ec6a63e06eacb09f0150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a718802069c22ec6a63e06eacb09f0150">&#9670;&#160;</a></span>getPlayers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structWorldScene_1_1PlayerRenderData.html">WorldScene::PlayerRenderData</a> &gt; WorldScene::getPlayers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -438,9 +447,6 @@ Public Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void WorldScene::setDebugBlock </td>
@@ -450,11 +456,6 @@ Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -464,9 +465,6 @@ Public Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void WorldScene::setTargetBlock </td>
@@ -476,11 +474,6 @@ Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Function to set the target block. </p>
@@ -498,9 +491,6 @@ Public Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::optional&lt; glm::vec3 &gt; WorldScene::targetBlock </td>
@@ -509,11 +499,6 @@ Public Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Function to get the target block. </p>
@@ -544,6 +529,42 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classIdList.html">IdList</a>&lt;uint64_t, <a class="el" href="structWorldScene_1_1MeshRenderData.html">MeshRenderData</a>&gt; WorldScene::entity_mesh_list</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf887b601d55415fb9259d47f5a4fa43" name="aaf887b601d55415fb9259d47f5a4fa43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf887b601d55415fb9259d47f5a4fa43">&#9670;&#160;</a></span>m_player_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex WorldScene::m_player_mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec9e9052db57d23eafa3acf6d1562baa" name="aec9e9052db57d23eafa3acf6d1562baa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec9e9052db57d23eafa3acf6d1562baa">&#9670;&#160;</a></span>m_players</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;uint64_t, <a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a>&gt; WorldScene::m_players</td>
         </tr>
       </table>
 </div><div class="memdoc">

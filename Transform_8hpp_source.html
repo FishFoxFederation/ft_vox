@@ -159,6 +159,56 @@ $(document).ready(function(){initNavTree('Transform_8hpp_source.html',''); initR
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classTransform.html#a6daf7add1e082d558b538c1a64c17aa5">   49</a></span>    <span class="keyword">const</span> <a class="code hl_class" href="classTransform.html">Transform</a> * <a class="code hl_variable" href="classTransform.html#a6daf7add1e082d558b538c1a64c17aa5">parent</a>;</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classMat4.html">   53</a></span><span class="keyword">class </span><a class="code hl_class" href="classMat4.html">Mat4</a></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>{</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classMat4.html#a91811ca098cf3c71874e9e0c991678b7">   58</a></span>    <a class="code hl_function" href="classMat4.html#a91811ca098cf3c71874e9e0c991678b7">Mat4</a>(<span class="keyword">const</span> glm::dmat4 &amp; <a class="code hl_function" href="classMat4.html#a3e5a90ffb20789a93f3cede551d9a1ed">mat</a> = glm::dmat4(1.0)):</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        m_mat(<a class="code hl_function" href="classMat4.html#a3e5a90ffb20789a93f3cede551d9a1ed">mat</a>)</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    }</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="classMat4.html#ac58529fdf443319bb6406eed968ad222">   63</a></span>    glm::dmat4 <a class="code hl_function" href="classMat4.html#ac58529fdf443319bb6406eed968ad222">dmat</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordflow">return</span> m_mat;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classMat4.html#a3e5a90ffb20789a93f3cede551d9a1ed">   68</a></span>    glm::mat4 <a class="code hl_function" href="classMat4.html#a3e5a90ffb20789a93f3cede551d9a1ed">mat</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordflow">return</span> glm::mat4(m_mat);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    }</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="classMat4.html#ad2746477f1d64566df1db42792dd0022">   73</a></span>    <a class="code hl_class" href="classMat4.html">Mat4</a> &amp; <a class="code hl_function" href="classMat4.html#ad2746477f1d64566df1db42792dd0022">translate</a>(<span class="keyword">const</span> glm::dvec3 &amp; vec)</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        m_mat = glm::translate(m_mat, vec);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classMat4.html#a3ef488276ad5977343c5a6d7a2202c71">   79</a></span>    <a class="code hl_class" href="classMat4.html">Mat4</a> &amp; <a class="code hl_function" href="classMat4.html#a3ef488276ad5977343c5a6d7a2202c71">rotate</a>(<span class="keywordtype">double</span> angle, <span class="keyword">const</span> glm::dvec3 &amp; axis)</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    {</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        m_mat = glm::rotate(m_mat, angle, axis);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    }</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classMat4.html#a7908b54583ed2bd62228a01a01b9ef9c">   85</a></span>    <a class="code hl_class" href="classMat4.html">Mat4</a> &amp; <a class="code hl_function" href="classMat4.html#a7908b54583ed2bd62228a01a01b9ef9c">scale</a>(<span class="keyword">const</span> glm::dvec3 &amp; vec)</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    {</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        m_mat = glm::scale(m_mat, vec);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    }</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    glm::dmat4 m_mat;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>};</div>
+<div class="ttc" id="aclassMat4_html"><div class="ttname"><a href="classMat4.html">Mat4</a></div><div class="ttdef"><b>Definition:</b> Transform.hpp:54</div></div>
+<div class="ttc" id="aclassMat4_html_a3e5a90ffb20789a93f3cede551d9a1ed"><div class="ttname"><a href="classMat4.html#a3e5a90ffb20789a93f3cede551d9a1ed">Mat4::mat</a></div><div class="ttdeci">glm::mat4 mat() const</div><div class="ttdef"><b>Definition:</b> Transform.hpp:68</div></div>
+<div class="ttc" id="aclassMat4_html_a3ef488276ad5977343c5a6d7a2202c71"><div class="ttname"><a href="classMat4.html#a3ef488276ad5977343c5a6d7a2202c71">Mat4::rotate</a></div><div class="ttdeci">Mat4 &amp; rotate(double angle, const glm::dvec3 &amp;axis)</div><div class="ttdef"><b>Definition:</b> Transform.hpp:79</div></div>
+<div class="ttc" id="aclassMat4_html_a7908b54583ed2bd62228a01a01b9ef9c"><div class="ttname"><a href="classMat4.html#a7908b54583ed2bd62228a01a01b9ef9c">Mat4::scale</a></div><div class="ttdeci">Mat4 &amp; scale(const glm::dvec3 &amp;vec)</div><div class="ttdef"><b>Definition:</b> Transform.hpp:85</div></div>
+<div class="ttc" id="aclassMat4_html_a91811ca098cf3c71874e9e0c991678b7"><div class="ttname"><a href="classMat4.html#a91811ca098cf3c71874e9e0c991678b7">Mat4::Mat4</a></div><div class="ttdeci">Mat4(const glm::dmat4 &amp;mat=glm::dmat4(1.0))</div><div class="ttdef"><b>Definition:</b> Transform.hpp:58</div></div>
+<div class="ttc" id="aclassMat4_html_ac58529fdf443319bb6406eed968ad222"><div class="ttname"><a href="classMat4.html#ac58529fdf443319bb6406eed968ad222">Mat4::dmat</a></div><div class="ttdeci">glm::dmat4 dmat() const</div><div class="ttdef"><b>Definition:</b> Transform.hpp:63</div></div>
+<div class="ttc" id="aclassMat4_html_ad2746477f1d64566df1db42792dd0022"><div class="ttname"><a href="classMat4.html#ad2746477f1d64566df1db42792dd0022">Mat4::translate</a></div><div class="ttdeci">Mat4 &amp; translate(const glm::dvec3 &amp;vec)</div><div class="ttdef"><b>Definition:</b> Transform.hpp:73</div></div>
 <div class="ttc" id="aclassTransform_html"><div class="ttname"><a href="classTransform.html">Transform</a></div><div class="ttdef"><b>Definition:</b> Transform.hpp:11</div></div>
 <div class="ttc" id="aclassTransform_html_a0bf3cd626be4c099ce455ff809761c1c"><div class="ttname"><a href="classTransform.html#a0bf3cd626be4c099ce455ff809761c1c">Transform::scale</a></div><div class="ttdeci">glm::dvec3 scale</div><div class="ttdef"><b>Definition:</b> Transform.hpp:47</div></div>
 <div class="ttc" id="aclassTransform_html_a6daf7add1e082d558b538c1a64c17aa5"><div class="ttname"><a href="classTransform.html#a6daf7add1e082d558b538c1a64c17aa5">Transform::parent</a></div><div class="ttdeci">const Transform * parent</div><div class="ttdef"><b>Definition:</b> Transform.hpp:49</div></div>

@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classInput.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classInput-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Input Class Reference</div></div>
@@ -122,6 +123,15 @@ Collaboration diagram for Input:</div>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0be44bf062481fd4b60c21607a2ee50a"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50a">KeyState</a> { <a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50aa109d54efbb64d71f9a6ab18d0fb8add8">RELEASED</a> = GLFW_RELEASE
+, <a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50aa5381dc876ab002103a027265bc14ae52">PRESSED</a> = GLFW_PRESS
+, <a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50aa5f7fd05d6eee2cf377a64ae7f4adcd6b">REPEATED</a> = GLFW_REPEAT
+, <a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50aab50339a10e1de285ac99d4c3990b8693">NONE</a>
+ }</td></tr>
+<tr class="separator:a0be44bf062481fd4b60c21607a2ee50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa895b31518ef527a6463c70fb4709097"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#aa895b31518ef527a6463c70fb4709097">Input</a> (GLFWwindow *glfwWindow)</td></tr>
@@ -130,18 +140,47 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af2db35ba67c8a8ccd23bef6a482fc291"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#af2db35ba67c8a8ccd23bef6a482fc291">~Input</a> ()</td></tr>
 <tr class="memdesc:af2db35ba67c8a8ccd23bef6a482fc291"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="classInput.html">Input</a> object.  <a href="classInput.html#af2db35ba67c8a8ccd23bef6a482fc291">More...</a><br /></td></tr>
 <tr class="separator:af2db35ba67c8a8ccd23bef6a482fc291"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf93d666dffe5ebb03ab37e036c2f687"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#abf93d666dffe5ebb03ab37e036c2f687">getKeyState</a> (int key)</td></tr>
-<tr class="memdesc:abf93d666dffe5ebb03ab37e036c2f687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the key state.  <a href="classInput.html#abf93d666dffe5ebb03ab37e036c2f687">More...</a><br /></td></tr>
-<tr class="separator:abf93d666dffe5ebb03ab37e036c2f687"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae381b13fabd937f971f55f91ad248c58"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#ae381b13fabd937f971f55f91ad248c58">getMouseButtonState</a> (int button)</td></tr>
-<tr class="memdesc:ae381b13fabd937f971f55f91ad248c58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the mouse button state.  <a href="classInput.html#ae381b13fabd937f971f55f91ad248c58">More...</a><br /></td></tr>
-<tr class="separator:ae381b13fabd937f971f55f91ad248c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a271f9ae0888e9d9e594a678d54438a39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50a">KeyState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#a271f9ae0888e9d9e594a678d54438a39">getKeyState</a> (int key)</td></tr>
+<tr class="memdesc:a271f9ae0888e9d9e594a678d54438a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the key state.  <a href="classInput.html#a271f9ae0888e9d9e594a678d54438a39">More...</a><br /></td></tr>
+<tr class="separator:a271f9ae0888e9d9e594a678d54438a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6cd2f591860019c65f4ccf7076f195a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50a">KeyState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#af6cd2f591860019c65f4ccf7076f195a">getMouseButtonState</a> (int button)</td></tr>
+<tr class="memdesc:af6cd2f591860019c65f4ccf7076f195a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the mouse button state.  <a href="classInput.html#af6cd2f591860019c65f4ccf7076f195a">More...</a><br /></td></tr>
+<tr class="separator:af6cd2f591860019c65f4ccf7076f195a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af27940a5ccc50e41923999fc859033cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#af27940a5ccc50e41923999fc859033cb">getCursorPos</a> (double &amp;xpos, double &amp;ypos)</td></tr>
 <tr class="memdesc:af27940a5ccc50e41923999fc859033cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the cursor position.  <a href="classInput.html#af27940a5ccc50e41923999fc859033cb">More...</a><br /></td></tr>
 <tr class="separator:af27940a5ccc50e41923999fc859033cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc3e0e7f94a824fbdc65957d51fe6eda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda">isCursorCaptured</a> ()</td></tr>
 <tr class="separator:abc3e0e7f94a824fbdc65957d51fe6eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a0be44bf062481fd4b60c21607a2ee50a" name="a0be44bf062481fd4b60c21607a2ee50a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be44bf062481fd4b60c21607a2ee50a">&#9670;&#160;</a></span>KeyState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50a">Input::KeyState</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0be44bf062481fd4b60c21607a2ee50aa109d54efbb64d71f9a6ab18d0fb8add8" name="a0be44bf062481fd4b60c21607a2ee50aa109d54efbb64d71f9a6ab18d0fb8add8"></a>RELEASED&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a0be44bf062481fd4b60c21607a2ee50aa5381dc876ab002103a027265bc14ae52" name="a0be44bf062481fd4b60c21607a2ee50aa5381dc876ab002103a027265bc14ae52"></a>PRESSED&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a0be44bf062481fd4b60c21607a2ee50aa5f7fd05d6eee2cf377a64ae7f4adcd6b" name="a0be44bf062481fd4b60c21607a2ee50aa5f7fd05d6eee2cf377a64ae7f4adcd6b"></a>REPEATED&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a0be44bf062481fd4b60c21607a2ee50aab50339a10e1de285ac99d4c3990b8693" name="a0be44bf062481fd4b60c21607a2ee50aab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa895b31518ef527a6463c70fb4709097" name="aa895b31518ef527a6463c70fb4709097"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa895b31518ef527a6463c70fb4709097">&#9670;&#160;</a></span>Input()</h2>
@@ -226,14 +265,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abf93d666dffe5ebb03ab37e036c2f687" name="abf93d666dffe5ebb03ab37e036c2f687"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf93d666dffe5ebb03ab37e036c2f687">&#9670;&#160;</a></span>getKeyState()</h2>
+<a id="a271f9ae0888e9d9e594a678d54438a39" name="a271f9ae0888e9d9e594a678d54438a39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a271f9ae0888e9d9e594a678d54438a39">&#9670;&#160;</a></span>getKeyState()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Input::getKeyState </td>
+          <td class="memname"><a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50a">Input::KeyState</a> Input::getKeyState </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>key</em></td><td>)</td>
@@ -249,18 +288,18 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>int The state of the key </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>KeyState The state of the key </dd></dl>
 
 </div>
 </div>
-<a id="ae381b13fabd937f971f55f91ad248c58" name="ae381b13fabd937f971f55f91ad248c58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae381b13fabd937f971f55f91ad248c58">&#9670;&#160;</a></span>getMouseButtonState()</h2>
+<a id="af6cd2f591860019c65f4ccf7076f195a" name="af6cd2f591860019c65f4ccf7076f195a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6cd2f591860019c65f4ccf7076f195a">&#9670;&#160;</a></span>getMouseButtonState()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Input::getMouseButtonState </td>
+          <td class="memname"><a class="el" href="classInput.html#a0be44bf062481fd4b60c21607a2ee50a">Input::KeyState</a> Input::getMouseButtonState </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>button</em></td><td>)</td>
@@ -276,7 +315,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>int The state of the button </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>KeyState The state of the button </dd></dl>
 
 </div>
 </div>

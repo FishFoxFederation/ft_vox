@@ -6,5 +6,7 @@ var searchData=
   ['vertices_3',['vertices',['../classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2',1,'CreateMeshData']]],
   ['view_4',['view',['../structCamera_1_1RenderInfo.html#a8bec29f57c433c3c0c0aeca64ec38419',1,'Camera::RenderInfo::view()'],['../classImage.html#aebce8e4c25a0b111ba906192fc0390bb',1,'Image::view()'],['../structViewProjMatrices.html#a75bed5a79358936fb1700d91a245d415',1,'ViewProjMatrices::view()'],['../structShadowMapLight.html#aab1a87b60d59c37d0273bf94fa6a0655',1,'ShadowMapLight::view()'],['../structImGuiTexture.html#a411e55284d8214522f76d218545d4433',1,'ImGuiTexture::view()']]],
   ['view_5ffrustum_5',['view_frustum',['../structCamera_1_1RenderInfo.html#ae916554eb253bd990d63e5b8ea35ce58',1,'Camera::RenderInfo']]],
-  ['vma_6',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]]
+  ['view_5fmode_6',['view_mode',['../classPlayer.html#aac46fc99a79a19b208a7057f7814225d',1,'Player']]],
+  ['visible_7',['visible',['../structWorldScene_1_1PlayerRenderData.html#aaed03cb5d89530a035968a016cd1a0cc',1,'WorldScene::PlayerRenderData']]],
+  ['vma_8',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]]
 ];

@@ -445,132 +445,137 @@ $(document).ready(function(){initNavTree('VulkanAPI_8hpp_source.html',''); initR
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#af620c1c039315ba3962c5ca935530fbb">  336</a></span>    uint64_t <a class="code hl_variable" href="classVulkanAPI.html#af620c1c039315ba3962c5ca935530fbb">cube_mesh_id</a>;</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">  338</a></span>    std::mutex <a class="code hl_variable" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">global_mutex</a>;</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#af630bfb30c0110e84fbf6a4b2ccf2a84">  338</a></span>    uint64_t <a class="code hl_variable" href="classVulkanAPI.html#af630bfb30c0110e84fbf6a4b2ccf2a84">player_chest_mesh_id</a>;</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#a1b80e03954d5522659cc2e333fe1811c">  339</a></span>    uint64_t <a class="code hl_variable" href="classVulkanAPI.html#a1b80e03954d5522659cc2e333fe1811c">player_head_mesh_id</a>;</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#ae3a51ebc7a3505d35ca282fe39db38df">  340</a></span>    uint64_t <a class="code hl_variable" href="classVulkanAPI.html#ae3a51ebc7a3505d35ca282fe39db38df">player_leg_mesh_id</a>;</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#a09c7d27a4ef371c350bf734fc42f1c73">  341</a></span>    uint64_t <a class="code hl_variable" href="classVulkanAPI.html#a09c7d27a4ef371c350bf734fc42f1c73">player_arm_mesh_id</a>;</div>
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keyword">const</span> std::vector&lt;const char *&gt; validation_layers = {</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>        <span class="stringliteral">&quot;VK_LAYER_KHRONOS_validation&quot;</span></div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    };</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    std::vector&lt;const char *&gt; device_extensions = {</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>        VK_KHR_SWAPCHAIN_EXTENSION_NAME,</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno"><a class="line" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">  343</a></span>    std::mutex <a class="code hl_variable" href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">global_mutex</a>;</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    <span class="keyword">const</span> std::vector&lt;const char *&gt; validation_layers = {</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        <span class="stringliteral">&quot;VK_LAYER_KHRONOS_validation&quot;</span></div>
 <div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    };</div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span> </div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    <span class="keywordtype">void</span> createInstance();</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    <span class="keywordtype">bool</span> checkValidationLayerSupport();</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    std::vector&lt;const char *&gt; getRequiredExtensions();</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    std::vector&lt;const char *&gt; device_extensions = {</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>        VK_KHR_SWAPCHAIN_EXTENSION_NAME,</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>        VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    };</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
 <div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span> </div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    <span class="keywordtype">void</span> createSurface(GLFWwindow * <a class="code hl_variable" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>);</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordtype">void</span> setupDebugMessenger();</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordtype">void</span> populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &amp; create_info);</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    VkResult CreateDebugUtilsMessengerEXT(</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>        VkInstance <a class="code hl_variable" href="classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742">instance</a>,</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        <span class="keyword">const</span> VkDebugUtilsMessengerCreateInfoEXT * create_info,</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        <span class="keyword">const</span> VkAllocationCallbacks * allocator,</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        VkDebugUtilsMessengerEXT * <a class="code hl_variable" href="classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e">debug_messenger</a></div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>    );</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <span class="keywordtype">void</span> DestroyDebugUtilsMessengerEXT(</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        VkInstance <a class="code hl_variable" href="classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742">instance</a>,</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        VkDebugUtilsMessengerEXT <a class="code hl_variable" href="classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e">debug_messenger</a>,</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>        <span class="keyword">const</span> VkAllocationCallbacks * allocator</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keywordtype">void</span> createInstance();</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordtype">bool</span> checkValidationLayerSupport();</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    std::vector&lt;const char *&gt; getRequiredExtensions();</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <span class="keywordtype">void</span> createSurface(GLFWwindow * <a class="code hl_variable" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>);</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span> </div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    <span class="keywordtype">void</span> setupDebugMessenger();</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    <span class="keywordtype">void</span> populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &amp; create_info);</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>    VkResult CreateDebugUtilsMessengerEXT(</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>        VkInstance <a class="code hl_variable" href="classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742">instance</a>,</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        <span class="keyword">const</span> VkDebugUtilsMessengerCreateInfoEXT * create_info,</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        <span class="keyword">const</span> VkAllocationCallbacks * allocator,</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>        VkDebugUtilsMessengerEXT * <a class="code hl_variable" href="classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e">debug_messenger</a></div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>    );</div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    <span class="keyword">static</span> VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,</div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>        VkDebugUtilsMessageTypeFlagsEXT message_type,</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        <span class="keyword">const</span> VkDebugUtilsMessengerCallbackDataEXT * callback_data,</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        <span class="keywordtype">void</span> * user_data</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    );</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordtype">void</span> pickPhysicalDevice();</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    <span class="keywordtype">bool</span> isDeviceSuitable(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    <span class="keywordtype">int</span> ratePhysicalDevice(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <a class="code hl_struct" href="structQueueFamilyIndices.html">QueueFamilyIndices</a> findQueueFamilies(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>    <span class="keywordtype">bool</span> checkDeviceExtensionSupport(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span> </div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <span class="keywordtype">void</span> createLogicalDevice();</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    <span class="keywordtype">void</span> createSwapChain(GLFWwindow * <a class="code hl_variable" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>);</div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    VkSurfaceFormatKHR chooseSwapSurfaceFormat(<span class="keyword">const</span> std::vector&lt;VkSurfaceFormatKHR&gt; &amp; available_formats);</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>    VkPresentModeKHR chooseSwapPresentMode(<span class="keyword">const</span> std::vector&lt;VkPresentModeKHR&gt; &amp; available_present_modes);</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>    VkExtent2D chooseSwapExtent(<span class="keyword">const</span> VkSurfaceCapabilitiesKHR &amp; capabilities, GLFWwindow * <a class="code hl_variable" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>);</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    <span class="keywordtype">void</span> DestroyDebugUtilsMessengerEXT(</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        VkInstance <a class="code hl_variable" href="classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742">instance</a>,</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>        VkDebugUtilsMessengerEXT <a class="code hl_variable" href="classVulkanAPI.html#a8899d4c5849a216c4e698a99e204bd3e">debug_messenger</a>,</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        <span class="keyword">const</span> VkAllocationCallbacks * allocator</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    );</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    <span class="keyword">static</span> VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>        VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>        VkDebugUtilsMessageTypeFlagsEXT message_type,</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>        <span class="keyword">const</span> VkDebugUtilsMessengerCallbackDataEXT * callback_data,</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>        <span class="keywordtype">void</span> * user_data</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    );</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    <span class="keywordtype">void</span> pickPhysicalDevice();</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <span class="keywordtype">bool</span> isDeviceSuitable(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    <span class="keywordtype">int</span> ratePhysicalDevice(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    <a class="code hl_struct" href="structQueueFamilyIndices.html">QueueFamilyIndices</a> findQueueFamilies(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    <span class="keywordtype">bool</span> checkDeviceExtensionSupport(VkPhysicalDevice <a class="code hl_variable" href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">device</a>);</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span> </div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>    <span class="keywordtype">void</span> createLogicalDevice();</div>
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span> </div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>    <span class="keywordtype">void</span> createCommandPool();</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>    <span class="keywordtype">void</span> createCommandBuffer();</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    <span class="keywordtype">void</span> createSyncObjects();</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>    <span class="keywordtype">void</span> createSwapChain(GLFWwindow * <a class="code hl_variable" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>);</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>    VkSurfaceFormatKHR chooseSwapSurfaceFormat(<span class="keyword">const</span> std::vector&lt;VkSurfaceFormatKHR&gt; &amp; available_formats);</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    VkPresentModeKHR chooseSwapPresentMode(<span class="keyword">const</span> std::vector&lt;VkPresentModeKHR&gt; &amp; available_present_modes);</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    VkExtent2D chooseSwapExtent(<span class="keyword">const</span> VkSurfaceCapabilitiesKHR &amp; capabilities, GLFWwindow * <a class="code hl_variable" href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">window</a>);</div>
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>    <span class="keywordtype">void</span> createColorAttachement();</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>    <span class="keywordtype">void</span> createDepthAttachement();</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>    <span class="keywordtype">void</span> createCommandPool();</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>    <span class="keywordtype">void</span> createCommandBuffer();</div>
 <div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span> </div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    <span class="keywordtype">void</span> createUniformBuffers();</div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>    <span class="keywordtype">void</span> createTextureArray(<span class="keyword">const</span> std::vector&lt;std::string&gt; &amp; file_paths, uint32_t size);</div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    <span class="keywordtype">void</span> createCubeMap(<span class="keyword">const</span> std::array&lt;std::string, 6&gt; &amp; file_paths, uint32_t size);</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="keywordtype">void</span> createFrustumLineBuffers();</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    <span class="keywordtype">void</span> createTextureImage(<span class="keyword">const</span> std::string &amp; file_path);</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span> </div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <span class="keywordtype">void</span> createDescriptors();</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>    <span class="keywordtype">void</span> createRenderPass();</div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>    <span class="keywordtype">void</span> createPipelines();</div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    <span class="keywordtype">void</span> createFramebuffers();</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    <span class="keywordtype">void</span> createSyncObjects();</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    <span class="keywordtype">void</span> createColorAttachement();</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="keywordtype">void</span> createDepthAttachement();</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    <span class="keywordtype">void</span> createUniformBuffers();</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <span class="keywordtype">void</span> createTextureArray(<span class="keyword">const</span> std::vector&lt;std::string&gt; &amp; file_paths, uint32_t size);</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>    <span class="keywordtype">void</span> createCubeMap(<span class="keyword">const</span> std::array&lt;std::string, 6&gt; &amp; file_paths, uint32_t size);</div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>    <span class="keywordtype">void</span> createFrustumLineBuffers();</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    <span class="keywordtype">void</span> createTextureImage(<span class="keyword">const</span> std::string &amp; file_path);</div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>    <span class="keywordtype">void</span> createCubeMesh();</div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classVulkanAPI.html#a64487d489c2c83eda603848f99c53826">destroyMeshes</a>();</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span> </div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span> </div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>    <span class="keywordtype">void</span> setupImgui();</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    <span class="keywordtype">void</span> destroyImGuiTexture(<a class="code hl_struct" href="structImGuiTexture.html">ImGuiTexture</a> &amp; <a class="code hl_variable" href="classVulkanAPI.html#a612c4d0c482f50a0f59bbd88469b6645">imgui_texture</a>);</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span> </div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    VkCommandBuffer beginSingleTimeCommands();</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <span class="keywordtype">void</span> endSingleTimeCommands(VkCommandBuffer command_buffer);</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span> </div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    VkFormat findSupportedFormat(</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>        <span class="keyword">const</span> std::vector&lt;VkFormat&gt; &amp; candidates,</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>        VkImageTiling tiling,</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>        VkFormatFeatureFlags features</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>    );</div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>    <span class="keywordtype">void</span> createImage(</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>        uint32_t width,</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>        uint32_t height,</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>        uint32_t mip_levels,</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>        VkFormat format,</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>        VkImageTiling tiling,</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        VkImageUsageFlags usage,</div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>        VkMemoryPropertyFlags properties,</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        VkImage &amp; image,</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>        VkDeviceMemory &amp; image_memory</div>
-<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>    );</div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    <span class="keywordtype">void</span> createImageView(</div>
-<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>        VkImage image,</div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>        VkFormat format,</div>
-<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>        VkImageAspectFlags aspect_flags,</div>
-<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>        VkImageView &amp; image_view</div>
-<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>    );</div>
-<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>    <span class="keywordtype">void</span> createBuffer(</div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>        VkDeviceSize size,</div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>        VkBufferUsageFlags usage,</div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>        VkMemoryPropertyFlags properties,</div>
-<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>        VkBuffer &amp; buffer,</div>
-<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>        VkDeviceMemory &amp; buffer_memory</div>
-<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>    );</div>
-<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>    <span class="keywordtype">void</span> copyBuffer(</div>
-<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>        VkBuffer src_buffer,</div>
-<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>        VkBuffer dst_buffer,</div>
-<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>        VkDeviceSize size</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>    <span class="keywordtype">void</span> createDescriptors();</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="keywordtype">void</span> createRenderPass();</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>    <span class="keywordtype">void</span> createPipelines();</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>    <span class="keywordtype">void</span> createFramebuffers();</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span> </div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    <span class="keywordtype">void</span> createMeshes();</div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classVulkanAPI.html#a64487d489c2c83eda603848f99c53826">destroyMeshes</a>();</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span> </div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span> </div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>    <span class="keywordtype">void</span> setupImgui();</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    <span class="keywordtype">void</span> destroyImGuiTexture(<a class="code hl_struct" href="structImGuiTexture.html">ImGuiTexture</a> &amp; <a class="code hl_variable" href="classVulkanAPI.html#a612c4d0c482f50a0f59bbd88469b6645">imgui_texture</a>);</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span> </div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>    VkCommandBuffer beginSingleTimeCommands();</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>    <span class="keywordtype">void</span> endSingleTimeCommands(VkCommandBuffer command_buffer);</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span> </div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>    VkFormat findSupportedFormat(</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>        <span class="keyword">const</span> std::vector&lt;VkFormat&gt; &amp; candidates,</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>        VkImageTiling tiling,</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>        VkFormatFeatureFlags features</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    );</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    <span class="keywordtype">void</span> createImage(</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        uint32_t width,</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>        uint32_t height,</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        uint32_t mip_levels,</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>        VkFormat format,</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>        VkImageTiling tiling,</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>        VkImageUsageFlags usage,</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>        VkMemoryPropertyFlags properties,</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>        VkImage &amp; image,</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>        VkDeviceMemory &amp; image_memory</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>    );</div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>    <span class="keywordtype">void</span> createImageView(</div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>        VkImage image,</div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>        VkFormat format,</div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>        VkImageAspectFlags aspect_flags,</div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>        VkImageView &amp; image_view</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>    );</div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>    <span class="keywordtype">void</span> createBuffer(</div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>        VkDeviceSize size,</div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>        VkBufferUsageFlags usage,</div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>        VkMemoryPropertyFlags properties,</div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>        VkBuffer &amp; buffer,</div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>        VkDeviceMemory &amp; buffer_memory</div>
 <div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>    );</div>
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>    <span class="keywordtype">void</span> copyBufferToImage(</div>
-<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>        VkBuffer buffer,</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        VkImage image,</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        uint32_t width,</div>
-<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>        uint32_t height</div>
-<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    );</div>
-<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
-<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>};</div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>    <span class="keywordtype">void</span> copyBuffer(</div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>        VkBuffer src_buffer,</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        VkBuffer dst_buffer,</div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        VkDeviceSize size</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>    );</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    <span class="keywordtype">void</span> copyBufferToImage(</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>        VkBuffer buffer,</div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>        VkImage image,</div>
+<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>        uint32_t width,</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>        uint32_t height</div>
+<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>    );</div>
+<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span> </div>
+<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>};</div>
 <div class="ttc" id="aChunk_8hpp_html"><div class="ttname"><a href="Chunk_8hpp.html">Chunk.hpp</a></div></div>
 <div class="ttc" id="aCommand_8hpp_html"><div class="ttname"><a href="Command_8hpp.html">Command.hpp</a></div></div>
 <div class="ttc" id="aCreateMeshData_8hpp_html"><div class="ttname"><a href="CreateMeshData_8hpp.html">CreateMeshData.hpp</a></div></div>
@@ -589,11 +594,13 @@ $(document).ready(function(){initNavTree('VulkanAPI_8hpp_source.html',''); initR
 <div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:191</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a0517937337ae0b3ad6e147526be0d960"><div class="ttname"><a href="classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960">VulkanAPI::transfer_queue</a></div><div class="ttdeci">VkQueue transfer_queue</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:255</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a05b49068f5c9218b7422d6074d897f64"><div class="ttname"><a href="classVulkanAPI.html#a05b49068f5c9218b7422d6074d897f64">VulkanAPI::crosshair_image_descriptor</a></div><div class="ttdeci">Descriptor crosshair_image_descriptor</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:315</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_a09c7d27a4ef371c350bf734fc42f1c73"><div class="ttname"><a href="classVulkanAPI.html#a09c7d27a4ef371c350bf734fc42f1c73">VulkanAPI::player_arm_mesh_id</a></div><div class="ttdeci">uint64_t player_arm_mesh_id</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:341</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a0e4499b996e5cc302f3bd35437086c92"><div class="ttname"><a href="classVulkanAPI.html#a0e4499b996e5cc302f3bd35437086c92">VulkanAPI::meshes</a></div><div class="ttdeci">IdList&lt; uint64_t, Mesh &gt; meshes</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:333</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a0f5fb5cf3d8332510c2e756a7fe3ef36"><div class="ttname"><a href="classVulkanAPI.html#a0f5fb5cf3d8332510c2e756a7fe3ef36">VulkanAPI::shadow_map_depth_attachement</a></div><div class="ttdeci">Image shadow_map_depth_attachement</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:286</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a10a2d2c305087b878e1518437fd6ca4e"><div class="ttname"><a href="classVulkanAPI.html#a10a2d2c305087b878e1518437fd6ca4e">VulkanAPI::single_time_command_fence</a></div><div class="ttdeci">VkFence single_time_command_fence</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:276</div></div>
-<div class="ttc" id="aclassVulkanAPI_html_a12d94d7daef95cd6ed0451e9a9cc69d4"><div class="ttname"><a href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">VulkanAPI::global_mutex</a></div><div class="ttdeci">std::mutex global_mutex</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:338</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_a12d94d7daef95cd6ed0451e9a9cc69d4"><div class="ttname"><a href="classVulkanAPI.html#a12d94d7daef95cd6ed0451e9a9cc69d4">VulkanAPI::global_mutex</a></div><div class="ttdeci">std::mutex global_mutex</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:343</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a190170e2b9d436a9aa6a2cf4a8b475a1"><div class="ttname"><a href="classVulkanAPI.html#a190170e2b9d436a9aa6a2cf4a8b475a1">VulkanAPI::window</a></div><div class="ttdeci">GLFWwindow * window</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:244</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_a1b80e03954d5522659cc2e333fe1811c"><div class="ttname"><a href="classVulkanAPI.html#a1b80e03954d5522659cc2e333fe1811c">VulkanAPI::player_head_mesh_id</a></div><div class="ttdeci">uint64_t player_head_mesh_id</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:339</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a1d0897c4f64ec32ad6d320b3b2108f71"><div class="ttname"><a href="classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71">VulkanAPI::main_render_finished_semaphores</a></div><div class="ttdeci">std::vector&lt; VkSemaphore &gt; main_render_finished_semaphores</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:272</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a23a980bd3a491a0ea5a09d395e345202"><div class="ttname"><a href="classVulkanAPI.html#a23a980bd3a491a0ea5a09d395e345202">VulkanAPI::current_frame</a></div><div class="ttdeci">int current_frame</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:279</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a28868afc63f2210693107cec8cd9e73a"><div class="ttname"><a href="classVulkanAPI.html#a28868afc63f2210693107cec8cd9e73a">VulkanAPI::line_pipeline</a></div><div class="ttdeci">Pipeline line_pipeline</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:321</div></div>
@@ -610,15 +617,15 @@ $(document).ready(function(){initNavTree('VulkanAPI_8hpp_source.html',''); initR
 <div class="ttc" id="aclassVulkanAPI_html_a3f4eb2dfd0c916f2c2d5cd32a11d1805"><div class="ttname"><a href="classVulkanAPI.html#a3f4eb2dfd0c916f2c2d5cd32a11d1805">VulkanAPI::queue_family_indices</a></div><div class="ttdeci">QueueFamilyIndices queue_family_indices</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:256</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a3f8d472b0563d698d14b40a18acce612"><div class="ttname"><a href="classVulkanAPI.html#a3f8d472b0563d698d14b40a18acce612">VulkanAPI::test_image_descriptor</a></div><div class="ttdeci">Descriptor test_image_descriptor</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:313</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a44ee7e85011c6fdb0d0c14526d1fa59c"><div class="ttname"><a href="classVulkanAPI.html#a44ee7e85011c6fdb0d0c14526d1fa59c">VulkanAPI::skybox_pipeline</a></div><div class="ttdeci">Pipeline skybox_pipeline</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:322</div></div>
-<div class="ttc" id="aclassVulkanAPI_html_a48f6b428d99ea240a6ebdc1ad4dba0cd"><div class="ttname"><a href="classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd">VulkanAPI::transitionImageLayout</a></div><div class="ttdeci">void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, uint32_t mipLevels, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:1780</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_a48f6b428d99ea240a6ebdc1ad4dba0cd"><div class="ttname"><a href="classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd">VulkanAPI::transitionImageLayout</a></div><div class="ttdeci">void transitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout, VkImageAspectFlags aspectMask, uint32_t mipLevels, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:1824</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a512711a2bf5f70765279aca5f1e6c5dd"><div class="ttname"><a href="classVulkanAPI.html#a512711a2bf5f70765279aca5f1e6c5dd">VulkanAPI::command_pool</a></div><div class="ttdeci">VkCommandPool command_pool</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:262</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a51ff3008ab2fd04ef4e378a1755b829e"><div class="ttname"><a href="classVulkanAPI.html#a51ff3008ab2fd04ef4e378a1755b829e">VulkanAPI::sun_uniform_buffers</a></div><div class="ttdeci">std::vector&lt; VkBuffer &gt; sun_uniform_buffers</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:296</div></div>
-<div class="ttc" id="aclassVulkanAPI_html_a5cf827ed1548a6c79b7c0113cf726892"><div class="ttname"><a href="classVulkanAPI.html#a5cf827ed1548a6c79b7c0113cf726892">VulkanAPI::setImageLayout</a></div><div class="ttdeci">void setImageLayout(VkCommandBuffer command_buffer, VkImage image, VkImageLayout old_layout, VkImageLayout new_layout, VkImageSubresourceRange subresource_range, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:1864</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_a5cf827ed1548a6c79b7c0113cf726892"><div class="ttname"><a href="classVulkanAPI.html#a5cf827ed1548a6c79b7c0113cf726892">VulkanAPI::setImageLayout</a></div><div class="ttdeci">void setImageLayout(VkCommandBuffer command_buffer, VkImage image, VkImageLayout old_layout, VkImageLayout new_layout, VkImageSubresourceRange subresource_range, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:1908</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a5d3a908536aee8c7f23b6f4a10ca2382"><div class="ttname"><a href="classVulkanAPI.html#a5d3a908536aee8c7f23b6f4a10ca2382">VulkanAPI::in_flight_fences</a></div><div class="ttdeci">std::vector&lt; VkFence &gt; in_flight_fences</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:275</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a5d6e6b05fcb23a206e35efdc5ece6cad"><div class="ttname"><a href="classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad">VulkanAPI::VulkanAPI</a></div><div class="ttdeci">VulkanAPI(const VulkanAPI &amp;)=delete</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a612c4d0c482f50a0f59bbd88469b6645"><div class="ttname"><a href="classVulkanAPI.html#a612c4d0c482f50a0f59bbd88469b6645">VulkanAPI::imgui_texture</a></div><div class="ttdeci">ImGuiTexture imgui_texture</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:330</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a64487d489c2c83eda603848f99c53826"><div class="ttname"><a href="classVulkanAPI.html#a64487d489c2c83eda603848f99c53826">VulkanAPI::destroyMeshes</a></div><div class="ttdeci">void destroyMeshes(const std::vector&lt; uint64_t &gt; &amp;mesh_ids)</div><div class="ttdef"><b>Definition:</b> chunk_mesh.cpp:84</div></div>
-<div class="ttc" id="aclassVulkanAPI_html_a656d3ac5626be8100d2d718b477c1323"><div class="ttname"><a href="classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323">VulkanAPI::createImGuiTexture</a></div><div class="ttdeci">uint64_t createImGuiTexture(const uint32_t width, const uint32_t height)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:1507</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_a656d3ac5626be8100d2d718b477c1323"><div class="ttname"><a href="classVulkanAPI.html#a656d3ac5626be8100d2d718b477c1323">VulkanAPI::createImGuiTexture</a></div><div class="ttdeci">uint64_t createImGuiTexture(const uint32_t width, const uint32_t height)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:1551</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a6605ae5a44cb5327a1633051b00cbd3f"><div class="ttname"><a href="classVulkanAPI.html#a6605ae5a44cb5327a1633051b00cbd3f">VulkanAPI::swapchain</a></div><div class="ttdeci">Swapchain swapchain</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:258</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a686c7e9f200979296e890de8c2801e25"><div class="ttname"><a href="classVulkanAPI.html#a686c7e9f200979296e890de8c2801e25">VulkanAPI::lighting_render_pass</a></div><div class="ttdeci">VkRenderPass lighting_render_pass</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:317</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_a69a7a6b2b516f93644c15fde5018807b"><div class="ttname"><a href="classVulkanAPI.html#a69a7a6b2b516f93644c15fde5018807b">VulkanAPI::sun_uniform_buffers_memory</a></div><div class="ttdeci">std::vector&lt; VkDeviceMemory &gt; sun_uniform_buffers_memory</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:297</div></div>
@@ -648,7 +655,7 @@ $(document).ready(function(){initNavTree('VulkanAPI_8hpp_source.html',''); initR
 <div class="ttc" id="aclassVulkanAPI_html_abe6ec2e82ad164f2a164cab715d51a60"><div class="ttname"><a href="classVulkanAPI.html#abe6ec2e82ad164f2a164cab715d51a60">VulkanAPI::camera_uniform_buffers_mapped_memory</a></div><div class="ttdeci">std::vector&lt; void * &gt; camera_uniform_buffers_mapped_memory</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:293</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_ac53aef29bbc7afd5cef325d4d608f669"><div class="ttname"><a href="classVulkanAPI.html#ac53aef29bbc7afd5cef325d4d608f669">VulkanAPI::device</a></div><div class="ttdeci">VkDevice device</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:252</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_ac8ced4ddb75fcdc02a26b5b9265dca03"><div class="ttname"><a href="classVulkanAPI.html#ac8ced4ddb75fcdc02a26b5b9265dca03">VulkanAPI::sun_descriptor</a></div><div class="ttdeci">Descriptor sun_descriptor</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:314</div></div>
-<div class="ttc" id="aclassVulkanAPI_html_acb1a97c9af39c7527966e3f8eb5f7581"><div class="ttname"><a href="classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581">VulkanAPI::recreateSwapChain</a></div><div class="ttdeci">void recreateSwapChain(GLFWwindow *window)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:574</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_acb1a97c9af39c7527966e3f8eb5f7581"><div class="ttname"><a href="classVulkanAPI.html#acb1a97c9af39c7527966e3f8eb5f7581">VulkanAPI::recreateSwapChain</a></div><div class="ttdeci">void recreateSwapChain(GLFWwindow *window)</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:575</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_acbc18157e133b2d4ad681f060d44c742"><div class="ttname"><a href="classVulkanAPI.html#acbc18157e133b2d4ad681f060d44c742">VulkanAPI::instance</a></div><div class="ttdeci">VkInstance instance</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:246</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_acd95a2f7af31d3ccba7de8553aeed384"><div class="ttname"><a href="classVulkanAPI.html#acd95a2f7af31d3ccba7de8553aeed384">VulkanAPI::present_queue</a></div><div class="ttdeci">VkQueue present_queue</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:254</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_ad12579eb2dc9bc8d779073a64d91e93e"><div class="ttname"><a href="classVulkanAPI.html#ad12579eb2dc9bc8d779073a64d91e93e">VulkanAPI::cube_map_descriptor</a></div><div class="ttdeci">Descriptor cube_map_descriptor</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:311</div></div>
@@ -658,15 +665,17 @@ $(document).ready(function(){initNavTree('VulkanAPI_8hpp_source.html',''); initR
 <div class="ttc" id="aclassVulkanAPI_html_adb8f28d802477d4121965de04856ddd0"><div class="ttname"><a href="classVulkanAPI.html#adb8f28d802477d4121965de04856ddd0">VulkanAPI::shadow_render_pass</a></div><div class="ttdeci">VkRenderPass shadow_render_pass</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:318</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_aded6afbe797d9e490d44f56c818baa90"><div class="ttname"><a href="classVulkanAPI.html#aded6afbe797d9e490d44f56c818baa90">VulkanAPI::image_available_semaphores</a></div><div class="ttdeci">std::vector&lt; VkSemaphore &gt; image_available_semaphores</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:271</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_ae308bfb7f1637a8d8a0490a2faf798f2"><div class="ttname"><a href="classVulkanAPI.html#ae308bfb7f1637a8d8a0490a2faf798f2">VulkanAPI::block_textures_descriptor</a></div><div class="ttdeci">Descriptor block_textures_descriptor</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:310</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_ae3a51ebc7a3505d35ca282fe39db38df"><div class="ttname"><a href="classVulkanAPI.html#ae3a51ebc7a3505d35ca282fe39db38df">VulkanAPI::player_leg_mesh_id</a></div><div class="ttdeci">uint64_t player_leg_mesh_id</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:340</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_ae3ca1ad478d46ff986a5c70ff3de9907"><div class="ttname"><a href="classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907">VulkanAPI::draw_command_buffers</a></div><div class="ttdeci">std::vector&lt; VkCommandBuffer &gt; draw_command_buffers</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:263</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_ae8f0c464acae09cabfc3631aaa50304a"><div class="ttname"><a href="classVulkanAPI.html#ae8f0c464acae09cabfc3631aaa50304a">VulkanAPI::test_image_pipeline</a></div><div class="ttdeci">Pipeline test_image_pipeline</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:324</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_aed55454df00de407ecbd6443cfb83fcb"><div class="ttname"><a href="classVulkanAPI.html#aed55454df00de407ecbd6443cfb83fcb">VulkanAPI::chunk_pipeline</a></div><div class="ttdeci">Pipeline chunk_pipeline</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:320</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_aeec288c213c1e8aa4de860a8e16f7c44"><div class="ttname"><a href="classVulkanAPI.html#aeec288c213c1e8aa4de860a8e16f7c44">VulkanAPI::shadow_map_descriptor</a></div><div class="ttdeci">Descriptor shadow_map_descriptor</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:312</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_af0178da68566ea2136a91746e686efdf"><div class="ttname"><a href="classVulkanAPI.html#af0178da68566ea2136a91746e686efdf">VulkanAPI::VulkanAPI</a></div><div class="ttdeci">VulkanAPI(VulkanAPI &amp;&amp;)=delete</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_af077051ab8c2e9346f85ebef42b87f5a"><div class="ttname"><a href="classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a">VulkanAPI::mesh_ids_to_destroy</a></div><div class="ttdeci">std::vector&lt; uint64_t &gt; mesh_ids_to_destroy</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:334</div></div>
-<div class="ttc" id="aclassVulkanAPI_html_af0fc9d116584aa25c04587c6ac9b43cc"><div class="ttname"><a href="classVulkanAPI.html#af0fc9d116584aa25c04587c6ac9b43cc">VulkanAPI::~VulkanAPI</a></div><div class="ttdeci">~VulkanAPI()</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:53</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_af0fc9d116584aa25c04587c6ac9b43cc"><div class="ttname"><a href="classVulkanAPI.html#af0fc9d116584aa25c04587c6ac9b43cc">VulkanAPI::~VulkanAPI</a></div><div class="ttdeci">~VulkanAPI()</div><div class="ttdef"><b>Definition:</b> VulkanAPI.cpp:54</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_af1984c2f095d500a1473961045e2c9b5"><div class="ttname"><a href="classVulkanAPI.html#af1984c2f095d500a1473961045e2c9b5">VulkanAPI::sun_uniform_buffers_mapped_memory</a></div><div class="ttdeci">std::vector&lt; void * &gt; sun_uniform_buffers_mapped_memory</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:298</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_af620c1c039315ba3962c5ca935530fbb"><div class="ttname"><a href="classVulkanAPI.html#af620c1c039315ba3962c5ca935530fbb">VulkanAPI::cube_mesh_id</a></div><div class="ttdeci">uint64_t cube_mesh_id</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:336</div></div>
+<div class="ttc" id="aclassVulkanAPI_html_af630bfb30c0110e84fbf6a4b2ccf2a84"><div class="ttname"><a href="classVulkanAPI.html#af630bfb30c0110e84fbf6a4b2ccf2a84">VulkanAPI::player_chest_mesh_id</a></div><div class="ttdeci">uint64_t player_chest_mesh_id</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:338</div></div>
 <div class="ttc" id="aclassVulkanAPI_html_afe362f2320ed6115d2eb627efed9d530"><div class="ttname"><a href="classVulkanAPI.html#afe362f2320ed6115d2eb627efed9d530">VulkanAPI::surface</a></div><div class="ttdeci">VkSurfaceKHR surface</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:250</div></div>
 <div class="ttc" id="astructEntityMatrices_html"><div class="ttname"><a href="structEntityMatrices.html">EntityMatrices</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:140</div></div>
 <div class="ttc" id="astructEntityMatrices_html_a6e6d2cf5dd32604545e8616e2d971792"><div class="ttname"><a href="structEntityMatrices.html#a6e6d2cf5dd32604545e8616e2d971792">EntityMatrices::color</a></div><div class="ttdeci">glm::vec4 color</div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:142</div></div>

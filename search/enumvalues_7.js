@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['max_0',['MAX',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12',1,'Logger']]]
+  ['head_0',['HEAD',['../classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041bae15e216fc1c639f787b1231ecdfa1bf8',1,'PlayerModel']]]
 ];

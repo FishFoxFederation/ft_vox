@@ -6,6 +6,5 @@ var searchData=
   ['end_3',['end',['../classSingleTimeCommand.html#a1b02b991974ebb1cc7ec72028fb79c1a',1,'SingleTimeCommand']]],
   ['erase_4',['erase',['../classIdList.html#a735bbf293da3e20da9271f5b9f0e1904',1,'IdList']]],
   ['extractmessage_5',['ExtractMessage',['../classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f',1,'IPacket']]],
-  ['extractpacket_6',['extractPacket',['../classPacketFactory.html#ad5d085d064bc559c1a08231fcdae51b0',1,'PacketFactory']]],
-  ['eyeposition_7',['eyePosition',['../classPlayer.html#a4c0a8d33917213524d34950943606b24',1,'Player']]]
+  ['extractpacket_6',['extractPacket',['../classPacketFactory.html#ad5d085d064bc559c1a08231fcdae51b0',1,'PacketFactory']]]
 ];
