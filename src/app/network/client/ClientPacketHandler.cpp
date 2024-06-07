@@ -34,6 +34,7 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		break;
 	case IPacket::Type::PING:
 		handlePingPacket(std::dynamic_pointer_cast<PingPacket>(packet));
+		break;
 	case IPacket::Type::PLAYER_LIST:
 		handlePlayerListPacket(std::dynamic_pointer_cast<PlayerListPacket>(packet));
 		break;

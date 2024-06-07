@@ -477,46 +477,100 @@ void RenderThread::loop()
 	// Draw the players
 	for (const auto & player : players)
 	{
+		if (!player.visible)
+		{
+			continue;
+		}
+
+		std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
+
+		// Body
+		const glm::mat4 body_model = Mat4()
+			.translate(player.position)
+			.rotate(-glm::radians(player.yaw - 90), glm::dvec3(0.0f, 1.0f, 0.0f))
+			.mat();
+
 		// Chest
+		const glm::mat4 chest_model = Mat4()
+			.translate(PlayerModel::chest_pos)
+			.mat();
 		drawPlayerBodyPart(
 			vk.player_chest_mesh_id,
-			player.model * PlayerModel::chestModel(),
+			body_model * chest_model,
 			glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)
 		);
 
 		// Head
+		const glm::mat4 head_model = Mat4()
+			.translate(PlayerModel::head_pos)
+			.rotate(-glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
+			.mat();
 		drawPlayerBodyPart(
 			vk.player_head_mesh_id,
-			player.model * PlayerModel::headModel(),
+			body_model * chest_model * head_model,
 			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)
 		);
 
+		// Legs animation angle
+		double legs_angle = 0.0;
+		if (player.is_walking)
+		{
+			legs_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+		}
+
 		// Left leg
+		const glm::mat4 left_leg_model = Mat4()
+			.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+			.translate(PlayerModel::left_leg_pos)
+			.mat();
 		drawPlayerBodyPart(
 			vk.player_leg_mesh_id,
-			player.model * PlayerModel::leftLegModel(),
+			body_model * chest_model * left_leg_model,
 			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
 		);
 
 		// Right leg
+		const glm::mat4 right_leg_model = Mat4()
+			.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+			.translate(PlayerModel::right_leg_pos)
+			.mat();
 		drawPlayerBodyPart(
 			vk.player_leg_mesh_id,
-			player.model * PlayerModel::rightLegModel(),
+			body_model * chest_model * right_leg_model,
 			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
 		);
 
+		// Arm animation angle
+		double arms_angle = 0.0;
+		if (player.is_walking)
+		{
+			arms_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+		}
+
 		// Left arm
+		const glm::mat4 left_arm_model = Mat4()
+			.translate(PlayerModel::left_arm_pos)
+			.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+			.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+			.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
+			.mat();
 		drawPlayerBodyPart(
 			vk.player_arm_mesh_id,
-			player.model * PlayerModel::leftArmModel(),
-			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+			body_model * chest_model * left_arm_model,
+			glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 
 		// Right arm
+		const glm::mat4 right_arm_model = Mat4()
+			.translate(PlayerModel::right_arm_pos)
+			.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+			.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+			.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
+			.mat();
 		drawPlayerBodyPart(
 			vk.player_arm_mesh_id,
-			player.model * PlayerModel::rightArmModel(),
-			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+			body_model * chest_model * right_arm_model,
+			glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
 		);
 	}
 

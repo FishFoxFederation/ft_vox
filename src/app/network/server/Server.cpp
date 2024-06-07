@@ -63,7 +63,7 @@ void Server::runOnce(int timeout)
 					LOG_INFO("EPOLLERR or EPOLLHUP");
 					throw ClientDisconnected(currentClient->first);
 				}
-			} 
+			}
 			catch (const ClientDisconnected & e)
 			{
 				LOG_INFO("Client disconnected : id: " << e.id() << " pushing disconnect packet");

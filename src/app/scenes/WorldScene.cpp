@@ -42,25 +42,6 @@ std::vector<WorldScene::DebugBlock> WorldScene::debugBlocks() const
 	return m_debug_block;
 }
 
-
-void WorldScene::addPlayer(uint64_t player_id, glm::mat4 model)
-{
-	std::lock_guard<std::mutex> lock(m_player_mutex);
-	m_players[player_id] = PlayerRenderData{model};
-}
-
-void WorldScene::removePlayer(uint64_t player_id)
-{
-	std::lock_guard<std::mutex> lock(m_player_mutex);
-	m_players.erase(player_id);
-}
-
-void WorldScene::updatePlayer(uint64_t player_id, glm::mat4 model)
-{
-	std::lock_guard<std::mutex> lock(m_player_mutex);
-	m_players[player_id].model = model;
-}
-
 std::vector<WorldScene::PlayerRenderData> WorldScene::getPlayers() const
 {
 	std::lock_guard<std::mutex> lock(m_player_mutex);

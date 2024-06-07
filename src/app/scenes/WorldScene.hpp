@@ -35,7 +35,14 @@ public:
 
 	struct PlayerRenderData
 	{
-		glm::mat4 model;
+		glm::dvec3 position;
+		double yaw = 0;
+		double pitch = 0;
+
+		bool is_walking = false;
+		std::chrono::nanoseconds walk_animation_start_time = std::chrono::nanoseconds(0);
+
+		bool visible = true;
 	};
 
 	class MeshList
@@ -119,9 +126,6 @@ public:
 	 */
 	std::optional<glm::vec3> targetBlock() const;
 
-	void addPlayer(uint64_t player_id, glm::mat4 model);
-	void removePlayer(uint64_t player_id);
-	void updatePlayer(uint64_t player_id, glm::mat4 model);
 	std::vector<PlayerRenderData> getPlayers() const;
 
 	struct DebugBlock
@@ -140,6 +144,9 @@ public:
 	IdList<uint64_t, MeshRenderData> chunk_mesh_list;
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
+	std::map<uint64_t, PlayerRenderData> m_players;
+	mutable std::mutex m_player_mutex;
+
 private:
 
 	Camera m_camera;
@@ -150,7 +157,4 @@ private:
 
 	std::vector<DebugBlock> m_debug_block;
 	mutable std::mutex m_debug_block_mutex;
-
-	std::map<uint64_t, PlayerRenderData> m_players;
-	mutable std::mutex m_player_mutex;
 };

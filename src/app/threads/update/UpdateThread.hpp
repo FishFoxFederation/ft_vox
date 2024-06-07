@@ -50,15 +50,14 @@ private:
 	int m_update_count;
 	std::chrono::nanoseconds m_start_time_counting_ups;
 
-	int m_move_forward;
-	int m_move_left;
-	int m_move_backward;
-	int m_move_right;
-	int m_jump;
-	int m_sneak;
-	int m_attack;
-	int m_use;
-	int m_ping;
+	int m_move_forward = 0;
+	int m_move_left = 0;
+	int m_move_backward = 0;
+	int m_move_right = 0;
+	int m_jump = 0;
+	int m_sneak = 0;
+	int m_attack = 0;
+	int m_use = 0;
 
 	double m_mouse_x;
 	double m_mouse_y;

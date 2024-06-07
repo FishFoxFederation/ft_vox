@@ -49,3 +49,46 @@ public:
 	const Transform * parent;
 
 };
+
+class Mat4
+{
+
+public:
+
+	Mat4(const glm::dmat4 & mat = glm::dmat4(1.0)):
+		m_mat(mat)
+	{
+	}
+
+	glm::dmat4 dmat() const
+	{
+		return m_mat;
+	}
+
+	glm::mat4 mat() const
+	{
+		return glm::mat4(m_mat);
+	}
+
+	Mat4 & translate(const glm::dvec3 & vec)
+	{
+		m_mat = glm::translate(m_mat, vec);
+		return *this;
+	}
+
+	Mat4 & rotate(double angle, const glm::dvec3 & axis)
+	{
+		m_mat = glm::rotate(m_mat, angle, axis);
+		return *this;
+	}
+
+	Mat4 & scale(const glm::dvec3 & vec)
+	{
+		m_mat = glm::scale(m_mat, vec);
+		return *this;
+	}
+
+private:
+
+	glm::dmat4 m_mat;
+};
