@@ -26,7 +26,7 @@ void Player::moveDirection(double x_offset, double y_offset)
 
 Camera Player::camera() const
 {
-	return Camera(transform.position + eyePosition(), pitch, yaw);
+	return Camera(transform.position + cameraPosition(), pitch, yaw);
 }
 
 glm::dvec3 Player::direction() const
