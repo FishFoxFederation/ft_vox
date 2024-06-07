@@ -65,6 +65,9 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
 
 	glm::ivec3 new_player_chunk_position = getChunkPosition(new_player_position);
 	glm::ivec3 old_player_chunk_position = getChunkPosition(old_player_position);
+
+	new_player_chunk_position.y = 0;
+	old_player_chunk_position.y = 0;
 	// glm::ivec3 chunk_direction = new_player_chunk_position - old_player_chunk_position;
 
 	std::unordered_set<glm::ivec3> old_chunks_in_range;
