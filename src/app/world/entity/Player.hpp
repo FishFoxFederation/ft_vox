@@ -42,7 +42,7 @@ public:
 
 	glm::dvec3 getTransformedMovement(glm::dvec3 move) const;
 
-	glm::dvec3 eyePosition() const; // the position of the eyes relative to entity position
+	glm::dvec3 cameraPosition() const; // the position of the eyes relative to entity position
 	glm::dvec3 direction() const;
 
 	bool shouldCollide() const;
@@ -70,6 +70,12 @@ public:
 		SPECTATOR
 	} gameMode = GameMode::SPECTATOR;
 
+	enum class ViewMode
+	{
+		FIRST_PERSON,
+		THIRD_PERSON_BACK
+	} view_mode = ViewMode::FIRST_PERSON;
+
 	double default_speed = 4.0;
 	double sprint_speed_factor = 1.5;
 	double sneak_speed_factor = 0.3;
@@ -93,6 +99,7 @@ public:
 
 	int jump_remaining = 1;
 
+	glm::dvec3 eye_position = glm::dvec3(0.0, 1.6, 0.0);
 	double yaw = 0.0;
 	double pitch = 0.0;
 

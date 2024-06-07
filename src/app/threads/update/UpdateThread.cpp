@@ -98,28 +98,42 @@ void UpdateThread::updateTime()
 
 void UpdateThread::readInput()
 {
-	int move_forward_key_status = m_window.input().getKeyState(GLFW_KEY_W);
-	int move_left_key_status = m_window.input().getKeyState(GLFW_KEY_A);
-	int move_backward_key_status = m_window.input().getKeyState(GLFW_KEY_S);
-	int move_right_key_status = m_window.input().getKeyState(GLFW_KEY_D);
-	int jump_key_status = m_window.input().getKeyState(GLFW_KEY_SPACE);
-	int sneak_key_status = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
-	int attack_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_LEFT);
-	int use_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
-	int ping_key_status = m_window.input().getKeyState(GLFW_KEY_P);
+	const Input::KeyState move_forward_key_status = m_window.input().getKeyState(GLFW_KEY_W);
+	const Input::KeyState move_left_key_status = m_window.input().getKeyState(GLFW_KEY_A);
+	const Input::KeyState move_backward_key_status = m_window.input().getKeyState(GLFW_KEY_S);
+	const Input::KeyState move_right_key_status = m_window.input().getKeyState(GLFW_KEY_D);
+	const Input::KeyState jump_key_status = m_window.input().getKeyState(GLFW_KEY_SPACE);
+	const Input::KeyState sneak_key_status = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
+	const Input::KeyState attack_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_LEFT);
+	const Input::KeyState use_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
 
-	m_move_forward = (move_forward_key_status == GLFW_PRESS) ? 1 : 0;
-	m_move_left = (move_left_key_status == GLFW_PRESS) ? 1 : 0;
-	m_move_backward = (move_backward_key_status == GLFW_PRESS) ? 1 : 0;
-	m_move_right = (move_right_key_status == GLFW_PRESS) ? 1 : 0;
-	m_jump = (jump_key_status == GLFW_PRESS) ? 1 : 0;
-	m_sneak = (sneak_key_status == GLFW_PRESS) ? 1 : 0;
-	m_attack = (attack_key_status == GLFW_PRESS) ? 1 : 0;
-	m_use = (use_key_status == GLFW_PRESS) ? 1 : 0;
-	m_ping = (ping_key_status == GLFW_PRESS && m_ping == 0) ? 1 : 0;
+	if (move_forward_key_status == Input::KeyState::PRESSED) m_move_forward = 1;
+	else if (move_forward_key_status == Input::KeyState::RELEASED) m_move_forward = 0;
+
+	if (move_left_key_status == Input::KeyState::PRESSED) m_move_left = 1;
+	else if (move_left_key_status == Input::KeyState::RELEASED) m_move_left = 0;
+
+	if (move_backward_key_status == Input::KeyState::PRESSED) m_move_backward = 1;
+	else if (move_backward_key_status == Input::KeyState::RELEASED) m_move_backward = 0;
+
+	if (move_right_key_status == Input::KeyState::PRESSED) m_move_right = 1;
+	else if (move_right_key_status == Input::KeyState::RELEASED) m_move_right = 0;
+
+	if (jump_key_status == Input::KeyState::PRESSED) m_jump = 1;
+	else if (jump_key_status == Input::KeyState::RELEASED) m_jump = 0;
+
+	if (sneak_key_status == Input::KeyState::PRESSED) m_sneak = 1;
+	else if (sneak_key_status == Input::KeyState::RELEASED) m_sneak = 0;
+
+	if (attack_key_status == Input::KeyState::PRESSED) m_attack = 1;
+	else if (attack_key_status == Input::KeyState::RELEASED) m_attack = 0;
+
+	if (use_key_status == Input::KeyState::PRESSED) m_use = 1;
+	else if (use_key_status == Input::KeyState::RELEASED) m_use = 0;
 
 
-	if (m_ping)
+	const Input::KeyState ping_key_status = m_window.input().getKeyState(GLFW_KEY_P);
+	if (ping_key_status == Input::KeyState::PRESSED)
 	{
 		uint64_t id = std::rand();
 
@@ -141,42 +155,37 @@ void UpdateThread::readInput()
 		m_client.sendPacket(packet);
 	}
 
-	int reset = m_window.input().getKeyState(GLFW_KEY_R);
-	int gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
-	int gamemode_1 = m_window.input().getKeyState(GLFW_KEY_1);
-	int gamemode_2 = m_window.input().getKeyState(GLFW_KEY_2);
-	int fly = m_window.input().getKeyState(GLFW_KEY_F);
+	const Input::KeyState gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
+	const Input::KeyState gamemode_1 = m_window.input().getKeyState(GLFW_KEY_1);
+	const Input::KeyState gamemode_2 = m_window.input().getKeyState(GLFW_KEY_2);
+	const Input::KeyState fly = m_window.input().getKeyState(GLFW_KEY_F);
 
 	m_world.updatePlayer(
 		m_world.m_my_player_id,
 		[
-			reset,
 			gamemode_0,
 			gamemode_1,
 			gamemode_2,
 			fly
 		](Player & player)
 		{
-			if (reset == GLFW_PRESS)
-				player.transform.position = glm::dvec3(0.0, 220.0, 0.0);
-
-			if (gamemode_0 == GLFW_PRESS)
+			if (gamemode_0 == Input::KeyState::PRESSED)
 			{
 				player.gameMode = Player::GameMode::SURVIVAL;
 				player.flying = false;
 				player.startFall();
 			}
-			if (gamemode_1 == GLFW_PRESS)
+			if (gamemode_1 == Input::KeyState::PRESSED)
 			{
 				player.gameMode = Player::GameMode::CREATIVE;
 				player.startFall();
 			}
-			if (gamemode_2 == GLFW_PRESS)
+			if (gamemode_2 == Input::KeyState::PRESSED)
 			{
 				player.gameMode = Player::GameMode::SPECTATOR;
 			}
 
-			if (fly == GLFW_PRESS)
+			if (fly == Input::KeyState::PRESSED)
 			{
 				if (player.flying)
 				{
@@ -186,6 +195,12 @@ void UpdateThread::readInput()
 			}
 		}
 	);
+
+	const Input::KeyState view_mode_key_status = m_window.input().getKeyState(GLFW_KEY_F5);
+	if (view_mode_key_status == Input::KeyState::PRESSED)
+	{
+		m_world.changePlayerViewMode(m_world.m_my_player_id);
+	}
 
 	m_window.input().getCursorPos(m_mouse_x, m_mouse_y);
 }

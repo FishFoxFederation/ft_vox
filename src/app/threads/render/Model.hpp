@@ -64,13 +64,6 @@ public:
 	PlayerModel & operator=(PlayerModel & other) = delete;
 	PlayerModel & operator=(PlayerModel && other) = delete;
 
-	static glm::mat4 chestModel() { return m_chest.model(); }
-	static glm::mat4 headModel() { return m_chest.model() * m_head.model(); }
-	static glm::mat4 leftLegModel() { return m_chest.model() * m_left_leg.model(); }
-	static glm::mat4 rightLegModel() { return m_chest.model() * m_right_leg.model(); }
-	static glm::mat4 leftArmModel() { return m_chest.model() * m_left_arm.model(); }
-	static glm::mat4 rightArmModel() { return m_chest.model() * m_right_arm.model(); }
-
 	static void getGeometry(
 		std::vector<Vertex> & vertices,
 		std::vector<uint32_t> & indices,
@@ -80,16 +73,16 @@ public:
 		switch (part)
 		{
 			case Part::CHEST:
-				geometry(vertices, indices, m_chest_size);
+				geometry(vertices, indices, chest_size);
 				break;
 			case Part::HEAD:
-				geometry(vertices, indices, m_head_size);
+				geometry(vertices, indices, head_size);
 				break;
 			case Part::LEG:
-				geometry(vertices, indices, m_leg_size);
+				geometry(vertices, indices, leg_size);
 				break;
 			case Part::ARM:
-				geometry(vertices, indices, m_arm_size);
+				geometry(vertices, indices, arm_size);
 				break;
 			default:
 				LOG_ERROR("Unknown player model part");
@@ -97,27 +90,27 @@ public:
 		}
 	}
 
+	constexpr static inline double player_height = 1.8;
+	constexpr static inline double unit = player_height / 32.0;
+
+	constexpr static inline glm::dvec3 chest_size = glm::dvec3(8.0, 12.0, 4.0) * unit;
+	constexpr static inline glm::dvec3 head_size  = glm::dvec3(8.0,  8.0, 8.0) * unit;
+	constexpr static inline glm::dvec3 leg_size   = glm::dvec3(4.0, 12.0, 4.0) * unit;
+	constexpr static inline glm::dvec3 arm_size   = glm::dvec3(4.0, 12.0, 4.0) * unit;
+
+	// static inline glm::dvec3 chest_size = glm::dvec3(0.45, 0.675, 0.225);
+	// static inline glm::dvec3 head_size  = glm::dvec3(0.45,  0.45, 0.45);
+	// static inline glm::dvec3 leg_size   = glm::dvec3(0.225, 0.675, 0.225);
+	// static inline glm::dvec3 arm_size   = glm::dvec3(0.225, 0.675, 0.225);
+
+	constexpr static inline glm::vec3 chest_pos     = glm::vec3{0.0, leg_size.y, 0.0};
+	constexpr static inline glm::vec3 head_pos      = glm::vec3{0.0, chest_size.y, 0.0};
+	constexpr static inline glm::vec3 left_leg_pos  = glm::vec3{-leg_size.x / 2, -leg_size.y, 0.0};
+	constexpr static inline glm::vec3 right_leg_pos = glm::vec3{leg_size.x / 2, -leg_size.y, 0.0};
+	constexpr static inline glm::vec3 left_arm_pos  = glm::vec3{-(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
+	constexpr static inline glm::vec3 right_arm_pos = glm::vec3{(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
+
 private:
-
-	constexpr static inline double m_player_height = 1.8;
-	constexpr static inline double m_unit = m_player_height / 32.0;
-
-	constexpr static inline glm::dvec3 m_chest_size = glm::dvec3(8.0, 12.0, 4.0) * m_unit;
-	constexpr static inline glm::dvec3 m_head_size  = glm::dvec3(8.0,  8.0, 8.0) * m_unit;
-	constexpr static inline glm::dvec3 m_leg_size   = glm::dvec3(4.0, 12.0, 4.0) * m_unit;
-	constexpr static inline glm::dvec3 m_arm_size   = glm::dvec3(4.0, 12.0, 4.0) * m_unit;
-
-	// static inline glm::dvec3 m_chest_size = glm::dvec3(0.45, 0.675, 0.225);
-	// static inline glm::dvec3 m_head_size  = glm::dvec3(0.45,  0.45, 0.45);
-	// static inline glm::dvec3 m_leg_size   = glm::dvec3(0.225, 0.675, 0.225);
-	// static inline glm::dvec3 m_arm_size   = glm::dvec3(0.225, 0.675, 0.225);
-
-	static inline Transform m_chest = Transform({0.0, m_leg_size.y, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
-	static inline Transform m_head = Transform({0.0, m_chest_size.y, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
-	static inline Transform m_left_leg = Transform({-m_leg_size.x / 2, -m_leg_size.y, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
-	static inline Transform m_right_leg = Transform({m_leg_size.x / 2, -m_leg_size.y, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
-	static inline Transform m_left_arm = Transform({-(m_arm_size.x / 2 + m_chest_size.x / 2), 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
-	static inline Transform m_right_arm = Transform({(m_arm_size.x / 2 + m_chest_size.x / 2), 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
 
 	/**
 	 * @brief Create the geometry for a cube with the given size and with th origin at the bottom center

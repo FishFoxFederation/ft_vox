@@ -64,6 +64,9 @@ public:
 		const uint64_t player_id,
 		bool use
 	);
+	void changePlayerViewMode(
+		const uint64_t player_id
+	);
 	void updatePlayer(
 		const uint64_t player_id,
 		std::function<void(Player &)> update

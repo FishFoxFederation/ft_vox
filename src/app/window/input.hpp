@@ -12,6 +12,14 @@ class Input
 
 public:
 
+	enum class KeyState
+	{
+		RELEASED = GLFW_RELEASE,
+		PRESSED = GLFW_PRESS,
+		REPEATED = GLFW_REPEAT,
+		NONE
+	};
+
 	/**
 	 * @brief Construct a new Input object
 	 *
@@ -28,17 +36,17 @@ public:
 	 * @brief Get the key state
 	 *
 	 * @param key The key to get the state of
-	 * @return int The state of the key
+	 * @return KeyState The state of the key
 	 */
-	int getKeyState(int key);
+	KeyState getKeyState(int key);
 
 	/**
 	 * @brief Get the mouse button state
 	 *
 	 * @param button The button to get the state of
-	 * @return int The state of the button
+	 * @return KeyState The state of the button
 	 */
-	int getMouseButtonState(int button);
+	KeyState getMouseButtonState(int button);
 
 	/**
 	 * @brief Get the cursor position
@@ -56,10 +64,10 @@ public:
 
 private:
 
-	std::queue<int> m_key_state[GLFW_KEY_LAST];
+	std::queue<KeyState> m_key_state[GLFW_KEY_LAST];
 	std::mutex m_key_state_mutex;
 
-	std::queue<int> m_mouse_button_state[GLFW_MOUSE_BUTTON_LAST];
+	std::queue<KeyState> m_mouse_button_state[GLFW_MOUSE_BUTTON_LAST];
 	std::mutex m_mouse_button_state_mutex;
 
 	double m_cursor_x;

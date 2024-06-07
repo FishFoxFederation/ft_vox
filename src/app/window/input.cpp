@@ -19,28 +19,24 @@ Input::~Input()
 
 }
 
-int Input::getKeyState(int key)
+Input::KeyState Input::getKeyState(int key)
 {
-	int state = GLFW_RELEASE;
+	KeyState state = KeyState::NONE;
 
 	std::lock_guard<std::mutex> lock(m_key_state_mutex);
 
 	if (!m_key_state[key].empty())
 	{
 		state = m_key_state[key].front();
-
-		if (m_key_state[key].size() > 1)
-		{
-			m_key_state[key].pop();
-		}
+		m_key_state[key].pop();
 	}
 
 	return state;
 }
 
-int Input::getMouseButtonState(int button)
+Input::KeyState Input::getMouseButtonState(int button)
 {
-	int state = GLFW_RELEASE;
+	KeyState state = KeyState::RELEASED;
 
 	std::lock_guard<std::mutex> lock(m_mouse_button_state_mutex);
 
@@ -74,7 +70,7 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	if (action != GLFW_REPEAT)
 	{
 		std::lock_guard<std::mutex> lock(input->m_key_state_mutex);
-		input->m_key_state[key].push(action);
+		input->m_key_state[key].push(static_cast<Input::KeyState>(action));
 	}
 
 	switch (key)
@@ -128,7 +124,7 @@ void Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 	Input* input = static_cast<Input*>(glfwGetWindowUserPointer(window));
 
 	std::lock_guard<std::mutex> lock(input->m_mouse_button_state_mutex);
-	input->m_mouse_button_state[button].push(action);
+	input->m_mouse_button_state[button].push(static_cast<Input::KeyState>(action));
 
 	// if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !input->m_cursor_captured)
 	// {
