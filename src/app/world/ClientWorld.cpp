@@ -944,7 +944,7 @@ bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dve
 				glm::vec3 block_position = glm::floor(position + offset);
 				glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
 				glm::vec3 chunk_position = getChunkPosition(block_position);
-				glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+				// glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
 				std::shared_ptr<Chunk> chunk = getChunk(glm::ivec3(chunk_position));
 				if (chunk == nullptr)
@@ -1000,7 +1000,7 @@ RayCastOnBlockResult ClientWorld::rayCastOnBlock(
 	{
 		glm::vec3 block_chunk_position = getBlockChunkPosition(block_position);
 		glm::vec3 chunk_position = getChunkPosition(block_position);
-		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+		// glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 		{
 			std::shared_ptr<Chunk> chunk = getChunk(glm::ivec3(chunk_position));
 			if (chunk != nullptr)
