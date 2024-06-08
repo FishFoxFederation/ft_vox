@@ -2,6 +2,8 @@
 #include "logger.hpp"
 #include "DebugGui.hpp"
 
+#include "Tracy.hpp"
+
 #include <unistd.h>
 
 UpdateThread::UpdateThread(
