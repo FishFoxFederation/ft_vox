@@ -11,7 +11,7 @@ PingPacket::PingPacket(uint64_t id)
 }
 
 PingPacket::PingPacket(const PingPacket & other)
-	: m_id(other.m_id)
+	: IPacket(other), m_id(other.m_id)
 {
 }
 

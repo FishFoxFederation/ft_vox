@@ -9,6 +9,7 @@ ChunkRequestPacket::~ChunkRequestPacket()
 }
 
 ChunkRequestPacket::ChunkRequestPacket(ChunkRequestPacket & other)
+	: IPacket(other)
 {
 	m_chunk_pos = other.m_chunk_pos;
 }

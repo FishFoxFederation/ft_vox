@@ -5,12 +5,12 @@ ConnectionPacket::ConnectionPacket()
 }
 
 ConnectionPacket::ConnectionPacket(uint32_t id, glm::vec3 position)
-: m_player_id(id), m_position(position)
+	: m_player_id(id), m_position(position)
 {
 }
 
 ConnectionPacket::ConnectionPacket(const ConnectionPacket & other)
-: m_player_id(other.m_player_id), m_position(other.m_position)
+	: IPacket(other), m_player_id(other.m_player_id), m_position(other.m_position)
 {
 }
 
