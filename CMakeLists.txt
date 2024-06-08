@@ -8,6 +8,11 @@ project(ft_vox
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(TRACY_ENABLE "" ON)
+add_subdirectory (external/tracy)
+
+
+
 add_executable(${PROJECT_NAME})
 
 target_compile_options(${PROJECT_NAME}
@@ -20,6 +25,12 @@ target_compile_options(${PROJECT_NAME}
 		-Werror
 		-Wpedantic
 		-Wno-missing-braces
+
+		# for tracy
+		-Wno-missing-field-initializers
+		-Wno-unused-parameter
+		-Wno-empty-body
+		-Wno-unused-result
 )
 
 target_link_options(${PROJECT_NAME}
@@ -96,6 +107,8 @@ target_sources(${PROJECT_NAME}
 		external/imgui/imgui_demo.cpp
 		external/imgui/backends/imgui_impl_glfw.cpp
 		external/imgui/backends/imgui_impl_vulkan.cpp
+
+		external/tracy/public/TracyClient.cpp
 )
 
 # include directories (equivalent to -I)
@@ -126,9 +139,10 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
+		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
 )
 
-target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
+target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient)
 
 
 
@@ -146,6 +160,12 @@ target_compile_options(server
 		-Werror
 		-Wpedantic
 		-Wno-missing-braces
+
+		# for tracy
+		-Wno-missing-field-initializers
+		-Wno-unused-parameter
+		-Wno-empty-body
+		-Wno-unused-result
 )
 
 target_link_options(server
@@ -221,6 +241,8 @@ target_sources(server
 		external/imgui/imgui_demo.cpp
 		external/imgui/backends/imgui_impl_glfw.cpp
 		external/imgui/backends/imgui_impl_vulkan.cpp
+
+		external/tracy/public/TracyClient.cpp
 )
 
 # include directories (equivalent to -I)
@@ -251,6 +273,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
+		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
 )
 
-target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
+target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient)
