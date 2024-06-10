@@ -5,6 +5,7 @@ const char * const str_block_update_thread = "BlockUpdateThread";
 const char * const str_network_thread = "NetworkThread";
 const char * const str_main_thread = "MainThread";
 const char * const str_thread_pool = "ThreadPool";
+const char * const str_render_thread = "RenderThread";
 
 const char * const str_worker_thread[20] = {
 	"WorkerThread0",
