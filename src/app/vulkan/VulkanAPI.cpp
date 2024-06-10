@@ -3,6 +3,8 @@
 #include "Block.hpp"
 #include "Model.hpp"
 
+#include "Tracy.hpp"
+
 #include <stb_image.h>
 
 #include <cstring>
@@ -13,6 +15,8 @@
 VulkanAPI::VulkanAPI(GLFWwindow * window):
 	window(window)
 {
+	ZoneScoped;
+
 	createInstance();
 	setupDebugMessenger();
 	createSurface(window);
@@ -53,6 +57,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 VulkanAPI::~VulkanAPI()
 {
+	ZoneScoped;
+
 	vkDeviceWaitIdle(device);
 
 	destroyMeshes();

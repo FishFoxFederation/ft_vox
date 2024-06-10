@@ -1,6 +1,8 @@
 #include "VulkanAPI.hpp"
 #include "DebugGui.hpp"
 
+#include "Tracy.hpp"
+
 #include <cstring>
 
 uint64_t VulkanAPI::storeMesh(
@@ -11,6 +13,7 @@ uint64_t VulkanAPI::storeMesh(
 	const uint32_t index_count
 )
 {
+	ZoneScoped;
 
 	if (vertex_count == 0 || index_count == 0)
 	{
@@ -90,6 +93,8 @@ void VulkanAPI::destroyMeshes(const std::vector<uint64_t> & mesh_ids)
 
 void VulkanAPI::destroyMeshes()
 {
+	ZoneScoped;
+
 	std::vector<uint64_t> meshes_still_in_use;
 	meshes_still_in_use.reserve(mesh_ids_to_destroy.size());
 	for (auto & id: mesh_ids_to_destroy)

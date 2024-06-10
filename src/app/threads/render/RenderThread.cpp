@@ -2,6 +2,10 @@
 #include "logger.hpp"
 #include "Model.hpp"
 
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
+#include "TracyVulkan.hpp"
+
 #include <iostream>
 #include <array>
 #include <algorithm>
@@ -9,6 +13,8 @@
 #include <cstring>
 #include <algorithm>
 #include <unistd.h>
+
+TracyVkCtx ctx;
 
 RenderThread::RenderThread(
 	const Settings & settings,
@@ -36,6 +42,10 @@ RenderThread::~RenderThread()
 
 void RenderThread::launch()
 {
+	const char * const ctx_name = "main_context";
+	ctx = TracyVkContext(vk.physical_device, vk.device, vk.graphics_queue, vk.draw_command_buffers[0]);
+	TracyVkContextName(ctx, ctx_name, strlen(ctx_name));
+
 	try
 	{
 		init();
@@ -50,15 +60,20 @@ void RenderThread::launch()
 		LOG_ERROR("RENDER THREAD Thread exception: " << e.what());
 	}
 	LOG_DEBUG("Thread stopped");
+
+	TracyVkDestroy(ctx);
 }
 
 void RenderThread::init()
 {
 	LOG_INFO("RenderThread launched :" << gettid());
+	tracy::SetThreadName(str_render_thread);
 }
 
 void RenderThread::loop()
 {
+	ZoneScoped;
+
 	//############################################################################################################
 	//                     																                         #
 	//                            Do independent logic from the vulkan rendering here                            #
@@ -170,98 +185,102 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
-	shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
-	shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
-	shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
-	shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
-	std::vector<VkClearValue> shadow_clear_values = {
-		{ 1.0f, 0 }
-	};
-	shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
-	shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
-
-	vkCmdBeginRenderPass(
-		vk.draw_command_buffers[vk.current_frame],
-		&shadow_render_pass_begin_info,
-		VK_SUBPASS_CONTENTS_INLINE
-	);
-
-	// Draw the chunks
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
-
-	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-		vk.sun_descriptor.sets[vk.current_frame]
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.shadow_pipeline.layout,
-		0,
-		static_cast<uint32_t>(shadow_descriptor_sets.size()),
-		shadow_descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	for (auto & chunk_mesh : chunk_meshes)
 	{
-		if (!vk.meshes.contains(chunk_mesh.id))
-		{
-			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
-			continue;
-		}
+		TracyVkZone(ctx, vk.draw_command_buffers[vk.current_frame], "Shadow pass");
 
-		Mesh mesh = vk.meshes.get(chunk_mesh.id);
+		VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
+		shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
+		shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
+		shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
+		shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
+		std::vector<VkClearValue> shadow_clear_values = {
+			{ 1.0f, 0 }
+		};
+		shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
+		shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
 
-		if (mesh.buffer == VK_NULL_HANDLE)
-		{
-			LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
-			continue;
-		}
-
-		{
-			auto lock = vk.meshes.lock();
-			vk.meshes.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
-		}
-
-		const VkBuffer vertex_buffers[] = { mesh.buffer };
-		const VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(
+		vkCmdBeginRenderPass(
 			vk.draw_command_buffers[vk.current_frame],
-			0, 1,
-			vertex_buffers,
-			offsets
+			&shadow_render_pass_begin_info,
+			VK_SUBPASS_CONTENTS_INLINE
 		);
 
-		vkCmdBindIndexBuffer(
-			vk.draw_command_buffers[vk.current_frame],
-			mesh.buffer,
-			mesh.index_offset,
-			VK_INDEX_TYPE_UINT32
-		);
+		// Draw the chunks
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
-		ModelMatrice model_matrice = {};
-		model_matrice.model = chunk_mesh.model;
-		vkCmdPushConstants(
+		const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+			vk.sun_descriptor.sets[vk.current_frame]
+		};
+
+		vkCmdBindDescriptorSets(
 			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.shadow_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT,
 			0,
-			sizeof(ModelMatrice),
-			&model_matrice
+			static_cast<uint32_t>(shadow_descriptor_sets.size()),
+			shadow_descriptor_sets.data(),
+			0,
+			nullptr
 		);
 
-		vkCmdDrawIndexed(
-			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(mesh.index_count),
-			1, 0, 0, 0
-		);
+		for (auto & chunk_mesh : chunk_meshes)
+		{
+			if (!vk.meshes.contains(chunk_mesh.id))
+			{
+				LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+				continue;
+			}
+
+			Mesh mesh = vk.meshes.get(chunk_mesh.id);
+
+			if (mesh.buffer == VK_NULL_HANDLE)
+			{
+				LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
+				continue;
+			}
+
+			{
+				auto lock = vk.meshes.lock();
+				vk.meshes.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
+			}
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			ModelMatrice model_matrice = {};
+			model_matrice.model = chunk_mesh.model;
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.shadow_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT,
+				0,
+				sizeof(ModelMatrice),
+				&model_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+		}
+
+		vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 	}
-
-	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
 	//                     																                         #
@@ -269,478 +288,484 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	VkRenderPassBeginInfo lighting_render_pass_begin_info = {};
-	lighting_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
-	lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
-	lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
-	lighting_render_pass_begin_info.renderArea.extent = vk.color_attachement.extent2D;
-	std::vector<VkClearValue> lighting_clear_values = {
-		{ 0.0f, 0.0f, 0.0f, 1.0f },
-		{ 1.0f, 0 }
-	};
-	lighting_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(lighting_clear_values.size());
-	lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
-
-	vkCmdBeginRenderPass(
-		vk.draw_command_buffers[vk.current_frame],
-		&lighting_render_pass_begin_info,
-		VK_SUBPASS_CONTENTS_INLINE
-	);
-
-
-	// Draw the chunks
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
-
-	const std::vector<VkDescriptorSet> descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.sun_descriptor.sets[vk.current_frame],
-		vk.block_textures_descriptor.set,
-		vk.shadow_map_descriptor.set
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.chunk_pipeline.layout,
-		0,
-		static_cast<uint32_t>(descriptor_sets.size()),
-		descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	uint32_t triangle_count = 0;
-
-	for (auto & chunk_mesh: chunk_meshes)
 	{
-		if (!vk.meshes.contains(chunk_mesh.id))
-		{
-			LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
-			continue;
-		}
+		TracyVkZone(ctx, vk.draw_command_buffers[vk.current_frame], "Lighting pass");
 
-		Mesh mesh = vk.meshes.get(chunk_mesh.id);
+		VkRenderPassBeginInfo lighting_render_pass_begin_info = {};
+		lighting_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
+		lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
+		lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
+		lighting_render_pass_begin_info.renderArea.extent = vk.color_attachement.extent2D;
+		std::vector<VkClearValue> lighting_clear_values = {
+			{ 0.0f, 0.0f, 0.0f, 1.0f },
+			{ 1.0f, 0 }
+		};
+		lighting_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(lighting_clear_values.size());
+		lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
 
-		if (mesh.buffer == VK_NULL_HANDLE)
-		{
-			LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
-			continue;
-		}
-
-		{
-			auto lock = vk.meshes.lock();
-			mesh.used_by_frame[vk.current_frame] = true;
-		}
-
-		// glm::dvec3 pos = chunk_mesh.transform.position();
-		// if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
-		// {
-		// 	continue;
-		// }
-
-		const VkBuffer vertex_buffers[] = { mesh.buffer };
-		const VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(
+		vkCmdBeginRenderPass(
 			vk.draw_command_buffers[vk.current_frame],
-			0, 1,
-			vertex_buffers,
-			offsets
+			&lighting_render_pass_begin_info,
+			VK_SUBPASS_CONTENTS_INLINE
 		);
 
-		vkCmdBindIndexBuffer(
-			vk.draw_command_buffers[vk.current_frame],
-			mesh.buffer,
-			mesh.index_offset,
-			VK_INDEX_TYPE_UINT32
-		);
 
-		ModelMatrice model_matrice = {};
-		model_matrice.model = chunk_mesh.model;
-		vkCmdPushConstants(
+		// Draw the chunks
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame],
+			vk.sun_descriptor.sets[vk.current_frame],
+			vk.block_textures_descriptor.set,
+			vk.shadow_map_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
 			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.chunk_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT,
 			0,
-			sizeof(ModelMatrice),
-			&model_matrice
-		);
-
-		vkCmdDrawIndexed(
-			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(mesh.index_count),
-			1, 0, 0, 0
-		);
-
-		triangle_count += (mesh.index_count) / 3;
-	}
-	DebugGui::rendered_triangles = triangle_count;
-
-
-	// Draw the entities
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
-
-	const std::vector<VkDescriptorSet> entity_descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame]
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.entity_pipeline.layout,
-		0,
-		static_cast<uint32_t>(entity_descriptor_sets.size()),
-		entity_descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	for (const auto & entity_mesh : entity_meshes)
-	{
-		if (!vk.meshes.contains(entity_mesh.id))
-		{
-			LOG_WARNING("Mesh " << entity_mesh.id << " not found in the mesh map.");
-			continue;
-		}
-
-		Mesh mesh = vk.meshes.get(entity_mesh.id);
-
-		if (mesh.buffer == VK_NULL_HANDLE)
-		{
-			LOG_WARNING("Mesh " << entity_mesh.id << " has a null buffer.");
-			continue;
-		}
-
-		const VkBuffer vertex_buffers[] = { mesh.buffer };
-		const VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(
-			vk.draw_command_buffers[vk.current_frame],
-			0, 1,
-			vertex_buffers,
-			offsets
-		);
-
-		vkCmdBindIndexBuffer(
-			vk.draw_command_buffers[vk.current_frame],
-			mesh.buffer,
-			mesh.index_offset,
-			VK_INDEX_TYPE_UINT32
-		);
-
-		EntityMatrices entity_matrice = {};
-		entity_matrice.model = entity_mesh.model;
-		entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-		vkCmdPushConstants(
-			vk.draw_command_buffers[vk.current_frame],
-			vk.entity_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			static_cast<uint32_t>(descriptor_sets.size()),
+			descriptor_sets.data(),
 			0,
-			sizeof(EntityMatrices),
-			&entity_matrice
+			nullptr
 		);
 
-		vkCmdDrawIndexed(
-			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(mesh.index_count),
-			1, 0, 0, 0
-		);
-	}
+		uint32_t triangle_count = 0;
 
-	for (auto & data: debug_blocks)
-	{
-		const glm::vec3 size = glm::vec3(data.size);
-		const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
-		const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
-
-		EntityMatrices block_matrice = {};
-		block_matrice.model = block_model;
-		block_matrice.color = data.color;
-		vkCmdPushConstants(
-			vk.draw_command_buffers[vk.current_frame],
-			vk.entity_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-			0,
-			sizeof(EntityMatrices),
-			&block_matrice
-		);
-
-		vkCmdDrawIndexed(
-			vk.draw_command_buffers[vk.current_frame],
-			36,
-			1,
-			0,
-			0,
-			0
-		);
-	}
-
-	// Draw the players
-	for (const auto & player : players)
-	{
-		if (!player.visible)
+		for (auto & chunk_mesh: chunk_meshes)
 		{
-			continue;
+			if (!vk.meshes.contains(chunk_mesh.id))
+			{
+				LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+				continue;
+			}
+
+			Mesh mesh = vk.meshes.get(chunk_mesh.id);
+
+			if (mesh.buffer == VK_NULL_HANDLE)
+			{
+				LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
+				continue;
+			}
+
+			{
+				auto lock = vk.meshes.lock();
+				mesh.used_by_frame[vk.current_frame] = true;
+			}
+
+			// glm::dvec3 pos = chunk_mesh.transform.position();
+			// if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+			// {
+			// 	continue;
+			// }
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			ModelMatrice model_matrice = {};
+			model_matrice.model = chunk_mesh.model;
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.chunk_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT,
+				0,
+				sizeof(ModelMatrice),
+				&model_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+
+			triangle_count += (mesh.index_count) / 3;
 		}
-
-		std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
-
-		// Body
-		const glm::mat4 body_model = Mat4()
-			.translate(player.position)
-			.rotate(-glm::radians(player.yaw - 90), glm::dvec3(0.0f, 1.0f, 0.0f))
-			.mat();
-
-		// Chest
-		const glm::mat4 chest_model = Mat4()
-			.translate(PlayerModel::chest_pos)
-			.mat();
-		drawPlayerBodyPart(
-			vk.player_chest_mesh_id,
-			body_model * chest_model,
-			glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)
-		);
-
-		// Head
-		const glm::mat4 head_model = Mat4()
-			.translate(PlayerModel::head_pos)
-			.rotate(-glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
-			.mat();
-		drawPlayerBodyPart(
-			vk.player_head_mesh_id,
-			body_model * chest_model * head_model,
-			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)
-		);
-
-		// Legs animation angle
-		double legs_angle = 0.0;
-		if (player.is_walking)
-		{
-			legs_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
-		}
-
-		// Left leg
-		const glm::mat4 left_leg_model = Mat4()
-			.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-			.translate(PlayerModel::left_leg_pos)
-			.mat();
-		drawPlayerBodyPart(
-			vk.player_leg_mesh_id,
-			body_model * chest_model * left_leg_model,
-			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
-		);
-
-		// Right leg
-		const glm::mat4 right_leg_model = Mat4()
-			.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-			.translate(PlayerModel::right_leg_pos)
-			.mat();
-		drawPlayerBodyPart(
-			vk.player_leg_mesh_id,
-			body_model * chest_model * right_leg_model,
-			glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
-		);
-
-		// Arm animation angle
-		double arms_angle = 0.0;
-		if (player.is_walking)
-		{
-			arms_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
-		}
-
-		// Left arm
-		const glm::mat4 left_arm_model = Mat4()
-			.translate(PlayerModel::left_arm_pos)
-			.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-			.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-			.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
-			.mat();
-		drawPlayerBodyPart(
-			vk.player_arm_mesh_id,
-			body_model * chest_model * left_arm_model,
-			glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
-		);
-
-		// Right arm
-		const glm::mat4 right_arm_model = Mat4()
-			.translate(PlayerModel::right_arm_pos)
-			.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-			.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-			.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
-			.mat();
-		drawPlayerBodyPart(
-			vk.player_arm_mesh_id,
-			body_model * chest_model * right_arm_model,
-			glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
-		);
-	}
+		DebugGui::rendered_triangles = triangle_count;
 
 
-	// Draw the targeted block
-	if (target_block.has_value())
-	{
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
+		// Draw the entities
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
 
-		const std::vector<VkDescriptorSet> line_descriptor_sets = {
+		const std::vector<VkDescriptorSet> entity_descriptor_sets = {
 			vk.camera_descriptor.sets[vk.current_frame]
 		};
 
 		vkCmdBindDescriptorSets(
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.line_pipeline.layout,
+			vk.entity_pipeline.layout,
 			0,
-			static_cast<uint32_t>(line_descriptor_sets.size()),
-			line_descriptor_sets.data(),
+			static_cast<uint32_t>(entity_descriptor_sets.size()),
+			entity_descriptor_sets.data(),
 			0,
 			nullptr
 		);
 
-		Mesh mesh = vk.meshes.get(vk.cube_mesh_id);
+		for (const auto & entity_mesh : entity_meshes)
+		{
+			if (!vk.meshes.contains(entity_mesh.id))
+			{
+				LOG_WARNING("Mesh " << entity_mesh.id << " not found in the mesh map.");
+				continue;
+			}
 
-		const VkBuffer vertex_buffers[] = { mesh.buffer };
-		const VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(
+			Mesh mesh = vk.meshes.get(entity_mesh.id);
+
+			if (mesh.buffer == VK_NULL_HANDLE)
+			{
+				LOG_WARNING("Mesh " << entity_mesh.id << " has a null buffer.");
+				continue;
+			}
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			EntityMatrices entity_matrice = {};
+			entity_matrice.model = entity_mesh.model;
+			entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.entity_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(EntityMatrices),
+				&entity_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+		}
+
+		for (auto & data: debug_blocks)
+		{
+			const glm::vec3 size = glm::vec3(data.size);
+			const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
+			const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
+
+			EntityMatrices block_matrice = {};
+			block_matrice.model = block_model;
+			block_matrice.color = data.color;
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.entity_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(EntityMatrices),
+				&block_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				36,
+				1,
+				0,
+				0,
+				0
+			);
+		}
+
+		// Draw the players
+		for (const auto & player : players)
+		{
+			if (!player.visible)
+			{
+				continue;
+			}
+
+			std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
+
+			// Body
+			const glm::mat4 body_model = Mat4()
+				.translate(player.position)
+				.rotate(-glm::radians(player.yaw - 90), glm::dvec3(0.0f, 1.0f, 0.0f))
+				.mat();
+
+			// Chest
+			const glm::mat4 chest_model = Mat4()
+				.translate(PlayerModel::chest_pos)
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_chest_mesh_id,
+				body_model * chest_model,
+				glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)
+			);
+
+			// Head
+			const glm::mat4 head_model = Mat4()
+				.translate(PlayerModel::head_pos)
+				.rotate(-glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_head_mesh_id,
+				body_model * chest_model * head_model,
+				glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)
+			);
+
+			// Legs animation angle
+			double legs_angle = 0.0;
+			if (player.is_walking)
+			{
+				legs_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+			}
+
+			// Left leg
+			const glm::mat4 left_leg_model = Mat4()
+				.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.translate(PlayerModel::left_leg_pos)
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_leg_mesh_id,
+				body_model * chest_model * left_leg_model,
+				glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+			);
+
+			// Right leg
+			const glm::mat4 right_leg_model = Mat4()
+				.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.translate(PlayerModel::right_leg_pos)
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_leg_mesh_id,
+				body_model * chest_model * right_leg_model,
+				glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
+			);
+
+			// Arm animation angle
+			double arms_angle = 0.0;
+			if (player.is_walking)
+			{
+				arms_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+			}
+
+			// Left arm
+			const glm::mat4 left_arm_model = Mat4()
+				.translate(PlayerModel::left_arm_pos)
+				.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+				.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_arm_mesh_id,
+				body_model * chest_model * left_arm_model,
+				glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
+			);
+
+			// Right arm
+			const glm::mat4 right_arm_model = Mat4()
+				.translate(PlayerModel::right_arm_pos)
+				.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+				.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_arm_mesh_id,
+				body_model * chest_model * right_arm_model,
+				glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
+			);
+		}
+
+
+		// Draw the targeted block
+		if (target_block.has_value())
+		{
+			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
+
+			const std::vector<VkDescriptorSet> line_descriptor_sets = {
+				vk.camera_descriptor.sets[vk.current_frame]
+			};
+
+			vkCmdBindDescriptorSets(
+				vk.draw_command_buffers[vk.current_frame],
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				vk.line_pipeline.layout,
+				0,
+				static_cast<uint32_t>(line_descriptor_sets.size()),
+				line_descriptor_sets.data(),
+				0,
+				nullptr
+			);
+
+			Mesh mesh = vk.meshes.get(vk.cube_mesh_id);
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			ModelMatrice target_block_matrice = {};
+			target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value());
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.line_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT,
+				0,
+				sizeof(ModelMatrice),
+				&target_block_matrice
+			);
+
+			vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 5.0f);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+		}
+
+
+		// Draw the skybox
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+
+		const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame],
+			vk.cube_map_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
 			vk.draw_command_buffers[vk.current_frame],
-			0, 1,
-			vertex_buffers,
-			offsets
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.skybox_pipeline.layout,
+			0,
+			static_cast<uint32_t>(skybox_descriptor_sets.size()),
+			skybox_descriptor_sets.data(),
+			0,
+			nullptr
 		);
 
-		vkCmdBindIndexBuffer(
-			vk.draw_command_buffers[vk.current_frame],
-			mesh.buffer,
-			mesh.index_offset,
-			VK_INDEX_TYPE_UINT32
-		);
-
-		ModelMatrice target_block_matrice = {};
-		target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value());
+		ModelMatrice camera_model_matrice = {};
+		camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
-			vk.line_pipeline.layout,
+			vk.skybox_pipeline.layout,
 			VK_SHADER_STAGE_VERTEX_BIT,
 			0,
 			sizeof(ModelMatrice),
-			&target_block_matrice
+			&camera_model_matrice
 		);
 
-		vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 5.0f);
-
-		vkCmdDrawIndexed(
+		vkCmdDraw(
 			vk.draw_command_buffers[vk.current_frame],
-			static_cast<uint32_t>(mesh.index_count),
-			1, 0, 0, 0
+			36,
+			1,
+			0,
+			0
 		);
+
+
+		// Draw gui
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> gui_descriptor_sets = {
+			vk.crosshair_image_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.gui_pipeline.layout,
+			0,
+			static_cast<uint32_t>(gui_descriptor_sets.size()),
+			gui_descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		float min_size = std::min(vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height);
+		float size = min_size / 40.0f;
+
+		VkViewport viewport = {};
+		viewport.x = static_cast<float>(vk.color_attachement.extent2D.width / 2 - (size / 2));
+		viewport.y = static_cast<float>(vk.color_attachement.extent2D.height / 2 - (size / 2));
+		viewport.width = size;
+		viewport.height = size;
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+
+		vkCmdSetViewport(vk.draw_command_buffers[vk.current_frame], 0, 1, &viewport);
+
+		vkCmdDraw(
+			vk.draw_command_buffers[vk.current_frame],
+			6,
+			1,
+			0,
+			0
+		);
+
+
+		// Draw test image
+		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+
+		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+		// 	vk.test_image_descriptor.set
+		// };
+
+		// vkCmdBindDescriptorSets(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+		// 	vk.test_image_pipeline.layout,
+		// 	0,
+		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
+		// 	test_image_descriptor_sets.data(),
+		// 	0,
+		// 	nullptr
+		// );
+
+		// vkCmdDraw(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	6,
+		// 	1,
+		// 	0,
+		// 	0
+		// );
+
+
+		vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 	}
 
-
-	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
-
-	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.cube_map_descriptor.set
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline.layout,
-		0,
-		static_cast<uint32_t>(skybox_descriptor_sets.size()),
-		skybox_descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	ModelMatrice camera_model_matrice = {};
-	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(ModelMatrice),
-		&camera_model_matrice
-	);
-
-	vkCmdDraw(
-		vk.draw_command_buffers[vk.current_frame],
-		36,
-		1,
-		0,
-		0
-	);
-
-
-	// Draw gui
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
-
-	const std::vector<VkDescriptorSet> gui_descriptor_sets = {
-		vk.crosshair_image_descriptor.set
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.gui_pipeline.layout,
-		0,
-		static_cast<uint32_t>(gui_descriptor_sets.size()),
-		gui_descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	float min_size = std::min(vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height);
-	float size = min_size / 40.0f;
-
-	VkViewport viewport = {};
-	viewport.x = static_cast<float>(vk.color_attachement.extent2D.width / 2 - (size / 2));
-	viewport.y = static_cast<float>(vk.color_attachement.extent2D.height / 2 - (size / 2));
-	viewport.width = size;
-	viewport.height = size;
-	viewport.minDepth = 0.0f;
-	viewport.maxDepth = 1.0f;
-
-	vkCmdSetViewport(vk.draw_command_buffers[vk.current_frame], 0, 1, &viewport);
-
-	vkCmdDraw(
-		vk.draw_command_buffers[vk.current_frame],
-		6,
-		1,
-		0,
-		0
-	);
-
-
-	// Draw test image
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
-
-	// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-	// 	vk.test_image_descriptor.set
-	// };
-
-	// vkCmdBindDescriptorSets(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.test_image_pipeline.layout,
-	// 	0,
-	// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-	// 	test_image_descriptor_sets.data(),
-	// 	0,
-	// 	nullptr
-	// );
-
-	// vkCmdDraw(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	6,
-	// 	1,
-	// 	0,
-	// 	0
-	// );
-
-
-	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
+	TracyVkCollect(ctx, vk.draw_command_buffers[vk.current_frame]);
 
 	//############################################################################################################
 	//                     																                         #
@@ -1016,6 +1041,8 @@ void RenderThread::loop()
 		throw std::runtime_error("Failed to present swap chain image");
 	}
 
+	FrameMark;
+
 	// Increment the current frame
 	vk.current_frame = (vk.current_frame + 1) % vk.max_frames_in_flight;
 
@@ -1025,6 +1052,8 @@ void RenderThread::loop()
 
 void RenderThread::updateTime()
 {
+	ZoneScoped;
+
 	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
 	m_delta_time = m_current_time - m_last_frame_time;
 	m_last_frame_time = m_current_time;
@@ -1036,6 +1065,8 @@ void RenderThread::drawPlayerBodyPart(
 	const glm::vec4 & color
 )
 {
+	ZoneScoped;
+
 	Mesh mesh = vk.meshes.get(mesh_id);
 
 	const VkBuffer vertex_buffers[] = { mesh.buffer };
