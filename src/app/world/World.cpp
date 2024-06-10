@@ -25,7 +25,8 @@ glm::vec3 World::getChunkPosition(const glm::vec3 & position)
 
 std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position) const
 {
-	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	std::lock_guard lock(m_chunks_mutex);
+	LockMark(m_chunks_mutex);
 	auto it = m_chunks.find(position);
 	if (it != m_chunks.end())
 	{
@@ -36,7 +37,7 @@ std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position) const
 
 void World::insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk)
 {
-	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	std::lock_guard lock(m_chunks_mutex);
 	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
 	if (!ret.second)
 	{

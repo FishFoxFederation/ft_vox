@@ -23,7 +23,8 @@ Chunk::Chunk(const Chunk & other)
 }
 
 Chunk::Chunk(Chunk && other)
-:	status(other.status),
+:	
+	// status(other.status),
 	position(other.position),
 	m_mesh_id(other.m_mesh_id),
 	m_blocks(std::move(other.m_blocks))
@@ -50,10 +51,7 @@ Chunk & Chunk::operator=(const Chunk && other)
 
 Chunk::~Chunk()
 {
-	if (!status.isLocked())
-	{
-		status.lock();
-	}
+	status.try_lock();
 }
 
 Chunk::BlockArray & Chunk::getBlocks()

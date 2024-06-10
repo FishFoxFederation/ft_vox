@@ -1995,7 +1995,7 @@ void VulkanAPI::copyBuffer(
 	// 	"Failed to allocate command buffers"
 	// );
 
-	std::unique_lock<std::mutex> lock(transfer_operation_mutex);
+	std::unique_lock lock(transfer_operation_mutex);
 
 	vkResetCommandBuffer(transfer_command_buffers, 0);
 

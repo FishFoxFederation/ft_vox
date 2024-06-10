@@ -48,7 +48,7 @@ public:
 
 	std::lock_guard<std::mutex> lock()
 	{
-		return std::lock_guard<std::mutex>(m_mutex);
+		return std::lock_guard(m_mutex);
 	}
 
 	using container::begin;
@@ -58,25 +58,25 @@ public:
 
 	Value get(const Key & key)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		return container::at(key);
 	}
 
 	uint32_t size() const
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		return container::size();
 	}
 
 	bool contains(const Key & key) const
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		return container::find(key) != container::end();
 	}
 
 	Key insert(const Value & value)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		Key key = m_id_generator.nextId();
 		container::insert(std::make_pair(key, value));
 		return key;
@@ -84,7 +84,7 @@ public:
 
 	Key insert(Value && value)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		Key key = m_id_generator.nextId();
 		container::insert(std::make_pair(key, std::move(value)));
 		return key;
@@ -92,25 +92,25 @@ public:
 
 	void insert(const Key & key, const Value & value)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		container::insert(std::make_pair(key, value));
 	}
 
 	void insert(const Key & key, Value && value)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		container::insert(std::make_pair(key, std::move(value)));
 	}
 
 	void erase(const Key & key)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		container::erase(key);
 	}
 
 	std::vector<Value> values() const
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		std::vector<Value> values;
 		values.reserve(container::size());
 		for (const auto & [key, value] : *this)

@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Tracy.hpp"
+
 #include <cstdint>
 #include <chrono>
 #include <mutex>
@@ -33,7 +35,7 @@ public:
 	void startFall();
 	double fallDuration();
 
-	std::mutex mutex;
+	TracyLockableN(std::mutex, mutex, "Mob Mutex");
 
 	Transform transform = Transform({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
 	HitBox hitbox = HitBox({-0.4, 0, -0.4}, {0.8, 1.8, 0.8});

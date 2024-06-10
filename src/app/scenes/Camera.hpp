@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <mutex>
+#include "Tracy.hpp"
 
 class ViewFrustum
 {
@@ -83,7 +84,7 @@ public:
 
 	Camera & operator=(Camera && camera)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		position = camera.position;
 		pitch = camera.pitch;
 		yaw = camera.yaw;
@@ -96,7 +97,7 @@ public:
 
 	RenderInfo getRenderInfo(double aspect_ratio) const
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		return {
 			getViewMatrix(),
 			getProjectionMatrix(aspect_ratio),
@@ -115,7 +116,7 @@ private:
 	double near_plane{ 0.01f };
 	double far_plane{ 1000.0f };
 
-	mutable std::mutex m_mutex;
+	mutable TracyLockableN(std::mutex, m_mutex, "Camera Mutex");
 
 	glm::dvec3 direction() const;
 

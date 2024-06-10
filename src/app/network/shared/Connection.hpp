@@ -7,6 +7,7 @@
 #include "ConnectionSocket.hpp"
 #include "Socket.hpp"
 #include "logger.hpp"
+#include "Tracy.hpp"
 
 class Connection
 {
@@ -25,7 +26,9 @@ public:
 	std::vector<uint8_t>			getReadBuffer() const;
 	const std::vector<uint8_t> &	getReadBufferRef() const;
 	const std::vector<uint8_t> &	getWriteBufferRef() const;
-	std::mutex & 			getReadBufferMutex();
+	// std::mutex & 			getReadBufferMutex();
+	void					lockReadBuffer();
+	void					unlockReadBuffer();
 	void					reduceReadBuffer(size_t size);
 	bool					dataToSend() const;
 	ssize_t 				recv();
@@ -39,8 +42,8 @@ private:
 
 	std::shared_ptr<Socket>	m_socket;
 	std::vector<uint8_t>	m_read_buffer;
-	mutable	std::mutex		m_read_buffer_mutex;
+	mutable TracyLockableN (std::mutex, m_read_buffer_mutex, "Read Buffer Mutex");
 	std::vector<uint8_t>	m_write_buffer;
-	mutable std::mutex		m_write_buffer_mutex;
+	mutable  TracyLockableN (std::mutex, m_write_buffer_mutex, "Write Buffer Mutex");
 	uint64_t				m_connection_id;
 };

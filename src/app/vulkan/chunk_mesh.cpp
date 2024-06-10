@@ -23,7 +23,7 @@ uint64_t VulkanAPI::storeMesh(
 	VkDeviceSize index_buffer_size = index_count * sizeof(uint32_t);
 	VkDeviceSize buffer_size = vertex_buffer_size + index_buffer_size;
 
-	// std::lock_guard<std::mutex> lock(global_mutex);
+	// std::lock_guard lock(global_mutex);
 
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
@@ -64,7 +64,7 @@ uint64_t VulkanAPI::storeMesh(
 
 	// uint64_t mesh_id;
 	// {
-	// 	std::lock_guard<std::mutex> lock(mesh_mutex);
+	// 	std::lock_guard lock(mesh_mutex);
 	// 	mesh_id = next_mesh_id++;
 	// 	meshes.emplace(mesh_id, mesh);
 	// }
@@ -76,14 +76,14 @@ uint64_t VulkanAPI::storeMesh(
 
 void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
 {
-	std::lock_guard<std::mutex> lock(global_mutex);
+	std::lock_guard lock(global_mutex);
 	mesh_ids_to_destroy.push_back(mesh_id);
 	destroyMeshes();
 }
 
 void VulkanAPI::destroyMeshes(const std::vector<uint64_t> & mesh_ids)
 {
-	std::lock_guard<std::mutex> lock(global_mutex);
+	std::lock_guard lock(global_mutex);
 	mesh_ids_to_destroy.insert(mesh_ids_to_destroy.end(), mesh_ids.begin(), mesh_ids.end());
 	destroyMeshes();
 }

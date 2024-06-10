@@ -5,6 +5,7 @@
 #include <queue>
 #include <memory>
 #include <mutex>
+#include "Tracy.hpp"
 
 class IncomingPacketList
 {
@@ -24,5 +25,5 @@ public:
 	bool						empty() const;
 private:
 	std::queue<std::shared_ptr<IPacket>>	m_packets;
-	mutable std::mutex						m_mutex;
+	mutable TracyLockableN(std::mutex, m_mutex, "Incoming Packet List Mutex");
 };

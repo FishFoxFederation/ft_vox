@@ -127,7 +127,7 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	std::lock_guard<std::mutex> lock(vk.global_mutex);
+	std::lock_guard lock(vk.global_mutex);
 
 	DebugGui::chunk_mesh_count = vk.meshes.size();
 

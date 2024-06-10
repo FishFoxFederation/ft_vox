@@ -2,6 +2,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include "Tracy.hpp"
+
 #include <map>
 #include <mutex>
 
@@ -41,6 +43,5 @@ private:
 
 	VkDeviceSize m_allocated_memory_size = 0;
 
-	mutable std::mutex m_mutex;
-
+	mutable TracyLockableN(std::mutex, m_mutex, "Vulkan Memory Allocator");
 };

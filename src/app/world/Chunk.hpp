@@ -9,6 +9,7 @@
 #include "Block.hpp"
 #include "Status.hpp"
 #include "define.hpp"
+#include "Tracy.hpp"
 
 #define CHUNK_Y_SIZE 256
 #define CHUNK_X_SIZE 16
@@ -57,7 +58,8 @@ public:
 	static	glm::ivec3	toCoord(const int & index);
 
 
-	Status	status;
+	// TracySharedLockableN			(Status,	status, "Chunk Status");
+	Status 							status;
 	std::unordered_set<uint64_t>	entity_ids;
 private:
 	bool 		meshed = false;

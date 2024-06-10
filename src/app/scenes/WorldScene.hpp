@@ -9,6 +9,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Tracy.hpp"
 
 #include <vector>
 #include <mutex>
@@ -60,26 +61,26 @@ public:
 
 		void add(uint64_t meshID, const Transform & transform)
 		{
-			std::lock_guard<std::mutex> lock(m_mutex);
+			std::lock_guard lock(m_mutex);
 			m_meshes.push_back({meshID, transform.model()});
 		}
 
 		void remove(uint64_t meshID)
 		{
-			std::lock_guard<std::mutex> lock(m_mutex);
+			std::lock_guard lock(m_mutex);
 			std::erase_if(m_meshes, [meshID](const MeshRenderData & data) { return data.id == meshID; });
 		}
 
 		std::vector<MeshRenderData> get() const
 		{
-			std::lock_guard<std::mutex> lock(m_mutex);
+			std::lock_guard lock(m_mutex);
 			return m_meshes;
 		}
 
 	private:
 
 		std::vector<MeshRenderData> m_meshes;
-		mutable std::mutex m_mutex;
+		mutable TracyLockableN(std::mutex, m_mutex, "Mesh List");
 	};
 
 	/**
@@ -145,7 +146,7 @@ public:
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
 	std::map<uint64_t, PlayerRenderData> m_players;
-	mutable std::mutex m_player_mutex;
+	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
 
 private:
 
@@ -153,8 +154,8 @@ private:
 
 	// position of the block the camera is looking at
 	std::optional<glm::vec3> m_target_block;
-	mutable std::mutex m_target_block_mutex;
+	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
 
 	std::vector<DebugBlock> m_debug_block;
-	mutable std::mutex m_debug_block_mutex;
+	mutable TracyLockableN(std::mutex, m_debug_block_mutex, "Debug Block");
 };

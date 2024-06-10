@@ -23,7 +23,7 @@ Input::KeyState Input::getKeyState(int key)
 {
 	KeyState state = KeyState::NONE;
 
-	std::lock_guard<std::mutex> lock(m_key_state_mutex);
+	std::lock_guard lock(m_key_state_mutex);
 
 	if (!m_key_state[key].empty())
 	{
@@ -38,7 +38,7 @@ Input::KeyState Input::getMouseButtonState(int button)
 {
 	KeyState state = KeyState::RELEASED;
 
-	std::lock_guard<std::mutex> lock(m_mouse_button_state_mutex);
+	std::lock_guard lock(m_mouse_button_state_mutex);
 
 	if (!m_mouse_button_state[button].empty())
 	{
@@ -55,7 +55,7 @@ Input::KeyState Input::getMouseButtonState(int button)
 
 void Input::getCursorPos(double& xpos, double& ypos)
 {
-	std::lock_guard<std::mutex> lock(m_cursor_mutex);
+	std::lock_guard lock(m_cursor_mutex);
 	xpos = m_cursor_x;
 	ypos = m_cursor_y;
 }
@@ -69,7 +69,7 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
 	if (action != GLFW_REPEAT)
 	{
-		std::lock_guard<std::mutex> lock(input->m_key_state_mutex);
+		std::lock_guard lock(input->m_key_state_mutex);
 		input->m_key_state[key].push(static_cast<Input::KeyState>(action));
 	}
 
@@ -79,7 +79,7 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		{
 			if (action == GLFW_PRESS)
 			{
-				std::lock_guard<std::mutex> lock(input->m_cursor_mutex);
+				std::lock_guard lock(input->m_cursor_mutex);
 				if (input->m_cursor_captured)
 				{
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -96,7 +96,7 @@ void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		{
 			if (action == GLFW_PRESS)
 			{
-				std::lock_guard<std::mutex> lock(input->m_cursor_mutex);
+				std::lock_guard lock(input->m_cursor_mutex);
 				if (input->m_cursor_captured)
 				{
 					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -123,7 +123,7 @@ void Input::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 
 	Input* input = static_cast<Input*>(glfwGetWindowUserPointer(window));
 
-	std::lock_guard<std::mutex> lock(input->m_mouse_button_state_mutex);
+	std::lock_guard lock(input->m_mouse_button_state_mutex);
 	input->m_mouse_button_state[button].push(static_cast<Input::KeyState>(action));
 
 	// if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !input->m_cursor_captured)
@@ -137,7 +137,7 @@ void Input::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	Input* input = static_cast<Input*>(glfwGetWindowUserPointer(window));
 
-	std::lock_guard<std::mutex> lock(input->m_cursor_mutex);
+	std::lock_guard lock(input->m_cursor_mutex);
 	input->m_cursor_x = xpos;
 	input->m_cursor_y = ypos;
 }

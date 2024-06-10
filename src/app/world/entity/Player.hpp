@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Tracy.hpp"
+
 #include <cstdint>
 #include <chrono>
 #include <mutex>
@@ -61,7 +63,7 @@ public:
 	bool canUse() const;
 	void startUse();
 
-	std::mutex mutex;
+	TracyLockableN (std::mutex,  mutex, "Player internal");
 
 	enum class GameMode
 	{
