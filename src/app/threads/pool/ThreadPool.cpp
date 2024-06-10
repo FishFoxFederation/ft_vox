@@ -9,7 +9,7 @@ ThreadPool::ThreadPool()
 	{
 		for (unsigned i = 0; i < thread_count; i++)
 		{
-			m_threads.push_back(std::thread(&ThreadPool::worker_thread, this));
+			m_threads.push_back(std::thread(&ThreadPool::worker_thread, this, i));
 		}
 	}
 	catch (...)
@@ -26,8 +26,9 @@ ThreadPool::~ThreadPool()
 	m_cond.notify_all();
 }
 
-void ThreadPool::worker_thread()
+void ThreadPool::worker_thread(const int & id)
 {
+	tracy::SetThreadName(str_worker_thread[id]);
 	while (!m_done)
 	{
 		std::packaged_task<void()> task;

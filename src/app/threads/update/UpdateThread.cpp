@@ -59,6 +59,7 @@ void UpdateThread::launch()
 void UpdateThread::init()
 {
 	LOG_INFO("UpdateThread launched :" << gettid());
+	tracy::SetThreadName(str_update_thread);
 	auto packet = std::make_shared<ConnectionPacket>(m_world.m_my_player_id, m_world.getPlayerPosition(m_world.m_my_player_id));
 	m_client.sendPacket(packet);
 

@@ -35,6 +35,7 @@ void NetworkThread::launch()
 void NetworkThread::init()
 {
 	LOG_INFO("NetworkThread launched :" << gettid());
+	tracy::SetThreadName("NetworkThread");
 }
 
 void NetworkThread::loop()

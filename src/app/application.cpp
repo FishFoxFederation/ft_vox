@@ -19,6 +19,7 @@ Application::Application(const int & player_id, const std::string & ip_address, 
 	// m_network_thread(m_client)
 {
 	LOG_INFO("Application::Application()");
+	
 }
 
 Application::~Application()

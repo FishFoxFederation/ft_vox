@@ -1,6 +1,8 @@
 #include "application.hpp"
 #include "logger.hpp"
 #include "HitBox.hpp"
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
 
 #include <iostream>
 #include <exception>

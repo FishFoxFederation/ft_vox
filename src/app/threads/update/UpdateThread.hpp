@@ -9,6 +9,8 @@
 #include "Client.hpp"
 #include "ClientPacketHandler.hpp"
 #include <chrono>
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
 
 class UpdateThread
 {
