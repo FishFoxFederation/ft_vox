@@ -38,6 +38,7 @@ void BlockUpdateThread::launch()
 void BlockUpdateThread::init()
 {
 	LOG_INFO("BlockUpdateThread launched :" << gettid());
+	tracy::SetThreadName(str_block_update_thread);
 	// for (int x = 0; x < 10; x++)
 	// {
 	// 	for (int z = 0; z < 10; z++)

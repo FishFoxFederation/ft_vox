@@ -13,6 +13,8 @@
 #include "ThreadPool.hpp"
 #include "Client.hpp"
 
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
 #include <chrono>
 
 class Application

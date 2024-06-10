@@ -8,6 +8,7 @@
 #include "ThreadPool.hpp"
 #include "DebugGui.hpp"
 #include "logger.hpp"
+#include "Tracy.hpp"
 
 
 

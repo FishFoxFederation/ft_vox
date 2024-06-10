@@ -8,6 +8,8 @@
 #include <mutex>
 #include <condition_variable>
 #include <future>
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
 
 class JoinThreads
 {
@@ -60,5 +62,5 @@ private:
 	std::vector<std::thread>			m_threads;
 	JoinThreads							m_joiner;
 
-	void worker_thread();
+	void worker_thread(const int & id);
 };

@@ -42,6 +42,7 @@ target_link_options(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
 	PRIVATE
 		src/main.cpp
+		src/tracy_globals.cpp
 
 		src/utils/logger.cpp
 
@@ -177,6 +178,7 @@ target_link_options(server
 
 target_sources(server
 	PRIVATE
+		src/tracy_globals.cpp
 		src/app/network/server_main.cpp
 
 		src/utils/logger.cpp
