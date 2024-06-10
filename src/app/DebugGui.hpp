@@ -10,6 +10,7 @@
 #include <array>
 #include <algorithm>
 #include <numeric>
+#include "Tracy.hpp"
 
 template <typename T>
 class Atomic
@@ -22,13 +23,13 @@ public:
 
 	T get() const
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		return m_value;
 	}
 
 	void set(T value)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		m_value = value;
 	}
 
@@ -46,7 +47,7 @@ public:
 private:
 
 	T m_value;
-	mutable std::mutex m_mutex;
+	mutable 	std::mutex m_mutex;
 
 };
 
@@ -58,7 +59,7 @@ public:
 
 	void push(T value)
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		m_sum += value;
 		m_sum -= m_history[0];
 		std::shift_left(m_history.begin(), m_history.end(), 1);
@@ -67,13 +68,13 @@ public:
 
 	T average() const
 	{
-		std::lock_guard<std::mutex> lock(m_mutex);
+		std::lock_guard lock(m_mutex);
 		return m_sum / N;
 	}
 
 	std::unique_lock<std::mutex> lock() const
 	{
-		return std::unique_lock<std::mutex>(m_mutex);
+		return std::unique_lock(m_mutex);
 	}
 
 	T * data()

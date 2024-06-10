@@ -7,6 +7,7 @@
 #include "ThreadPool.hpp"
 #include "Mob.hpp"
 #include "hashes.hpp"
+#include "Tracy.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -46,14 +47,14 @@ public:
 	void 					insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
 protected:
 	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
-	std::mutex												m_players_mutex;
+	TracyLockableN											(std::mutex, m_players_mutex, "Players");
 
 	std::unordered_map<uint64_t, std::shared_ptr<Mob>>		m_mobs;
-	std::mutex												m_mobs_mutex;
+	TracyLockableN											(std::mutex, m_mobs_mutex, "Mobs");
 	uint64_t												m_mob_id = 0;
 
 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>>	m_chunks;
-	mutable std::mutex										m_chunks_mutex;
+	mutable TracyLockableN											(std::mutex,	m_chunks_mutex, "Chunks");
 	WorldGenerator										m_world_generator;
 
 };

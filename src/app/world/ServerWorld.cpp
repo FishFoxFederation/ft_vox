@@ -4,7 +4,7 @@ ServerWorld::ServerWorld()
 {
 	std::shared_ptr<Chunk> chunk;
 
-	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	std::lock_guard lock(m_chunks_mutex);
 
 	chunk = std::make_shared<Chunk>(m_world_generator.generateChunkColumn(0, 0));
 	this->m_chunks.insert({glm::ivec3(0, 0, 0), chunk});
@@ -44,7 +44,7 @@ void ServerWorld::setBlock(const glm::vec3 & position, BlockID block)
 	std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
 	if (chunk == nullptr)
 		return;
-	std::lock_guard<Status> lock(chunk->status);
+	std::lock_guard lock(chunk->status);
 	chunk->setBlock(block_chunk_position, block);
 }
 
@@ -52,7 +52,7 @@ void ServerWorld::loadChunk(const glm::ivec3 & chunk_position)
 {
 	std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(m_world_generator.generateChunkColumn(chunk_position.x, chunk_position.z));
 	{
-		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		std::lock_guard lock(m_chunks_mutex);
 		m_chunks.insert({chunk_position, std::move(chunk)});
 	}
 }

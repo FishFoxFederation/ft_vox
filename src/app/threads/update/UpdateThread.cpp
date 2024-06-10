@@ -68,6 +68,7 @@ void UpdateThread::init()
 
 void UpdateThread::loop()
 {
+	ZoneScoped;
 	m_client.runOnce(1);
 	updateTime();
 	readInput();
@@ -259,6 +260,7 @@ void UpdateThread::movePlayer()
 
 void UpdateThread::handlePackets()
 {
+	ZoneScoped;
 	int i = 0;
 	while (i < 10 && m_client.getQueueSize())
 	{

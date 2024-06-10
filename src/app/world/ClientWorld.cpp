@@ -24,6 +24,7 @@ ClientWorld::~ClientWorld()
 
 void ClientWorld::updateBlock(glm::dvec3 position)
 {
+	ZoneScoped;
 	updateChunks(position);
 	waitForFinishedFutures();
 }
@@ -38,7 +39,10 @@ void ClientWorld::addChunk(std::shared_ptr<Chunk> chunk)
 {
 	glm::ivec3 chunk_position = chunk->getPosition();
 	{
-		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		std::lock_guard lock(m_chunks_mutex);
+		std::lock_guard lock2(m_loaded_chunks_mutex);
+		LockMark(m_chunks_mutex);
+		LockMark(m_loaded_chunks_mutex);
 
 		m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
 		m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
@@ -60,12 +64,13 @@ void ClientWorld::addChunk(std::shared_ptr<Chunk> chunk)
 
 void ClientWorld::removeChunk(const glm::ivec3 & chunkPosition)
 {
-	std::lock_guard<std::mutex> lock(m_loaded_chunks_mutex);
+	std::lock_guard lock(m_loaded_chunks_mutex);
 	unloadChunk(chunkPosition);
 }
 
 void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 {
+	ZoneScoped;
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
 	//here coords are in 2D because we are working with chunk columns
@@ -93,6 +98,7 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 
 				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id, chunk]()
 				{
+					ZoneScopedN("Chunk Loading");
 					/**************************************************************
 					 * CHUNK LOADING FUNCTION
 					 **************************************************************/
@@ -100,14 +106,14 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 					*chunk = m_world_generator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
 					// LOG_DEBUG("Chunk unlocked: " << chunkPos2D.x << " " << chunkPos2D.y);
 					{
-						std::lock_guard<std::mutex> lock(m_loaded_chunks_mutex);
+						std::lock_guard lock(m_loaded_chunks_mutex);
 						m_loaded_chunks.insert(chunkPos2D);
 						// LOG_DEBUG("Chunk inserted into loaded chunks: " << chunkPos2D.x << " " << chunkPos2D.y);
 					}
 					chunk->status.unlock();
 
 					{
-						std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+						std::lock_guard lock(m_finished_futures_mutex);
 						m_finished_futures.push(current_id);
 						// LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
 					}
@@ -128,6 +134,7 @@ void ClientWorld::loadChunks(const std::vector<glm::vec3> & playerPositions)
 
 void ClientWorld::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 {
+	ZoneScoped;
 	std::vector<glm::ivec2> playerChunks2D;
 	for (auto playerPosition : playerPositions)
 	{
@@ -166,9 +173,10 @@ void ClientWorld::unloadChunks(const glm::vec3 & playerPosition)
 
 void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 {
+	ZoneScoped;
 	std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
 	{
-		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+		std::lock_guard lock(m_chunks_mutex);
 		m_chunks.erase(chunkPos3D);
 	}
 	m_loaded_chunks.erase(glm::ivec2(chunkPos3D.x, chunkPos3D.z));
@@ -178,6 +186,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 	uint64_t current_id = m_future_id++;
 	std::future<void> future = m_threadPool.submit([this, chunk, current_id]()
 	{
+		ZoneScopedN("Chunk Unloading");
 		/**************************************************************
 		 * CHUNK UNLOADING FUNCTION
 		 **************************************************************/
@@ -185,7 +194,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 		uint64_t mesh_scene_id, mesh_id;
 
 		//will block and wait
-		std::lock_guard<Status> lock(chunk->status);
+		std::lock_guard lock(chunk->status);
 
 		mesh_scene_id = chunk->getMeshID();
 
@@ -197,7 +206,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 		}
 
 		{
-			std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+			std::lock_guard lock(m_finished_futures_mutex);
 			m_finished_futures.push(current_id);
 		}
 
@@ -209,6 +218,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 {
+	ZoneScoped;
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
 	for(auto chunkPos2D : m_loaded_chunks)
@@ -232,6 +242,7 @@ void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 
 void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 {
+	ZoneScoped;
 	glm::ivec3 chunkPos3D = glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
 	/********
 	 * CHECKING IF NEIGHBOURS EXIST AND ARE AVAILABLE
@@ -263,6 +274,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	//The constructor will mark the chunk as being read
 	//create all mesh data needed ( pointers to neighbors basically )
 	m_chunks_mutex.lock();
+	LockMark(m_chunks_mutex);
 	// LOG_INFO("mchunks size: " << m_chunks.size());
 	CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
 	m_chunks_mutex.unlock();
@@ -273,6 +285,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	uint64_t current_id = m_future_id++;
 	std::future<void> future = m_threadPool.submit([this, chunkPos3D, current_id, mesh_data = std::move(mesh_data)]() mutable
 	{
+		ZoneScopedN("Chunk Meshing");
 		/**************************************************************
 		 * CALCULATE MESH FUNCTION
 		 **************************************************************/
@@ -317,7 +330,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		}
 
 		{
-			std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+			std::lock_guard lock(m_finished_futures_mutex);
 			m_finished_futures.push(current_id);
 			// LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
 		}
@@ -332,11 +345,12 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 {
+	ZoneScoped;
 	// static std::chrono::steady_clock::time_point last_update = std::chrono::steady_clock::now();
-	// std::lock_guard<std::mutex> lock(m_chunks_mutex);
-	// std::lock_guard<std::mutex> lock5(m_unload_set_mutex);
-	// std::lock_guard<std::mutex> lock6(m_blocks_to_set_mutex);
-	std::lock_guard<std::mutex> lock(m_loaded_chunks_mutex);
+	// std::lock_guard lock(m_chunks_mutex);
+	// std::lock_guard lock5(m_unload_set_mutex);
+	// std::lock_guard lock6(m_blocks_to_set_mutex);
+	std::lock_guard lock(m_loaded_chunks_mutex);
 	// loadChunks(playerPosition);
 	// unloadChunks(playerPosition);
 	meshChunks(playerPosition);
@@ -346,7 +360,7 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 void ClientWorld::doBlockSets()
 {
 	{
-		std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		std::lock_guard lock(m_blocks_to_set_mutex);
 		if (m_blocks_to_set.empty())
 			return;
 	}
@@ -362,8 +376,8 @@ void ClientWorld::doBlockSets()
 			glm::ivec2 chunk_position2D;
 			std::shared_ptr<Chunk> chunk;
 			{
-				std::lock_guard<std::mutex> lock(m_chunks_mutex);
-				std::lock_guard<std::mutex> lock3(m_blocks_to_set_mutex);
+				std::lock_guard lock(m_chunks_mutex);
+				std::lock_guard lock3(m_blocks_to_set_mutex);
 				if (m_blocks_to_set.empty())
 					break;
 				auto ret_pair = m_blocks_to_set.front();
@@ -394,7 +408,7 @@ void ClientWorld::doBlockSets()
 		}
 
 		// {
-			// std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+			// std::lock_guard lock(m_finished_futures_mutex);
 			// m_finished_futures.push(current_id);
 		// }
 	// });
@@ -403,7 +417,8 @@ void ClientWorld::doBlockSets()
 
 void ClientWorld::waitForFinishedFutures()
 {
-	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+	ZoneScoped;
+	std::lock_guard lock(m_finished_futures_mutex);
 	while(!m_finished_futures.empty())
 	{
 		uint64_t id = m_finished_futures.front();
@@ -430,7 +445,7 @@ void ClientWorld::updateEntities()
 void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dvec3 & displacement)
 {
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 
 	// apply displacement
 	player->transform.position += displacement;
@@ -438,7 +453,7 @@ void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dve
 	DebugGui::player_position = player->transform.position;
 
 	{
-		std::lock_guard<std::mutex> lock(m_worldScene.m_player_mutex);
+		std::lock_guard lock(m_worldScene.m_player_mutex);
 		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
 		data.position = player->transform.position;
 	}
@@ -449,13 +464,13 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 	if (!m_players.contains(player_id))
 		return;
 	std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(m_players.at(player_id));
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 
 	// apply displacement
 	player->transform.position = position;
 
 	{
-		std::lock_guard<std::mutex> lock(m_worldScene.m_player_mutex);
+		std::lock_guard lock(m_worldScene.m_player_mutex);
 		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
 		data.position = player->transform.position;
 	}
@@ -483,10 +498,10 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 {
 	std::shared_ptr<Player> player;
 	{
-		std::lock_guard<std::mutex> lock(m_players_mutex);
+		std::lock_guard lock(m_players_mutex);
 		player = m_players.at(player_id);
 	}
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 
 	std::pair<glm::dvec3, glm::dvec3> result;
 
@@ -608,7 +623,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	DebugGui::player_velocity = glm::length(player->velocity);
 
 	{ // update player walking animation
-		std::lock_guard<std::mutex> lock(m_worldScene.m_player_mutex);
+		std::lock_guard lock(m_worldScene.m_player_mutex);
 		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
 		if (glm::length(move) > 0.0)
 		{
@@ -634,7 +649,7 @@ void ClientWorld::updatePlayerTargetBlock(
 )
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> guard(player->mutex);
+	std::lock_guard guard(player->mutex);
 
 	glm::dvec3 position = player->transform.position + player->eye_position;
 	glm::dvec3 direction = player->direction();
@@ -654,7 +669,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 )
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> guard(player->mutex);
+	std::lock_guard guard(player->mutex);
 
 	if (!attack || !player->canAttack())
 		return {false, glm::vec3(0.0)};
@@ -667,7 +682,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 		// 	<< " = " << int(player->targeted_block.block)
 		// );
 
-		// std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		// std::lock_guard lock(m_blocks_to_set_mutex);
 		// m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
 		return std::make_pair(true, player->targeted_block.block_position);
 	}
@@ -684,7 +699,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerUse(
 )
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> guard(player->mutex);
+	std::lock_guard guard(player->mutex);
 
 	if (!use || !player->canUse())
 		return {false, glm::vec3(0.0)};
@@ -703,7 +718,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerUse(
 		))
 			return {false, glm::vec3(0.0)};
 
-		// std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+		// std::lock_guard lock(m_blocks_to_set_mutex);
 		// m_blocks_to_set.push({block_placed_position, Block::Stone.id});
 		return {true, block_placed_position};
 	}
@@ -717,12 +732,12 @@ void ClientWorld::updatePlayerCamera(
 )
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> guard(player->mutex);
+	std::lock_guard guard(player->mutex);
 
 	player->moveDirection(x_offset, y_offset);
 
 	{
-		std::lock_guard<std::mutex> lock(m_worldScene.m_player_mutex);
+		std::lock_guard lock(m_worldScene.m_player_mutex);
 		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
 		data.pitch = player->pitch;
 		data.yaw = player->yaw;
@@ -734,8 +749,8 @@ void ClientWorld::changePlayerViewMode(
 )
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> lock(player->mutex);
-	std::lock_guard<std::mutex> lock1(m_worldScene.m_player_mutex);
+	std::lock_guard lock(player->mutex);
+	std::lock_guard lock1(m_worldScene.m_player_mutex);
 
 	switch (player->view_mode)
 	{
@@ -756,13 +771,13 @@ void ClientWorld::updatePlayer(
 )
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 	update(*player);
 }
 
 void ClientWorld::createMob()
 {
-	std::lock_guard<std::mutex> lock(m_mobs_mutex);
+	std::lock_guard lock(m_mobs_mutex);
 
 	std::shared_ptr<Mob> mob = std::make_shared<Mob>();
 	mob->transform.position = glm::dvec3(0.0, 220.0, 0.0);
@@ -791,22 +806,22 @@ void ClientWorld::updateMobs(
 {
 	std::shared_ptr<Player> player;
 	{
-		std::lock_guard<std::mutex> lock1(m_players_mutex);
+		std::lock_guard lock1(m_players_mutex);
 		player = m_players.at(m_my_player_id);
 	}
-	std::lock_guard<std::mutex> lock2(player->mutex);
+	std::lock_guard lock2(player->mutex);
 
 
 
-	std::lock_guard<std::mutex> lock(m_mobs_mutex);
+	std::lock_guard lock(m_mobs_mutex);
 	for (auto & [id, mob] : m_mobs)
 	{
-		std::lock_guard<std::mutex> lock(mob->mutex);
+		std::lock_guard lock(mob->mutex);
 
 		{
 			glm::dvec3 chunk_position3D = getChunkPosition(mob->transform.position);
 			glm::ivec2 chunk_position2D = glm::ivec2(chunk_position3D.x, chunk_position3D.z);
-			std::lock_guard<std::mutex> lock(m_chunks_mutex);
+			std::lock_guard lock(m_chunks_mutex);
 			if (m_loaded_chunks.contains(chunk_position2D) == false)
 				continue;
 		}
@@ -920,14 +935,14 @@ void ClientWorld::updateMobs(
 Camera ClientWorld::getCamera(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 	return player->camera();
 }
 
 glm::dvec3 ClientWorld::getPlayerPosition(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 	return player->transform.position;
 }
 
@@ -1075,7 +1090,7 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 	m_players.insert(std::make_pair(player_id, player));
 
 	{
-		std::lock_guard<std::mutex> lock(m_worldScene.m_player_mutex);
+		std::lock_guard lock(m_worldScene.m_player_mutex);
 		m_worldScene.m_players.insert(std::make_pair(player_id, WorldScene::PlayerRenderData{position}));
 		if (player_id == m_my_player_id) // default player view mode is first person
 		{
@@ -1087,18 +1102,18 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 void ClientWorld::removePlayer(const uint64_t player_id)
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 
 	m_players.erase(player_id);
 	{
-		std::lock_guard<std::mutex> lock(m_worldScene.m_player_mutex);
+		std::lock_guard lock(m_worldScene.m_player_mutex);
 		m_worldScene.entity_mesh_list.erase(player_id);
 	}
 }
 
 void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockID & block_id)
 {
-	std::lock_guard<std::mutex> lock(m_blocks_to_set_mutex);
+	std::lock_guard lock(m_blocks_to_set_mutex);
 	m_blocks_to_set.push({position, block_id});
 }
 
@@ -1107,13 +1122,13 @@ void ClientWorld::setChunkNotMeshed(const glm::ivec2 & chunk_position)
 	std::shared_ptr<Chunk> chunk = getChunk(glm::ivec3(chunk_position.x, 0, chunk_position.y));
 	if (!chunk)
 		return;
-	std::lock_guard<Status> lock2(chunk->status);
+	std::lock_guard lock2(chunk->status);
 	chunk->setMeshed(false);
 }
 
 std::shared_ptr<Chunk> ClientWorld::localGetChunk(const glm::ivec3 & chunk_position) const
 {
-	std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	std::lock_guard lock(m_chunks_mutex);
 	auto it = m_chunks.find(chunk_position);
 	if (it != m_chunks.end())
 	{

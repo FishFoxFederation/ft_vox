@@ -30,7 +30,7 @@ Connection& Connection::operator=(Connection&& other)
 
 std::vector<uint8_t> Connection::getReadBuffer() const
 {
-	std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
+	std::lock_guard lock(m_read_buffer_mutex);
 	return m_read_buffer;
 }
 
@@ -46,7 +46,7 @@ const std::vector<uint8_t> & Connection::getWriteBufferRef() const
 
 void Connection::reduceReadBuffer(size_t size)
 {
-	std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
+	std::lock_guard lock(m_read_buffer_mutex);
 	m_read_buffer.erase(m_read_buffer.begin(), m_read_buffer.begin() + size);
 }
 
@@ -72,7 +72,7 @@ ssize_t Connection::recv()
 		}
 		else
 		{
-			std::lock_guard<std::mutex> lock(m_read_buffer_mutex);
+			std::lock_guard lock(m_read_buffer_mutex);
 			m_read_buffer.insert(m_read_buffer.end(), buffer, buffer + size);
 		}
 		total_size += size;
@@ -82,7 +82,7 @@ ssize_t Connection::recv()
 
 ssize_t Connection::sendQueue()
 {
-	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
+	std::lock_guard lock(m_write_buffer_mutex);
 	if (m_write_buffer.empty())
 		return 0;
 	// LOG_INFO("Sending data");
@@ -103,7 +103,7 @@ ssize_t Connection::sendQueue()
 void Connection::queueAndSendMessage(const std::vector<uint8_t> & msg)
 {
 	{
-		std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
+		std::lock_guard lock(m_write_buffer_mutex);
 		m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
 	}
 	sendQueue();
@@ -126,11 +126,16 @@ void Connection::setConnectionId(const uint64_t & connection_id)
 
 bool Connection::dataToSend() const
 {
-	std::lock_guard<std::mutex> lock(m_write_buffer_mutex);
+	std::lock_guard lock(m_write_buffer_mutex);
 	return !m_write_buffer.empty();
 }
 
-std::mutex & Connection::getReadBufferMutex()
+void Connection::lockReadBuffer()
 {
-	return m_read_buffer_mutex;
+	m_read_buffer_mutex.lock();
+}
+
+void Connection::unlockReadBuffer()
+{
+	m_read_buffer_mutex.unlock();
 }

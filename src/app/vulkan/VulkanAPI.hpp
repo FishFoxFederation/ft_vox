@@ -17,6 +17,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Tracy.hpp"
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_vulkan.h"
@@ -266,7 +268,7 @@ public:
 
 	VkCommandPool transfer_command_pool;
 	VkCommandBuffer transfer_command_buffers;
-	std::mutex transfer_operation_mutex;
+	TracyLockableN (std::mutex, transfer_operation_mutex, "Transfer Operation");
 
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> main_render_finished_semaphores;
@@ -340,7 +342,7 @@ public:
 	uint64_t player_leg_mesh_id;
 	uint64_t player_arm_mesh_id;
 
-	std::mutex global_mutex;
+	TracyLockableN (std::mutex, global_mutex, "Global Mutex");
 
 
 private:

@@ -58,7 +58,7 @@ public:
 
 	bool isCursorCaptured()
 	{
-		std::lock_guard<std::mutex> lock(m_cursor_mutex);
+		std::lock_guard lock(m_cursor_mutex);
 		return m_cursor_captured;
 	}
 

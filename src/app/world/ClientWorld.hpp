@@ -116,24 +116,24 @@ private:
 	 *  CHUNKS AND MAP
 	*************************************/
 	std::unordered_set<glm::ivec2>			m_loaded_chunks;
-	std::mutex 								m_loaded_chunks_mutex;
+	TracyLockableN							(std::mutex, m_loaded_chunks_mutex, "Loaded Chunks");
 
 	// std::unordered_set<glm::ivec2>			m_visible_chunks;
 	// std::mutex								m_visible_chunks_mutex;
 
 	std::unordered_set<glm::ivec2> 			m_unload_set;
-	std::mutex								m_unload_set_mutex;
+	TracyLockableN							(std::mutex, m_unload_set_mutex, "Unload Set");
 
 
 	std::unordered_map<uint64_t, std::future<void>> m_futures;
 
 	std::queue<uint64_t>					m_finished_futures;
-	std::mutex								m_finished_futures_mutex;
+	TracyLockableN							(std::mutex, m_finished_futures_mutex, "Finished Futures");
 
 	uint64_t								m_future_id = 0;
 
 	std::queue<std::pair<glm::vec3, BlockID>> m_blocks_to_set;
-	std::mutex								m_blocks_to_set_mutex;
+	TracyLockableN							(std::mutex, m_blocks_to_set_mutex, "Blocks to set");
 
 
 
