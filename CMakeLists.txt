@@ -179,7 +179,7 @@ target_link_options(server
 target_sources(server
 	PRIVATE
 		src/tracy_globals.cpp
-		src/app/network/server_main.cpp
+		src/server_main.cpp
 
 		src/utils/logger.cpp
 
