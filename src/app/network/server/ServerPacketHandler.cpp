@@ -53,6 +53,7 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 
 void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet)
 {
+	ZoneScoped;
 	uint64_t CurrentConnectionId = packet->GetConnectionId();
 	uint32_t CurrentPlayerId = packet->GetPlayerId();
 	glm::vec3 CurrentPlayerPosition = packet->GetPosition();
@@ -102,7 +103,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 
 void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet)
 {
-
+	ZoneScoped;
 	auto connection_id = packet->GetConnectionId();
 	auto player_id = m_connection_to_player_id[connection_id];
 
@@ -118,6 +119,7 @@ void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacke
 
 void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
+	ZoneScoped;
 	// LOG_INFO("Player move: " << packet->GetId());
 
 	glm::vec3 old_position = m_player_positions[packet->GetPlayerId()];
@@ -159,6 +161,7 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 
 void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)
 {
+	ZoneScoped;
 	auto packet_to_send = std::make_shared<BlockActionPacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_world.setBlock(packet->GetPosition(), packet->GetBlockID());
@@ -189,10 +192,12 @@ void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestP
 
 void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)
 {
+	ZoneScoped;
 	m_server.sendAll(packet);
 }
 
 void ServerPacketHandler::relayPacket(std::shared_ptr<IPacket> packet)
 {
+	ZoneScoped;
 	m_server.sendAllExcept(packet, packet->GetConnectionId());
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+#include "Tracy.hpp"
 
 extern const char* const str_update_thread;
 extern const char* const str_block_update_thread;
