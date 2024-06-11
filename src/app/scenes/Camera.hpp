@@ -44,10 +44,15 @@ public:
 
 	struct RenderInfo
 	{
-		glm::mat4 view;
-		glm::mat4 projection;
-		glm::dvec3 position;
-		ViewFrustum view_frustum;
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		glm::dvec3 position = glm::dvec3(0.0f, 0.0f, 0.0f);
+		ViewFrustum view_frustum = ViewFrustum(
+			glm::dvec3(0.0f, 0.0f, 0.0f),
+			glm::dvec3(0.0f, 0.0f, 0.0f),
+			glm::dvec3(0.0f, 0.0f, 0.0f),
+			0.0f, 0.0f, 0.0f, 0.0f
+		);
 	};
 
 	Camera() = default;

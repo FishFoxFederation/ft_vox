@@ -12,6 +12,10 @@
 #include "CreateMeshData.hpp"
 #include "List.hpp"
 
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
+#include "TracyVulkan.hpp"
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
@@ -235,8 +239,8 @@ public:
 		const void * indices,
 		const uint32_t index_count
 	);
-	void	 destroyMeshes(const std::vector<uint64_t> & mesh_ids);
-	void	 destroyMesh(const uint64_t & mesh_id);
+	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
+	void destroyMesh(const uint64_t & mesh_id);
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 
@@ -268,7 +272,7 @@ public:
 
 	VkCommandPool transfer_command_pool;
 	VkCommandBuffer transfer_command_buffers;
-	TracyLockableN (std::mutex, transfer_operation_mutex, "Transfer Operation");
+	TracyLockableN (std::mutex, transfer_operation_mutex, "Vulkan Transfer Operation");
 
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> main_render_finished_semaphores;
@@ -332,7 +336,10 @@ public:
 	ImGuiTexture imgui_texture;
 
 	// Meshes
-	IdList<uint64_t, Mesh> meshes;
+	std::unordered_map<uint64_t, Mesh> mesh_map;
+	uint64_t next_mesh_id = 1;
+	const uint64_t invalid_mesh_id = 0;
+	TracyLockableN (std::mutex, mesh_map_mutex, "Vulkan Mesh Map Mutex");
 	std::vector<uint64_t> mesh_ids_to_destroy;
 
 	uint64_t cube_mesh_id;
@@ -342,7 +349,10 @@ public:
 	uint64_t player_leg_mesh_id;
 	uint64_t player_arm_mesh_id;
 
-	TracyLockableN (std::mutex, global_mutex, "Global Mutex");
+	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
+
+
+	TracyVkCtx ctx;
 
 
 private:
