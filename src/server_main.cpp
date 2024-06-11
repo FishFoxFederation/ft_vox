@@ -11,7 +11,7 @@
 #include <thread>
 #include "logger.hpp"
 #include <chrono>
-
+#include "tracy_globals.hpp"
 
 int main()
 {
@@ -28,6 +28,7 @@ int main()
 	uint64_t max_packet = 0;
 	while (true)
 	{
+		ZoneScopedN("Server Loop");
 		auto start = std::chrono::high_resolution_clock::now();
 		server.runOnce(100);
 		uint64_t packet_count = 0;
