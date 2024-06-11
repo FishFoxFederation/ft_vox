@@ -61,8 +61,6 @@ VulkanAPI::~VulkanAPI()
 
 	vkDeviceWaitIdle(device);
 
-	destroyMeshes();
-
 	destroyImGuiTexture(imgui_texture);
 
 	ImGui_ImplVulkan_Shutdown();
@@ -70,8 +68,8 @@ VulkanAPI::~VulkanAPI()
 	ImGui::DestroyContext();
 
 	{
-		auto lock = meshes.lock();
-		for (auto & [key, mesh] : meshes)
+		std::lock_guard lock(mesh_map_mutex);
+		for (auto & [key, mesh] : mesh_map)
 		{
 			vkDestroyBuffer(device, mesh.buffer, nullptr);
 			vma.freeMemory(device, mesh.buffer_memory, nullptr);

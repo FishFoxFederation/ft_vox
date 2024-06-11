@@ -65,16 +65,14 @@ uint64_t VulkanAPI::storeMesh(
 	mesh.index_count = index_count;
 	mesh.memory_size = buffer_size;
 
-	// uint64_t mesh_id;
-	// {
-	// 	std::lock_guard lock(mesh_mutex);
-	// 	mesh_id = next_mesh_id++;
-	// 	meshes.emplace(mesh_id, mesh);
-	// }
+	uint64_t mesh_id;
+	{
+		std::lock_guard lock(mesh_map_mutex);
+		mesh_id = next_mesh_id++;
+		mesh_map.emplace(mesh_id, mesh);
+	}
 
-	// return mesh_id;
-
-	return meshes.insert(mesh);
+	return mesh_id;
 }
 
 void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
@@ -94,19 +92,20 @@ void VulkanAPI::destroyMeshes(const std::vector<uint64_t> & mesh_ids)
 void VulkanAPI::destroyMeshes()
 {
 	ZoneScoped;
+	std::lock_guard lock(mesh_map_mutex);
 
 	std::vector<uint64_t> meshes_still_in_use;
 	meshes_still_in_use.reserve(mesh_ids_to_destroy.size());
 	for (auto & id: mesh_ids_to_destroy)
 	{
-		if (meshes.contains(id))
+		if (mesh_map.contains(id))
 		{
-			auto mesh = meshes.get(id);
+			Mesh mesh = mesh_map.at(id);
 			if (mesh.is_used == false)
 			{
 				vkDestroyBuffer(device, mesh.buffer, nullptr);
 				vma.freeMemory(device, mesh.buffer_memory, nullptr);
-				meshes.erase(id);
+				mesh_map.erase(id);
 			}
 			else
 			{
