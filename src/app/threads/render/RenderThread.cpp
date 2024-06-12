@@ -36,10 +36,6 @@ RenderThread::~RenderThread()
 
 void RenderThread::launch()
 {
-	const char * const ctx_name = "Gpu rendering";
-	vk.ctx = TracyVkContext(vk.physical_device, vk.device, vk.graphics_queue, vk.draw_command_buffers[0]);
-	TracyVkContextName(vk.ctx, ctx_name, strlen(ctx_name));
-
 	try
 	{
 		init();
@@ -54,8 +50,6 @@ void RenderThread::launch()
 		LOG_ERROR("RENDER THREAD Thread exception: " << e.what());
 	}
 	LOG_DEBUG("Thread stopped");
-
-	TracyVkDestroy(vk.ctx);
 }
 
 void RenderThread::init()
