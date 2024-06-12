@@ -52,6 +52,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	setupImgui();
 	createImGuiTexture(100, 100);
 
+	setupTracy();
+
 	LOG_INFO("VulkanAPI initialized");
 }
 
@@ -60,6 +62,8 @@ VulkanAPI::~VulkanAPI()
 	ZoneScoped;
 
 	vkDeviceWaitIdle(device);
+
+	destroyTracy();
 
 	destroyImGuiTexture(imgui_texture);
 
@@ -1691,6 +1695,40 @@ void VulkanAPI::setupImgui()
 	ImGui_ImplVulkan_Init(&init_info);
 }
 
+void VulkanAPI::setupTracy()
+{
+	vkGetPhysicalDeviceCalibrateableTimeDomainsEXT = reinterpret_cast<PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT>(
+		vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceCalibrateableTimeDomainsEXT")
+	);
+	if (vkGetPhysicalDeviceCalibrateableTimeDomainsEXT == nullptr)
+	{
+		throw std::runtime_error("Failed to get vkGetPhysicalDeviceCalibrateableTimeDomainsEXT function pointer");
+	}
+
+	vkGetCalibratedTimestampsEXT = reinterpret_cast<PFN_vkGetCalibratedTimestampsEXT>(
+		vkGetInstanceProcAddr(instance, "vkGetCalibratedTimestampsEXT")
+	);
+	if (vkGetCalibratedTimestampsEXT == nullptr)
+	{
+		throw std::runtime_error("Failed to get vkGetCalibratedTimestampsEXT function pointer");
+	}
+
+	const char * const ctx_name = "Gpu rendering";
+	ctx = TracyVkContextCalibrated(
+		physical_device,
+		device,
+		graphics_queue,
+		draw_command_buffers[0],
+		vkGetPhysicalDeviceCalibrateableTimeDomainsEXT,
+		vkGetCalibratedTimestampsEXT
+	);
+	TracyVkContextName(ctx, ctx_name, strlen(ctx_name));
+}
+
+void VulkanAPI::destroyTracy()
+{
+	TracyVkDestroy(ctx);
+}
 
 VkCommandBuffer VulkanAPI::beginSingleTimeCommands()
 {

@@ -353,6 +353,9 @@ public:
 
 
 	TracyVkCtx ctx;
+	// function pointers for the calibrated timestamps
+	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
+	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
 
 
 private:
@@ -363,7 +366,8 @@ private:
 
 	std::vector<const char *> device_extensions = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME
+		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
+		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME
 	};
 
 
@@ -432,6 +436,9 @@ private:
 
 	void setupImgui();
 	void destroyImGuiTexture(ImGuiTexture & imgui_texture);
+
+	void setupTracy();
+	void destroyTracy();
 
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);
