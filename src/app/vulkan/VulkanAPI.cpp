@@ -2,6 +2,7 @@
 #include "logger.hpp"
 #include "Block.hpp"
 #include "Model.hpp"
+#include "ObjLoader.hpp"
 
 #include "Tracy.hpp"
 
@@ -1458,59 +1459,71 @@ void VulkanAPI::createFramebuffers()
 void VulkanAPI::createMeshes()
 {
 	{ // create cube mesh
-		std::vector<EntityVertex> vertices = {
-			// right
-			{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
-			{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-			{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-			{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+		// std::vector<EntityVertex> vertices = {
+		// 	// right
+		// 	{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+		// 	{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+		// 	{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+		// 	{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
 
-			// left
-			{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
-			{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
-			{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
-			{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+		// 	// left
+		// 	{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+		// 	{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+		// 	{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+		// 	{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
 
-			// top
-			{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-			{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-			{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-			{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+		// 	// top
+		// 	{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+		// 	{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+		// 	{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+		// 	{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
 
-			// bottom
-			{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
-			{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
-			{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
-			{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+		// 	// bottom
+		// 	{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+		// 	{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+		// 	{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+		// 	{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
 
-			// front
-			{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-			{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-			{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-			{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		// 	// front
+		// 	{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		// 	{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		// 	{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+		// 	{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
 
-			// back
-			{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-			{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-			{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-			{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}}
-		};
+		// 	// back
+		// 	{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+		// 	{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+		// 	{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+		// 	{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}}
+		// };
 
-		std::vector<uint32_t> indices = {
-			0, 2, 1, 0, 3, 2,
-			4, 5, 6, 6, 7, 4,
-			8, 9, 10, 10, 11, 8,
-			12, 14, 13, 12, 15, 14,
-			16, 18, 17, 16, 19, 18,
-			20, 21, 22, 22, 23, 20
-		};
+		// std::vector<uint32_t> indices = {
+		// 	0, 2, 1, 0, 3, 2,
+		// 	4, 5, 6, 6, 7, 4,
+		// 	8, 9, 10, 10, 11, 8,
+		// 	12, 14, 13, 12, 15, 14,
+		// 	16, 18, 17, 16, 19, 18,
+		// 	20, 21, 22, 22, 23, 20
+		// };
+
+		ObjLoader obj_loader("assets/models/cube.obj");
+
+		std::vector<EntityVertex> vertices;
+		std::transform(
+			obj_loader.vertices().begin(),
+			obj_loader.vertices().end(),
+			std::back_inserter(vertices),
+			[](const ObjVertex & obj_vertex) {
+				return EntityVertex{obj_vertex.pos, obj_vertex.normal};
+			}
+		);
 
 		cube_mesh_id = storeMesh(
 			vertices.data(),
 			vertices.size(),
 			sizeof(EntityVertex),
-			indices.data(),
-			indices.size()
+			obj_loader.indices().data(),
+			obj_loader.indices().size()
 		);
 	}
 
