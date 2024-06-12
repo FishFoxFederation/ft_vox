@@ -19,6 +19,7 @@ public:
 	{
 		glm::vec3 pos;
 		glm::vec3 normal;
+		glm::vec2 texCoord;
 
 		static VkVertexInputBindingDescription getBindingDescription()
 		{
@@ -32,7 +33,7 @@ public:
 
 		static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
 		{
-			std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
+			std::vector<VkVertexInputAttributeDescription> attributeDescriptions(3);
 
 			attributeDescriptions[0].binding = 0;
 			attributeDescriptions[0].location = 0;
@@ -43,6 +44,11 @@ public:
 			attributeDescriptions[1].location = 1;
 			attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
 			attributeDescriptions[1].offset = offsetof(Vertex, normal);
+
+			attributeDescriptions[2].binding = 0;
+			attributeDescriptions[2].location = 2;
+			attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
 
 			return attributeDescriptions;
 		}
@@ -109,6 +115,13 @@ public:
 	constexpr static inline glm::vec3 right_leg_pos = glm::vec3{leg_size.x / 2, -leg_size.y, 0.0};
 	constexpr static inline glm::vec3 left_arm_pos  = glm::vec3{-(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
 	constexpr static inline glm::vec3 right_arm_pos = glm::vec3{(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
+
+	static inline std::vector<glm::vec2> chest_texCoords = {
+		glm::vec2{0.0, 0.0},
+		glm::vec2{0.0, 0.5},
+		glm::vec2{0.5, 0.5},
+		glm::vec2{0.5, 0.0}
+	};
 
 private:
 
