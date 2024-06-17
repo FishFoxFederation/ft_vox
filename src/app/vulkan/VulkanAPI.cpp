@@ -41,7 +41,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 		"assets/textures/skybox/back.jpg"
 	}, 512);
 	createFrustumLineBuffers();
-	createTextureImage("assets/textures/gui/crosshair.png");
+	createTextureImage();
 
 	createDescriptors();
 	createRenderPass();
@@ -132,6 +132,7 @@ VulkanAPI::~VulkanAPI()
 		block_textures.clear();
 		skybox_cube_map.clear();
 		crosshair_image.clear();
+		player_skin_image.clear();
 
 		camera_descriptor.clear();
 		block_textures_descriptor.clear();
@@ -140,6 +141,7 @@ VulkanAPI::~VulkanAPI()
 		test_image_descriptor.clear();
 		sun_descriptor.clear();
 		crosshair_image_descriptor.clear();
+		player_skin_image_descriptor.clear();
 
 		chunk_pipeline.clear();
 		line_pipeline.clear();
@@ -147,6 +149,7 @@ VulkanAPI::~VulkanAPI()
 		shadow_pipeline.clear();
 		test_image_pipeline.clear();
 		entity_pipeline.clear();
+		player_pipeline.clear();
 		gui_pipeline.clear();
 
 		swapchain.clear();
@@ -952,11 +955,11 @@ void VulkanAPI::createFrustumLineBuffers()
 	}
 }
 
-void VulkanAPI::createTextureImage(const std::string & file_path)
+void VulkanAPI::createTextureImage()
 {
 	{ // crosshair
 		Image::CreateInfo image_info = {};
-		image_info.file_paths = {file_path};
+		image_info.file_paths = {"assets/textures/gui/crosshair.png"};
 		image_info.extent = {32, 32};
 		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
 		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
@@ -968,6 +971,23 @@ void VulkanAPI::createTextureImage(const std::string & file_path)
 		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
 		crosshair_image = Image(device, physical_device, command_buffer, image_info);
+	}
+
+	{ // player skin
+		Image::CreateInfo image_info = {};
+		image_info.file_paths = {"assets/textures/player_skin.png"};
+		image_info.extent = {64, 64};
+		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.create_view = true;
+		image_info.create_sampler = true;
+		image_info.sampler_filter = VK_FILTER_NEAREST;
+
+		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+		player_skin_image = Image(device, physical_device, command_buffer, image_info);
 	}
 }
 
@@ -1119,6 +1139,28 @@ void VulkanAPI::createDescriptors()
 			device,
 			crosshair_image.view,
 			crosshair_image.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		);
+	}
+
+	{ // Player skin image descriptor
+		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+		sampler_layout_binding.binding = 0;
+		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding.descriptorCount = 1;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { sampler_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		player_skin_image_descriptor = Descriptor(device, descriptor_info);
+
+		player_skin_image_descriptor.update(
+			device,
+			player_skin_image.view,
+			player_skin_image.sampler,
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 		);
 	}
@@ -1384,6 +1426,27 @@ void VulkanAPI::createPipelines()
 		entity_pipeline = Pipeline(device, pipeline_info);
 	}
 
+	{ // Player pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/player_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/player_shader.frag.spv";
+		pipeline_info.binding_description = ObjVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = ObjVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout,
+			player_skin_image_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+
+		player_pipeline = Pipeline(device, pipeline_info);
+	}
+
 	{ // Gui pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
@@ -1567,6 +1630,18 @@ void VulkanAPI::createMeshes()
 			indices.size()
 		);
 	}
+
+	{
+		ObjLoader obj_loader("assets/models/player/template.obj");
+
+		template_mesh_id = storeMesh(
+			obj_loader.vertices().data(),
+			obj_loader.vertices().size(),
+			sizeof(ObjVertex),
+			obj_loader.indices().data(),
+			obj_loader.indices().size()
+		);
+	}
 }
 
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
@@ -1727,6 +1802,7 @@ void VulkanAPI::setupTracy()
 	}
 
 	const char * const ctx_name = "Gpu rendering";
+	(void)ctx_name;
 	ctx = TracyVkContextCalibrated(
 		physical_device,
 		device,
