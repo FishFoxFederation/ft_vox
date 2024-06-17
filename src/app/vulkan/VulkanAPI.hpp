@@ -292,6 +292,7 @@ public:
 	Image shadow_map_depth_attachement;
 
 	Image crosshair_image;
+	Image player_skin_image;
 
 	// Uniform buffers for the camera matrices
 	std::vector<VkBuffer> camera_uniform_buffers;
@@ -319,6 +320,7 @@ public:
 	Descriptor test_image_descriptor;
 	Descriptor sun_descriptor;
 	Descriptor crosshair_image_descriptor;
+	Descriptor player_skin_image_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
@@ -329,6 +331,7 @@ public:
 	Pipeline shadow_pipeline;
 	Pipeline test_image_pipeline;
 	Pipeline entity_pipeline;
+	Pipeline player_pipeline;
 	Pipeline gui_pipeline;
 
 	// Dear ImGui resources
@@ -348,6 +351,8 @@ public:
 	uint64_t player_head_mesh_id;
 	uint64_t player_leg_mesh_id;
 	uint64_t player_arm_mesh_id;
+
+	uint64_t template_mesh_id;
 
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
 
@@ -423,7 +428,7 @@ private:
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
 	void createFrustumLineBuffers();
-	void createTextureImage(const std::string & file_path);
+	void createTextureImage();
 
 	void createDescriptors();
 	void createRenderPass();

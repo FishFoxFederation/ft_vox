@@ -630,6 +630,66 @@ void RenderThread::loop()
 			}
 		}
 
+		{ // Draw player test
+			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
+
+			const std::vector<VkDescriptorSet> player_descriptor_sets = {
+				vk.camera_descriptor.sets[vk.current_frame],
+				vk.player_skin_image_descriptor.set
+			};
+
+			vkCmdBindDescriptorSets(
+				vk.draw_command_buffers[vk.current_frame],
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				vk.player_pipeline.layout,
+				0,
+				static_cast<uint32_t>(player_descriptor_sets.size()),
+				player_descriptor_sets.data(),
+				0,
+				nullptr
+			);
+
+			Mesh mesh;
+			{
+				std::lock_guard lock(vk.mesh_map_mutex);
+				mesh = vk.mesh_map.at(vk.template_mesh_id);
+			}
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			ModelMatrice target_block_matrice = {};
+			target_block_matrice.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 220.0f, 0.0f));
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.player_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT,
+				0,
+				sizeof(ModelMatrice),
+				&target_block_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+
+		}
+
 		// Draw the targeted block
 		if (target_block.has_value())
 		{

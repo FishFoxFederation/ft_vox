@@ -30,19 +30,19 @@ const char * const str_worker_thread[20] = {
 	"WorkerThread19"
 };
 
-#ifdef TRACY_ENABLE
+// #ifdef TRACY_ENABLE
 
-void * operator new(size_t size)
-{
-	void * ptr = malloc(size);
-	TracyAlloc(ptr, size);
-	return ptr;
-}
+// void * operator new(size_t size)
+// {
+// 	void * ptr = malloc(size);
+// 	TracyAlloc(ptr, size);
+// 	return ptr;
+// }
 
-void operator delete(void * ptr) noexcept
-{
-	TracyFree(ptr);
-	free(ptr);
-}
+// void operator delete(void * ptr) noexcept
+// {
+// 	TracyFree(ptr);
+// 	free(ptr);
+// }
 
-#endif
+// #endif
