@@ -521,107 +521,6 @@ void RenderThread::loop()
 		{ // Draw the players
 			ZoneScopedN("Draw players");
 
-			for (const auto & player : players)
-			{
-				if (!player.visible)
-				{
-					continue;
-				}
-
-				std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
-
-				// Body
-				const glm::mat4 body_model = Mat4()
-					.translate(player.position)
-					.rotate(-glm::radians(player.yaw - 90), glm::dvec3(0.0f, 1.0f, 0.0f))
-					.mat();
-
-				// Chest
-				const glm::mat4 chest_model = Mat4()
-					.translate(PlayerModel::chest_pos)
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_chest_mesh_id,
-					body_model * chest_model,
-					glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)
-				);
-
-				// Head
-				const glm::mat4 head_model = Mat4()
-					.translate(PlayerModel::head_pos)
-					.rotate(-glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_head_mesh_id,
-					body_model * chest_model * head_model,
-					glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)
-				);
-
-				// Legs animation angle
-				double legs_angle = 0.0;
-				if (player.is_walking)
-				{
-					legs_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
-				}
-
-				// Left leg
-				const glm::mat4 left_leg_model = Mat4()
-					.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate(PlayerModel::left_leg_pos)
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_leg_mesh_id,
-					body_model * chest_model * left_leg_model,
-					glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
-				);
-
-				// Right leg
-				const glm::mat4 right_leg_model = Mat4()
-					.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate(PlayerModel::right_leg_pos)
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_leg_mesh_id,
-					body_model * chest_model * right_leg_model,
-					glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)
-				);
-
-				// Arm animation angle
-				double arms_angle = 0.0;
-				if (player.is_walking)
-				{
-					arms_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
-				}
-
-				// Left arm
-				const glm::mat4 left_arm_model = Mat4()
-					.translate(PlayerModel::left_arm_pos)
-					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-					.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_arm_mesh_id,
-					body_model * chest_model * left_arm_model,
-					glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
-				);
-
-				// Right arm
-				const glm::mat4 right_arm_model = Mat4()
-					.translate(PlayerModel::right_arm_pos)
-					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-					.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_arm_mesh_id,
-					body_model * chest_model * right_arm_model,
-					glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
-				);
-			}
-		}
-
-		{ // Draw player test
 			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
 
 			const std::vector<VkDescriptorSet> player_descriptor_sets = {
@@ -640,45 +539,98 @@ void RenderThread::loop()
 				nullptr
 			);
 
-			Mesh mesh;
+			for (const auto & player : players)
 			{
-				std::lock_guard lock(vk.mesh_map_mutex);
-				mesh = vk.mesh_map.at(vk.template_mesh_id);
+				if (!player.visible)
+				{
+					continue;
+				}
+
+				std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
+
+				// Body
+				const glm::mat4 body_model = Mat4()
+					.translate(player.position)
+					.rotate(-glm::radians(player.yaw + 90), glm::dvec3(0.0f, 1.0f, 0.0f))
+					.mat();
+
+				// Chest
+				const glm::mat4 chest_model = Mat4()
+					.translate(PlayerModel::chest_pos)
+					.mat();
+				drawPlayerBodyPart(
+					vk.player_chest_mesh_id,
+					body_model * chest_model
+				);
+
+				// Head
+				const glm::mat4 head_model = Mat4()
+					.translate(PlayerModel::head_pos)
+					.rotate(glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
+					.mat();
+				drawPlayerBodyPart(
+					vk.player_head_mesh_id,
+					body_model * chest_model * head_model
+				);
+
+				// Legs animation angle
+				double legs_angle = 0.0;
+				if (player.is_walking)
+				{
+					legs_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+				}
+
+				// Left leg
+				const glm::mat4 left_leg_model = Mat4()
+					.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.translate(PlayerModel::left_leg_pos)
+					.mat();
+				drawPlayerBodyPart(
+					vk.player_left_leg_mesh_id,
+					body_model * chest_model * left_leg_model
+				);
+
+				// Right leg
+				const glm::mat4 right_leg_model = Mat4()
+					.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.translate(PlayerModel::right_leg_pos)
+					.mat();
+				drawPlayerBodyPart(
+					vk.player_right_leg_mesh_id,
+					body_model * chest_model * right_leg_model
+				);
+
+				// Arm animation angle
+				double arms_angle = 0.0;
+				if (player.is_walking)
+				{
+					arms_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+				}
+
+				// Left arm
+				const glm::mat4 left_arm_model = Mat4()
+					.translate(PlayerModel::left_arm_pos)
+					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+					.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
+					.mat();
+				drawPlayerBodyPart(
+					vk.player_right_arm_mesh_id,
+					body_model * chest_model * left_arm_model
+				);
+
+				// Right arm
+				const glm::mat4 right_arm_model = Mat4()
+					.translate(PlayerModel::right_arm_pos)
+					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+					.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
+					.mat();
+				drawPlayerBodyPart(
+					vk.player_right_arm_mesh_id,
+					body_model * chest_model * right_arm_model
+				);
 			}
-
-			const VkBuffer vertex_buffers[] = { mesh.buffer };
-			const VkDeviceSize offsets[] = { 0 };
-			vkCmdBindVertexBuffers(
-				vk.draw_command_buffers[vk.current_frame],
-				0, 1,
-				vertex_buffers,
-				offsets
-			);
-
-			vkCmdBindIndexBuffer(
-				vk.draw_command_buffers[vk.current_frame],
-				mesh.buffer,
-				mesh.index_offset,
-				VK_INDEX_TYPE_UINT32
-			);
-
-			ModelMatrice target_block_matrice = {};
-			target_block_matrice.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 220.0f, 0.0f));
-			vkCmdPushConstants(
-				vk.draw_command_buffers[vk.current_frame],
-				vk.player_pipeline.layout,
-				VK_SHADER_STAGE_VERTEX_BIT,
-				0,
-				sizeof(ModelMatrice),
-				&target_block_matrice
-			);
-
-			vkCmdDrawIndexed(
-				vk.draw_command_buffers[vk.current_frame],
-				static_cast<uint32_t>(mesh.index_count),
-				1, 0, 0, 0
-			);
-
 		}
 
 		// Draw the targeted block
@@ -1149,8 +1101,7 @@ void RenderThread::updateTime()
 
 void RenderThread::drawPlayerBodyPart(
 	const uint64_t mesh_id,
-	const glm::mat4 & model,
-	const glm::vec4 & color
+	const glm::mat4 & model
 )
 {
 	ZoneScoped;
@@ -1191,15 +1142,14 @@ void RenderThread::drawPlayerBodyPart(
 		VK_INDEX_TYPE_UINT32
 	);
 
-	EntityMatrices player_matrice = {};
+	ModelMatrice player_matrice = {};
 	player_matrice.model = model;
-	player_matrice.color = color;
 	vkCmdPushConstants(
 		vk.draw_command_buffers[vk.current_frame],
-		vk.entity_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+		vk.player_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
 		0,
-		sizeof(EntityMatrices),
+		sizeof(ModelMatrice),
 		&player_matrice
 	);
 

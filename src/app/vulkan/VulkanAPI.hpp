@@ -349,8 +349,10 @@ public:
 
 	uint64_t player_chest_mesh_id;
 	uint64_t player_head_mesh_id;
-	uint64_t player_leg_mesh_id;
-	uint64_t player_arm_mesh_id;
+	uint64_t player_right_leg_mesh_id;
+	uint64_t player_left_leg_mesh_id;
+	uint64_t player_right_arm_mesh_id;
+	uint64_t player_left_arm_mesh_id;
 
 	uint64_t template_mesh_id;
 
