@@ -21,4 +21,4 @@ mkdir -p build
 # build the project
 cd build
 cmake ..
-make
+make -j
