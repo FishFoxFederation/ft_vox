@@ -547,6 +547,7 @@ void RenderThread::loop()
 				}
 
 				std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
+				std::chrono::nanoseconds time_since_attack_or_use_animation_start = m_current_time - player.attack_or_use_animation_start_time;
 
 				// Body
 				const glm::mat4 body_model = Mat4()
@@ -612,19 +613,22 @@ void RenderThread::loop()
 					.translate(PlayerModel::left_arm_pos)
 					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
 					.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
 					.mat();
 				drawPlayerBodyPart(
 					vk.player_right_arm_mesh_id,
 					body_model * chest_model * left_arm_model
 				);
 
+				if (player.is_attacking_or_using)
+				{
+					arms_angle = std::sin(9.0 * static_cast<double>(time_since_attack_or_use_animation_start.count()) / 1e9) * 1.0;
+				}
+
 				// Right arm
 				const glm::mat4 right_arm_model = Mat4()
 					.translate(PlayerModel::right_arm_pos)
 					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
 					.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate({0.0f, -PlayerModel::arm_size.y, 0.0f})
 					.mat();
 				drawPlayerBodyPart(
 					vk.player_right_arm_mesh_id,
