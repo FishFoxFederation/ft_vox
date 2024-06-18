@@ -975,7 +975,7 @@ void VulkanAPI::createTextureImage()
 
 	{ // player skin
 		Image::CreateInfo image_info = {};
-		image_info.file_paths = {"assets/textures/player_skin.png"};
+		image_info.file_paths = {"assets/textures/skin/player/steve.png"};
 		image_info.extent = {64, 64};
 		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
 		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
@@ -1521,54 +1521,7 @@ void VulkanAPI::createFramebuffers()
 
 void VulkanAPI::createMeshes()
 {
-	{ // create cube mesh
-		// std::vector<EntityVertex> vertices = {
-		// 	// right
-		// 	{{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
-		// 	{{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-		// 	{{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-		// 	{{1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
-
-		// 	// left
-		// 	{{0.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
-		// 	{{0.0f, 1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
-		// 	{{0.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
-		// 	{{0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
-
-		// 	// top
-		// 	{{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-		// 	{{1.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-		// 	{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-		// 	{{0.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-
-		// 	// bottom
-		// 	{{1.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
-		// 	{{1.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
-		// 	{{0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
-		// 	{{0.0f, 0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
-
-		// 	// front
-		// 	{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-		// 	{{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-		// 	{{0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-		// 	{{0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-
-		// 	// back
-		// 	{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-		// 	{{1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-		// 	{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
-		// 	{{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}}
-		// };
-
-		// std::vector<uint32_t> indices = {
-		// 	0, 2, 1, 0, 3, 2,
-		// 	4, 5, 6, 6, 7, 4,
-		// 	8, 9, 10, 10, 11, 8,
-		// 	12, 14, 13, 12, 15, 14,
-		// 	16, 18, 17, 16, 19, 18,
-		// 	20, 21, 22, 22, 23, 20
-		// };
-
+	{ // load cube mesh
 		ObjLoader obj_loader("assets/models/cube.obj");
 
 		std::vector<EntityVertex> vertices;
@@ -1590,56 +1543,59 @@ void VulkanAPI::createMeshes()
 		);
 	}
 
-	{ // create player mesh
-		std::vector<PlayerModel::Vertex> vertices;
-		std::vector<uint32_t> indices;
-
-		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::CHEST);
+	{ // load player mesh
+		ObjLoader chest_geometry("assets/models/player/chest.obj");
 		player_chest_mesh_id = storeMesh(
-			vertices.data(),
-			vertices.size(),
-			sizeof(PlayerModel::Vertex),
-			indices.data(),
-			indices.size()
-		);
-
-		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::HEAD);
-		player_head_mesh_id = storeMesh(
-			vertices.data(),
-			vertices.size(),
-			sizeof(PlayerModel::Vertex),
-			indices.data(),
-			indices.size()
-		);
-
-		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::LEG);
-		player_leg_mesh_id = storeMesh(
-			vertices.data(),
-			vertices.size(),
-			sizeof(PlayerModel::Vertex),
-			indices.data(),
-			indices.size()
-		);
-
-		PlayerModel::getGeometry(vertices, indices, PlayerModel::Part::ARM);
-		player_arm_mesh_id = storeMesh(
-			vertices.data(),
-			vertices.size(),
-			sizeof(PlayerModel::Vertex),
-			indices.data(),
-			indices.size()
-		);
-	}
-
-	{
-		ObjLoader obj_loader("assets/models/player/template.obj");
-
-		template_mesh_id = storeMesh(
-			obj_loader.vertices().data(),
-			obj_loader.vertices().size(),
+			chest_geometry.vertices().data(),
+			chest_geometry.vertices().size(),
 			sizeof(ObjVertex),
-			obj_loader.indices().data(),
-			obj_loader.indices().size()
+			chest_geometry.indices().data(),
+			chest_geometry.indices().size()
+		);
+
+		ObjLoader head_geometry("assets/models/player/head.obj");
+		player_head_mesh_id = storeMesh(
+			head_geometry.vertices().data(),
+			head_geometry.vertices().size(),
+			sizeof(ObjVertex),
+			head_geometry.indices().data(),
+			head_geometry.indices().size()
+		);
+
+		ObjLoader right_leg_geometry("assets/models/player/right_leg.obj");
+		player_right_leg_mesh_id = storeMesh(
+			right_leg_geometry.vertices().data(),
+			right_leg_geometry.vertices().size(),
+			sizeof(ObjVertex),
+			right_leg_geometry.indices().data(),
+			right_leg_geometry.indices().size()
+		);
+
+		ObjLoader left_leg_geometry("assets/models/player/left_leg.obj");
+		player_left_leg_mesh_id = storeMesh(
+			left_leg_geometry.vertices().data(),
+			left_leg_geometry.vertices().size(),
+			sizeof(ObjVertex),
+			left_leg_geometry.indices().data(),
+			left_leg_geometry.indices().size()
+		);
+
+		ObjLoader right_arm_geometry("assets/models/player/right_arm.obj");
+		player_right_arm_mesh_id = storeMesh(
+			right_arm_geometry.vertices().data(),
+			right_arm_geometry.vertices().size(),
+			sizeof(ObjVertex),
+			right_arm_geometry.indices().data(),
+			right_arm_geometry.indices().size()
+		);
+
+		ObjLoader left_arm_geometry("assets/models/player/left_arm.obj");
+		player_left_arm_mesh_id = storeMesh(
+			left_arm_geometry.vertices().data(),
+			left_arm_geometry.vertices().size(),
+			sizeof(ObjVertex),
+			left_arm_geometry.indices().data(),
+			left_arm_geometry.indices().size()
 		);
 	}
 }
