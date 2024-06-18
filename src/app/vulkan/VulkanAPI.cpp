@@ -1544,7 +1544,7 @@ void VulkanAPI::createMeshes()
 	}
 
 	{ // load player mesh
-		ObjLoader chest_geometry("assets/models/player/chest.obj");
+		ObjLoader chest_geometry("assets/models/entity/player/chest.obj");
 		player_chest_mesh_id = storeMesh(
 			chest_geometry.vertices().data(),
 			chest_geometry.vertices().size(),
@@ -1553,7 +1553,7 @@ void VulkanAPI::createMeshes()
 			chest_geometry.indices().size()
 		);
 
-		ObjLoader head_geometry("assets/models/player/head.obj");
+		ObjLoader head_geometry("assets/models/entity/player/head.obj");
 		player_head_mesh_id = storeMesh(
 			head_geometry.vertices().data(),
 			head_geometry.vertices().size(),
@@ -1562,7 +1562,7 @@ void VulkanAPI::createMeshes()
 			head_geometry.indices().size()
 		);
 
-		ObjLoader right_leg_geometry("assets/models/player/right_leg.obj");
+		ObjLoader right_leg_geometry("assets/models/entity/player/right_leg.obj");
 		player_right_leg_mesh_id = storeMesh(
 			right_leg_geometry.vertices().data(),
 			right_leg_geometry.vertices().size(),
@@ -1571,7 +1571,7 @@ void VulkanAPI::createMeshes()
 			right_leg_geometry.indices().size()
 		);
 
-		ObjLoader left_leg_geometry("assets/models/player/left_leg.obj");
+		ObjLoader left_leg_geometry("assets/models/entity/player/left_leg.obj");
 		player_left_leg_mesh_id = storeMesh(
 			left_leg_geometry.vertices().data(),
 			left_leg_geometry.vertices().size(),
@@ -1580,7 +1580,7 @@ void VulkanAPI::createMeshes()
 			left_leg_geometry.indices().size()
 		);
 
-		ObjLoader right_arm_geometry("assets/models/player/right_arm.obj");
+		ObjLoader right_arm_geometry("assets/models/entity/player/right_arm.obj");
 		player_right_arm_mesh_id = storeMesh(
 			right_arm_geometry.vertices().data(),
 			right_arm_geometry.vertices().size(),
@@ -1589,7 +1589,7 @@ void VulkanAPI::createMeshes()
 			right_arm_geometry.indices().size()
 		);
 
-		ObjLoader left_arm_geometry("assets/models/player/left_arm.obj");
+		ObjLoader left_arm_geometry("assets/models/entity/player/left_arm.obj");
 		player_left_arm_mesh_id = storeMesh(
 			left_arm_geometry.vertices().data(),
 			left_arm_geometry.vertices().size(),

@@ -139,7 +139,7 @@ private:
 		std::ifstream file(this->m_path);
 		if (!file.is_open())
 		{
-			throw std::runtime_error("Failed to open file");
+			throw std::runtime_error("Failed to open file '" + this->m_path + "'");
 		}
 
 		std::string line;

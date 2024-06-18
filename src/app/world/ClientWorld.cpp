@@ -629,6 +629,17 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 		return {false, glm::vec3(0.0)};
 	player->startAttack();
 
+	{ // update player attack animation
+		std::lock_guard lock(m_worldScene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		if (data.is_attacking_or_using == false)
+		{
+			LOG_DEBUG("Attack animation start");
+			data.attack_or_use_animation_start_time = std::chrono::steady_clock::now().time_since_epoch();
+		}
+		data.is_attacking_or_using = true;
+	}
+
 	if (player->targeted_block.hit)
 	{
 		// LOG_DEBUG("Block hit: "
@@ -638,6 +649,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 
 		// std::lock_guard lock(m_blocks_to_set_mutex);
 		// m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
+
 		return std::make_pair(true, player->targeted_block.block_position);
 	}
 	// else

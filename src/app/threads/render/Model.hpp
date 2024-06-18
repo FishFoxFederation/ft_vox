@@ -54,14 +54,6 @@ public:
 		}
 	};
 
-	enum class Part
-	{
-		CHEST,
-		HEAD,
-		LEG,
-		ARM
-	};
-
 	PlayerModel() {}
 	~PlayerModel() {}
 
@@ -69,32 +61,6 @@ public:
 	PlayerModel(PlayerModel && other) = delete;
 	PlayerModel & operator=(PlayerModel & other) = delete;
 	PlayerModel & operator=(PlayerModel && other) = delete;
-
-	static void getGeometry(
-		std::vector<Vertex> & vertices,
-		std::vector<uint32_t> & indices,
-		const Part part
-	)
-	{
-		switch (part)
-		{
-			case Part::CHEST:
-				geometry(vertices, indices, chest_size);
-				break;
-			case Part::HEAD:
-				geometry(vertices, indices, head_size);
-				break;
-			case Part::LEG:
-				geometry(vertices, indices, leg_size);
-				break;
-			case Part::ARM:
-				geometry(vertices, indices, arm_size);
-				break;
-			default:
-				LOG_ERROR("Unknown player model part");
-				break;
-		}
-	}
 
 	constexpr static inline double player_height = 1.8;
 	constexpr static inline double unit = player_height / 32.0;
@@ -111,77 +77,9 @@ public:
 
 	constexpr static inline glm::vec3 chest_pos     = glm::vec3{0.0, leg_size.y, 0.0};
 	constexpr static inline glm::vec3 head_pos      = glm::vec3{0.0, chest_size.y, 0.0};
-	constexpr static inline glm::vec3 left_leg_pos  = glm::vec3{-leg_size.x / 2, -leg_size.y, 0.0};
-	constexpr static inline glm::vec3 right_leg_pos = glm::vec3{leg_size.x / 2, -leg_size.y, 0.0};
+	constexpr static inline glm::vec3 left_leg_pos  = glm::vec3{-leg_size.x / 2, 0.0, 0.0};
+	constexpr static inline glm::vec3 right_leg_pos = glm::vec3{leg_size.x / 2, 0.0, 0.0};
 	constexpr static inline glm::vec3 left_arm_pos  = glm::vec3{-(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
 	constexpr static inline glm::vec3 right_arm_pos = glm::vec3{(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
-
-	static inline std::vector<glm::vec2> chest_texCoords = {
-		glm::vec2{0.0, 0.0},
-		glm::vec2{0.0, 0.5},
-		glm::vec2{0.5, 0.5},
-		glm::vec2{0.5, 0.0}
-	};
-
-private:
-
-	/**
-	 * @brief Create the geometry for a cube with the given size and with th origin at the bottom center
-	 *
-	 */
-	static void geometry(
-		std::vector<Vertex> & vertices,
-		std::vector<uint32_t> & indices,
-		const glm::vec3 & size
-	)
-	{
-		const glm::vec3 s = size / 2.0f;
-		vertices = {
-			// right
-			{{s.x, size.y,  s.z}, {1.0f, 0.0f, 0.0f}},
-			{{s.x, size.y, -s.z}, {1.0f, 0.0f, 0.0f}},
-			{{s.x,   0.0f, -s.z}, {1.0f, 0.0f, 0.0f}},
-			{{s.x,   0.0f,  s.z}, {1.0f, 0.0f, 0.0f}},
-
-			// left
-			{{-s.x, size.y,  s.z}, {-1.0f, 0.0f, 0.0f}},
-			{{-s.x, size.y, -s.z}, {-1.0f, 0.0f, 0.0f}},
-			{{-s.x,   0.0f, -s.z}, {-1.0f, 0.0f, 0.0f}},
-			{{-s.x,   0.0f,  s.z}, {-1.0f, 0.0f, 0.0f}},
-
-			// top
-			{{ s.x, size.y,  s.z}, {0.0f, 1.0f, 0.0f}},
-			{{ s.x, size.y, -s.z}, {0.0f, 1.0f, 0.0f}},
-			{{-s.x, size.y, -s.z}, {0.0f, 1.0f, 0.0f}},
-			{{-s.x, size.y,  s.z}, {0.0f, 1.0f, 0.0f}},
-
-			// bottom
-			{{ s.x, 0.0f,  s.z}, {0.0f, -1.0f, 0.0f}},
-			{{ s.x, 0.0f, -s.z}, {0.0f, -1.0f, 0.0f}},
-			{{-s.x, 0.0f, -s.z}, {0.0f, -1.0f, 0.0f}},
-			{{-s.x, 0.0f,  s.z}, {0.0f, -1.0f, 0.0f}},
-
-			// front
-			{{ s.x, size.y, s.z}, {0.0f, 0.0f, 1.0f}},
-			{{ s.x,   0.0f, s.z}, {0.0f, 0.0f, 1.0f}},
-			{{-s.x,   0.0f, s.z}, {0.0f, 0.0f, 1.0f}},
-			{{-s.x, size.y, s.z}, {0.0f, 0.0f, 1.0f}},
-
-			// back
-			{{ s.x, size.y, -s.z}, {0.0f, 0.0f, -1.0f}},
-			{{ s.x,   0.0f, -s.z}, {0.0f, 0.0f, -1.0f}},
-			{{-s.x,   0.0f, -s.z}, {0.0f, 0.0f, -1.0f}},
-			{{-s.x, size.y, -s.z}, {0.0f, 0.0f, -1.0f}}
-		};
-
-		indices = {
-			0, 2, 1, 0, 3, 2,
-			4, 5, 6, 6, 7, 4,
-			8, 9, 10, 10, 11, 8,
-			12, 14, 13, 12, 15, 14,
-			16, 18, 17, 16, 19, 18,
-			20, 21, 22, 22, 23, 20
-		};
-	}
 
 };
