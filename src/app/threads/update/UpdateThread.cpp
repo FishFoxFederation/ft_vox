@@ -89,6 +89,7 @@ void UpdateThread::loop()
 		for (auto & [id, player] : m_world_scene.m_players)
 		{
 			player.walk_animation.update();
+			player.attack_animation.update();
 		}
 	}
 }

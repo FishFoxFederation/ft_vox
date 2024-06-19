@@ -631,12 +631,10 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 	{ // update player attack animation
 		std::lock_guard lock(m_worldScene.m_player_mutex);
 		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
-		if (data.is_attacking_or_using == false)
+		if (data.attack_animation.isActive() == false)
 		{
-			LOG_DEBUG("Attack animation start");
-			data.attack_or_use_animation_start_time = std::chrono::steady_clock::now().time_since_epoch();
+			data.attack_animation.start();
 		}
-		data.is_attacking_or_using = true;
 	}
 
 	if (player->targeted_block.hit)
@@ -669,6 +667,15 @@ std::pair<bool, glm::vec3> ClientWorld::playerUse(
 	if (!use || !player->canUse())
 		return {false, glm::vec3(0.0)};
 	player->startUse();
+
+	{ // update player attack animation
+		std::lock_guard lock(m_worldScene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		if (data.attack_animation.isActive() == false)
+		{
+			data.attack_animation.start();
+		}
+	}
 
 	if (player->targeted_block.hit)
 	{
