@@ -63,7 +63,7 @@ void UpdateThread::init()
 	auto packet = std::make_shared<ConnectionPacket>(m_world.m_my_player_id, m_world.getPlayerPosition(m_world.m_my_player_id));
 	m_client.sendPacket(packet);
 
-	m_world.createMob();
+	// m_world.createMob();
 }
 
 void UpdateThread::loop()
