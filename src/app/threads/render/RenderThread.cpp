@@ -619,6 +619,7 @@ void RenderThread::loop()
 					.translate(PlayerModel::left_arm_pos)
 					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
 					.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.rotate(-glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
 					.mat();
 				drawPlayerBodyPart(
 					vk.player_right_arm_mesh_id,
@@ -635,6 +636,7 @@ void RenderThread::loop()
 					.translate(PlayerModel::right_arm_pos)
 					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
 					.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.rotate(glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
 					.mat();
 				drawPlayerBodyPart(
 					vk.player_right_arm_mesh_id,
