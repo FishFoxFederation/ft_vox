@@ -41,9 +41,7 @@ public:
 		double pitch = 0;
 
 		PlayerModel::WalkAnimation walk_animation;
-
-		bool is_attacking_or_using = false;
-		std::chrono::nanoseconds attack_or_use_animation_start_time = std::chrono::nanoseconds(0);
+		PlayerModel::AttackAnimation attack_animation;
 
 		bool visible = true;
 	};

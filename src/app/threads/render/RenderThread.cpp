@@ -546,8 +546,6 @@ void RenderThread::loop()
 					continue;
 				}
 
-				std::chrono::nanoseconds time_since_attack_or_use_animation_start = m_current_time - player.attack_or_use_animation_start_time;
-
 				// Body
 				const glm::mat4 body_model = Mat4()
 					.translate(player.position)
@@ -618,9 +616,9 @@ void RenderThread::loop()
 					body_model * chest_model * left_arm_model
 				);
 
-				if (player.is_attacking_or_using)
+				if (player.attack_animation.isActive())
 				{
-					arms_angle = std::sin(9.0 * static_cast<double>(time_since_attack_or_use_animation_start.count()) / 1e9) * 1.0;
+					arms_angle = player.attack_animation.angle();
 				}
 
 				// Right arm
