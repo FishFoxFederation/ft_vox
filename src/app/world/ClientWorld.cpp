@@ -627,15 +627,14 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
 		if (glm::length(move) > 0.0)
 		{
-			if (data.is_walking == false)
+			if (data.walk_animation.isActive() == false)
 			{
-				data.walk_animation_start_time = std::chrono::steady_clock::now().time_since_epoch();
+				data.walk_animation.start();
 			}
-			data.is_walking = true;
 		}
 		else
 		{
-			data.is_walking = false;
+			data.walk_animation.stop();
 		}
 	}
 
