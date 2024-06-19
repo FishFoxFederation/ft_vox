@@ -120,7 +120,7 @@ public:
 
 		void update()
 		{
-			if (time_since_start() >= duration_s / 2)
+			if (time_since_start() >= duration_s)
 			{
 				if (m_should_stop)
 				{
@@ -145,7 +145,71 @@ public:
 		constexpr static inline double amplitude = 0.5;
 		constexpr static inline double frequency = 9.0;
 
-		const static inline double duration_s = 2.0 * glm::pi<double>() / frequency;
+		const static inline double duration_s = glm::pi<double>() / frequency;
+
+	};
+
+	class AttackAnimation
+	{
+
+	public:
+
+		AttackAnimation() = default;
+		~AttackAnimation() = default;
+
+		void start()
+		{
+			m_is_active = true;
+			m_start_time = std::chrono::steady_clock::now().time_since_epoch();
+			m_should_stop = true;
+		}
+
+		void stop()
+		{
+			m_should_stop = true;
+		}
+
+		double time_since_start()
+		{
+			return static_cast<double>((std::chrono::steady_clock::now().time_since_epoch() - m_start_time).count()) / 1e9;
+		}
+
+		bool isActive()
+		{
+			return m_is_active;
+		}
+
+		double angle()
+		{
+			return amplitude * glm::sin(frequency * time_since_start());
+		}
+
+		void update()
+		{
+			if (time_since_start() >= duration_s)
+			{
+				if (m_should_stop)
+				{
+					m_is_active = false;
+					m_should_stop = false;
+				}
+				else
+				{
+					m_start_time = std::chrono::steady_clock::now().time_since_epoch();
+				}
+			}
+		}
+
+	private:
+
+		bool m_is_active = false;
+		bool m_should_stop = false;
+		std::chrono::nanoseconds m_start_time = std::chrono::nanoseconds(0);
+
+		constexpr static inline double amplitude = 1.0;
+		constexpr static inline double frequency = 15.0;
+
+		const static inline double duration_s = glm::pi<double>() / frequency;
 
 	};
 
