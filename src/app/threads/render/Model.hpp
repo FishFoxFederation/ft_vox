@@ -82,4 +82,71 @@ public:
 	constexpr static inline glm::vec3 left_arm_pos  = glm::vec3{-(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
 	constexpr static inline glm::vec3 right_arm_pos = glm::vec3{(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0};
 
+	class WalkAnimation
+	{
+
+	public:
+
+		WalkAnimation() = default;
+		~WalkAnimation() = default;
+
+		void start()
+		{
+			m_is_active = true;
+			m_start_time = std::chrono::steady_clock::now().time_since_epoch();
+			m_should_stop = false;
+			m_direction = 1.0;
+		}
+
+		void stop()
+		{
+			m_should_stop = true;
+		}
+
+		double time_since_start()
+		{
+			return static_cast<double>((std::chrono::steady_clock::now().time_since_epoch() - m_start_time).count()) / 1e9;
+		}
+
+		bool isActive()
+		{
+			return m_is_active;
+		}
+
+		double angle()
+		{
+			return m_direction * amplitude * glm::sin(frequency * time_since_start());
+		}
+
+		void update()
+		{
+			if (time_since_start() >= duration_s / 2)
+			{
+				if (m_should_stop)
+				{
+					m_is_active = false;
+					m_should_stop = false;
+				}
+				else
+				{
+					m_start_time = std::chrono::steady_clock::now().time_since_epoch();
+					m_direction = -m_direction;
+				}
+			}
+		}
+
+	private:
+
+		bool m_is_active = false;
+		bool m_should_stop = false;
+		int m_direction = 1;
+		std::chrono::nanoseconds m_start_time = std::chrono::nanoseconds(0);
+
+		constexpr static inline double amplitude = 0.5;
+		constexpr static inline double frequency = 9.0;
+
+		const static inline double duration_s = 2.0 * glm::pi<double>() / frequency;
+
+	};
+
 };
