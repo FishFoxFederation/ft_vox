@@ -548,14 +548,13 @@ void RenderThread::loop()
 				nullptr
 			);
 
-			for (const auto & player : players)
+			for (auto & player : players)
 			{
 				if (!player.visible)
 				{
 					continue;
 				}
 
-				std::chrono::nanoseconds time_since_walk_animation_start = m_current_time - player.walk_animation_start_time;
 				std::chrono::nanoseconds time_since_attack_or_use_animation_start = m_current_time - player.attack_or_use_animation_start_time;
 
 				// Body
@@ -585,9 +584,9 @@ void RenderThread::loop()
 
 				// Legs animation angle
 				double legs_angle = 0.0;
-				if (player.is_walking)
+				if (player.walk_animation.isActive())
 				{
-					legs_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+					legs_angle = player.walk_animation.angle();
 				}
 
 				// Left leg
@@ -612,9 +611,9 @@ void RenderThread::loop()
 
 				// Arm animation angle
 				double arms_angle = 0.0;
-				if (player.is_walking)
+				if (player.walk_animation.isActive())
 				{
-					arms_angle = std::sin(9.0 * static_cast<double>(time_since_walk_animation_start.count()) / 1e9) * 0.5;
+					arms_angle = player.walk_animation.angle();
 				}
 
 				// Left arm

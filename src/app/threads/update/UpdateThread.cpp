@@ -83,6 +83,14 @@ void UpdateThread::loop()
 	m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
 
 	m_world.updateMobs(m_delta_time.count() / 1e9);
+
+	{ // Update walk animation
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		for (auto & [id, player] : m_world_scene.m_players)
+		{
+			player.walk_animation.update();
+		}
+	}
 }
 
 void UpdateThread::updateTime()
