@@ -608,17 +608,19 @@ void RenderThread::loop()
 				);
 
 				// Arm animation angle
-				double arms_angle = 0.0;
+				double arms_angle_x = 0.0;
+				double arms_angle_y = 0.0;
+				double arms_angle_z = 0.0;
 				if (player.walk_animation.isActive())
 				{
-					arms_angle = player.walk_animation.angle();
+					arms_angle_x = player.walk_animation.angle();
 				}
 
 				// Left arm
 				const glm::mat4 left_arm_model = Mat4()
 					.translate(PlayerModel::left_arm_pos)
 					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-					.rotate(-arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.rotate(-arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
 					.rotate(-glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
 					.mat();
 				drawPlayerBodyPart(
@@ -628,15 +630,19 @@ void RenderThread::loop()
 
 				if (player.attack_animation.isActive())
 				{
-					arms_angle = player.attack_animation.angle();
+					arms_angle_x = player.attack_animation.angleX();
+					arms_angle_y = player.attack_animation.angleY();
+					arms_angle_z = player.attack_animation.angleZ();
 				}
 
 				// Right arm
 				const glm::mat4 right_arm_model = Mat4()
 					.translate(PlayerModel::right_arm_pos)
 					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-					.rotate(arms_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.rotate(arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
+					.rotate(arms_angle_z, glm::dvec3(0.0f, 0.0f, 1.0f))
 					.rotate(glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
+					.rotate(arms_angle_y, glm::dvec3(0.0f, 1.0f, 0.0f))
 					.mat();
 				drawPlayerBodyPart(
 					vk.player_right_arm_mesh_id,
@@ -688,7 +694,7 @@ void RenderThread::loop()
 			);
 
 			ModelMatrice target_block_matrice = {};
-			target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value());
+			target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value()) * glm::scale(glm::mat4(1.0f), glm::vec3(1.001f));
 			vkCmdPushConstants(
 				vk.draw_command_buffers[vk.current_frame],
 				vk.line_pipeline.layout,
@@ -698,7 +704,7 @@ void RenderThread::loop()
 				&target_block_matrice
 			);
 
-			vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 5.0f);
+			vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 2.0f);
 
 			vkCmdDrawIndexed(
 				vk.draw_command_buffers[vk.current_frame],
