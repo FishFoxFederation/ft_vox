@@ -6,7 +6,7 @@ layout(set = 3, binding = 0) uniform sampler2D shadow_map;
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
 layout(location = 2) in vec4 shadow_coords;
-layout(location = 3) in float fragAO;
+layout(location = 3) in float frag_ao;
 
 layout(location = 0) out vec4 out_color;
 
@@ -66,7 +66,7 @@ void main()
 	float min_light = 0.2;
 
 	float max_ao_shadow = 0.13;
-	float ao_factor = fragAO / 3.0;
+	float ao_factor = frag_ao / 3.0;
 
 	float max_shadow_light = 0.8;
 	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 10000, 3);
@@ -74,5 +74,6 @@ void main()
 	float light = (min_light + max_shadow_light * shadow_factor) - max_ao_shadow * ao_factor;
 
 
-	out_color = texture(tex, frag_tex_coord) * light;
+	// out_color = texture(tex, frag_tex_coord) * light;
+	out_color = texture(tex, frag_tex_coord) * (0.8 * (1 - frag_ao / 3.0));
 }

@@ -251,7 +251,6 @@ public:
 	void drawMesh(
 		const Pipeline & pipeline,
 		const uint64_t mesh_id,
-		const std::vector<VkDescriptorSet> & descriptor_sets,
 		const void * push_constants,
 		const uint32_t push_constants_size,
 		const VkShaderStageFlags push_constants_stage
