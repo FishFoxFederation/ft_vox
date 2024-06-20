@@ -103,17 +103,17 @@ public:
 			m_should_stop = true;
 		}
 
-		double time_since_start()
+		double time_since_start() const
 		{
 			return static_cast<double>((std::chrono::steady_clock::now().time_since_epoch() - m_start_time).count()) / 1e9;
 		}
 
-		bool isActive()
+		bool isActive() const
 		{
 			return m_is_active;
 		}
 
-		double angle()
+		double angle() const
 		{
 			return m_direction * amplitude_x * glm::sin(frequency * time_since_start());
 		}
@@ -170,27 +170,27 @@ public:
 			m_should_stop = true;
 		}
 
-		double time_since_start()
+		double time_since_start() const
 		{
 			return static_cast<double>((std::chrono::steady_clock::now().time_since_epoch() - m_start_time).count()) / 1e9;
 		}
 
-		bool isActive()
+		bool isActive() const
 		{
 			return m_is_active;
 		}
 
-		double angleX()
+		double angleX() const
 		{
 			return amplitude_x * glm::sin(frequency * time_since_start());
 		}
 
-		double angleY()
+		double angleY() const
 		{
 			return amplitude_y * glm::sin(frequency * time_since_start() * 2.0);
 		}
 
-		double angleZ()
+		double angleZ() const
 		{
 			return amplitude_z * glm::sin(frequency * time_since_start() * 2.0);
 		}

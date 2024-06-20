@@ -170,8 +170,7 @@ void RenderThread::loop()
 
 	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
-	// reset mesh usage by frame info
-	{
+	{ // reset mesh usage by frame info
 		std::lock_guard lock(vk.mesh_map_mutex);
 		for (auto & [id, mesh] : vk.mesh_map)
 		{
@@ -195,641 +194,11 @@ void RenderThread::loop()
 	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 	memcpy(vk.sun_uniform_buffers_mapped_memory[vk.current_frame], &sun, sizeof(sun));
 
-	//############################################################################################################
-	//                     																                         #
-	//                                     Start shadow pass rendering here                                      #
-	//                     																                         #
-	//############################################################################################################
 
-	{
-		ZoneScopedN("Shadow pass");
-		TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Shadow pass");
-
-		VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
-		shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
-		shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
-		shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
-		shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
-		std::vector<VkClearValue> shadow_clear_values = {
-			{ 1.0f, 0 }
-		};
-		shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
-		shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
-
-		vkCmdBeginRenderPass(
-			vk.draw_command_buffers[vk.current_frame],
-			&shadow_render_pass_begin_info,
-			VK_SUBPASS_CONTENTS_INLINE
-		);
-
-		// Draw the chunks
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-			vk.sun_descriptor.sets[vk.current_frame]
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.shadow_pipeline.layout,
-			0,
-			static_cast<uint32_t>(shadow_descriptor_sets.size()),
-			shadow_descriptor_sets.data(),
-			0,
-			nullptr
-		);
-
-		for (auto & chunk_mesh : chunk_meshes)
-		{
-			Mesh mesh;
-			{
-				std::lock_guard lock(vk.mesh_map_mutex);
-
-				if (!vk.mesh_map.contains(chunk_mesh.id))
-				{
-					LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
-					continue;
-				}
-
-				mesh = vk.mesh_map.at(chunk_mesh.id);
-
-				if (mesh.buffer == VK_NULL_HANDLE)
-				{
-					LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
-					continue;
-				}
-
-				vk.mesh_map.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
-			}
-
-			const VkBuffer vertex_buffers[] = { mesh.buffer };
-			const VkDeviceSize offsets[] = { 0 };
-			vkCmdBindVertexBuffers(
-				vk.draw_command_buffers[vk.current_frame],
-				0, 1,
-				vertex_buffers,
-				offsets
-			);
-
-			vkCmdBindIndexBuffer(
-				vk.draw_command_buffers[vk.current_frame],
-				mesh.buffer,
-				mesh.index_offset,
-				VK_INDEX_TYPE_UINT32
-			);
-
-			ModelMatrice model_matrice = {};
-			model_matrice.model = chunk_mesh.model;
-			vkCmdPushConstants(
-				vk.draw_command_buffers[vk.current_frame],
-				vk.shadow_pipeline.layout,
-				VK_SHADER_STAGE_VERTEX_BIT,
-				0,
-				sizeof(ModelMatrice),
-				&model_matrice
-			);
-
-			vkCmdDrawIndexed(
-				vk.draw_command_buffers[vk.current_frame],
-				static_cast<uint32_t>(mesh.index_count),
-				1, 0, 0, 0
-			);
-		}
-
-		vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
-	}
-
-	//############################################################################################################
-	//                     																                         #
-	//                                    Start lighting pass rendering here                                     #
-	//                     																                         #
-	//############################################################################################################
-
-	{
-		ZoneScopedN("Lighting pass");
-		TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Lighting pass");
-
-		VkRenderPassBeginInfo lighting_render_pass_begin_info = {};
-		lighting_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
-		lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
-		lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
-		lighting_render_pass_begin_info.renderArea.extent = vk.color_attachement.extent2D;
-		std::vector<VkClearValue> lighting_clear_values = {
-			{ 0.0f, 0.0f, 0.0f, 1.0f },
-			{ 1.0f, 0 }
-		};
-		lighting_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(lighting_clear_values.size());
-		lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
-
-		vkCmdBeginRenderPass(
-			vk.draw_command_buffers[vk.current_frame],
-			&lighting_render_pass_begin_info,
-			VK_SUBPASS_CONTENTS_INLINE
-		);
-
-		{ // Draw the chunks
-			ZoneScopedN("Draw chunks");
-
-			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
-
-			const std::vector<VkDescriptorSet> descriptor_sets = {
-				vk.camera_descriptor.sets[vk.current_frame],
-				vk.sun_descriptor.sets[vk.current_frame],
-				vk.block_textures_descriptor.set,
-				vk.shadow_map_descriptor.set
-			};
-
-			vkCmdBindDescriptorSets(
-				vk.draw_command_buffers[vk.current_frame],
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				vk.chunk_pipeline.layout,
-				0,
-				static_cast<uint32_t>(descriptor_sets.size()),
-				descriptor_sets.data(),
-				0,
-				nullptr
-			);
-
-			uint32_t triangle_count = 0;
-
-			for (auto & chunk_mesh: chunk_meshes)
-			{
-				Mesh mesh;
-				{
-					std::lock_guard lock(vk.mesh_map_mutex);
-					if (!vk.mesh_map.contains(chunk_mesh.id))
-					{
-						LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
-						continue;
-					}
-
-					mesh = vk.mesh_map.at(chunk_mesh.id);
-
-					if (mesh.buffer == VK_NULL_HANDLE)
-					{
-						LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
-						continue;
-					}
-
-					vk.mesh_map.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
-				}
-
-				// glm::dvec3 pos = chunk_mesh.transform.position();
-				// if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
-				// {
-				// 	continue;
-				// }
-
-				const VkBuffer vertex_buffers[] = { mesh.buffer };
-				const VkDeviceSize offsets[] = { 0 };
-				vkCmdBindVertexBuffers(
-					vk.draw_command_buffers[vk.current_frame],
-					0, 1,
-					vertex_buffers,
-					offsets
-				);
-
-				vkCmdBindIndexBuffer(
-					vk.draw_command_buffers[vk.current_frame],
-					mesh.buffer,
-					mesh.index_offset,
-					VK_INDEX_TYPE_UINT32
-				);
-
-				ModelMatrice model_matrice = {};
-				model_matrice.model = chunk_mesh.model;
-				vkCmdPushConstants(
-					vk.draw_command_buffers[vk.current_frame],
-					vk.chunk_pipeline.layout,
-					VK_SHADER_STAGE_VERTEX_BIT,
-					0,
-					sizeof(ModelMatrice),
-					&model_matrice
-				);
-
-				vkCmdDrawIndexed(
-					vk.draw_command_buffers[vk.current_frame],
-					static_cast<uint32_t>(mesh.index_count),
-					1, 0, 0, 0
-				);
-
-				triangle_count += (mesh.index_count) / 3;
-			}
-			DebugGui::rendered_triangles = triangle_count;
-		}
-
-		{ // Draw the entities
-			ZoneScopedN("Draw entities");
-
-			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
-
-			const std::vector<VkDescriptorSet> entity_descriptor_sets = {
-				vk.camera_descriptor.sets[vk.current_frame]
-			};
-
-			vkCmdBindDescriptorSets(
-				vk.draw_command_buffers[vk.current_frame],
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				vk.entity_pipeline.layout,
-				0,
-				static_cast<uint32_t>(entity_descriptor_sets.size()),
-				entity_descriptor_sets.data(),
-				0,
-				nullptr
-			);
-
-			for (const auto & entity_mesh : entity_meshes)
-			{
-				Mesh mesh;
-				{
-					std::lock_guard lock(vk.mesh_map_mutex);
-					if (!vk.mesh_map.contains(entity_mesh.id))
-					{
-						LOG_WARNING("Mesh " << entity_mesh.id << " not found in the mesh map.");
-						continue;
-					}
-
-					mesh = vk.mesh_map.at(entity_mesh.id);
-
-					if (mesh.buffer == VK_NULL_HANDLE)
-					{
-						LOG_WARNING("Mesh " << entity_mesh.id << " has a null buffer.");
-						continue;
-					}
-
-					vk.mesh_map.at(entity_mesh.id).used_by_frame[vk.current_frame] = true;
-				}
-
-				const VkBuffer vertex_buffers[] = { mesh.buffer };
-				const VkDeviceSize offsets[] = { 0 };
-				vkCmdBindVertexBuffers(
-					vk.draw_command_buffers[vk.current_frame],
-					0, 1,
-					vertex_buffers,
-					offsets
-				);
-
-				vkCmdBindIndexBuffer(
-					vk.draw_command_buffers[vk.current_frame],
-					mesh.buffer,
-					mesh.index_offset,
-					VK_INDEX_TYPE_UINT32
-				);
-
-				EntityMatrices entity_matrice = {};
-				entity_matrice.model = entity_mesh.model;
-				entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-				vkCmdPushConstants(
-					vk.draw_command_buffers[vk.current_frame],
-					vk.entity_pipeline.layout,
-					VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-					0,
-					sizeof(EntityMatrices),
-					&entity_matrice
-				);
-
-				vkCmdDrawIndexed(
-					vk.draw_command_buffers[vk.current_frame],
-					static_cast<uint32_t>(mesh.index_count),
-					1, 0, 0, 0
-				);
-			}
-
-			for (auto & data: debug_blocks)
-			{
-				const glm::vec3 size = glm::vec3(data.size);
-				const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
-				const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
-
-				EntityMatrices block_matrice = {};
-				block_matrice.model = block_model;
-				block_matrice.color = data.color;
-				vkCmdPushConstants(
-					vk.draw_command_buffers[vk.current_frame],
-					vk.entity_pipeline.layout,
-					VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-					0,
-					sizeof(EntityMatrices),
-					&block_matrice
-				);
-
-				vkCmdDrawIndexed(
-					vk.draw_command_buffers[vk.current_frame],
-					36,
-					1,
-					0,
-					0,
-					0
-				);
-			}
-		}
-
-		{ // Draw the players
-			ZoneScopedN("Draw players");
-
-			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
-
-			const std::vector<VkDescriptorSet> player_descriptor_sets = {
-				vk.camera_descriptor.sets[vk.current_frame],
-				vk.player_skin_image_descriptor.set
-			};
-
-			vkCmdBindDescriptorSets(
-				vk.draw_command_buffers[vk.current_frame],
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				vk.player_pipeline.layout,
-				0,
-				static_cast<uint32_t>(player_descriptor_sets.size()),
-				player_descriptor_sets.data(),
-				0,
-				nullptr
-			);
-
-			for (auto & player : players)
-			{
-				if (!player.visible)
-				{
-					continue;
-				}
-
-				// Body
-				const glm::mat4 body_model = Mat4()
-					.translate(player.position)
-					.rotate(-glm::radians(player.yaw + 90), glm::dvec3(0.0f, 1.0f, 0.0f))
-					.mat();
-
-				// Chest
-				const glm::mat4 chest_model = Mat4()
-					.translate(PlayerModel::chest_pos)
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_chest_mesh_id,
-					body_model * chest_model
-				);
-
-				// Head
-				const glm::mat4 head_model = Mat4()
-					.translate(PlayerModel::head_pos)
-					.rotate(glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_head_mesh_id,
-					body_model * chest_model * head_model
-				);
-
-				// Legs animation angle
-				double legs_angle = 0.0;
-				if (player.walk_animation.isActive())
-				{
-					legs_angle = player.walk_animation.angle();
-				}
-
-				// Left leg
-				const glm::mat4 left_leg_model = Mat4()
-					.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate(PlayerModel::left_leg_pos)
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_left_leg_mesh_id,
-					body_model * chest_model * left_leg_model
-				);
-
-				// Right leg
-				const glm::mat4 right_leg_model = Mat4()
-					.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.translate(PlayerModel::right_leg_pos)
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_right_leg_mesh_id,
-					body_model * chest_model * right_leg_model
-				);
-
-				// Arm animation angle
-				double arms_angle_x = 0.0;
-				double arms_angle_y = 0.0;
-				double arms_angle_z = 0.0;
-				if (player.walk_animation.isActive())
-				{
-					arms_angle_x = player.walk_animation.angle();
-				}
-
-				// Left arm
-				const glm::mat4 left_arm_model = Mat4()
-					.translate(PlayerModel::left_arm_pos)
-					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-					.rotate(-arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.rotate(-glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_right_arm_mesh_id,
-					body_model * chest_model * left_arm_model
-				);
-
-				if (player.attack_animation.isActive())
-				{
-					arms_angle_x = player.attack_animation.angleX();
-					arms_angle_y = player.attack_animation.angleY();
-					arms_angle_z = player.attack_animation.angleZ();
-				}
-
-				// Right arm
-				const glm::mat4 right_arm_model = Mat4()
-					.translate(PlayerModel::right_arm_pos)
-					.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
-					.rotate(arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
-					.rotate(arms_angle_z, glm::dvec3(0.0f, 0.0f, 1.0f))
-					.rotate(glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
-					.rotate(arms_angle_y, glm::dvec3(0.0f, 1.0f, 0.0f))
-					.mat();
-				drawPlayerBodyPart(
-					vk.player_right_arm_mesh_id,
-					body_model * chest_model * right_arm_model
-				);
-			}
-		}
-
-		// Draw the targeted block
-		if (target_block.has_value())
-		{
-			vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
-
-			const std::vector<VkDescriptorSet> line_descriptor_sets = {
-				vk.camera_descriptor.sets[vk.current_frame]
-			};
-
-			vkCmdBindDescriptorSets(
-				vk.draw_command_buffers[vk.current_frame],
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				vk.line_pipeline.layout,
-				0,
-				static_cast<uint32_t>(line_descriptor_sets.size()),
-				line_descriptor_sets.data(),
-				0,
-				nullptr
-			);
-
-			Mesh mesh;
-			{
-				std::lock_guard lock(vk.mesh_map_mutex);
-				mesh = vk.mesh_map.at(vk.cube_mesh_id);
-			}
-
-			const VkBuffer vertex_buffers[] = { mesh.buffer };
-			const VkDeviceSize offsets[] = { 0 };
-			vkCmdBindVertexBuffers(
-				vk.draw_command_buffers[vk.current_frame],
-				0, 1,
-				vertex_buffers,
-				offsets
-			);
-
-			vkCmdBindIndexBuffer(
-				vk.draw_command_buffers[vk.current_frame],
-				mesh.buffer,
-				mesh.index_offset,
-				VK_INDEX_TYPE_UINT32
-			);
-
-			ModelMatrice target_block_matrice = {};
-			target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value()) * glm::scale(glm::mat4(1.0f), glm::vec3(1.001f));
-			vkCmdPushConstants(
-				vk.draw_command_buffers[vk.current_frame],
-				vk.line_pipeline.layout,
-				VK_SHADER_STAGE_VERTEX_BIT,
-				0,
-				sizeof(ModelMatrice),
-				&target_block_matrice
-			);
-
-			vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 2.0f);
-
-			vkCmdDrawIndexed(
-				vk.draw_command_buffers[vk.current_frame],
-				static_cast<uint32_t>(mesh.index_count),
-				1, 0, 0, 0
-			);
-		}
-
-
-		// Draw the skybox
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
-
-		const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame],
-			vk.cube_map_descriptor.set
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.skybox_pipeline.layout,
-			0,
-			static_cast<uint32_t>(skybox_descriptor_sets.size()),
-			skybox_descriptor_sets.data(),
-			0,
-			nullptr
-		);
-
-		ModelMatrice camera_model_matrice = {};
-		camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-		vkCmdPushConstants(
-			vk.draw_command_buffers[vk.current_frame],
-			vk.skybox_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT,
-			0,
-			sizeof(ModelMatrice),
-			&camera_model_matrice
-		);
-
-		vkCmdDraw(
-			vk.draw_command_buffers[vk.current_frame],
-			36,
-			1,
-			0,
-			0
-		);
-
-
-		// Draw gui
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> gui_descriptor_sets = {
-			vk.crosshair_image_descriptor.set
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.gui_pipeline.layout,
-			0,
-			static_cast<uint32_t>(gui_descriptor_sets.size()),
-			gui_descriptor_sets.data(),
-			0,
-			nullptr
-		);
-
-		float min_size = std::min(vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height);
-		float size = min_size / 40.0f;
-
-		VkViewport viewport = {};
-		viewport.x = static_cast<float>(vk.color_attachement.extent2D.width / 2 - (size / 2));
-		viewport.y = static_cast<float>(vk.color_attachement.extent2D.height / 2 - (size / 2));
-		viewport.width = size;
-		viewport.height = size;
-		viewport.minDepth = 0.0f;
-		viewport.maxDepth = 1.0f;
-
-		vkCmdSetViewport(vk.draw_command_buffers[vk.current_frame], 0, 1, &viewport);
-
-		vkCmdDraw(
-			vk.draw_command_buffers[vk.current_frame],
-			6,
-			1,
-			0,
-			0
-		);
-
-
-		// Draw test image
-		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
-
-		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-		// 	vk.test_image_descriptor.set
-		// };
-
-		// vkCmdBindDescriptorSets(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-		// 	vk.test_image_pipeline.layout,
-		// 	0,
-		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-		// 	test_image_descriptor_sets.data(),
-		// 	0,
-		// 	nullptr
-		// );
-
-		// vkCmdDraw(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	6,
-		// 	1,
-		// 	0,
-		// 	0
-		// );
-
-
-		vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
-	}
+	shadowPass(chunk_meshes);
+	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks);
 
 	TracyVkCollect(vk.ctx, vk.draw_command_buffers[vk.current_frame]);
-
-	//############################################################################################################
-	//                     																                         #
-	//                              Submit the command buffer to the graphics queue                              #
-	//                     																                         #
-	//############################################################################################################
 
 	VK_CHECK(
 		vkEndCommandBuffer(vk.draw_command_buffers[vk.current_frame]),
@@ -849,88 +218,7 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	// Acquire the next swap chain image
-	uint32_t image_index;
-	VkResult result = vkAcquireNextImageKHR(
-		vk.device,
-		vk.swapchain.swapchain,
-		std::numeric_limits<uint64_t>::max(),
-		vk.image_available_semaphores[vk.current_frame],
-		VK_NULL_HANDLE,
-		&image_index
-	);
-
-	if (result == VK_ERROR_OUT_OF_DATE_KHR)
-	{
-		vk.recreateSwapChain(vk.window);
-		return;
-	}
-	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-	{
-		throw std::runtime_error("Failed to acquire swap chain image");
-	}
-
-
-	// Copy the color image to the swap chain image with blit
-	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
-
-	VkCommandBufferBeginInfo copy_begin_info = {};
-	copy_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-	VK_CHECK(
-		vkBeginCommandBuffer(vk.copy_command_buffers[vk.current_frame], &copy_begin_info),
-		"Failed to begin recording copy command buffer"
-	);
-
-	vk.setImageLayout(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.swapchain.images[image_index],
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	VkImageBlit blit = {};
-	blit.srcOffsets[0] = { 0, 0, 0 };
-	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.color_attachement.extent2D.width),
-		static_cast<int32_t>(vk.color_attachement.extent2D.height),
-		1
-	};
-	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	blit.srcSubresource.mipLevel = 0;
-	blit.srcSubresource.baseArrayLayer = 0;
-	blit.srcSubresource.layerCount = 1;
-	blit.dstOffsets[0] = { 0, 0, 0 };
-	blit.dstOffsets[1] = {
-		static_cast<int32_t>(vk.swapchain.extent.width),
-		static_cast<int32_t>(vk.swapchain.extent.height),
-		1
-	};
-	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	blit.dstSubresource.mipLevel = 0;
-	blit.dstSubresource.baseArrayLayer = 0;
-	blit.dstSubresource.layerCount = 1;
-
-	vkCmdBlitImage(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.color_attachement.image,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		vk.swapchain.images[image_index],
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		1,
-		&blit,
-		VK_FILTER_LINEAR
-	);
-
-	VK_CHECK(
-		vkEndCommandBuffer(vk.copy_command_buffers[vk.current_frame]),
-		"Failed to record copy command buffer"
-	);
+	copyToSwapchain();
 
 	VkSubmitInfo copy_submit_info = {};
 	copy_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -958,98 +246,7 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	vkResetCommandBuffer(vk.imgui_command_buffers[vk.current_frame], 0);
-
-	VkCommandBufferBeginInfo imgui_begin_info = {};
-	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-	VK_CHECK(
-		vkBeginCommandBuffer(vk.imgui_command_buffers[vk.current_frame], &imgui_begin_info),
-		"Failed to begin recording command buffer"
-	);
-
-	vk.setImageLayout(
-		vk.imgui_command_buffers[vk.current_frame],
-		vk.swapchain.images[image_index],
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-	);
-
-	vk.setImageLayout(
-		vk.imgui_command_buffers[vk.current_frame],
-		vk.imgui_texture.image,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
-
-	VkRenderingAttachmentInfo imgui_color_attachment = {};
-	imgui_color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-	imgui_color_attachment.imageView = vk.swapchain.image_views[image_index];
-	imgui_color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	imgui_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-	imgui_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-
-	VkRenderingInfo imgui_render_info = {};
-	imgui_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	imgui_render_info.renderArea = { 0, 0, vk.swapchain.extent.width, vk.swapchain.extent.height };
-	imgui_render_info.layerCount = 1;
-	imgui_render_info.colorAttachmentCount = 1;
-	imgui_render_info.pColorAttachments = &imgui_color_attachment;
-
-	vkCmdBeginRendering(vk.imgui_command_buffers[vk.current_frame], &imgui_render_info);
-
-
-	ImGui_ImplVulkan_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	m_debug_gui.updateImGui();
-
-	ImGui::Render();
-
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), vk.imgui_command_buffers[vk.current_frame]);
-
-
-	vkCmdEndRendering(vk.imgui_command_buffers[vk.current_frame]);
-
-	vk.setImageLayout(
-		vk.imgui_command_buffers[vk.current_frame],
-		vk.swapchain.images[image_index],
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-	);
-
-	vk.setImageLayout(
-		vk.imgui_command_buffers[vk.current_frame],
-		vk.imgui_texture.image,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_IMAGE_LAYOUT_GENERAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-	);
-
-	VK_CHECK(
-		vkEndCommandBuffer(vk.imgui_command_buffers[vk.current_frame]),
-		"Failed to record imgui command buffer"
-	);
+	drawDebugGui();
 
 	VkSubmitInfo imgui_submit_info = {};
 	imgui_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -1086,9 +283,9 @@ void RenderThread::loop()
 	present_info.pWaitSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
 	present_info.swapchainCount = 1;
 	present_info.pSwapchains = &vk.swapchain.swapchain;
-	present_info.pImageIndices = &image_index;
+	present_info.pImageIndices = &vk.current_image_index;
 
-	result = vkQueuePresentKHR(vk.present_queue, &present_info);
+	VkResult result = vkQueuePresentKHR(vk.present_queue, &present_info);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
 	{
@@ -1115,6 +312,633 @@ void RenderThread::updateTime()
 	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
 	m_delta_time = m_current_time - m_last_frame_time;
 	m_last_frame_time = m_current_time;
+}
+
+void RenderThread::shadowPass(
+	const std::vector<WorldScene::MeshRenderData> & chunk_meshes
+)
+{
+	ZoneScoped;
+	TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Shadow pass");
+
+	VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
+	shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
+	shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
+	shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
+	std::vector<VkClearValue> shadow_clear_values = {
+		{ 1.0f, 0 }
+	};
+	shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
+	shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
+
+	vkCmdBeginRenderPass(
+		vk.draw_command_buffers[vk.current_frame],
+		&shadow_render_pass_begin_info,
+		VK_SUBPASS_CONTENTS_INLINE
+	);
+
+	// Draw the chunks
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+		vk.sun_descriptor.sets[vk.current_frame]
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.shadow_pipeline.layout,
+		0,
+		static_cast<uint32_t>(shadow_descriptor_sets.size()),
+		shadow_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	for (auto & chunk_mesh : chunk_meshes)
+	{
+		Mesh mesh;
+		{
+			std::lock_guard lock(vk.mesh_map_mutex);
+
+			if (!vk.mesh_map.contains(chunk_mesh.id))
+			{
+				LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+				continue;
+			}
+
+			mesh = vk.mesh_map.at(chunk_mesh.id);
+
+			if (mesh.buffer == VK_NULL_HANDLE)
+			{
+				LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
+				continue;
+			}
+
+			vk.mesh_map.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
+		}
+
+		const VkBuffer vertex_buffers[] = { mesh.buffer };
+		const VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(
+			vk.draw_command_buffers[vk.current_frame],
+			0, 1,
+			vertex_buffers,
+			offsets
+		);
+
+		vkCmdBindIndexBuffer(
+			vk.draw_command_buffers[vk.current_frame],
+			mesh.buffer,
+			mesh.index_offset,
+			VK_INDEX_TYPE_UINT32
+		);
+
+		ModelMatrice model_matrice = {};
+		model_matrice.model = chunk_mesh.model;
+		vkCmdPushConstants(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.shadow_pipeline.layout,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			0,
+			sizeof(ModelMatrice),
+			&model_matrice
+		);
+
+		vkCmdDrawIndexed(
+			vk.draw_command_buffers[vk.current_frame],
+			static_cast<uint32_t>(mesh.index_count),
+			1, 0, 0, 0
+		);
+	}
+
+	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
+}
+
+void RenderThread::lightingPass(
+	const Camera::RenderInfo & camera,
+	const std::vector<WorldScene::MeshRenderData> & chunk_meshes,
+	const std::vector<WorldScene::MeshRenderData> & entity_meshes,
+	const std::vector<WorldScene::PlayerRenderData> & players,
+	const std::optional<glm::vec3> & target_block,
+	const std::vector<WorldScene::DebugBlock> & debug_blocks
+)
+{
+	ZoneScoped;
+	TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Lighting pass");
+
+	VkRenderPassBeginInfo lighting_render_pass_begin_info = {};
+	lighting_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
+	lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
+	lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	lighting_render_pass_begin_info.renderArea.extent = vk.color_attachement.extent2D;
+	std::vector<VkClearValue> lighting_clear_values = {
+		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 1.0f, 0 }
+	};
+	lighting_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(lighting_clear_values.size());
+	lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
+
+	vkCmdBeginRenderPass(
+		vk.draw_command_buffers[vk.current_frame],
+		&lighting_render_pass_begin_info,
+		VK_SUBPASS_CONTENTS_INLINE
+	);
+
+	{ // Draw the chunks
+		ZoneScopedN("Draw chunks");
+
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame],
+			vk.sun_descriptor.sets[vk.current_frame],
+			vk.block_textures_descriptor.set,
+			vk.shadow_map_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.chunk_pipeline.layout,
+			0,
+			static_cast<uint32_t>(descriptor_sets.size()),
+			descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		uint32_t triangle_count = 0;
+
+		for (auto & chunk_mesh: chunk_meshes)
+		{
+			Mesh mesh;
+			{
+				std::lock_guard lock(vk.mesh_map_mutex);
+				if (!vk.mesh_map.contains(chunk_mesh.id))
+				{
+					LOG_WARNING("Mesh " << chunk_mesh.id << " not found in the mesh map.");
+					continue;
+				}
+
+				mesh = vk.mesh_map.at(chunk_mesh.id);
+
+				if (mesh.buffer == VK_NULL_HANDLE)
+				{
+					LOG_WARNING("Mesh " << chunk_mesh.id << " has a null buffer.");
+					continue;
+				}
+
+				vk.mesh_map.at(chunk_mesh.id).used_by_frame[vk.current_frame] = true;
+			}
+
+			// glm::dvec3 pos = chunk_mesh.transform.position();
+			// if (!camera.view_frustum.sphereInFrustum(pos + glm::dvec3(CHUNK_SIZE / 2), CHUNK_SIZE / 2 * std::sqrt(3)))
+			// {
+			// 	continue;
+			// }
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			ModelMatrice model_matrice = {};
+			model_matrice.model = chunk_mesh.model;
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.chunk_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT,
+				0,
+				sizeof(ModelMatrice),
+				&model_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+
+			triangle_count += (mesh.index_count) / 3;
+		}
+		DebugGui::rendered_triangles = triangle_count;
+	}
+
+	{ // Draw the entities
+		ZoneScopedN("Draw entities");
+
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> entity_descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame]
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.entity_pipeline.layout,
+			0,
+			static_cast<uint32_t>(entity_descriptor_sets.size()),
+			entity_descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		for (const auto & entity_mesh : entity_meshes)
+		{
+			Mesh mesh;
+			{
+				std::lock_guard lock(vk.mesh_map_mutex);
+				if (!vk.mesh_map.contains(entity_mesh.id))
+				{
+					LOG_WARNING("Mesh " << entity_mesh.id << " not found in the mesh map.");
+					continue;
+				}
+
+				mesh = vk.mesh_map.at(entity_mesh.id);
+
+				if (mesh.buffer == VK_NULL_HANDLE)
+				{
+					LOG_WARNING("Mesh " << entity_mesh.id << " has a null buffer.");
+					continue;
+				}
+
+				vk.mesh_map.at(entity_mesh.id).used_by_frame[vk.current_frame] = true;
+			}
+
+			const VkBuffer vertex_buffers[] = { mesh.buffer };
+			const VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(
+				vk.draw_command_buffers[vk.current_frame],
+				0, 1,
+				vertex_buffers,
+				offsets
+			);
+
+			vkCmdBindIndexBuffer(
+				vk.draw_command_buffers[vk.current_frame],
+				mesh.buffer,
+				mesh.index_offset,
+				VK_INDEX_TYPE_UINT32
+			);
+
+			EntityMatrices entity_matrice = {};
+			entity_matrice.model = entity_mesh.model;
+			entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.entity_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(EntityMatrices),
+				&entity_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				static_cast<uint32_t>(mesh.index_count),
+				1, 0, 0, 0
+			);
+		}
+
+		for (auto & data: debug_blocks)
+		{
+			const glm::vec3 size = glm::vec3(data.size);
+			const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
+			const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
+
+			EntityMatrices block_matrice = {};
+			block_matrice.model = block_model;
+			block_matrice.color = data.color;
+			vkCmdPushConstants(
+				vk.draw_command_buffers[vk.current_frame],
+				vk.entity_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(EntityMatrices),
+				&block_matrice
+			);
+
+			vkCmdDrawIndexed(
+				vk.draw_command_buffers[vk.current_frame],
+				36,
+				1,
+				0,
+				0,
+				0
+			);
+		}
+	}
+
+	{ // Draw the players
+		ZoneScopedN("Draw players");
+
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> player_descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame],
+			vk.player_skin_image_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.player_pipeline.layout,
+			0,
+			static_cast<uint32_t>(player_descriptor_sets.size()),
+			player_descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		for (const auto & player : players)
+		{
+			if (!player.visible)
+			{
+				continue;
+			}
+
+			// Body
+			const glm::mat4 body_model = Mat4()
+				.translate(player.position)
+				.rotate(-glm::radians(player.yaw + 90), glm::dvec3(0.0f, 1.0f, 0.0f))
+				.mat();
+
+			// Chest
+			const glm::mat4 chest_model = Mat4()
+				.translate(PlayerModel::chest_pos)
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_chest_mesh_id,
+				body_model * chest_model
+			);
+
+			// Head
+			const glm::mat4 head_model = Mat4()
+				.translate(PlayerModel::head_pos)
+				.rotate(glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_head_mesh_id,
+				body_model * chest_model * head_model
+			);
+
+			// Legs animation angle
+			double legs_angle = 0.0;
+			if (player.walk_animation.isActive())
+			{
+				legs_angle = player.walk_animation.angle();
+			}
+
+			// Left leg
+			const glm::mat4 left_leg_model = Mat4()
+				.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.translate(PlayerModel::left_leg_pos)
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_left_leg_mesh_id,
+				body_model * chest_model * left_leg_model
+			);
+
+			// Right leg
+			const glm::mat4 right_leg_model = Mat4()
+				.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.translate(PlayerModel::right_leg_pos)
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_right_leg_mesh_id,
+				body_model * chest_model * right_leg_model
+			);
+
+			// Arm animation angle
+			double arms_angle_x = 0.0;
+			double arms_angle_y = 0.0;
+			double arms_angle_z = 0.0;
+			if (player.walk_animation.isActive())
+			{
+				arms_angle_x = player.walk_animation.angle();
+			}
+
+			// Left arm
+			const glm::mat4 left_arm_model = Mat4()
+				.translate(PlayerModel::left_arm_pos)
+				.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+				.rotate(-arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.rotate(-glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_right_arm_mesh_id,
+				body_model * chest_model * left_arm_model
+			);
+
+			if (player.attack_animation.isActive())
+			{
+				arms_angle_x = player.attack_animation.angleX();
+				arms_angle_y = player.attack_animation.angleY();
+				arms_angle_z = player.attack_animation.angleZ();
+			}
+
+			// Right arm
+			const glm::mat4 right_arm_model = Mat4()
+				.translate(PlayerModel::right_arm_pos)
+				.translate({0.0f, PlayerModel::arm_size.y, 0.0f})
+				.rotate(arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
+				.rotate(arms_angle_z, glm::dvec3(0.0f, 0.0f, 1.0f))
+				.rotate(glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
+				.rotate(arms_angle_y, glm::dvec3(0.0f, 1.0f, 0.0f))
+				.mat();
+			drawPlayerBodyPart(
+				vk.player_right_arm_mesh_id,
+				body_model * chest_model * right_arm_model
+			);
+		}
+	}
+
+	// Draw the targeted block
+	if (target_block.has_value())
+	{
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> line_descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame]
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.line_pipeline.layout,
+			0,
+			static_cast<uint32_t>(line_descriptor_sets.size()),
+			line_descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		Mesh mesh;
+		{
+			std::lock_guard lock(vk.mesh_map_mutex);
+			mesh = vk.mesh_map.at(vk.cube_mesh_id);
+		}
+
+		const VkBuffer vertex_buffers[] = { mesh.buffer };
+		const VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(
+			vk.draw_command_buffers[vk.current_frame],
+			0, 1,
+			vertex_buffers,
+			offsets
+		);
+
+		vkCmdBindIndexBuffer(
+			vk.draw_command_buffers[vk.current_frame],
+			mesh.buffer,
+			mesh.index_offset,
+			VK_INDEX_TYPE_UINT32
+		);
+
+		ModelMatrice target_block_matrice = {};
+		target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value()) * glm::scale(glm::mat4(1.0f), glm::vec3(1.001f));
+		vkCmdPushConstants(
+			vk.draw_command_buffers[vk.current_frame],
+			vk.line_pipeline.layout,
+			VK_SHADER_STAGE_VERTEX_BIT,
+			0,
+			sizeof(ModelMatrice),
+			&target_block_matrice
+		);
+
+		vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 2.0f);
+
+		vkCmdDrawIndexed(
+			vk.draw_command_buffers[vk.current_frame],
+			static_cast<uint32_t>(mesh.index_count),
+			1, 0, 0, 0
+		);
+	}
+
+
+	// Draw the skybox
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+
+	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.cube_map_descriptor.set
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.skybox_pipeline.layout,
+		0,
+		static_cast<uint32_t>(skybox_descriptor_sets.size()),
+		skybox_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	ModelMatrice camera_model_matrice = {};
+	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.skybox_pipeline.layout,
+		VK_SHADER_STAGE_VERTEX_BIT,
+		0,
+		sizeof(ModelMatrice),
+		&camera_model_matrice
+	);
+
+	vkCmdDraw(
+		vk.draw_command_buffers[vk.current_frame],
+		36,
+		1,
+		0,
+		0
+	);
+
+
+	// Draw gui
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
+
+	const std::vector<VkDescriptorSet> gui_descriptor_sets = {
+		vk.crosshair_image_descriptor.set
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.gui_pipeline.layout,
+		0,
+		static_cast<uint32_t>(gui_descriptor_sets.size()),
+		gui_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	float min_size = std::min(vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height);
+	float size = min_size / 40.0f;
+
+	VkViewport viewport = {};
+	viewport.x = static_cast<float>(vk.color_attachement.extent2D.width / 2 - (size / 2));
+	viewport.y = static_cast<float>(vk.color_attachement.extent2D.height / 2 - (size / 2));
+	viewport.width = size;
+	viewport.height = size;
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+
+	vkCmdSetViewport(vk.draw_command_buffers[vk.current_frame], 0, 1, &viewport);
+
+	vkCmdDraw(
+		vk.draw_command_buffers[vk.current_frame],
+		6,
+		1,
+		0,
+		0
+	);
+
+
+	// Draw test image
+	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+
+	// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+	// 	vk.test_image_descriptor.set
+	// };
+
+	// vkCmdBindDescriptorSets(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+	// 	vk.test_image_pipeline.layout,
+	// 	0,
+	// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
+	// 	test_image_descriptor_sets.data(),
+	// 	0,
+	// 	nullptr
+	// );
+
+	// vkCmdDraw(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	6,
+	// 	1,
+	// 	0,
+	// 	0
+	// );
+
+
+	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 }
 
 void RenderThread::drawPlayerBodyPart(
@@ -1175,5 +999,190 @@ void RenderThread::drawPlayerBodyPart(
 		vk.draw_command_buffers[vk.current_frame],
 		static_cast<uint32_t>(mesh.index_count),
 		1, 0, 0, 0
+	);
+}
+
+void RenderThread::copyToSwapchain()
+{
+	ZoneScoped;
+
+	// Acquire the next swap chain image
+	VkResult result = vkAcquireNextImageKHR(
+		vk.device,
+		vk.swapchain.swapchain,
+		std::numeric_limits<uint64_t>::max(),
+		vk.image_available_semaphores[vk.current_frame],
+		VK_NULL_HANDLE,
+		&vk.current_image_index
+	);
+
+	if (result == VK_ERROR_OUT_OF_DATE_KHR)
+	{
+		vk.recreateSwapChain(vk.window);
+		return;
+	}
+	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	{
+		throw std::runtime_error("Failed to acquire swap chain image");
+	}
+
+
+	// Copy the color image to the swap chain image with blit
+	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
+
+	VkCommandBufferBeginInfo copy_begin_info = {};
+	copy_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+	VK_CHECK(
+		vkBeginCommandBuffer(vk.copy_command_buffers[vk.current_frame], &copy_begin_info),
+		"Failed to begin recording copy command buffer"
+	);
+
+	vk.setImageLayout(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.swapchain.images[vk.current_image_index],
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT
+	);
+
+	VkImageBlit blit = {};
+	blit.srcOffsets[0] = { 0, 0, 0 };
+	blit.srcOffsets[1] = {
+		static_cast<int32_t>(vk.color_attachement.extent2D.width),
+		static_cast<int32_t>(vk.color_attachement.extent2D.height),
+		1
+	};
+	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.srcSubresource.mipLevel = 0;
+	blit.srcSubresource.baseArrayLayer = 0;
+	blit.srcSubresource.layerCount = 1;
+	blit.dstOffsets[0] = { 0, 0, 0 };
+	blit.dstOffsets[1] = {
+		static_cast<int32_t>(vk.swapchain.extent.width),
+		static_cast<int32_t>(vk.swapchain.extent.height),
+		1
+	};
+	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.dstSubresource.mipLevel = 0;
+	blit.dstSubresource.baseArrayLayer = 0;
+	blit.dstSubresource.layerCount = 1;
+
+	vkCmdBlitImage(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.color_attachement.image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		vk.swapchain.images[vk.current_image_index],
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		1,
+		&blit,
+		VK_FILTER_LINEAR
+	);
+
+	VK_CHECK(
+		vkEndCommandBuffer(vk.copy_command_buffers[vk.current_frame]),
+		"Failed to record copy command buffer"
+	);
+}
+
+void RenderThread::drawDebugGui()
+{
+	ZoneScoped;
+
+	vkResetCommandBuffer(vk.imgui_command_buffers[vk.current_frame], 0);
+
+	VkCommandBufferBeginInfo imgui_begin_info = {};
+	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+	VK_CHECK(
+		vkBeginCommandBuffer(vk.imgui_command_buffers[vk.current_frame], &imgui_begin_info),
+		"Failed to begin recording command buffer"
+	);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.swapchain.images[vk.current_image_index],
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+	);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.imgui_texture.image,
+		VK_IMAGE_LAYOUT_GENERAL,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+	);
+
+	VkRenderingAttachmentInfo imgui_color_attachment = {};
+	imgui_color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+	imgui_color_attachment.imageView = vk.swapchain.image_views[vk.current_image_index];
+	imgui_color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	imgui_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	imgui_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+	VkRenderingInfo imgui_render_info = {};
+	imgui_render_info.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+	imgui_render_info.renderArea = { 0, 0, vk.swapchain.extent.width, vk.swapchain.extent.height };
+	imgui_render_info.layerCount = 1;
+	imgui_render_info.colorAttachmentCount = 1;
+	imgui_render_info.pColorAttachments = &imgui_color_attachment;
+
+	vkCmdBeginRendering(vk.imgui_command_buffers[vk.current_frame], &imgui_render_info);
+
+
+	ImGui_ImplVulkan_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	m_debug_gui.updateImGui();
+
+	ImGui::Render();
+
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), vk.imgui_command_buffers[vk.current_frame]);
+
+
+	vkCmdEndRendering(vk.imgui_command_buffers[vk.current_frame]);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.swapchain.images[vk.current_image_index],
+		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+		VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+	);
+
+	vk.setImageLayout(
+		vk.imgui_command_buffers[vk.current_frame],
+		vk.imgui_texture.image,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+		VK_IMAGE_LAYOUT_GENERAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+	);
+
+	VK_CHECK(
+		vkEndCommandBuffer(vk.imgui_command_buffers[vk.current_frame]),
+		"Failed to record imgui command buffer"
 	);
 }

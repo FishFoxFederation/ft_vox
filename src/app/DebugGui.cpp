@@ -33,28 +33,6 @@ void DebugGui::updateImGui()
 				ImGui::Text("Rendered triangles: %ld", rendered_triangles.load());
 				ImGui::Text("Chunk meshes count: %d", chunk_mesh_count.load());
 
-				ImGui::Separator();
-
-				double acceleration_ = acceleration.load();
-				double ground_friction_ = ground_friction.load();
-				double air_friction_ = air_friction.load();
-				double jump_force_ = jump_force.load();
-				double gravity_ = gravity.load();
-
-				ImGui::InputDouble("Acceleration", &acceleration_);
-				ImGui::InputDouble("Ground friction", &ground_friction_);
-				ImGui::InputDouble("Air friction", &air_friction_);
-				ImGui::InputDouble("Jump force", &jump_force_);
-				ImGui::InputDouble("Gravity", &gravity_);
-
-				acceleration.store(acceleration_);
-				ground_friction.store(ground_friction_);
-				air_friction.store(air_friction_);
-				jump_force.store(jump_force_);
-				gravity.store(gravity_);
-
-				ImGui::Separator();
-				
 				ImGui::EndTabItem();
 			}
 
