@@ -283,6 +283,7 @@ public:
 
 	const int max_frames_in_flight = 2;
 	int current_frame = 0;
+	uint32_t current_image_index = 0;
 
 
 	Image color_attachement;

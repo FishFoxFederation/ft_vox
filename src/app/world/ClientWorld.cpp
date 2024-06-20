@@ -489,13 +489,13 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	// if player is walking
 	if (player->isFlying() == false)
 	{
-		double acc = DebugGui::acceleration;
-		double ground_friction = DebugGui::ground_friction;
-		double air_friction = DebugGui::air_friction;
+		double acc = 30.0;
+		double ground_friction = 10.0;
+		double air_friction = 0.8;
 		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
 
-		double jump_force = DebugGui::jump_force;
-		double gravity = -DebugGui::gravity;
+		double jump_force = 9.0;
+		double gravity = -25.0;
 
 		if (up && player->canJump())
 		{

@@ -85,31 +85,31 @@ private:
 	 */
 	void launch();
 
-	/**
-	 * @brief function used to initialize the vulkan ressources via the renderAPI
-	 *
-	 * @details will be initialized here:
-	 * - the textures
-	 * - the pipelines
-	 *
-	 */
 	void init();
-
-	/**
-	 * @brief the main loop of the thread
-	 *
-	 */
 	void loop();
 
-	/**
-	 * @brief update the time
-	 *
-	 */
 	void updateTime();
+
+	void shadowPass(
+		const std::vector<WorldScene::MeshRenderData> & chunk_meshes
+	);
+
+	void lightingPass(
+		const Camera::RenderInfo & camera,
+		const std::vector<WorldScene::MeshRenderData> & chunk_meshes,
+		const std::vector<WorldScene::MeshRenderData> & entity_meshes,
+		const std::vector<WorldScene::PlayerRenderData> & players,
+		const std::optional<glm::vec3> & target_block,
+		const std::vector<WorldScene::DebugBlock> & debug_blocks
+	);
 
 	void drawPlayerBodyPart(
 		const uint64_t mesh_id,
 		const glm::mat4 & model
 	);
+
+	void copyToSwapchain();
+
+	void drawDebugGui();
 
 };
