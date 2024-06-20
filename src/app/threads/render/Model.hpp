@@ -115,7 +115,7 @@ public:
 
 		double angle()
 		{
-			return m_direction * amplitude * glm::sin(frequency * time_since_start());
+			return m_direction * amplitude_x * glm::sin(frequency * time_since_start());
 		}
 
 		void update()
@@ -142,10 +142,11 @@ public:
 		int m_direction = 1;
 		std::chrono::nanoseconds m_start_time = std::chrono::nanoseconds(0);
 
-		constexpr static inline double amplitude = 0.5;
-		constexpr static inline double frequency = 9.0;
+		constexpr static inline double amplitude_x = 0.5;
 
-		const static inline double duration_s = glm::pi<double>() / frequency;
+		constexpr static inline double duration_s = 0.35;
+
+		constexpr static inline double frequency = glm::pi<double>() / duration_s;
 
 	};
 
@@ -179,9 +180,19 @@ public:
 			return m_is_active;
 		}
 
-		double angle()
+		double angleX()
 		{
-			return amplitude * glm::sin(frequency * time_since_start());
+			return amplitude_x * glm::sin(frequency * time_since_start());
+		}
+
+		double angleY()
+		{
+			return amplitude_y * glm::sin(frequency * time_since_start() * 2.0);
+		}
+
+		double angleZ()
+		{
+			return amplitude_z * glm::sin(frequency * time_since_start() * 2.0);
 		}
 
 		void update()
@@ -206,10 +217,13 @@ public:
 		bool m_should_stop = false;
 		std::chrono::nanoseconds m_start_time = std::chrono::nanoseconds(0);
 
-		constexpr static inline double amplitude = 1.0;
-		constexpr static inline double frequency = 15.0;
+		constexpr static inline double amplitude_x = 1.0;
+		constexpr static inline double amplitude_y = -0.8;
+		constexpr static inline double amplitude_z = 0.3;
 
-		const static inline double duration_s = glm::pi<double>() / frequency;
+		constexpr static inline double duration_s = 0.2;
+
+		constexpr static inline double frequency = glm::pi<double>() / duration_s;
 
 	};
 
