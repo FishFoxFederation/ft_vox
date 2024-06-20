@@ -100,7 +100,8 @@ private:
 		const std::vector<WorldScene::MeshRenderData> & entity_meshes,
 		const std::vector<WorldScene::PlayerRenderData> & players,
 		const std::optional<glm::vec3> & target_block,
-		const std::vector<WorldScene::DebugBlock> & debug_blocks
+		const std::vector<WorldScene::DebugBlock> & debug_blocks,
+		const glm::dvec3 & sun_position
 	);
 
 	void drawPlayerBodyPart(
