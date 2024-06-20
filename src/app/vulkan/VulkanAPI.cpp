@@ -146,6 +146,7 @@ VulkanAPI::~VulkanAPI()
 		chunk_pipeline.clear();
 		line_pipeline.clear();
 		skybox_pipeline.clear();
+		sun_pipeline.clear();
 		shadow_pipeline.clear();
 		test_image_pipeline.clear();
 		entity_pipeline.clear();
@@ -1348,8 +1349,8 @@ void VulkanAPI::createPipelines()
 	{ // skybox pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/skybox_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/skybox_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/sky/box.vert.spv";
+		pipeline_info.frag_path = "shaders/sky/box.frag.spv";
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
@@ -1362,6 +1363,27 @@ void VulkanAPI::createPipelines()
 		pipeline_info.render_pass = lighting_render_pass;
 
 		skybox_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // sun pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/sky/sun.vert.spv";
+		pipeline_info.frag_path = "shaders/sky/sun.frag.spv";
+		pipeline_info.binding_description = ObjVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = ObjVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyShaderData) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
+
+		sun_pipeline = Pipeline(device, pipeline_info);
 	}
 
 	{ // shadow map pipeline
@@ -1538,6 +1560,17 @@ void VulkanAPI::createMeshes()
 			vertices.data(),
 			vertices.size(),
 			sizeof(EntityVertex),
+			obj_loader.indices().data(),
+			obj_loader.indices().size()
+		);
+	}
+
+	{ // load icosphere mesh
+		ObjLoader obj_loader("assets/models/icosphere_blender.obj");
+		icosphere_mesh_id = storeMesh(
+			obj_loader.vertices().data(),
+			obj_loader.vertices().size(),
+			sizeof(ObjVertex),
 			obj_loader.indices().data(),
 			obj_loader.indices().size()
 		);
@@ -1811,6 +1844,89 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 
 	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
 }
+
+
+void VulkanAPI::drawMesh(
+	const Pipeline & pipeline,
+	const uint64_t mesh_id,
+	const std::vector<VkDescriptorSet> & descriptor_sets,
+	const void * push_constants,
+	const uint32_t push_constants_size,
+	VkShaderStageFlags push_constants_stage
+)
+{
+	vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
+
+	if (descriptor_sets.empty() == false)
+	{
+		vkCmdBindDescriptorSets(
+			draw_command_buffers[current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipeline.layout,
+			0,
+			static_cast<uint32_t>(descriptor_sets.size()),
+			descriptor_sets.data(),
+			0,
+			nullptr
+		);
+	}
+
+	if (push_constants_size > 0)
+	{
+		vkCmdPushConstants(
+			draw_command_buffers[current_frame],
+			pipeline.layout,
+			push_constants_stage,
+			0,
+			push_constants_size,
+			push_constants
+		);
+	}
+
+	Mesh mesh;
+	{
+		std::lock_guard lock(mesh_map_mutex);
+		if (!mesh_map.contains(mesh_id))
+		{
+			LOG_WARNING("Mesh " << mesh_id << " not found in the mesh map.");
+			return;
+		}
+
+		mesh = mesh_map.at(mesh_id);
+
+		if (mesh.buffer == VK_NULL_HANDLE)
+		{
+			LOG_WARNING("Mesh " << mesh_id << " has a null buffer.");
+			return;
+		}
+
+		mesh_map.at(mesh_id).used_by_frame[current_frame] = true;
+	}
+
+	const VkBuffer vertex_buffers[] = { mesh.buffer };
+	const VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(
+		draw_command_buffers[current_frame],
+		0, 1,
+		vertex_buffers,
+		offsets
+	);
+
+	vkCmdBindIndexBuffer(
+		draw_command_buffers[current_frame],
+		mesh.buffer,
+		mesh.index_offset,
+		VK_INDEX_TYPE_UINT32
+	);
+
+	vkCmdDrawIndexed(
+		draw_command_buffers[current_frame],
+		static_cast<uint32_t>(mesh.index_count),
+		1, 0, 0, 0
+	);
+}
+
+
 
 VkFormat VulkanAPI::findSupportedFormat(
 	const std::vector<VkFormat> & candidates,

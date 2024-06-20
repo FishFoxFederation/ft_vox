@@ -155,6 +155,12 @@ struct ShadowMapLight
 	glm::mat4 model;
 };
 
+struct SkyShaderData
+{
+	glm::mat4 model;
+	glm::vec3 sun_direction;
+};
+
 struct GuiTextureData
 {
 	glm::vec2 position;
@@ -241,6 +247,15 @@ public:
 	);
 	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
+
+	void drawMesh(
+		const Pipeline & pipeline,
+		const uint64_t mesh_id,
+		const std::vector<VkDescriptorSet> & descriptor_sets,
+		const void * push_constants,
+		const uint32_t push_constants_size,
+		const VkShaderStageFlags push_constants_stage
+	);
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 
@@ -329,6 +344,7 @@ public:
 	Pipeline chunk_pipeline;
 	Pipeline line_pipeline;
 	Pipeline skybox_pipeline;
+	Pipeline sun_pipeline;
 	Pipeline shadow_pipeline;
 	Pipeline test_image_pipeline;
 	Pipeline entity_pipeline;
@@ -347,6 +363,7 @@ public:
 	std::vector<uint64_t> mesh_ids_to_destroy;
 
 	uint64_t cube_mesh_id;
+	uint64_t icosphere_mesh_id;
 
 	uint64_t player_chest_mesh_id;
 	uint64_t player_head_mesh_id;
