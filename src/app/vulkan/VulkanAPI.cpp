@@ -1566,7 +1566,7 @@ void VulkanAPI::createMeshes()
 	}
 
 	{ // load icosphere mesh
-		ObjLoader obj_loader("assets/models/icosphere_blender.obj");
+		ObjLoader obj_loader("assets/models/icosphere.obj");
 		icosphere_mesh_id = storeMesh(
 			obj_loader.vertices().data(),
 			obj_loader.vertices().size(),
@@ -1849,40 +1849,11 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 void VulkanAPI::drawMesh(
 	const Pipeline & pipeline,
 	const uint64_t mesh_id,
-	const std::vector<VkDescriptorSet> & descriptor_sets,
 	const void * push_constants,
 	const uint32_t push_constants_size,
 	VkShaderStageFlags push_constants_stage
 )
 {
-	vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
-
-	if (descriptor_sets.empty() == false)
-	{
-		vkCmdBindDescriptorSets(
-			draw_command_buffers[current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			pipeline.layout,
-			0,
-			static_cast<uint32_t>(descriptor_sets.size()),
-			descriptor_sets.data(),
-			0,
-			nullptr
-		);
-	}
-
-	if (push_constants_size > 0)
-	{
-		vkCmdPushConstants(
-			draw_command_buffers[current_frame],
-			pipeline.layout,
-			push_constants_stage,
-			0,
-			push_constants_size,
-			push_constants
-		);
-	}
-
 	Mesh mesh;
 	{
 		std::lock_guard lock(mesh_map_mutex);
@@ -1918,6 +1889,18 @@ void VulkanAPI::drawMesh(
 		mesh.index_offset,
 		VK_INDEX_TYPE_UINT32
 	);
+
+	if (push_constants_size > 0)
+	{
+		vkCmdPushConstants(
+			draw_command_buffers[current_frame],
+			pipeline.layout,
+			push_constants_stage,
+			0,
+			push_constants_size,
+			push_constants
+		);
+	}
 
 	vkCmdDrawIndexed(
 		draw_command_buffers[current_frame],
