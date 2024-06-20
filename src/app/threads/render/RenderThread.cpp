@@ -79,6 +79,7 @@ void RenderThread::loop()
 	std::vector<WorldScene::MeshRenderData> entity_meshes;
 	std::vector<WorldScene::PlayerRenderData> players;
 	ViewProjMatrices sun = {};
+	glm::dvec3 sun_position;
 	std::optional<glm::vec3> target_block;
 	std::vector<WorldScene::DebugBlock> debug_blocks;
 
@@ -117,15 +118,19 @@ void RenderThread::loop()
 
 		DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
-		const glm::dvec3 sun_offset = glm::dvec3(100.0f, 70.0f, 100.0f);
-		const glm::dvec3 sun_pos = camera.position + sun_offset;
+		const glm::dvec3 sun_offset = glm::dvec3(
+			100.0 * glm::cos(glm::radians(20.0) * m_current_time.count() / 1e9),
+			70.0f,
+			100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
+		);
+		sun_position = camera.position + sun_offset;
 		const float sun_size = 300.0f;
 		const float sun_near = 10.0f;
 		const float sun_far = 1000.0f;
 
 		sun = camera_matrices;
 		sun.view = glm::lookAt(
-			sun_pos,
+			sun_position,
 			camera.position,
 			glm::dvec3(0.0f, 1.0f, 0.0f)
 		);
@@ -187,7 +192,7 @@ void RenderThread::loop()
 
 
 	shadowPass(chunk_meshes);
-	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks);
+	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
 
 	TracyVkCollect(vk.ctx, vk.draw_command_buffers[vk.current_frame]);
 
@@ -414,7 +419,8 @@ void RenderThread::lightingPass(
 	const std::vector<WorldScene::MeshRenderData> & entity_meshes,
 	const std::vector<WorldScene::PlayerRenderData> & players,
 	const std::optional<glm::vec3> & target_block,
-	const std::vector<WorldScene::DebugBlock> & debug_blocks
+	const std::vector<WorldScene::DebugBlock> & debug_blocks,
+	const glm::dvec3 & sun_position
 )
 {
 	ZoneScoped;
@@ -824,41 +830,59 @@ void RenderThread::lightingPass(
 
 
 	// Draw the skybox
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
+	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-	const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.cube_map_descriptor.set
+	// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
+	// 	vk.camera_descriptor.sets[vk.current_frame],
+	// 	vk.cube_map_descriptor.set
+	// };
+
+	// vkCmdBindDescriptorSets(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+	// 	vk.skybox_pipeline.layout,
+	// 	0,
+	// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
+	// 	skybox_descriptor_sets.data(),
+	// 	0,
+	// 	nullptr
+	// );
+
+	// ModelMatrice skybox_matrices = {};
+	// skybox_matrices.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	// vkCmdPushConstants(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	vk.skybox_pipeline.layout,
+	// 	VK_SHADER_STAGE_VERTEX_BIT,
+	// 	0,
+	// 	sizeof(ModelMatrice),
+	// 	&skybox_matrices
+	// );
+
+	// vkCmdDraw(
+	// 	vk.draw_command_buffers[vk.current_frame],
+	// 	36,
+	// 	1,
+	// 	0,
+	// 	0
+	// );
+
+	// Draw the sun
+	const std::vector<VkDescriptorSet> sun_descriptor_sets = {
+		vk.camera_descriptor.sets[vk.current_frame]
 	};
 
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.skybox_pipeline.layout,
-		0,
-		static_cast<uint32_t>(skybox_descriptor_sets.size()),
-		skybox_descriptor_sets.data(),
-		0,
-		nullptr
-	);
+	SkyShaderData sky_shader_data = {};
+	sky_shader_data.model = glm::translate(glm::dmat4(1.0f), camera.position);
+	sky_shader_data.sun_direction = glm::normalize(sun_position - camera.position);
 
-	ModelMatrice camera_model_matrice = {};
-	camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);
-	vkCmdPushConstants(
-		vk.draw_command_buffers[vk.current_frame],
-		vk.skybox_pipeline.layout,
-		VK_SHADER_STAGE_VERTEX_BIT,
-		0,
-		sizeof(ModelMatrice),
-		&camera_model_matrice
-	);
-
-	vkCmdDraw(
-		vk.draw_command_buffers[vk.current_frame],
-		36,
-		1,
-		0,
-		0
+	vk.drawMesh(
+		vk.sun_pipeline,
+		vk.icosphere_mesh_id,
+		{ vk.camera_descriptor.sets[vk.current_frame] },
+		&sky_shader_data,
+		sizeof(SkyShaderData),
+		VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 	);
 
 
