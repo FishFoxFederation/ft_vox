@@ -243,7 +243,7 @@ Image::Image(
 				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 				1,
 				&image_blit,
-				VK_FILTER_LINEAR
+				VK_FILTER_NEAREST
 			);
 		}
 
@@ -316,7 +316,7 @@ Image::Image(
 					VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 					1,
 					&mipmaps_blit,
-					VK_FILTER_LINEAR
+					VK_FILTER_NEAREST
 				);
 			}
 
