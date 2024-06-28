@@ -73,7 +73,7 @@ vec3 computeSkyColor(vec3 origin, vec3 dir, float tmin, float tmax)
     for (int i = 0; i < numSamples; ++i)
 	{
         vec3 samplePosition = origin + (tCurrent + segmentLength * 0.5) * dir;
-        float height = samplePosition.length() - earthRadius;
+        float height = length(samplePosition) - earthRadius;
         // compute optical depth for light
         float hr = exp(-height / Hr) * segmentLength;
         float hm = exp(-height / Hm) * segmentLength;
@@ -88,8 +88,8 @@ vec3 computeSkyColor(vec3 origin, vec3 dir, float tmin, float tmax)
         for (j = 0; j < numSamplesLight; ++j)
 		{
             vec3 samplePositionLight = samplePosition + (tCurrentLight + segmentLengthLight * 0.5) * pc.sunDir;
-            float heightLight = samplePositionLight.length() - earthRadius;
-            // if (heightLight < 0) break;
+            float heightLight = length(samplePositionLight) - earthRadius;
+            if (heightLight < 0) break;
             opticalDepthLightR += exp(-heightLight / Hr) * segmentLengthLight;
             opticalDepthLightM += exp(-heightLight / Hm) * segmentLengthLight;
             tCurrentLight += segmentLengthLight;
