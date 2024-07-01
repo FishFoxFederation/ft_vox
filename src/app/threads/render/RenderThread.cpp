@@ -91,6 +91,7 @@ void RenderThread::loop()
 	glm::dvec3 sun_position;
 	std::optional<glm::vec3> target_block;
 	std::vector<WorldScene::DebugBlock> debug_blocks;
+	AtmosphereParams atmosphere_params = {};
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -127,10 +128,15 @@ void RenderThread::loop()
 
 		DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
+		// const glm::dvec3 sun_offset = glm::dvec3(
+		// 	0.0f,
+		// 	100.0 * glm::cos(glm::radians(20.0) * m_current_time.count() / 1e9),
+		// 	100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
+		// );
 		const glm::dvec3 sun_offset = glm::dvec3(
 			0.0f,
-			100.0 * glm::cos(glm::radians(20.0) * m_current_time.count() / 1e9),
-			100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
+			100.0 * glm::cos(glm::radians(DebugGui::sun_theta.load())),
+			100.0 * glm::sin(glm::radians(DebugGui::sun_theta.load()))
 		);
 		sun_position = camera.position + sun_offset;
 		const float sun_size = 300.0f;
@@ -151,6 +157,17 @@ void RenderThread::loop()
 
 		target_block = m_world_scene.targetBlock();
 		debug_blocks = m_world_scene.debugBlocks();
+
+		atmosphere_params.earth_radius = DebugGui::earth_radius;
+		atmosphere_params.atmosphere_radius = DebugGui::atmosphere_radius;
+		atmosphere_params.beta_rayleigh = DebugGui::beta_rayleigh;
+		atmosphere_params.beta_mie = DebugGui::beta_mie;
+		atmosphere_params.sun_intensity = DebugGui::sun_intensity;
+		atmosphere_params.h_rayleigh = DebugGui::h_rayleigh;
+		atmosphere_params.h_mie = DebugGui::h_mie;
+		atmosphere_params.g = DebugGui::g;
+		atmosphere_params.n_samples = DebugGui::n_samples;
+		atmosphere_params.n_light_samples = DebugGui::n_light_samples;
 	}
 
 	//############################################################################################################
@@ -196,8 +213,9 @@ void RenderThread::loop()
 		"Failed to begin recording command buffer"
 	);
 
-	memcpy(vk.camera_uniform_buffers_mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
-	memcpy(vk.sun_uniform_buffers_mapped_memory[vk.current_frame], &sun, sizeof(sun));
+	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
+	memcpy(vk.sun_ubo.mapped_memory[vk.current_frame], &sun, sizeof(sun));
+	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
 
 	shadowPass(chunk_meshes);
@@ -743,7 +761,8 @@ void RenderThread::lightingPass(
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.sun_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> sun_descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame]
+			vk.camera_descriptor.sets[vk.current_frame],
+			vk.atmosphere_descriptor.sets[vk.current_frame]
 		};
 
 		vkCmdBindDescriptorSets(
