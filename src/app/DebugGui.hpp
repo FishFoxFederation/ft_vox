@@ -132,17 +132,22 @@ public:
 
 	static inline std::atomic<double> create_mesh_time;
 
-	static inline std::atomic<double> store_mesh_time;
-	static inline std::atomic<double> store_mesh_mutex_wait_time;
-	static inline std::atomic<double> store_mesh_create_staging_buffer_time;
-	static inline std::atomic<double> store_mesh_memcpy_time;
-	static inline std::atomic<double> store_mesh_create_buffer_time;
-	static inline std::atomic<double> store_mesh_copy_buffer_time;
-	static inline std::atomic<double> store_mesh_destroy_buffer_time;
-
 	static inline std::atomic<size_t> send_buffer_size;
 	static inline std::atomic<size_t> recv_buffer_size;
 
 	static inline History<size_t, 100> send_history;
 	static inline History<size_t, 100> recv_history;
+
+	static inline std::atomic<float> sun_theta = 70.0f;
+	static inline std::atomic<float> earth_radius = 6360000.0f;
+	static inline std::atomic<float> atmosphere_radius = 6420000.0f;
+	static inline std::atomic<float> player_height = 1.0f;
+	static inline Atomic<glm::vec3> beta_rayleigh = glm::vec3(5.8e-6, 13.5e-6, 33.1e-6);
+	static inline Atomic<glm::vec3> beta_mie = glm::vec3(21e-6);
+	static inline std::atomic<float> sun_intensity = 20.0f;
+	static inline std::atomic<float> h_rayleigh = 7994.0f;
+	static inline std::atomic<float> h_mie = 1200.0f;
+	static inline std::atomic<float> g = 0.95f;
+	static inline std::atomic<int> n_samples = 8.0f;
+	static inline std::atomic<int> n_light_samples = 4.0f;
 };

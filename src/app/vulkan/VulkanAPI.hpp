@@ -131,6 +131,13 @@ struct Mesh
 	};
 };
 
+struct UBO
+{
+	std::vector<VkBuffer> buffers;
+	std::vector<VkDeviceMemory> memory;
+	std::vector<void *> mapped_memory;
+};
+
 struct ViewProjMatrices
 {
 	glm::mat4 view;
@@ -165,6 +172,21 @@ struct GuiTextureData
 {
 	glm::vec2 position;
 	glm::vec2 size;
+};
+
+struct AtmosphereParams
+{
+	float earth_radius;
+	float atmosphere_radius;
+	float player_height;
+	float h_rayleigh;
+	float h_mie;
+	float g;
+	float sun_intensity;
+	float n_samples;
+	float n_light_samples;
+	alignas(16) glm::vec3 beta_rayleigh;
+	alignas(16) glm::vec3 beta_mie;
 };
 
 struct ImGuiTexture
@@ -309,16 +331,9 @@ public:
 	Image crosshair_image;
 	Image player_skin_image;
 
-	// Uniform buffers for the camera matrices
-	std::vector<VkBuffer> camera_uniform_buffers;
-	std::vector<VkDeviceMemory> camera_uniform_buffers_memory;
-	std::vector<void *> camera_uniform_buffers_mapped_memory;
-
-	// Uniform buffers for the sun light matrices
-	std::vector<VkBuffer> sun_uniform_buffers;
-	std::vector<VkDeviceMemory> sun_uniform_buffers_memory;
-	std::vector<void *> sun_uniform_buffers_mapped_memory;
-
+	UBO camera_ubo;
+	UBO sun_ubo;
+	UBO atmosphere_ubo;
 
 	// Buffers for the line vertices and indices for the frustum
 	std::vector<VkBuffer> frustum_line_buffers;
@@ -336,6 +351,7 @@ public:
 	Descriptor sun_descriptor;
 	Descriptor crosshair_image_descriptor;
 	Descriptor player_skin_image_descriptor;
+	Descriptor atmosphere_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
@@ -443,6 +459,7 @@ private:
 	void createColorAttachement();
 	void createDepthAttachement();
 
+	void createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count);
 	void createUniformBuffers();
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
