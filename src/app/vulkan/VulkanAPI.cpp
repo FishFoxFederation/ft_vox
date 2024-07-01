@@ -19,6 +19,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	ZoneScoped;
 
 	createInstance();
+	loadVulkanFunctions();
 	setupDebugMessenger();
 	createSurface(window);
 	pickPhysicalDevice();
@@ -55,6 +56,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	setupTracy();
 
+	setupRayTracing();
+
 	LOG_INFO("VulkanAPI initialized");
 }
 
@@ -71,6 +74,10 @@ VulkanAPI::~VulkanAPI()
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+
+
+	vkDestroyAccelerationStructureKHR(device, icospere_blas, nullptr);
+
 
 	{
 		std::lock_guard lock(mesh_map_mutex);
@@ -164,7 +171,7 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyDevice(device, nullptr);
 
 	#ifndef NDEBUG
-		DestroyDebugUtilsMessengerEXT(instance, debug_messenger, nullptr);
+		vkDestroyDebugUtilsMessengerEXT(instance, debug_messenger, nullptr);
 	#endif
 
 	vkDestroySurfaceKHR(instance, surface, nullptr);
@@ -259,6 +266,27 @@ std::vector<const char *> VulkanAPI::getRequiredExtensions()
 	return extensions;
 }
 
+void VulkanAPI::loadVulkanFunctions()
+{
+#define VK_LOAD_FUNCTION(name) name = reinterpret_cast<PFN_##name>(vkGetInstanceProcAddr(instance, #name)); \
+	if (name == nullptr) { \
+		throw std::runtime_error("Failed to load Vulkan function: " #name); \
+	}
+
+	VK_LOAD_FUNCTION(vkCreateDebugUtilsMessengerEXT)
+	VK_LOAD_FUNCTION(vkDestroyDebugUtilsMessengerEXT)
+
+	VK_LOAD_FUNCTION(vkGetPhysicalDeviceCalibrateableTimeDomainsEXT)
+	VK_LOAD_FUNCTION(vkGetCalibratedTimestampsEXT)
+
+	VK_LOAD_FUNCTION(vkCreateAccelerationStructureKHR)
+	VK_LOAD_FUNCTION(vkDestroyAccelerationStructureKHR)
+	VK_LOAD_FUNCTION(vkGetAccelerationStructureBuildSizesKHR)
+	VK_LOAD_FUNCTION(vkCmdBuildAccelerationStructuresKHR)
+
+#undef VK_LOAD_FUNCTION
+}
+
 void VulkanAPI::setupDebugMessenger()
 {
 	#ifndef NDEBUG
@@ -266,7 +294,7 @@ void VulkanAPI::setupDebugMessenger()
 		populateDebugMessengerCreateInfo(create_info);
 
 		VK_CHECK(
-			CreateDebugUtilsMessengerEXT(instance, &create_info, nullptr, &debug_messenger),
+			vkCreateDebugUtilsMessengerEXT(instance, &create_info, nullptr, &debug_messenger),
 			"Failed to set up debug messenger"
 		);
 	#endif
@@ -284,37 +312,6 @@ void VulkanAPI::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfo
 		VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
 		VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 	create_info.pfnUserCallback = debugCallback;
-}
-
-VkResult VulkanAPI::CreateDebugUtilsMessengerEXT(
-	VkInstance instance,
-	const VkDebugUtilsMessengerCreateInfoEXT * create_info,
-	const VkAllocationCallbacks * allocator,
-	VkDebugUtilsMessengerEXT * debug_messenger
-)
-{
-	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
-	if (func != nullptr)
-	{
-		return func(instance, create_info, allocator, debug_messenger);
-	}
-	else
-	{
-		return VK_ERROR_EXTENSION_NOT_PRESENT;
-	}
-}
-
-void VulkanAPI::DestroyDebugUtilsMessengerEXT(
-	VkInstance instance,
-	VkDebugUtilsMessengerEXT debug_messenger,
-	const VkAllocationCallbacks * allocator
-)
-{
-	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-	if (func != nullptr)
-	{
-		func(instance, debug_messenger, allocator);
-	}
 }
 
 VKAPI_ATTR VkBool32 VKAPI_CALL VulkanAPI::debugCallback(
@@ -1746,6 +1743,107 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 	vkDestroyImage(device, imgui_texture.image, nullptr);
 }
 
+void VulkanAPI::setupRayTracing()
+{
+	{ // create acceleration structure
+
+		VkBufferDeviceAddressInfo buffer_device_address_info = {};
+		buffer_device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
+		buffer_device_address_info.buffer = mesh_map[icosphere_mesh_id].buffer;
+
+		VkDeviceAddress address = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+
+		// create bottom level acceleration structure
+		VkAccelerationStructureGeometryTrianglesDataKHR triangles = {};
+		triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+		triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
+		triangles.vertexData.deviceAddress = address;
+		triangles.vertexStride = sizeof(ObjVertex);
+		triangles.maxVertex = mesh_map[icosphere_mesh_id].vertex_count - 1;
+		triangles.indexType = VK_INDEX_TYPE_UINT32;
+		triangles.indexData.deviceAddress = address + mesh_map[icosphere_mesh_id].index_offset;
+		triangles.transformData.hostAddress = &icospere_transform_matrix;
+
+		VkAccelerationStructureGeometryKHR geometry = {};
+		geometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+		geometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+		geometry.geometry.triangles = triangles;
+		geometry.flags = VK_GEOMETRY_OPAQUE_BIT_KHR;
+
+		VkAccelerationStructureBuildGeometryInfoKHR build_info = {};
+		build_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+		build_info.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
+		build_info.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR;
+		build_info.geometryCount = 1;
+		build_info.pGeometries = &geometry;
+
+
+		uint32_t primitive_count = mesh_map[icosphere_mesh_id].index_count / 3;
+
+		VkAccelerationStructureBuildSizesInfoKHR build_sizes_info = {};
+		vkGetAccelerationStructureBuildSizesKHR(
+			device,
+			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
+			&build_info,
+			&primitive_count,
+			&build_sizes_info
+		);
+
+		VkBuffer scratch_buffer;
+		VkDeviceMemory scratch_buffer_memory;
+		createBuffer(
+			build_sizes_info.buildScratchSize,
+			VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			scratch_buffer,
+			scratch_buffer_memory
+		);
+
+		VkBuffer acceleration_structure_buffer;
+		VkDeviceMemory acceleration_structure_buffer_memory;
+		createBuffer(
+			build_sizes_info.accelerationStructureSize,
+			VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			acceleration_structure_buffer,
+			acceleration_structure_buffer_memory
+		);
+
+		VkAccelerationStructureCreateInfoKHR acceleration_structure_info = {};
+		acceleration_structure_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
+		acceleration_structure_info.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
+		acceleration_structure_info.buffer = acceleration_structure_buffer;
+		acceleration_structure_info.size = build_sizes_info.accelerationStructureSize;
+
+		VK_CHECK(
+			vkCreateAccelerationStructureKHR(device, &acceleration_structure_info, nullptr, &icospere_blas),
+			"Failed to create bottom level acceleration structure"
+		);
+
+		buffer_device_address_info.buffer = scratch_buffer;
+		build_info.scratchData.deviceAddress = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+		build_info.dstAccelerationStructure = icospere_blas;
+
+		VkAccelerationStructureBuildRangeInfoKHR build_range_info = {};
+		build_range_info.primitiveCount = primitive_count;
+		build_range_info.primitiveOffset = 0;
+		build_range_info.firstVertex = 0;
+		build_range_info.transformOffset = 0;
+
+		VkAccelerationStructureBuildRangeInfoKHR * p_build_range_info = &build_range_info;
+
+		VkCommandBuffer command_buffer = beginSingleTimeCommands();
+
+		vkCmdBuildAccelerationStructuresKHR(
+			command_buffer,
+			1,
+			&build_info,
+			&p_build_range_info
+		);
+	}
+
+}
+
 void VulkanAPI::setupImgui()
 {
 	IMGUI_CHECKVERSION();
@@ -1804,22 +1902,6 @@ void VulkanAPI::setupImgui()
 
 void VulkanAPI::setupTracy()
 {
-	vkGetPhysicalDeviceCalibrateableTimeDomainsEXT = reinterpret_cast<PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT>(
-		vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceCalibrateableTimeDomainsEXT")
-	);
-	if (vkGetPhysicalDeviceCalibrateableTimeDomainsEXT == nullptr)
-	{
-		throw std::runtime_error("Failed to get vkGetPhysicalDeviceCalibrateableTimeDomainsEXT function pointer");
-	}
-
-	vkGetCalibratedTimestampsEXT = reinterpret_cast<PFN_vkGetCalibratedTimestampsEXT>(
-		vkGetInstanceProcAddr(instance, "vkGetCalibratedTimestampsEXT")
-	);
-	if (vkGetCalibratedTimestampsEXT == nullptr)
-	{
-		throw std::runtime_error("Failed to get vkGetCalibratedTimestampsEXT function pointer");
-	}
-
 	const char * const ctx_name = "Gpu rendering";
 	(void)ctx_name;
 	ctx = TracyVkContextCalibrated(
