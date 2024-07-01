@@ -83,17 +83,21 @@ VulkanAPI::~VulkanAPI()
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
-		vkUnmapMemory(device, camera_uniform_buffers_memory[i]);
-		vma.freeMemory(device, camera_uniform_buffers_memory[i], nullptr);
-		vkDestroyBuffer(device, camera_uniform_buffers[i], nullptr);
-
-		vkUnmapMemory(device, sun_uniform_buffers_memory[i]);
-		vma.freeMemory(device, sun_uniform_buffers_memory[i], nullptr);
-		vkDestroyBuffer(device, sun_uniform_buffers[i], nullptr);
-
 		vkUnmapMemory(device, frustum_line_buffers_memory[i]);
 		vma.freeMemory(device, frustum_line_buffers_memory[i], nullptr);
 		vkDestroyBuffer(device, frustum_line_buffers[i], nullptr);
+
+		vkUnmapMemory(device, camera_ubo.memory[i]);
+		vma.freeMemory(device, camera_ubo.memory[i], nullptr);
+		vkDestroyBuffer(device, camera_ubo.buffers[i], nullptr);
+
+		vkUnmapMemory(device, sun_ubo.memory[i]);
+		vma.freeMemory(device, sun_ubo.memory[i], nullptr);
+		vkDestroyBuffer(device, sun_ubo.buffers[i], nullptr);
+
+		vkUnmapMemory(device, atmosphere_ubo.memory[i]);
+		vma.freeMemory(device, atmosphere_ubo.memory[i], nullptr);
+		vkDestroyBuffer(device, atmosphere_ubo.buffers[i], nullptr);
 	}
 
 	for (int i = 0; i < max_frames_in_flight; i++)
@@ -142,6 +146,7 @@ VulkanAPI::~VulkanAPI()
 		sun_descriptor.clear();
 		crosshair_image_descriptor.clear();
 		player_skin_image_descriptor.clear();
+		atmosphere_descriptor.clear();
 
 		chunk_pipeline.clear();
 		line_pipeline.clear();
@@ -826,50 +831,34 @@ void VulkanAPI::createDepthAttachement()
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
-void VulkanAPI::createUniformBuffers()
+void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count)
 {
-	VkDeviceSize buffer_size = sizeof(ViewProjMatrices);
+	ubo.buffers.resize(count);
+	ubo.memory.resize(count);
+	ubo.mapped_memory.resize(count);
 
-	camera_uniform_buffers.resize(max_frames_in_flight);
-	camera_uniform_buffers_memory.resize(max_frames_in_flight);
-	camera_uniform_buffers_mapped_memory.resize(max_frames_in_flight);
-
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (uint32_t i = 0; i < count; i++)
 	{
 		createBuffer(
-			buffer_size,
+			size,
 			VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-			camera_uniform_buffers[i],
-			camera_uniform_buffers_memory[i]
+			ubo.buffers[i],
+			ubo.memory[i]
 		);
 
 		VK_CHECK(
-			vkMapMemory(device, camera_uniform_buffers_memory[i], 0, buffer_size, 0, &camera_uniform_buffers_mapped_memory[i]),
+			vkMapMemory(device, ubo.memory[i], 0, size, 0, &ubo.mapped_memory[i]),
 			"Failed to map memory for camera uniform buffer."
 		);
 	}
+}
 
-	sun_uniform_buffers.resize(max_frames_in_flight);
-	sun_uniform_buffers_memory.resize(max_frames_in_flight);
-	sun_uniform_buffers_mapped_memory.resize(max_frames_in_flight);
-
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		createBuffer(
-			buffer_size,
-			VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-			sun_uniform_buffers[i],
-			sun_uniform_buffers_memory[i]
-		);
-
-		VK_CHECK(
-			vkMapMemory(device, sun_uniform_buffers_memory[i], 0, buffer_size, 0, &sun_uniform_buffers_mapped_memory[i]),
-			"Failed to map memory for sun uniform buffer."
-		);
-	}
-
+void VulkanAPI::createUniformBuffers()
+{
+	createUBO(camera_ubo, sizeof(ViewProjMatrices), max_frames_in_flight);
+	createUBO(sun_ubo, sizeof(ViewProjMatrices), max_frames_in_flight);
+	createUBO(atmosphere_ubo, sizeof(AtmosphereParams), max_frames_in_flight);
 }
 
 void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, uint32_t size)
@@ -1012,7 +1001,7 @@ void VulkanAPI::createDescriptors()
 		for (int i = 0; i < max_frames_in_flight; i++)
 		{
 			VkDescriptorBufferInfo buffer_info = {};
-			buffer_info.buffer = camera_uniform_buffers[i];
+			buffer_info.buffer = camera_ubo.buffers[i];
 			buffer_info.offset = 0;
 			buffer_info.range = sizeof(ViewProjMatrices);
 
@@ -1184,13 +1173,53 @@ void VulkanAPI::createDescriptors()
 		for (int i = 0; i < max_frames_in_flight; i++)
 		{
 			VkDescriptorBufferInfo buffer_info = {};
-			buffer_info.buffer = sun_uniform_buffers[i];
+			buffer_info.buffer = sun_ubo.buffers[i];
 			buffer_info.offset = 0;
 			buffer_info.range = sizeof(ViewProjMatrices);
 
 			VkWriteDescriptorSet descriptor_write = {};
 			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 			descriptor_write.dstSet = sun_descriptor.sets[i];
+			descriptor_write.dstBinding = 0;
+			descriptor_write.dstArrayElement = 0;
+			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			descriptor_write.descriptorCount = 1;
+			descriptor_write.pBufferInfo = &buffer_info;
+
+			vkUpdateDescriptorSets(
+				device,
+				1,
+				&descriptor_write,
+				0, nullptr
+			);
+		}
+	}
+
+	{ // Atmosphere descriptor
+		VkDescriptorSetLayoutBinding ubo_layout_binding = {};
+		ubo_layout_binding.binding = 0;
+		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		ubo_layout_binding.descriptorCount = 1;
+		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		ubo_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { ubo_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		atmosphere_descriptor = Descriptor(device, descriptor_info);
+
+		for (int i = 0; i < max_frames_in_flight; i++)
+		{
+			VkDescriptorBufferInfo buffer_info = {};
+			buffer_info.buffer = atmosphere_ubo.buffers[i];
+			buffer_info.offset = 0;
+			buffer_info.range = sizeof(AtmosphereParams);
+
+			VkWriteDescriptorSet descriptor_write = {};
+			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptor_write.dstSet = atmosphere_descriptor.sets[i];
 			descriptor_write.dstBinding = 0;
 			descriptor_write.dstArrayElement = 0;
 			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -1375,7 +1404,8 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout
+			camera_descriptor.layout,
+			atmosphere_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyShaderData) }

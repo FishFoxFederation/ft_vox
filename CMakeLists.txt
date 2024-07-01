@@ -8,7 +8,7 @@ project(ft_vox
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(TRACY_ENABLE "" ON)
+option(TRACY_ENABLE "" OFF)
 add_subdirectory (external/tracy)
 
 
