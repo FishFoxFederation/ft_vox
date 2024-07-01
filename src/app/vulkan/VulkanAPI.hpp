@@ -389,13 +389,30 @@ public:
 
 	uint64_t template_mesh_id;
 
+	// Ray tracing
+	VkPhysicalDeviceRayTracingPipelinePropertiesKHR ray_tracing_properties;
+	VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_structure_properties;
+
+	VkTransformMatrixKHR icospere_transform_matrix;
+	VkAabbPositionsKHR icospere_aabb;
+	VkAccelerationStructureKHR icospere_blas;
+
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
 
 
 	TracyVkCtx ctx;
-	// function pointers for the calibrated timestamps
+
+	// function pointers
+	PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;
+	PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
+
 	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
 	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
+
+	PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
+	PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;
+	PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR;
+	PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR;
 
 
 private:
@@ -407,7 +424,10 @@ private:
 	std::vector<const char *> device_extensions = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
 		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
-		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME
+		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
+		VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
+		VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
+		VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME
 	};
 
 
@@ -416,21 +436,12 @@ private:
 	bool checkValidationLayerSupport();
 	std::vector<const char *> getRequiredExtensions();
 
+	void loadVulkanFunctions();
+
 	void createSurface(GLFWwindow * window);
 
 	void setupDebugMessenger();
 	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info);
-	VkResult CreateDebugUtilsMessengerEXT(
-		VkInstance instance,
-		const VkDebugUtilsMessengerCreateInfoEXT * create_info,
-		const VkAllocationCallbacks * allocator,
-		VkDebugUtilsMessengerEXT * debug_messenger
-	);
-	void DestroyDebugUtilsMessengerEXT(
-		VkInstance instance,
-		VkDebugUtilsMessengerEXT debug_messenger,
-		const VkAllocationCallbacks * allocator
-	);
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
 		VkDebugUtilsMessageTypeFlagsEXT message_type,
@@ -473,6 +484,8 @@ private:
 
 	void createMeshes();
 	void destroyMeshes();
+
+	void setupRayTracing();
 
 
 	void setupImgui();
