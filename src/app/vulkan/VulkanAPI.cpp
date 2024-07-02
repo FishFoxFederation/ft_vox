@@ -77,8 +77,8 @@ VulkanAPI::~VulkanAPI()
 
 
 	vkDestroyAccelerationStructureKHR(device, icospere_blas, nullptr);
-	vkDestroyBuffer(device, acceleration_structure_buffer, nullptr);
-	vma.freeMemory(device, acceleration_structure_buffer_memory, nullptr);
+	vkDestroyBuffer(device, icospere_blas_buffer, nullptr);
+	vma.freeMemory(device, icospere_blas_buffer_memory, nullptr);
 
 
 	{
@@ -285,6 +285,7 @@ void VulkanAPI::loadVulkanFunctions()
 	VK_LOAD_FUNCTION(vkDestroyAccelerationStructureKHR)
 	VK_LOAD_FUNCTION(vkGetAccelerationStructureBuildSizesKHR)
 	VK_LOAD_FUNCTION(vkCmdBuildAccelerationStructuresKHR)
+	VK_LOAD_FUNCTION(vkGetAccelerationStructureDeviceAddressKHR)
 
 #undef VK_LOAD_FUNCTION
 }
@@ -534,6 +535,30 @@ void VulkanAPI::createLogicalDevice()
 		queue_create_infos.push_back(queue_create_info);
 	}
 
+
+
+	VkPhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures{};
+	bufferDeviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+
+	VkPhysicalDeviceFeatures2 deviceFeatures{};
+	deviceFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+	deviceFeatures.pNext = &bufferDeviceAddressFeatures;
+
+	vkGetPhysicalDeviceFeatures2(physical_device, &deviceFeatures);
+
+	if (bufferDeviceAddressFeatures.bufferDeviceAddress == VK_FALSE)
+	{
+		throw std::runtime_error("Buffer device address not supported");
+	}
+	else
+	{
+		LOG_INFO("Buffer device address supported");
+	}
+
+
+
+
+
 	VkPhysicalDeviceFeatures device_features = {};
 	device_features.samplerAnisotropy = VK_TRUE;
 	device_features.fillModeNonSolid = VK_TRUE;
@@ -543,7 +568,7 @@ void VulkanAPI::createLogicalDevice()
 	buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
 	buffer_device_address_features_ext.bufferDeviceAddress = VK_TRUE;
 
-	VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features = {};
+	VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
 	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
 	buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
 	buffer_device_address_features.pNext = &buffer_device_address_features_ext;
@@ -558,6 +583,16 @@ void VulkanAPI::createLogicalDevice()
 	acceleration_structure_features.accelerationStructure = VK_TRUE;
 	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
 
+	VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
+	vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+	vulkan_12_features.bufferDeviceAddress = VK_TRUE;
+	vulkan_12_features.pNext = &acceleration_structure_features;
+
+	VkPhysicalDeviceFeatures2 device_features_2 = {};
+	device_features_2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+	device_features_2.features = device_features;
+	device_features_2.pNext = &vulkan_12_features;
+
 	VkDeviceCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 	create_info.pQueueCreateInfos = queue_create_infos.data();
@@ -566,7 +601,7 @@ void VulkanAPI::createLogicalDevice()
 	create_info.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
 	create_info.ppEnabledExtensionNames = device_extensions.data();
 
-	create_info.pNext = &acceleration_structure_features;
+	create_info.pNext = &device_features_2;
 
 	#ifndef NDEBUG
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
@@ -1769,15 +1804,13 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 
 void VulkanAPI::setupRayTracing()
 {
-	{ // create acceleration structure
-
+	{ // create bottom level acceleration structure
 		VkBufferDeviceAddressInfo buffer_device_address_info = {};
 		buffer_device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
 		buffer_device_address_info.buffer = mesh_map[icosphere_mesh_id].buffer;
 
 		VkDeviceAddress address = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
 
-		// create bottom level acceleration structure
 		VkAccelerationStructureGeometryTrianglesDataKHR triangles = {};
 		triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
 		triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
@@ -1829,14 +1862,14 @@ void VulkanAPI::setupRayTracing()
 			build_sizes_info.accelerationStructureSize,
 			VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-			acceleration_structure_buffer,
-			acceleration_structure_buffer_memory
+			icospere_blas_buffer,
+			icospere_blas_buffer_memory
 		);
 
 		VkAccelerationStructureCreateInfoKHR acceleration_structure_info = {};
 		acceleration_structure_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
 		acceleration_structure_info.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
-		acceleration_structure_info.buffer = acceleration_structure_buffer;
+		acceleration_structure_info.buffer = icospere_blas_buffer;
 		acceleration_structure_info.size = build_sizes_info.accelerationStructureSize;
 
 		VK_CHECK(
@@ -1871,6 +1904,123 @@ void VulkanAPI::setupRayTracing()
 		vma.freeMemory(device, scratch_buffer_memory, nullptr);
 	}
 
+	{ // create top level acceleration structure
+		VkAccelerationStructureDeviceAddressInfoKHR device_address_info = {};
+		device_address_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
+		device_address_info.accelerationStructure = icospere_blas;
+
+		VkDeviceAddress blas_device_address = vkGetAccelerationStructureDeviceAddressKHR(device, &device_address_info);
+
+		VkAccelerationStructureInstanceKHR instance = {};
+		instance.transform = icospere_transform_matrix;
+		instance.instanceCustomIndex = 0;
+		instance.mask = 0xFF;
+		instance.instanceShaderBindingTableRecordOffset = 0;
+		instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+		instance.accelerationStructureReference = blas_device_address;
+
+		VkAccelerationStructureGeometryInstancesDataKHR instances = {};
+		instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
+		instances.arrayOfPointers = VK_FALSE;
+		instances.data.hostAddress = &instance;
+
+
+		VkAccelerationStructureGeometryKHR geometry = {};
+		geometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+		geometry.geometryType = VK_GEOMETRY_TYPE_INSTANCES_KHR;
+		geometry.geometry.instances = instances;
+		geometry.flags = VK_GEOMETRY_OPAQUE_BIT_KHR;
+
+		VkAccelerationStructureBuildGeometryInfoKHR build_info = {};
+		build_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+		build_info.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+		build_info.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR;
+		build_info.geometryCount = 1;
+		build_info.pGeometries = &geometry;
+
+
+		uint32_t primitive_count = mesh_map[icosphere_mesh_id].index_count / 3;
+
+		VkAccelerationStructureBuildSizesInfoKHR build_sizes_info = {};
+		build_sizes_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
+		vkGetAccelerationStructureBuildSizesKHR(
+			device,
+			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
+			&build_info,
+			&primitive_count,
+			&build_sizes_info
+		);
+
+		VkBuffer scratch_buffer;
+		VkDeviceMemory scratch_buffer_memory;
+		createBuffer(
+			build_sizes_info.buildScratchSize,
+			VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			scratch_buffer,
+			scratch_buffer_memory
+		);
+
+		createBuffer(
+			build_sizes_info.accelerationStructureSize,
+			VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			tlas_buffer,
+			tlas_buffer_memory
+		);
+
+		VkAccelerationStructureCreateInfoKHR acceleration_structure_info = {};
+		acceleration_structure_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
+		acceleration_structure_info.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+		acceleration_structure_info.buffer = tlas_buffer;
+		acceleration_structure_info.size = build_sizes_info.accelerationStructureSize;
+
+		VK_CHECK(
+			vkCreateAccelerationStructureKHR(device, &acceleration_structure_info, nullptr, &tlas),
+			"Failed to create bottom level acceleration structure"
+		);
+
+		VkBufferDeviceAddressInfo buffer_device_address_info = {};
+		buffer_device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
+		buffer_device_address_info.buffer = scratch_buffer;
+
+		build_info.scratchData.deviceAddress = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+		build_info.dstAccelerationStructure = tlas;
+
+		VkAccelerationStructureBuildRangeInfoKHR build_range_info = {};
+		build_range_info.primitiveCount = primitive_count;
+		build_range_info.primitiveOffset = 0;
+		build_range_info.firstVertex = 0;
+		build_range_info.transformOffset = 0;
+
+		VkAccelerationStructureBuildRangeInfoKHR * p_build_range_info = &build_range_info;
+
+		VkCommandBuffer command_buffer = beginSingleTimeCommands();
+
+		vkCmdBuildAccelerationStructuresKHR(
+			command_buffer,
+			1,
+			&build_info,
+			&p_build_range_info
+		);
+
+		vkEndCommandBuffer(command_buffer);
+
+		VkSubmitInfo submit_info = {};
+		submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submit_info.commandBufferCount = 1;
+		submit_info.pCommandBuffers = &command_buffer;
+
+		vkQueueSubmit(graphics_queue, 1, &submit_info, single_time_command_fence);
+		// vkWaitForFences(device, 1, &single_time_command_fence, VK_TRUE, UINT64_MAX);
+
+		// vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
+
+		// endSingleTimeCommands(command_buffer);
+
+		// vkDestroyBuffer(device, scratch_buffer, nullptr);
+		// vma.freeMemory(device, scratch_buffer_memory, nullptr);
+	}
 }
 
 void VulkanAPI::setupImgui()
