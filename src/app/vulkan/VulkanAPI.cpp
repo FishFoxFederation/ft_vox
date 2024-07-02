@@ -77,6 +77,8 @@ VulkanAPI::~VulkanAPI()
 
 
 	vkDestroyAccelerationStructureKHR(device, icospere_blas, nullptr);
+	vkDestroyBuffer(device, acceleration_structure_buffer, nullptr);
+	vma.freeMemory(device, acceleration_structure_buffer_memory, nullptr);
 
 
 	{
@@ -537,6 +539,25 @@ void VulkanAPI::createLogicalDevice()
 	device_features.fillModeNonSolid = VK_TRUE;
 	device_features.wideLines = VK_TRUE;
 
+	VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
+	buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
+	buffer_device_address_features_ext.bufferDeviceAddress = VK_TRUE;
+
+	VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features = {};
+	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+	buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
+	buffer_device_address_features.pNext = &buffer_device_address_features_ext;
+
+	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
+	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+	ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
+	ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
+
+	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
+	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+	acceleration_structure_features.accelerationStructure = VK_TRUE;
+	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
+
 	VkDeviceCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 	create_info.pQueueCreateInfos = queue_create_infos.data();
@@ -544,6 +565,8 @@ void VulkanAPI::createLogicalDevice()
 	create_info.pEnabledFeatures = &device_features;
 	create_info.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
 	create_info.ppEnabledExtensionNames = device_extensions.data();
+
+	create_info.pNext = &acceleration_structure_features;
 
 	#ifndef NDEBUG
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
@@ -1599,7 +1622,8 @@ void VulkanAPI::createMeshes()
 			obj_loader.vertices().size(),
 			sizeof(ObjVertex),
 			obj_loader.indices().data(),
-			obj_loader.indices().size()
+			obj_loader.indices().size(),
+			VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR
 		);
 	}
 
@@ -1763,6 +1787,7 @@ void VulkanAPI::setupRayTracing()
 		triangles.indexType = VK_INDEX_TYPE_UINT32;
 		triangles.indexData.deviceAddress = address + mesh_map[icosphere_mesh_id].index_offset;
 		triangles.transformData.hostAddress = &icospere_transform_matrix;
+		triangles.transformData.deviceAddress = 0;
 
 		VkAccelerationStructureGeometryKHR geometry = {};
 		geometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
@@ -1781,6 +1806,7 @@ void VulkanAPI::setupRayTracing()
 		uint32_t primitive_count = mesh_map[icosphere_mesh_id].index_count / 3;
 
 		VkAccelerationStructureBuildSizesInfoKHR build_sizes_info = {};
+		build_sizes_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
 		vkGetAccelerationStructureBuildSizesKHR(
 			device,
 			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
@@ -1799,8 +1825,6 @@ void VulkanAPI::setupRayTracing()
 			scratch_buffer_memory
 		);
 
-		VkBuffer acceleration_structure_buffer;
-		VkDeviceMemory acceleration_structure_buffer_memory;
 		createBuffer(
 			build_sizes_info.accelerationStructureSize,
 			VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
@@ -1840,6 +1864,11 @@ void VulkanAPI::setupRayTracing()
 			&build_info,
 			&p_build_range_info
 		);
+
+		endSingleTimeCommands(command_buffer);
+
+		vkDestroyBuffer(device, scratch_buffer, nullptr);
+		vma.freeMemory(device, scratch_buffer_memory, nullptr);
 	}
 
 }
