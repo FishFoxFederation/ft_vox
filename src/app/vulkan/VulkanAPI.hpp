@@ -397,9 +397,12 @@ public:
 	VkTransformMatrixKHR icospere_transform_matrix;
 	VkAabbPositionsKHR icospere_aabb;
 	VkAccelerationStructureKHR icospere_blas;
+	VkBuffer icospere_blas_buffer;
+	VkDeviceMemory icospere_blas_buffer_memory;
 
-	VkBuffer acceleration_structure_buffer;
-	VkDeviceMemory acceleration_structure_buffer_memory;
+	VkAccelerationStructureKHR tlas;
+	VkBuffer tlas_buffer;
+	VkDeviceMemory tlas_buffer_memory;
 
 
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
@@ -418,6 +421,7 @@ public:
 	PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;
 	PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR;
 	PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR;
+	PFN_vkGetAccelerationStructureDeviceAddressKHR vkGetAccelerationStructureDeviceAddressKHR;
 
 
 private:
