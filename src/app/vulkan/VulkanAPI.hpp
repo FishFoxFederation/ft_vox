@@ -265,7 +265,8 @@ public:
 		const uint32_t vertex_count,
 		const uint32_t vertex_size,
 		const void * indices,
-		const uint32_t index_count
+		const uint32_t index_count,
+		const VkMemoryPropertyFlags additional_memory_properties = 0
 	);
 	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
@@ -397,6 +398,10 @@ public:
 	VkAabbPositionsKHR icospere_aabb;
 	VkAccelerationStructureKHR icospere_blas;
 
+	VkBuffer acceleration_structure_buffer;
+	VkDeviceMemory acceleration_structure_buffer_memory;
+
+
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
 
 
@@ -427,7 +432,9 @@ private:
 		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
 		VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
 		VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
-		VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME
+		VK_KHR_RAY_QUERY_EXTENSION_NAME,
+		VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
+		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME
 	};
 
 
