@@ -537,23 +537,44 @@ void VulkanAPI::createLogicalDevice()
 
 
 
-	VkPhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures{};
-	bufferDeviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+	VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
+	buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
+
+	VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
+	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+	buffer_device_address_features.pNext = &buffer_device_address_features_ext;
+
+	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
+	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+	ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
+
+	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
+	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
 
 	VkPhysicalDeviceFeatures2 deviceFeatures{};
 	deviceFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-	deviceFeatures.pNext = &bufferDeviceAddressFeatures;
+	deviceFeatures.pNext = &acceleration_structure_features;
 
 	vkGetPhysicalDeviceFeatures2(physical_device, &deviceFeatures);
 
-	if (bufferDeviceAddressFeatures.bufferDeviceAddress == VK_FALSE)
-	{
-		throw std::runtime_error("Buffer device address not supported");
-	}
-	else
-	{
-		LOG_INFO("Buffer device address supported");
-	}
+	#define ENABLE_FEATURE(feature) \
+		if (feature == VK_TRUE) \
+		{ \
+			LOG_INFO(#feature " supported"); \
+		} \
+		else \
+		{ \
+			LOG_WARNING(#feature " not supported"); \
+		}
+
+	ENABLE_FEATURE(buffer_device_address_features_ext.bufferDeviceAddress)
+	ENABLE_FEATURE(buffer_device_address_features.bufferDeviceAddress)
+	ENABLE_FEATURE(ray_tracing_pipeline_features.rayTracingPipeline)
+	ENABLE_FEATURE(acceleration_structure_features.accelerationStructure)
+	ENABLE_FEATURE(deviceFeatures.features.samplerAnisotropy)
+	ENABLE_FEATURE(deviceFeatures.features.fillModeNonSolid)
+	ENABLE_FEATURE(deviceFeatures.features.wideLines)
 
 
 
@@ -564,34 +585,34 @@ void VulkanAPI::createLogicalDevice()
 	device_features.fillModeNonSolid = VK_TRUE;
 	device_features.wideLines = VK_TRUE;
 
-	VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
-	buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
-	buffer_device_address_features_ext.bufferDeviceAddress = VK_TRUE;
+	// VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
+	// buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
+	// buffer_device_address_features_ext.bufferDeviceAddress = VK_TRUE;
 
-	VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
-	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
-	buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
-	buffer_device_address_features.pNext = &buffer_device_address_features_ext;
+	// VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
+	// buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+	// buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
+	// buffer_device_address_features.pNext = &buffer_device_address_features_ext;
 
-	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
-	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-	ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
-	ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
+	// VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
+	// ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+	// ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
+	// ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
 
-	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
-	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-	acceleration_structure_features.accelerationStructure = VK_TRUE;
-	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
+	// VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
+	// acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+	// acceleration_structure_features.accelerationStructure = VK_TRUE;
+	// acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
 
-	VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
-	vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
-	vulkan_12_features.bufferDeviceAddress = VK_TRUE;
-	vulkan_12_features.pNext = &acceleration_structure_features;
+	// VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
+	// vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+	// vulkan_12_features.bufferDeviceAddress = VK_TRUE;
+	// vulkan_12_features.pNext = &acceleration_structure_features;
 
-	VkPhysicalDeviceFeatures2 device_features_2 = {};
-	device_features_2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-	device_features_2.features = device_features;
-	device_features_2.pNext = &vulkan_12_features;
+	// VkPhysicalDeviceFeatures2 device_features_2 = {};
+	// device_features_2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+	// device_features_2.features = device_features;
+	// device_features_2.pNext = &vulkan_12_features;
 
 	VkDeviceCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -601,7 +622,7 @@ void VulkanAPI::createLogicalDevice()
 	create_info.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
 	create_info.ppEnabledExtensionNames = device_extensions.data();
 
-	create_info.pNext = &device_features_2;
+	create_info.pNext = &deviceFeatures;
 
 	#ifndef NDEBUG
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
@@ -1832,6 +1853,7 @@ void VulkanAPI::setupRayTracing()
 		build_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
 		build_info.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
 		build_info.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR;
+		build_info.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
 		build_info.geometryCount = 1;
 		build_info.pGeometries = &geometry;
 
@@ -1842,7 +1864,7 @@ void VulkanAPI::setupRayTracing()
 		build_sizes_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
 		vkGetAccelerationStructureBuildSizesKHR(
 			device,
-			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
+			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_OR_DEVICE_KHR,
 			&build_info,
 			&primitive_count,
 			&build_sizes_info
@@ -1912,7 +1934,11 @@ void VulkanAPI::setupRayTracing()
 		VkDeviceAddress blas_device_address = vkGetAccelerationStructureDeviceAddressKHR(device, &device_address_info);
 
 		VkAccelerationStructureInstanceKHR instance = {};
-		instance.transform = icospere_transform_matrix;
+		instance.transform = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f
+		};
 		instance.instanceCustomIndex = 0;
 		instance.mask = 0xFF;
 		instance.instanceShaderBindingTableRecordOffset = 0;
@@ -1935,19 +1961,22 @@ void VulkanAPI::setupRayTracing()
 		build_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
 		build_info.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
 		build_info.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR;
+		build_info.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
 		build_info.geometryCount = 1;
 		build_info.pGeometries = &geometry;
 
 
-		uint32_t primitive_count = mesh_map[icosphere_mesh_id].index_count / 3;
+		std::vector<uint32_t> primitive_counts = {
+			mesh_map[icosphere_mesh_id].index_count / 3
+		};
 
 		VkAccelerationStructureBuildSizesInfoKHR build_sizes_info = {};
 		build_sizes_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
 		vkGetAccelerationStructureBuildSizesKHR(
 			device,
-			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
+			VK_ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_OR_DEVICE_KHR,
 			&build_info,
-			&primitive_count,
+			primitive_counts.data(),
 			&build_sizes_info
 		);
 
@@ -1987,13 +2016,20 @@ void VulkanAPI::setupRayTracing()
 		build_info.scratchData.deviceAddress = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
 		build_info.dstAccelerationStructure = tlas;
 
-		VkAccelerationStructureBuildRangeInfoKHR build_range_info = {};
-		build_range_info.primitiveCount = primitive_count;
-		build_range_info.primitiveOffset = 0;
-		build_range_info.firstVertex = 0;
-		build_range_info.transformOffset = 0;
+		std::vector<VkAccelerationStructureBuildRangeInfoKHR> build_range_infos;
 
-		VkAccelerationStructureBuildRangeInfoKHR * p_build_range_info = &build_range_info;
+		for (uint32_t i = 0; i < build_info.geometryCount; i++)
+		{
+			VkAccelerationStructureBuildRangeInfoKHR build_range_info = {};
+			build_range_info.primitiveCount = primitive_counts[i];
+			build_range_info.primitiveOffset = 0;
+			build_range_info.firstVertex = 0;
+			build_range_info.transformOffset = 0;
+
+			build_range_infos.push_back(build_range_info);
+		}
+
+		VkAccelerationStructureBuildRangeInfoKHR * p_build_range_info = build_range_infos.data();
 
 		VkCommandBuffer command_buffer = beginSingleTimeCommands();
 
@@ -2004,24 +2040,13 @@ void VulkanAPI::setupRayTracing()
 			&p_build_range_info
 		);
 
-		vkEndCommandBuffer(command_buffer);
+		endSingleTimeCommands(command_buffer);
 
-		VkSubmitInfo submit_info = {};
-		submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		submit_info.commandBufferCount = 1;
-		submit_info.pCommandBuffers = &command_buffer;
-
-		vkQueueSubmit(graphics_queue, 1, &submit_info, single_time_command_fence);
-		// vkWaitForFences(device, 1, &single_time_command_fence, VK_TRUE, UINT64_MAX);
-
-		// vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
-
-		// endSingleTimeCommands(command_buffer);
-
-		// vkDestroyBuffer(device, scratch_buffer, nullptr);
-		// vma.freeMemory(device, scratch_buffer_memory, nullptr);
+		vkDestroyBuffer(device, scratch_buffer, nullptr);
+		vma.freeMemory(device, scratch_buffer_memory, nullptr);
 	}
 }
+
 
 void VulkanAPI::setupImgui()
 {
@@ -2101,7 +2126,10 @@ void VulkanAPI::destroyTracy()
 
 VkCommandBuffer VulkanAPI::beginSingleTimeCommands()
 {
-	vkResetFences(device, 1, &single_time_command_fence);
+	VK_CHECK(
+		vkResetFences(device, 1, &single_time_command_fence),
+		"Failed to reset single time command buffer fence"
+	);
 
 	VkCommandBufferAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -2110,28 +2138,44 @@ VkCommandBuffer VulkanAPI::beginSingleTimeCommands()
 	alloc_info.commandBufferCount = 1;
 
 	VkCommandBuffer command_buffer;
-	vkAllocateCommandBuffers(device, &alloc_info, &command_buffer);
+	VK_CHECK(
+		vkAllocateCommandBuffers(device, &alloc_info, &command_buffer),
+		"Failed to allocate single time command buffer"
+	);
 
 	VkCommandBufferBeginInfo begin_info = {};
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-	vkBeginCommandBuffer(command_buffer, &begin_info);
+	VK_CHECK(
+		vkBeginCommandBuffer(command_buffer, &begin_info),
+		"Failed to begin single time command buffer"
+	);
 
 	return command_buffer;
 }
 
 void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 {
-	vkEndCommandBuffer(command_buffer);
+	VK_CHECK(
+		vkEndCommandBuffer(command_buffer),
+		"Failed to end single time command buffer"
+	);
+
 
 	VkSubmitInfo submit_info = {};
 	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submit_info.commandBufferCount = 1;
 	submit_info.pCommandBuffers = &command_buffer;
 
-	vkQueueSubmit(graphics_queue, 1, &submit_info, single_time_command_fence);
-	vkWaitForFences(device, 1, &single_time_command_fence, VK_TRUE, UINT64_MAX);
+	VK_CHECK(
+		vkQueueSubmit(graphics_queue, 1, &submit_info, single_time_command_fence),
+		"Failed to submit single time command buffer"
+	);
+	VK_CHECK(
+		vkWaitForFences(device, 1, &single_time_command_fence, VK_TRUE, UINT64_MAX),
+		"Failed to wait for single time command buffer"
+	);
 
 	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
 }
