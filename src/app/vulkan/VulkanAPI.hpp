@@ -391,9 +391,6 @@ public:
 	uint64_t template_mesh_id;
 
 	// Ray tracing
-	VkPhysicalDeviceRayTracingPipelinePropertiesKHR ray_tracing_properties;
-	VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_structure_properties;
-
 	VkTransformMatrixKHR icospere_transform_matrix;
 	VkAabbPositionsKHR icospere_aabb;
 	VkAccelerationStructureKHR icospere_blas;
