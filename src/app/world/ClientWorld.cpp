@@ -87,12 +87,12 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 				chunk = std::make_shared<Chunk>(chunkPos3D);
 				chunk->status.lock();
 				insertChunk(chunkPos3D, chunk);
-				std::shared_ptr<Chunk> chunk_local = localGetChunk(chunkPos3D);
-				if (chunk_local == nullptr)
-				{
-					LOG_CRITICAL("insert Chunk local is null");
-					chunk_local->setMeshed(false);
-				}
+				// std::shared_ptr<Chunk> chunk_local = localGetChunk(chunkPos3D);
+				// if (chunk_local == nullptr)
+				// {
+				// 	LOG_CRITICAL("insert Chunk local is null");
+				// 	chunk_local->setMeshed(false);
+				// }
 
 				m_threadPool.submit([this, chunkPos2D, chunk] () mutable
 				{

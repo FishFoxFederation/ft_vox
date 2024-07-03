@@ -56,7 +56,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	setupTracy();
 
-	setupRayTracing();
+	// setupRayTracing();
 
 	LOG_INFO("VulkanAPI initialized");
 }
@@ -76,9 +76,17 @@ VulkanAPI::~VulkanAPI()
 	ImGui::DestroyContext();
 
 
+	// Not sure why but it's the only line line that doesn't cause a validation layer error
 	vkDestroyAccelerationStructureKHR(device, icospere_blas, nullptr);
-	vkDestroyBuffer(device, icospere_blas_buffer, nullptr);
-	vma.freeMemory(device, icospere_blas_buffer_memory, nullptr);
+	// vkDestroyBuffer(device, icospere_blas_buffer, nullptr);
+	// vma.freeMemory(device, icospere_blas_buffer_memory, nullptr);
+
+	// vkDestroyBuffer(device, as_instance_buffer, nullptr);
+	// vma.freeMemory(device, as_instance_buffer_memory, nullptr);
+	
+	// vkDestroyAccelerationStructureKHR(device, tlas, nullptr);
+	// vkDestroyBuffer(device, tlas_buffer, nullptr);
+	// vma.freeMemory(device, tlas_buffer_memory, nullptr);
 
 
 	{
@@ -537,48 +545,6 @@ void VulkanAPI::createLogicalDevice()
 
 
 
-	VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
-	buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
-
-	VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
-	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
-	buffer_device_address_features.pNext = &buffer_device_address_features_ext;
-
-	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
-	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-	ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
-
-	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
-	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
-
-	VkPhysicalDeviceFeatures2 deviceFeatures{};
-	deviceFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-	deviceFeatures.pNext = &acceleration_structure_features;
-
-	vkGetPhysicalDeviceFeatures2(physical_device, &deviceFeatures);
-
-	#define ENABLE_FEATURE(feature) \
-		if (feature == VK_TRUE) \
-		{ \
-			LOG_INFO(#feature " supported"); \
-		} \
-		else \
-		{ \
-			LOG_WARNING(#feature " not supported"); \
-		}
-
-	ENABLE_FEATURE(buffer_device_address_features_ext.bufferDeviceAddress)
-	ENABLE_FEATURE(buffer_device_address_features.bufferDeviceAddress)
-	ENABLE_FEATURE(ray_tracing_pipeline_features.rayTracingPipeline)
-	ENABLE_FEATURE(acceleration_structure_features.accelerationStructure)
-	ENABLE_FEATURE(deviceFeatures.features.samplerAnisotropy)
-	ENABLE_FEATURE(deviceFeatures.features.fillModeNonSolid)
-	ENABLE_FEATURE(deviceFeatures.features.wideLines)
-
-
-
-
 
 	VkPhysicalDeviceFeatures device_features = {};
 	device_features.samplerAnisotropy = VK_TRUE;
@@ -589,25 +555,30 @@ void VulkanAPI::createLogicalDevice()
 	// buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
 	// buffer_device_address_features_ext.bufferDeviceAddress = VK_TRUE;
 
-	// VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
-	// buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
-	// buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
+	VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
+	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+	buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
 	// buffer_device_address_features.pNext = &buffer_device_address_features_ext;
 
-	// VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
-	// ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-	// ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
-	// ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
+	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
+	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+	ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
+	ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
 
-	// VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
-	// acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-	// acceleration_structure_features.accelerationStructure = VK_TRUE;
-	// acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
+	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
+	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+	acceleration_structure_features.accelerationStructure = VK_TRUE;
+	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
+
+	VkPhysicalDeviceDynamicRenderingFeaturesKHR dynamic_rendering_features = {};
+	dynamic_rendering_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
+	dynamic_rendering_features.dynamicRendering = VK_TRUE;
+	dynamic_rendering_features.pNext = &acceleration_structure_features;
 
 	// VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
 	// vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
 	// vulkan_12_features.bufferDeviceAddress = VK_TRUE;
-	// vulkan_12_features.pNext = &acceleration_structure_features;
+	// vulkan_12_features.pNext = &dynamic_rendering_features;
 
 	// VkPhysicalDeviceFeatures2 device_features_2 = {};
 	// device_features_2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
@@ -622,7 +593,7 @@ void VulkanAPI::createLogicalDevice()
 	create_info.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
 	create_info.ppEnabledExtensionNames = device_extensions.data();
 
-	create_info.pNext = &deviceFeatures;
+	create_info.pNext = &dynamic_rendering_features;
 
 	#ifndef NDEBUG
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
@@ -631,11 +602,6 @@ void VulkanAPI::createLogicalDevice()
 		create_info.enabledLayerCount = 0;
 	#endif
 
-	VkPhysicalDeviceDynamicRenderingFeaturesKHR dynamic_rendering_features = {};
-	dynamic_rendering_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
-	dynamic_rendering_features.dynamicRendering = VK_TRUE;
-
-	create_info.pNext = &dynamic_rendering_features;
 
 	VK_CHECK(
 		vkCreateDevice(physical_device, &create_info, nullptr, &device),
@@ -1826,11 +1792,8 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 void VulkanAPI::setupRayTracing()
 {
 	{ // create bottom level acceleration structure
-		VkBufferDeviceAddressInfo buffer_device_address_info = {};
-		buffer_device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
-		buffer_device_address_info.buffer = mesh_map[icosphere_mesh_id].buffer;
 
-		VkDeviceAddress address = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+		VkDeviceAddress address = getBufferDeviceAddress(mesh_map[icosphere_mesh_id].buffer);
 
 		VkAccelerationStructureGeometryTrianglesDataKHR triangles = {};
 		triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
@@ -1899,8 +1862,7 @@ void VulkanAPI::setupRayTracing()
 			"Failed to create bottom level acceleration structure"
 		);
 
-		buffer_device_address_info.buffer = scratch_buffer;
-		build_info.scratchData.deviceAddress = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+		build_info.scratchData.deviceAddress = getBufferDeviceAddress(scratch_buffer);
 		build_info.dstAccelerationStructure = icospere_blas;
 
 		VkAccelerationStructureBuildRangeInfoKHR build_range_info = {};
@@ -1945,10 +1907,23 @@ void VulkanAPI::setupRayTracing()
 		instance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
 		instance.accelerationStructureReference = blas_device_address;
 
+		createBuffer(
+			sizeof(VkAccelerationStructureInstanceKHR),
+			VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+			as_instance_buffer,
+			as_instance_buffer_memory
+		);
+
+		void * data;
+		vkMapMemory(device, as_instance_buffer_memory, 0, sizeof(VkAccelerationStructureInstanceKHR), 0, &data);
+		memcpy(data, &instance, sizeof(VkAccelerationStructureInstanceKHR));
+		vkUnmapMemory(device, as_instance_buffer_memory);
+
 		VkAccelerationStructureGeometryInstancesDataKHR instances = {};
 		instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
 		instances.arrayOfPointers = VK_FALSE;
-		instances.data.hostAddress = &instance;
+		instances.data.deviceAddress = getBufferDeviceAddress(as_instance_buffer);
 
 
 		VkAccelerationStructureGeometryKHR geometry = {};
@@ -2009,11 +1984,7 @@ void VulkanAPI::setupRayTracing()
 			"Failed to create bottom level acceleration structure"
 		);
 
-		VkBufferDeviceAddressInfo buffer_device_address_info = {};
-		buffer_device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
-		buffer_device_address_info.buffer = scratch_buffer;
-
-		build_info.scratchData.deviceAddress = vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+		build_info.scratchData.deviceAddress = getBufferDeviceAddress(scratch_buffer);
 		build_info.dstAccelerationStructure = tlas;
 
 		std::vector<VkAccelerationStructureBuildRangeInfoKHR> build_range_infos;
@@ -2245,6 +2216,15 @@ void VulkanAPI::drawMesh(
 }
 
 
+
+VkDeviceAddress VulkanAPI::getBufferDeviceAddress(VkBuffer buffer)
+{
+	VkBufferDeviceAddressInfo buffer_device_address_info = {};
+	buffer_device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
+	buffer_device_address_info.buffer = buffer;
+
+	return vkGetBufferDeviceAddress(device, &buffer_device_address_info);
+}
 
 VkFormat VulkanAPI::findSupportedFormat(
 	const std::vector<VkFormat> & candidates,
@@ -2485,10 +2465,19 @@ void VulkanAPI::createBuffer(
 	VkMemoryRequirements mem_requirements;
 	vkGetBufferMemoryRequirements(device, buffer, &mem_requirements);
 
+	VkMemoryAllocateFlagsInfo memory_allocate_flags_info = {};
+	memory_allocate_flags_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO;
+
+	if (usage & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
+	{
+		memory_allocate_flags_info.flags |= VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT;
+	}
+
 	VkMemoryAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.allocationSize = mem_requirements.size;
 	alloc_info.memoryTypeIndex = vk_helper::findMemoryType(physical_device, mem_requirements.memoryTypeBits, properties);
+	alloc_info.pNext = &memory_allocate_flags_info;
 
 	VK_CHECK(
 		vma.allocateMemory(device, &alloc_info, nullptr, &buffer_memory),
