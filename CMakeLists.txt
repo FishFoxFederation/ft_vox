@@ -32,6 +32,7 @@ target_compile_options(${PROJECT_NAME}
 		-Wno-empty-body
 		-Wno-unused-result
 		-Wno-c11-extensions
+		-Wno-maybe-uninitialized
 )
 
 target_link_options(${PROJECT_NAME}
@@ -165,6 +166,7 @@ target_compile_options(server
 		-Wno-empty-body
 		-Wno-unused-result
 		-Wno-c11-extensions
+		-Wno-maybe-uninitialized
 )
 
 target_link_options(server

@@ -397,6 +397,9 @@ public:
 	VkBuffer icospere_blas_buffer;
 	VkDeviceMemory icospere_blas_buffer_memory;
 
+	VkBuffer as_instance_buffer;
+	VkDeviceMemory as_instance_buffer_memory;
+
 	VkAccelerationStructureKHR tlas;
 	VkBuffer tlas_buffer;
 	VkDeviceMemory tlas_buffer_memory;
@@ -505,6 +508,7 @@ private:
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);
 
+	VkDeviceAddress getBufferDeviceAddress(VkBuffer buffer);
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat> & candidates,
 		VkImageTiling tiling,
