@@ -36,6 +36,15 @@
 #include <queue>
 #include <memory>
 
+#define VK_CHECK_RESULT(f)																				\
+{																										\
+	VkResult res = (f);																					\
+	if (res != VK_SUCCESS)																				\
+	{																									\
+		throw ("fatal error");																	\
+	}																									\
+}
+
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphics_family;
@@ -353,6 +362,7 @@ public:
 	Descriptor crosshair_image_descriptor;
 	Descriptor player_skin_image_descriptor;
 	Descriptor atmosphere_descriptor;
+	Descriptor ray_tracing_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
@@ -391,7 +401,13 @@ public:
 	uint64_t template_mesh_id;
 
 	// Ray tracing
-	VkTransformMatrixKHR icospere_transform_matrix;
+	// VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_features;
+	VkPhysicalDeviceRayTracingPipelinePropertiesKHR ray_tracing_properties;
+	// VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features;
+	VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_structure_properties;
+
+	VkBuffer blas_transform_buffer;
+	VkDeviceMemory blas_transform_buffer_memory;
 	VkAabbPositionsKHR icospere_aabb;
 	VkAccelerationStructureKHR icospere_blas;
 	VkBuffer icospere_blas_buffer;
@@ -403,6 +419,12 @@ public:
 	VkAccelerationStructureKHR tlas;
 	VkBuffer tlas_buffer;
 	VkDeviceMemory tlas_buffer_memory;
+
+	VkPipelineLayout ray_tracing_pipeline_layout;
+	VkPipeline ray_tracing_pipeline;
+
+	VkBuffer ray_tracing_shader_binding_table_buffer;
+	VkDeviceMemory ray_tracing_shader_binding_table_buffer_memory;
 
 
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
@@ -422,6 +444,9 @@ public:
 	PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR;
 	PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR;
 	PFN_vkGetAccelerationStructureDeviceAddressKHR vkGetAccelerationStructureDeviceAddressKHR;
+	PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
+	PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
+	PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 
 
 private:
@@ -438,7 +463,8 @@ private:
 		VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
 		VK_KHR_RAY_QUERY_EXTENSION_NAME,
 		VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
-		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME
+		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
+		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
 	};
 
 
@@ -497,6 +523,9 @@ private:
 	void destroyMeshes();
 
 	void setupRayTracing();
+	void getRayTracingProperties();
+	std::vector<char> readFile(const std::string & filename);
+	VkShaderModule createShaderModule(const std::vector<char> & code);
 
 
 	void setupImgui();
