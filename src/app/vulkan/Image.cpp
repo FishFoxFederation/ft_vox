@@ -498,6 +498,12 @@ void Image::transitionLayout(
 
 			switch (new_layout)
 			{
+			case VK_IMAGE_LAYOUT_GENERAL:
+			{
+				barrier.dstAccessMask = 0;
+				dst_stage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+				break;
+			}
 			case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
 			{
 				barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;

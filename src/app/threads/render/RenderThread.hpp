@@ -113,4 +113,6 @@ private:
 
 	void drawDebugGui();
 
+	void raytrace();
+
 };
