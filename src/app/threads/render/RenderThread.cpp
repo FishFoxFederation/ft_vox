@@ -217,6 +217,7 @@ void RenderThread::loop()
 	memcpy(vk.sun_ubo.mapped_memory[vk.current_frame], &sun, sizeof(sun));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
+	raytrace();
 
 	shadowPass(chunk_meshes);
 	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
@@ -928,9 +929,14 @@ void RenderThread::copyToSwapchain()
 
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
+	// blit.srcOffsets[1] = {
+	// 	static_cast<int32_t>(vk.color_attachement.extent2D.width),
+	// 	static_cast<int32_t>(vk.color_attachement.extent2D.height),
+	// 	1
+	// };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.color_attachement.extent2D.width),
-		static_cast<int32_t>(vk.color_attachement.extent2D.height),
+		static_cast<int32_t>(vk.rt_output_image_width),
+		static_cast<int32_t>(vk.rt_output_image_height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -948,10 +954,21 @@ void RenderThread::copyToSwapchain()
 	blit.dstSubresource.baseArrayLayer = 0;
 	blit.dstSubresource.layerCount = 1;
 
+	// vkCmdBlitImage(
+	// 	vk.copy_command_buffers[vk.current_frame],
+	// 	vk.color_attachement.image,
+	// 	VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+	// 	vk.swapchain.images[vk.current_image_index],
+	// 	VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+	// 	1,
+	// 	&blit,
+	// 	VK_FILTER_LINEAR
+	// );
+
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.color_attachement.image,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		vk.rt_output_image,
+		VK_IMAGE_LAYOUT_GENERAL,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		1,
@@ -1060,5 +1077,36 @@ void RenderThread::drawDebugGui()
 	VK_CHECK(
 		vkEndCommandBuffer(vk.imgui_command_buffers[vk.current_frame]),
 		"Failed to record imgui command buffer"
+	);
+}
+
+void RenderThread::raytrace()
+{
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, vk.rt_pipeline);
+
+	std::vector<VkDescriptorSet> rt_descriptor_sets = {
+		vk.rt_descriptor.sets[vk.current_frame]
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_RAY_TRACING_NV,
+		vk.rt_pipeline_layout,
+		0,
+		static_cast<uint32_t>(rt_descriptor_sets.size()),
+		rt_descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	vk.vkCmdTraceRaysKHR(
+		vk.draw_command_buffers[vk.current_frame],
+		&vk.rt_sbt_rgen_region,
+		&vk.rt_sbt_miss_region,
+		&vk.rt_sbt_hit_region,
+		&vk.rt_sbt_call_region,
+		vk.rt_output_image_width,
+		vk.rt_output_image_height,
+		1
 	);
 }
