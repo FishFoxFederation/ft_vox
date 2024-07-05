@@ -150,4 +150,6 @@ public:
 	static inline std::atomic<float> g = 0.95f;
 	static inline std::atomic<int> n_samples = 8.0f;
 	static inline std::atomic<int> n_light_samples = 4.0f;
+
+	static inline std::atomic<bool> use_raytracing = false;
 };

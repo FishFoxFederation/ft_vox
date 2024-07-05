@@ -13,7 +13,7 @@ ClientWorld::ClientWorld(
 	// m_players(),
 {
 	m_my_player_id = my_player_id;
-	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
+	addPlayer(m_my_player_id, glm::dvec3(1.0, 0.0, 1.0));
 }
 
 ClientWorld::~ClientWorld()

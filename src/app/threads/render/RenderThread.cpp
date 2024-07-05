@@ -168,6 +168,8 @@ void RenderThread::loop()
 		atmosphere_params.g = DebugGui::g;
 		atmosphere_params.n_samples = DebugGui::n_samples;
 		atmosphere_params.n_light_samples = DebugGui::n_light_samples;
+
+		use_raytracing = DebugGui::use_raytracing;
 	}
 
 	//############################################################################################################
@@ -217,10 +219,15 @@ void RenderThread::loop()
 	memcpy(vk.sun_ubo.mapped_memory[vk.current_frame], &sun, sizeof(sun));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
-	raytrace();
-
-	shadowPass(chunk_meshes);
-	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
+	if (use_raytracing)
+	{
+		raytrace();
+	}
+	else
+	{
+		shadowPass(chunk_meshes);
+		lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
+	}
 
 	TracyVkCollect(vk.ctx, vk.draw_command_buffers[vk.current_frame]);
 
@@ -242,7 +249,24 @@ void RenderThread::loop()
 	//                     																                         #
 	//############################################################################################################
 
-	copyToSwapchain();
+	if (use_raytracing)
+	{
+		copyToSwapchain(
+			vk.rt_output_image,
+			vk.rt_output_image_width,
+			vk.rt_output_image_height,
+			VK_IMAGE_LAYOUT_GENERAL
+		);
+	}
+	else
+	{
+		copyToSwapchain(
+			vk.color_attachement.image,
+			vk.color_attachement.extent2D.width,
+			vk.color_attachement.extent2D.height,
+			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+		);
+	}
 
 	VkSubmitInfo copy_submit_info = {};
 	copy_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -879,7 +903,12 @@ void RenderThread::drawPlayerBodyPart(
 	);
 }
 
-void RenderThread::copyToSwapchain()
+void RenderThread::copyToSwapchain(
+	VkImage src_image,
+	uint32_t width,
+	uint32_t height,
+	VkImageLayout src_image_layout
+)
 {
 	ZoneScoped;
 
@@ -934,9 +963,14 @@ void RenderThread::copyToSwapchain()
 	// 	static_cast<int32_t>(vk.color_attachement.extent2D.height),
 	// 	1
 	// };
+	// blit.srcOffsets[1] = {
+	// 	static_cast<int32_t>(vk.rt_output_image_width),
+	// 	static_cast<int32_t>(vk.rt_output_image_height),
+	// 	1
+	// };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.rt_output_image_width),
-		static_cast<int32_t>(vk.rt_output_image_height),
+		static_cast<int32_t>(width),
+		static_cast<int32_t>(height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -965,10 +999,21 @@ void RenderThread::copyToSwapchain()
 	// 	VK_FILTER_LINEAR
 	// );
 
+	// vkCmdBlitImage(
+	// 	vk.copy_command_buffers[vk.current_frame],
+	// 	vk.rt_output_image,
+	// 	VK_IMAGE_LAYOUT_GENERAL,
+	// 	vk.swapchain.images[vk.current_image_index],
+	// 	VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+	// 	1,
+	// 	&blit,
+	// 	VK_FILTER_LINEAR
+	// );
+
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
-		VK_IMAGE_LAYOUT_GENERAL,
+		src_image,
+		src_image_layout,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		1,
