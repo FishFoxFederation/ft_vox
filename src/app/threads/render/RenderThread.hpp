@@ -71,6 +71,8 @@ private:
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
+	bool use_raytracing;
+
 
 	// For DebugGui
 	int m_frame_count;
@@ -109,7 +111,12 @@ private:
 		const glm::mat4 & model
 	);
 
-	void copyToSwapchain();
+	void copyToSwapchain(
+		VkImage src_image,
+		uint32_t width,
+		uint32_t height,
+		VkImageLayout src_image_layout
+	);
 
 	void drawDebugGui();
 

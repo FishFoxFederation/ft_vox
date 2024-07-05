@@ -105,6 +105,12 @@ void DebugGui::updateImGui()
 
 			if (ImGui::BeginTabItem("Graphic"))
 			{
+				bool tmp = use_raytracing;
+				ImGui::Checkbox("Raytracing", &tmp);
+				use_raytracing = tmp;
+
+				ImGui::Separator();
+
 				// slidders for atmosphere parrams
 				FLOAT_SLIDER(sun_theta, 0.0f, 360.0f)
 				FLOAT_SLIDER(earth_radius, 0.0f, 10000000.0f)
