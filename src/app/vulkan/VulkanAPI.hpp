@@ -407,14 +407,22 @@ public:
 
 	VkBuffer blas_transform_buffer;
 	VkDeviceMemory blas_transform_buffer_memory;
-	VkAabbPositionsKHR icospere_aabb;
-	VkAccelerationStructureKHR icospere_blas;
-	VkBuffer icospere_blas_buffer;
-	VkDeviceMemory icospere_blas_buffer_memory;
+	VkAccelerationStructureKHR blas;
+	VkBuffer blas_buffer;
+	VkDeviceMemory blas_buffer_memory;
 
 	VkAccelerationStructureKHR tlas;
 	VkBuffer tlas_buffer;
 	VkDeviceMemory tlas_buffer_memory;
+
+	struct RTMeshData
+	{
+		uint64_t vertex_buffer_address;
+		uint64_t index_buffer_address;
+	};
+
+	VkBuffer rt_mesh_data_buffer;
+	VkDeviceMemory rt_mesh_data_buffer_memory;
 
 	VkImage rt_output_image;
 	VkDeviceMemory rt_output_image_memory;
@@ -422,7 +430,8 @@ public:
 	uint32_t rt_output_image_width;
 	uint32_t rt_output_image_height;
 
-	Descriptor rt_descriptor;
+	Descriptor rt_global_descriptor;
+	Descriptor rt_scene_descriptor;
 
 	VkPipelineLayout rt_pipeline_layout;
 	VkPipeline rt_pipeline;
@@ -534,6 +543,7 @@ private:
 	void setupRayTracing();
 	void getRayTracingProperties();
 	void createBottomLevelAS();
+	void createMeshDataBuffer();
 	void createTopLevelAS();
 	void createRayTracingOutputImage();
 	void createRayTracingDescriptor();

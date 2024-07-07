@@ -76,9 +76,9 @@ VulkanAPI::~VulkanAPI()
 	ImGui::DestroyContext();
 
 
-	vkDestroyAccelerationStructureKHR(device, icospere_blas, nullptr);
-	vkDestroyBuffer(device, icospere_blas_buffer, nullptr);
-	vma.freeMemory(device, icospere_blas_buffer_memory, nullptr);
+	vkDestroyAccelerationStructureKHR(device, blas, nullptr);
+	vkDestroyBuffer(device, blas_buffer, nullptr);
+	vma.freeMemory(device, blas_buffer_memory, nullptr);
 
 	vkDestroyBuffer(device, blas_transform_buffer, nullptr);
 	vma.freeMemory(device, blas_transform_buffer_memory, nullptr);
@@ -87,7 +87,8 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyBuffer(device, tlas_buffer, nullptr);
 	vma.freeMemory(device, tlas_buffer_memory, nullptr);
 
-	rt_descriptor.clear();
+	rt_global_descriptor.clear();
+	rt_scene_descriptor.clear();
 
 	vkDestroyImage(device, rt_output_image, nullptr);
 	vma.freeMemory(device, rt_output_image_memory, nullptr);
@@ -98,6 +99,9 @@ VulkanAPI::~VulkanAPI()
 
 	vkDestroyBuffer(device, rt_sbt_buffer, nullptr);
 	vma.freeMemory(device, rt_sbt_buffer_memory, nullptr);
+
+	vkDestroyBuffer(device, rt_mesh_data_buffer, nullptr);
+	vma.freeMemory(device, rt_mesh_data_buffer_memory, nullptr);
 
 
 
@@ -566,6 +570,7 @@ void VulkanAPI::createLogicalDevice()
 	device_features.samplerAnisotropy = VK_TRUE;
 	device_features.fillModeNonSolid = VK_TRUE;
 	device_features.wideLines = VK_TRUE;
+	device_features.shaderInt64 = VK_TRUE;
 
 	// VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
 	// buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
@@ -1649,7 +1654,8 @@ void VulkanAPI::createMeshes()
 			vertices.size(),
 			sizeof(EntityVertex),
 			obj_loader.indices().data(),
-			obj_loader.indices().size()
+			obj_loader.indices().size(),
+			VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR
 		);
 	}
 
@@ -1810,6 +1816,7 @@ void VulkanAPI::setupRayTracing()
 {
 	getRayTracingProperties();
 	createBottomLevelAS();
+	createMeshDataBuffer();
 	createTopLevelAS();
 	createRayTracingOutputImage();
 	createRayTracingDescriptor();
@@ -1848,7 +1855,7 @@ void VulkanAPI::getRayTracingProperties()
 
 void VulkanAPI::createBottomLevelAS()
 {
-	VkDeviceAddress address = getBufferDeviceAddress(mesh_map[icosphere_mesh_id].buffer);
+	VkDeviceAddress address = getBufferDeviceAddress(mesh_map[cube_mesh_id].buffer);
 
 	VkTransformMatrixKHR transform_matrix = {
 		1.0f, 0.0f, 0.0f, 0.0f,
@@ -1880,9 +1887,9 @@ void VulkanAPI::createBottomLevelAS()
 	as_geometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
 	as_geometry.geometry.triangles.vertexData.deviceAddress = address;
 	as_geometry.geometry.triangles.vertexStride = sizeof(ObjVertex);
-	as_geometry.geometry.triangles.maxVertex = mesh_map[icosphere_mesh_id].vertex_count - 1;
+	as_geometry.geometry.triangles.maxVertex = mesh_map[cube_mesh_id].vertex_count - 1;
 	as_geometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
-	as_geometry.geometry.triangles.indexData.deviceAddress = address + mesh_map[icosphere_mesh_id].index_offset;
+	as_geometry.geometry.triangles.indexData.deviceAddress = address + mesh_map[cube_mesh_id].index_offset;
 	as_geometry.geometry.triangles.transformData.hostAddress = nullptr;
 	as_geometry.geometry.triangles.transformData.deviceAddress = 0;
 	as_geometry.geometry.triangles.transformData = transformBufferDeviceAddress;
@@ -1896,7 +1903,7 @@ void VulkanAPI::createBottomLevelAS()
 	build_info.pGeometries = &as_geometry;
 
 
-	uint32_t primitive_count = mesh_map[icosphere_mesh_id].index_count / 3;
+	uint32_t primitive_count = mesh_map[cube_mesh_id].index_count / 3;
 
 	VkAccelerationStructureBuildSizesInfoKHR build_sizes_info = {};
 	build_sizes_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
@@ -1922,23 +1929,23 @@ void VulkanAPI::createBottomLevelAS()
 		build_sizes_info.accelerationStructureSize,
 		VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-		icospere_blas_buffer,
-		icospere_blas_buffer_memory
+		blas_buffer,
+		blas_buffer_memory
 	);
 
 	VkAccelerationStructureCreateInfoKHR acceleration_structure_info = {};
 	acceleration_structure_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
 	acceleration_structure_info.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
-	acceleration_structure_info.buffer = icospere_blas_buffer;
+	acceleration_structure_info.buffer = blas_buffer;
 	acceleration_structure_info.size = build_sizes_info.accelerationStructureSize;
 
 	VK_CHECK(
-		vkCreateAccelerationStructureKHR(device, &acceleration_structure_info, nullptr, &icospere_blas),
+		vkCreateAccelerationStructureKHR(device, &acceleration_structure_info, nullptr, &blas),
 		"Failed to create bottom level acceleration structure"
 	);
 
 	build_info.scratchData.deviceAddress = getBufferDeviceAddress(scratch_buffer);
-	build_info.dstAccelerationStructure = icospere_blas;
+	build_info.dstAccelerationStructure = blas;
 
 	VkAccelerationStructureBuildRangeInfoKHR build_range_info = {};
 	build_range_info.primitiveCount = primitive_count;
@@ -1963,11 +1970,31 @@ void VulkanAPI::createBottomLevelAS()
 	vma.freeMemory(device, scratch_buffer_memory, nullptr);
 }
 
+void VulkanAPI::createMeshDataBuffer()
+{
+	RTMeshData mesh_data = {};
+	mesh_data.vertex_buffer_address = getBufferDeviceAddress(mesh_map[cube_mesh_id].buffer);
+	mesh_data.index_buffer_address = mesh_data.vertex_buffer_address + mesh_map[cube_mesh_id].index_offset;
+
+	createBuffer(
+		sizeof(RTMeshData),
+		VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		rt_mesh_data_buffer,
+		rt_mesh_data_buffer_memory
+	);
+
+	void * data;
+	vkMapMemory(device, rt_mesh_data_buffer_memory, 0, sizeof(RTMeshData), 0, &data);
+	memcpy(data, &mesh_data, sizeof(RTMeshData));
+	vkUnmapMemory(device, rt_mesh_data_buffer_memory);
+}
+
 void VulkanAPI::createTopLevelAS()
 {
 	VkAccelerationStructureDeviceAddressInfoKHR device_address_info = {};
 	device_address_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
-	device_address_info.accelerationStructure = icospere_blas;
+	device_address_info.accelerationStructure = blas;
 
 	VkDeviceAddress blas_device_address = vkGetAccelerationStructureDeviceAddressKHR(device, &device_address_info);
 
@@ -2127,37 +2154,68 @@ void VulkanAPI::createRayTracingOutputImage()
 
 void VulkanAPI::createRayTracingDescriptor()
 {
-	VkDescriptorSetLayoutBinding acceleration_structure_binding = {};
-	acceleration_structure_binding.binding = 0;
-	acceleration_structure_binding.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
-	acceleration_structure_binding.descriptorCount = 1;
-	acceleration_structure_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
-	acceleration_structure_binding.pImmutableSamplers = nullptr;
+	{ // Global descriptor
+		VkDescriptorSetLayoutBinding acceleration_structure_binding = {};
+		acceleration_structure_binding.binding = 0;
+		acceleration_structure_binding.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
+		acceleration_structure_binding.descriptorCount = 1;
+		acceleration_structure_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+		acceleration_structure_binding.pImmutableSamplers = nullptr;
 
-	VkDescriptorSetLayoutBinding result_image_binding = {};
-	result_image_binding.binding = 1;
-	result_image_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-	result_image_binding.descriptorCount = 1;
-	result_image_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
-	result_image_binding.pImmutableSamplers = nullptr;
+		VkDescriptorSetLayoutBinding result_image_binding = {};
+		result_image_binding.binding = 1;
+		result_image_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		result_image_binding.descriptorCount = 1;
+		result_image_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+		result_image_binding.pImmutableSamplers = nullptr;
 
-	VkDescriptorSetLayoutBinding camera_binding = {};
-	camera_binding.binding = 2;
-	camera_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	camera_binding.descriptorCount = 1;
-	camera_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
-	camera_binding.pImmutableSamplers = nullptr;
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = {
+			acceleration_structure_binding,
+			result_image_binding
+		};
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
 
-	Descriptor::CreateInfo descriptor_info = {};
-	descriptor_info.bindings = {
-		acceleration_structure_binding,
-		result_image_binding,
-		camera_binding
-	};
-	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-	descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+		rt_global_descriptor = Descriptor(device, descriptor_info);
+	}
 
-	rt_descriptor = Descriptor(device, descriptor_info);
+	{ // Scene Descriptor
+		VkDescriptorSetLayoutBinding mesh_data_binding = {};
+		mesh_data_binding.binding = 0;
+		mesh_data_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+		mesh_data_binding.descriptorCount = 1;
+		mesh_data_binding.stageFlags = VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
+		mesh_data_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = {
+			mesh_data_binding
+		};
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		rt_scene_descriptor = Descriptor(device, descriptor_info);
+
+
+		VkDescriptorBufferInfo buffer_info = {};
+		buffer_info.buffer = rt_mesh_data_buffer;
+		buffer_info.offset = 0;
+		buffer_info.range = sizeof(RTMeshData);
+
+		for (int i = 0; i < max_frames_in_flight; i++)
+		{
+			VkWriteDescriptorSet write = {};
+			write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			write.dstSet = rt_scene_descriptor.sets[i];
+			write.dstBinding = 0;
+			write.descriptorCount = 1;
+			write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+			write.pBufferInfo = &buffer_info;
+
+			vkUpdateDescriptorSets(device, 1, &write, 0, nullptr);
+		}
+	}
 }
 
 void VulkanAPI::updateRayTracingDescriptor()
@@ -2171,7 +2229,7 @@ void VulkanAPI::updateRayTracingDescriptor()
 
 		VkWriteDescriptorSet acceleration_structure_write = {};
 		acceleration_structure_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		acceleration_structure_write.dstSet = rt_descriptor.sets[i];
+		acceleration_structure_write.dstSet = rt_global_descriptor.sets[i];
 		acceleration_structure_write.dstBinding = 0;
 		acceleration_structure_write.descriptorCount = 1;
 		acceleration_structure_write.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
@@ -2184,30 +2242,16 @@ void VulkanAPI::updateRayTracingDescriptor()
 
 		VkWriteDescriptorSet result_image_write = {};
 		result_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		result_image_write.dstSet = rt_descriptor.sets[i];
+		result_image_write.dstSet = rt_global_descriptor.sets[i];
 		result_image_write.dstBinding = 1;
 		result_image_write.descriptorCount = 1;
 		result_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
 		result_image_write.pImageInfo = &result_image_info;
 
 
-		VkDescriptorBufferInfo camera_info = {};
-		camera_info.buffer = camera_ubo.buffers[i];
-		camera_info.offset = 0;
-		camera_info.range = sizeof(ViewProjMatrices);
-
-		VkWriteDescriptorSet camera_write = {};
-		camera_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		camera_write.dstSet = rt_descriptor.sets[i];
-		camera_write.dstBinding = 2;
-		camera_write.descriptorCount = 1;
-		camera_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		camera_write.pBufferInfo = &camera_info;
-
 		std::vector<VkWriteDescriptorSet> writes = {
 			acceleration_structure_write,
-			result_image_write,
-			camera_write
+			result_image_write
 		};
 
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
@@ -2266,10 +2310,17 @@ void VulkanAPI::createRayTracingPipeline()
 		hit_group
 	};
 
+
+	std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {
+		rt_global_descriptor.layout,
+		camera_descriptor.layout,
+		rt_scene_descriptor.layout
+	};
+
 	VkPipelineLayoutCreateInfo pipeline_layout_info = {};
 	pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipeline_layout_info.setLayoutCount = 1;
-	pipeline_layout_info.pSetLayouts = &rt_descriptor.layout;
+	pipeline_layout_info.setLayoutCount = static_cast<uint32_t>(descriptor_set_layouts.size());
+	pipeline_layout_info.pSetLayouts = descriptor_set_layouts.data();
 	pipeline_layout_info.pushConstantRangeCount = 0;
 	pipeline_layout_info.pPushConstantRanges = nullptr;
 

@@ -1130,7 +1130,9 @@ void RenderThread::raytrace()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, vk.rt_pipeline);
 
 	std::vector<VkDescriptorSet> rt_descriptor_sets = {
-		vk.rt_descriptor.sets[vk.current_frame]
+		vk.rt_global_descriptor.sets[vk.current_frame],
+		vk.camera_descriptor.sets[vk.current_frame],
+		vk.rt_scene_descriptor.sets[vk.current_frame],
 	};
 
 	vkCmdBindDescriptorSets(
