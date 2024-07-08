@@ -14,9 +14,15 @@ WorldGenerator::~WorldGenerator()
 
 }
 
-Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z)
+std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z)
 {
-	Chunk chunk(glm::ivec3(x, y, z));
+	return generateFullChunk(x, y, z, nullptr);
+}
+
+std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk)
+{
+	if (chunk == nullptr)
+		chunk = std::make_shared<Chunk>(glm::ivec3(x, y, z));
 	(void)x, (void)y;
 
 	for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
@@ -25,16 +31,24 @@ Chunk WorldGenerator::generateFullChunk(const int & x, const int & y, const int 
 		{
 			for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 			{
-				chunk.setBlock(blockX, blockY, blockZ, BlockID::Stone);
+				chunk->setBlock(blockX, blockY, blockZ, BlockID::Stone);
 			}
 		}
 	}
+	chunk->setGenerated(true);
 	return chunk;
 }
 
-Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
+std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int & z)
 {
-	Chunk column(glm::ivec3(x, 0, z));
+	return generateChunkColumn(x, z, nullptr);
+}
+
+std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int & z, std::shared_ptr<Chunk> column)
+{
+	if (column == nullptr)
+		column = std::make_shared<Chunk>(glm::ivec3(x, 0, z));
+	// chunk = std::make_shared<Chunk>(glm::ivec3(x, y, z));
 
 
 	for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
@@ -69,7 +83,7 @@ Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
 				if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
 					to_set = BlockID::Air;
 				// try {
-				column.setBlock(blockX, blockY, blockZ, to_set);
+				column->setBlock(blockX, blockY, blockZ, to_set);
 				// } catch (std::exception & e)
 				// {
 					// LOG_ERROR("EXCEPTION: " << e.what());
@@ -77,13 +91,14 @@ Chunk WorldGenerator::generateChunkColumn(const int & x, const int & z)
 			}
 		}
 	}
+	column->setGenerated(true);
 	return column;
 }
 
-Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
+std::shared_ptr<Chunk> WorldGenerator::generateChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk)
 {
-
-	Chunk chunk(glm::ivec3(x, y, z));
+	if (chunk == nullptr)
+		chunk = std::make_shared<Chunk>(glm::ivec3(x, y, z));
 	(void)x, (void)y;
 
 	for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
@@ -111,10 +126,11 @@ Chunk WorldGenerator::generateChunk(const int & x, const int & y, const int & z)
 				// {
 				// 	to_set = Block::Grass;
 				// }
-				chunk.setBlock(blockX, blockY, blockZ, to_set);
+				chunk->setBlock(blockX, blockY, blockZ, to_set);
 			}
 		}
 	}
+	chunk->setGenerated(true);
 	return chunk;
 }
 

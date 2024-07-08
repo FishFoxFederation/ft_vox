@@ -107,6 +107,8 @@ public:
 
 	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id, false};
 
+	uint64_t connection_id = 0;
+
 private:
 
 	std::chrono::nanoseconds fall_start_time = std::chrono::nanoseconds(0);
