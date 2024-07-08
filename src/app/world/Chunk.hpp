@@ -47,12 +47,17 @@ public:
 	const int & 		y()const {return position.y;};
 	const int & 		z()const {return position.z;};
 
-
 	const uint64_t	&	getMeshID() const;
 	void				setMeshID(const uint64_t & mesh_id);
 
 	bool				isMeshed() const;
 	void				setMeshed(bool meshed);
+
+	bool 				isGenerated() const;
+	void 				setGenerated(bool gen);
+
+	const int &			getLoadLevel() const;
+	void				setLoadLevel(const int & load_level);
 
 	static  int			toIndex(const int & x, const int & y, const int & z);
 	static	glm::ivec3	toCoord(const int & index);
@@ -61,9 +66,12 @@ public:
 	// TracySharedLockableN			(Status,	status, "Chunk Status");
 	Status 							status;
 	std::unordered_set<uint64_t>	entity_ids;
+	std::unordered_set<uint64_t>	observing_player_ids;
 private:
 	bool 		meshed = false;
+	bool 		gen = false;
 	glm::ivec3	position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
+	int			load_level = 44;
 };

@@ -54,7 +54,7 @@ protected:
 	uint64_t												m_mob_id = 0;
 
 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>>	m_chunks;
-	mutable TracyLockableN											(std::mutex,	m_chunks_mutex, "Chunks");
+	mutable TracyLockableN									(std::mutex,	m_chunks_mutex, "Chunks");
 	WorldGenerator										m_world_generator;
 
 };

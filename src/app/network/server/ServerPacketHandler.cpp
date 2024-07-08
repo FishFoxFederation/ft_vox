@@ -30,7 +30,7 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		}
 		case IPacket::Type::BLOCK_ACTION:
 		{
-			handleBlockActionPacket(std::dynamic_pointer_cast<BlockActionPacket>(packet));
+			m_world.handlePacket(packet);
 			break;
 		}
 		case IPacket::Type::CHUNK_REQUEST:
@@ -74,19 +74,9 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	packet_to_send->SetConnectionId(CurrentConnectionId);
 	m_server.send(packet_to_send);
 
-	//send chunks around player
-	for (int x = -SERVER_LOAD_DISTANCE; x <= SERVER_LOAD_DISTANCE; x++)
-	{
-		for (int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
-		{
-			glm::vec3 chunkPos(x + CurrentPlayerChunkPosition.x, 0, z + CurrentPlayerChunkPosition.z);
-			if (glm::distance(CurrentPlayerChunkPosition, chunkPos) >= SERVER_LOAD_DISTANCE)
-				continue;
-			packet_to_send = std::make_shared<ChunkPacket>(*m_world.getAndLoadChunk(chunkPos));
-			packet_to_send->SetConnectionId(CurrentConnectionId);
-			m_server.send(packet_to_send);
-		}
-	}
+
+	//notify world of new player
+	m_world.handleConnectionPacket(packet);
 
 
 

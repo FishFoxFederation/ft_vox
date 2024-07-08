@@ -96,14 +96,14 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 					chunk_local->setMeshed(false);
 				}
 
-				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id, chunk]()
+				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id, chunk] () mutable
 				{
 					ZoneScopedN("Chunk Loading");
 					/**************************************************************
 					 * CHUNK LOADING FUNCTION
 					 **************************************************************/
 					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-					*chunk = m_world_generator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
+					chunk = m_world_generator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
 					// LOG_DEBUG("Chunk unlocked: " << chunkPos2D.x << " " << chunkPos2D.y);
 					{
 						std::lock_guard lock(m_loaded_chunks_mutex);
