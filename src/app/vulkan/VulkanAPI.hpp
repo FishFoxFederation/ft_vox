@@ -128,6 +128,7 @@ struct Mesh
 	VkBuffer buffer;
 	VkDeviceMemory buffer_memory;
 	uint32_t vertex_count;
+	uint32_t vertex_size;
 	VkDeviceSize index_offset;
 	uint32_t index_count;
 
@@ -274,11 +275,13 @@ public:
 		const uint32_t vertex_count,
 		const uint32_t vertex_size,
 		const void * indices,
-		const uint32_t index_count,
-		const VkMemoryPropertyFlags additional_memory_properties = 0
+		const uint32_t index_count
 	);
 	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
+
+	void addMeshToScene(const uint64_t mesh_id, const glm::mat4 & transform = glm::mat4(1.0f));
+	void removeMeshFromScene(const uint64_t mesh_id);
 
 	void drawMesh(
 		const Pipeline & pipeline,
@@ -405,24 +408,51 @@ public:
 	// VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features;
 	VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_structure_properties;
 
-	VkBuffer blas_transform_buffer;
-	VkDeviceMemory blas_transform_buffer_memory;
-	VkAccelerationStructureKHR blas;
-	VkBuffer blas_buffer;
-	VkDeviceMemory blas_buffer_memory;
+	struct BottomLevelAS
+	{
+		VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
+		VkBuffer buffer = VK_NULL_HANDLE;
+		VkDeviceMemory memory = VK_NULL_HANDLE;
+		VkDeviceAddress address = 0;
 
-	VkAccelerationStructureKHR tlas;
-	VkBuffer tlas_buffer;
-	VkDeviceMemory tlas_buffer_memory;
+		VkBuffer transform_buffer = VK_NULL_HANDLE;
+		VkDeviceMemory transform_buffer_memory = VK_NULL_HANDLE;
+		VkDeviceAddress transform_address = 0;
+		void * transform_mapped_memory = nullptr;
+
+		uint64_t mesh_id = 0;
+		uint32_t instance_custom_index;
+	};
+
+	std::vector<BottomLevelAS> blas_list;
+
+	struct InstanceData
+	{
+		glm::mat4 transform = glm::mat4(1.0f);
+		uint64_t blas_address = 0;
+		uint32_t custom_index;
+
+		VkBuffer buffer = VK_NULL_HANDLE;
+		VkDeviceMemory memory = VK_NULL_HANDLE;
+		VkDeviceAddress address = 0;
+		void * mapped_memory = nullptr;
+	};
+
+	std::vector<InstanceData> instance_data_list;
+
+	VkAccelerationStructureKHR tlas = VK_NULL_HANDLE;
+	VkBuffer tlas_buffer = VK_NULL_HANDLE;
+	VkDeviceMemory tlas_buffer_memory = VK_NULL_HANDLE;
 
 	struct RTMeshData
 	{
-		uint64_t vertex_buffer_address;
-		uint64_t index_buffer_address;
+		uint64_t vertex_buffer_address = 0;
+		uint64_t index_buffer_address = 0;
 	};
 
-	VkBuffer rt_mesh_data_buffer;
-	VkDeviceMemory rt_mesh_data_buffer_memory;
+	VkBuffer rt_mesh_data_buffer = VK_NULL_HANDLE;
+	VkDeviceMemory rt_mesh_data_buffer_memory = VK_NULL_HANDLE;
+
 
 	VkImage rt_output_image;
 	VkDeviceMemory rt_output_image_memory;
@@ -430,8 +460,8 @@ public:
 	uint32_t rt_output_image_width;
 	uint32_t rt_output_image_height;
 
-	Descriptor rt_global_descriptor;
-	Descriptor rt_scene_descriptor;
+	Descriptor rt_output_image_descriptor;
+	Descriptor rt_objects_descriptor;
 
 	VkPipelineLayout rt_pipeline_layout;
 	VkPipeline rt_pipeline;
@@ -541,17 +571,29 @@ private:
 	void destroyMeshes();
 
 	void setupRayTracing();
+	void destroyRayTracing();
 	void getRayTracingProperties();
-	void createBottomLevelAS();
+	void createBottomLevelAS(uint64_t mesh_id);
+	void destroyBottomLevelAS(BottomLevelAS & blas);
+	void createInstanceData(const BottomLevelAS & blas, const glm::mat4 & transform);
 	void createMeshDataBuffer();
-	void createTopLevelAS();
+	void createTopLevelAS(const std::vector<BottomLevelAS> & blas_list);
 	void createRayTracingOutputImage();
 	void createRayTracingDescriptor();
-	void updateRayTracingDescriptor();
+	void updateRTOutputImageDescriptor();
+	void updateRTObjectsDescriptor();
 	void createRayTracingPipeline();
 	void createRayTracingShaderBindingTable();
 	std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);
+	void addMeshToTopLevelAS(
+		const uint64_t mesh_id,
+		const glm::mat4 & transform = glm::mat4(1.0f)
+	);
+	void removeMeshFromTopLevelAS(const uint64_t mesh_id);
+	VkTransformMatrixKHR glmToVkTransformMatrix(const glm::mat4 & matrix);
+	void updateMeshTransform(const uint64_t mesh_id, const glm::mat4 & transform);
+
 
 
 	void setupImgui();

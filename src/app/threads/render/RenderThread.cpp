@@ -251,21 +251,11 @@ void RenderThread::loop()
 
 	if (use_raytracing)
 	{
-		copyToSwapchain(
-			vk.rt_output_image,
-			vk.rt_output_image_width,
-			vk.rt_output_image_height,
-			VK_IMAGE_LAYOUT_GENERAL
-		);
+		copyToSwapchainRT();
 	}
 	else
 	{
-		copyToSwapchain(
-			vk.color_attachement.image,
-			vk.color_attachement.extent2D.width,
-			vk.color_attachement.extent2D.height,
-			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-		);
+		copyToSwapchain();
 	}
 
 	VkSubmitInfo copy_submit_info = {};
@@ -903,12 +893,7 @@ void RenderThread::drawPlayerBodyPart(
 	);
 }
 
-void RenderThread::copyToSwapchain(
-	VkImage src_image,
-	uint32_t width,
-	uint32_t height,
-	VkImageLayout src_image_layout
-)
+void RenderThread::copyToSwapchain()
 {
 	ZoneScoped;
 
@@ -958,19 +943,9 @@ void RenderThread::copyToSwapchain(
 
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
-	// blit.srcOffsets[1] = {
-	// 	static_cast<int32_t>(vk.color_attachement.extent2D.width),
-	// 	static_cast<int32_t>(vk.color_attachement.extent2D.height),
-	// 	1
-	// };
-	// blit.srcOffsets[1] = {
-	// 	static_cast<int32_t>(vk.rt_output_image_width),
-	// 	static_cast<int32_t>(vk.rt_output_image_height),
-	// 	1
-	// };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(width),
-		static_cast<int32_t>(height),
+		static_cast<int32_t>(vk.color_attachement.extent2D.width),
+		static_cast<int32_t>(vk.color_attachement.extent2D.height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -988,37 +963,126 @@ void RenderThread::copyToSwapchain(
 	blit.dstSubresource.baseArrayLayer = 0;
 	blit.dstSubresource.layerCount = 1;
 
-	// vkCmdBlitImage(
-	// 	vk.copy_command_buffers[vk.current_frame],
-	// 	vk.color_attachement.image,
-	// 	VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-	// 	vk.swapchain.images[vk.current_image_index],
-	// 	VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-	// 	1,
-	// 	&blit,
-	// 	VK_FILTER_LINEAR
-	// );
-
-	// vkCmdBlitImage(
-	// 	vk.copy_command_buffers[vk.current_frame],
-	// 	vk.rt_output_image,
-	// 	VK_IMAGE_LAYOUT_GENERAL,
-	// 	vk.swapchain.images[vk.current_image_index],
-	// 	VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-	// 	1,
-	// 	&blit,
-	// 	VK_FILTER_LINEAR
-	// );
-
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		src_image,
-		src_image_layout,
+		vk.color_attachement.image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 		1,
 		&blit,
 		VK_FILTER_LINEAR
+	);
+
+	VK_CHECK(
+		vkEndCommandBuffer(vk.copy_command_buffers[vk.current_frame]),
+		"Failed to record copy command buffer"
+	);
+}
+
+void RenderThread::copyToSwapchainRT()
+{
+	ZoneScoped;
+
+	// Acquire the next swap chain image
+	VkResult result = vkAcquireNextImageKHR(
+		vk.device,
+		vk.swapchain.swapchain,
+		std::numeric_limits<uint64_t>::max(),
+		vk.image_available_semaphores[vk.current_frame],
+		VK_NULL_HANDLE,
+		&vk.current_image_index
+	);
+
+	if (result == VK_ERROR_OUT_OF_DATE_KHR)
+	{
+		vk.recreateSwapChain(vk.window);
+		return;
+	}
+	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	{
+		throw std::runtime_error("Failed to acquire swap chain image");
+	}
+
+
+	// Copy the color image to the swap chain image with blit
+	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
+
+	VkCommandBufferBeginInfo copy_begin_info = {};
+	copy_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+	VK_CHECK(
+		vkBeginCommandBuffer(vk.copy_command_buffers[vk.current_frame], &copy_begin_info),
+		"Failed to begin recording copy command buffer"
+	);
+
+	vk.setImageLayout(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.swapchain.images[vk.current_image_index],
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT
+	);
+
+	vk.setImageLayout(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.rt_output_image,
+		VK_IMAGE_LAYOUT_GENERAL,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+		VK_PIPELINE_STAGE_TRANSFER_BIT
+	);
+
+	VkImageBlit blit = {};
+	blit.srcOffsets[0] = { 0, 0, 0 };
+	blit.srcOffsets[1] = {
+		static_cast<int32_t>(vk.rt_output_image_width),
+		static_cast<int32_t>(vk.rt_output_image_height),
+		1
+	};
+	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.srcSubresource.mipLevel = 0;
+	blit.srcSubresource.baseArrayLayer = 0;
+	blit.srcSubresource.layerCount = 1;
+	blit.dstOffsets[0] = { 0, 0, 0 };
+	blit.dstOffsets[1] = {
+		static_cast<int32_t>(vk.swapchain.extent.width),
+		static_cast<int32_t>(vk.swapchain.extent.height),
+		1
+	};
+	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	blit.dstSubresource.mipLevel = 0;
+	blit.dstSubresource.baseArrayLayer = 0;
+	blit.dstSubresource.layerCount = 1;
+
+	vkCmdBlitImage(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.rt_output_image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		vk.swapchain.images[vk.current_image_index],
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		1,
+		&blit,
+		VK_FILTER_LINEAR
+	);
+
+	vk.setImageLayout(
+		vk.copy_command_buffers[vk.current_frame],
+		vk.rt_output_image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		VK_IMAGE_LAYOUT_GENERAL,
+		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+		0,
+		0,
+		VK_PIPELINE_STAGE_TRANSFER_BIT,
+		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
 	);
 
 	VK_CHECK(
@@ -1127,12 +1191,20 @@ void RenderThread::drawDebugGui()
 
 void RenderThread::raytrace()
 {
+	ZoneScoped;
+	TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Raytrace");
+
+	if (vk.tlas == VK_NULL_HANDLE)
+	{
+		return;
+	}
+
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, vk.rt_pipeline);
 
 	std::vector<VkDescriptorSet> rt_descriptor_sets = {
-		vk.rt_global_descriptor.sets[vk.current_frame],
+		vk.rt_output_image_descriptor.sets[vk.current_frame],
+		vk.rt_objects_descriptor.sets[vk.current_frame],
 		vk.camera_descriptor.sets[vk.current_frame],
-		vk.rt_scene_descriptor.sets[vk.current_frame],
 	};
 
 	vkCmdBindDescriptorSets(

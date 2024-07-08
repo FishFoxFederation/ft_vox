@@ -17,12 +17,14 @@ struct Vertex
 	vec3 position;
 	vec3 normal;
 	vec2 uv;
+	// uint texLayer;
+	// uint ao;
 };
 
 layout(buffer_reference, scalar) buffer VertexBuffer { Vertex vertices[]; };
 layout(buffer_reference, scalar) buffer IndexBuffer { ivec3 indices[]; };
 
-layout(binding = 0, set = 2, scalar) buffer ObjectBuffer { ObjectData objects[]; };
+layout(binding = 1, set = 1, scalar) buffer ObjectBuffer { ObjectData objects[]; };
 
 layout(location = 0) rayPayloadInEXT vec3 hitValue;
 hitAttributeEXT vec2 attribs;
@@ -43,12 +45,12 @@ void main()
 	const vec3 barycentrics = vec3(1.0 - attribs.x - attribs.y, attribs.x, attribs.y);
 
 	// Computing the coordinates of the hit position
-	const vec3 pos      = v0.position * barycentrics.x + v1.position * barycentrics.y + v2.position * barycentrics.z;
-	const vec3 world_pos = vec3(gl_ObjectToWorldEXT * vec4(pos, 1.0));  // Transforming the position to world space
+	const vec3 pos = v0.position * barycentrics.x + v1.position * barycentrics.y + v2.position * barycentrics.z;
+	const vec3 world_pos = vec3(gl_ObjectToWorldEXT * vec4(pos, 1.0)); // Transforming the position to world space
 
 	// Computing the normal at hit position
-	const vec3 normal      = v0.normal * barycentrics.x + v1.normal * barycentrics.y + v2.normal * barycentrics.z;
-	const vec3 world_normal = normalize(vec3(normal * gl_WorldToObjectEXT));  // Transforming the normal to world space
+	const vec3 normal = v0.normal * barycentrics.x + v1.normal * barycentrics.y + v2.normal * barycentrics.z;
+	const vec3 world_normal = normalize(vec3(normal * gl_WorldToObjectEXT)); // Transforming the normal to world space
 
-	hitValue = world_normal;
+	hitValue = abs(world_normal);
 }

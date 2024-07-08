@@ -10,8 +10,7 @@ uint64_t VulkanAPI::storeMesh(
 	const uint32_t vertex_count,
 	const uint32_t vertex_size,
 	const void * indices,
-	const uint32_t index_count,
-	const VkMemoryPropertyFlags additional_memory_properties
+	const uint32_t index_count
 )
 {
 	ZoneScoped;
@@ -50,7 +49,11 @@ uint64_t VulkanAPI::storeMesh(
 
 	createBuffer(
 		buffer_size,
-		VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | additional_memory_properties,
+		VK_BUFFER_USAGE_TRANSFER_DST_BIT
+		| VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+		| VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+		| VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT
+		| VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 		mesh.buffer,
 		mesh.buffer_memory
@@ -62,6 +65,7 @@ uint64_t VulkanAPI::storeMesh(
 	vma.freeMemory(device, staging_buffer_memory, nullptr);
 
 	mesh.vertex_count = vertex_count;
+	mesh.vertex_size = vertex_size;
 	mesh.index_offset = vertex_buffer_size;
 	mesh.index_count = index_count;
 	mesh.memory_size = buffer_size;
