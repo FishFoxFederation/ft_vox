@@ -5,5 +5,8 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "alternative_main.cpp", "alternative__main_8cpp.html", "alternative__main_8cpp" ],
     [ "define.hpp", "define_8hpp.html", "define_8hpp" ],
     [ "main.cpp", "main_8cpp.html", "main_8cpp" ],
-    [ "server_define.hpp", "server__define_8hpp.html", "server__define_8hpp" ]
+    [ "server_define.hpp", "server__define_8hpp.html", "server__define_8hpp" ],
+    [ "server_main.cpp", "server__main_8cpp.html", "server__main_8cpp" ],
+    [ "tracy_globals.cpp", "tracy__globals_8cpp.html", "tracy__globals_8cpp" ],
+    [ "tracy_globals.hpp", "tracy__globals_8hpp.html", "tracy__globals_8hpp" ]
 ];

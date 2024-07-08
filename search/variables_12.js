@@ -13,7 +13,6 @@ var searchData=
   ['transfer_5fcommand_5fbuffers_10',['transfer_command_buffers',['../classVulkanAPI.html#a77a5993a4ce2374bb9c920a52476a669',1,'VulkanAPI']]],
   ['transfer_5fcommand_5fpool_11',['transfer_command_pool',['../classVulkanAPI.html#a3f4d479c32e0010b49c8400eb96340ab',1,'VulkanAPI']]],
   ['transfer_5ffamily_12',['transfer_family',['../structQueueFamilyIndices.html#a44f40b1ee7642edba5edcf8c7da9a8f7',1,'QueueFamilyIndices']]],
-  ['transfer_5foperation_5fmutex_13',['transfer_operation_mutex',['../classVulkanAPI.html#a3e2a8e23d44bb3ba01152cabbfb634d0',1,'VulkanAPI']]],
-  ['transfer_5fqueue_14',['transfer_queue',['../classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960',1,'VulkanAPI']]],
-  ['transform_15',['transform',['../classMob.html#ae5fea291d4689996bdf6a86b06396c44',1,'Mob::transform()'],['../classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d',1,'Player::transform()']]]
+  ['transfer_5fqueue_13',['transfer_queue',['../classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960',1,'VulkanAPI']]],
+  ['transform_14',['transform',['../classMob.html#ae5fea291d4689996bdf6a86b06396c44',1,'Mob::transform()'],['../classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d',1,'Player::transform()']]]
 ];

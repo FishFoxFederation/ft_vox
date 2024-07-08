@@ -1,7 +1,7 @@
 <map id="src/app/world/ServerWorld.hpp" name="src/app/world/ServerWorld.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="183,5,381,31"/>
-<area shape="rect" id="node2" href="$ServerPacketHandler_8hpp.html" title=" " alt="" coords="69,79,244,119"/>
-<area shape="rect" id="node4" href="$server__main_8cpp.html" title=" " alt="" coords="205,167,359,207"/>
-<area shape="rect" id="node5" href="$ServerWorld_8cpp.html" title=" " alt="" coords="320,86,519,111"/>
+<area shape="rect" id="node1" title=" " alt="" coords="175,5,373,31"/>
+<area shape="rect" id="node2" href="$ServerPacketHandler_8hpp.html" title=" " alt="" coords="61,79,236,119"/>
+<area shape="rect" id="node4" href="$server__main_8cpp.html" title=" " alt="" coords="205,174,343,199"/>
+<area shape="rect" id="node5" href="$ServerWorld_8cpp.html" title=" " alt="" coords="312,86,511,111"/>
 <area shape="rect" id="node3" href="$ServerPacketHandler_8cpp.html" title=" " alt="" coords="5,167,180,207"/>
 </map>

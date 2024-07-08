@@ -158,7 +158,7 @@ $(document).ready(function(){initNavTree('List_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">   49</a></span>    std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>()</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordflow">return</span> std::lock_guard&lt;std::mutex&gt;(m_mutex);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordflow">return</span> std::lock_guard(m_mutex);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">using </span>container::begin;</div>
@@ -168,25 +168,25 @@ $(document).ready(function(){initNavTree('List_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classIdList.html#a7e939a9ac873e13ea125d963ad13c426">   59</a></span>    Value <a class="code hl_function" href="classIdList.html#a7e939a9ac873e13ea125d963ad13c426">get</a>(<span class="keyword">const</span> Key &amp; key)</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">return</span> container::at(key);</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    }</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classIdList.html#a8dffea83014485c4baebd6d64d044c49">   65</a></span>    uint32_t <a class="code hl_function" href="classIdList.html#a8dffea83014485c4baebd6d64d044c49">size</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">return</span> container::size();</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="classIdList.html#a7f34fd2efe2686e03082fbd723f0fbdd">   71</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classIdList.html#a7f34fd2efe2686e03082fbd723f0fbdd">contains</a>(<span class="keyword">const</span> Key &amp; key)<span class="keyword"> const</span></div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">return</span> container::find(key) != container::end();</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    }</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="classIdList.html#a9f13a6e2c7b0ad078aec1ed58731aae2">   77</a></span>    Key <a class="code hl_function" href="classIdList.html#a9f13a6e2c7b0ad078aec1ed58731aae2">insert</a>(<span class="keyword">const</span> Value &amp; value)</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    {</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        Key key = m_id_generator.nextId();</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        container::insert(std::make_pair(key, value));</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">return</span> key;</div>
@@ -194,7 +194,7 @@ $(document).ready(function(){initNavTree('List_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classIdList.html#a5ae7d76de56fe94f1831bd1c6e834ecb">   85</a></span>    Key <a class="code hl_function" href="classIdList.html#a5ae7d76de56fe94f1831bd1c6e834ecb">insert</a>(Value &amp;&amp; value)</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    {</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        Key key = m_id_generator.nextId();</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        container::insert(std::make_pair(key, std::move(value)));</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <span class="keywordflow">return</span> key;</div>
@@ -202,25 +202,25 @@ $(document).ready(function(){initNavTree('List_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="classIdList.html#a74c071b70b6ecca184fd950f8e7d8417">   93</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classIdList.html#a74c071b70b6ecca184fd950f8e7d8417">insert</a>(<span class="keyword">const</span> Key &amp; key, <span class="keyword">const</span> Value &amp; value)</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    {</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        container::insert(std::make_pair(key, value));</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    }</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="classIdList.html#a7a325affc5650075383909a95651034b">   99</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classIdList.html#a7a325affc5650075383909a95651034b">insert</a>(<span class="keyword">const</span> Key &amp; key, Value &amp;&amp; value)</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    {</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        container::insert(std::make_pair(key, std::move(value)));</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    }</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="classIdList.html#a735bbf293da3e20da9271f5b9f0e1904">  105</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classIdList.html#a735bbf293da3e20da9271f5b9f0e1904">erase</a>(<span class="keyword">const</span> Key &amp; key)</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    {</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        container::erase(key);</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    }</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="classIdList.html#a37a32451a3f16a9129a6fc6143549609">  111</a></span>    std::vector&lt;Value&gt; <a class="code hl_function" href="classIdList.html#a37a32451a3f16a9129a6fc6143549609">values</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        std::lock_guard&lt;std::mutex&gt; <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        std::lock_guard <a class="code hl_function" href="classIdList.html#a9b8e8a2d4541b5a49fa4ea1c8cec2c4a">lock</a>(m_mutex);</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        std::vector&lt;Value&gt; <a class="code hl_function" href="classIdList.html#a37a32451a3f16a9129a6fc6143549609">values</a>;</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <a class="code hl_function" href="classIdList.html#a37a32451a3f16a9129a6fc6143549609">values</a>.reserve(container::size());</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp; [key, value] : *<span class="keyword">this</span>)</div>

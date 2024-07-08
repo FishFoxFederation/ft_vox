@@ -102,7 +102,6 @@ var hierarchy =
     [ "Timer< ChronoCount, HistorySize >", "classTimer.html", null ],
     [ "Transform", "classTransform.html", null ],
     [ "std::unordered_map", null, [
-      [ "IdList< uint64_t, Mesh >", "classIdList.html", null ],
       [ "IdList< uint64_t, WorldScene::MeshRenderData >", "classIdList.html", null ],
       [ "IdList< Key, Value, container, IdGen >", "classIdList.html", null ]
     ] ],

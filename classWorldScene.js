@@ -18,8 +18,8 @@ var classWorldScene =
     [ "setDebugBlock", "classWorldScene.html#a4af382fc1d4b7db877a750b07ceaf4b6", null ],
     [ "setTargetBlock", "classWorldScene.html#a4235cb886fbf5bd62b70d274a91e9a81", null ],
     [ "targetBlock", "classWorldScene.html#aba9acd92f94920f1ee870a735b38b0c8", null ],
+    [ "TracyLockableN", "classWorldScene.html#a9ac4be621afef099e56afdbb6e08510f", null ],
     [ "chunk_mesh_list", "classWorldScene.html#a375d67e327f3d44016f47e62ba3b6230", null ],
     [ "entity_mesh_list", "classWorldScene.html#a39a8384c40aa13380dcae1d593e6f3cb", null ],
-    [ "m_player_mutex", "classWorldScene.html#aaf887b601d55415fb9259d47f5a4fa43", null ],
     [ "m_players", "classWorldScene.html#aec9e9052db57d23eafa3acf6d1562baa", null ]
 ];

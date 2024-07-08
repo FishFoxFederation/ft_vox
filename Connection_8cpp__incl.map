@@ -1,13 +1,14 @@
 <map id="src/app/network/shared/Connection.cpp" name="src/app/network/shared/Connection.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="178,5,337,45"/>
-<area shape="rect" id="node2" href="$Connection_8hpp.html" title=" " alt="" coords="202,93,313,119"/>
+<area shape="rect" id="node1" title=" " alt="" coords="249,5,407,45"/>
+<area shape="rect" id="node2" href="$Connection_8hpp.html" title=" " alt="" coords="273,93,383,119"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,167,64,192"/>
 <area shape="rect" id="node4" title=" " alt="" coords="139,240,197,265"/>
 <area shape="rect" id="node5" title=" " alt="" coords="221,240,293,265"/>
 <area shape="rect" id="node6" title=" " alt="" coords="297,387,365,412"/>
-<area shape="rect" id="node7" href="$ConnectionSocket_8hpp.html" title=" " alt="" coords="724,167,876,192"/>
+<area shape="rect" id="node7" href="$ConnectionSocket_8hpp.html" title=" " alt="" coords="449,167,601,192"/>
 <area shape="rect" id="node8" href="$Socket_8hpp.html" title=" " alt="" coords="826,240,913,265"/>
-<area shape="rect" id="node17" href="$logger_8hpp.html" title=" " alt="" coords="361,167,442,192"/>
+<area shape="rect" id="node17" href="$logger_8hpp.html" title=" " alt="" coords="343,167,425,192"/>
+<area shape="rect" id="node23" title=" " alt="" coords="677,167,755,192"/>
 <area shape="rect" id="node9" title=" " alt="" coords="783,313,849,339"/>
 <area shape="rect" id="node10" title=" " alt="" coords="874,313,969,339"/>
 <area shape="rect" id="node11" title=" " alt="" coords="466,313,553,339"/>

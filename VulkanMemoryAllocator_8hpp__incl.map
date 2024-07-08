@@ -1,6 +1,7 @@
 <map id="src/app/vulkan/VulkanMemoryAllocator.hpp" name="src/app/vulkan/VulkanMemoryAllocator.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="67,5,264,45"/>
+<area shape="rect" id="node1" title=" " alt="" coords="125,5,323,45"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,93,117,119"/>
-<area shape="rect" id="node3" title=" " alt="" coords="142,93,189,119"/>
-<area shape="rect" id="node4" title=" " alt="" coords="213,93,270,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="142,93,221,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="245,93,291,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="315,93,373,119"/>
 </map>

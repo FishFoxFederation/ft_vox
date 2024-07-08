@@ -122,62 +122,64 @@ $(document).ready(function(){initNavTree('application_8hpp.html',''); initResiza
 <code>#include &quot;<a class="el" href="NetworkThread_8hpp_source.html">NetworkThread.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ThreadPool_8hpp_source.html">ThreadPool.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Client_8hpp_source.html">Client.hpp</a>&quot;</code><br />
+<code>#include &quot;Tracy.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="tracy__globals_8hpp_source.html">tracy_globals.hpp</a>&quot;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for application.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="application_8hpp__incl.png" border="0" usemap="#asrc_2app_2application_8hpp" alt=""/></div>
 <map name="asrc_2app_2application_8hpp" id="asrc_2app_2application_8hpp">
-<area shape="rect" title=" " alt="" coords="1439,5,1593,31"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="853,592,933,617"/>
-<area shape="rect" href="window_8hpp.html" title=" " alt="" coords="93,445,184,471"/>
-<area shape="rect" href="Settings_8hpp.html" title=" " alt="" coords="285,299,379,324"/>
-<area shape="rect" href="ClientWorld_8hpp.html" title=" " alt="" coords="1492,225,1604,251"/>
-<area shape="rect" title=" " alt="" coords="368,519,429,544"/>
-<area shape="rect" href="WorldScene_8hpp.html" title=" " alt="" coords="2118,372,2234,397"/>
-<area shape="rect" href="ThreadPool_8hpp.html" title=" " alt="" coords="792,372,904,397"/>
-<area shape="rect" href="VulkanAPI_8hpp.html" title=" " alt="" coords="2779,299,2887,324"/>
-<area shape="rect" href="RenderThread_8hpp.html" title=" " alt="" coords="934,225,1061,251"/>
-<area shape="rect" href="UpdateThread_8hpp.html" title=" " alt="" coords="1452,79,1580,104"/>
-<area shape="rect" href="Client_8hpp.html" title=" " alt="" coords="2017,299,2095,324"/>
-<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="1895,152,2057,177"/>
-<area shape="rect" href="NetworkThread_8hpp.html" title=" " alt="" coords="2011,225,2146,251"/>
-<area shape="rect" href="input_8hpp.html" title=" " alt="" coords="109,519,184,544"/>
-<area shape="rect" title=" " alt="" coords="19,592,125,617"/>
-<area shape="rect" title=" " alt="" coords="3134,592,3189,617"/>
-<area shape="rect" title=" " alt="" coords="1751,592,1809,617"/>
-<area shape="rect" title=" " alt="" coords="665,372,767,397"/>
-<area shape="rect" href="List_8hpp.html" title=" " alt="" coords="1545,445,1613,471"/>
-<area shape="rect" title=" " alt="" coords="1299,519,1410,544"/>
-<area shape="rect" href="Player_8hpp.html" title=" " alt="" coords="1941,445,2024,471"/>
-<area shape="rect" href="Camera_8hpp.html" title=" " alt="" coords="2020,519,2111,544"/>
-<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1559,519,1641,544"/>
-<area shape="rect" href="WorldGenerator_8hpp.html" title=" " alt="" coords="1029,372,1165,397"/>
-<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="1646,372,1789,397"/>
-<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="1339,299,1418,324"/>
-<area shape="rect" title=" " alt="" coords="3267,519,3325,544"/>
-<area shape="rect" href="Transform_8hpp.html" title=" " alt="" coords="2186,519,2291,544"/>
-<area shape="rect" title=" " alt="" coords="2327,592,2419,617"/>
-<area shape="rect" title=" " alt="" coords="2099,592,2290,617"/>
-<area shape="rect" title=" " alt="" coords="2872,519,2939,544"/>
-<area shape="rect" href="Model_8hpp.html" title=" " alt="" coords="2150,445,2231,471"/>
-<area shape="rect" title=" " alt="" coords="2739,445,2786,471"/>
-<area shape="rect" title=" " alt="" coords="2657,519,2732,544"/>
-<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="1083,445,1165,471"/>
-<area shape="rect" href="DebugGui_8hpp.html" title=" " alt="" coords="2409,445,2511,471"/>
-<area shape="rect" title=" " alt="" coords="2570,519,2633,544"/>
-<area shape="rect" href="vk__define_8hpp.html" title=" " alt="" coords="3560,519,3661,544"/>
-<area shape="rect" title=" " alt="" coords="3829,592,3907,617"/>
-<area shape="rect" href="vk__helper_8hpp.html" title=" " alt="" coords="3894,372,3997,397"/>
-<area shape="rect" href="VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="2462,372,2645,397"/>
-<area shape="rect" href="Command_8hpp.html" title=" " alt="" coords="3650,445,3755,471"/>
-<area shape="rect" href="Image_8hpp.html" title=" " alt="" coords="3661,372,3744,397"/>
-<area shape="rect" href="Descriptor_8hpp.html" title=" " alt="" coords="3334,445,3439,471"/>
-<area shape="rect" href="Swapchain_8hpp.html" title=" " alt="" coords="3463,445,3574,471"/>
-<area shape="rect" href="Pipeline_8hpp.html" title=" " alt="" coords="3115,445,3207,471"/>
-<area shape="rect" title=" " alt="" coords="2771,372,2896,397"/>
-<area shape="rect" title=" " alt="" coords="2920,372,3059,397"/>
-<area shape="rect" href="ClientPacketHandler_8hpp.html" title=" " alt="" coords="1655,152,1820,177"/>
+<area shape="rect" title=" " alt="" coords="1874,5,2029,31"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="1586,592,1666,617"/>
+<area shape="rect" href="window_8hpp.html" title=" " alt="" coords="105,445,195,471"/>
+<area shape="rect" href="Settings_8hpp.html" title=" " alt="" coords="2056,299,2151,324"/>
+<area shape="rect" href="ClientWorld_8hpp.html" title=" " alt="" coords="2533,225,2645,251"/>
+<area shape="rect" title=" " alt="" coords="3927,592,4005,617"/>
+<area shape="rect" title=" " alt="" coords="397,519,458,544"/>
+<area shape="rect" href="WorldScene_8hpp.html" title=" " alt="" coords="1776,372,1892,397"/>
+<area shape="rect" href="ThreadPool_8hpp.html" title=" " alt="" coords="4042,372,4154,397"/>
+<area shape="rect" href="tracy__globals_8hpp.html" title=" " alt="" coords="4191,445,4314,471"/>
+<area shape="rect" href="VulkanAPI_8hpp.html" title=" " alt="" coords="1872,299,1980,324"/>
+<area shape="rect" href="RenderThread_8hpp.html" title=" " alt="" coords="1787,225,1913,251"/>
+<area shape="rect" href="UpdateThread_8hpp.html" title=" " alt="" coords="1386,79,1514,104"/>
+<area shape="rect" href="Client_8hpp.html" title=" " alt="" coords="1229,299,1308,324"/>
+<area shape="rect" href="BlockUpdateThread_8hpp.html" title=" " alt="" coords="2297,152,2459,177"/>
+<area shape="rect" href="NetworkThread_8hpp.html" title=" " alt="" coords="2167,225,2301,251"/>
+<area shape="rect" href="input_8hpp.html" title=" " alt="" coords="197,519,271,544"/>
+<area shape="rect" title=" " alt="" coords="5,592,111,617"/>
+<area shape="rect" title=" " alt="" coords="1081,592,1136,617"/>
+<area shape="rect" title=" " alt="" coords="3133,592,3191,617"/>
+<area shape="rect" title=" " alt="" coords="3197,372,3300,397"/>
+<area shape="rect" href="List_8hpp.html" title=" " alt="" coords="3029,445,3097,471"/>
+<area shape="rect" title=" " alt="" coords="3251,519,3361,544"/>
+<area shape="rect" href="Player_8hpp.html" title=" " alt="" coords="2719,445,2802,471"/>
+<area shape="rect" href="Camera_8hpp.html" title=" " alt="" coords="2679,519,2770,544"/>
+<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="3488,519,3569,544"/>
+<area shape="rect" href="WorldGenerator_8hpp.html" title=" " alt="" coords="3578,372,3714,397"/>
+<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="2517,372,2660,397"/>
+<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="3425,299,3504,324"/>
+<area shape="rect" title=" " alt="" coords="1367,519,1426,544"/>
+<area shape="rect" href="Transform_8hpp.html" title=" " alt="" coords="2208,519,2313,544"/>
+<area shape="rect" title=" " alt="" coords="2543,592,2635,617"/>
+<area shape="rect" title=" " alt="" coords="2315,592,2505,617"/>
+<area shape="rect" title=" " alt="" coords="1762,519,1829,544"/>
+<area shape="rect" href="Model_8hpp.html" title=" " alt="" coords="2283,445,2364,471"/>
+<area shape="rect" title=" " alt="" coords="1653,445,1700,471"/>
+<area shape="rect" title=" " alt="" coords="1663,519,1738,544"/>
+<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="3679,445,3762,471"/>
+<area shape="rect" href="DebugGui_8hpp.html" title=" " alt="" coords="2592,445,2695,471"/>
+<area shape="rect" title=" " alt="" coords="2491,519,2553,544"/>
+<area shape="rect" href="vk__define_8hpp.html" title=" " alt="" coords="1058,519,1159,544"/>
+<area shape="rect" href="vk__helper_8hpp.html" title=" " alt="" coords="837,372,940,397"/>
+<area shape="rect" href="VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="2787,372,2969,397"/>
+<area shape="rect" href="Command_8hpp.html" title=" " alt="" coords="989,445,1095,471"/>
+<area shape="rect" href="Image_8hpp.html" title=" " alt="" coords="965,372,1047,397"/>
+<area shape="rect" href="Descriptor_8hpp.html" title=" " alt="" coords="1253,445,1359,471"/>
+<area shape="rect" href="Swapchain_8hpp.html" title=" " alt="" coords="1119,445,1229,471"/>
+<area shape="rect" href="Pipeline_8hpp.html" title=" " alt="" coords="1485,445,1577,471"/>
+<area shape="rect" title=" " alt="" coords="1968,372,2087,397"/>
+<area shape="rect" href="ClientPacketHandler_8hpp.html" title=" " alt="" coords="1307,152,1473,177"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">

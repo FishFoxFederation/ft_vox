@@ -8,5 +8,7 @@ var searchData=
   ['view_5ffrustum_5',['view_frustum',['../structCamera_1_1RenderInfo.html#ae916554eb253bd990d63e5b8ea35ce58',1,'Camera::RenderInfo']]],
   ['view_5fmode_6',['view_mode',['../classPlayer.html#aac46fc99a79a19b208a7057f7814225d',1,'Player']]],
   ['visible_7',['visible',['../structWorldScene_1_1PlayerRenderData.html#aaed03cb5d89530a035968a016cd1a0cc',1,'WorldScene::PlayerRenderData']]],
-  ['vma_8',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]]
+  ['vkgetcalibratedtimestampsext_8',['vkGetCalibratedTimestampsEXT',['../classVulkanAPI.html#a6c0515ff6c976c5480e82adf3ccaadb3',1,'VulkanAPI']]],
+  ['vkgetphysicaldevicecalibrateabletimedomainsext_9',['vkGetPhysicalDeviceCalibrateableTimeDomainsEXT',['../classVulkanAPI.html#a761b38015d3f933dd83fc8a47cd89113',1,'VulkanAPI']]],
+  ['vma_10',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]]
 ];

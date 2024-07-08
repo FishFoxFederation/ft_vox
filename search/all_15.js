@@ -19,11 +19,13 @@ var searchData=
   ['vk_5fhelper_16',['vk_helper',['../namespacevk__helper.html',1,'']]],
   ['vk_5fhelper_2ecpp_17',['vk_helper.cpp',['../vk__helper_8cpp.html',1,'']]],
   ['vk_5fhelper_2ehpp_18',['vk_helper.hpp',['../vk__helper_8hpp.html',1,'']]],
-  ['vma_19',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]],
-  ['vulaknmemoryallocator_20',['VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html',1,'VulaknMemoryAllocator'],['../classVulaknMemoryAllocator.html#a640bd4cb7d7185a15512e635485e6fb5',1,'VulaknMemoryAllocator::VulaknMemoryAllocator()'],['../classVulaknMemoryAllocator.html#afe98fb3b31b66dc9f83efa94fab47abc',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(const VulaknMemoryAllocator &amp;)=delete'],['../classVulaknMemoryAllocator.html#aea802393219721d2d50925a9728f615e',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(VulaknMemoryAllocator &amp;&amp;)=delete']]],
-  ['vulkanapi_21',['VulkanAPI',['../classVulkanAPI.html',1,'VulkanAPI'],['../classVulkanAPI.html#a0847afa3a3335e05c44922686174d17b',1,'VulkanAPI::VulkanAPI(GLFWwindow *window)'],['../classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad',1,'VulkanAPI::VulkanAPI(const VulkanAPI &amp;)=delete'],['../classVulkanAPI.html#af0178da68566ea2136a91746e686efdf',1,'VulkanAPI::VulkanAPI(VulkanAPI &amp;&amp;)=delete']]],
-  ['vulkanapi_2ecpp_22',['VulkanAPI.cpp',['../VulkanAPI_8cpp.html',1,'']]],
-  ['vulkanapi_2ehpp_23',['VulkanAPI.hpp',['../VulkanAPI_8hpp.html',1,'']]],
-  ['vulkanmemoryallocator_2ecpp_24',['VulkanMemoryAllocator.cpp',['../VulkanMemoryAllocator_8cpp.html',1,'']]],
-  ['vulkanmemoryallocator_2ehpp_25',['VulkanMemoryAllocator.hpp',['../VulkanMemoryAllocator_8hpp.html',1,'']]]
+  ['vkgetcalibratedtimestampsext_19',['vkGetCalibratedTimestampsEXT',['../classVulkanAPI.html#a6c0515ff6c976c5480e82adf3ccaadb3',1,'VulkanAPI']]],
+  ['vkgetphysicaldevicecalibrateabletimedomainsext_20',['vkGetPhysicalDeviceCalibrateableTimeDomainsEXT',['../classVulkanAPI.html#a761b38015d3f933dd83fc8a47cd89113',1,'VulkanAPI']]],
+  ['vma_21',['vma',['../classVulkanAPI.html#abc7ee7f42669915b4f93f5dfacbd92e5',1,'VulkanAPI']]],
+  ['vulaknmemoryallocator_22',['VulaknMemoryAllocator',['../classVulaknMemoryAllocator.html',1,'VulaknMemoryAllocator'],['../classVulaknMemoryAllocator.html#a640bd4cb7d7185a15512e635485e6fb5',1,'VulaknMemoryAllocator::VulaknMemoryAllocator()'],['../classVulaknMemoryAllocator.html#afe98fb3b31b66dc9f83efa94fab47abc',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(const VulaknMemoryAllocator &amp;)=delete'],['../classVulaknMemoryAllocator.html#aea802393219721d2d50925a9728f615e',1,'VulaknMemoryAllocator::VulaknMemoryAllocator(VulaknMemoryAllocator &amp;&amp;)=delete']]],
+  ['vulkanapi_23',['VulkanAPI',['../classVulkanAPI.html',1,'VulkanAPI'],['../classVulkanAPI.html#a0847afa3a3335e05c44922686174d17b',1,'VulkanAPI::VulkanAPI(GLFWwindow *window)'],['../classVulkanAPI.html#a5d6e6b05fcb23a206e35efdc5ece6cad',1,'VulkanAPI::VulkanAPI(const VulkanAPI &amp;)=delete'],['../classVulkanAPI.html#af0178da68566ea2136a91746e686efdf',1,'VulkanAPI::VulkanAPI(VulkanAPI &amp;&amp;)=delete']]],
+  ['vulkanapi_2ecpp_24',['VulkanAPI.cpp',['../VulkanAPI_8cpp.html',1,'']]],
+  ['vulkanapi_2ehpp_25',['VulkanAPI.hpp',['../VulkanAPI_8hpp.html',1,'']]],
+  ['vulkanmemoryallocator_2ecpp_26',['VulkanMemoryAllocator.cpp',['../VulkanMemoryAllocator_8cpp.html',1,'']]],
+  ['vulkanmemoryallocator_2ehpp_27',['VulkanMemoryAllocator.hpp',['../VulkanMemoryAllocator_8hpp.html',1,'']]]
 ];

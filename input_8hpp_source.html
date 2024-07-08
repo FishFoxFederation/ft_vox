@@ -142,7 +142,7 @@ $(document).ready(function(){initNavTree('input_8hpp_source.html',''); initResiz
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda">   59</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda">isCursorCaptured</a>()</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        std::lock_guard&lt;std::mutex&gt; lock(m_cursor_mutex);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        std::lock_guard lock(m_cursor_mutex);</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">return</span> m_cursor_captured;</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    }</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>

@@ -1,23 +1,24 @@
 <map id="src/app/DebugGui.cpp" name="src/app/DebugGui.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="718,5,869,31"/>
-<area shape="rect" id="node2" href="$DebugGui_8hpp.html" title=" " alt="" coords="505,79,607,104"/>
-<area shape="rect" id="node12" title=" " alt="" coords="685,152,760,177"/>
-<area shape="rect" id="node13" title=" " alt="" coords="785,152,853,177"/>
-<area shape="rect" id="node14" href="$logger_8hpp.html" title=" " alt="" coords="1109,79,1190,104"/>
-<area shape="rect" id="node3" href="$Camera_8hpp.html" title=" " alt="" coords="193,152,284,177"/>
-<area shape="rect" id="node7" title=" " alt="" coords="441,225,498,251"/>
-<area shape="rect" id="node8" title=" " alt="" coords="359,152,422,177"/>
-<area shape="rect" id="node9" title=" " alt="" coords="446,152,501,177"/>
-<area shape="rect" id="node10" title=" " alt="" coords="525,152,587,177"/>
-<area shape="rect" id="node11" title=" " alt="" coords="611,152,661,177"/>
-<area shape="rect" id="node4" href="$define_8hpp.html" title=" " alt="" coords="5,225,85,251"/>
-<area shape="rect" id="node5" title=" " alt="" coords="110,225,202,251"/>
-<area shape="rect" id="node6" title=" " alt="" coords="226,225,417,251"/>
-<area shape="rect" id="node15" title=" " alt="" coords="928,152,1000,177"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1024,152,1091,177"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1115,152,1184,177"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1209,152,1263,177"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1288,152,1355,177"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1379,152,1459,177"/>
-<area shape="rect" id="node21" title=" " alt="" coords="1483,152,1551,177"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1033,5,1183,31"/>
+<area shape="rect" id="node2" href="$DebugGui_8hpp.html" title=" " alt="" coords="1013,79,1115,104"/>
+<area shape="rect" id="node13" title=" " alt="" coords="1247,152,1321,177"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1346,152,1414,177"/>
+<area shape="rect" id="node15" href="$logger_8hpp.html" title=" " alt="" coords="358,79,439,104"/>
+<area shape="rect" id="node3" href="$Camera_8hpp.html" title=" " alt="" coords="1081,152,1172,177"/>
+<area shape="rect" id="node7" title=" " alt="" coords="681,225,738,251"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1198,225,1277,251"/>
+<area shape="rect" id="node9" title=" " alt="" coords="755,152,818,177"/>
+<area shape="rect" id="node10" title=" " alt="" coords="842,152,897,177"/>
+<area shape="rect" id="node11" title=" " alt="" coords="921,152,983,177"/>
+<area shape="rect" id="node12" title=" " alt="" coords="1007,152,1057,177"/>
+<area shape="rect" id="node4" href="$define_8hpp.html" title=" " alt="" coords="1093,225,1173,251"/>
+<area shape="rect" id="node5" title=" " alt="" coords="762,225,854,251"/>
+<area shape="rect" id="node6" title=" " alt="" coords="878,225,1069,251"/>
+<area shape="rect" id="node16" title=" " alt="" coords="5,152,77,177"/>
+<area shape="rect" id="node17" title=" " alt="" coords="101,152,168,177"/>
+<area shape="rect" id="node18" title=" " alt="" coords="192,152,261,177"/>
+<area shape="rect" id="node19" title=" " alt="" coords="286,152,341,177"/>
+<area shape="rect" id="node20" title=" " alt="" coords="365,152,432,177"/>
+<area shape="rect" id="node21" title=" " alt="" coords="456,152,536,177"/>
+<area shape="rect" id="node22" title=" " alt="" coords="561,152,629,177"/>
 </map>

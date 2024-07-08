@@ -185,11 +185,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a60c19c665bddaa431f7c61aba55d3d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3733354eaf71b26f23344fe257c3d943"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a3733354eaf71b26f23344fe257c3d943">startUse</a> ()</td></tr>
 <tr class="separator:a3733354eaf71b26f23344fe257c3d943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afda6980b5f15ef154c0d3ba057a36819"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#afda6980b5f15ef154c0d3ba057a36819">TracyLockableN</a> (std::mutex, mutex, &quot;Player internal&quot;)</td></tr>
+<tr class="separator:afda6980b5f15ef154c0d3ba057a36819"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a3b9c92200177ccc5ab23fc2c8f436b98"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a3b9c92200177ccc5ab23fc2c8f436b98">mutex</a></td></tr>
-<tr class="separator:a3b9c92200177ccc5ab23fc2c8f436b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39ad689468b2763f5b735a5e4fb78113"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292d">Player::GameMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a39ad689468b2763f5b735a5e4fb78113">gameMode</a> = <a class="el" href="classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19">GameMode::SPECTATOR</a></td></tr>
 <tr class="separator:a39ad689468b2763f5b735a5e4fb78113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac46fc99a79a19b208a7057f7814225d"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8">Player::ViewMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aac46fc99a79a19b208a7057f7814225d">view_mode</a> = <a class="el" href="classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8a25cddcf7d5a6ec236403ee4a5ad8c00f">ViewMode::FIRST_PERSON</a></td></tr>
@@ -715,6 +715,40 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="afda6980b5f15ef154c0d3ba057a36819" name="afda6980b5f15ef154c0d3ba057a36819"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afda6980b5f15ef154c0d3ba057a36819">&#9670;&#160;</a></span>TracyLockableN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Player::TracyLockableN </td>
+          <td>(</td>
+          <td class="paramtype">std::mutex&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mutex&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Player internal&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a51abadfb0aa236bcb754b23a60288bb5" name="a51abadfb0aa236bcb754b23a60288bb5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a51abadfb0aa236bcb754b23a60288bb5">&#9670;&#160;</a></span>default_speed</h2>
@@ -878,20 +912,6 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool Player::jumping = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3b9c92200177ccc5ab23fc2c8f436b98" name="a3b9c92200177ccc5ab23fc2c8f436b98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b9c92200177ccc5ab23fc2c8f436b98">&#9670;&#160;</a></span>mutex</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex Player::mutex</td>
         </tr>
       </table>
 </div><div class="memdoc">

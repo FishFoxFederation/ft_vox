@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VOX: src/app/network/server_main.cpp File Reference</title>
+<title>VOX: src/server_main.cpp File Reference</title>
 <!--BEGIN PROJECT_ICON-->
 <link rel="icon" href="$projecticon" type="image/x-icon" />
 <!--END PROJECT_ICON-->
@@ -123,61 +123,62 @@ $(document).ready(function(){initNavTree('server__main_8cpp.html',''); initResiz
 <code>#include &lt;thread&gt;</code><br />
 <code>#include &quot;<a class="el" href="logger_8hpp_source.html">logger.hpp</a>&quot;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
+<code>#include &quot;<a class="el" href="tracy__globals_8hpp_source.html">tracy_globals.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for server_main.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="server__main_8cpp__incl.png" border="0" usemap="#asrc_2app_2network_2server__main_8cpp" alt=""/></div>
-<map name="asrc_2app_2network_2server__main_8cpp" id="asrc_2app_2network_2server__main_8cpp">
-<area shape="rect" title=" " alt="" coords="1449,5,1604,45"/>
-<area shape="rect" href="Connection_8hpp.html" title=" " alt="" coords="823,533,934,559"/>
-<area shape="rect" title=" " alt="" coords="811,680,883,705"/>
-<area shape="rect" title=" " alt="" coords="37,753,104,779"/>
-<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1765,607,1846,632"/>
-<area shape="rect" href="Server_8hpp.html" title=" " alt="" coords="1026,167,1150,192"/>
-<area shape="rect" title=" " alt="" coords="1322,313,1433,339"/>
-<area shape="rect" href="PacketFactory_8hpp.html" title=" " alt="" coords="1159,240,1289,265"/>
-<area shape="rect" href="ServerPacketHandler_8hpp.html" title=" " alt="" coords="1441,93,1612,119"/>
-<area shape="rect" href="ServerWorld_8hpp.html" title=" " alt="" coords="1604,167,1721,192"/>
-<area shape="rect" title=" " alt="" coords="1925,387,1984,412"/>
-<area shape="rect" title=" " alt="" coords="2098,93,2153,119"/>
-<area shape="rect" title=" " alt="" coords="2177,93,2237,119"/>
-<area shape="rect" title=" " alt="" coords="2261,93,2323,119"/>
-<area shape="rect" title=" " alt="" coords="861,607,920,632"/>
-<area shape="rect" title=" " alt="" coords="1439,680,1497,705"/>
-<area shape="rect" title=" " alt="" coords="949,827,1017,852"/>
-<area shape="rect" href="ConnectionSocket_8hpp.html" title=" " alt="" coords="483,607,635,632"/>
-<area shape="rect" href="Socket_8hpp.html" title=" " alt="" coords="402,680,489,705"/>
-<area shape="rect" title=" " alt="" coords="398,753,493,779"/>
-<area shape="rect" title=" " alt="" coords="517,753,603,779"/>
-<area shape="rect" title=" " alt="" coords="681,753,759,779"/>
-<area shape="rect" title=" " alt="" coords="295,753,374,779"/>
-<area shape="rect" href="Poller_8hpp.html" title=" " alt="" coords="129,753,207,779"/>
-<area shape="rect" title=" " alt="" coords="5,827,67,852"/>
-<area shape="rect" title=" " alt="" coords="127,827,209,852"/>
-<area shape="rect" title=" " alt="" coords="1680,680,1747,705"/>
-<area shape="rect" title=" " alt="" coords="1771,680,1840,705"/>
-<area shape="rect" title=" " alt="" coords="1865,680,1919,705"/>
-<area shape="rect" title=" " alt="" coords="1944,680,2011,705"/>
-<area shape="rect" title=" " alt="" coords="1576,680,1656,705"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="1573,387,1653,412"/>
-<area shape="rect" title=" " alt="" coords="1023,240,1084,265"/>
-<area shape="rect" href="ServerSocket_8hpp.html" title=" " alt="" coords="263,533,388,559"/>
-<area shape="rect" href="IncomingPacketList_8hpp.html" title=" " alt="" coords="1387,387,1549,412"/>
-<area shape="rect" title=" " alt="" coords="227,607,291,632"/>
-<area shape="rect" title=" " alt="" coords="315,607,408,632"/>
-<area shape="rect" href="Packets_8hpp.html" title=" " alt="" coords="853,313,947,339"/>
-<area shape="rect" href="PlayerMovePacket_8hpp.html" title=" " alt="" coords="1208,387,1363,412"/>
-<area shape="rect" href="PlayerConnectedPacket_8hpp.html" title=" " alt="" coords="465,387,650,412"/>
-<area shape="rect" href="ConnectionPacket_8hpp.html" title=" " alt="" coords="675,387,827,412"/>
-<area shape="rect" href="DisconnectPacket_8hpp.html" title=" " alt="" coords="851,387,1003,412"/>
-<area shape="rect" href="BlockActionPacket_8hpp.html" title=" " alt="" coords="1027,387,1184,412"/>
-<area shape="rect" href="IPacket_8hpp.html" title=" " alt="" coords="921,460,1012,485"/>
-<area shape="rect" title=" " alt="" coords="1571,460,1629,485"/>
-<area shape="rect" title=" " alt="" coords="1879,313,1971,339"/>
-<area shape="rect" href="server__define_8hpp.html" title=" " alt="" coords="1516,240,1639,265"/>
-<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="1714,240,1793,265"/>
-<area shape="rect" href="ThreadPool_8hpp.html" title=" " alt="" coords="1636,313,1748,339"/>
-<area shape="rect" title=" " alt="" coords="1817,240,1921,265"/>
+<div class="center"><img src="server__main_8cpp__incl.png" border="0" usemap="#asrc_2server__main_8cpp" alt=""/></div>
+<map name="asrc_2server__main_8cpp" id="asrc_2server__main_8cpp">
+<area shape="rect" title=" " alt="" coords="1357,5,1496,31"/>
+<area shape="rect" href="Connection_8hpp.html" title=" " alt="" coords="802,519,913,544"/>
+<area shape="rect" title=" " alt="" coords="844,665,916,691"/>
+<area shape="rect" title=" " alt="" coords="37,739,104,764"/>
+<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1347,592,1429,617"/>
+<area shape="rect" href="Server_8hpp.html" title=" " alt="" coords="962,152,1086,177"/>
+<area shape="rect" title=" " alt="" coords="1310,299,1421,324"/>
+<area shape="rect" href="PacketFactory_8hpp.html" title=" " alt="" coords="1147,225,1277,251"/>
+<area shape="rect" href="ServerPacketHandler_8hpp.html" title=" " alt="" coords="1403,79,1573,104"/>
+<area shape="rect" href="ServerWorld_8hpp.html" title=" " alt="" coords="1612,152,1729,177"/>
+<area shape="rect" title=" " alt="" coords="1896,445,1955,471"/>
+<area shape="rect" href="tracy__globals_8hpp.html" title=" " alt="" coords="1828,519,1951,544"/>
+<area shape="rect" title=" " alt="" coords="2035,79,2090,104"/>
+<area shape="rect" title=" " alt="" coords="2114,79,2174,104"/>
+<area shape="rect" title=" " alt="" coords="2199,79,2260,104"/>
+<area shape="rect" title=" " alt="" coords="895,592,953,617"/>
+<area shape="rect" title=" " alt="" coords="1130,665,1187,691"/>
+<area shape="rect" title=" " alt="" coords="1007,812,1075,837"/>
+<area shape="rect" href="ConnectionSocket_8hpp.html" title=" " alt="" coords="465,592,617,617"/>
+<area shape="rect" href="Socket_8hpp.html" title=" " alt="" coords="337,665,423,691"/>
+<area shape="rect" title=" " alt="" coords="1650,592,1729,617"/>
+<area shape="rect" title=" " alt="" coords="497,739,591,764"/>
+<area shape="rect" title=" " alt="" coords="283,739,370,764"/>
+<area shape="rect" title=" " alt="" coords="655,739,732,764"/>
+<area shape="rect" title=" " alt="" coords="394,739,473,764"/>
+<area shape="rect" href="Poller_8hpp.html" title=" " alt="" coords="129,739,207,764"/>
+<area shape="rect" title=" " alt="" coords="5,812,67,837"/>
+<area shape="rect" title=" " alt="" coords="127,812,209,837"/>
+<area shape="rect" title=" " alt="" coords="1263,665,1329,691"/>
+<area shape="rect" title=" " alt="" coords="1353,665,1423,691"/>
+<area shape="rect" title=" " alt="" coords="1447,665,1502,691"/>
+<area shape="rect" title=" " alt="" coords="1527,665,1593,691"/>
+<area shape="rect" title=" " alt="" coords="1617,665,1697,691"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="1420,445,1500,471"/>
+<area shape="rect" title=" " alt="" coords="960,225,1021,251"/>
+<area shape="rect" href="ServerSocket_8hpp.html" title=" " alt="" coords="199,519,324,544"/>
+<area shape="rect" href="IncomingPacketList_8hpp.html" title=" " alt="" coords="1067,372,1229,397"/>
+<area shape="rect" title=" " alt="" coords="377,592,441,617"/>
+<area shape="rect" title=" " alt="" coords="260,592,353,617"/>
+<area shape="rect" href="Packets_8hpp.html" title=" " alt="" coords="739,299,834,324"/>
+<area shape="rect" href="PlayerMovePacket_8hpp.html" title=" " alt="" coords="888,372,1043,397"/>
+<area shape="rect" href="PlayerConnectedPacket_8hpp.html" title=" " alt="" coords="502,372,687,397"/>
+<area shape="rect" href="ConnectionPacket_8hpp.html" title=" " alt="" coords="712,372,864,397"/>
+<area shape="rect" href="IPacket_8hpp.html" title=" " alt="" coords="865,445,956,471"/>
+<area shape="rect" title=" " alt="" coords="1287,445,1345,471"/>
+<area shape="rect" title=" " alt="" coords="1454,299,1546,324"/>
+<area shape="rect" href="server__define_8hpp.html" title=" " alt="" coords="1504,225,1627,251"/>
+<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="1651,225,1730,251"/>
+<area shape="rect" href="ThreadPool_8hpp.html" title=" " alt="" coords="1633,372,1745,397"/>
+<area shape="rect" title=" " alt="" coords="1805,225,1909,251"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -210,7 +211,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5194e5fea318fda12687127c23f8aba1.html">app</a></li><li class="navelem"><a class="el" href="dir_4ef74e756346c53bf9c397b20b3a88d5.html">network</a></li><li class="navelem"><a class="el" href="server__main_8cpp.html">server_main.cpp</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="server__main_8cpp.html">server_main.cpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

@@ -8,12 +8,12 @@ var classWorld =
     [ "insertChunk", "classWorld.html#acfd5f2a2c19381826debe4d0b5ac3c50", null ],
     [ "operator=", "classWorld.html#af69b86b3ac37a2168715401267d104ab", null ],
     [ "operator=", "classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa", null ],
+    [ "TracyLockableN", "classWorld.html#a2aceeb77eacb247872f3c3a1b422cd15", null ],
+    [ "TracyLockableN", "classWorld.html#a456108e02a2cf121c20b3436d293614a", null ],
+    [ "TracyLockableN", "classWorld.html#a4430c3b7f548d58f0aa64deabf26357c", null ],
     [ "m_chunks", "classWorld.html#afe23d5e9f0c87a03212fad1b73249926", null ],
-    [ "m_chunks_mutex", "classWorld.html#a7fced6f101ff215e8818cffedf858ebb", null ],
     [ "m_mob_id", "classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05", null ],
     [ "m_mobs", "classWorld.html#a9befd190fce3a87e810b479bbfad356f", null ],
-    [ "m_mobs_mutex", "classWorld.html#a31ea2f70b814860d8c6ab6195a2c56d6", null ],
     [ "m_players", "classWorld.html#a9b6166c32096dff1f9e29a78743945f1", null ],
-    [ "m_players_mutex", "classWorld.html#ac8905e640eda96df40ba2f5eca926417", null ],
     [ "m_world_generator", "classWorld.html#a47cc090d4ed08b81df6748abb8daea0e", null ]
 ];

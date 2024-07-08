@@ -176,6 +176,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a39f2d721590c28dcf1bd9723298cdd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa30c05b2a0f01c1b9ba0be17fa80f732"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structWorldScene_1_1DebugBlock.html">DebugBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aa30c05b2a0f01c1b9ba0be17fa80f732">debugBlocks</a> () const</td></tr>
 <tr class="separator:aa30c05b2a0f01c1b9ba0be17fa80f732"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ac4be621afef099e56afdbb6e08510f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#a9ac4be621afef099e56afdbb6e08510f">TracyLockableN</a> (std::mutex, m_player_mutex, &quot;Player Render Data&quot;)</td></tr>
+<tr class="separator:a9ac4be621afef099e56afdbb6e08510f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -185,8 +187,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a39a8384c40aa13380dcae1d593e6f3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec9e9052db57d23eafa3acf6d1562baa"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint64_t, <a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aec9e9052db57d23eafa3acf6d1562baa">m_players</a></td></tr>
 <tr class="separator:aec9e9052db57d23eafa3acf6d1562baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf887b601d55415fb9259d47f5a4fa43"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aaf887b601d55415fb9259d47f5a4fa43">m_player_mutex</a></td></tr>
-<tr class="separator:aaf887b601d55415fb9259d47f5a4fa43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class to hold the world scene. The instance of this class will be accessed by multiple threads so it will include synchronization logic. </p>
@@ -506,6 +506,48 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9ac4be621afef099e56afdbb6e08510f" name="a9ac4be621afef099e56afdbb6e08510f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ac4be621afef099e56afdbb6e08510f">&#9670;&#160;</a></span>TracyLockableN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">WorldScene::TracyLockableN </td>
+          <td>(</td>
+          <td class="paramtype">std::mutex&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">m_player_mutex&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Player Render Data&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a375d67e327f3d44016f47e62ba3b6230" name="a375d67e327f3d44016f47e62ba3b6230"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a375d67e327f3d44016f47e62ba3b6230">&#9670;&#160;</a></span>chunk_mesh_list</h2>
@@ -531,28 +573,6 @@ Public Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classIdList.html">IdList</a>&lt;uint64_t, <a class="el" href="structWorldScene_1_1MeshRenderData.html">MeshRenderData</a>&gt; WorldScene::entity_mesh_list</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aaf887b601d55415fb9259d47f5a4fa43" name="aaf887b601d55415fb9259d47f5a4fa43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf887b601d55415fb9259d47f5a4fa43">&#9670;&#160;</a></span>m_player_mutex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex WorldScene::m_player_mutex</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
