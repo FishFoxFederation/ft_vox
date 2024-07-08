@@ -111,12 +111,8 @@ private:
 		const glm::mat4 & model
 	);
 
-	void copyToSwapchain(
-		VkImage src_image,
-		uint32_t width,
-		uint32_t height,
-		VkImageLayout src_image_layout
-	);
+	void copyToSwapchain();
+	void copyToSwapchainRT();
 
 	void drawDebugGui();
 

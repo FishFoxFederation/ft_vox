@@ -13,7 +13,7 @@ ClientWorld::ClientWorld(
 	// m_players(),
 {
 	m_my_player_id = my_player_id;
-	addPlayer(m_my_player_id, glm::dvec3(1.0, 0.0, 1.0));
+	addPlayer(m_my_player_id, glm::dvec3(-1.0, 0.0, 0.0));
 }
 
 ClientWorld::~ClientWorld()
@@ -304,6 +304,11 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 			});
 			chunk->setMeshID(mesh_scene_id);
+
+			// m_vulkanAPI.addMeshToScene(
+			// 	mesh_scene_id,
+			// 	Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
+			// );
 		}
 
 		if (m_worldScene.chunk_mesh_list.contains(old_mesh_scene_id))
@@ -311,6 +316,8 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 			uint64_t mesh_id = m_worldScene.chunk_mesh_list.get(old_mesh_scene_id).id;
 			m_worldScene.chunk_mesh_list.erase(old_mesh_scene_id);
 			m_vulkanAPI.destroyMesh(mesh_id);
+
+			// m_vulkanAPI.removeMeshFromScene(old_mesh_scene_id);
 		}
 
 		mesh_data.unlock();
