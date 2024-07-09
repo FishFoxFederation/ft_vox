@@ -1714,6 +1714,7 @@ void VulkanAPI::setupTracy()
 	}
 
 	const char * const ctx_name = "Gpu rendering";
+	(void)ctx_name;
 	ctx = TracyVkContextCalibrated(
 		physical_device,
 		device,

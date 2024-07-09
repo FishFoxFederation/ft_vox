@@ -108,6 +108,8 @@ public:
 	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id, false};
 
 	uint64_t connection_id = 0;
+	uint64_t player_id = 0;
+	uint64_t player_ticket_id = 0;
 
 private:
 

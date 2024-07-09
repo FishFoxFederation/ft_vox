@@ -109,8 +109,6 @@ private:
 
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
-	ThreadPool &							m_threadPool;
-
 
 	/*************************************
 	 *  CHUNKS AND MAP
@@ -123,14 +121,6 @@ private:
 
 	std::unordered_set<glm::ivec2> 			m_unload_set;
 	TracyLockableN							(std::mutex, m_unload_set_mutex, "Unload Set");
-
-
-	std::unordered_map<uint64_t, std::future<void>> m_futures;
-
-	std::queue<uint64_t>					m_finished_futures;
-	TracyLockableN							(std::mutex, m_finished_futures_mutex, "Finished Futures");
-
-	uint64_t								m_future_id = 0;
 
 	std::queue<std::pair<glm::vec3, BlockID>> m_blocks_to_set;
 	TracyLockableN							(std::mutex, m_blocks_to_set_mutex, "Blocks to set");
@@ -207,11 +197,6 @@ private:
 
 	void	setChunkNotMeshed(const glm::ivec2 & chunkPosition);
 
-	/*************************************
-	 *  FUTURES
-	 *************************************/
-	void	waitForFinishedFutures();
-	void	waitForFutures();
 
 	/*************************************
 	 *  ENTITIES

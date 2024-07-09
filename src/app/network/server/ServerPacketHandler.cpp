@@ -30,7 +30,7 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		}
 		case IPacket::Type::BLOCK_ACTION:
 		{
-			m_world.handlePacket(packet);
+			m_world.handleBlockActionPacket(std::dynamic_pointer_cast<BlockActionPacket>(packet));
 			break;
 		}
 		case IPacket::Type::CHUNK_REQUEST:
@@ -67,22 +67,17 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 
 
 	//send all other players to new player
-	std::vector<PlayerListPacket::PlayerInfo> players;
-	for(auto player : m_player_positions)
-		players.push_back(PlayerListPacket::PlayerInfo{player.first, player.second});
-	packet_to_send = std::make_shared<PlayerListPacket>(players);
-	packet_to_send->SetConnectionId(CurrentConnectionId);
-	m_server.send(packet_to_send);
+	// std::vector<PlayerListPacket::PlayerInfo> players;
+	// for(auto player : m_player_positions)
+	// 	players.push_back(PlayerListPacket::PlayerInfo{player.first, player.second});
+	// packet_to_send = std::make_shared<PlayerListPacket>(players);
+	// packet_to_send->SetConnectionId(CurrentConnectionId);
+	// m_server.send(packet_to_send);
 
 
 	//notify world of new player
 	m_world.handleConnectionPacket(packet);
 
-
-
-
-	//add new player to list
-	m_player_positions[CurrentPlayerId] = CurrentPlayerPosition;
 
 	//add new player to connection id map
 	m_player_to_connection_id[CurrentPlayerId] = CurrentConnectionId;
@@ -98,13 +93,14 @@ void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacke
 	auto player_id = m_connection_to_player_id[connection_id];
 
 	LOG_INFO("DISCONNECT PACKET: " << player_id);
-	m_player_positions.erase(player_id);
 	m_player_to_connection_id.erase(player_id);
 	m_connection_to_player_id.erase(connection_id);
 
 	auto packet_to_send = std::make_shared<DisconnectPacket>(player_id);
 	packet_to_send->SetConnectionId(connection_id);
 	m_server.sendAll(packet_to_send);
+
+	m_world.handleDisconnectPacket(packet);
 }
 
 void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
@@ -112,41 +108,36 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 	ZoneScoped;
 	// LOG_INFO("Player move: " << packet->GetId());
 
-	glm::vec3 old_position = m_player_positions[packet->GetPlayerId()];
-	glm::vec3 new_position = packet->GetPosition();
 
 	//send move to everyone	
 	auto packet_to_send = std::make_shared<PlayerMovePacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_server.sendAll(packet_to_send);
 
-	m_player_positions[packet->GetPlayerId()] = new_position;
-
-	//if player changed chunk, re trigger the chunk load/unload
-	glm::ivec3 old_chunk = m_world.getChunkPosition(old_position);
-	glm::ivec3 new_chunk = m_world.getChunkPosition(new_position);
+	//transfer packet to world
+	m_world.handlePlayerMovePacket(packet);
 
 	//for now ignore if player goes above or under the world
-	old_chunk.y = 0;
-	new_chunk.y = 0;
-	if (old_chunk != new_chunk)
-	{
-		LOG_INFO("Player moved to new chunk: " << new_chunk.x << " " << new_chunk.y << " " << new_chunk.z);
-		auto chunk_data = m_world.getChunksToUnload(old_position, new_position);
-		for (auto chunk : chunk_data.chunks_to_load)
-		{
-			auto packet_to_send = std::make_shared<ChunkPacket>(*chunk);
-			packet_to_send->SetConnectionId(packet->GetConnectionId());
-			m_server.send(packet_to_send);
-		}
+	// old_chunk.y = 0;
+	// new_chunk.y = 0;
+	// if (old_chunk != new_chunk)
+	// {
+	// 	LOG_INFO("Player moved to new chunk: " << new_chunk.x << " " << new_chunk.y << " " << new_chunk.z);
+	// 	auto chunk_data = m_world.getChunksToUnload(old_position, new_position);
+	// 	for (auto chunk : chunk_data.chunks_to_load)
+	// 	{
+	// 		auto packet_to_send = std::make_shared<ChunkPacket>(*chunk);
+	// 		packet_to_send->SetConnectionId(packet->GetConnectionId());
+	// 		m_server.send(packet_to_send);
+	// 	}
 
-		for (auto chunk : chunk_data.chunks_to_unload)
-		{
-			auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk);
-			packet_to_send->SetConnectionId(packet->GetConnectionId());
-			m_server.send(packet_to_send);
-		}
-	}
+	// 	for (auto chunk : chunk_data.chunks_to_unload)
+	// 	{
+	// 		auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk);
+	// 		packet_to_send->SetConnectionId(packet->GetConnectionId());
+	// 		m_server.send(packet_to_send);
+	// 	}
+	// }
 }
 
 void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)

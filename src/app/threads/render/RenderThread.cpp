@@ -42,7 +42,16 @@ void RenderThread::launch()
 
 		while (!m_thread.get_stop_token().stop_requested())
 		{
+			auto start_time = std::chrono::high_resolution_clock::now();
 			loop();
+			auto end_time = std::chrono::high_resolution_clock::now();
+
+			//i want 60fps so if not enough time passed wait a bit
+			std::chrono::nanoseconds frame_time = end_time - start_time;
+			if (frame_time < std::chrono::nanoseconds(16666666))
+			{
+				std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
+			}
 		}
 	}
 	catch (const std::exception & e)

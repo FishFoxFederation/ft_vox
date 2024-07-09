@@ -19,7 +19,7 @@
 class World
 {
 public:
-	World();
+	World(ThreadPool & threadpool);
 	~World();
 
 	World(World & other) = delete;
@@ -55,6 +55,19 @@ protected:
 
 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>>	m_chunks;
 	mutable TracyLockableN									(std::mutex,	m_chunks_mutex, "Chunks");
+
+	ThreadPool & 										m_threadPool;
+	std::unordered_map<uint64_t, std::future<void>> 	m_futures;
+
+	std::queue<uint64_t>								m_finished_futures;
+	TracyLockableN										(std::mutex, m_finished_futures_mutex, "Finished Futures");
+
+	uint64_t											m_future_id = 0;
 	WorldGenerator										m_world_generator;
 
+	/*************************************
+	 *  FUTURES
+	 *************************************/
+	void	waitForFinishedFutures();
+	void	waitForFutures();
 };
