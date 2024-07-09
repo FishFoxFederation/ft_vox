@@ -11,7 +11,6 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 layout(push_constant) uniform PushConstants
 {
 	mat4 model;
-	vec3 sunDir;
 }pc;
 
 layout(location = 0) in vec3 position;

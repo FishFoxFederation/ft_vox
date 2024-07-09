@@ -660,6 +660,8 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 		shadow_map_depth_attachement.sampler,
 		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 	);
+
+	handleResizeRT();
 }
 
 VkSurfaceFormatKHR VulkanAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
@@ -1053,7 +1055,7 @@ void VulkanAPI::createDescriptors()
 		sampler_layout_binding.binding = 0;
 		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
 		sampler_layout_binding.pImmutableSamplers = nullptr;
 
 		Descriptor::CreateInfo descriptor_info = {};
@@ -1225,7 +1227,7 @@ void VulkanAPI::createDescriptors()
 		ubo_layout_binding.binding = 0;
 		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_MISS_BIT_KHR;
 		ubo_layout_binding.pImmutableSamplers = nullptr;
 
 		Descriptor::CreateInfo descriptor_info = {};
@@ -1433,7 +1435,7 @@ void VulkanAPI::createPipelines()
 			atmosphere_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyShaderData) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
@@ -1814,6 +1816,16 @@ void VulkanAPI::destroyRayTracing()
 	vma.freeMemory(device, rt_sbt_buffer_memory, nullptr);
 }
 
+void VulkanAPI::handleResizeRT()
+{
+	vkDestroyImage(device, rt_output_image, nullptr);
+	vma.freeMemory(device, rt_output_image_memory, nullptr);
+	vkDestroyImageView(device, rt_output_image_view, nullptr);
+
+	createRayTracingOutputImage();
+	updateRTOutputImageDescriptor();
+}
+
 void VulkanAPI::getRayTracingProperties()
 {
 	VkPhysicalDeviceProperties2 properties = {};
@@ -2008,7 +2020,7 @@ void VulkanAPI::destroyBottomLevelAS(BottomLevelAS & blas)
 	vkDestroyBuffer(device, blas.buffer, nullptr);
 	vkDestroyBuffer(device, blas.transform_buffer, nullptr);
 
-	memset(&blas, 0, sizeof(BottomLevelAS));
+	blas = {};
 
 	blas_count--;
 }
@@ -2081,7 +2093,7 @@ void VulkanAPI::destroyInstance(InstanceData & instance)
 	vma.freeMemory(device, instance.memory, nullptr);
 	vkDestroyBuffer(device, instance.buffer, nullptr);
 
-	memset(&instance, 0, sizeof(InstanceData));
+	instance = {};
 
 	instance_count--;
 }
@@ -2241,8 +2253,8 @@ void VulkanAPI::createTopLevelAS(const std::vector<InstanceData> & instance_list
 
 void VulkanAPI::createRayTracingOutputImage()
 {
-	rt_output_image_width = swapchain.extent.width;
-	rt_output_image_height = swapchain.extent.height;
+	rt_output_image_width = swapchain.extent.width * 2;
+	rt_output_image_height = swapchain.extent.height * 2;
 
 	createImage(
 		rt_output_image_width,
@@ -2443,7 +2455,9 @@ void VulkanAPI::createRayTracingPipeline()
 	std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {
 		rt_output_image_descriptor.layout,
 		rt_objects_descriptor.layout,
-		camera_descriptor.layout
+		camera_descriptor.layout,
+		block_textures_descriptor.layout,
+		atmosphere_descriptor.layout
 	};
 
 	VkPipelineLayoutCreateInfo pipeline_layout_info = {};

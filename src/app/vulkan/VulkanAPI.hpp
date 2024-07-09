@@ -172,12 +172,6 @@ struct ShadowMapLight
 	glm::mat4 model;
 };
 
-struct SkyShaderData
-{
-	glm::mat4 model;
-	glm::vec3 sun_direction;
-};
-
 struct GuiTextureData
 {
 	glm::vec2 position;
@@ -186,6 +180,7 @@ struct GuiTextureData
 
 struct AtmosphereParams
 {
+	glm::vec3 sun_direction;
 	float earth_radius;
 	float atmosphere_radius;
 	float player_height;
@@ -577,6 +572,7 @@ private:
 
 	void setupRayTracing();
 	void destroyRayTracing();
+	void handleResizeRT();
 	void getRayTracingProperties();
 	int createBottomLevelAS(uint64_t mesh_id);
 	void destroyBottomLevelAS(BottomLevelAS & blas);

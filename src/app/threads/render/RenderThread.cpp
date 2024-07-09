@@ -158,6 +158,7 @@ void RenderThread::loop()
 		target_block = m_world_scene.targetBlock();
 		debug_blocks = m_world_scene.debugBlocks();
 
+		atmosphere_params.sun_direction = glm::normalize(sun_position - camera.position);
 		atmosphere_params.earth_radius = DebugGui::earth_radius;
 		atmosphere_params.atmosphere_radius = DebugGui::atmosphere_radius;
 		atmosphere_params.beta_rayleigh = DebugGui::beta_rayleigh;
@@ -791,16 +792,15 @@ void RenderThread::lightingPass(
 			nullptr
 		);
 
-		SkyShaderData sky_shader_data = {};
+		ModelMatrice sky_shader_data = {};
 		sky_shader_data.model = glm::translate(glm::dmat4(1.0f), camera.position);
-		sky_shader_data.sun_direction = glm::normalize(sun_position - camera.position);
 
 		vk.drawMesh(
 			vk.sun_pipeline,
 			vk.icosphere_mesh_id,
 			&sky_shader_data,
-			sizeof(SkyShaderData),
-			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+			sizeof(ModelMatrice),
+			VK_SHADER_STAGE_VERTEX_BIT
 		);
 	}
 
@@ -1205,6 +1205,8 @@ void RenderThread::raytrace()
 		vk.rt_output_image_descriptor.sets[vk.current_frame],
 		vk.rt_objects_descriptor.sets[vk.current_frame],
 		vk.camera_descriptor.sets[vk.current_frame],
+		vk.block_textures_descriptor.set,
+		vk.atmosphere_descriptor.sets[vk.current_frame],
 	};
 
 	vkCmdBindDescriptorSets(
