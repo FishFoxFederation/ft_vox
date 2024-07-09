@@ -5,6 +5,7 @@
 #include "DebugGui.hpp"
 #include "Timer.hpp"
 #include "logger.hpp"
+#include "ObjLoader.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -17,7 +18,7 @@
 
 struct BlockVertex
 {
-	glm::ivec3 pos;
+	glm::vec3 pos;
 	glm::vec3 normal;
 	glm::vec2 texCoord;
 	uint32_t texLayer;

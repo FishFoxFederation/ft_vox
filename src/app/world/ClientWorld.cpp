@@ -13,7 +13,7 @@ ClientWorld::ClientWorld(
 	// m_players(),
 {
 	m_my_player_id = my_player_id;
-	addPlayer(m_my_player_id, glm::dvec3(-1.0, 0.0, 0.0));
+	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
 }
 
 ClientWorld::~ClientWorld()
@@ -194,6 +194,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 			mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
 			m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
 			m_vulkanAPI.destroyMesh(mesh_id);
+			m_vulkanAPI.removeMeshFromScene(mesh_id);
 		}
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
@@ -305,10 +306,10 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 			});
 			chunk->setMeshID(mesh_scene_id);
 
-			// m_vulkanAPI.addMeshToScene(
-			// 	mesh_scene_id,
-			// 	Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
-			// );
+			m_vulkanAPI.addMeshToScene(
+				mesh_id,
+				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
+			);
 		}
 
 		if (m_worldScene.chunk_mesh_list.contains(old_mesh_scene_id))
@@ -317,7 +318,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 			m_worldScene.chunk_mesh_list.erase(old_mesh_scene_id);
 			m_vulkanAPI.destroyMesh(mesh_id);
 
-			// m_vulkanAPI.removeMeshFromScene(old_mesh_scene_id);
+			m_vulkanAPI.removeMeshFromScene(mesh_id);
 		}
 
 		mesh_data.unlock();

@@ -400,8 +400,6 @@ public:
 	uint64_t player_right_arm_mesh_id;
 	uint64_t player_left_arm_mesh_id;
 
-	uint64_t template_mesh_id;
-
 	// Ray tracing
 	// VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_features;
 	VkPhysicalDeviceRayTracingPipelinePropertiesKHR ray_tracing_properties;
@@ -410,6 +408,7 @@ public:
 
 	struct BottomLevelAS
 	{
+		bool is_used = false;
 		VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
 		VkBuffer buffer = VK_NULL_HANDLE;
 		VkDeviceMemory memory = VK_NULL_HANDLE;
@@ -421,16 +420,18 @@ public:
 		void * transform_mapped_memory = nullptr;
 
 		uint64_t mesh_id = 0;
-		uint32_t instance_custom_index;
+		uint32_t instance_custom_index = 0;
 	};
 
 	std::vector<BottomLevelAS> blas_list;
+	uint32_t blas_count = 0;
 
 	struct InstanceData
 	{
+		bool is_used = false;
 		glm::mat4 transform = glm::mat4(1.0f);
 		uint64_t blas_address = 0;
-		uint32_t custom_index;
+		uint32_t custom_index = 0;
 
 		VkBuffer buffer = VK_NULL_HANDLE;
 		VkDeviceMemory memory = VK_NULL_HANDLE;
@@ -438,7 +439,8 @@ public:
 		void * mapped_memory = nullptr;
 	};
 
-	std::vector<InstanceData> instance_data_list;
+	std::vector<InstanceData> instance_list;
+	uint32_t instance_count = 0;
 
 	VkAccelerationStructureKHR tlas = VK_NULL_HANDLE;
 	VkBuffer tlas_buffer = VK_NULL_HANDLE;
@@ -452,6 +454,8 @@ public:
 
 	VkBuffer rt_mesh_data_buffer = VK_NULL_HANDLE;
 	VkDeviceMemory rt_mesh_data_buffer_memory = VK_NULL_HANDLE;
+	VkDeviceSize rt_mesh_data_buffer_size = 0;
+	uint32_t rt_mesh_data_buffer_count = 0;
 
 
 	VkImage rt_output_image;
@@ -512,7 +516,8 @@ private:
 		VK_KHR_RAY_QUERY_EXTENSION_NAME,
 		VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
 		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
-		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
+		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
+		VK_KHR_8BIT_STORAGE_EXTENSION_NAME
 	};
 
 
@@ -573,11 +578,12 @@ private:
 	void setupRayTracing();
 	void destroyRayTracing();
 	void getRayTracingProperties();
-	void createBottomLevelAS(uint64_t mesh_id);
+	int createBottomLevelAS(uint64_t mesh_id);
 	void destroyBottomLevelAS(BottomLevelAS & blas);
-	void createInstanceData(const BottomLevelAS & blas, const glm::mat4 & transform);
+	int createInstance(const BottomLevelAS & blas, const glm::mat4 & transform);
+	void destroyInstance(InstanceData & instance);
 	void createMeshDataBuffer();
-	void createTopLevelAS(const std::vector<BottomLevelAS> & blas_list);
+	void createTopLevelAS(const std::vector<InstanceData> & instance_list);
 	void createRayTracingOutputImage();
 	void createRayTracingDescriptor();
 	void updateRTOutputImageDescriptor();
@@ -592,7 +598,7 @@ private:
 	);
 	void removeMeshFromTopLevelAS(const uint64_t mesh_id);
 	VkTransformMatrixKHR glmToVkTransformMatrix(const glm::mat4 & matrix);
-	void updateMeshTransform(const uint64_t mesh_id, const glm::mat4 & transform);
+	void updateInstanceTransform(const uint32_t instance_id, const glm::mat4 & transform);
 
 
 

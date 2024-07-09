@@ -111,6 +111,7 @@ void VulkanAPI::destroyMeshes()
 				vkDestroyBuffer(device, mesh.buffer, nullptr);
 				vma.freeMemory(device, mesh.buffer_memory, nullptr);
 				mesh_map.erase(id);
+				removeMeshFromTopLevelAS(id);
 			}
 			else
 			{

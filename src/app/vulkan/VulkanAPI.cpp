@@ -544,19 +544,10 @@ void VulkanAPI::createLogicalDevice()
 	device_features.wideLines = VK_TRUE;
 	device_features.shaderInt64 = VK_TRUE;
 
-	// VkPhysicalDeviceBufferDeviceAddressFeaturesEXT buffer_device_address_features_ext = {};
-	// buffer_device_address_features_ext.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT;
-	// buffer_device_address_features_ext.bufferDeviceAddress = VK_TRUE;
-
-	VkPhysicalDeviceBufferDeviceAddressFeatures buffer_device_address_features = {};
-	buffer_device_address_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
-	buffer_device_address_features.bufferDeviceAddress = VK_TRUE;
-	// buffer_device_address_features.pNext = &buffer_device_address_features_ext;
 
 	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
 	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
 	ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
-	ray_tracing_pipeline_features.pNext = &buffer_device_address_features;
 
 	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
 	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
@@ -568,15 +559,14 @@ void VulkanAPI::createLogicalDevice()
 	dynamic_rendering_features.dynamicRendering = VK_TRUE;
 	dynamic_rendering_features.pNext = &acceleration_structure_features;
 
-	// VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
-	// vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
-	// vulkan_12_features.bufferDeviceAddress = VK_TRUE;
-	// vulkan_12_features.pNext = &dynamic_rendering_features;
+	VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
+	vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+	vulkan_12_features.bufferDeviceAddress = VK_TRUE;
+	vulkan_12_features.descriptorIndexing = VK_TRUE;
+	vulkan_12_features.shaderInt8 = VK_TRUE;
+	vulkan_12_features.storageBuffer8BitAccess = VK_TRUE;
+	vulkan_12_features.pNext = &dynamic_rendering_features;
 
-	// VkPhysicalDeviceFeatures2 device_features_2 = {};
-	// device_features_2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-	// device_features_2.features = device_features;
-	// device_features_2.pNext = &vulkan_12_features;
 
 	VkDeviceCreateInfo create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -586,7 +576,7 @@ void VulkanAPI::createLogicalDevice()
 	create_info.enabledExtensionCount = static_cast<uint32_t>(device_extensions.size());
 	create_info.ppEnabledExtensionNames = device_extensions.data();
 
-	create_info.pNext = &dynamic_rendering_features;
+	create_info.pNext = &vulkan_12_features;
 
 	#ifndef NDEBUG
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
@@ -1781,16 +1771,6 @@ void VulkanAPI::setupRayTracing()
 	createRayTracingPipeline();
 	createRayTracingShaderBindingTable();
 
-	createBottomLevelAS(cube_mesh_id);
-	createBottomLevelAS(icosphere_mesh_id);
-	createMeshDataBuffer();
-
-	createInstanceData(blas_list[0], glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-	createInstanceData(blas_list[1], glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
-
-	createTopLevelAS(blas_list);
-	updateRTObjectsDescriptor();
-
 	LOG_INFO("Ray tracing setup complete");
 }
 
@@ -1802,10 +1782,9 @@ void VulkanAPI::destroyRayTracing()
 		destroyBottomLevelAS(blas_list[i]);
 	}
 
-	for (uint32_t i = 0; i < instance_data_list.size(); i++)
+	for (uint32_t i = 0; i < instance_list.size(); i++)
 	{
-		vkDestroyBuffer(device, instance_data_list[i].buffer, nullptr);
-		vma.freeMemory(device, instance_data_list[i].memory, nullptr);
+		destroyInstance(instance_list[i]);
 	}
 
 	if (tlas != VK_NULL_HANDLE)
@@ -1861,12 +1840,12 @@ void VulkanAPI::getRayTracingProperties()
 	vkGetPhysicalDeviceProperties2(physical_device, &properties);
 }
 
-void VulkanAPI::createBottomLevelAS(uint64_t mesh_id)
+int VulkanAPI::createBottomLevelAS(uint64_t mesh_id)
 {
 	int blas_index = -1;
 	for (uint32_t i = 0; i < blas_list.size(); i++)
 	{
-		if (blas_list[i].handle == VK_NULL_HANDLE)
+		if (blas_list[i].is_used == false)
 		{
 			blas_index = i;
 			break;
@@ -1878,9 +1857,12 @@ void VulkanAPI::createBottomLevelAS(uint64_t mesh_id)
 		blas_list.push_back({});
 	}
 
+	blas_count++;
+
 	Mesh & mesh = mesh_map[mesh_id];
 
 	BottomLevelAS & blas = blas_list[blas_index];
+	blas.is_used = true;
 	blas.instance_custom_index = blas_index;
 	blas.mesh_id = mesh_id;
 
@@ -1999,25 +1981,57 @@ void VulkanAPI::createBottomLevelAS(uint64_t mesh_id)
 	device_address_info.accelerationStructure = blas.handle;
 
 	blas.address = vkGetAccelerationStructureDeviceAddressKHR(device, &device_address_info);
+
+	return blas_index;
 }
 
 void VulkanAPI::destroyBottomLevelAS(BottomLevelAS & blas)
 {
+	if (blas.is_used == false)
+	{
+		return;
+	}
+
+	for (uint32_t i = 0; i < instance_list.size(); i++)
+	{
+		if (instance_list[i].blas_address == blas.address)
+		{
+			// LOG_WARNING("Destroying Bottom Level AS triggers instance destruction");
+			destroyInstance(instance_list[i]);
+		}
+	}
+
 	vkDestroyAccelerationStructureKHR(device, blas.handle, nullptr);
 	vkUnmapMemory(device, blas.transform_buffer_memory);
-	// vkUnmapMemory(device, blas.instance_buffer_memory);
 	vma.freeMemory(device, blas.memory, nullptr);
 	vma.freeMemory(device, blas.transform_buffer_memory, nullptr);
-	// vma.freeMemory(device, blas.instance_buffer_memory, nullptr);
 	vkDestroyBuffer(device, blas.buffer, nullptr);
 	vkDestroyBuffer(device, blas.transform_buffer, nullptr);
-	// vkDestroyBuffer(device, blas.instance_buffer, nullptr);
 
-	blas.handle = VK_NULL_HANDLE;
+	memset(&blas, 0, sizeof(BottomLevelAS));
+
+	blas_count--;
 }
 
-void VulkanAPI::createInstanceData(const BottomLevelAS & blas, const glm::mat4 & transform)
+int VulkanAPI::createInstance(const BottomLevelAS & blas, const glm::mat4 & transform)
 {
+	int instance_index = -1;
+	for (uint32_t i = 0; i < instance_list.size(); i++)
+	{
+		if (instance_list[i].is_used == false)
+		{
+			instance_index = i;
+			break;
+		}
+	}
+	if (instance_index == -1)
+	{
+		instance_index = instance_list.size();
+		instance_list.push_back({});
+	}
+
+	instance_count++;
+
 	VkAccelerationStructureInstanceKHR instance = {};
 	instance.transform = glmToVkTransformMatrix(transform);
 	instance.instanceCustomIndex = blas.instance_custom_index;
@@ -2042,7 +2056,8 @@ void VulkanAPI::createInstanceData(const BottomLevelAS & blas, const glm::mat4 &
 
 	VkDeviceAddress instance_address = getBufferDeviceAddress(instance_buffer);
 
-	instance_data_list.push_back({
+	instance_list[instance_index] = InstanceData({
+		.is_used = true,
 		.transform = transform,
 		.blas_address = blas.address,
 		.custom_index = blas.instance_custom_index,
@@ -2051,22 +2066,51 @@ void VulkanAPI::createInstanceData(const BottomLevelAS & blas, const glm::mat4 &
 		.address = instance_address,
 		.mapped_memory = data
 	});
+
+	return instance_index;
+}
+
+void VulkanAPI::destroyInstance(InstanceData & instance)
+{
+	if (instance.is_used == false)
+	{
+		return;
+	}
+
+	vkUnmapMemory(device, instance.memory);
+	vma.freeMemory(device, instance.memory, nullptr);
+	vkDestroyBuffer(device, instance.buffer, nullptr);
+
+	memset(&instance, 0, sizeof(InstanceData));
+
+	instance_count--;
 }
 
 void VulkanAPI::createMeshDataBuffer()
 {
-	std::vector<RTMeshData> mesh_data(blas_list.size());
+	std::vector<RTMeshData> mesh_data;
 	for (uint32_t i = 0; i < blas_list.size(); i++)
 	{
+		if (blas_list[i].is_used == false)
+		{
+			mesh_data.push_back({});
+			continue;
+		}
+
 		Mesh & mesh = mesh_map.at(blas_list[i].mesh_id);
-		mesh_data[i].vertex_buffer_address = getBufferDeviceAddress(mesh.buffer);
-		mesh_data[i].index_buffer_address = mesh_data[i].vertex_buffer_address + mesh.index_offset;
+
+		RTMeshData data = {};
+		data.vertex_buffer_address = getBufferDeviceAddress(mesh.buffer);
+		data.index_buffer_address = data.vertex_buffer_address + mesh.index_offset;
+
+		mesh_data.push_back(data);
 	}
 
-	VkDeviceSize buffer_size = sizeof(RTMeshData) * mesh_data.size();
+	rt_mesh_data_buffer_count = mesh_data.size();
+	rt_mesh_data_buffer_size = sizeof(RTMeshData) * mesh_data.size();
 
 	createBuffer(
-		buffer_size,
+		rt_mesh_data_buffer_size,
 		VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
 		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 		rt_mesh_data_buffer,
@@ -2074,17 +2118,22 @@ void VulkanAPI::createMeshDataBuffer()
 	);
 
 	void * data;
-	vkMapMemory(device, rt_mesh_data_buffer_memory, 0, buffer_size, 0, &data);
-	memcpy(data, mesh_data.data(), buffer_size);
+	vkMapMemory(device, rt_mesh_data_buffer_memory, 0, rt_mesh_data_buffer_size, 0, &data);
+	memcpy(data, mesh_data.data(), rt_mesh_data_buffer_size);
 	vkUnmapMemory(device, rt_mesh_data_buffer_memory);
 }
 
-void VulkanAPI::createTopLevelAS(const std::vector<BottomLevelAS> & blas_list)
+void VulkanAPI::createTopLevelAS(const std::vector<InstanceData> & instance_list)
 {
-	std::vector<VkDeviceOrHostAddressConstKHR> instance_addresses(blas_list.size());
-	for (uint32_t i = 0; i < instance_data_list.size(); i++)
+	std::vector<VkDeviceOrHostAddressConstKHR> instance_addresses;
+	for (uint32_t i = 0; i < instance_list.size(); i++)
 	{
-		instance_addresses[i].deviceAddress = instance_data_list[i].address;
+		if (instance_list[i].is_used)
+		{
+			instance_addresses.push_back({
+				.deviceAddress = instance_list[i].address
+			});
+		}
 	}
 
 	VkBuffer as_instances_buffer;
@@ -2308,7 +2357,7 @@ void VulkanAPI::updateRTObjectsDescriptor()
 	VkDescriptorBufferInfo buffer_info = {};
 	buffer_info.buffer = rt_mesh_data_buffer;
 	buffer_info.offset = 0;
-	buffer_info.range = sizeof(RTMeshData) * blas_list.size();
+	buffer_info.range = rt_mesh_data_buffer_size;
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -2545,57 +2594,85 @@ void VulkanAPI::addMeshToTopLevelAS(
 	const glm::mat4 & transform
 )
 {
-	createBottomLevelAS(mesh_id);
-	updateMeshTransform(mesh_id, transform);
-
-	// Destroy the mesh data buffer and recreate it
-	if (rt_mesh_data_buffer != VK_NULL_HANDLE)
+	try
 	{
-		vkDestroyBuffer(device, rt_mesh_data_buffer, nullptr);
-		vma.freeMemory(device, rt_mesh_data_buffer_memory, nullptr);
-		rt_mesh_data_buffer = VK_NULL_HANDLE;
-	}
-	createMeshDataBuffer();
+		int blas_id = createBottomLevelAS(mesh_id);
 
-	// Destroy the TLAS and recreate it
-	if (tlas != VK_NULL_HANDLE)
+		VkBuffer rt_mesh_data_buffer_tmp = rt_mesh_data_buffer;
+		VkDeviceMemory rt_mesh_data_buffer_memory_tmp = rt_mesh_data_buffer_memory;
+		createMeshDataBuffer();
+
+		createInstance(blas_list[blas_id], transform);
+
+		VkAccelerationStructureKHR tlas_tmp = tlas;
+		VkBuffer tlas_buffer_tmp = tlas_buffer;
+		VkDeviceMemory tlas_buffer_memory_tmp = tlas_buffer_memory;
+		createTopLevelAS(instance_list);
+
+		updateRTObjectsDescriptor();
+
+
+		if (rt_mesh_data_buffer_tmp != VK_NULL_HANDLE)
+		{
+			vkDestroyBuffer(device, rt_mesh_data_buffer_tmp, nullptr);
+			vma.freeMemory(device, rt_mesh_data_buffer_memory_tmp, nullptr);
+		}
+
+		if (tlas_tmp != VK_NULL_HANDLE)
+		{
+			vkDestroyAccelerationStructureKHR(device, tlas_tmp, nullptr);
+			vkDestroyBuffer(device, tlas_buffer_tmp, nullptr);
+			vma.freeMemory(device, tlas_buffer_memory_tmp, nullptr);
+		}
+	}
+	catch (const std::exception & e)
 	{
-		vkDestroyAccelerationStructureKHR(device, tlas, nullptr);
-		vkDestroyBuffer(device, tlas_buffer, nullptr);
-		vma.freeMemory(device, tlas_buffer_memory, nullptr);
-		tlas = VK_NULL_HANDLE;
+		LOG_ERROR("Failed to add mesh to top level AS: " << e.what());
 	}
-	createTopLevelAS(blas_list);
-
-	// Update the objects descriptor
-	updateRTObjectsDescriptor();
 }
 
 void VulkanAPI::removeMeshFromTopLevelAS(const uint64_t mesh_id)
 {
-	// Find the BLAS with the mesh id and destroy it
-	for (uint32_t i = 0; i < blas_list.size(); i++)
+	try
 	{
-		if (blas_list[i].mesh_id == mesh_id)
+		// Find the BLAS with the mesh id and destroy it
+		for (uint32_t i = 0; i < blas_list.size(); i++)
 		{
-			destroyBottomLevelAS(blas_list[i]);
-			break;
+			if (blas_list[i].mesh_id == mesh_id)
+			{
+				destroyBottomLevelAS(blas_list[i]);
+				break;
+			}
+		}
+
+		VkBuffer rt_mesh_data_buffer_tmp = rt_mesh_data_buffer;
+		VkDeviceMemory rt_mesh_data_buffer_memory_tmp = rt_mesh_data_buffer_memory;
+		createMeshDataBuffer();
+
+		VkAccelerationStructureKHR tlas_tmp = tlas;
+		VkBuffer tlas_buffer_tmp = tlas_buffer;
+		VkDeviceMemory tlas_buffer_memory_tmp = tlas_buffer_memory;
+		createTopLevelAS(instance_list);
+
+		updateRTObjectsDescriptor();
+
+		if (rt_mesh_data_buffer_tmp != VK_NULL_HANDLE)
+		{
+			vkDestroyBuffer(device, rt_mesh_data_buffer_tmp, nullptr);
+			vma.freeMemory(device, rt_mesh_data_buffer_memory_tmp, nullptr);
+		}
+
+		if (tlas_tmp != VK_NULL_HANDLE)
+		{
+			vkDestroyAccelerationStructureKHR(device, tlas_tmp, nullptr);
+			vkDestroyBuffer(device, tlas_buffer_tmp, nullptr);
+			vma.freeMemory(device, tlas_buffer_memory_tmp, nullptr);
 		}
 	}
-
-	// Destroy the mesh data buffer and recreate it
-	vkDestroyBuffer(device, rt_mesh_data_buffer, nullptr);
-	vma.freeMemory(device, rt_mesh_data_buffer_memory, nullptr);
-	createMeshDataBuffer();
-
-	// Destroy the TLAS and recreate it
-	vkDestroyAccelerationStructureKHR(device, tlas, nullptr);
-	vkDestroyBuffer(device, tlas_buffer, nullptr);
-	vma.freeMemory(device, tlas_buffer_memory, nullptr);
-	createTopLevelAS(blas_list);
-
-	// Update the objects descriptor
-	updateRTObjectsDescriptor();
+	catch (const std::exception & e)
+	{
+		LOG_ERROR("Failed to remove mesh from top level AS: " << e.what());
+	}
 }
 
 VkTransformMatrixKHR VulkanAPI::glmToVkTransformMatrix(const glm::mat4 & matrix)
@@ -2607,30 +2684,22 @@ VkTransformMatrixKHR VulkanAPI::glmToVkTransformMatrix(const glm::mat4 & matrix)
 	};
 }
 
-void VulkanAPI::updateMeshTransform(const uint64_t mesh_id, const glm::mat4 & transform)
+void VulkanAPI::updateInstanceTransform(const uint32_t instance_id, const glm::mat4 & transform)
 {
-	for (uint32_t i = 0; i < blas_list.size(); i++)
-	{
-		if (blas_list[i].mesh_id == mesh_id)
-		{
-			// VkTransformMatrixKHR transform_matrix = glmToVkTransformMatrix(transform);
+	VkTransformMatrixKHR transform_matrix = glmToVkTransformMatrix(transform);
 
-			// memcpy(blas_list[i].instance_mapped_memory, &transform_matrix, sizeof(VkTransformMatrixKHR));
-			break;
-		}
-	}
-
+	memcpy(instance_list[instance_id].mapped_memory, &transform_matrix, sizeof(VkTransformMatrixKHR));
 }
 
 void VulkanAPI::addMeshToScene(const uint64_t mesh_id, const glm::mat4 & transform)
 {
-	std::lock_guard lock2(global_mutex);
+	std::lock_guard lock(global_mutex);
 	addMeshToTopLevelAS(mesh_id, transform);
 }
 
 void VulkanAPI::removeMeshFromScene(const uint64_t mesh_id)
 {
-	std::lock_guard lock2(global_mutex);
+	std::lock_guard lock(global_mutex);
 	removeMeshFromTopLevelAS(mesh_id);
 }
 
