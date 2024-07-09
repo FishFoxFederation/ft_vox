@@ -1,7 +1,7 @@
 #include "ServerWorld.hpp"
 
 ServerWorld::ServerWorld(Server & server)
-:	World(), 
+:	World(),
 	m_server(server)
 {
 	addTicket({TICKET_LEVEL_SPAWN, glm::ivec3(0, 0, 0)});

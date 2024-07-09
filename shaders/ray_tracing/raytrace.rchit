@@ -3,6 +3,8 @@
 #extension GL_EXT_nonuniform_qualifier : enable
 #extension GL_EXT_scalar_block_layout : enable
 // #extension GL_GOOGLE_include_directive : enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int8 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int32 : require
 #extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
 #extension GL_EXT_buffer_reference2 : require
 
@@ -17,8 +19,8 @@ struct Vertex
 	vec3 position;
 	vec3 normal;
 	vec2 uv;
-	// uint texLayer;
-	// uint ao;
+	uint32_t texLayer;
+	uint8_t ao;
 };
 
 layout(buffer_reference, scalar) buffer VertexBuffer { Vertex vertices[]; };
@@ -53,4 +55,13 @@ void main()
 	const vec3 world_normal = normalize(vec3(normal * gl_WorldToObjectEXT)); // Transforming the normal to world space
 
 	hitValue = abs(world_normal);
+	// if (gl_InstanceCustomIndexEXT > objects[0].index)
+	// {
+	// 	hitValue = vec3(0.8, 0.0, 0.0);
+	// }
+	// else
+	// {
+	// 	hitValue = vec3(0.0, 0.7, 0.0);
+	// }
+	// hitValue = vec3(1.0, 0.0, 0.0);
 }

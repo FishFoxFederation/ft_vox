@@ -11,6 +11,7 @@ int main(int argc, char **argv)
 {
 	// logger.setTimestamp(false);
 	logger.setLevel(Logger::DEBUG);
+	logger.configure("log");
 	try
 	{
 		std::string ip = IP_ADDRESS;

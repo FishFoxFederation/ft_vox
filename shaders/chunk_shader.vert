@@ -17,7 +17,7 @@ layout(push_constant) uniform PushConstants
 	mat4 model;
 }pc;
 
-layout(location = 0) in ivec3 positions;
+layout(location = 0) in vec3 positions;
 layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
 layout(location = 3) in uint texLayer;
