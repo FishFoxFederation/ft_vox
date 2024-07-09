@@ -12,12 +12,15 @@
 #include "logger.hpp"
 #include <chrono>
 #include "tracy_globals.hpp"
+#include "ServerBlockUpdateThread.hpp"
 
 int main()
 {
 	LOG_INFO("Server started");
+	ThreadPool threadPool;
 	Server server(4245);
-	ServerWorld world;
+	ServerWorld world(server, threadPool);
+	ServerBlockUpdateThread block_update_thread(world);	
 	ServerPacketHandler packet_handler(server, world);
 	// std::thread server_thread([&server](){
 	// 	server.run();

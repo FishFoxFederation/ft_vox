@@ -24,7 +24,6 @@ public:
 private:
 	Server &	m_server;
 	ServerWorld & m_world;
-	std::unordered_map<uint64_t, glm::dvec3> m_player_positions;
 	std::unordered_map<uint64_t, uint64_t> m_player_to_connection_id;
 	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
 

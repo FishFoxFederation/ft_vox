@@ -1,73 +1,76 @@
 #include "ServerWorld.hpp"
 
-std::vector<glm::ivec3> ServerWorld::getBlockUpdateChunks() const
+const std::unordered_set<glm::ivec3> & ServerWorld::getBlockUpdateChunks() const
 {
-	std::vector<glm::ivec3> chunks;
-	std::lock_guard lock(m_chunks_mutex);
-	for (auto & [position, chunk] : m_chunks)
-	{
-		if (chunk->getLoadLevel() == TICKET_LEVEL_BLOCK_UPDATE)
-			chunks.push_back(position);
-	}
-	return chunks;
+	return m_block_update_chunks;
 }
 
-std::vector<glm::ivec3> ServerWorld::getEntityUpdateChunks() const
+const std::unordered_set<glm::ivec3> & ServerWorld::getEntityUpdateChunks() const
 {
-	std::vector<glm::ivec3> chunks;
-	std::lock_guard lock(m_chunks_mutex);
-	for (auto & [position, chunk] : m_chunks)
-	{
-		if (chunk->getLoadLevel() == TICKET_LEVEL_ENTITY_UPDATE)
-			chunks.push_back(position);
-	}
-	return chunks;
+	return m_entity_update_chunks;
 }
 
-std::vector<ServerWorld::Ticket> ServerWorld::getTickets() const
+const ServerWorld::TicketMultiMap & ServerWorld::getTickets() const
 {
 	std::lock_guard lock(m_tickets_mutex);
 	return m_active_tickets;
 }
 
-void ServerWorld::addTicket(const ServerWorld::Ticket & ticket)
+uint64_t ServerWorld::addTicket(const ServerWorld::Ticket & ticket)
 {
 	std::lock_guard lock(m_tickets_mutex);
-	m_tickets_to_add.push_back(ticket);
+	LOG_INFO("Adding ticket: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
+	m_tickets_to_add.insert({ticket.hash(), ticket});
+	return (ticket.hash());
 }
 
-void ServerWorld::removeTicket(const ServerWorld::Ticket & ticket)
+void ServerWorld::removeTicket(const uint64_t & ticket_id)
 {
 	std::lock_guard lock(m_tickets_mutex);
-	m_tickets_to_remove.push_back(ticket);
+	m_tickets_to_remove.insert(ticket_id);
+}
+
+uint64_t ServerWorld::changeTicket(const uint64_t & old_ticket_id, const ServerWorld::Ticket & new_ticket)
+{
+	std::lock_guard lock(m_tickets_mutex);
+	m_tickets_to_remove.insert(old_ticket_id);
+	m_tickets_to_add.insert({new_ticket.hash(), new_ticket});
+	return new_ticket.hash();
 }
 
 void ServerWorld::updateTickets()
 {
+	ZoneScopedN("Update Tickets");
 	std::lock_guard lock(m_tickets_mutex);
-	std::lock_guard lock2(m_chunks_mutex);
 	bool changed = false;
+
+
+	//very important to add first and remove last
+	//otherwise we might not remove a ticket that was added then removed in the same tick
+
+	if (!m_tickets_to_add.empty())
+	{
+		changed = true;
+		for (auto & ticket : m_tickets_to_add)
+			m_active_tickets.insert(ticket);
+		m_tickets_to_add.clear();
+		//no need to clear load levels when only adding to a floodfill
+	}
 
 	if (!m_tickets_to_remove.empty())
 	{
 		changed = true;
 		for (auto & ticket : m_tickets_to_remove)
 		{
-			auto it = std::find(m_active_tickets.begin(), m_active_tickets.end(), ticket);
+			auto it = m_active_tickets.find(ticket);
 			if (it != m_active_tickets.end())
+			{
+				// LOG_INFO("Removing ticket: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
 				m_active_tickets.erase(it);
+			}
 		}
+		m_tickets_to_remove.clear();
 		clearChunksLoadLevel();
-	}
-
-	if (!m_tickets_to_add.empty())
-	{
-		changed = true;
-		for (auto & ticket : m_tickets_to_add)
-		{
-			m_active_tickets.push_back(ticket);
-		}
-		//no need to clear when only adding to a floodfill
 	}
 
 	if (changed)
@@ -85,29 +88,37 @@ void ServerWorld::clearChunksLoadLevel()
 	m_border_chunks.clear();
 }
 
-void ServerWorld::floodFill(const std::vector<ServerWorld::Ticket> & tickets)
+void ServerWorld::floodFill(const TicketMultiMap & tickets)
 {
+	LOG_INFO("ENTERING FLOODFILL");
 	std::queue<Ticket> queue;
 	for (auto & ticket : tickets)
-		queue.push(ticket);
-
+	{
+		// LOG_INFO("Adding ticket to floodfill: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
+		queue.push(ticket.second);
+	}
 	while (!queue.empty())
 	{
 		auto current = queue.front();
 		queue.pop();
-		if (current.level > 44)
+		if (current.level > TICKET_LEVEL_INACTIVE)
 			continue;
 
 		//visit the chunk
 
 		std::shared_ptr<Chunk> chunk = getChunk(current.position);
-		
+
 		if (chunk == nullptr)
+		{
 			chunk = std::make_shared<Chunk>(current.position);
+			insertChunk(current.position, chunk);
+		}
+		// chunk->status.lock();
 		if (current.level >= chunk->getLoadLevel())
 			continue;
+		// LOG_INFO("Visiting chunk at:" << current.position.x << " " << current.position.z << " with level: " << current.level);
 		if (current.level <= TICKET_LEVEL_INACTIVE && !chunk->isGenerated())
-			m_world_generator.generateChunkColumn(current.position.x, current.position.z, chunk);
+			asyncGenChunk(current.position);
 		
 		if (current.level <= TICKET_LEVEL_ENTITY_UPDATE)
 			m_entity_update_chunks.insert(current.position);
@@ -122,14 +133,13 @@ void ServerWorld::floodFill(const std::vector<ServerWorld::Ticket> & tickets)
 		// add the neighbors
 		for (int x = -1; x <= 1; x++)
 		{
-			for (int y = -1; y <= 1; y++)
+			for (int z = -1; z <= 1; z++)
 			{
-				for (int z = -1; z <= 1; z++)
-				{
-					glm::ivec3 new_position = current.position + glm::ivec3(x, y, z);
+				if (x == 0 && z == 0)
+					continue;
+				glm::ivec3 new_position = current.position + glm::ivec3(x, 0, z);
 
-					queue.push(Ticket{current.level + 1, new_position});
-				}
+				queue.push(Ticket{current.level + 1, new_position});
 			}
 		}
 	}

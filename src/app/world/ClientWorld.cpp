@@ -7,11 +7,11 @@ ClientWorld::ClientWorld(
 	ThreadPool & threadPool,
 	uint64_t my_player_id
 )
-:	m_worldScene(WorldScene),
-	m_vulkanAPI(vulkanAPI),
-	m_threadPool(threadPool),
+:
+	World(threadPool),	
+	m_worldScene(WorldScene),
+	m_vulkanAPI(vulkanAPI)
 	// m_players(),
-	m_future_id(0)
 {
 	m_my_player_id = my_player_id;
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
@@ -19,7 +19,6 @@ ClientWorld::ClientWorld(
 
 ClientWorld::~ClientWorld()
 {
-	waitForFutures();
 }
 
 void ClientWorld::updateBlock(glm::dvec3 position)
@@ -415,29 +414,6 @@ void ClientWorld::doBlockSets()
 	// m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
-void ClientWorld::waitForFinishedFutures()
-{
-	ZoneScoped;
-	std::lock_guard lock(m_finished_futures_mutex);
-	while(!m_finished_futures.empty())
-	{
-		uint64_t id = m_finished_futures.front();
-		m_finished_futures.pop();
-		auto & future = m_futures.at(id);
-		future.get();
-		m_futures.erase(id);
-	}
-}
-
-void ClientWorld::waitForFutures()
-{
-	while(!m_futures.empty())
-	{
-		m_futures.begin()->second.get();
-		m_futures.erase(m_futures.begin());
-	}
-}
-
 void ClientWorld::updateEntities()
 {
 }
@@ -559,7 +535,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	}
 	else // if player is flying
 	{
-		double acc = 100.0;
+		double acc = 1000.0;
 		double drag = 10.0;
 
 		move.y = up - down;
@@ -1106,6 +1082,7 @@ void ClientWorld::removePlayer(const uint64_t player_id)
 
 	m_players.erase(player_id);
 	{
+		LOG_INFO("Removing player mesh: " << player_id);
 		std::lock_guard lock(m_worldScene.m_player_mutex);
 		m_worldScene.entity_mesh_list.erase(player_id);
 	}

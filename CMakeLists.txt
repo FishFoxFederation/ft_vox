@@ -8,7 +8,7 @@ project(ft_vox
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(TRACY_ENABLE "" ON)
+option(TRACY_ENABLE "" OFF)
 add_subdirectory (external/tracy)
 
 
@@ -74,7 +74,6 @@ target_sources(${PROJECT_NAME}
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
-		src/app/world/ServerWorld.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
 		src/app/network/client/Client.cpp
@@ -82,7 +81,6 @@ target_sources(${PROJECT_NAME}
 		src/app/network/client/ClientPacketHandler.cpp
 		src/app/network/server/Server.cpp
 		src/app/network/server/ServerSocket.cpp
-		src/app/network/server/ServerPacketHandler.cpp
 		src/app/network/shared/Connection.cpp
 		src/app/network/shared/Poller.cpp
 		src/app/network/shared/Socket.cpp
@@ -147,14 +145,11 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient)
 
 
-
-
-
 add_executable(server)
 
 target_compile_options(server
 	PRIVATE
-		-O3
+		# -O3
 		-g3
 		# -fsanitize=thread
 		-Wall
@@ -185,7 +180,6 @@ target_sources(server
 
 		src/app/perlin/Perlin.cpp
 
-		src/app/application.cpp
 		src/app/DebugGui.cpp
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
@@ -194,7 +188,7 @@ target_sources(server
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/pool/ThreadPool.cpp
-		src/app/threads/block_update/BlockUpdateThread.cpp
+		src/app/threads/block_update/ServerBlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/vulkan/VulkanMemoryAllocator.cpp
@@ -211,6 +205,9 @@ target_sources(server
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
+		src/app/world/ServerWorldTickets.cpp
+		src/app/world/ServerWorldNetwork.cpp
+		src/app/world/ServerWorldBlocks.cpp
 		src/app/world/ServerWorld.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp

@@ -50,4 +50,4 @@ private:
 	 * @brief WIP
 	 */
 	void loop();
-}
+};

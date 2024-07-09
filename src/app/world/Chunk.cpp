@@ -119,6 +119,26 @@ void Chunk::setMeshed(bool meshed)
 	this->meshed = meshed;
 }
 
+bool Chunk::isGenerated() const
+{
+	return gen;
+}
+
+void Chunk::setGenerated(bool gen)
+{
+	this->gen = gen;
+}
+
+int Chunk::getLoadLevel() const
+{
+	return load_level;
+}
+
+void Chunk::setLoadLevel(const int & load_level)
+{
+	this->load_level = load_level;
+}
+
 int Chunk::toIndex(const int & x, const int & y, const int & z)
 {
 	return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;

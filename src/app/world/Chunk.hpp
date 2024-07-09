@@ -56,7 +56,7 @@ public:
 	bool 				isGenerated() const;
 	void 				setGenerated(bool gen);
 
-	const int &			getLoadLevel() const;
+	int					getLoadLevel() const;
 	void				setLoadLevel(const int & load_level);
 
 	static  int			toIndex(const int & x, const int & y, const int & z);
