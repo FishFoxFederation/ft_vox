@@ -121,8 +121,8 @@ Collaboration diagram for Chunk:</div>
 <div class="dyncontent">
 <div class="center"><img src="classChunk__coll__graph.png" border="0" usemap="#aChunk_coll__map" alt="Collaboration graph"/></div>
 <map name="aChunk_coll__map" id="aChunk_coll__map">
-<area shape="rect" title=" " alt="" coords="21,269,122,515"/>
-<area shape="rect" href="classStatus.html" title=" " alt="" coords="5,5,137,207"/>
+<area shape="rect" title=" " alt="" coords="5,269,160,529"/>
+<area shape="rect" href="classStatus.html" title=" " alt="" coords="17,5,149,207"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -177,6 +177,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6db3df2c63c66f8f1ce2ecbf335e6194"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae79fe0a5c6220712dc1d3fb321987ce3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ae79fe0a5c6220712dc1d3fb321987ce3">setMeshed</a> (bool meshed)</td></tr>
 <tr class="separator:ae79fe0a5c6220712dc1d3fb321987ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a809faeba8eb570bdc4d378f706a8a692"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a809faeba8eb570bdc4d378f706a8a692">isGenerated</a> () const</td></tr>
+<tr class="separator:a809faeba8eb570bdc4d378f706a8a692"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55df90d1187a69aea5b16db22e386a45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a55df90d1187a69aea5b16db22e386a45">setGenerated</a> (bool gen)</td></tr>
+<tr class="separator:a55df90d1187a69aea5b16db22e386a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae44723155b8a00e6c523d27ebd3f5e7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ae44723155b8a00e6c523d27ebd3f5e7d">getLoadLevel</a> () const</td></tr>
+<tr class="separator:ae44723155b8a00e6c523d27ebd3f5e7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa72d16adb85c7fe255e3c6736475fbc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa72d16adb85c7fe255e3c6736475fbc4">setLoadLevel</a> (const int &amp;load_level)</td></tr>
+<tr class="separator:aa72d16adb85c7fe255e3c6736475fbc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -191,6 +199,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a46d6db3de4d66e2ba1e7fcfcdcf58918"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9be7205972b0ef732c338037f717cef"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa9be7205972b0ef732c338037f717cef">entity_ids</a></td></tr>
 <tr class="separator:aa9be7205972b0ef732c338037f717cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a057de54f4cc465177fa249fad8c304df"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a057de54f4cc465177fa249fad8c304df">observing_player_ids</a></td></tr>
+<tr class="separator:a057de54f4cc465177fa249fad8c304df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a88ee5de5ab052189e31a7446d6acac1e" name="a88ee5de5ab052189e31a7446d6acac1e"></a>
@@ -394,6 +404,23 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae44723155b8a00e6c523d27ebd3f5e7d" name="ae44723155b8a00e6c523d27ebd3f5e7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae44723155b8a00e6c523d27ebd3f5e7d">&#9670;&#160;</a></span>getLoadLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Chunk::getLoadLevel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9a8d9430340b16dc0dbc8d6c8e5d0ff3" name="a9a8d9430340b16dc0dbc8d6c8e5d0ff3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9a8d9430340b16dc0dbc8d6c8e5d0ff3">&#9670;&#160;</a></span>getMeshID()</h2>
 
@@ -419,6 +446,23 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const glm::ivec3 &amp; Chunk::getPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a809faeba8eb570bdc4d378f706a8a692" name="a809faeba8eb570bdc4d378f706a8a692"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a809faeba8eb570bdc4d378f706a8a692">&#9670;&#160;</a></span>isGenerated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Chunk::isGenerated </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -543,6 +587,42 @@ Public Attributes</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a55df90d1187a69aea5b16db22e386a45" name="a55df90d1187a69aea5b16db22e386a45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55df90d1187a69aea5b16db22e386a45">&#9670;&#160;</a></span>setGenerated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setGenerated </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>gen</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa72d16adb85c7fe255e3c6736475fbc4" name="aa72d16adb85c7fe255e3c6736475fbc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa72d16adb85c7fe255e3c6736475fbc4">&#9670;&#160;</a></span>setLoadLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setLoadLevel </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>load_level</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -755,6 +835,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::unordered_set&lt;uint64_t&gt; Chunk::entity_ids</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a057de54f4cc465177fa249fad8c304df" name="a057de54f4cc465177fa249fad8c304df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a057de54f4cc465177fa249fad8c304df">&#9670;&#160;</a></span>observing_player_ids</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_set&lt;uint64_t&gt; Chunk::observing_player_ids</td>
         </tr>
       </table>
 </div><div class="memdoc">

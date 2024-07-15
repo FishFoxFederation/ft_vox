@@ -3,7 +3,8 @@ var annotated_dup =
     [ "std", "namespacestd.html", [
       [ "hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", "structstd_1_1hash_3_01BlockVertex_01_4" ],
       [ "hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec2_01_4" ],
-      [ "hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec3_01_4" ]
+      [ "hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec3_01_4" ],
+      [ "hash< ServerWorld::Ticket >", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4" ]
     ] ],
     [ "Application", "classApplication.html", "classApplication" ],
     [ "Atomic", "classAtomic.html", "classAtomic" ],
@@ -66,6 +67,7 @@ var annotated_dup =
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", "structRayCastOnBlockResult" ],
     [ "RenderThread", "classRenderThread.html", "classRenderThread" ],
     [ "Server", "classServer.html", "classServer" ],
+    [ "ServerBlockUpdateThread", "classServerBlockUpdateThread.html", "classServerBlockUpdateThread" ],
     [ "ServerPacketHandler", "classServerPacketHandler.html", "classServerPacketHandler" ],
     [ "ServerSocket", "classServerSocket.html", "classServerSocket" ],
     [ "ServerWorld", "classServerWorld.html", "classServerWorld" ],

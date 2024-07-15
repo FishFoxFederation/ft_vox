@@ -3,7 +3,7 @@ var searchData=
   ['binding_5fdescription_0',['binding_description',['../structPipeline_1_1CreateInfo.html#a98a9203deb394878a54df0bd399debd7',1,'Pipeline::CreateInfo']]],
   ['bindings_1',['bindings',['../structDescriptor_1_1CreateInfo.html#a2adb4c296c558b7b62ed92771dc8ec55',1,'Descriptor::CreateInfo']]],
   ['block_2',['Block',['../structBlock.html',1,'']]],
-  ['block_3',['block',['../classCreateMeshData.html#a62f5b52d9f5460c2e38576026fdf5883',1,'CreateMeshData::block(const glm::ivec3 &amp;pos)'],['../classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c',1,'CreateMeshData::block(const int x, const int y, const int z)'],['../structRayCastOnBlockResult.html#a9c1b9ca974dc4d1b48f3fc5828f28a21',1,'RayCastOnBlockResult::block()']]],
+  ['block_3',['block',['../classCreateMeshData.html#a62f5b52d9f5460c2e38576026fdf5883',1,'CreateMeshData::block(const glm::ivec3 &amp;pos)'],['../classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c',1,'CreateMeshData::block(const int x, const int y, const int z)'],['../structServerWorld_1_1BlockUpdateData.html#aadf621a9fd9bc2c45c57b91248faa38b',1,'ServerWorld::BlockUpdateData::block()'],['../structRayCastOnBlockResult.html#a9c1b9ca974dc4d1b48f3fc5828f28a21',1,'RayCastOnBlockResult::block()']]],
   ['block_2ehpp_4',['Block.hpp',['../Block_8hpp.html',1,'']]],
   ['block_5faction_5',['BLOCK_ACTION',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae',1,'IPacket']]],
   ['block_5fface_5fback_6',['BLOCK_FACE_BACK',['../Block_8hpp.html#acdc50e3ae7204b9a9281913ce0c4ed54',1,'Block.hpp']]],
@@ -28,10 +28,11 @@ var searchData=
   ['blockproperties_25',['BlockProperties',['../Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c',1,'Block.hpp']]],
   ['blocks_5fper_5fchunk_26',['BLOCKS_PER_CHUNK',['../Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3',1,'Chunk.hpp']]],
   ['blocktype_27',['BlockType',['../Block_8hpp.html#aa38934da64b62c122965f1699b71e2cb',1,'Block.hpp']]],
-  ['blockupdatethread_28',['BlockUpdateThread',['../classBlockUpdateThread.html#ac5e8f510884616c75e89bac2ee17b75c',1,'BlockUpdateThread::BlockUpdateThread()'],['../classBlockUpdateThread.html',1,'BlockUpdateThread'],['../classBlockUpdateThread.html#afc8b69c912bcadcac529322cdd24a8cb',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;&amp;other)=delete'],['../classBlockUpdateThread.html#af1fac4df9851afc406860d95dcec4ff8',1,'BlockUpdateThread::BlockUpdateThread(WorldScene &amp;worldScene, ClientWorld &amp;world)']]],
-  ['blockupdatethread_2ecpp_29',['BlockUpdateThread.cpp',['../BlockUpdateThread_8cpp.html',1,'']]],
-  ['blockupdatethread_2ehpp_30',['BlockUpdateThread.hpp',['../BlockUpdateThread_8hpp.html',1,'']]],
-  ['blockvertex_31',['BlockVertex',['../structBlockVertex.html',1,'']]],
-  ['buffer_32',['buffer',['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh']]],
-  ['buffer_5fmemory_33',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]]
+  ['blockupdatedata_28',['BlockUpdateData',['../structServerWorld_1_1BlockUpdateData.html',1,'ServerWorld']]],
+  ['blockupdatethread_29',['BlockUpdateThread',['../classBlockUpdateThread.html#af1fac4df9851afc406860d95dcec4ff8',1,'BlockUpdateThread::BlockUpdateThread()'],['../classBlockUpdateThread.html',1,'BlockUpdateThread'],['../classBlockUpdateThread.html#afc8b69c912bcadcac529322cdd24a8cb',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;&amp;other)=delete'],['../classBlockUpdateThread.html#ac5e8f510884616c75e89bac2ee17b75c',1,'BlockUpdateThread::BlockUpdateThread(BlockUpdateThread &amp;other)=delete']]],
+  ['blockupdatethread_2ecpp_30',['BlockUpdateThread.cpp',['../BlockUpdateThread_8cpp.html',1,'']]],
+  ['blockupdatethread_2ehpp_31',['BlockUpdateThread.hpp',['../BlockUpdateThread_8hpp.html',1,'']]],
+  ['blockvertex_32',['BlockVertex',['../structBlockVertex.html',1,'']]],
+  ['buffer_33',['buffer',['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh']]],
+  ['buffer_5fmemory_34',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]]
 ];

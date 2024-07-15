@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x_0',['X',['../classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a02129bb861061d1a052c592e2dc6b383',1,'CreateMeshData']]]
+  ['warning_0',['WARNING',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca',1,'Logger']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['warning_0',['WARNING',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fafb1bf96f41b282521d9438106ea11bca',1,'Logger']]]
+  ['update_0',['UPDATE',['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fca15a8022d0ed9cd9c2a2e756822703eb4',1,'ServerWorld::BlockUpdateData']]]
 ];

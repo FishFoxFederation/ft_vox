@@ -6,7 +6,7 @@ var searchData=
   ['leg_3',['LEG',['../classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041bacd1734044172b2a25333c2f92ce6ba6c',1,'PlayerModel']]],
   ['leg_5fsize_4',['leg_size',['../classPlayerModel.html#addaf70e0f9fd2491d0dbbf9a8fcae9a1',1,'PlayerModel']]],
   ['level_5',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]],
-  ['level_6',['level',['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger']]],
+  ['level_6',['level',['../structServerWorld_1_1Ticket.html#aef4d65e8169df5ef755b7cdc22e1f114',1,'ServerWorld::Ticket::level()'],['../classLogger.html#ae5d3b0c1fbbb73f7155fb4b682ac5f87',1,'Logger::level()']]],
   ['lighting_5fframebuffers_7',['lighting_framebuffers',['../classVulkanAPI.html#a32b2991a33a67aac18e47097c38c2257',1,'VulkanAPI']]],
   ['lighting_5frender_5fpass_8',['lighting_render_pass',['../classVulkanAPI.html#a686c7e9f200979296e890de8c2801e25',1,'VulkanAPI']]],
   ['line_5fpipeline_9',['line_pipeline',['../classVulkanAPI.html#a28868afc63f2210693107cec8cd9e73a',1,'VulkanAPI']]],
