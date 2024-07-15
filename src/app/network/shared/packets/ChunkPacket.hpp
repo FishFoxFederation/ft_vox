@@ -27,9 +27,9 @@ public:
 	/*******************************
 	 * ATTRIBUTES
 	********************************/
-	Chunk			GetChunk() const;
+	std::shared_ptr<Chunk>			GetChunk() const;
 
-	void			SetChunk(const Chunk & chunk);
+	void							SetChunk(const Chunk & chunk);
 
 private:
 	glm::ivec3			m_chunk_pos;

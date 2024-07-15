@@ -19,7 +19,7 @@ const ServerWorld::TicketMultiMap & ServerWorld::getTickets() const
 uint64_t ServerWorld::addTicket(const ServerWorld::Ticket & ticket)
 {
 	std::lock_guard lock(m_tickets_mutex);
-	LOG_INFO("Adding ticket: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
+	// LOG_INFO("Adding ticket: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
 	m_tickets_to_add.insert({ticket.hash(), ticket});
 	return (ticket.hash());
 }
@@ -90,12 +90,12 @@ void ServerWorld::clearChunksLoadLevel()
 
 void ServerWorld::floodFill(const TicketMultiMap & tickets)
 {
-	LOG_INFO("ENTERING FLOODFILL");
+	// LOG_INFO("ENTERING FLOODFILL");
 	std::queue<Ticket> queue;
-	for (auto & ticket : tickets)
+	for (auto & [id, ticket] : tickets)
 	{
-		// LOG_INFO("Adding ticket to floodfill: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
-		queue.push(ticket.second);
+		// LOG_INFO("Adding ticket to floodfill: " << ticket.position.x << " " << ticket.position.y << " " << ticket.position.z << " level: " << ticket.level);
+		queue.push(ticket);
 	}
 	while (!queue.empty())
 	{

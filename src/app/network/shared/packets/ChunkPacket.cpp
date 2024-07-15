@@ -90,9 +90,9 @@ std::shared_ptr<IPacket> ChunkPacket::Clone() const
 	return std::make_shared<ChunkPacket>();
 }
 
-Chunk	ChunkPacket::GetChunk() const
+std::shared_ptr<Chunk>	ChunkPacket::GetChunk() const
 {
-	return Chunk(m_chunk_pos, m_blocks);
+	return std::make_shared<Chunk>(m_chunk_pos, m_blocks);
 }
 
 void ChunkPacket::SetChunk(const Chunk & chunk)

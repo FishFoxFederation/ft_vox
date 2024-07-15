@@ -166,7 +166,8 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 
 	new_player_chunk_position.y = 0;
 	old_player_chunk_position.y = 0;
-	// glm::ivec3 chunk_direction = new_player_chunk_position - old_player_chunk_position;
+	if (!first_time && new_player_chunk_position == old_player_chunk_position)
+		return data;
 
 	std::unordered_set<glm::ivec3> old_chunks_in_range;
 	std::unordered_set<glm::ivec3> new_chunks_in_range;
@@ -180,9 +181,7 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 			for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
 			{
 				glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
-				float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(old_player_chunk_position.x, old_player_chunk_position.z));
-				if (distance < SERVER_LOAD_DISTANCE)
-					old_chunks_in_range.insert(chunk_position);
+				old_chunks_in_range.insert(chunk_position);
 			}
 		}
 	}
@@ -193,9 +192,7 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 		for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
 		{
 			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
-			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(new_player_chunk_position.x, new_player_chunk_position.z));
-			if (distance < SERVER_LOAD_DISTANCE)
-				new_chunks_in_range.insert(chunk_position);
+			new_chunks_in_range.insert(chunk_position);
 		}
 	}
 
@@ -204,7 +201,10 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 		//if chunk is now too far away
 		if (!new_chunks_in_range.contains(chunk_position))
 		{
-			m_chunks.at(chunk_position)->observing_player_ids.erase(player_id);
+			std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
+			chunk->status.lock();
+			chunk->observing_player_ids.erase(player_id);
+			chunk->status.unlock();
 			data.chunks_to_unload.push_back(chunk_position);
 		}
 	}
@@ -216,7 +216,9 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 		{
 			std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
 			if (chunk == nullptr)
-				LOG_CRITICAL("Chunk is nullptr");
+			{
+				LOG_CRITICAL("Chunk is nullptr pos:" << chunk_position.x << " " << chunk_position.y << " " << chunk_position.z);
+			}
 			chunk->observing_player_ids.insert(player_id);
 			data.chunks_to_load.push_back(chunk);
 		}
@@ -248,9 +250,17 @@ void ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D)
 {
 	std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
 	if (chunk == nullptr)
+	{
 		chunk = std::make_shared<Chunk>(chunkPos3D);
-	
-	chunk->status.lock();
+		std::lock_guard lock(m_chunks_mutex);
+		m_chunks.insert({chunkPos3D, chunk});
+		chunk->status.lock();
+		LOG_INFO("GenChunk: Chunk " << chunkPos3D.x << " " << chunkPos3D.z << " is nullptr");
+	}
+	else
+		chunk->status.lock();
+
+
 	if (chunk->isGenerated())
 	{
 		chunk->status.unlock();

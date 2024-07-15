@@ -58,7 +58,7 @@ public:
 
 	ChunkLoadUnloadData			getChunksToUnload(
 		const glm::vec3 & old_player_position,
-		const glm::vec3 & new_player_positiom
+		const glm::vec3 & new_player_position
 	);
 
 
