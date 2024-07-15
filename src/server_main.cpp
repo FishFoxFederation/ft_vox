@@ -13,13 +13,19 @@
 #include <chrono>
 #include "tracy_globals.hpp"
 #include "ServerBlockUpdateThread.hpp"
+#include <signal.h>
+
+bool running = true;
 
 int main()
 {
 	LOG_INFO("Server started");
-	ThreadPool threadPool;
+	// ThreadPool threadPool;
+	signal(SIGINT, [](int signum) {
+		running = false;
+	});
 	Server server(4245);
-	ServerWorld world(server, threadPool);
+	ServerWorld world(server);
 	ServerBlockUpdateThread block_update_thread(world);	
 	ServerPacketHandler packet_handler(server, world);
 	// std::thread server_thread([&server](){
@@ -29,7 +35,7 @@ int main()
 	uint64_t last_time = 0;
 	uint64_t last_time_count = 0;
 	uint64_t max_packet = 0;
-	while (true)
+	while (running)
 	{
 		ZoneScopedN("Server Loop");
 		auto start = std::chrono::high_resolution_clock::now();

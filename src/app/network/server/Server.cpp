@@ -70,8 +70,7 @@ void Server::runOnce(int timeout)
 				auto packet = std::make_shared<DisconnectPacket>();
 				packet->SetConnectionId(e.id());
 				m_incoming_packets.push(packet);
-				m_poller.remove(currentClient->second.getSocket());
-				m_connections.erase(currentClient);
+				disconnect(e.id());
 			}
 		}
 	}
@@ -175,4 +174,16 @@ void Server::sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id)
 	for (auto & [current_id, connection] : m_connections)
 		if (current_id != id)
 			connection.queueAndSendMessage(buffer);
+}
+
+void Server::disconnect(uint64_t id)
+{
+	auto currentClient = m_connections.find(id);
+	if (currentClient == m_connections.end())
+	{
+		LOG_ERROR("Server: Disconnect: Client not found");
+		return;
+	}
+	m_poller.remove(currentClient->second.getSocket());
+	m_connections.erase(currentClient);
 }

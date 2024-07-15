@@ -118,7 +118,10 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets)
 			continue;
 		// LOG_INFO("Visiting chunk at:" << current.position.x << " " << current.position.z << " with level: " << current.level);
 		if (current.level <= TICKET_LEVEL_INACTIVE && !chunk->isGenerated())
-			asyncGenChunk(current.position);
+		{
+			std::lock_guard lock(m_chunk_futures_ids_mutex);
+			m_chunk_futures_ids.push_back(asyncGenChunk(current.position));
+		}
 		
 		if (current.level <= TICKET_LEVEL_ENTITY_UPDATE)
 			m_entity_update_chunks.insert(current.position);

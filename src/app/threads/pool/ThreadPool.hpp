@@ -33,28 +33,29 @@ private:
 };
 
 
-
 class ThreadPool
 {
 public:
-	ThreadPool();
 	~ThreadPool();
 
-	template<typename FunctionType>
-	std::future<typename std::invoke_result<FunctionType>::type> submit(FunctionType f)
+	static ThreadPool & get_instance()
 	{
-		typedef typename std::invoke_result<FunctionType>::type result_type;
-		{
-			std::unique_lock<std::mutex> lock(m_queue_mutex);
-			std::packaged_task<result_type()> task(std::move(f));
-			std::future<result_type> res(task.get_future());
-			m_work_queue.push(std::move(task));
-			m_cond.notify_one();
-			return res;
-		}
+		static ThreadPool instance;
+		return instance;
+	}
+
+	std::future<void> submit(std::function<void()> f)
+	{
+		std::unique_lock<std::mutex> lock(m_queue_mutex);
+		std::packaged_task<void()> task(std::move(f));
+		std::future<void> res(task.get_future());
+		m_work_queue.push(std::move(task));
+		m_cond.notify_one();
+		return res;
 	}
 
 private:
+	ThreadPool();
 	std::atomic_bool					m_done;
 	std::queue<std::packaged_task<void()> >	m_work_queue;
 	std::mutex							m_queue_mutex;
@@ -64,3 +65,4 @@ private:
 
 	void worker_thread(const int & id);
 };
+

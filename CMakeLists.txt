@@ -57,6 +57,7 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/pool/ThreadPool.cpp
+		src/app/threads/pool/ThreadPoolAccessor.cpp
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
@@ -188,6 +189,7 @@ target_sources(server
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/pool/ThreadPool.cpp
+		src/app/threads/pool/ThreadPoolAccessor.cpp
 		src/app/threads/block_update/ServerBlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
 		src/app/vulkan/VulkanAPI.cpp

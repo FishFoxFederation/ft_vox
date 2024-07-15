@@ -11,6 +11,12 @@ ServerPacketHandler::~ServerPacketHandler()
 
 void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 {
+	if (!m_connection_to_player_id.contains(packet->GetConnectionId()) && packet->GetType() != IPacket::Type::CONNECTION)
+	{
+		LOG_INFO("Packet connection id does not match connection id");
+		m_server.disconnect(packet->GetConnectionId());
+		return;
+	}
 	switch(packet->GetType())
 	{
 		case IPacket::Type::CONNECTION:

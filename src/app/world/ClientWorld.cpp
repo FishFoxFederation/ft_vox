@@ -4,11 +4,10 @@
 ClientWorld::ClientWorld(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
-	ThreadPool & threadPool,
 	uint64_t my_player_id
 )
 :
-	World(threadPool),	
+	World(),	
 	m_worldScene(WorldScene),
 	m_vulkanAPI(vulkanAPI)
 	// m_players(),
@@ -25,7 +24,8 @@ void ClientWorld::updateBlock(glm::dvec3 position)
 {
 	ZoneScoped;
 	updateChunks(position);
-	waitForFinishedFutures();
+	// waitForFinishedFutures();
+	m_threadPool.waitForFinishedTasks();
 }
 
 // void ClientWorld::update(glm::dvec3 nextPlayerPosition)
@@ -84,7 +84,6 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 			std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
 			if(chunk == nullptr)
 			{
-				uint64_t current_id = m_future_id++;
 				chunk = std::make_shared<Chunk>(chunkPos3D);
 				chunk->status.lock();
 				insertChunk(chunkPos3D, chunk);
@@ -95,7 +94,7 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 					chunk_local->setMeshed(false);
 				}
 
-				std::future<void> future = m_threadPool.submit([this, chunkPos2D, current_id, chunk] () mutable
+				m_threadPool.submit([this, chunkPos2D, chunk] () mutable
 				{
 					ZoneScopedN("Chunk Loading");
 					/**************************************************************
@@ -111,15 +110,9 @@ void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
 					}
 					chunk->status.unlock();
 
-					{
-						std::lock_guard lock(m_finished_futures_mutex);
-						m_finished_futures.push(current_id);
-						// LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
-					}
 					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 				});
-				m_futures.insert(std::make_pair(current_id, std::move(future)));
 			}
 		}
 	}
@@ -182,8 +175,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 	if (chunk == nullptr)
 		return;
-	uint64_t current_id = m_future_id++;
-	std::future<void> future = m_threadPool.submit([this, chunk, current_id]()
+	m_threadPool.submit([this, chunk]()
 	{
 		ZoneScopedN("Chunk Unloading");
 		/**************************************************************
@@ -204,15 +196,9 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 			m_vulkanAPI.destroyMesh(mesh_id);
 		}
 
-		{
-			std::lock_guard lock(m_finished_futures_mutex);
-			m_finished_futures.push(current_id);
-		}
-
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 		DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 	});
-	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
 void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
@@ -281,8 +267,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	/********
 	* PUSHING TASK TO THREAD POOL
 	********/
-	uint64_t current_id = m_future_id++;
-	std::future<void> future = m_threadPool.submit([this, chunkPos3D, current_id, mesh_data = std::move(mesh_data)]() mutable
+	m_threadPool.submit([this, chunkPos3D, mesh_data = std::move(mesh_data)]() mutable
 	{
 		ZoneScopedN("Chunk Meshing");
 		/**************************************************************
@@ -328,18 +313,11 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 			m_vulkanAPI.destroyMesh(mesh_id);
 		}
 
-		{
-			std::lock_guard lock(m_finished_futures_mutex);
-			m_finished_futures.push(current_id);
-			// LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
-		}
-
 		mesh_data.unlock();
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 		DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 	});
-	m_futures.insert(std::make_pair(current_id, std::move(future)));
 }
 
 void ClientWorld::updateChunks(const glm::vec3 & playerPosition)

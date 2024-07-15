@@ -4,7 +4,7 @@
 #include "Player.hpp"
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
-#include "ThreadPool.hpp"
+#include "ThreadPoolAccessor.hpp"
 #include "Mob.hpp"
 #include "hashes.hpp"
 #include "Tracy.hpp"
@@ -19,7 +19,7 @@
 class World
 {
 public:
-	World(ThreadPool & threadpool);
+	World();
 	~World();
 
 	World(World & other) = delete;
@@ -56,18 +56,14 @@ protected:
 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>>	m_chunks;
 	mutable TracyLockableN									(std::mutex,	m_chunks_mutex, "Chunks");
 
-	ThreadPool & 										m_threadPool;
-	std::unordered_map<uint64_t, std::future<void>> 	m_futures;
+	ThreadPoolAccessor 									m_threadPool;
 
-	std::queue<uint64_t>								m_finished_futures;
-	TracyLockableN										(std::mutex, m_finished_futures_mutex, "Finished Futures");
 
-	uint64_t											m_future_id = 0;
 	WorldGenerator										m_world_generator;
 
 	/*************************************
 	 *  FUTURES
 	 *************************************/
-	void	waitForFinishedFutures();
-	void	waitForFutures();
+	// void	waitForFinishedFutures();
+	// void	waitForFutures();
 };
