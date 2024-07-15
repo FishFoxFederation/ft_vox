@@ -149,7 +149,7 @@ add_executable(server)
 
 target_compile_options(server
 	PRIVATE
-		# -O3
+		-O3
 		-g3
 		# -fsanitize=thread
 		-Wall

@@ -31,9 +31,9 @@ void ServerWorld::update()
 	ZoneScopedN("Block Update");
 
 	{
-		std::lock_guard lock(m_tickets_mutex);
+		// std::lock_guard lock(m_tickets_mutex);
 
-		LOG_INFO("BU size: " << m_block_update_chunks.size());
+		// LOG_INFO("BU size: " << m_block_update_chunks.size());
 	}
 	savePlayerPositions();
 	// MAIN BLOCK UPDATE FUNCTION
@@ -62,7 +62,9 @@ void ServerWorld::savePlayerPositions()
 		if (m_last_tick_player_positions.contains(player_id))
 		{
 			glm::ivec3 last_chunk = getChunkPosition(m_last_tick_player_positions.at(player_id));
+			last_chunk.y = 0;
 			glm::ivec3 current_chunk = getChunkPosition(player->transform.position);
+			current_chunk.y = 0;
 
 			//change ticket if player changed chunk
 			if (last_chunk != current_chunk)
