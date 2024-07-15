@@ -1,14 +1,11 @@
 #include "World.hpp"
 
-World::World(ThreadPool & threadpool)
- :	m_threadPool(threadpool),
-	m_future_id(0)
+World::World()
 {
 }
 
 World::~World()
 {
-	waitForFutures();
 }
 
 glm::vec3 World::getBlockChunkPosition(const glm::vec3 & position)
@@ -53,25 +50,25 @@ void World::insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chun
 	}
 }
 
-void World::waitForFinishedFutures()
-{
-	ZoneScoped;
-	std::lock_guard lock(m_finished_futures_mutex);
-	while(!m_finished_futures.empty())
-	{
-		uint64_t id = m_finished_futures.front();
-		m_finished_futures.pop();
-		auto & future = m_futures.at(id);
-		future.get();
-		m_futures.erase(id);
-	}
-}
+// void World::waitForFinishedFutures()
+// {
+// 	ZoneScoped;
+// 	std::lock_guard lock(m_finished_futures_mutex);
+// 	while(!m_finished_futures.empty())
+// 	{
+// 		uint64_t id = m_finished_futures.front();
+// 		m_finished_futures.pop();
+// 		auto & future = m_futures.at(id);
+// 		future.get();
+// 		m_futures.erase(id);
+// 	}
+// }
 
-void World::waitForFutures()
-{
-	while(!m_futures.empty())
-	{
-		m_futures.begin()->second.get();
-		m_futures.erase(m_futures.begin());
-	}
-}
+// void World::waitForFutures()
+// {
+// 	while(!m_futures.empty())
+// 	{
+// 		m_futures.begin()->second.get();
+// 		m_futures.erase(m_futures.begin());
+// 	}
+// }

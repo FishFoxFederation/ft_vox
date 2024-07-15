@@ -36,6 +36,8 @@ public:
 	void sendAll(std::shared_ptr<IPacket> packet);
 	void sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id);
 
+	void disconnect(uint64_t id);
+
 	IncomingPacketList & get_incoming_packets() { return m_incoming_packets; }
 
 	class ClientDisconnected : public std::exception

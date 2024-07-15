@@ -36,8 +36,7 @@ private:
 	WorldScene			m_world_scene;
 	Window				m_window;
 	VulkanAPI			m_vulkan_api;
-	ThreadPool			m_thread_pool;
-	ClientWorld				m_world;
+	ClientWorld			m_world;
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
 	BlockUpdateThread	m_block_update_thread;

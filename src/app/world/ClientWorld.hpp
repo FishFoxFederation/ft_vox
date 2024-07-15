@@ -8,7 +8,6 @@
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
 #include "CreateMeshData.hpp"
-#include "ThreadPool.hpp"
 #include "VulkanAPI.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
@@ -24,7 +23,6 @@ public:
 	ClientWorld(
 		WorldScene & WorldScene,
 		VulkanAPI & vulkanAPI,
-		ThreadPool & threadPool,
 		uint64_t my_player_id = 0
 	);
 	~ClientWorld();

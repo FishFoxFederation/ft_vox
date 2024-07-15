@@ -13,7 +13,7 @@
 class ServerWorld : public World
 {
 public:
-	ServerWorld(Server & server, ThreadPool & thread_pool);
+	ServerWorld(Server & server);
 	~ServerWorld();
 
 	ServerWorld(ServerWorld & other) = delete;
@@ -154,19 +154,23 @@ private:
 	std::queue<BlockUpdateData> m_block_updates;
 	mutable TracyLockableN(std::mutex, m_block_updates_mutex, "BlockUpdateQueue");
 
-	void					asyncGenChunk(const glm::ivec3 & chunk_position);
+	uint64_t				asyncGenChunk(const glm::ivec3 & chunk_position);
 	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id);
 	void 					removeChunkObservations(std::shared_ptr<Player> player);
 
 	/*********************************\
 	 * MISCELLANEOUS
 	\*********************************/
-	std::unordered_map<uint64_t, glm::dvec3> m_last_tick_player_positions;
-	std::unordered_map<uint64_t, glm::dvec3> m_current_tick_player_positions;
+	std::unordered_map<uint64_t, glm::dvec3>	m_last_tick_player_positions;
+	std::unordered_map<uint64_t, glm::dvec3>	m_current_tick_player_positions;
+
+	std::vector<uint64_t>						m_chunk_futures_ids;
+	TracyLockableN(std::mutex, m_chunk_futures_ids_mutex, "ChunkFuturesIds");
 
 
 	void savePlayerPositions();
 	void updatePlayerPositions();
+	void waitForChunkFutures();
 };
 
 

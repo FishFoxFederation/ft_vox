@@ -1,7 +1,7 @@
 #include "ServerWorld.hpp"
 
-ServerWorld::ServerWorld(Server & server, ThreadPool & threadPool)
-:	World(threadPool), 
+ServerWorld::ServerWorld(Server & server)
+:	World(), 
 	m_server(server)
 {
 	addTicket({TICKET_LEVEL_PLAYER, glm::ivec3(0, 0, 0)});
@@ -44,7 +44,7 @@ void ServerWorld::update()
 	// do all chunk updates
 	updateTickets();
 
-	waitForFutures();
+	waitForChunkFutures();
 
 	// if player changed chunk send new chunks and update observations
 	updatePlayerPositions();
@@ -87,4 +87,10 @@ void ServerWorld::updatePlayerPositions()
 	}
 }
 
-
+void ServerWorld::waitForChunkFutures()
+{
+	ZoneScopedN("Wait For Chunk Futures");
+	std::lock_guard lock(m_chunk_futures_ids_mutex);
+	m_threadPool.waitForTasks(m_chunk_futures_ids);
+	m_chunk_futures_ids.clear();
+}

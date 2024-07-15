@@ -246,7 +246,7 @@ void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
 	}
 }
 
-void ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D)
+uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D)
 {
 	std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
 	if (chunk == nullptr)
@@ -260,24 +260,12 @@ void ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D)
 	else
 		chunk->status.lock();
 
-
-	if (chunk->isGenerated())
-	{
-		chunk->status.unlock();
-		return;
-	}
+	assert(chunk->isGenerated() == false);
 	chunk->setGenerated(true);
-	uint64_t current_future_id = m_future_id++;
-	std::future<void> future = m_threadPool.submit([this, chunkPos3D, chunk, current_future_id]
+	return m_threadPool.submit([this, chunkPos3D, chunk] ()
 	{
 		ZoneScopedN("Generate Chunk");
 		m_world_generator.generateChunkColumn(chunkPos3D.x, chunkPos3D.z, chunk);
 		chunk->status.unlock();
-
-		{
-			std::lock_guard lock(m_finished_futures_mutex);
-			m_finished_futures.push(current_future_id);
-		}
 	});
-	m_futures.insert(std::make_pair(current_future_id, std::move(future)));
 }
