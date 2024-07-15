@@ -1,0 +1,22 @@
+#version 450
+
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout (set = 0, binding = 0, rgba32f) uniform readonly image2D lighting_image;
+layout (set = 0, binding = 1, rgba32f) uniform readonly image2D shadow_image;
+layout (set = 1, binding = 0, rgba32f) uniform writeonly image2D output_image;
+
+void main()
+{
+	if (
+		gl_GlobalInvocationID.x >= imageSize(lighting_image).x
+		|| gl_GlobalInvocationID.y >= imageSize(lighting_image).y
+	)
+	{
+		return;
+	}
+
+	ivec2 storePos = ivec2(gl_GlobalInvocationID.xy);
+	vec4 pixel = imageLoad(lighting_image, storePos);
+	imageStore(output_image, storePos, pixel);
+}

@@ -1227,7 +1227,9 @@ void VulkanAPI::createDescriptors()
 		ubo_layout_binding.binding = 0;
 		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_MISS_BIT_KHR;
+		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+										| VK_SHADER_STAGE_MISS_BIT_KHR
+										| VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
 		ubo_layout_binding.pImmutableSamplers = nullptr;
 
 		Descriptor::CreateInfo descriptor_info = {};
@@ -1360,8 +1362,8 @@ void VulkanAPI::createPipelines()
 	{ // chunk pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/chunk_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/chunk_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/chunk_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/chunk_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { color_attachement.format };
@@ -1383,8 +1385,8 @@ void VulkanAPI::createPipelines()
 	{ // line pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/line_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/line_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/line_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/line_shader.frag.spv";
 		pipeline_info.binding_description = LineVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = LineVertex::getAttributeDescriptions();
 		pipeline_info.polygon_mode = VK_POLYGON_MODE_LINE;
@@ -1405,8 +1407,8 @@ void VulkanAPI::createPipelines()
 	{ // skybox pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/sky/box.vert.spv";
-		pipeline_info.frag_path = "shaders/sky/box.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/sky/box.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/sky/box.frag.spv";
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
@@ -1424,8 +1426,8 @@ void VulkanAPI::createPipelines()
 	{ // sun pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/sky/sun.vert.spv";
-		pipeline_info.frag_path = "shaders/sky/sun.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/sky/sun.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/sky/sun.frag.spv";
 		pipeline_info.binding_description = ObjVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = ObjVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { color_attachement.format };
@@ -1446,7 +1448,7 @@ void VulkanAPI::createPipelines()
 	{ // shadow map pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = shadow_map_depth_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/shadow_shader.vert.spv";
+		pipeline_info.vert_path = "shaders/rasterization/shadow_shader.vert.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		std::vector<VkVertexInputAttributeDescription> attribute_descriptions = {
 			BlockVertex::getAttributeDescriptions()[0]
@@ -1470,8 +1472,8 @@ void VulkanAPI::createPipelines()
 	{ // test image pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = { color_attachement.extent2D.width / 3, color_attachement.extent2D.height / 3 };
-		pipeline_info.vert_path = "shaders/test_image_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/test_image_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/test_image_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/test_image_shader.frag.spv";
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
@@ -1488,8 +1490,8 @@ void VulkanAPI::createPipelines()
 	{ // Entity pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/entity_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/entity_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/entity_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/entity_shader.frag.spv";
 		pipeline_info.binding_description = EntityVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = EntityVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { color_attachement.format };
@@ -1508,8 +1510,8 @@ void VulkanAPI::createPipelines()
 	{ // Player pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/player_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/player_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/player_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/player_shader.frag.spv";
 		pipeline_info.binding_description = ObjVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = ObjVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { color_attachement.format };
@@ -1529,8 +1531,8 @@ void VulkanAPI::createPipelines()
 	{ // Gui pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = color_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/gui_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/gui_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/gui_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/gui_shader.frag.spv";
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
@@ -1767,11 +1769,12 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 void VulkanAPI::setupRayTracing()
 {
 	getRayTracingProperties();
-	createRayTracingOutputImage();
+	createRayTracingImages();
 	createRayTracingDescriptor();
-	updateRTOutputImageDescriptor();
+	updateRTImagesDescriptor();
 	createRayTracingPipeline();
 	createRayTracingShaderBindingTable();
+	createComputePipeline();
 
 	LOG_INFO("Ray tracing setup complete");
 }
@@ -1802,8 +1805,17 @@ void VulkanAPI::destroyRayTracing()
 		vma.freeMemory(device, rt_mesh_data_buffer_memory, nullptr);
 	}
 
+	rt_lighting_shadow_image_descriptor.clear();
 	rt_output_image_descriptor.clear();
 	rt_objects_descriptor.clear();
+
+	vkDestroyImage(device, rt_lighting_image, nullptr);
+	vma.freeMemory(device, rt_lighting_image_memory, nullptr);
+	vkDestroyImageView(device, rt_lighting_image_view, nullptr);
+
+	vkDestroyImage(device, rt_shadow_image, nullptr);
+	vma.freeMemory(device, rt_shadow_image_memory, nullptr);
+	vkDestroyImageView(device, rt_shadow_image_view, nullptr);
 
 	vkDestroyImage(device, rt_output_image, nullptr);
 	vma.freeMemory(device, rt_output_image_memory, nullptr);
@@ -1812,18 +1824,29 @@ void VulkanAPI::destroyRayTracing()
 	vkDestroyPipeline(device, rt_pipeline, nullptr);
 	vkDestroyPipelineLayout(device, rt_pipeline_layout, nullptr);
 
+	vkDestroyPipeline(device, compute_pipeline, nullptr);
+	vkDestroyPipelineLayout(device, compute_pipeline_layout, nullptr);
+
 	vkDestroyBuffer(device, rt_sbt_buffer, nullptr);
 	vma.freeMemory(device, rt_sbt_buffer_memory, nullptr);
 }
 
 void VulkanAPI::handleResizeRT()
 {
+	vkDestroyImage(device, rt_lighting_image, nullptr);
+	vma.freeMemory(device, rt_lighting_image_memory, nullptr);
+	vkDestroyImageView(device, rt_lighting_image_view, nullptr);
+
+	vkDestroyImage(device, rt_shadow_image, nullptr);
+	vma.freeMemory(device, rt_shadow_image_memory, nullptr);
+	vkDestroyImageView(device, rt_shadow_image_view, nullptr);
+
 	vkDestroyImage(device, rt_output_image, nullptr);
 	vma.freeMemory(device, rt_output_image_memory, nullptr);
 	vkDestroyImageView(device, rt_output_image_view, nullptr);
 
-	createRayTracingOutputImage();
-	updateRTOutputImageDescriptor();
+	createRayTracingImages();
+	updateRTImagesDescriptor();
 }
 
 void VulkanAPI::getRayTracingProperties()
@@ -2251,51 +2274,151 @@ void VulkanAPI::createTopLevelAS(const std::vector<InstanceData> & instance_list
 	vma.freeMemory(device, as_instances_buffer_memory, nullptr);
 }
 
-void VulkanAPI::createRayTracingOutputImage()
+void VulkanAPI::createRayTracingImages()
 {
-	rt_output_image_width = swapchain.extent.width * 2;
-	rt_output_image_height = swapchain.extent.height * 2;
+	{ // Lighting image
+		rt_lighting_image_width = swapchain.extent.width * 2;
+		rt_lighting_image_height = swapchain.extent.height * 2;
 
-	createImage(
-		rt_output_image_width,
-		rt_output_image_height,
-		1,
-		VK_FORMAT_R8G8B8A8_UNORM,
-		VK_IMAGE_TILING_OPTIMAL,
-		VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-		rt_output_image,
-		rt_output_image_memory
-	);
+		createImage(
+			rt_lighting_image_width,
+			rt_lighting_image_height,
+			1,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			rt_lighting_image,
+			rt_lighting_image_memory
+		);
 
-	createImageView(
-		rt_output_image,
-		VK_FORMAT_R8G8B8A8_UNORM,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		rt_output_image_view
-	);
+		createImageView(
+			rt_lighting_image,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			rt_lighting_image_view
+		);
 
-	transitionImageLayout(
-		rt_output_image,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		VK_ACCESS_SHADER_WRITE_BIT,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR
-	);
+		transitionImageLayout(
+			rt_lighting_image,
+			VK_IMAGE_LAYOUT_UNDEFINED,
+			VK_IMAGE_LAYOUT_GENERAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			1,
+			0,
+			VK_ACCESS_SHADER_WRITE_BIT,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR
+		);
+	}
+
+	{ // Shadow image
+		rt_shadow_image_width = swapchain.extent.width * 2;
+		rt_shadow_image_height = swapchain.extent.height * 2;
+
+		createImage(
+			rt_shadow_image_width,
+			rt_shadow_image_height,
+			1,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			rt_shadow_image,
+			rt_shadow_image_memory
+		);
+
+		createImageView(
+			rt_shadow_image,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			rt_shadow_image_view
+		);
+
+		transitionImageLayout(
+			rt_shadow_image,
+			VK_IMAGE_LAYOUT_UNDEFINED,
+			VK_IMAGE_LAYOUT_GENERAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			1,
+			0,
+			VK_ACCESS_SHADER_WRITE_BIT,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR
+		);
+	}
+
+	{ // Output image
+		rt_output_image_width = swapchain.extent.width * 2;
+		rt_output_image_height = swapchain.extent.height * 2;
+
+		createImage(
+			rt_output_image_width,
+			rt_output_image_height,
+			1,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			rt_output_image,
+			rt_output_image_memory
+		);
+
+		createImageView(
+			rt_output_image,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			rt_output_image_view
+		);
+
+		transitionImageLayout(
+			rt_output_image,
+			VK_IMAGE_LAYOUT_UNDEFINED,
+			VK_IMAGE_LAYOUT_GENERAL,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			1,
+			0,
+			VK_ACCESS_SHADER_WRITE_BIT,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR
+		);
+	}
 }
 
 void VulkanAPI::createRayTracingDescriptor()
 {
+	{ // Lighting and shadow image descriptor
+		VkDescriptorSetLayoutBinding lighting_image_binding = {};
+		lighting_image_binding.binding = 0;
+		lighting_image_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		lighting_image_binding.descriptorCount = 1;
+		lighting_image_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_COMPUTE_BIT;
+		lighting_image_binding.pImmutableSamplers = nullptr;
+
+		VkDescriptorSetLayoutBinding shadow_image_binding = {};
+		shadow_image_binding.binding = 1;
+		shadow_image_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		shadow_image_binding.descriptorCount = 1;
+		shadow_image_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_COMPUTE_BIT;
+		shadow_image_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = {
+			lighting_image_binding,
+			shadow_image_binding
+		};
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		rt_lighting_shadow_image_descriptor = Descriptor(device, descriptor_info);
+	}
+
 	{ // Output image descriptor
 		VkDescriptorSetLayoutBinding result_image_binding = {};
 		result_image_binding.binding = 0;
 		result_image_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
 		result_image_binding.descriptorCount = 1;
-		result_image_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+		result_image_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_COMPUTE_BIT;
 		result_image_binding.pImmutableSamplers = nullptr;
 
 		Descriptor::CreateInfo descriptor_info = {};
@@ -2313,7 +2436,7 @@ void VulkanAPI::createRayTracingDescriptor()
 		acceleration_structure_binding.binding = 0;
 		acceleration_structure_binding.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
 		acceleration_structure_binding.descriptorCount = 1;
-		acceleration_structure_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+		acceleration_structure_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
 		acceleration_structure_binding.pImmutableSamplers = nullptr;
 
 		VkDescriptorSetLayoutBinding mesh_data_binding = {};
@@ -2335,24 +2458,51 @@ void VulkanAPI::createRayTracingDescriptor()
 	}
 }
 
-void VulkanAPI::updateRTOutputImageDescriptor()
+void VulkanAPI::updateRTImagesDescriptor()
 {
-	VkDescriptorImageInfo result_image_info = {};
-	result_image_info.imageView = rt_output_image_view;
-	result_image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+	VkDescriptorImageInfo lighting_image_info = {};
+	lighting_image_info.imageView = rt_lighting_image_view;
+	lighting_image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+
+	VkDescriptorImageInfo shadow_image_info = {};
+	shadow_image_info.imageView = rt_shadow_image_view;
+	shadow_image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+
+	VkDescriptorImageInfo output_image_info = {};
+	output_image_info.imageView = rt_output_image_view;
+	output_image_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
-		VkWriteDescriptorSet result_image_write = {};
-		result_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		result_image_write.dstSet = rt_output_image_descriptor.sets[i];
-		result_image_write.dstBinding = 0;
-		result_image_write.descriptorCount = 1;
-		result_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-		result_image_write.pImageInfo = &result_image_info;
+		VkWriteDescriptorSet lighting_image_write = {};
+		lighting_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		lighting_image_write.dstSet = rt_lighting_shadow_image_descriptor.sets[i];
+		lighting_image_write.dstBinding = 0;
+		lighting_image_write.descriptorCount = 1;
+		lighting_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		lighting_image_write.pImageInfo = &lighting_image_info;
+
+		VkWriteDescriptorSet shadow_image_write = {};
+		shadow_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		shadow_image_write.dstSet = rt_lighting_shadow_image_descriptor.sets[i];
+		shadow_image_write.dstBinding = 1;
+		shadow_image_write.descriptorCount = 1;
+		shadow_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		shadow_image_write.pImageInfo = &shadow_image_info;
+
+		VkWriteDescriptorSet output_image_write = {};
+		output_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		output_image_write.dstSet = rt_output_image_descriptor.sets[i];
+		output_image_write.dstBinding = 0;
+		output_image_write.descriptorCount = 1;
+		output_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+		output_image_write.pImageInfo = &output_image_info;
+
 
 		std::vector<VkWriteDescriptorSet> writes = {
-			result_image_write
+			lighting_image_write,
+			shadow_image_write,
+			output_image_write
 		};
 
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
@@ -2416,7 +2566,8 @@ void VulkanAPI::createRayTracingPipeline()
 	}
 
 	LOAD_SHADER_STAGE(VK_SHADER_STAGE_RAYGEN_BIT_KHR, "shaders/ray_tracing/raytrace.rgen.spv");
-	LOAD_SHADER_STAGE(VK_SHADER_STAGE_MISS_BIT_KHR, "shaders/ray_tracing/raytrace.rmiss.spv");
+	LOAD_SHADER_STAGE(VK_SHADER_STAGE_MISS_BIT_KHR, "shaders/ray_tracing/sky.rmiss.spv");
+	LOAD_SHADER_STAGE(VK_SHADER_STAGE_MISS_BIT_KHR, "shaders/ray_tracing/shadow.rmiss.spv");
 	LOAD_SHADER_STAGE(VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR, "shaders/ray_tracing/raytrace.rchit.spv");
 
 	#undef LOAD_SHADER_STAGE
@@ -2424,36 +2575,45 @@ void VulkanAPI::createRayTracingPipeline()
 	VkRayTracingShaderGroupCreateInfoKHR raygen_group = {};
 	raygen_group.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
 	raygen_group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-	raygen_group.generalShader = static_cast<uint32_t>(shader_stages.size() - 3);
+	raygen_group.generalShader = 0;
 	raygen_group.closestHitShader = VK_SHADER_UNUSED_KHR;
 	raygen_group.anyHitShader = VK_SHADER_UNUSED_KHR;
 	raygen_group.intersectionShader = VK_SHADER_UNUSED_KHR;
 
-	VkRayTracingShaderGroupCreateInfoKHR miss_group = {};
-	miss_group.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
-	miss_group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
-	miss_group.generalShader = static_cast<uint32_t>(shader_stages.size() - 2);
-	miss_group.closestHitShader = VK_SHADER_UNUSED_KHR;
-	miss_group.anyHitShader = VK_SHADER_UNUSED_KHR;
-	miss_group.intersectionShader = VK_SHADER_UNUSED_KHR;
+	VkRayTracingShaderGroupCreateInfoKHR sky_miss_group = {};
+	sky_miss_group.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
+	sky_miss_group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
+	sky_miss_group.generalShader = 1;
+	sky_miss_group.closestHitShader = VK_SHADER_UNUSED_KHR;
+	sky_miss_group.anyHitShader = VK_SHADER_UNUSED_KHR;
+	sky_miss_group.intersectionShader = VK_SHADER_UNUSED_KHR;
+
+	VkRayTracingShaderGroupCreateInfoKHR shadow_miss_group = {};
+	shadow_miss_group.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
+	shadow_miss_group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
+	shadow_miss_group.generalShader = 2;
+	shadow_miss_group.closestHitShader = VK_SHADER_UNUSED_KHR;
+	shadow_miss_group.anyHitShader = VK_SHADER_UNUSED_KHR;
+	shadow_miss_group.intersectionShader = VK_SHADER_UNUSED_KHR;
 
 	VkRayTracingShaderGroupCreateInfoKHR hit_group = {};
 	hit_group.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
 	hit_group.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
 	hit_group.generalShader = VK_SHADER_UNUSED_KHR;
-	hit_group.closestHitShader = static_cast<uint32_t>(shader_stages.size() - 1);
+	hit_group.closestHitShader = 3;
 	hit_group.anyHitShader = VK_SHADER_UNUSED_KHR;
 	hit_group.intersectionShader = VK_SHADER_UNUSED_KHR;
 
 	std::vector<VkRayTracingShaderGroupCreateInfoKHR> groups = {
 		raygen_group,
-		miss_group,
+		sky_miss_group,
+		shadow_miss_group,
 		hit_group
 	};
 
 
 	std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {
-		rt_output_image_descriptor.layout,
+		rt_lighting_shadow_image_descriptor.layout,
 		rt_objects_descriptor.layout,
 		camera_descriptor.layout,
 		block_textures_descriptor.layout,
@@ -2478,7 +2638,7 @@ void VulkanAPI::createRayTracingPipeline()
 	pipeline_info.pStages = shader_stages.data();
 	pipeline_info.groupCount = static_cast<uint32_t>(groups.size());
 	pipeline_info.pGroups = groups.data();
-	pipeline_info.maxPipelineRayRecursionDepth = 1;
+	pipeline_info.maxPipelineRayRecursionDepth = 2;
 	pipeline_info.layout = rt_pipeline_layout;
 
 	VK_CHECK(
@@ -2492,6 +2652,47 @@ void VulkanAPI::createRayTracingPipeline()
 	}
 }
 
+void VulkanAPI::createComputePipeline()
+{
+	auto code = readFile("shaders/compute/shading.comp.spv");
+	VkShaderModule module = createShaderModule(code);
+
+	VkPipelineShaderStageCreateInfo stage_info = {};
+	stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	stage_info.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+	stage_info.module = module;
+	stage_info.pName = "main";
+
+	std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {
+		rt_lighting_shadow_image_descriptor.layout,
+		rt_output_image_descriptor.layout
+	};
+
+	VkPipelineLayoutCreateInfo pipeline_layout_info = {};
+	pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipeline_layout_info.setLayoutCount = static_cast<uint32_t>(descriptor_set_layouts.size());
+	pipeline_layout_info.pSetLayouts = descriptor_set_layouts.data();
+	pipeline_layout_info.pushConstantRangeCount = 0;
+	pipeline_layout_info.pPushConstantRanges = nullptr;
+
+	VK_CHECK(
+		vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &compute_pipeline_layout),
+		"Failed to create compute pipeline layout"
+	);
+
+	VkComputePipelineCreateInfo pipeline_info = {};
+	pipeline_info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+	pipeline_info.stage = stage_info;
+	pipeline_info.layout = compute_pipeline_layout;
+
+	VK_CHECK(
+		vkCreateComputePipelines(device, VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &compute_pipeline),
+		"Failed to create compute pipeline"
+	);
+
+	vkDestroyShaderModule(device, module, nullptr);
+}
+
 uint32_t alignedSize(uint32_t value, uint32_t alignment)
 {
 	return (value + alignment - 1) & ~(alignment - 1);
@@ -2499,7 +2700,7 @@ uint32_t alignedSize(uint32_t value, uint32_t alignment)
 
 void VulkanAPI::createRayTracingShaderBindingTable()
 {
-	uint32_t miss_count = 1;
+	uint32_t miss_count = 2;
 	uint32_t hit_count = 1;
 	uint32_t handle_count = 1 + miss_count + hit_count;
 	uint32_t handle_size = ray_tracing_properties.shaderGroupHandleSize;

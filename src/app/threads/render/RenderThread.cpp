@@ -1030,7 +1030,7 @@ void RenderThread::copyToSwapchainRT()
 
 	vk.setImageLayout(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
+		vk.rt_lighting_image,
 		VK_IMAGE_LAYOUT_GENERAL,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -1043,8 +1043,8 @@ void RenderThread::copyToSwapchainRT()
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.rt_output_image_width),
-		static_cast<int32_t>(vk.rt_output_image_height),
+		static_cast<int32_t>(vk.rt_lighting_image_width),
+		static_cast<int32_t>(vk.rt_lighting_image_height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1064,7 +1064,7 @@ void RenderThread::copyToSwapchainRT()
 
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
+		vk.rt_lighting_image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -1075,7 +1075,7 @@ void RenderThread::copyToSwapchainRT()
 
 	vk.setImageLayout(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
+		vk.rt_lighting_image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		VK_IMAGE_LAYOUT_GENERAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -1202,7 +1202,7 @@ void RenderThread::raytrace()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, vk.rt_pipeline);
 
 	std::vector<VkDescriptorSet> rt_descriptor_sets = {
-		vk.rt_output_image_descriptor.sets[vk.current_frame],
+		vk.rt_lighting_shadow_image_descriptor.sets[vk.current_frame],
 		vk.rt_objects_descriptor.sets[vk.current_frame],
 		vk.camera_descriptor.sets[vk.current_frame],
 		vk.block_textures_descriptor.set,

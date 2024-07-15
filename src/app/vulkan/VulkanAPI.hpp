@@ -396,9 +396,7 @@ public:
 	uint64_t player_left_arm_mesh_id;
 
 	// Ray tracing
-	// VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_features;
 	VkPhysicalDeviceRayTracingPipelinePropertiesKHR ray_tracing_properties;
-	// VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features;
 	VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_structure_properties;
 
 	struct BottomLevelAS
@@ -453,12 +451,25 @@ public:
 	uint32_t rt_mesh_data_buffer_count = 0;
 
 
+	VkImage rt_lighting_image;
+	VkDeviceMemory rt_lighting_image_memory;
+	VkImageView rt_lighting_image_view;
+	uint32_t rt_lighting_image_width;
+	uint32_t rt_lighting_image_height;
+
+	VkImage rt_shadow_image;
+	VkDeviceMemory rt_shadow_image_memory;
+	VkImageView rt_shadow_image_view;
+	uint32_t rt_shadow_image_width;
+	uint32_t rt_shadow_image_height;
+
 	VkImage rt_output_image;
 	VkDeviceMemory rt_output_image_memory;
 	VkImageView rt_output_image_view;
 	uint32_t rt_output_image_width;
 	uint32_t rt_output_image_height;
 
+	Descriptor rt_lighting_shadow_image_descriptor;
 	Descriptor rt_output_image_descriptor;
 	Descriptor rt_objects_descriptor;
 
@@ -471,6 +482,9 @@ public:
 	VkStridedDeviceAddressRegionKHR rt_sbt_miss_region = {};
 	VkStridedDeviceAddressRegionKHR rt_sbt_hit_region = {};
 	VkStridedDeviceAddressRegionKHR rt_sbt_call_region = {};
+
+	VkPipeline compute_pipeline;
+	VkPipelineLayout compute_pipeline_layout;
 
 
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
@@ -580,11 +594,12 @@ private:
 	void destroyInstance(InstanceData & instance);
 	void createMeshDataBuffer();
 	void createTopLevelAS(const std::vector<InstanceData> & instance_list);
-	void createRayTracingOutputImage();
+	void createRayTracingImages();
 	void createRayTracingDescriptor();
-	void updateRTOutputImageDescriptor();
+	void updateRTImagesDescriptor();
 	void updateRTObjectsDescriptor();
 	void createRayTracingPipeline();
+	void createComputePipeline();
 	void createRayTracingShaderBindingTable();
 	std::vector<char> readFile(const std::string & filename);
 	VkShaderModule createShaderModule(const std::vector<char> & code);

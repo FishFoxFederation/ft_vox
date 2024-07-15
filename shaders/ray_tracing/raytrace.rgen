@@ -1,10 +1,11 @@
 #version 460
 #extension GL_EXT_ray_tracing : require
 
-layout(binding = 0, set = 0, rgba32f) uniform image2D image;
-layout(binding = 0, set = 1) uniform accelerationStructureEXT topLevelAS;
+layout(set = 0, binding = 0, rgba32f) uniform image2D lighting_image;
+layout(set = 0, binding = 1, rgba32f) uniform image2D shadow_image;
+layout(set = 1, binding = 0) uniform accelerationStructureEXT topLevelAS;
 
-layout(binding = 0, set = 2) uniform Camera
+layout(set = 2, binding = 0) uniform Camera
 {
 	mat4 view;
 	mat4 proj;
@@ -19,7 +20,7 @@ layout(location = 0) rayPayloadEXT struct RayPayload
 void main()
 {
 	const vec2 pixel_center = vec2(gl_LaunchIDEXT.xy) + vec2(0.5);
-	const vec2 inUV = pixel_center / vec2(imageSize(image));
+	const vec2 inUV = pixel_center / vec2(imageSize(lighting_image));
 	const vec2 d = inUV * 2.0 - 1.0;
 
 	const mat4 inv_view = inverse(camera.view);
@@ -31,7 +32,7 @@ void main()
 
 	uint  rayFlags = gl_RayFlagsOpaqueEXT;
 	float tMin = 0.001;
-	float tMax = 10000.0;
+	float tMax = 1000.0;
 
 	payload.ray_direction = direction.xyz;
 
@@ -50,5 +51,5 @@ void main()
 	);
 
 
-	imageStore(image, ivec2(gl_LaunchIDEXT.xy), payload.color);
+	imageStore(lighting_image, ivec2(gl_LaunchIDEXT.xy), payload.color);
 }
