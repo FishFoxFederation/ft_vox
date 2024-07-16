@@ -121,8 +121,8 @@ Inheritance diagram for ServerWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classServerWorld__inherit__graph.png" border="0" usemap="#aServerWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aServerWorld_inherit__map" id="aServerWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,372,227,705"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="28,5,204,324"/>
+<area shape="rect" title=" " alt="" coords="5,372,207,705"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="18,5,194,324"/>
 </map>
 </div>
 <div class="dynheader">
@@ -130,7 +130,7 @@ Collaboration diagram for ServerWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classServerWorld__coll__graph.png" border="0" usemap="#aServerWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aServerWorld_coll__map" id="aServerWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="77,608,298,941"/>
+<area shape="rect" title=" " alt="" coords="87,608,288,941"/>
 <area shape="rect" href="classWorld.html" title=" " alt="" coords="99,269,275,559"/>
 <area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,5,175,207"/>
 <area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,27,371,185"/>
@@ -233,8 +233,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a67b82ec0f52732390556aa2bf499c2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6888801ef91a7255eb097c1ba97de195"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a6888801ef91a7255eb097c1ba97de195">TICKET_LEVEL_INACTIVE</a> = 34</td></tr>
 <tr class="separator:a6888801ef91a7255eb097c1ba97de195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee54b9e94d47a7ee1b1e54b231f0d108"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#aee54b9e94d47a7ee1b1e54b231f0d108">SPAWN_POINT_LOAD_LEVEL</a> = 22</td></tr>
-<tr class="separator:aee54b9e94d47a7ee1b1e54b231f0d108"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac97956e2db082c0f7b71ee24697684a8"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#ac97956e2db082c0f7b71ee24697684a8">TICKET_LEVEL_SPAWN</a> = 32</td></tr>
+<tr class="separator:ac97956e2db082c0f7b71ee24697684a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f91d49257fcbf0fca2d99c060089fd0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a3f91d49257fcbf0fca2d99c060089fd0">TICKET_LEVEL_PLAYER</a> = 30</td></tr>
 <tr class="separator:a3f91d49257fcbf0fca2d99c060089fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa452cff199cbe72eb22a8ce01a09a97a"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#aa452cff199cbe72eb22a8ce01a09a97a">SERVER_LOAD_DISTANCE</a> = <a class="el" href="classServerWorld.html#a6888801ef91a7255eb097c1ba97de195">TICKET_LEVEL_INACTIVE</a> - <a class="el" href="classServerWorld.html#a3f91d49257fcbf0fca2d99c060089fd0">TICKET_LEVEL_PLAYER</a></td></tr>
@@ -854,28 +854,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="aee54b9e94d47a7ee1b1e54b231f0d108" name="aee54b9e94d47a7ee1b1e54b231f0d108"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee54b9e94d47a7ee1b1e54b231f0d108">&#9670;&#160;</a></span>SPAWN_POINT_LOAD_LEVEL</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::SPAWN_POINT_LOAD_LEVEL = 22</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a019348b5fe4d508e8d6e6b48ae491dc4" name="a019348b5fe4d508e8d6e6b48ae491dc4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a019348b5fe4d508e8d6e6b48ae491dc4">&#9670;&#160;</a></span>TICKET_LEVEL_BLOCK_UPDATE</h2>
 
@@ -975,6 +953,28 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_PLAYER = 30</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac97956e2db082c0f7b71ee24697684a8" name="ac97956e2db082c0f7b71ee24697684a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac97956e2db082c0f7b71ee24697684a8">&#9670;&#160;</a></span>TICKET_LEVEL_SPAWN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_SPAWN = 32</td>
         </tr>
       </table>
   </td>

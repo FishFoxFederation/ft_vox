@@ -8,5 +8,5 @@ var classPoller =
     [ "operator=", "classPoller.html#a2cc09217e44aa64dae5f269ef152a3c6", null ],
     [ "operator=", "classPoller.html#a3bce85b455a85eb54d9e989c3bca7ebc", null ],
     [ "remove", "classPoller.html#a70cea12024b34cd521d14e6474e8c89b", null ],
-    [ "wait", "classPoller.html#aa1f5dc6b24a59c63a420f787205f87f1", null ]
+    [ "wait", "classPoller.html#a9ae5cbc4c3754ccb262f0bc503a8e095", null ]
 ];
