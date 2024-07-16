@@ -103,6 +103,7 @@ var hierarchy =
     [ "Swapchain::SupportDetails", "structSwapchain_1_1SupportDetails.html", null ],
     [ "Swapchain", "classSwapchain.html", null ],
     [ "ThreadPool", "classThreadPool.html", null ],
+    [ "ThreadPoolAccessor", "classThreadPoolAccessor.html", null ],
     [ "ServerWorld::Ticket", "structServerWorld_1_1Ticket.html", null ],
     [ "Timer< ChronoCount, HistorySize >", "classTimer.html", null ],
     [ "Transform", "classTransform.html", null ],

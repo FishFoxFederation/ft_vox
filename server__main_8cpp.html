@@ -106,7 +106,8 @@ $(document).ready(function(){initNavTree('server__main_8cpp.html',''); initResiz
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">server_main.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -125,61 +126,62 @@ $(document).ready(function(){initNavTree('server__main_8cpp.html',''); initResiz
 <code>#include &lt;chrono&gt;</code><br />
 <code>#include &quot;<a class="el" href="tracy__globals_8hpp_source.html">tracy_globals.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ServerBlockUpdateThread_8hpp_source.html">ServerBlockUpdateThread.hpp</a>&quot;</code><br />
+<code>#include &lt;signal.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for server_main.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="server__main_8cpp__incl.png" border="0" usemap="#asrc_2server__main_8cpp" alt=""/></div>
 <map name="asrc_2server__main_8cpp" id="asrc_2server__main_8cpp">
-<area shape="rect" title=" " alt="" coords="1117,5,1256,31"/>
-<area shape="rect" href="Connection_8hpp.html" title=" " alt="" coords="833,592,943,617"/>
-<area shape="rect" title=" " alt="" coords="859,739,931,764"/>
-<area shape="rect" title=" " alt="" coords="21,812,88,837"/>
-<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1162,665,1243,691"/>
-<area shape="rect" href="Server_8hpp.html" title=" " alt="" coords="629,225,753,251"/>
-<area shape="rect" title=" " alt="" coords="437,372,547,397"/>
-<area shape="rect" href="PacketFactory_8hpp.html" title=" " alt="" coords="427,299,557,324"/>
-<area shape="rect" href="ServerPacketHandler_8hpp.html" title=" " alt="" coords="757,79,928,104"/>
-<area shape="rect" href="ServerWorld_8hpp.html" title=" " alt="" coords="1128,152,1245,177"/>
-<area shape="rect" title=" " alt="" coords="1749,372,1808,397"/>
-<area shape="rect" href="tracy__globals_8hpp.html" title=" " alt="" coords="1883,372,2005,397"/>
-<area shape="rect" title=" " alt="" coords="1750,79,1805,104"/>
-<area shape="rect" title=" " alt="" coords="1829,79,1889,104"/>
-<area shape="rect" title=" " alt="" coords="1913,79,1975,104"/>
-<area shape="rect" href="ServerBlockUpdateThread_8hpp.html" title=" " alt="" coords="1475,79,1674,104"/>
-<area shape="rect" title=" " alt="" coords="859,665,917,691"/>
-<area shape="rect" title=" " alt="" coords="1515,739,1573,764"/>
-<area shape="rect" title=" " alt="" coords="934,885,1002,911"/>
-<area shape="rect" href="ConnectionSocket_8hpp.html" title=" " alt="" coords="531,665,683,691"/>
-<area shape="rect" href="Socket_8hpp.html" title=" " alt="" coords="407,739,494,764"/>
-<area shape="rect" title=" " alt="" coords="1622,665,1701,691"/>
-<area shape="rect" title=" " alt="" coords="471,812,566,837"/>
-<area shape="rect" title=" " alt="" coords="590,812,677,837"/>
-<area shape="rect" title=" " alt="" coords="112,812,189,837"/>
-<area shape="rect" title=" " alt="" coords="369,812,447,837"/>
-<area shape="rect" href="Poller_8hpp.html" title=" " alt="" coords="214,812,293,837"/>
-<area shape="rect" title=" " alt="" coords="40,885,101,911"/>
-<area shape="rect" title=" " alt="" coords="212,885,295,911"/>
-<area shape="rect" title=" " alt="" coords="1056,739,1123,764"/>
-<area shape="rect" title=" " alt="" coords="1147,739,1216,764"/>
-<area shape="rect" title=" " alt="" coords="1241,739,1295,764"/>
-<area shape="rect" title=" " alt="" coords="1320,739,1387,764"/>
-<area shape="rect" title=" " alt="" coords="1411,739,1491,764"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="1493,372,1573,397"/>
-<area shape="rect" title=" " alt="" coords="632,299,693,324"/>
-<area shape="rect" href="ServerSocket_8hpp.html" title=" " alt="" coords="327,592,452,617"/>
-<area shape="rect" href="IncomingPacketList_8hpp.html" title=" " alt="" coords="1341,445,1504,471"/>
-<area shape="rect" title=" " alt="" coords="275,665,339,691"/>
-<area shape="rect" title=" " alt="" coords="363,665,456,691"/>
-<area shape="rect" href="Packets_8hpp.html" title=" " alt="" coords="785,372,879,397"/>
+<area shape="rect" title=" " alt="" coords="1235,5,1373,31"/>
+<area shape="rect" href="Connection_8hpp.html" title=" " alt="" coords="854,592,965,617"/>
+<area shape="rect" title=" " alt="" coords="807,739,879,764"/>
+<area shape="rect" title=" " alt="" coords="116,812,183,837"/>
+<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="1271,665,1353,691"/>
+<area shape="rect" href="Server_8hpp.html" title=" " alt="" coords="582,225,706,251"/>
+<area shape="rect" title=" " alt="" coords="381,372,491,397"/>
+<area shape="rect" href="PacketFactory_8hpp.html" title=" " alt="" coords="371,299,501,324"/>
+<area shape="rect" href="ServerPacketHandler_8hpp.html" title=" " alt="" coords="669,79,840,104"/>
+<area shape="rect" href="ServerWorld_8hpp.html" title=" " alt="" coords="1124,152,1241,177"/>
+<area shape="rect" title=" " alt="" coords="1592,299,1651,324"/>
+<area shape="rect" href="tracy__globals_8hpp.html" title=" " alt="" coords="1725,299,1848,324"/>
+<area shape="rect" title=" " alt="" coords="1674,79,1729,104"/>
+<area shape="rect" title=" " alt="" coords="1753,79,1813,104"/>
+<area shape="rect" title=" " alt="" coords="1837,79,1899,104"/>
+<area shape="rect" href="ServerBlockUpdateThread_8hpp.html" title=" " alt="" coords="1299,79,1498,104"/>
+<area shape="rect" title=" " alt="" coords="1973,79,2040,104"/>
+<area shape="rect" title=" " alt="" coords="880,665,939,691"/>
+<area shape="rect" title=" " alt="" coords="1065,739,1122,764"/>
+<area shape="rect" title=" " alt="" coords="942,885,1010,911"/>
+<area shape="rect" href="ConnectionSocket_8hpp.html" title=" " alt="" coords="451,665,603,691"/>
+<area shape="rect" href="Socket_8hpp.html" title=" " alt="" coords="435,739,522,764"/>
+<area shape="rect" title=" " alt="" coords="1531,665,1610,691"/>
+<area shape="rect" title=" " alt="" coords="383,812,478,837"/>
+<area shape="rect" title=" " alt="" coords="502,812,589,837"/>
+<area shape="rect" title=" " alt="" coords="716,812,793,837"/>
+<area shape="rect" title=" " alt="" coords="613,812,691,837"/>
+<area shape="rect" href="Poller_8hpp.html" title=" " alt="" coords="229,812,307,837"/>
+<area shape="rect" title=" " alt="" coords="84,885,145,911"/>
+<area shape="rect" title=" " alt="" coords="227,885,309,911"/>
+<area shape="rect" title=" " alt="" coords="1197,739,1264,764"/>
+<area shape="rect" title=" " alt="" coords="1288,739,1357,764"/>
+<area shape="rect" title=" " alt="" coords="1382,739,1437,764"/>
+<area shape="rect" title=" " alt="" coords="1461,739,1528,764"/>
+<area shape="rect" title=" " alt="" coords="1552,739,1632,764"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="1336,299,1416,324"/>
+<area shape="rect" title=" " alt="" coords="677,299,739,324"/>
+<area shape="rect" href="ServerSocket_8hpp.html" title=" " alt="" coords="300,592,425,617"/>
+<area shape="rect" href="IncomingPacketList_8hpp.html" title=" " alt="" coords="979,445,1141,471"/>
+<area shape="rect" title=" " alt="" coords="144,665,208,691"/>
+<area shape="rect" title=" " alt="" coords="232,665,325,691"/>
+<area shape="rect" href="Packets_8hpp.html" title=" " alt="" coords="779,372,874,397"/>
 <area shape="rect" href="PlayerMovePacket_8hpp.html" title=" " alt="" coords="749,445,904,471"/>
-<area shape="rect" href="PlayerConnectedPacket_8hpp.html" title=" " alt="" coords="929,445,1114,471"/>
-<area shape="rect" href="IPacket_8hpp.html" title=" " alt="" coords="960,519,1051,544"/>
-<area shape="rect" title=" " alt="" coords="1515,519,1573,544"/>
-<area shape="rect" title=" " alt="" coords="1022,299,1114,324"/>
-<area shape="rect" href="server__define_8hpp.html" title=" " alt="" coords="880,225,1003,251"/>
-<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="1206,225,1285,251"/>
-<area shape="rect" href="ThreadPool_8hpp.html" title=" " alt="" coords="1563,299,1675,324"/>
-<area shape="rect" title=" " alt="" coords="1077,225,1181,251"/>
+<area shape="rect" href="IPacket_8hpp.html" title=" " alt="" coords="797,519,888,544"/>
+<area shape="rect" title=" " alt="" coords="1217,519,1274,544"/>
+<area shape="rect" title=" " alt="" coords="1211,372,1303,397"/>
+<area shape="rect" href="server__define_8hpp.html" title=" " alt="" coords="883,225,1005,251"/>
+<area shape="rect" href="World_8hpp.html" title=" " alt="" coords="1233,299,1311,324"/>
+<area shape="rect" href="ThreadPool_8hpp.html" title=" " alt="" coords="1411,225,1523,251"/>
+<area shape="rect" title=" " alt="" coords="1131,225,1235,251"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -187,6 +189,11 @@ Include dependency graph for server_main.cpp:</div>
 Functions</h2></td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="server__main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a36f7b6be7108281af77939ceaec42fd6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="server__main_8cpp.html#a36f7b6be7108281af77939ceaec42fd6">running</a> = true</td></tr>
+<tr class="separator:a36f7b6be7108281af77939ceaec42fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ae66f6b31b5ad750f1fe042a706a4e3d4" name="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
@@ -201,6 +208,21 @@ Functions</h2></td></tr>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a36f7b6be7108281af77939ceaec42fd6" name="a36f7b6be7108281af77939ceaec42fd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36f7b6be7108281af77939ceaec42fd6">&#9670;&#160;</a></span>running</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool running = true</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -33,13 +33,14 @@ var searchData=
   ['direction_30',['direction',['../classPlayer.html#a333e44206106f4585180041030d3cd00',1,'Player']]],
   ['dirt_31',['Dirt',['../structBlock.html#ada116f107b1d659e9d3fecd2f5fb9da1',1,'Block::Dirt()'],['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a7cf334b79a84091f27dfc019b4b79229',1,'Dirt():&#160;Block.hpp']]],
   ['disconnect_32',['DISCONNECT',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462',1,'IPacket']]],
-  ['disconnectpacket_33',['DisconnectPacket',['../classDisconnectPacket.html',1,'DisconnectPacket'],['../classDisconnectPacket.html#a4e59088ea19edff71f5f8448c2ffa8d0',1,'DisconnectPacket::DisconnectPacket(DisconnectPacket &amp;&amp;other)'],['../classDisconnectPacket.html#af87b9c06ab910752e742ac20a4ea93aa',1,'DisconnectPacket::DisconnectPacket()'],['../classDisconnectPacket.html#a07da316298ff176a99d6829b7be74fd0',1,'DisconnectPacket::DisconnectPacket(uint32_t player_id)'],['../classDisconnectPacket.html#ab40aba2804ab0dea47f591d71ae34a53',1,'DisconnectPacket::DisconnectPacket(const DisconnectPacket &amp;other)']]],
-  ['disconnectpacket_2ecpp_34',['DisconnectPacket.cpp',['../DisconnectPacket_8cpp.html',1,'']]],
-  ['disconnectpacket_2ehpp_35',['DisconnectPacket.hpp',['../DisconnectPacket_8hpp.html',1,'']]],
-  ['dmat_36',['dmat',['../classMat4.html#ac58529fdf443319bb6406eed968ad222',1,'Mat4']]],
-  ['docs_20style_20guide_37',['Docs Style guide',['../docstyleguide.html',1,'']]],
-  ['docs_5fstyle_5fguide_2emd_38',['docs_style_guide.md',['../docs__style__guide_8md.html',1,'']]],
-  ['draw_5fcommand_5fbuffers_39',['draw_command_buffers',['../classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907',1,'VulkanAPI']]],
-  ['dynamic_5fheader_5fsize_40',['DYNAMIC_HEADER_SIZE',['../classIPacket.html#aa1fbb981153d0de919c84d235613a65c',1,'IPacket']]],
-  ['dynamic_5fstates_41',['dynamic_states',['../structPipeline_1_1CreateInfo.html#a7f5176bb1185e2f0b2da53af19e3fa22',1,'Pipeline::CreateInfo']]]
+  ['disconnect_33',['disconnect',['../classServer.html#a2384ffdcf012e494a472ff9b57845f3b',1,'Server']]],
+  ['disconnectpacket_34',['DisconnectPacket',['../classDisconnectPacket.html',1,'DisconnectPacket'],['../classDisconnectPacket.html#a4e59088ea19edff71f5f8448c2ffa8d0',1,'DisconnectPacket::DisconnectPacket(DisconnectPacket &amp;&amp;other)'],['../classDisconnectPacket.html#af87b9c06ab910752e742ac20a4ea93aa',1,'DisconnectPacket::DisconnectPacket()'],['../classDisconnectPacket.html#a07da316298ff176a99d6829b7be74fd0',1,'DisconnectPacket::DisconnectPacket(uint32_t player_id)'],['../classDisconnectPacket.html#ab40aba2804ab0dea47f591d71ae34a53',1,'DisconnectPacket::DisconnectPacket(const DisconnectPacket &amp;other)']]],
+  ['disconnectpacket_2ecpp_35',['DisconnectPacket.cpp',['../DisconnectPacket_8cpp.html',1,'']]],
+  ['disconnectpacket_2ehpp_36',['DisconnectPacket.hpp',['../DisconnectPacket_8hpp.html',1,'']]],
+  ['dmat_37',['dmat',['../classMat4.html#ac58529fdf443319bb6406eed968ad222',1,'Mat4']]],
+  ['docs_20style_20guide_38',['Docs Style guide',['../docstyleguide.html',1,'']]],
+  ['docs_5fstyle_5fguide_2emd_39',['docs_style_guide.md',['../docs__style__guide_8md.html',1,'']]],
+  ['draw_5fcommand_5fbuffers_40',['draw_command_buffers',['../classVulkanAPI.html#ae3ca1ad478d46ff986a5c70ff3de9907',1,'VulkanAPI']]],
+  ['dynamic_5fheader_5fsize_41',['DYNAMIC_HEADER_SIZE',['../classIPacket.html#aa1fbb981153d0de919c84d235613a65c',1,'IPacket']]],
+  ['dynamic_5fstates_42',['dynamic_states',['../structPipeline_1_1CreateInfo.html#a7f5176bb1185e2f0b2da53af19e3fa22',1,'Pipeline::CreateInfo']]]
 ];

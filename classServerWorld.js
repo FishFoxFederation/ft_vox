@@ -4,7 +4,7 @@ var classServerWorld =
     [ "ChunkLoadUnloadData", "structServerWorld_1_1ChunkLoadUnloadData.html", "structServerWorld_1_1ChunkLoadUnloadData" ],
     [ "Ticket", "structServerWorld_1_1Ticket.html", "structServerWorld_1_1Ticket" ],
     [ "TicketMultiMap", "classServerWorld.html#a2734abb3a43b9347baa9be53e8093bda", null ],
-    [ "ServerWorld", "classServerWorld.html#ace706834635c9e5dab5c0504c710b484", null ],
+    [ "ServerWorld", "classServerWorld.html#ace35309adfbf4f853462b841e5696349", null ],
     [ "~ServerWorld", "classServerWorld.html#a821f2b9d1beafd6e53a186d73ac7ef09", null ],
     [ "ServerWorld", "classServerWorld.html#a23994b51ee628967efff79bbd27c3c9d", null ],
     [ "ServerWorld", "classServerWorld.html#adc567f737eba6828e7a12b0575ba7f93", null ],

@@ -1,5 +1,14 @@
 var NAVTREEINDEX5 =
 {
+"dir_b1761ed663595ed5d6faaeadad515f12.html":[11,0,1,0,4],
+"dir_c5f24f899eba4af6609da0690c066909.html":[11,0,1,0,1],
+"dir_cdb872d0c5c0fc0450cfef875ffa32ad.html":[11,0,1,0,5],
+"dir_ce67dc49e7b7521052d4b4fbb7c7077e.html":[11,0,1,0,2],
+"dir_e0870200418b25675e0ea23f406010ef.html":[11,0,1,0,3,2],
+"dir_e2d4946961cb2f7a598bb8a45601bca0.html":[11,0,1,0,3],
+"dir_e3a9557ac17630dcabd48e2e12c89d76.html":[11,0,1,0,6,0],
+"dir_ef3b2545113449f8f25e623a543d64e3.html":[11,0,0,0],
+"docstyleguide.html":[4],
 "docstyleguide.html#autotoc_md10":[4,1,1],
 "docstyleguide.html#autotoc_md11":[4,1,2],
 "docstyleguide.html#autotoc_md12":[4,2],
@@ -148,6 +157,7 @@ var NAVTREEINDEX5 =
 "server__define_8hpp.html":[11,0,1,5],
 "server__define_8hpp_source.html":[11,0,1,5],
 "server__main_8cpp.html":[11,0,1,6],
+"server__main_8cpp.html#a36f7b6be7108281af77939ceaec42fd6":[11,0,1,6,1],
 "server__main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[11,0,1,6,0],
 "structBlock.html":[10,0,3],
 "structBlockVertex.html":[10,0,6],
@@ -239,15 +249,5 @@ var NAVTREEINDEX5 =
 "structPipeline_1_1CreateInfo.html#a9cb9c18feed0563d0f3a9943ee708fb6":[10,0,51,0,2],
 "structPipeline_1_1CreateInfo.html#aa660f137d0ccf59854db69dc936769e5":[10,0,51,0,19],
 "structPipeline_1_1CreateInfo.html#aad0a65fa0068271cee011e6ece5c05f2":[10,0,51,0,6],
-"structPipeline_1_1CreateInfo.html#aae95948271ff108a34c8659455c0cf8c":[10,0,51,0,4],
-"structPipeline_1_1CreateInfo.html#ab40d996acb993a2798c34273f04ce458":[10,0,51,0,17],
-"structPipeline_1_1CreateInfo.html#ad71d7079bfbfe032392e48c3c1f2b57e":[10,0,51,0,16],
-"structPipeline_1_1CreateInfo.html#adf162273ffab300c95b4fa8257db63c7":[10,0,51,0,12],
-"structPipeline_1_1CreateInfo.html#ae45ff04b3b97493ba41e71f731f04f0c":[10,0,51,0,7],
-"structPipeline_1_1CreateInfo.html#aef5ab13ac9228b2147fea6d1f846a3e8":[10,0,51,0,5],
-"structPipeline_1_1CreateInfo.html#afadf397780e7d6489b9fa660069805f4":[10,0,51,0,18],
-"structPlayerListPacket_1_1PlayerInfo.html":[10,0,54,0],
-"structPlayerListPacket_1_1PlayerInfo.html#a45d234a16fccb9b55e36271d21ff569a":[10,0,54,0,1],
-"structPlayerListPacket_1_1PlayerInfo.html#a708b260d422703e08d2d4aa30d979c09":[10,0,54,0,0],
-"structPlayerModel_1_1Vertex.html":[10,0,55,0]
+"structPipeline_1_1CreateInfo.html#aae95948271ff108a34c8659455c0cf8c":[10,0,51,0,4]
 };

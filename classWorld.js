@@ -1,6 +1,6 @@
 var classWorld =
 [
-    [ "World", "classWorld.html#a9b28c29b1a08bd1c3bb7ad31fa8373bd", null ],
+    [ "World", "classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8", null ],
     [ "~World", "classWorld.html#a8c73fba541a5817fff65147ba47cd827", null ],
     [ "World", "classWorld.html#a8e7a792ae04e9804a464746adb06f7aa", null ],
     [ "World", "classWorld.html#a9319f9fe52db6162be2269479d76100d", null ],
@@ -9,18 +9,12 @@ var classWorld =
     [ "operator=", "classWorld.html#af69b86b3ac37a2168715401267d104ab", null ],
     [ "operator=", "classWorld.html#a2fd49185c8ef00d9f8aaf16fb7d943fa", null ],
     [ "TracyLockableN", "classWorld.html#a2aceeb77eacb247872f3c3a1b422cd15", null ],
-    [ "TracyLockableN", "classWorld.html#aa25903c80fce71dfde81373a693094d7", null ],
     [ "TracyLockableN", "classWorld.html#a456108e02a2cf121c20b3436d293614a", null ],
     [ "TracyLockableN", "classWorld.html#a4430c3b7f548d58f0aa64deabf26357c", null ],
-    [ "waitForFinishedFutures", "classWorld.html#aa310db6b3c8cc82dead00ab0821a45ec", null ],
-    [ "waitForFutures", "classWorld.html#a158e312563197f4c6e4a54273ae2f24b", null ],
     [ "m_chunks", "classWorld.html#afe23d5e9f0c87a03212fad1b73249926", null ],
-    [ "m_finished_futures", "classWorld.html#ac59233f3c89cde4b5644b70554e73075", null ],
-    [ "m_future_id", "classWorld.html#af3ea6068e6ce809d82e8c8a22c79b33f", null ],
-    [ "m_futures", "classWorld.html#a048f8bc101878c13e0582c61e5791947", null ],
     [ "m_mob_id", "classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05", null ],
     [ "m_mobs", "classWorld.html#a9befd190fce3a87e810b479bbfad356f", null ],
     [ "m_players", "classWorld.html#a9b6166c32096dff1f9e29a78743945f1", null ],
-    [ "m_threadPool", "classWorld.html#a5bfb4bd10285850ebc42202c293adced", null ],
+    [ "m_threadPool", "classWorld.html#ae465315b182161c0902e98055d03395f", null ],
     [ "m_world_generator", "classWorld.html#a47cc090d4ed08b81df6748abb8daea0e", null ]
 ];

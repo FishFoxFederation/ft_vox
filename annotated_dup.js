@@ -78,6 +78,7 @@ var annotated_dup =
     [ "Status", "classStatus.html", "classStatus" ],
     [ "Swapchain", "classSwapchain.html", "classSwapchain" ],
     [ "ThreadPool", "classThreadPool.html", "classThreadPool" ],
+    [ "ThreadPoolAccessor", "classThreadPoolAccessor.html", "classThreadPoolAccessor" ],
     [ "Timer", "classTimer.html", "classTimer" ],
     [ "Transform", "classTransform.html", "classTransform" ],
     [ "UpdateThread", "classUpdateThread.html", "classUpdateThread" ],

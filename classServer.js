@@ -5,6 +5,7 @@ var classServer =
     [ "~Server", "classServer.html#a4b3aa2579cb1c8cd1d069582c14d0fa6", null ],
     [ "Server", "classServer.html#aca4a9834f8bf136619d3c4cdb1db4e1e", null ],
     [ "Server", "classServer.html#a75912e5c72969c3e7afcf62c25594505", null ],
+    [ "disconnect", "classServer.html#a2384ffdcf012e494a472ff9b57845f3b", null ],
     [ "get_incoming_packets", "classServer.html#aa05ae3a43bbbfec9a99e3a59e5d4b393", null ],
     [ "operator=", "classServer.html#a9f30bafde48d9f0a0d646687cd69c4bb", null ],
     [ "operator=", "classServer.html#a72f16fc38789727d57762556799083eb", null ],
