@@ -1072,6 +1072,7 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 	{
 		std::lock_guard lock(m_worldScene.m_player_mutex);
 		m_worldScene.m_players.insert(std::make_pair(player_id, WorldScene::PlayerRenderData{position}));
+		LOG_INFO("Adding player mesh: " << player_id);
 		if (player_id == m_my_player_id) // default player view mode is first person
 		{
 			m_worldScene.m_players.at(player_id).visible = false;
@@ -1088,7 +1089,7 @@ void ClientWorld::removePlayer(const uint64_t player_id)
 	{
 		LOG_INFO("Removing player mesh: " << player_id);
 		std::lock_guard lock(m_worldScene.m_player_mutex);
-		m_worldScene.entity_mesh_list.erase(player_id);
+		m_worldScene.m_players.erase(player_id);
 	}
 }
 
