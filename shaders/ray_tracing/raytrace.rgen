@@ -15,6 +15,8 @@ layout(location = 0) rayPayloadEXT struct RayPayload
 {
 	vec3 ray_direction;
 	vec4 color;
+	float shadow;
+	float depth;
 } payload;
 
 void main()
@@ -35,6 +37,9 @@ void main()
 	float tMax = 1000.0;
 
 	payload.ray_direction = direction.xyz;
+	payload.color = vec4(0, 0, 0, 0);
+	payload.shadow = 1.0;
+	payload.depth = 1.0;
 
 	traceRayEXT(
 		topLevelAS,		// acceleration structure
@@ -52,4 +57,5 @@ void main()
 
 
 	imageStore(lighting_image, ivec2(gl_LaunchIDEXT.xy), payload.color);
+	imageStore(shadow_image, ivec2(gl_LaunchIDEXT.xy), vec4(payload.shadow, payload.depth, 0.0, 0.0));
 }
