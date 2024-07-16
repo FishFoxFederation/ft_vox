@@ -312,6 +312,7 @@ public:
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
 	std::vector<VkCommandBuffer> copy_command_buffers;
+	std::vector<VkCommandBuffer> compute_command_buffers;
 	std::vector<VkCommandBuffer> imgui_command_buffers;
 
 	VkCommandPool transfer_command_pool;
@@ -320,6 +321,7 @@ public:
 
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> main_render_finished_semaphores;
+	std::vector<VkSemaphore> compute_finished_semaphores;
 	std::vector<VkSemaphore> copy_finished_semaphores;
 	std::vector<VkSemaphore> imgui_render_finished_semaphores;
 	std::vector<VkFence> in_flight_fences;
@@ -351,6 +353,7 @@ public:
 	uint32_t frustum_line_vertex_count;
 	uint32_t frustum_line_index_count;
 
+	Descriptor swapchain_image_descriptor;
 	Descriptor camera_descriptor;
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
@@ -449,7 +452,6 @@ public:
 	VkDeviceMemory rt_mesh_data_buffer_memory = VK_NULL_HANDLE;
 	VkDeviceSize rt_mesh_data_buffer_size = 0;
 	uint32_t rt_mesh_data_buffer_count = 0;
-
 
 	VkImage rt_lighting_image;
 	VkDeviceMemory rt_lighting_image_memory;

@@ -74,9 +74,9 @@ void RenderThread::loop()
 	ZoneText(current_frame.c_str(), current_frame.size());
 
 	//############################################################################################################
-	//                     																                         #
-	//                            Do independent logic from the vulkan rendering here                            #
-	//                     																                         #
+	//					 																						 #
+	//							Do independent logic from the vulkan rendering here							#
+	//					 																						 #
 	//############################################################################################################
 
 	int window_width, window_height;
@@ -174,9 +174,9 @@ void RenderThread::loop()
 	}
 
 	//############################################################################################################
-	//                     																                         #
-	//                                  Start the vulkan rendering process here                                  #
-	//                     																                         #
+	//					 																						 #
+	//								  Start the vulkan rendering process here								  #
+	//					 																						 #
 	//############################################################################################################
 
 	std::lock_guard lock(vk.global_mutex);
@@ -244,11 +244,78 @@ void RenderThread::loop()
 	render_submit_info.signalSemaphoreCount = 1;
 	render_submit_info.pSignalSemaphores = &vk.main_render_finished_semaphores[vk.current_frame];
 
-	//############################################################################################################
-	//                     																                         #
-	//                     Copy the color image attachment to the swap chain image with blit                     #
-	//                     																                         #
-	//############################################################################################################
+	//###########################################################################################################
+	//					 																						#
+	//										Raytracing shading with compute										#
+	//					 																						#
+	//###########################################################################################################
+
+	if (use_raytracing)
+	{
+		vkResetCommandBuffer(vk.compute_command_buffers[vk.current_frame], 0);
+
+		VkCommandBufferBeginInfo compute_begin_info = {};
+		compute_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+		VK_CHECK(
+			vkBeginCommandBuffer(vk.compute_command_buffers[vk.current_frame], &compute_begin_info),
+			"Failed to begin recording compute command buffer"
+		);
+
+		vkCmdBindPipeline(vk.compute_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_COMPUTE, vk.compute_pipeline);
+
+		const std::vector<VkDescriptorSet> compute_descriptor_sets = {
+			vk.rt_lighting_shadow_image_descriptor.sets[vk.current_frame],
+			vk.rt_output_image_descriptor.sets[vk.current_frame]
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.compute_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_COMPUTE,
+			vk.compute_pipeline_layout,
+			0,
+			static_cast<uint32_t>(compute_descriptor_sets.size()),
+			compute_descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		vkCmdDispatch(
+			vk.compute_command_buffers[vk.current_frame],
+			vk.color_attachement.extent2D.width / 16,
+			vk.color_attachement.extent2D.height / 16,
+			1
+		);
+
+		VK_CHECK(
+			vkEndCommandBuffer(vk.compute_command_buffers[vk.current_frame]),
+			"Failed to record compute command buffer"
+		);
+	}
+
+	VkSubmitInfo compute_submit_info = {};
+	compute_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	compute_submit_info.commandBufferCount = 1;
+	compute_submit_info.pCommandBuffers = &vk.compute_command_buffers[vk.current_frame];
+
+	const std::array<VkSemaphore, 1> compute_wait_semaphores = {
+		vk.main_render_finished_semaphores[vk.current_frame]
+	};
+	const std::array<VkPipelineStageFlags, 1> compute_wait_stages = {
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+	};
+	compute_submit_info.waitSemaphoreCount = static_cast<uint32_t>(compute_wait_semaphores.size());
+	compute_submit_info.pWaitSemaphores = compute_wait_semaphores.data();
+	compute_submit_info.pWaitDstStageMask = compute_wait_stages.data();
+
+	compute_submit_info.signalSemaphoreCount = 1;
+	compute_submit_info.pSignalSemaphores = &vk.compute_finished_semaphores[vk.current_frame];
+
+	//###########################################################################################################
+	//																											#
+	//						Copy the color image attachment to the swap chain image with blit					#
+	//																											#
+	//###########################################################################################################
 
 	if (use_raytracing)
 	{
@@ -264,14 +331,19 @@ void RenderThread::loop()
 	copy_submit_info.commandBufferCount = 1;
 	copy_submit_info.pCommandBuffers = &vk.copy_command_buffers[vk.current_frame];
 
-	const std::array<VkSemaphore, 2> copy_wait_semaphores = {
+	std::array<VkSemaphore, 2> copy_wait_semaphores = {
 		vk.image_available_semaphores[vk.current_frame],
 		vk.main_render_finished_semaphores[vk.current_frame]
 	};
-	const std::array<VkPipelineStageFlags, 2> copy_wait_stages = {
+	std::array<VkPipelineStageFlags, 2> copy_wait_stages = {
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	};
+	if (use_raytracing)
+	{
+		copy_wait_semaphores[1] = vk.compute_finished_semaphores[vk.current_frame];
+		copy_wait_stages[1] = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+	}
 	copy_submit_info.waitSemaphoreCount = static_cast<uint32_t>(copy_wait_semaphores.size());
 	copy_submit_info.pWaitSemaphores = copy_wait_semaphores.data();
 	copy_submit_info.pWaitDstStageMask = copy_wait_stages.data();
@@ -279,11 +351,11 @@ void RenderThread::loop()
 	copy_submit_info.signalSemaphoreCount = 1;
 	copy_submit_info.pSignalSemaphores = &vk.copy_finished_semaphores[vk.current_frame];
 
-	//############################################################################################################
-	//                     																                         #
-	//                                        Do the ImGui rendering here                                        #
-	//                     																                         #
-	//############################################################################################################
+	//###########################################################################################################
+	//					 																						#
+	//										Do the ImGui rendering here											#
+	//					 																						#
+	//###########################################################################################################
 
 	drawDebugGui();
 
@@ -299,22 +371,33 @@ void RenderThread::loop()
 	imgui_submit_info.pSignalSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
 
 
-	const std::array<VkSubmitInfo, 3> submit_infos = {
-		render_submit_info,
-		copy_submit_info,
-		imgui_submit_info
-	};
+	//###########################################################################################################
+	//					 																						#
+	//											  Submit to queue												#
+	//					 																						#
+	//###########################################################################################################
+
+
+	std::vector<VkSubmitInfo> submit_infos;
+	if (use_raytracing)
+	{
+		submit_infos = { render_submit_info, compute_submit_info, copy_submit_info, imgui_submit_info };
+	}
+	else
+	{
+		submit_infos = { render_submit_info, copy_submit_info, imgui_submit_info };
+	}
 
 	VK_CHECK(
 		vkQueueSubmit(vk.graphics_queue, static_cast<uint32_t>(submit_infos.size()), submit_infos.data(), vk.in_flight_fences[vk.current_frame]),
 		"Failed to submit all command buffers"
 	);
 
-	//############################################################################################################
-	//                     																                         #
-	//                             Present the swap chain image to the present queue                             #
-	//                     																                         #
-	//############################################################################################################
+	//###########################################################################################################
+	//					 																						#
+	//							 Present the swap chain image to the present queue								#
+	//					 																						#
+	//###########################################################################################################
 
 	VkPresentInfoKHR present_info = {};
 	present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -1030,7 +1113,7 @@ void RenderThread::copyToSwapchainRT()
 
 	vk.setImageLayout(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_lighting_image,
+		vk.rt_output_image,
 		VK_IMAGE_LAYOUT_GENERAL,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -1043,8 +1126,8 @@ void RenderThread::copyToSwapchainRT()
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.rt_lighting_image_width),
-		static_cast<int32_t>(vk.rt_lighting_image_height),
+		static_cast<int32_t>(vk.rt_output_image_width),
+		static_cast<int32_t>(vk.rt_output_image_height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1064,7 +1147,7 @@ void RenderThread::copyToSwapchainRT()
 
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_lighting_image,
+		vk.rt_output_image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -1075,7 +1158,7 @@ void RenderThread::copyToSwapchainRT()
 
 	vk.setImageLayout(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_lighting_image,
+		vk.rt_output_image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		VK_IMAGE_LAYOUT_GENERAL,
 		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
