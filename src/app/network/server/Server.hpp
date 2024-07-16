@@ -28,7 +28,7 @@ public:
 	 * you might wanna run this in a separate thread
 	 */
 	void run();
-	void runOnce(int timeout);
+	void runOnce(int timeout_ms);
 
 	void stop();
 
@@ -60,7 +60,8 @@ private:
 	ServerSocket								m_server_socket;
 	PacketFactory							&	m_packet_factory;
 	IncomingPacketList							m_incoming_packets;
-	std::unordered_map<uint64_t, Connection>	m_connections;
+	std::unordered_map<uint64_t, std::shared_ptr<Connection>>	m_connections;
+	std::mutex									m_connections_mutex;
 
 
 	uint64_t									m_ids_counter;

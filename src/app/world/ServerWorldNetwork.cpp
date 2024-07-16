@@ -40,6 +40,7 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 	glm::vec3 CurrentPlayerPosition = packet->GetPosition();
 	glm::vec3 CurrentPlayerChunkPosition = getChunkPosition(CurrentPlayerPosition);
 
+	std::lock_guard lock(m_players_info_mutex);
 	m_player_to_connection_id.insert({CurrentPlayerId, CurrentConnectionId});
 	m_connection_to_player_id.insert({CurrentConnectionId, CurrentPlayerId});
 
@@ -75,7 +76,15 @@ void ServerWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packe
 	uint64_t connection_id = packet->GetConnectionId();
 	//not using the player_id in the packet because you cannot trust
 	//the internet only the socket
-	uint64_t player_id = m_connection_to_player_id.at(connection_id); 
+	uint64_t player_id = 0;
+	{
+		std::lock_guard lock(m_players_info_mutex);
+		player_id = m_connection_to_player_id.at(connection_id); 
+		m_connection_to_player_id.erase(connection_id);
+		m_player_to_connection_id.erase(player_id);
+		m_last_tick_player_positions.erase(player_id);
+		m_current_tick_player_positions.erase(player_id);
+	}
 
 	std::shared_ptr<Player> player;
 	{
@@ -83,13 +92,9 @@ void ServerWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packe
 		player = m_players.at(player_id);
 		m_players.erase(player_id);
 	}
-	m_player_to_connection_id.erase(player_id);
-	m_connection_to_player_id.erase(connection_id);
-
-	m_last_tick_player_positions.erase(player_id);
-	m_current_tick_player_positions.erase(player_id);
 
 	//remove player ticket
+	std::lock_guard<std::mutex> lock(player->mutex);
 	removeTicket(player->player_ticket_id);
 
 	//remove player observations
@@ -130,7 +135,9 @@ void ServerWorld::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packe
 
 void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id)
 {
-	uint64_t connection_id = m_player_to_connection_id.at(player_id);
+	uint64_t connection_id = 0;
+
+	connection_id = m_player_to_connection_id.at(player_id);
 	for(auto chunk : data.chunks_to_load)
 	{
 		//send chunk to player

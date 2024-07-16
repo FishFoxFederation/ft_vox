@@ -2,9 +2,8 @@
 
 ServerBlockUpdateThread::ServerBlockUpdateThread(
 	ServerWorld & world
-) : m_world(world)
+) : m_world(world), m_thread(&ServerBlockUpdateThread::launch, this)
 {
-	m_thread = std::jthread(&ServerBlockUpdateThread::launch, this);
 }
 
 ServerBlockUpdateThread::~ServerBlockUpdateThread()

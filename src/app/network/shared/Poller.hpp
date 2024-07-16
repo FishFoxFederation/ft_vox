@@ -23,7 +23,7 @@ public:
 
 	void							add(const uint64_t & id, const Socket & socket);
 	void							remove(const Socket & socket);
-	std::pair<size_t, epoll_event*>	wait(const int & timeout);
+	std::pair<size_t, epoll_event*>	wait(const int & timeout_ms);
 private:
 	int			m_epolld_fd = -1;
 	epoll_event	m_events[EVENTS_SIZE];

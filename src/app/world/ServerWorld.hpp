@@ -70,7 +70,7 @@ public:
 	constexpr static int TICKET_LEVEL_BORDER = 33;
 	constexpr static int TICKET_LEVEL_INACTIVE = 34;
 
-	constexpr static int SPAWN_POINT_LOAD_LEVEL = 22;
+	constexpr static int TICKET_LEVEL_SPAWN = 32;
 	constexpr static int TICKET_LEVEL_PLAYER = 30;
 
 	constexpr static int SERVER_LOAD_DISTANCE = TICKET_LEVEL_INACTIVE - TICKET_LEVEL_PLAYER;
@@ -121,6 +121,8 @@ private:
 	Server & m_server;
 	std::unordered_map<uint64_t, uint64_t> m_player_to_connection_id;
 	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
+	TracyLockableN(std::mutex, m_players_info_mutex, "PlayerInfoMutex");
+
 	IncomingPacketList m_incoming_packets;
 
 

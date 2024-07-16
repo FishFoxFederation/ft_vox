@@ -30,12 +30,13 @@ void Server::runOnce(int timeout)
 		**********************************************/
 		if (events[i].data.u64 == 0)
 		{
+			std::lock_guard lock(m_connections_mutex);
 			LOG_INFO("New client connected");
-			Connection connection(m_server_socket.accept());
-			connection.setConnectionId(get_new_id());
-			auto ret = m_connections.insert(std::make_pair(connection.getConnectionId(), std::move(connection)));
-			LOG_INFO("New client id : " << std::to_string(ret.first->second.getConnectionId()));
-			m_poller.add(ret.first->second.getConnectionId(), ret.first->second.getSocket());
+			std::shared_ptr<Connection> connection = std::make_shared<Connection>(m_server_socket.accept());
+			connection->setConnectionId(get_new_id());
+			m_connections.insert(std::make_pair(connection->getConnectionId(), connection));
+			LOG_INFO("New client id : " << std::to_string(connection->getConnectionId()));
+			m_poller.add(connection->getConnectionId(), connection->getSocket());
 		}
 
 		/**********************************************
@@ -47,21 +48,27 @@ void Server::runOnce(int timeout)
 		else
 		{
 			auto current_event = events[i].events;
-			auto currentClient = m_connections.find(events[i].data.u64);
-			if (currentClient == m_connections.end())
+			std::shared_ptr<Connection> currentClient;
 			{
-				LOG_ERROR("Client not found");
-				continue;
+				std::lock_guard lock(m_connections_mutex);
+				auto it = m_connections.find(events[i].data.u64);
+				if (it == m_connections.end())
+				{
+					LOG_ERROR("Client not found");
+					continue;
+				}
+				currentClient = it->second;
 			}
 			try {
+				std::lock_guard lock(*currentClient);
 				if (current_event & EPOLLIN)
-					read_data(currentClient->second, currentClient->first);
+					read_data(*currentClient, currentClient->getConnectionId());
 				if (current_event & EPOLLOUT)
-					send_data(currentClient->second, currentClient->first);
+					send_data(*currentClient, currentClient->getConnectionId());
 				if (current_event & EPOLLERR || current_event & EPOLLHUP)
 				{
 					LOG_INFO("EPOLLERR or EPOLLHUP");
-					throw ClientDisconnected(currentClient->first);
+					throw ClientDisconnected(currentClient->getConnectionId());
 				}
 			}
 			catch (const ClientDisconnected & e)
@@ -146,44 +153,65 @@ int Server::send_data(Connection & connection, uint64_t id)
 
 void Server::send(std::shared_ptr<IPacket> packet)
 {
-	auto currentClient = m_connections.find(packet->GetConnectionId());
-
-	if (currentClient == m_connections.end())
+	
+	std::shared_ptr<Connection> currentClient;
 	{
-		LOG_ERROR("Client not found");
-		return;
+		std::lock_guard lock(m_connections_mutex);
+		auto it = m_connections.find(packet->GetConnectionId());
+		if (it == m_connections.end())
+		{
+			// LOG_ERROR("Server: Send: Client not found");
+			return;
+		}
+		currentClient = it->second;
 	}
+
+	std::lock_guard lock(*currentClient);
 	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
-	currentClient->second.queueAndSendMessage(buffer);
+	currentClient->queueAndSendMessage(buffer);
 }
 
 void Server::sendAll(std::shared_ptr<IPacket> packet)
 {
+	std::lock_guard lock(m_connections_mutex);
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
 	for (auto & [id, connection] : m_connections)
-		connection.queueAndSendMessage(buffer);
+	{
+		std::lock_guard lock(*connection);
+		connection->queueAndSendMessage(buffer);
+	}
 }
 
 void Server::sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id)
 {
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
+	std::lock_guard lock(m_connections_mutex);
 	for (auto & [current_id, connection] : m_connections)
+	{
 		if (current_id != id)
-			connection.queueAndSendMessage(buffer);
+		{
+			std::lock_guard lock2(*connection);
+			connection->queueAndSendMessage(buffer);
+		}
+	}
 }
 
 void Server::disconnect(uint64_t id)
 {
-	auto currentClient = m_connections.find(id);
-	if (currentClient == m_connections.end())
+	std::lock_guard lock(m_connections_mutex);
+	auto it = m_connections.find(id);
+	std::shared_ptr<Connection> currentClient;
+	if (it == m_connections.end())
 	{
 		LOG_ERROR("Server: Disconnect: Client not found");
 		return;
 	}
-	m_poller.remove(currentClient->second.getSocket());
-	m_connections.erase(currentClient);
+	currentClient = it->second;
+	std::lock_guard lock2(*currentClient);
+	m_poller.remove(currentClient->getSocket());
+	m_connections.erase(it);
 }
