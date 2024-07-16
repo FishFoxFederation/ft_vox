@@ -60,10 +60,10 @@ void Poller::remove(const Socket & socket)
 		throw std::runtime_error("Failed to remove socket from epoll instance");
 }
 
-std::pair<size_t, epoll_event*> Poller::wait(const int & timeout)
+std::pair<size_t, epoll_event*> Poller::wait(const int & timeout_ms)
 {
-	int ret = epoll_wait(m_epolld_fd, m_events, EVENTS_SIZE, timeout);
+	int ret = epoll_wait(m_epolld_fd, m_events, EVENTS_SIZE, timeout_ms);
 	if (ret == -1)
-		throw std::runtime_error("Failed to wait for events");
+		throw std::runtime_error("Failed to wait for events" + std::string(strerror(errno)));
 	return std::make_pair(ret, m_events);
 }

@@ -76,10 +76,8 @@ std::pair<bool, std::shared_ptr<IPacket>> PacketFactory::extractPacket(Connectio
 {
 	PacketFactory::packetInfo packetRet;
 	{
-		connection.lockReadBuffer();
 		const std::vector<uint8_t> & buffer = connection.getReadBufferRef();
 		packetRet = getPacketInfo(buffer.data(), buffer.size());
-		connection.unlockReadBuffer();
 	}
 
 	std::pair<bool, std::shared_ptr<IPacket>> ret = std::make_pair(false, nullptr);

@@ -4,7 +4,7 @@ ServerWorld::ServerWorld(Server & server)
 :	World(), 
 	m_server(server)
 {
-	addTicket({TICKET_LEVEL_PLAYER, glm::ivec3(0, 0, 0)});
+	addTicket({TICKET_LEVEL_SPAWN, glm::ivec3(0, 0, 0)});
 	// std::shared_ptr<Chunk> chunk;
 
 	// std::lock_guard lock(m_chunks_mutex);
@@ -29,7 +29,7 @@ ServerWorld::~ServerWorld()
 void ServerWorld::update()
 {
 	ZoneScopedN("Block Update");
-
+	std::lock_guard lock(m_players_info_mutex);
 	{
 		// std::lock_guard lock(m_tickets_mutex);
 

@@ -24,6 +24,7 @@ int main()
 	signal(SIGINT, [](int signum) {
 		running = false;
 	});
+	try {
 	Server server(4245);
 	ServerWorld world(server);
 	ServerBlockUpdateThread block_update_thread(world);	
@@ -39,7 +40,7 @@ int main()
 	{
 		ZoneScopedN("Server Loop");
 		auto start = std::chrono::high_resolution_clock::now();
-		server.runOnce(100);
+		server.runOnce(1);
 		uint64_t packet_count = 0;
 		while (incoming_packets.size() > 0)
 		{
@@ -70,5 +71,23 @@ int main()
 		last_time_count++;
 		// std::cout << "Time: " << duration.count() << "ms" << std::endl;
 		// std::cout << "Avg time: " << last_time / last_time_count << "ms, PacketCount: " << packet_count << std::endl;
+	}
+	}
+	catch (std::runtime_error & e)
+	{
+		if (errno == EINTR)
+		{
+			LOG_INFO("Server stopped");
+			return 0;
+		}
+		LOG_CRITICAL("Runtime error: " << e.what());
+	}
+	catch (std::exception & e)
+	{
+		LOG_CRITICAL("Exception: " << e.what());
+	}
+	catch (...)
+	{
+		LOG_ERROR("Unknown exception");
 	}
 }
