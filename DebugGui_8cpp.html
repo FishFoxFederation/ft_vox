@@ -105,6 +105,8 @@ $(document).ready(function(){initNavTree('DebugGui_8cpp.html',''); initResizable
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle"><div class="title">DebugGui.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -141,7 +143,151 @@ Include dependency graph for DebugGui.cpp:</div>
 <area shape="rect" title=" " alt="" coords="561,152,629,177"/>
 </map>
 </div>
-</div></div><!-- contents -->
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a83afe3d775af78fb1849b9c0989aa890"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="DebugGui_8cpp.html#a83afe3d775af78fb1849b9c0989aa890">FLOAT_SLIDER</a>(name,  min,  max)&#160;&#160;&#160;float name ## _f = name; ImGui::SliderFloat(#name, &amp;name ## _f, min, max); name = name ## _f;</td></tr>
+<tr class="separator:a83afe3d775af78fb1849b9c0989aa890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a60a34f2199b20e73fa9957c46f8378"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="DebugGui_8cpp.html#a1a60a34f2199b20e73fa9957c46f8378">INT_SLIDER</a>(name,  min,  max)&#160;&#160;&#160;int name ## _i = name; ImGui::SliderInt(#name, &amp;name ## _i, min, max); name = name ## _i;</td></tr>
+<tr class="separator:a1a60a34f2199b20e73fa9957c46f8378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad49f439c11e37ce9f755f1567b9eedd2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="DebugGui_8cpp.html#ad49f439c11e37ce9f755f1567b9eedd2">VEC3_SLIDER</a>(name,  min_x,  max_x,  min_y,  max_y,  min_z,  max_z)</td></tr>
+<tr class="separator:ad49f439c11e37ce9f755f1567b9eedd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a83afe3d775af78fb1849b9c0989aa890" name="a83afe3d775af78fb1849b9c0989aa890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83afe3d775af78fb1849b9c0989aa890">&#9670;&#160;</a></span>FLOAT_SLIDER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FLOAT_SLIDER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">min, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">max&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;float name ## _f = name; ImGui::SliderFloat(#name, &amp;name ## _f, min, max); name = name ## _f;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a60a34f2199b20e73fa9957c46f8378" name="a1a60a34f2199b20e73fa9957c46f8378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a60a34f2199b20e73fa9957c46f8378">&#9670;&#160;</a></span>INT_SLIDER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INT_SLIDER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">min, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">max&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;int name ## _i = name; ImGui::SliderInt(#name, &amp;name ## _i, min, max); name = name ## _i;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad49f439c11e37ce9f755f1567b9eedd2" name="ad49f439c11e37ce9f755f1567b9eedd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad49f439c11e37ce9f755f1567b9eedd2">&#9670;&#160;</a></span>VEC3_SLIDER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VEC3_SLIDER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">min_x, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">max_x, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">min_y, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">max_y, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">min_z, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">max_z&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordtype">float</span> name ## _x = name.x; \</div>
+<div class="line">    <span class="keywordtype">float</span> name ## _y = name.y; \</div>
+<div class="line">    <span class="keywordtype">float</span> name ## _z = name.z; \</div>
+<div class="line">    ImGui::SliderFloat(#name <span class="stringliteral">&quot; x&quot;</span>, &amp;name ## _x, min_x, max_x); \</div>
+<div class="line">    ImGui::SliderFloat(#name <span class="stringliteral">&quot; y&quot;</span>, &amp;name ## _y, min_y, max_y); \</div>
+<div class="line">    ImGui::SliderFloat(#name <span class="stringliteral">&quot; z&quot;</span>, &amp;name ## _z, min_z, max_z); \</div>
+<div class="line">    name = glm::vec3(name ## _x, name ## _y, name ## _z);</div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['head_0',['HEAD',['../classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041bae15e216fc1c639f787b1231ecdfa1bf8',1,'PlayerModel']]]
+  ['info_0',['INFO',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa61a9b6fc1e9babc448984b8a34ca2ed2',1,'Logger']]]
 ];

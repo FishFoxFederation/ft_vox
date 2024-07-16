@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('VulkanAPI_8cpp.html',''); initResizabl
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">VulkanAPI.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -112,6 +115,7 @@ $(document).ready(function(){initNavTree('VulkanAPI_8cpp.html',''); initResizabl
 <code>#include &quot;<a class="el" href="logger_8hpp_source.html">logger.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Block_8hpp_source.html">Block.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Model_8hpp_source.html">Model.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ObjLoader_8hpp_source.html">ObjLoader.hpp</a>&quot;</code><br />
 <code>#include &quot;Tracy.hpp&quot;</code><br />
 <code>#include &lt;stb_image.h&gt;</code><br />
 <code>#include &lt;cstring&gt;</code><br />
@@ -123,59 +127,162 @@ Include dependency graph for VulkanAPI.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="VulkanAPI_8cpp__incl.png" border="0" usemap="#asrc_2app_2vulkan_2VulkanAPI_8cpp" alt=""/></div>
 <map name="asrc_2app_2vulkan_2VulkanAPI_8cpp" id="asrc_2app_2vulkan_2VulkanAPI_8cpp">
-<area shape="rect" title=" " alt="" coords="2752,5,2949,31"/>
-<area shape="rect" href="VulkanAPI_8hpp.html" title=" " alt="" coords="1401,79,1509,104"/>
-<area shape="rect" title=" " alt="" coords="2114,299,2193,324"/>
-<area shape="rect" title=" " alt="" coords="2661,225,2707,251"/>
-<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="2453,225,2534,251"/>
-<area shape="rect" title=" " alt="" coords="325,225,400,251"/>
-<area shape="rect" href="Block_8hpp.html" title=" " alt="" coords="2217,299,2295,324"/>
-<area shape="rect" href="Model_8hpp.html" title=" " alt="" coords="2914,152,2995,177"/>
-<area shape="rect" title=" " alt="" coords="2965,79,3057,104"/>
-<area shape="rect" title=" " alt="" coords="3081,79,3143,104"/>
-<area shape="rect" title=" " alt="" coords="3167,79,3207,104"/>
-<area shape="rect" href="vk__define_8hpp.html" title=" " alt="" coords="597,299,699,324"/>
-<area shape="rect" title=" " alt="" coords="810,379,889,405"/>
-<area shape="rect" href="vk__helper_8hpp.html" title=" " alt="" coords="475,225,578,251"/>
-<area shape="rect" href="VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="2402,152,2585,177"/>
-<area shape="rect" title=" " alt="" coords="1941,299,1998,324"/>
-<area shape="rect" href="Command_8hpp.html" title=" " alt="" coords="43,225,149,251"/>
-<area shape="rect" title=" " alt="" coords="1001,460,1060,485"/>
-<area shape="rect" href="Image_8hpp.html" title=" " alt="" coords="196,152,279,177"/>
-<area shape="rect" href="Descriptor_8hpp.html" title=" " alt="" coords="897,225,1002,251"/>
-<area shape="rect" href="Swapchain_8hpp.html" title=" " alt="" coords="1026,225,1137,251"/>
-<area shape="rect" href="Pipeline_8hpp.html" title=" " alt="" coords="697,152,789,177"/>
-<area shape="rect" title=" " alt="" coords="2022,299,2090,324"/>
-<area shape="rect" title=" " alt="" coords="805,225,872,251"/>
-<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="1708,225,1791,251"/>
-<area shape="rect" title=" " alt="" coords="2953,533,3045,559"/>
-<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="1226,152,1369,177"/>
-<area shape="rect" title=" " alt="" coords="1314,225,1425,251"/>
-<area shape="rect" href="List_8hpp.html" title=" " alt="" coords="1082,152,1150,177"/>
-<area shape="rect" href="tracy__globals_8hpp.html" title=" " alt="" coords="2204,225,2327,251"/>
-<area shape="rect" title=" " alt="" coords="1445,152,1563,177"/>
-<area shape="rect" title=" " alt="" coords="1587,152,1693,177"/>
-<area shape="rect" title=" " alt="" coords="1717,152,1779,177"/>
-<area shape="rect" title=" " alt="" coords="1804,152,1929,177"/>
-<area shape="rect" title=" " alt="" coords="1953,152,2092,177"/>
-<area shape="rect" title=" " alt="" coords="2117,152,2174,177"/>
-<area shape="rect" title=" " alt="" coords="2740,379,2852,405"/>
-<area shape="rect" title=" " alt="" coords="547,372,703,412"/>
-<area shape="rect" title=" " alt="" coords="727,379,782,405"/>
-<area shape="rect" title=" " alt="" coords="1849,299,1916,324"/>
-<area shape="rect" title=" " alt="" coords="2593,299,2665,324"/>
-<area shape="rect" title=" " alt="" coords="2689,299,2759,324"/>
-<area shape="rect" title=" " alt="" coords="2319,299,2374,324"/>
-<area shape="rect" title=" " alt="" coords="2399,299,2465,324"/>
-<area shape="rect" title=" " alt="" coords="2489,299,2569,324"/>
-<area shape="rect" title=" " alt="" coords="1724,299,1775,324"/>
-<area shape="rect" title=" " alt="" coords="1601,299,1700,324"/>
-<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="1921,533,2001,559"/>
-<area shape="rect" href="HitBox_8hpp.html" title=" " alt="" coords="2213,379,2299,405"/>
-<area shape="rect" href="Transform_8hpp.html" title=" " alt="" coords="2550,460,2655,485"/>
+<area shape="rect" title=" " alt="" coords="2457,5,2655,31"/>
+<area shape="rect" href="VulkanAPI_8hpp.html" title=" " alt="" coords="1139,79,1247,104"/>
+<area shape="rect" title=" " alt="" coords="1386,299,1465,324"/>
+<area shape="rect" title=" " alt="" coords="2611,225,2658,251"/>
+<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="2077,225,2158,251"/>
+<area shape="rect" title=" " alt="" coords="1577,225,1652,251"/>
+<area shape="rect" href="Block_8hpp.html" title=" " alt="" coords="539,299,618,324"/>
+<area shape="rect" href="ObjLoader_8hpp.html" title=" " alt="" coords="2265,225,2372,251"/>
+<area shape="rect" title=" " alt="" coords="2864,299,2925,324"/>
+<area shape="rect" href="Model_8hpp.html" title=" " alt="" coords="2758,152,2839,177"/>
+<area shape="rect" title=" " alt="" coords="2915,79,3007,104"/>
+<area shape="rect" title=" " alt="" coords="3032,79,3072,104"/>
+<area shape="rect" href="vk__define_8hpp.html" title=" " alt="" coords="693,299,795,324"/>
+<area shape="rect" title=" " alt="" coords="843,372,922,397"/>
+<area shape="rect" href="vk__helper_8hpp.html" title=" " alt="" coords="693,225,795,251"/>
+<area shape="rect" href="VulkanMemoryAllocator_8hpp.html" title=" " alt="" coords="2234,152,2417,177"/>
+<area shape="rect" title=" " alt="" coords="1305,299,1362,324"/>
+<area shape="rect" href="Command_8hpp.html" title=" " alt="" coords="377,225,482,251"/>
+<area shape="rect" title=" " alt="" coords="551,445,609,471"/>
+<area shape="rect" href="Image_8hpp.html" title=" " alt="" coords="297,152,380,177"/>
+<area shape="rect" href="Descriptor_8hpp.html" title=" " alt="" coords="145,225,250,251"/>
+<area shape="rect" href="Swapchain_8hpp.html" title=" " alt="" coords="506,225,617,251"/>
+<area shape="rect" href="Pipeline_8hpp.html" title=" " alt="" coords="1697,152,1789,177"/>
+<area shape="rect" title=" " alt="" coords="1489,299,1557,324"/>
+<area shape="rect" title=" " alt="" coords="921,225,988,251"/>
+<area shape="rect" href="Chunk_8hpp.html" title=" " alt="" coords="1012,225,1095,251"/>
+<area shape="rect" title=" " alt="" coords="2894,519,2986,544"/>
+<area shape="rect" href="CreateMeshData_8hpp.html" title=" " alt="" coords="2067,152,2210,177"/>
+<area shape="rect" title=" " alt="" coords="1067,299,1178,324"/>
+<area shape="rect" href="List_8hpp.html" title=" " alt="" coords="1322,225,1390,251"/>
+<area shape="rect" href="tracy__globals_8hpp.html" title=" " alt="" coords="1727,225,1849,251"/>
+<area shape="rect" title=" " alt="" coords="943,152,1062,177"/>
+<area shape="rect" title=" " alt="" coords="1086,152,1191,177"/>
+<area shape="rect" title=" " alt="" coords="1215,152,1278,177"/>
+<area shape="rect" title=" " alt="" coords="1303,152,1428,177"/>
+<area shape="rect" title=" " alt="" coords="1452,152,1591,177"/>
+<area shape="rect" title=" " alt="" coords="1615,152,1673,177"/>
+<area shape="rect" title=" " alt="" coords="2381,372,2493,397"/>
+<area shape="rect" title=" " alt="" coords="673,372,727,397"/>
+<area shape="rect" title=" " alt="" coords="1776,299,1843,324"/>
+<area shape="rect" title=" " alt="" coords="1947,299,2019,324"/>
+<area shape="rect" title=" " alt="" coords="2043,299,2112,324"/>
+<area shape="rect" title=" " alt="" coords="1867,299,1922,324"/>
+<area shape="rect" title=" " alt="" coords="1581,299,1648,324"/>
+<area shape="rect" title=" " alt="" coords="1672,299,1752,324"/>
+<area shape="rect" href="define_8hpp.html" title=" " alt="" coords="2541,519,2621,544"/>
+<area shape="rect" href="HitBox_8hpp.html" title=" " alt="" coords="2619,372,2704,397"/>
+<area shape="rect" href="Transform_8hpp.html" title=" " alt="" coords="2771,445,2877,471"/>
+<area shape="rect" title=" " alt="" coords="2136,299,2256,324"/>
+<area shape="rect" title=" " alt="" coords="2432,299,2485,324"/>
 </map>
 </div>
-</div></div><!-- contents -->
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a6a6be32f4ddd153a7853299a85f579de"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8cpp.html#a6a6be32f4ddd153a7853299a85f579de">VK_LOAD_FUNCTION</a>(name)</td></tr>
+<tr class="separator:a6a6be32f4ddd153a7853299a85f579de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8f1ab644725d9596340b142a6c8b666"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8cpp.html#ac8f1ab644725d9596340b142a6c8b666">LOAD_SHADER_STAGE</a>(stage_name,  path)</td></tr>
+<tr class="separator:ac8f1ab644725d9596340b142a6c8b666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a88722cfb6c25353705b217ef62e65d4a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8cpp.html#a88722cfb6c25353705b217ef62e65d4a">alignedSize</a> (uint32_t value, uint32_t alignment)</td></tr>
+<tr class="separator:a88722cfb6c25353705b217ef62e65d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ac8f1ab644725d9596340b142a6c8b666" name="ac8f1ab644725d9596340b142a6c8b666"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8f1ab644725d9596340b142a6c8b666">&#9670;&#160;</a></span>LOAD_SHADER_STAGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LOAD_SHADER_STAGE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">stage_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">path&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    { \</div>
+<div class="line">        <span class="keyword">auto</span> code = readFile(path); \</div>
+<div class="line">        VkShaderModule module = createShaderModule(code); \</div>
+<div class="line">        VkPipelineShaderStageCreateInfo stage_info = {}; \</div>
+<div class="line">        stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO; \</div>
+<div class="line">        stage_info.stage = stage_name; \</div>
+<div class="line">        stage_info.module = module; \</div>
+<div class="line">        stage_info.pName = <span class="stringliteral">&quot;main&quot;</span>; \</div>
+<div class="line">        shader_stages.push_back(stage_info); \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a6a6be32f4ddd153a7853299a85f579de" name="a6a6be32f4ddd153a7853299a85f579de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a6be32f4ddd153a7853299a85f579de">&#9670;&#160;</a></span>VK_LOAD_FUNCTION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VK_LOAD_FUNCTION</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    name = <span class="keyword">reinterpret_cast&lt;</span>PFN_##name<span class="keyword">&gt;</span>(vkGetInstanceProcAddr(instance, #name)); \</div>
+<div class="line">    if (name == <span class="keyword">nullptr</span>) { \</div>
+<div class="line">        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Failed to load Vulkan function: &quot;</span> #name); \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a88722cfb6c25353705b217ef62e65d4a" name="a88722cfb6c25353705b217ef62e65d4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88722cfb6c25353705b217ef62e65d4a">&#9670;&#160;</a></span>alignedSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t alignedSize </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>alignment</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

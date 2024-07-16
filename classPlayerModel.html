@@ -107,9 +107,7 @@ $(document).ready(function(){initNavTree('classPlayerModel.html',''); initResiza
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classPlayerModel-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">PlayerModel Class Reference</div></div>
@@ -122,23 +120,18 @@ Collaboration diagram for PlayerModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classPlayerModel__coll__graph.png" border="0" usemap="#aPlayerModel_coll__map" alt="Collaboration graph"/></div>
 <map name="aPlayerModel_coll__map" id="aPlayerModel_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,124,324"/>
+<area shape="rect" title=" " alt="" coords="5,5,124,309"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel_1_1AttackAnimation.html">AttackAnimation</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPlayerModel_1_1Vertex.html">Vertex</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a9e4c93bbbbebd2a46722170a3cb1041b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041b">Part</a> { <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041ba5bdccd55677ef3fc449ed476ade69fb7">CHEST</a>
-, <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041bae15e216fc1c639f787b1231ecdfa1bf8">HEAD</a>
-, <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041bacd1734044172b2a25333c2f92ce6ba6c">LEG</a>
-, <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041ba47f45e65244c17ec9fa8771a5c6d60e1">ARM</a>
- }</td></tr>
-<tr class="separator:a9e4c93bbbbebd2a46722170a3cb1041b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel_1_1WalkAnimation.html">WalkAnimation</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -154,11 +147,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a667deb2031ed86ee20edeededeb35284"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6b574649cc7c4d595fcf457f4896670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPlayerModel.html">PlayerModel</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#ab6b574649cc7c4d595fcf457f4896670">operator=</a> (<a class="el" href="classPlayerModel.html">PlayerModel</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:ab6b574649cc7c4d595fcf457f4896670"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ae5f3a300789e3cb0eae78d98846a7e24"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#ae5f3a300789e3cb0eae78d98846a7e24">getGeometry</a> (std::vector&lt; <a class="el" href="structPlayerModel_1_1Vertex.html">Vertex</a> &gt; &amp;vertices, std::vector&lt; uint32_t &gt; &amp;indices, const <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041b">Part</a> part)</td></tr>
-<tr class="separator:ae5f3a300789e3cb0eae78d98846a7e24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -178,44 +166,15 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:ae04358bcd88b0b68ca3015a6a834ec86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abae8362e20e7452d1d8596360731e3db"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#abae8362e20e7452d1d8596360731e3db">head_pos</a> = glm::vec3{0.0, chest_size.y, 0.0}</td></tr>
 <tr class="separator:abae8362e20e7452d1d8596360731e3db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c97633d415df2c594c6dd3c02bffb3e"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#a6c97633d415df2c594c6dd3c02bffb3e">left_leg_pos</a> = glm::vec3{-leg_size.x / 2, -leg_size.y, 0.0}</td></tr>
+<tr class="memitem:a6c97633d415df2c594c6dd3c02bffb3e"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#a6c97633d415df2c594c6dd3c02bffb3e">left_leg_pos</a> = glm::vec3{-leg_size.x / 2, 0.0, 0.0}</td></tr>
 <tr class="separator:a6c97633d415df2c594c6dd3c02bffb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a308ce43f763ed01a3909d11def1396f2"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#a308ce43f763ed01a3909d11def1396f2">right_leg_pos</a> = glm::vec3{leg_size.x / 2, -leg_size.y, 0.0}</td></tr>
+<tr class="memitem:a308ce43f763ed01a3909d11def1396f2"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#a308ce43f763ed01a3909d11def1396f2">right_leg_pos</a> = glm::vec3{leg_size.x / 2, 0.0, 0.0}</td></tr>
 <tr class="separator:a308ce43f763ed01a3909d11def1396f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe1dedbe53d9db08568dc8364887a812"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#afe1dedbe53d9db08568dc8364887a812">left_arm_pos</a> = glm::vec3{-(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0}</td></tr>
 <tr class="separator:afe1dedbe53d9db08568dc8364887a812"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e853e1616b34c91ad097baa49c07aa1"><td class="memItemLeft" align="right" valign="top">static constexpr glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerModel.html#a8e853e1616b34c91ad097baa49c07aa1">right_arm_pos</a> = glm::vec3{(arm_size.x / 2 + chest_size.x / 2), 0.0, 0.0}</td></tr>
 <tr class="separator:a8e853e1616b34c91ad097baa49c07aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a9e4c93bbbbebd2a46722170a3cb1041b" name="a9e4c93bbbbebd2a46722170a3cb1041b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e4c93bbbbebd2a46722170a3cb1041b">&#9670;&#160;</a></span>Part</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum class <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041b">PlayerModel::Part</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9e4c93bbbbebd2a46722170a3cb1041ba5bdccd55677ef3fc449ed476ade69fb7" name="a9e4c93bbbbebd2a46722170a3cb1041ba5bdccd55677ef3fc449ed476ade69fb7"></a>CHEST&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9e4c93bbbbebd2a46722170a3cb1041bae15e216fc1c639f787b1231ecdfa1bf8" name="a9e4c93bbbbebd2a46722170a3cb1041bae15e216fc1c639f787b1231ecdfa1bf8"></a>HEAD&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9e4c93bbbbebd2a46722170a3cb1041bacd1734044172b2a25333c2f92ce6ba6c" name="a9e4c93bbbbebd2a46722170a3cb1041bacd1734044172b2a25333c2f92ce6ba6c"></a>LEG&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a9e4c93bbbbebd2a46722170a3cb1041ba47f45e65244c17ec9fa8771a5c6d60e1" name="a9e4c93bbbbebd2a46722170a3cb1041ba47f45e65244c17ec9fa8771a5c6d60e1"></a>ARM&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a10b23d720ce628b505b259d268f54d80" name="a10b23d720ce628b505b259d268f54d80"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a10b23d720ce628b505b259d268f54d80">&#9670;&#160;</a></span>PlayerModel() <span class="overload">[1/3]</span></h2>
@@ -320,48 +279,6 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae5f3a300789e3cb0eae78d98846a7e24" name="ae5f3a300789e3cb0eae78d98846a7e24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5f3a300789e3cb0eae78d98846a7e24">&#9670;&#160;</a></span>getGeometry()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void PlayerModel::getGeometry </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="structPlayerModel_1_1Vertex.html">Vertex</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>vertices</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>indices</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classPlayerModel.html#a9e4c93bbbbebd2a46722170a3cb1041b">Part</a>&#160;</td>
-          <td class="paramname"><em>part</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ab6b574649cc7c4d595fcf457f4896670" name="ab6b574649cc7c4d595fcf457f4896670"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab6b574649cc7c4d595fcf457f4896670">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
@@ -557,7 +474,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr glm::vec3 PlayerModel::left_leg_pos = glm::vec3{-leg_size.x / 2, -leg_size.y, 0.0}</td>
+          <td class="memname">constexpr glm::vec3 PlayerModel::left_leg_pos = glm::vec3{-leg_size.x / 2, 0.0, 0.0}</td>
         </tr>
       </table>
   </td>
@@ -645,7 +562,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr glm::vec3 PlayerModel::right_leg_pos = glm::vec3{leg_size.x / 2, -leg_size.y, 0.0}</td>
+          <td class="memname">constexpr glm::vec3 PlayerModel::right_leg_pos = glm::vec3{leg_size.x / 2, 0.0, 0.0}</td>
         </tr>
       </table>
   </td>

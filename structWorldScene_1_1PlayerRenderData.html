@@ -118,7 +118,9 @@ Collaboration diagram for WorldScene::PlayerRenderData:</div>
 <div class="dyncontent">
 <div class="center"><img src="structWorldScene_1_1PlayerRenderData__coll__graph.png" border="0" usemap="#aWorldScene_1_1PlayerRenderData_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_1_1PlayerRenderData_coll__map" id="aWorldScene_1_1PlayerRenderData_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,212,133"/>
+<area shape="rect" title=" " alt="" coords="107,255,313,353"/>
+<area shape="rect" href="classPlayerModel_1_1WalkAnimation.html" title=" " alt="" coords="5,20,196,177"/>
+<area shape="rect" href="classPlayerModel_1_1AttackAnimation.html" title=" " alt="" coords="220,5,419,192"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -130,22 +132,22 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab27d42664ef2103bc012f8a7372fa781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2f0e054725b472fe7d8b5e4d416ff23"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html#ae2f0e054725b472fe7d8b5e4d416ff23">pitch</a> = 0</td></tr>
 <tr class="separator:ae2f0e054725b472fe7d8b5e4d416ff23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9445d8ff7a08f9a18a689facdffe54bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html#a9445d8ff7a08f9a18a689facdffe54bc">is_walking</a> = false</td></tr>
-<tr class="separator:a9445d8ff7a08f9a18a689facdffe54bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9d385e4330b1e8c29a20de3b3c165db"><td class="memItemLeft" align="right" valign="top">std::chrono::nanoseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html#af9d385e4330b1e8c29a20de3b3c165db">walk_animation_start_time</a> = std::chrono::nanoseconds(0)</td></tr>
-<tr class="separator:af9d385e4330b1e8c29a20de3b3c165db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d24dc0d055e8eb7844c08bd6fc14c53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPlayerModel_1_1WalkAnimation.html">PlayerModel::WalkAnimation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html#a3d24dc0d055e8eb7844c08bd6fc14c53">walk_animation</a></td></tr>
+<tr class="separator:a3d24dc0d055e8eb7844c08bd6fc14c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a117e3c0a1934877c0379e6660e19115a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPlayerModel_1_1AttackAnimation.html">PlayerModel::AttackAnimation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html#a117e3c0a1934877c0379e6660e19115a">attack_animation</a></td></tr>
+<tr class="separator:a117e3c0a1934877c0379e6660e19115a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaed03cb5d89530a035968a016cd1a0cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldScene_1_1PlayerRenderData.html#aaed03cb5d89530a035968a016cd1a0cc">visible</a> = true</td></tr>
 <tr class="separator:aaed03cb5d89530a035968a016cd1a0cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a9445d8ff7a08f9a18a689facdffe54bc" name="a9445d8ff7a08f9a18a689facdffe54bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9445d8ff7a08f9a18a689facdffe54bc">&#9670;&#160;</a></span>is_walking</h2>
+<a id="a117e3c0a1934877c0379e6660e19115a" name="a117e3c0a1934877c0379e6660e19115a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a117e3c0a1934877c0379e6660e19115a">&#9670;&#160;</a></span>attack_animation</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool WorldScene::PlayerRenderData::is_walking = false</td>
+          <td class="memname"><a class="el" href="classPlayerModel_1_1AttackAnimation.html">PlayerModel::AttackAnimation</a> WorldScene::PlayerRenderData::attack_animation</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -194,14 +196,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af9d385e4330b1e8c29a20de3b3c165db" name="af9d385e4330b1e8c29a20de3b3c165db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9d385e4330b1e8c29a20de3b3c165db">&#9670;&#160;</a></span>walk_animation_start_time</h2>
+<a id="a3d24dc0d055e8eb7844c08bd6fc14c53" name="a3d24dc0d055e8eb7844c08bd6fc14c53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d24dc0d055e8eb7844c08bd6fc14c53">&#9670;&#160;</a></span>walk_animation</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::chrono::nanoseconds WorldScene::PlayerRenderData::walk_animation_start_time = std::chrono::nanoseconds(0)</td>
+          <td class="memname"><a class="el" href="classPlayerModel_1_1WalkAnimation.html">PlayerModel::WalkAnimation</a> WorldScene::PlayerRenderData::walk_animation</td>
         </tr>
       </table>
 </div><div class="memdoc">

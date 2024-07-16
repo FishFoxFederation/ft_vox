@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update_0',['UPDATE',['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fca15a8022d0ed9cd9c2a2e756822703eb4',1,'ServerWorld::BlockUpdateData']]]
+  ['x_0',['X',['../classCreateMeshData.html#a5c6063de0e463d26969267ecdb269277a02129bb861061d1a052c592e2dc6b383',1,'CreateMeshData']]]
 ];

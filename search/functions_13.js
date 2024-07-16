@@ -2,7 +2,7 @@ var searchData=
 [
   ['unlock_0',['unlock',['../classStatus.html#acfccc37966909280673cb73ea8cbbd83',1,'Status::unlock()'],['../classCreateMeshData.html#ad38f0692830fb519424088722614e4a4',1,'CreateMeshData::unlock()'],['../classConnection.html#a9e678398a769b0925021f0e6edd88d48',1,'Connection::unlock()']]],
   ['unlock_5fshared_1',['unlock_shared',['../classStatus.html#ae13734a6357c21bce8d1ac8e340bafe5',1,'Status']]],
-  ['update_2',['update',['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor::update()'],['../classServerWorld.html#a3c1b24daa5bca947dc841ad7edec54be',1,'ServerWorld::update()']]],
+  ['update_2',['update',['../classPlayerModel_1_1WalkAnimation.html#a04a03a46cbf9536b02cb8ccee53bc4f7',1,'PlayerModel::WalkAnimation::update()'],['../classPlayerModel_1_1AttackAnimation.html#a75ecc3c283bdda1adaca053047959a41',1,'PlayerModel::AttackAnimation::update()'],['../classDescriptor.html#a042525e659ae32a5361d384930c4c25b',1,'Descriptor::update()'],['../classServerWorld.html#a3c1b24daa5bca947dc841ad7edec54be',1,'ServerWorld::update()']]],
   ['updateblock_3',['updateBlock',['../classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45',1,'ClientWorld']]],
   ['updateblocks_4',['updateBlocks',['../classServerWorld.html#a7f8de8a9ac580e3ba3f8a44ae0bcedef',1,'ServerWorld']]],
   ['updateentities_5',['updateEntities',['../classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a',1,'ClientWorld']]],

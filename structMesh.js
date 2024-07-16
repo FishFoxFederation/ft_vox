@@ -7,5 +7,6 @@ var structMesh =
     [ "is_used", "structMesh.html#a8ea5a0edf71dfc56e666db22e049a161", null ],
     [ "memory_size", "structMesh.html#a7a2014516f01a52710e83ed41d7f9165", null ],
     [ "used_by_frame", "structMesh.html#ae9c8ca91934b5f535e62d2637a3d400a", null ],
-    [ "vertex_count", "structMesh.html#a21d4053e57ef0a7c7022de6301adb92a", null ]
+    [ "vertex_count", "structMesh.html#a21d4053e57ef0a7c7022de6301adb92a", null ],
+    [ "vertex_size", "structMesh.html#aa238e9a98a698723da97e51bdebc31b5", null ]
 ];

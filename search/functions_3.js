@@ -11,5 +11,6 @@ var searchData=
   ['direction_8',['direction',['../classPlayer.html#a333e44206106f4585180041030d3cd00',1,'Player']]],
   ['disconnect_9',['disconnect',['../classServer.html#a2384ffdcf012e494a472ff9b57845f3b',1,'Server']]],
   ['disconnectpacket_10',['DisconnectPacket',['../classDisconnectPacket.html#af87b9c06ab910752e742ac20a4ea93aa',1,'DisconnectPacket::DisconnectPacket()'],['../classDisconnectPacket.html#a07da316298ff176a99d6829b7be74fd0',1,'DisconnectPacket::DisconnectPacket(uint32_t player_id)'],['../classDisconnectPacket.html#ab40aba2804ab0dea47f591d71ae34a53',1,'DisconnectPacket::DisconnectPacket(const DisconnectPacket &amp;other)'],['../classDisconnectPacket.html#a4e59088ea19edff71f5f8448c2ffa8d0',1,'DisconnectPacket::DisconnectPacket(DisconnectPacket &amp;&amp;other)']]],
-  ['dmat_11',['dmat',['../classMat4.html#ac58529fdf443319bb6406eed968ad222',1,'Mat4']]]
+  ['dmat_11',['dmat',['../classMat4.html#ac58529fdf443319bb6406eed968ad222',1,'Mat4']]],
+  ['drawmesh_12',['drawMesh',['../classVulkanAPI.html#ae897f724728306e2d4b2227369351611',1,'VulkanAPI']]]
 ];

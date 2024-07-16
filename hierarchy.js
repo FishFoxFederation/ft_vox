@@ -1,12 +1,15 @@
 var hierarchy =
 [
     [ "Application", "classApplication.html", null ],
+    [ "AtmosphereParams", "structAtmosphereParams.html", null ],
     [ "Atomic< T >", "classAtomic.html", null ],
     [ "Atomic< glm::vec3 >", "classAtomic.html", null ],
+    [ "PlayerModel::AttackAnimation", "classPlayerModel_1_1AttackAnimation.html", null ],
     [ "Block", "structBlock.html", null ],
     [ "ServerWorld::BlockUpdateData", "structServerWorld_1_1BlockUpdateData.html", null ],
     [ "BlockUpdateThread", "classBlockUpdateThread.html", null ],
     [ "BlockVertex", "structBlockVertex.html", null ],
+    [ "VulkanAPI::BottomLevelAS", "structVulkanAPI_1_1BottomLevelAS.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "Chunk", "classChunk.html", null ],
     [ "ServerWorld::ChunkLoadUnloadData", "structServerWorld_1_1ChunkLoadUnloadData.html", null ],
@@ -29,11 +32,13 @@ var hierarchy =
       [ "Client::ServerDisconnected", "classClient_1_1ServerDisconnected.html", null ],
       [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ]
     ] ],
+    [ "Face", "structFace.html", null ],
     [ "GuiTextureData", "structGuiTextureData.html", null ],
     [ "ServerWorld::Ticket::hash", "structServerWorld_1_1Ticket_1_1hash.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
     [ "std::hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", null ],
     [ "std::hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", null ],
+    [ "std::hash< ObjVertex >", "structstd_1_1hash_3_01ObjVertex_01_4.html", null ],
     [ "std::hash< ServerWorld::Ticket >", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html", null ],
     [ "History< T, N >", "classHistory.html", null ],
     [ "History< float, 100 >", "classHistory.html", null ],
@@ -47,6 +52,7 @@ var hierarchy =
     [ "ImGuiTexture", "structImGuiTexture.html", null ],
     [ "IncomingPacketList", "classIncomingPacketList.html", null ],
     [ "Input", "classInput.html", null ],
+    [ "VulkanAPI::InstanceData", "structVulkanAPI_1_1InstanceData.html", null ],
     [ "IPacket", "classIPacket.html", [
       [ "BlockActionPacket", "classBlockActionPacket.html", null ],
       [ "ChunkPacket", "classChunkPacket.html", null ],
@@ -73,6 +79,8 @@ var hierarchy =
     [ "ModelMatrice", "structModelMatrice.html", null ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
     [ "NetworkThread", "classNetworkThread.html", null ],
+    [ "ObjLoader", "classObjLoader.html", null ],
+    [ "ObjVertex", "structObjVertex.html", null ],
     [ "std::ofstream", null, [
       [ "FileOutput", "classFileOutput.html", null ]
     ] ],
@@ -88,6 +96,7 @@ var hierarchy =
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", null ],
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],
     [ "RenderThread", "classRenderThread.html", null ],
+    [ "VulkanAPI::RTMeshData", "structVulkanAPI_1_1RTMeshData.html", null ],
     [ "Server", "classServer.html", null ],
     [ "ServerBlockUpdateThread", "classServerBlockUpdateThread.html", null ],
     [ "ServerPacketHandler", "classServerPacketHandler.html", null ],
@@ -107,6 +116,7 @@ var hierarchy =
     [ "ServerWorld::Ticket", "structServerWorld_1_1Ticket.html", null ],
     [ "Timer< ChronoCount, HistorySize >", "classTimer.html", null ],
     [ "Transform", "classTransform.html", null ],
+    [ "UBO", "structUBO.html", null ],
     [ "std::unordered_map", null, [
       [ "IdList< uint64_t, WorldScene::MeshRenderData >", "classIdList.html", null ],
       [ "IdList< Key, Value, container, IdGen >", "classIdList.html", null ]
@@ -117,6 +127,7 @@ var hierarchy =
     [ "ViewProjMatrices", "structViewProjMatrices.html", null ],
     [ "VulaknMemoryAllocator", "classVulaknMemoryAllocator.html", null ],
     [ "VulkanAPI", "classVulkanAPI.html", null ],
+    [ "PlayerModel::WalkAnimation", "classPlayerModel_1_1WalkAnimation.html", null ],
     [ "Window", "classWindow.html", null ],
     [ "World", "classWorld.html", [
       [ "ClientWorld", "classClientWorld.html", null ],
