@@ -226,6 +226,19 @@ struct ImGuiTexture
 	}
 };
 
+struct RTPushConstant
+{
+	float time;
+};
+
+struct RTCameraMatrices
+{
+	glm::mat4 view;
+	glm::mat4 proj;
+	glm::mat4 last_view;
+	glm::mat4 last_proj;
+};
+
 class VulkanAPI
 {
 
@@ -420,7 +433,6 @@ public:
 	};
 
 	std::vector<BottomLevelAS> blas_list;
-	uint32_t blas_count = 0;
 
 	struct InstanceData
 	{
@@ -436,7 +448,6 @@ public:
 	};
 
 	std::vector<InstanceData> instance_list;
-	uint32_t instance_count = 0;
 
 	VkAccelerationStructureKHR tlas = VK_NULL_HANDLE;
 	VkBuffer tlas_buffer = VK_NULL_HANDLE;
@@ -452,6 +463,8 @@ public:
 	VkDeviceMemory rt_mesh_data_buffer_memory = VK_NULL_HANDLE;
 	VkDeviceSize rt_mesh_data_buffer_size = 0;
 	uint32_t rt_mesh_data_buffer_count = 0;
+
+	UBO rt_camera_ubo;
 
 	VkImage rt_lighting_image;
 	VkDeviceMemory rt_lighting_image_memory;
@@ -474,6 +487,7 @@ public:
 	Descriptor rt_lighting_shadow_image_descriptor;
 	Descriptor rt_output_image_descriptor;
 	Descriptor rt_objects_descriptor;
+	Descriptor rt_camera_descriptor;
 
 	VkPipelineLayout rt_pipeline_layout;
 	VkPipeline rt_pipeline;
@@ -596,6 +610,7 @@ private:
 	void destroyInstance(InstanceData & instance);
 	void createMeshDataBuffer();
 	void createTopLevelAS(const std::vector<InstanceData> & instance_list);
+	void createRayTracingUBO();
 	void createRayTracingImages();
 	void createRayTracingDescriptor();
 	void updateRTImagesDescriptor();

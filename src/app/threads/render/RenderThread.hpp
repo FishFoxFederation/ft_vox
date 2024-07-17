@@ -73,6 +73,8 @@ private:
 
 	bool use_raytracing;
 
+	ViewProjMatrices m_last_frame_view_proj_matrices = {};
+
 
 	// For DebugGui
 	int m_frame_count;

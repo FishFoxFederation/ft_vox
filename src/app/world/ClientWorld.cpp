@@ -7,7 +7,7 @@ ClientWorld::ClientWorld(
 	uint64_t my_player_id
 )
 :
-	World(),	
+	World(),
 	m_worldScene(WorldScene),
 	m_vulkanAPI(vulkanAPI)
 	// m_players(),
@@ -521,7 +521,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	}
 	else // if player is flying
 	{
-		double acc = 1000.0;
+		double acc = 100.0;
 		double drag = 10.0;
 
 		move.y = up - down;
