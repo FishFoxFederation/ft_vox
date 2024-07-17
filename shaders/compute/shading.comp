@@ -25,10 +25,6 @@ vec4 sampleShadow(ivec2 pos)
 	{
 		return vec4(0.0);
 	}
-	if (occlusion == 1)
-	{
-		return vec4(1.0);
-	}
 
 	for (float i = -size / 2; i < size / 2; i += sample_step)
 	{
@@ -52,10 +48,49 @@ vec4 sampleShadow(ivec2 pos)
 	return vec4(pixel_lit_count / pixel_lit_count_max);
 }
 
-// float linearize_depth(float d, float n, float f)
-// {
-//     return n * f / (f + d * (n - f));
-// }
+#define PI 3.14159265359
+
+float distance(int x, int y, int i, int j)
+{
+    return float(sqrt(pow(x - i, 2) + pow(y - j, 2)));
+}
+
+float gaussian(float x, float sigma)
+{
+    return exp(-(pow(x, 2))/(2 * pow(sigma, 2))) / (2 * PI * pow(sigma, 2));
+}
+
+float bilateral_filtering(ivec2 pos)
+{
+	int diameter = 2;
+	int radius = diameter / 2;
+	float sigma_i = 12.0;
+	float sigma_s = 16.0;
+	float sum = 0.0;
+	float weight = 0.0;
+	float pixel = imageLoad(shadow_image, pos).r;
+
+	for (int i = -radius; i <= radius; i++)
+	{
+		for (int j = -radius; j <= radius; j++)
+		{
+			ivec2 sample_pos = pos + ivec2(i, j);
+			if (!bound_check(sample_pos, imageSize(shadow_image)))
+			{
+				continue;
+			}
+
+			float sample_pixel = imageLoad(shadow_image, sample_pos).r;
+			float gi = gaussian(sample_pixel - pixel, sigma_i);
+			float gs = gaussian(distance(pos.x, pos.y, sample_pos.x, sample_pos.y), sigma_s);
+			float w = gi * gs;
+			sum += sample_pixel * w;
+			weight += w;
+		}
+	}
+
+	return sum / weight;
+}
 
 void main()
 {
@@ -70,5 +105,7 @@ void main()
 	vec4 lighting_pixel = imageLoad(lighting_image, storePos);
 	vec4 shadow_pixel = imageLoad(shadow_image, storePos);
 
-	imageStore(output_image, storePos, lighting_pixel * (sampleShadow(storePos) * 0.5 + 0.5));
+	// imageStore(output_image, storePos, lighting_pixel * (sampleShadow(storePos) * 0.5 + 0.5));
+	// imageStore(output_image, storePos, lighting_pixel * shadow_pixel.r);
+	imageStore(output_image, storePos, lighting_pixel * bilateral_filtering(storePos));
 }

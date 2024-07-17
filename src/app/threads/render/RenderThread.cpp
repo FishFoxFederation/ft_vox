@@ -42,16 +42,16 @@ void RenderThread::launch()
 
 		while (!m_thread.get_stop_token().stop_requested())
 		{
-			auto start_time = std::chrono::high_resolution_clock::now();
+			// auto start_time = std::chrono::high_resolution_clock::now();
 			loop();
-			auto end_time = std::chrono::high_resolution_clock::now();
+			// auto end_time = std::chrono::high_resolution_clock::now();
 
-			//i want 60fps so if not enough time passed wait a bit
-			std::chrono::nanoseconds frame_time = end_time - start_time;
-			if (frame_time < std::chrono::nanoseconds(16666666))
-			{
-				std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
-			}
+			// //i want 60fps so if not enough time passed wait a bit
+			// std::chrono::nanoseconds frame_time = end_time - start_time;
+			// if (frame_time < std::chrono::nanoseconds(16666666))
+			// {
+			// 	std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
+			// }
 		}
 	}
 	catch (const std::exception & e)
@@ -73,11 +73,11 @@ void RenderThread::loop()
 	std::string current_frame = "Frame " + std::to_string(vk.current_frame);
 	ZoneText(current_frame.c_str(), current_frame.size());
 
-	//############################################################################################################
-	//					 																						 #
-	//							Do independent logic from the vulkan rendering here							#
-	//					 																						 #
-	//############################################################################################################
+	//###########################################################################################################
+	//					 																						#
+	//							Do independent logic from the vulkan rendering here								#
+	//					 																						#
+	//###########################################################################################################
 
 	int window_width, window_height;
 	double aspect_ratio;
@@ -92,6 +92,7 @@ void RenderThread::loop()
 	std::optional<glm::vec3> target_block;
 	std::vector<WorldScene::DebugBlock> debug_blocks;
 	AtmosphereParams atmosphere_params = {};
+	RTCameraMatrices rt_camera_matrices = {};
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -171,6 +172,14 @@ void RenderThread::loop()
 		atmosphere_params.n_light_samples = DebugGui::n_light_samples;
 
 		use_raytracing = DebugGui::use_raytracing;
+
+
+		rt_camera_matrices.view = camera_matrices.view;
+		rt_camera_matrices.proj = camera_matrices.proj;
+		rt_camera_matrices.last_view = m_last_frame_view_proj_matrices.view;
+		rt_camera_matrices.last_proj = m_last_frame_view_proj_matrices.proj;
+
+		m_last_frame_view_proj_matrices = camera_matrices;
 	}
 
 	//############################################################################################################
@@ -219,6 +228,7 @@ void RenderThread::loop()
 	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 	memcpy(vk.sun_ubo.mapped_memory[vk.current_frame], &sun, sizeof(sun));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
+	memcpy(vk.rt_camera_ubo.mapped_memory[vk.current_frame], &rt_camera_matrices, sizeof(rt_camera_matrices));
 
 	if (use_raytracing)
 	{
@@ -1287,7 +1297,7 @@ void RenderThread::raytrace()
 	std::vector<VkDescriptorSet> rt_descriptor_sets = {
 		vk.rt_lighting_shadow_image_descriptor.sets[vk.current_frame],
 		vk.rt_objects_descriptor.sets[vk.current_frame],
-		vk.camera_descriptor.sets[vk.current_frame],
+		vk.rt_camera_descriptor.sets[vk.current_frame],
 		vk.block_textures_descriptor.set,
 		vk.atmosphere_descriptor.sets[vk.current_frame],
 	};
@@ -1301,6 +1311,17 @@ void RenderThread::raytrace()
 		rt_descriptor_sets.data(),
 		0,
 		nullptr
+	);
+
+	RTPushConstant rt_push_constant = {};
+	rt_push_constant.time = m_current_time.count();
+	vkCmdPushConstants(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.rt_pipeline_layout,
+		VK_SHADER_STAGE_RAYGEN_BIT_NV | VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV,
+		0,
+		sizeof(RTPushConstant),
+		&rt_push_constant
 	);
 
 	vk.vkCmdTraceRaysKHR(

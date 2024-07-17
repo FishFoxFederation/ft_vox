@@ -1781,6 +1781,7 @@ void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
 void VulkanAPI::setupRayTracing()
 {
 	getRayTracingProperties();
+	createRayTracingUBO();
 	createRayTracingImages();
 	createRayTracingDescriptor();
 	updateRTImagesDescriptor();
@@ -1817,9 +1818,17 @@ void VulkanAPI::destroyRayTracing()
 		vma.freeMemory(device, rt_mesh_data_buffer_memory, nullptr);
 	}
 
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		vkUnmapMemory(device, rt_camera_ubo.memory[i]);
+		vma.freeMemory(device, rt_camera_ubo.memory[i], nullptr);
+		vkDestroyBuffer(device, rt_camera_ubo.buffers[i], nullptr);
+	}
+
 	rt_lighting_shadow_image_descriptor.clear();
 	rt_output_image_descriptor.clear();
 	rt_objects_descriptor.clear();
+	rt_camera_descriptor.clear();
 
 	vkDestroyImage(device, rt_lighting_image, nullptr);
 	vma.freeMemory(device, rt_lighting_image_memory, nullptr);
@@ -1903,8 +1912,6 @@ int VulkanAPI::createBottomLevelAS(uint64_t mesh_id)
 		blas_index = blas_list.size();
 		blas_list.push_back({});
 	}
-
-	blas_count++;
 
 	Mesh & mesh = mesh_map[mesh_id];
 
@@ -2056,8 +2063,6 @@ void VulkanAPI::destroyBottomLevelAS(BottomLevelAS & blas)
 	vkDestroyBuffer(device, blas.transform_buffer, nullptr);
 
 	blas = {};
-
-	blas_count--;
 }
 
 int VulkanAPI::createInstance(const BottomLevelAS & blas, const glm::mat4 & transform)
@@ -2076,8 +2081,6 @@ int VulkanAPI::createInstance(const BottomLevelAS & blas, const glm::mat4 & tran
 		instance_index = instance_list.size();
 		instance_list.push_back({});
 	}
-
-	instance_count++;
 
 	VkAccelerationStructureInstanceKHR instance = {};
 	instance.transform = glmToVkTransformMatrix(transform);
@@ -2129,8 +2132,6 @@ void VulkanAPI::destroyInstance(InstanceData & instance)
 	vkDestroyBuffer(device, instance.buffer, nullptr);
 
 	instance = {};
-
-	instance_count--;
 }
 
 void VulkanAPI::createMeshDataBuffer()
@@ -2284,6 +2285,11 @@ void VulkanAPI::createTopLevelAS(const std::vector<InstanceData> & instance_list
 
 	vkDestroyBuffer(device, as_instances_buffer, nullptr);
 	vma.freeMemory(device, as_instances_buffer_memory, nullptr);
+}
+
+void VulkanAPI::createRayTracingUBO()
+{
+	createUBO(rt_camera_ubo, sizeof(RTCameraMatrices), max_frames_in_flight);
 }
 
 void VulkanAPI::createRayTracingImages()
@@ -2468,6 +2474,48 @@ void VulkanAPI::createRayTracingDescriptor()
 
 		rt_objects_descriptor = Descriptor(device, descriptor_info);
 	}
+
+	{ // Camera Descriptor
+		VkDescriptorSetLayoutBinding camera_binding = {};
+		camera_binding.binding = 0;
+		camera_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		camera_binding.descriptorCount = 1;
+		camera_binding.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
+		camera_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = {
+			camera_binding
+		};
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		rt_camera_descriptor = Descriptor(device, descriptor_info);
+
+		for (int i = 0; i < max_frames_in_flight; i++)
+		{
+			VkDescriptorBufferInfo buffer_info = {};
+			buffer_info.buffer = rt_camera_ubo.buffers[i];
+			buffer_info.offset = 0;
+			buffer_info.range = sizeof(ViewProjMatrices);
+
+			VkWriteDescriptorSet descriptor_write = {};
+			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptor_write.dstSet = rt_camera_descriptor.sets[i];
+			descriptor_write.dstBinding = 0;
+			descriptor_write.dstArrayElement = 0;
+			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			descriptor_write.descriptorCount = 1;
+			descriptor_write.pBufferInfo = &buffer_info;
+
+			vkUpdateDescriptorSets(
+				device,
+				1,
+				&descriptor_write,
+				0, nullptr
+			);
+		}
+	}
 }
 
 void VulkanAPI::updateRTImagesDescriptor()
@@ -2627,17 +2675,22 @@ void VulkanAPI::createRayTracingPipeline()
 	std::vector<VkDescriptorSetLayout> descriptor_set_layouts = {
 		rt_lighting_shadow_image_descriptor.layout,
 		rt_objects_descriptor.layout,
-		camera_descriptor.layout,
+		rt_camera_descriptor.layout,
 		block_textures_descriptor.layout,
 		atmosphere_descriptor.layout
 	};
+
+	VkPushConstantRange push_constant_range = {};
+	push_constant_range.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
+	push_constant_range.offset = 0;
+	push_constant_range.size = sizeof(RTPushConstant);
 
 	VkPipelineLayoutCreateInfo pipeline_layout_info = {};
 	pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	pipeline_layout_info.setLayoutCount = static_cast<uint32_t>(descriptor_set_layouts.size());
 	pipeline_layout_info.pSetLayouts = descriptor_set_layouts.data();
-	pipeline_layout_info.pushConstantRangeCount = 0;
-	pipeline_layout_info.pPushConstantRanges = nullptr;
+	pipeline_layout_info.pushConstantRangeCount = 1;
+	pipeline_layout_info.pPushConstantRanges = &push_constant_range;
 
 	VK_CHECK(
 		vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &rt_pipeline_layout),
