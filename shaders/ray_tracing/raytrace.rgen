@@ -22,6 +22,11 @@ layout(location = 0) rayPayloadEXT struct RayPayload
 	vec2 motion;
 } payload;
 
+bool bound_check(ivec2 pos, ivec2 size)
+{
+	return pos.x >= 0 && pos.x < size.x && pos.y >= 0 && pos.y < size.y;
+}
+
 void main()
 {
 	const vec2 pixel_center = vec2(gl_LaunchIDEXT.xy) + vec2(0.5);
@@ -59,9 +64,21 @@ void main()
 		0				// payload (location = 0)
 	);
 
-	float shadow_last_frame = imageLoad(shadow_image, ivec2(gl_LaunchIDEXT.xy - payload.motion)).r;
-	payload.shadow = mix(shadow_last_frame, payload.shadow, 0.1);
+	ivec2 frame_pos = ivec2(gl_LaunchIDEXT.xy);
+	ivec2 last_frame_pos = ivec2(vec2(frame_pos) - payload.motion);
+	float shadow_last_frame = 0.0;
+	if (bound_check(last_frame_pos, imageSize(shadow_image)))
+	{
+		shadow_last_frame = imageLoad(shadow_image, last_frame_pos).r;
+		// shadow_last_frame = 0.9;
+	}
+	else
+	{
+		// shadow_last_frame = imageLoad(shadow_image, frame_pos).r;
+		shadow_last_frame = 0.0;
+	}
+	float shadow = mix(shadow_last_frame, payload.shadow, 0.1);
 
-	imageStore(lighting_image, ivec2(gl_LaunchIDEXT.xy), payload.color);
-	imageStore(shadow_image, ivec2(gl_LaunchIDEXT.xy), vec4(payload.shadow, payload.depth, 0.0, 0.0));
+	imageStore(lighting_image, frame_pos, payload.color);
+	imageStore(shadow_image, frame_pos, vec4(shadow, payload.depth, 0.0, 0.0));
 }
