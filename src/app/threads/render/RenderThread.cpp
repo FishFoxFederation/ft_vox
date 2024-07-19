@@ -292,8 +292,8 @@ void RenderThread::loop()
 
 		vkCmdDispatch(
 			vk.compute_command_buffers[vk.current_frame],
-			vk.color_attachement.extent2D.width / 16,
-			vk.color_attachement.extent2D.height / 16,
+			vk.rt_lighting_image_width / 32 + 1,
+			vk.rt_lighting_image_height / 32 + 1,
 			1
 		);
 
@@ -1330,8 +1330,8 @@ void RenderThread::raytrace()
 		&vk.rt_sbt_miss_region,
 		&vk.rt_sbt_hit_region,
 		&vk.rt_sbt_call_region,
-		vk.rt_output_image_width,
-		vk.rt_output_image_height,
+		vk.rt_lighting_image_width,
+		vk.rt_lighting_image_height,
 		1
 	);
 }

@@ -1,6 +1,6 @@
 #version 450
 
-layout(local_size_x = 16, local_size_y = 16) in;
+layout(local_size_x = 32, local_size_y = 32) in;
 
 layout (set = 0, binding = 0, rgba32f) uniform readonly image2D lighting_image;
 layout (set = 0, binding = 1, rgba32f) uniform readonly image2D shadow_image;
@@ -94,18 +94,18 @@ float bilateral_filtering(ivec2 pos)
 
 void main()
 {
-	ivec2 storePos = ivec2(gl_GlobalInvocationID.xy);
+	ivec2 store_pos = ivec2(gl_GlobalInvocationID.xy);
 	ivec2 image_size = imageSize(lighting_image);
 
-	if (!bound_check(storePos, image_size))
+	if (!bound_check(store_pos, image_size))
 	{
 		return;
 	}
 
-	vec4 lighting_pixel = imageLoad(lighting_image, storePos);
-	vec4 shadow_pixel = imageLoad(shadow_image, storePos);
+	vec4 lighting_pixel = imageLoad(lighting_image, store_pos);
+	vec4 shadow_pixel = imageLoad(shadow_image, store_pos);
 
-	// imageStore(output_image, storePos, lighting_pixel * (sampleShadow(storePos) * 0.5 + 0.5));
-	// imageStore(output_image, storePos, lighting_pixel * shadow_pixel.r);
-	imageStore(output_image, storePos, lighting_pixel * bilateral_filtering(storePos));
+	// imageStore(output_image, store_pos, lighting_pixel * (sampleShadow(store_pos) * 0.5 + 0.5));
+	// imageStore(output_image, store_pos, lighting_pixel * shadow_pixel.r);
+	imageStore(output_image, store_pos, lighting_pixel * bilateral_filtering(store_pos));
 }

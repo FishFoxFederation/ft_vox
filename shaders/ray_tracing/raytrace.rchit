@@ -136,10 +136,10 @@ void main()
 	ao = 1.0 - (ao / 3.0) * 0.9;
 
 
-	float light_distance = 1000.0;
+	float light_distance = 100.0;
 	vec3 to_light = normalize(ap.sun_dir);
 	vec3 light_pos = world_pos + to_light * light_distance;
-	float light_size = 10.0;
+	float light_size = 1.0;
 
 	// vectors to the side of the light
 	vec3 perpL = cross(to_light, vec3(0, 1, 0));
@@ -153,6 +153,7 @@ void main()
 	vec3 new_light_pos = light_pos + perpL * light_offset.x + perpL2 * light_offset.y;
 	vec3 ray_dir = normalize(new_light_pos - world_pos);
 
+	// ray_dir = to_light;
 
 	float attenuation = 1.0;
 
@@ -187,13 +188,13 @@ void main()
 	}
 	else
 	{
-		attenuation = 0.3;
+		attenuation = 0.1;
 	}
 
 
 	vec4 clip_pos = camera.proj * camera.view * gl_ObjectToWorld3x4EXT * pos;
 	vec2 ndc = clip_pos.xy / clip_pos.w;
-	// Wrong because this is the world_pos of the current frame (but it works for non-moving objects)
+	// Wrong because this is the model matrice of the current frame (but it works for non-moving objects)
 	vec4 last_clip_pos = camera.last_proj * camera.last_view * gl_ObjectToWorld3x4EXT * pos;
 	vec2 last_ndc = last_clip_pos.xy / last_clip_pos.w;
 	vec2 motion = (ndc - last_ndc);
@@ -202,6 +203,6 @@ void main()
 	payload.shadow = attenuation;
 	// payload.depth = unlinearize_depth(gl_HitTEXT, 0.001, 1000);
 	payload.depth = sqrt(gl_HitTEXT) / 10.0;
-	// payload.motion = motion;
+	payload.motion = motion;
 }
 
