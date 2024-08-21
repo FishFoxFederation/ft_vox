@@ -21,15 +21,6 @@ float compute_shadow_factor(
 	// Compute the light space position in NDC
 	vec3 light_space_ndc = light_space_pos.xyz /= light_space_pos.w;
 
-	if (
-		abs(light_space_ndc.x) > 1.0 ||
-		abs(light_space_ndc.y) > 1.0 ||
-		abs(light_space_ndc.z) > 1.0
-	)
-	{
-	 	return 0.5;
-	}
-
 	// Translate from NDC to shadow map space (Vulkan's Z is already in [0..1])
 	vec2 shadow_map_coord = light_space_ndc.xy * 0.5 + 0.5;
 
@@ -69,11 +60,11 @@ void main()
 	float ao_factor = frag_ao / 3.0;
 
 	float max_shadow_light = 0.8;
-	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 10000, 3);
+	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, textureSize(shadow_map, 0).x, 2);
 
-	float light = (min_light + max_shadow_light * shadow_factor) - max_ao_shadow * ao_factor;
+	float light = min_light + max_shadow_light * shadow_factor - max_ao_shadow * ao_factor;
 
 
-	// out_color = texture(tex, frag_tex_coord) * light;
-	out_color = texture(tex, frag_tex_coord) * (0.8 * (1 - frag_ao / 3.0));
+	out_color = texture(tex, frag_tex_coord) * light;
+	// out_color = texture(tex, frag_tex_coord) * (0.8 * (1 - frag_ao / 3.0));
 }
