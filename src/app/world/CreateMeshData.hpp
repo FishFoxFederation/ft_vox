@@ -374,12 +374,34 @@ public:
 			{
 				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					BlockID block_id = block(pos.x, pos.y, pos.z);
-					BlockID neighbor_id = block(pos.x + normal.x, pos.y + normal.y, pos.z + normal.z);
+					BlockID block_id = block(pos);
+					BlockID neighbor_id = block(pos + normal);
 
-					if (block_id != BlockID::Air && neighbor_id == BlockID::Air)
+					bool should_render = true;
+					bool block_is_opaque = Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE);
+					bool neighbor_is_opaque = Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE);
+
+					if (block_id == BlockID::Air || neighbor_is_opaque)
 					{
-						face_data[pos.x][pos.y][pos.z] = {Block::getData(block_id).texture[face], getAmbientOcclusion(pos + normal, dim_1, dim_2)};
+						should_render = false;
+					}
+					else if (block_id == BlockID::Glass && neighbor_id == BlockID::Glass)
+					{
+						should_render = false;
+					}
+
+					if (should_render)
+					{
+						std::array<uint8_t, 4UL> ao = {0, 0, 0, 0};
+						if (block_is_opaque)
+						{
+							ao = getAmbientOcclusion(pos + normal, dim_1, dim_2);
+						}
+
+						face_data[pos.x][pos.y][pos.z] = {
+							Block::getData(block_id).texture[face],
+							ao
+						};
 					}
 					else
 					{
@@ -546,9 +568,9 @@ public:
 		BlockID corner
 	)
 	{
-		return Block::hasProperty(side_1, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID) +
-				Block::hasProperty(side_2, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID) +
-				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_SOLID);
+		return Block::hasProperty(side_1, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE) +
+				Block::hasProperty(side_2, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE) +
+				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE);
 	}
 
 	std::vector<std::vector<std::vector<std::shared_ptr<Chunk>>>> chunks;

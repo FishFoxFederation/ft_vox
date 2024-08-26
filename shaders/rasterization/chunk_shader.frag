@@ -73,7 +73,13 @@ void main()
 
 	float light = (min_light + max_shadow_light * shadow_factor) - max_ao_shadow * ao_factor;
 
+	vec4 texture_color = texture(tex, frag_tex_coord);
 
-	// out_color = texture(tex, frag_tex_coord) * light;
-	out_color = texture(tex, frag_tex_coord) * (0.8 * (1 - frag_ao / 3.0));
+	if (texture_color.a < 0.1)
+	{
+		discard;
+	}
+
+	// out_color = texture_color * light;
+	out_color = texture_color * (0.7 * (1 - frag_ao / 3.0));
 }

@@ -79,6 +79,10 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 				else
 					to_set = BlockID::Air;
 
+				//if above relief value and below 200 place water
+				if (to_set == BlockID::Air && position.y < 200)
+					to_set = BlockID::Glass;
+
 				//if below relief value try to carve a cave
 				if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
 					to_set = BlockID::Air;

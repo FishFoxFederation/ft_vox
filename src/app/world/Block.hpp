@@ -16,7 +16,9 @@ enum class BlockID : BlockType
 	Air,
 	Grass,
 	Dirt,
-	Stone
+	Stone,
+	Water,
+	Glass
 };
 
 // Block properties
@@ -24,7 +26,7 @@ enum class BlockID : BlockType
 #define BLOCK_PROPERTY_SOLID	1U		// solid block (can be walked on)
 #define BLOCK_PROPERTY_OPAQUE	1U << 1 // opaque block (cannot be seen through)
 #define BLOCK_PROPERTY_CUBE		1U << 2 // cube block (is a standard cube shape)
-#define BLOCK_PROPERTY_LIGHT	1U << 2 // light block (emits light)
+#define BLOCK_PROPERTY_LIGHT	1U << 3 // light block (emits light)
 
 // Block faces coresponding to the texture array
 #define BLOCK_FACE_TOP		0
@@ -46,17 +48,19 @@ struct Block
 {
 
 	static inline const std::vector<std::string> texture_names = {
-		"assets/textures/grass_top.jpg", // 0
-		"assets/textures/grass_top.jpg", // 1
-		"assets/textures/grass_side.jpg", // 2
-		"assets/textures/dirt.jpg", // 3
-		"assets/textures/stone.jpg" // 4
-		// "assets/textures/debug/white.png",
-		// "assets/textures/debug/right.png",
-		// "assets/textures/debug/left.png",
-		// "assets/textures/debug/front.png",
-		// "assets/textures/debug/top.png",
-		// "assets/textures/debug/back_bottom.png",
+		"assets/textures/block/grass_top.png", // 0
+		"assets/textures/block/grass_top.png", // 1
+		"assets/textures/block/grass_side.png", // 2
+		"assets/textures/block/dirt.png", // 3
+		"assets/textures/block/stone.png", // 4
+		"assets/textures/block/water.png", // 5
+		"assets/textures/block/glass_clear.png", // 5
+		// "assets/textures/block/debug/white.png",
+		// "assets/textures/block/debug/right.png",
+		// "assets/textures/block/debug/left.png",
+		// "assets/textures/block/debug/front.png",
+		// "assets/textures/block/debug/top.png",
+		// "assets/textures/block/debug/back_bottom.png",
 	};
 
 	static const Data & getData(const BlockID id)
@@ -67,6 +71,8 @@ struct Block
 		case BlockID::Grass: return Grass;
 		case BlockID::Dirt: return Dirt;
 		case BlockID::Stone: return Stone;
+		case BlockID::Water: return Water;
+		case BlockID::Glass: return Glass;
 		default: return Air;
 		}
 	}
@@ -134,6 +140,37 @@ struct Block
 		.properties =
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
+			| BLOCK_PROPERTY_CUBE,
+		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+	};
+	static inline const Data Water = {
+		.id = BlockID::Water,
+		.texture = {
+			5, // water
+			5, // water
+			5, // water
+			5, // water
+			5, // water
+			5  // water
+		},
+		.properties =
+			BLOCK_PROPERTY_SOLID
+			| BLOCK_PROPERTY_OPAQUE
+			| BLOCK_PROPERTY_CUBE,
+		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+	};
+	static inline const Data Glass = {
+		.id = BlockID::Glass,
+		.texture = {
+			6, // glass
+			6, // glass
+			6, // glass
+			6, // glass
+			6, // glass
+			6  // glass
+		},
+		.properties =
+			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_CUBE,
 		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
