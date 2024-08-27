@@ -27,6 +27,7 @@ enum class BlockID : BlockType
 #define BLOCK_PROPERTY_OPAQUE	1U << 1 // opaque block (cannot be seen through)
 #define BLOCK_PROPERTY_CUBE		1U << 2 // cube block (is a standard cube shape)
 #define BLOCK_PROPERTY_LIGHT	1U << 3 // light block (emits light)
+#define BLOCK_PROPERTY_FLUID	1U << 4 // fluid block (flows)
 
 // Block faces coresponding to the texture array
 #define BLOCK_FACE_TOP		0
@@ -154,7 +155,7 @@ struct Block
 			5  // water
 		},
 		.properties =
-			BLOCK_PROPERTY_CUBE,
+			BLOCK_PROPERTY_FLUID,
 		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
 	static inline const Data Glass = {

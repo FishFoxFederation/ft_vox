@@ -484,7 +484,8 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	std::pair<glm::dvec3, glm::dvec3> result;
 
 	// determine if player is on the ground or in the air and detect
-	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position);
+	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position, BLOCK_PROPERTY_SOLID);
+	bool in_fluid = hitboxCollisionWithBlock(player->feet, player->transform.position, BLOCK_PROPERTY_FLUID);
 	if (on_ground && !player->on_ground) // player just landed
 	{
 		player->jump_remaining = 1;
@@ -495,6 +496,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 		player->startFall();
 	}
 	player->on_ground = on_ground;
+	player->swimming = in_fluid;
 
 
 
@@ -510,30 +512,54 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 
 	glm::dvec3 displacement;
 
-	// if player is walking
 	if (player->isFlying() == false)
 	{
-		double acc = 40.0;
-		double ground_friction = 10.0;
-		double air_friction = 0.8;
-		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
-
-		double jump_force = 9.0;
-		double gravity = -25.0;
-
-		if (up && player->canJump())
+		if (!player->swimming) // if player is walking
 		{
-			player->startJump();
-			player->velocity.y = jump_force;
+			double acc = 40.0;
+			double ground_friction = 10.0;
+			double air_friction = 0.8;
+			glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
+
+			double jump_force = 9.0;
+			double gravity = -25.0;
+
+			if (up && player->canJump())
+			{
+				player->startJump();
+				player->velocity.y = jump_force;
+			}
+
+			player->velocity.y += gravity * delta_time_second;
+
+			player->velocity += move * acc * delta_time_second;
+
+			displacement = player->velocity * delta_time_second;
+
+			player->velocity *= (1.0 - glm::min(delta_time_second * friction, 1.0));
 		}
+		else // if player is swimming
+		{
+			double acc = 20.0;
+			double fluid_friction = 10.0;
+			glm::dvec3 friction = glm::dvec3(fluid_friction, fluid_friction, fluid_friction);
 
-		player->velocity.y += gravity * delta_time_second;
+			double jump_force = 4.0;
+			double gravity = -25.0;
 
-		player->velocity += move * acc * delta_time_second;
+			if (up)
+			{
+				player->velocity.y = jump_force;
+			}
 
-		displacement = player->velocity * delta_time_second;
+			player->velocity.y += gravity * delta_time_second;
 
-		player->velocity *= (1.0 - glm::min(delta_time_second * friction, 1.0));
+			player->velocity += move * acc * delta_time_second;
+
+			displacement = player->velocity * delta_time_second;
+
+			player->velocity *= (1.0 - glm::min(delta_time_second * friction, 1.0));
+		}
 	}
 	else // if player is flying
 	{
@@ -559,12 +585,12 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 		const glm::dvec3 move_yz = {0.0, displacement.y, displacement.z};
 		const glm::dvec3 move_xy = {displacement.x, displacement.y, 0.0};
 
-		bool collision_x = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_x);
-		bool collision_y = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_y);
-		bool collision_z = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_z);
-		bool collision_xz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xz);
-		bool collision_yz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_yz);
-		bool collision_xy = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xy);
+		bool collision_x = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_x, BLOCK_PROPERTY_SOLID);
+		bool collision_y = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_y, BLOCK_PROPERTY_SOLID);
+		bool collision_z = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_z, BLOCK_PROPERTY_SOLID);
+		bool collision_xz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xz, BLOCK_PROPERTY_SOLID);
+		bool collision_yz = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_yz, BLOCK_PROPERTY_SOLID);
+		bool collision_xy = hitboxCollisionWithBlock(player->hitbox, player->transform.position + move_xy, BLOCK_PROPERTY_SOLID);
 
 		// edge case when the player is perfectly aligned with the corner of a block
 		if (!collision_x && !collision_z && collision_xz)
@@ -825,7 +851,7 @@ void ClientWorld::updateMobs(
 		mob->target_position = player->transform.position;
 
 		// determine if mob is on the ground or in the air and detect
-		bool on_ground = hitboxCollisionWithBlock(mob->feet, mob->transform.position);
+		bool on_ground = hitboxCollisionWithBlock(mob->feet, mob->transform.position, BLOCK_PROPERTY_SOLID);
 		if (on_ground && !mob->on_ground) // mob just landed
 		{
 			mob->jump_remaining = 1;
@@ -877,12 +903,12 @@ void ClientWorld::updateMobs(
 		const glm::dvec3 move_yz = {0.0, displacement.y, displacement.z};
 		const glm::dvec3 move_xy = {displacement.x, displacement.y, 0.0};
 
-		bool collision_x = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_x);
-		bool collision_y = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_y);
-		bool collision_z = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_z);
-		bool collision_xz = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_xz);
-		bool collision_yz = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_yz);
-		bool collision_xy = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_xy);
+		bool collision_x = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_x, BLOCK_PROPERTY_SOLID);
+		bool collision_y = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_y, BLOCK_PROPERTY_SOLID);
+		bool collision_z = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_z, BLOCK_PROPERTY_SOLID);
+		bool collision_xz = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_xz, BLOCK_PROPERTY_SOLID);
+		bool collision_yz = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_yz, BLOCK_PROPERTY_SOLID);
+		bool collision_xy = hitboxCollisionWithBlock(mob->hitbox, mob->transform.position + move_xy, BLOCK_PROPERTY_SOLID);
 		// edge case when the mob is perfectly aligned with the corner of a block
 		if (!collision_x && !collision_z && collision_xz)
 		{
@@ -942,7 +968,11 @@ glm::dvec3 ClientWorld::getPlayerPosition(const uint64_t player_id)
 	return player->transform.position;
 }
 
-bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position)
+bool ClientWorld::hitboxCollisionWithBlock(
+	const HitBox & hitbox,
+	const glm::dvec3 & position,
+	const uint64_t block_properties
+)
 {
 
 	glm::dvec3 offset = glm::dvec3(0.0);
@@ -965,7 +995,7 @@ bool ClientWorld::hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dve
 				BlockID block_id = chunk->getBlock(block_chunk_position);
 				chunk->status.unlock_shared();
 
-				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
+				if (Block::hasProperty(block_id, block_properties))
 				{
 					HitBox block_hitbox = Block::getData(block_id).hitbox;
 
