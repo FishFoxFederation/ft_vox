@@ -7,7 +7,7 @@ ClientWorld::ClientWorld(
 	uint64_t my_player_id
 )
 :
-	World(),	
+	World(),
 	m_worldScene(WorldScene),
 	m_vulkanAPI(vulkanAPI)
 	// m_players(),
@@ -182,7 +182,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 		 * CHUNK UNLOADING FUNCTION
 		 **************************************************************/
 		std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-		uint64_t mesh_scene_id, mesh_id;
+		uint64_t mesh_scene_id;
 
 		//will block and wait
 		std::lock_guard lock(chunk->status);
@@ -191,10 +191,13 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 		if (m_worldScene.chunk_mesh_list.contains(mesh_scene_id))
 		{
-			mesh_id = m_worldScene.chunk_mesh_list.get(mesh_scene_id).id;
+			WorldScene::ChunkMeshRenderData old_mesh_data = m_worldScene.chunk_mesh_list.get(mesh_scene_id);
 			m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
-			m_vulkanAPI.destroyMesh(mesh_id);
-			m_vulkanAPI.removeMeshFromScene(mesh_id);
+			m_vulkanAPI.destroyMesh(old_mesh_data.id);
+			m_vulkanAPI.destroyMesh(old_mesh_data.water_id);
+
+			//for raytracing
+			// m_vulkanAPI.removeMeshFromScene(mesh_id);
 		}
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
@@ -281,10 +284,9 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		if (chunk == nullptr)
 			throw std::runtime_error("Center chunk is null");
 		chunk->setMeshed(true);
-		uint64_t old_mesh_scene_id;
 
 		//destroy old mesh if it exists
-		old_mesh_scene_id = chunk->getMeshID();
+		uint64_t old_mesh_scene_id = chunk->getMeshID();
 
 
 		mesh_data.create(); //CPU intensive task to create the mesh
@@ -296,29 +298,43 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 			mesh_data.indices.data(),
 			mesh_data.indices.size()
 		);
+		uint64_t water_mesh_id = m_vulkanAPI.storeMesh(
+			mesh_data.water_vertices.data(),
+			mesh_data.water_vertices.size(),
+			sizeof(BlockVertex),
+			mesh_data.water_indices.data(),
+			mesh_data.water_indices.size()
+		);
+
 
 		//adding mesh id to the scene so it is rendered
-		if(mesh_id != IdList<uint64_t, Mesh>::invalid_id)
+		// if (mesh_id != IdList<uint64_t, Mesh>::invalid_id)
 		{
 			uint64_t mesh_scene_id = m_worldScene.chunk_mesh_list.insert({
 				mesh_id,
+				water_mesh_id,
 				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 			});
 			chunk->setMeshID(mesh_scene_id);
 
-			m_vulkanAPI.addMeshToScene(
-				mesh_id,
-				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
-			);
+			//for raytracing
+			// m_vulkanAPI.addMeshToScene(
+			// 	mesh_id,
+			// 	Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
+			// );
 		}
 
+
+		//destroy old mesh if it exists
 		if (m_worldScene.chunk_mesh_list.contains(old_mesh_scene_id))
 		{
-			uint64_t mesh_id = m_worldScene.chunk_mesh_list.get(old_mesh_scene_id).id;
+			WorldScene::ChunkMeshRenderData old_mesh_data = m_worldScene.chunk_mesh_list.get(old_mesh_scene_id);
 			m_worldScene.chunk_mesh_list.erase(old_mesh_scene_id);
-			m_vulkanAPI.destroyMesh(mesh_id);
+			m_vulkanAPI.destroyMesh(old_mesh_data.id);
+			m_vulkanAPI.destroyMesh(old_mesh_data.water_id);
 
-			m_vulkanAPI.removeMeshFromScene(mesh_id);
+			//for raytracing
+			// m_vulkanAPI.removeMeshFromScene(mesh_id);
 		}
 
 		mesh_data.unlock();
@@ -497,7 +513,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	// if player is walking
 	if (player->isFlying() == false)
 	{
-		double acc = 30.0;
+		double acc = 40.0;
 		double ground_friction = 10.0;
 		double air_friction = 0.8;
 		glm::dvec3 friction = glm::dvec3(ground_friction, air_friction, ground_friction);
@@ -521,7 +537,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	}
 	else // if player is flying
 	{
-		double acc = 1000.0;
+		double acc = 400.0;
 		double drag = 10.0;
 
 		move.y = up - down;

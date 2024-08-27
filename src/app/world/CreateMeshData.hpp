@@ -271,6 +271,30 @@ public:
 				{1, 0, 0}, -1,
 				BLOCK_FACE_LEFT
 			);
+
+			// water right face
+			createFaceWater(
+				static_cast<int>(Dimensions::Z),
+				static_cast<int>(Dimensions::Y),
+				{x, 0, 0},
+				{1, size_block.y, size_block.z},
+				{1, 0, 2, 1, 2, 3},
+				{0, 2, 3, 0, 3, 1},
+				{1, 0, 0}, 1,
+				BLOCK_FACE_RIGHT
+			);
+
+			// water left face
+			createFaceWater(
+				static_cast<int>(Dimensions::Z),
+				static_cast<int>(Dimensions::Y),
+				{x, 0, 0},
+				{1, size_block.y, size_block.z},
+				{0, 1, 2, 1, 3, 2},
+				{0, 1, 3, 0, 3, 2},
+				{1, 0, 0}, -1,
+				BLOCK_FACE_LEFT
+			);
 		}
 
 		for (int y = 0; y < size_block.y; y++)
@@ -298,6 +322,30 @@ public:
 				{0, 1, 0}, -1,
 				BLOCK_FACE_BOTTOM
 			);
+
+			// water top face
+			createFaceWater(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Z),
+				{0, y, 0},
+				{size_block.x, 1, size_block.z},
+				{1, 0, 2, 1, 2, 3},
+				{0, 2, 3, 0, 3, 1},
+				{0, 1, 0}, 1,
+				BLOCK_FACE_TOP
+			);
+
+			// water bottom face
+			createFaceWater(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Z),
+				{0, y, 0},
+				{size_block.x, 1, size_block.z},
+				{0, 1, 2, 1, 3, 2},
+				{0, 1, 3, 0, 3, 2},
+				{0, 1, 0}, -1,
+				BLOCK_FACE_BOTTOM
+			);
 		}
 
 		for (int z = 0; z < size_block.z; z++)
@@ -316,6 +364,30 @@ public:
 
 			// back face
 			createFace(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Y),
+				{0, 0, z},
+				{size_block.x, size_block.y, 1},
+				{1, 0, 2, 1, 2, 3},
+				{0, 2, 3, 0, 3, 1},
+				{0, 0, 1}, -1,
+				BLOCK_FACE_BACK
+			);
+
+			// water front face
+			createFaceWater(
+				static_cast<int>(Dimensions::X),
+				static_cast<int>(Dimensions::Y),
+				{0, 0, z},
+				{size_block.x, size_block.y, 1},
+				{0, 1, 2, 1, 3, 2},
+				{0, 1, 3, 0, 3, 2},
+				{0, 0, 1}, 1,
+				BLOCK_FACE_FRONT
+			);
+
+			// water back face
+			createFaceWater(
 				static_cast<int>(Dimensions::X),
 				static_cast<int>(Dimensions::Y),
 				{0, 0, z},
@@ -386,6 +458,10 @@ public:
 						should_render = false;
 					}
 					else if (block_id == BlockID::Glass && neighbor_id == BlockID::Glass)
+					{
+						should_render = false;
+					}
+					else if (block_id == BlockID::Water)
 					{
 						should_render = false;
 					}
@@ -511,6 +587,175 @@ public:
 		}
 	}
 
+	void createFaceWater(
+		const int dim_1,
+		const int dim_2,
+		const glm::ivec3 & start,
+		const glm::ivec3 & max_iter,
+		const std::array<int, 6> & indices_order,
+		const std::array<int, 6> & indices_order_fliped,
+		const glm::ivec3 & abs_normal,
+		const int normal_signe,
+		const int face
+	)
+	{
+		const glm::ivec3 normal = abs_normal * normal_signe;
+
+		glm::ivec3 tmp = normal_signe > 0 ? normal : glm::ivec3{0, 0, 0};
+		std::array<glm::ivec3, 4> offsets = { tmp, tmp, tmp, tmp };
+		offsets[1][dim_1] = 1;
+		offsets[2][dim_2] = 1;
+		offsets[3][dim_1] = 1;
+		offsets[3][dim_2] = 1;
+
+		std::array<glm::vec2, 4> tex_coord_factor = {
+			glm::vec2(1.0f, 1.0f),
+			glm::vec2(0.0f, 1.0f),
+			glm::vec2(1.0f, 0.0f),
+			glm::vec2(0.0f, 0.0f)
+		};
+
+		if (face == BLOCK_FACE_LEFT || face == BLOCK_FACE_FRONT || face == BLOCK_FACE_BOTTOM)
+		{
+			tex_coord_factor = {
+				glm::vec2(0.0f, 1.0f),
+				glm::vec2(1.0f, 1.0f),
+				glm::vec2(0.0f, 0.0f),
+				glm::vec2(1.0f, 0.0f)
+			};
+		}
+
+		glm::ivec3 final_max_iter = start + max_iter;
+		glm::ivec3 pos;
+		for (pos.x = start.x; pos.x < final_max_iter.x; pos.x++)
+		{
+			for (pos.y = start.y; pos.y < final_max_iter.y; pos.y++)
+			{
+				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
+				{
+					BlockID block_id = block(pos);
+					BlockID neighbor_id = block(pos + normal);
+
+					if (
+						block_id == BlockID::Water
+						&& !Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE)
+						&& neighbor_id != BlockID::Water
+					)
+					{
+						face_data[pos.x][pos.y][pos.z] = {
+							Block::getData(block_id).texture[face],
+							0
+						};
+					}
+					else
+					{
+						face_data[pos.x][pos.y][pos.z] = {0, 0};
+					}
+				}
+			}
+		}
+
+		for (pos.x = start.x; pos.x < final_max_iter.x; pos.x++)
+		{
+			for (pos.y = start.y; pos.y < final_max_iter.y; pos.y++)
+			{
+				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
+				{
+					FaceData data = face_data[pos.x][pos.y][pos.z];
+
+					if (data.texture != 0)
+					{
+						int merge_count = 0;
+						// check if the block has identical neighbors for greedy meshing
+						// if so, then merge the blocks into one mesh
+						glm::ivec3 offset{0, 0, 0};
+						glm::ivec3 saved_offset{0, 0, 0};
+						for (offset.x = pos.x; offset.x < final_max_iter.x; offset.x++)
+						{
+							for (offset.y = pos.y; offset.y < final_max_iter.y && (saved_offset.y == 0 || offset.y < saved_offset.y); offset.y++)
+							{
+								// continue if still in chunk bounds and if either it's the first iteration or the offset is less than the saved offset
+								for (offset.z = pos.z; offset.z < final_max_iter.z && (saved_offset.z == 0 || offset.z < saved_offset.z); offset.z++)
+								{
+									if (face_data[offset.x][offset.y][offset.z] != data)
+									{
+										break;
+									}
+									merge_count++;
+								}
+								// save the offset if it's the first iteration
+								if (saved_offset.z == 0)
+								{
+									saved_offset.z = offset.z;
+								}
+								// if the offset is different than the saved offset, then break
+								else if (offset.z != saved_offset.z)
+								{
+									break;
+								}
+							}
+							// save the offset if it's the first iteration
+							if (saved_offset.y == 0)
+							{
+								saved_offset.y = offset.y;
+							}
+							// if the offset is different than the saved offset, then break
+							else if (offset.y != saved_offset.y)
+							{
+								break;
+							}
+						}
+						saved_offset.x = offset.x;
+
+						// saved_offset = glm::ivec3(pos.x + 1, pos.y + 1, pos.z + 1);
+
+						for (offset.x = pos.x; offset.x < saved_offset.x; offset.x++)
+						{
+							for (offset.y = pos.y; offset.y < saved_offset.y; offset.y++)
+							{
+								for (offset.z = pos.z; offset.z < saved_offset.z; offset.z++)
+								{
+									face_data[offset.x][offset.y][offset.z] = {0, 0};
+								}
+							}
+						}
+
+						saved_offset -= pos;
+
+						if (normal.x + normal.y + normal.z < 0)
+						{
+							saved_offset += normal;
+						}
+
+						glm::vec2 tex_coord = { saved_offset[dim_1], saved_offset[dim_2] };
+						// tex_coord = {1.0f, 1.0f};
+
+						for (int i = 0; i < 4; i++)
+						{
+							water_vertices.push_back({pos + offsets[i] * saved_offset, normal, tex_coord_factor[i] * tex_coord, data.texture, data.ao[i]});
+						}
+
+						if (data.ao[0] + data.ao[3] > data.ao[1] + data.ao[2]) // if the first triangle has more ambient occlusion than the second triangle
+						{
+							for (int i = 0; i < 6; i++)
+							{
+								water_indices.push_back(water_vertices.size() - 4 + indices_order[i]);
+							}
+						}
+						else
+						{
+							for (int i = 0; i < 6; i++)
+							{
+								water_indices.push_back(water_vertices.size() - 4 + indices_order_fliped[i]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
 	std::array<uint8_t, 4> getAmbientOcclusion(
 		const glm::ivec3 & pos,
 		const int dim_1,
@@ -576,6 +821,9 @@ public:
 	std::vector<std::vector<std::vector<std::shared_ptr<Chunk>>>> chunks;
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
+
+	std::vector<BlockVertex> water_vertices;
+	std::vector<uint32_t> water_indices;
 
 	std::shared_ptr<Chunk> getCenterChunk()
 	{
