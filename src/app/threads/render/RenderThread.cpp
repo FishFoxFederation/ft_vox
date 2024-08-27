@@ -139,7 +139,7 @@ void RenderThread::loop()
 			100.0 * glm::sin(glm::radians(DebugGui::sun_theta.load()))
 		);
 		sun_position = camera.position + sun_offset;
-		const float sun_size = 300.0f;
+		const float sun_size = 50.0f;
 		const float sun_near = 10.0f;
 		const float sun_far = 1000.0f;
 
@@ -462,36 +462,36 @@ void RenderThread::shadowPass(
 	);
 
 	// Draw the chunks
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
+	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
-	// const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-	// 	vk.sun_descriptor.sets[vk.current_frame]
-	// };
+	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+		vk.sun_descriptor.sets[vk.current_frame]
+	};
 
-	// vkCmdBindDescriptorSets(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.shadow_pipeline.layout,
-	// 	0,
-	// 	static_cast<uint32_t>(shadow_descriptor_sets.size()),
-	// 	shadow_descriptor_sets.data(),
-	// 	0,
-	// 	nullptr
-	// );
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.shadow_pipeline.layout,
+		0,
+		static_cast<uint32_t>(shadow_descriptor_sets.size()),
+		shadow_descriptor_sets.data(),
+		0,
+		nullptr
+	);
 
-	// for (auto & chunk_mesh : chunk_meshes)
-	// {
-	// 	ModelMatrice model_matrice = {};
-	// 	model_matrice.model = chunk_mesh.model;
+	for (auto & chunk_mesh : chunk_meshes)
+	{
+		ModelMatrice model_matrice = {};
+		model_matrice.model = chunk_mesh.model;
 
-	// 	vk.drawMesh(
-	// 		vk.shadow_pipeline,
-	// 		chunk_mesh.id,
-	// 		&model_matrice,
-	// 		sizeof(ModelMatrice),
-	// 		VK_SHADER_STAGE_VERTEX_BIT
-	// 	);
-	// }
+		vk.drawMesh(
+			vk.shadow_pipeline,
+			chunk_mesh.id,
+			&model_matrice,
+			sizeof(ModelMatrice),
+			VK_SHADER_STAGE_VERTEX_BIT
+		);
+	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 }
