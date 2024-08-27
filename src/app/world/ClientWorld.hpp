@@ -199,7 +199,11 @@ private:
 	/*************************************
 	 *  ENTITIES
 	 *************************************/
-	bool hitboxCollisionWithBlock(const HitBox & hitbox, const glm::dvec3 & position);
+	bool hitboxCollisionWithBlock(
+		const HitBox & hitbox,
+		const glm::dvec3 & position,
+		const uint64_t block_properties
+	);
 
 	/*************************************
 	 *  RAYCAST

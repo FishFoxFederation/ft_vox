@@ -92,6 +92,7 @@ public:
 	bool sneaking = false;
 	bool sprinting = false;
 	bool jumping = false;
+	bool swimming = false;
 
 	Transform transform = Transform({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
 	HitBox hitbox = HitBox({-0.3, 0, -0.3}, {0.6, 1.8, 0.6});
