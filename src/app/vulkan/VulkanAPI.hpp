@@ -368,6 +368,7 @@ public:
 	VkRenderPass shadow_render_pass;
 
 	Pipeline chunk_pipeline;
+	Pipeline water_pipeline;
 	Pipeline line_pipeline;
 	Pipeline skybox_pipeline;
 	Pipeline sun_pipeline;

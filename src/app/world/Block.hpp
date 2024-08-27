@@ -154,9 +154,7 @@ struct Block
 			5  // water
 		},
 		.properties =
-			BLOCK_PROPERTY_SOLID
-			| BLOCK_PROPERTY_OPAQUE
-			| BLOCK_PROPERTY_CUBE,
+			BLOCK_PROPERTY_CUBE,
 		.hitbox = {{0, 0, 0}, {1, 1, 1}}
 	};
 	static inline const Data Glass = {

@@ -28,6 +28,13 @@ class WorldScene
 
 public:
 
+	struct ChunkMeshRenderData
+	{
+		uint64_t id;
+		uint64_t water_id;
+		glm::dmat4 model;
+	};
+
 	struct MeshRenderData
 	{
 		uint64_t id;
@@ -44,43 +51,6 @@ public:
 		PlayerModel::AttackAnimation attack_animation;
 
 		bool visible = true;
-	};
-
-	class MeshList
-	{
-
-	public:
-
-		MeshList() = default;
-		~MeshList() = default;
-
-		MeshList(const MeshList & other) = delete;
-		MeshList(MeshList && other) = delete;
-		MeshList & operator=(const MeshList & other) = delete;
-		MeshList & operator=(MeshList && other) = delete;
-
-		void add(uint64_t meshID, const Transform & transform)
-		{
-			std::lock_guard lock(m_mutex);
-			m_meshes.push_back({meshID, transform.model()});
-		}
-
-		void remove(uint64_t meshID)
-		{
-			std::lock_guard lock(m_mutex);
-			std::erase_if(m_meshes, [meshID](const MeshRenderData & data) { return data.id == meshID; });
-		}
-
-		std::vector<MeshRenderData> get() const
-		{
-			std::lock_guard lock(m_mutex);
-			return m_meshes;
-		}
-
-	private:
-
-		std::vector<MeshRenderData> m_meshes;
-		mutable TracyLockableN(std::mutex, m_mutex, "Mesh List");
 	};
 
 	/**
@@ -142,7 +112,7 @@ public:
 
 
 	// MeshList chunk_mesh_list;
-	IdList<uint64_t, MeshRenderData> chunk_mesh_list;
+	IdList<uint64_t, ChunkMeshRenderData> chunk_mesh_list;
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
 	std::map<uint64_t, PlayerRenderData> m_players;

@@ -156,6 +156,7 @@ VulkanAPI::~VulkanAPI()
 		atmosphere_descriptor.clear();
 
 		chunk_pipeline.clear();
+		water_pipeline.clear();
 		line_pipeline.clear();
 		skybox_pipeline.clear();
 		sun_pipeline.clear();
@@ -1392,6 +1393,31 @@ void VulkanAPI::createPipelines()
 		pipeline_info.render_pass = lighting_render_pass;
 
 		chunk_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // water pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = color_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/rasterization/water_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/water_shader.frag.spv";
+		pipeline_info.binding_description = BlockVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { color_attachement.format };
+		pipeline_info.depth_format = depth_attachement.format;
+		pipeline_info.enable_alpha_blending = true;
+		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
+		pipeline_info.descriptor_set_layouts = {
+			camera_descriptor.layout,
+			sun_descriptor.layout,
+			block_textures_descriptor.layout,
+			shadow_map_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+		};
+		pipeline_info.render_pass = lighting_render_pass;
+
+		water_pipeline = Pipeline(device, pipeline_info);
 	}
 
 	{ // line pipeline
