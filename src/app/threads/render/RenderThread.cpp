@@ -84,7 +84,7 @@ void RenderThread::loop()
 	glm::mat4 clip;
 	Camera::RenderInfo camera;
 	ViewProjMatrices camera_matrices = {};
-	std::vector<WorldScene::MeshRenderData> chunk_meshes;
+	std::vector<WorldScene::ChunkMeshRenderData> chunk_meshes;
 	std::vector<WorldScene::MeshRenderData> entity_meshes;
 	std::vector<WorldScene::PlayerRenderData> players;
 	ViewProjMatrices sun = {};
@@ -437,7 +437,7 @@ void RenderThread::updateTime()
 }
 
 void RenderThread::shadowPass(
-	const std::vector<WorldScene::MeshRenderData> & chunk_meshes
+	const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes
 )
 {
 	ZoneScoped;
@@ -498,7 +498,7 @@ void RenderThread::shadowPass(
 
 void RenderThread::lightingPass(
 	const Camera::RenderInfo & camera,
-	const std::vector<WorldScene::MeshRenderData> & chunk_meshes,
+	const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes,
 	const std::vector<WorldScene::MeshRenderData> & entity_meshes,
 	const std::vector<WorldScene::PlayerRenderData> & players,
 	const std::optional<glm::vec3> & target_block,
@@ -887,6 +887,49 @@ void RenderThread::lightingPass(
 		);
 	}
 
+	{ // Draw water
+		ZoneScopedN("Draw water");
+
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> descriptor_sets = {
+			vk.camera_descriptor.sets[vk.current_frame],
+			vk.sun_descriptor.sets[vk.current_frame],
+			vk.block_textures_descriptor.set,
+			vk.shadow_map_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.water_pipeline.layout,
+			0,
+			static_cast<uint32_t>(descriptor_sets.size()),
+			descriptor_sets.data(),
+			0,
+			nullptr
+		);
+
+		for (auto & chunk_mesh: chunk_meshes)
+		{
+			if (chunk_mesh.water_id == 0)
+			{
+				continue;
+			}
+
+			ModelMatrice model_matrice = {};
+			model_matrice.model = chunk_mesh.model;
+
+			vk.drawMesh(
+				vk.water_pipeline,
+				chunk_mesh.water_id,
+				&model_matrice,
+				sizeof(ModelMatrice),
+				VK_SHADER_STAGE_VERTEX_BIT
+			);
+		}
+	}
+
 
 	{ // Draw gui
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
@@ -927,33 +970,6 @@ void RenderThread::lightingPass(
 			0
 		);
 	}
-
-
-	// Draw test image
-	// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
-
-	// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-	// 	vk.test_image_descriptor.set
-	// };
-
-	// vkCmdBindDescriptorSets(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-	// 	vk.test_image_pipeline.layout,
-	// 	0,
-	// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-	// 	test_image_descriptor_sets.data(),
-	// 	0,
-	// 	nullptr
-	// );
-
-	// vkCmdDraw(
-	// 	vk.draw_command_buffers[vk.current_frame],
-	// 	6,
-	// 	1,
-	// 	0,
-	// 	0
-	// );
 
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);

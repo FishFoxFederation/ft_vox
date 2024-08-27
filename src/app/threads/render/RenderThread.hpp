@@ -93,12 +93,12 @@ private:
 	void updateTime();
 
 	void shadowPass(
-		const std::vector<WorldScene::MeshRenderData> & chunk_meshes
+		const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes
 	);
 
 	void lightingPass(
 		const Camera::RenderInfo & camera,
-		const std::vector<WorldScene::MeshRenderData> & chunk_meshes,
+		const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes,
 		const std::vector<WorldScene::MeshRenderData> & entity_meshes,
 		const std::vector<WorldScene::PlayerRenderData> & players,
 		const std::optional<glm::vec3> & target_block,
