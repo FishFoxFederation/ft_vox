@@ -337,6 +337,7 @@ public:
 	Image block_textures;
 	Image skybox_cube_map;
 	Image shadow_map_depth_attachement;
+	Image water_fog_depth_attachement;
 
 	Image crosshair_image;
 	Image player_skin_image;
@@ -358,6 +359,7 @@ public:
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
 	Descriptor shadow_map_descriptor;
+	Descriptor water_fog_descriptor;
 	Descriptor test_image_descriptor;
 	Descriptor sun_descriptor;
 	Descriptor crosshair_image_descriptor;

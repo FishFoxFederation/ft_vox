@@ -42,6 +42,7 @@ public:
 		std::vector<VkPushConstantRange> push_constant_ranges = {};
 
 		VkRenderPass render_pass = VK_NULL_HANDLE;
+		uint32_t subpass = 0;
 
 		std::vector<VkDynamicState> dynamic_states = {};
 
@@ -242,6 +243,7 @@ public:
 		else
 		{
 			pipeline_info.renderPass = create_info.render_pass;
+			pipeline_info.subpass = create_info.subpass;
 		}
 
 		VK_CHECK(
