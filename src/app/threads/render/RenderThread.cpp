@@ -887,6 +887,8 @@ void RenderThread::lightingPass(
 		);
 	}
 
+	vkCmdNextSubpass(vk.draw_command_buffers[vk.current_frame], VK_SUBPASS_CONTENTS_INLINE);
+
 	{ // Draw water
 		ZoneScopedN("Draw water");
 
@@ -930,6 +932,7 @@ void RenderThread::lightingPass(
 		}
 	}
 
+	vkCmdNextSubpass(vk.draw_command_buffers[vk.current_frame], VK_SUBPASS_CONTENTS_INLINE);
 
 	{ // Draw gui
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);

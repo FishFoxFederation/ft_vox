@@ -140,6 +140,7 @@ VulkanAPI::~VulkanAPI()
 		color_attachement.clear();
 		depth_attachement.clear();
 		shadow_map_depth_attachement.clear();
+		water_fog_depth_attachement.clear();
 		block_textures.clear();
 		skybox_cube_map.clear();
 		crosshair_image.clear();
@@ -149,6 +150,7 @@ VulkanAPI::~VulkanAPI()
 		block_textures_descriptor.clear();
 		cube_map_descriptor.clear();
 		shadow_map_descriptor.clear();
+		water_fog_descriptor.clear();
 		test_image_descriptor.clear();
 		sun_descriptor.clear();
 		crosshair_image_descriptor.clear();
@@ -855,7 +857,7 @@ void VulkanAPI::createDepthAttachement()
 		VK_IMAGE_TILING_OPTIMAL,
 		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 	);
-	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
 	depth_attachement_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 	depth_attachement_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depth_attachement_info.create_view = true;
@@ -864,11 +866,16 @@ void VulkanAPI::createDepthAttachement()
 
 
 	depth_attachement_info.extent = { 10000, 10000 };
-	depth_attachement_info.usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
+	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	depth_attachement_info.create_sampler = true;
 	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
+
+
+	depth_attachement_info.extent = { swapchain.extent.width * 2, swapchain.extent.height * 2 };
+
+	water_fog_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
 void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count)
@@ -1129,6 +1136,28 @@ void VulkanAPI::createDescriptors()
 		);
 	}
 
+	{ // Water fog descriptor
+		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+		sampler_layout_binding.binding = 0;
+		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding.descriptorCount = 1;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { sampler_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		water_fog_descriptor = Descriptor(device, descriptor_info);
+
+		water_fog_descriptor.update(
+			device,
+			water_fog_depth_attachement.view,
+			water_fog_depth_attachement.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		);
+	}
+
 	{ // Test image descriptor
 		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
 		sampler_layout_binding.binding = 0;
@@ -1301,6 +1330,11 @@ void VulkanAPI::createRenderPass()
 		depth_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		depth_attachement_description.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
+		std::vector<VkAttachmentDescription> attachments = {
+			color_attachement_description,
+			depth_attachement_description
+		};
+
 		VkAttachmentReference color_attachement_ref = {};
 		color_attachement_ref.attachment = 0;
 		color_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -1309,23 +1343,68 @@ void VulkanAPI::createRenderPass()
 		depth_attachement_ref.attachment = 1;
 		depth_attachement_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
+		VkAttachmentReference water_depth_attachement_ref = {};
+		water_depth_attachement_ref.attachment = 1;
+		water_depth_attachement_ref.layout = VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL;
+
 		VkSubpassDescription subpass = {};
 		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments = &color_attachement_ref;
 		subpass.pDepthStencilAttachment = &depth_attachement_ref;
 
-		std::array<VkAttachmentDescription, 2> attachments = {
-			color_attachement_description,
-			depth_attachement_description
+		VkSubpassDescription water_subpass = {};
+		water_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		water_subpass.colorAttachmentCount = 1;
+		water_subpass.pColorAttachments = &color_attachement_ref;
+		water_subpass.inputAttachmentCount = 1;
+		water_subpass.pInputAttachments = &water_depth_attachement_ref;
+
+		std::vector<VkSubpassDescription> subpasses = {
+			subpass, // main subpass
+			water_subpass, // water
+			subpass // gui (same as main subpass for now)
+		};
+
+
+		std::vector<VkSubpassDependency> dependencies = {
+			{
+				VK_SUBPASS_EXTERNAL,
+				0,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				0,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				0
+			},
+			{
+				0,
+				1,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				0
+			},
+			{
+				1,
+				2,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				0
+			}
 		};
 
 		VkRenderPassCreateInfo render_pass_info = {};
 		render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 		render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
 		render_pass_info.pAttachments = attachments.data();
-		render_pass_info.subpassCount = 1;
-		render_pass_info.pSubpasses = &subpass;
+		render_pass_info.subpassCount = static_cast<uint32_t>(subpasses.size());
+		render_pass_info.pSubpasses = subpasses.data();
+		render_pass_info.dependencyCount = static_cast<uint32_t>(dependencies.size());
+		render_pass_info.pDependencies = dependencies.data();
 
 		VK_CHECK(
 			vkCreateRenderPass(device, &render_pass_info, nullptr, &lighting_render_pass),
@@ -1416,6 +1495,7 @@ void VulkanAPI::createPipelines()
 			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
+		pipeline_info.subpass = 1;
 
 		water_pipeline = Pipeline(device, pipeline_info);
 	}
@@ -1580,6 +1660,7 @@ void VulkanAPI::createPipelines()
 			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(GuiTextureData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
+		pipeline_info.subpass = 2;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_VIEWPORT };
 		pipeline_info.enable_alpha_blending = true;
 

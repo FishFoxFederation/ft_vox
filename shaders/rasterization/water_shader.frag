@@ -3,6 +3,8 @@
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
 layout(set = 3, binding = 0) uniform sampler2D shadow_map;
 
+layout(input_attachment_index = 0, set = 0, binding = 0) uniform subpassInput depth;
+
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
 layout(location = 2) in vec4 shadow_coords;
@@ -71,10 +73,17 @@ void main()
 
 	vec4 texture_color = texture(tex, frag_tex_coord);
 
-	if (texture_color.a < 0.01)
+
+	float depth_value = subpassLoad(depth).x;
+	float depth_diff = depth_value - gl_FragCoord.z;
+
+	if (depth_diff < 0.0) // if the fragment is behind the depth value
 	{
 		discard;
 	}
+
+	// add water fog depending on the depth
+	float fog_factor = 1.0 - exp(-depth_diff * 0.1);
 
 	// out_color = vec4(texture_color.rgb * light, texture_color.a);
 	out_color = texture_color;
