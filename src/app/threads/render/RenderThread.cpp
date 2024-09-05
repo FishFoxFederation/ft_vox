@@ -514,10 +514,11 @@ void RenderThread::lightingPass(
 	lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
 	lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
 	lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
-	lighting_render_pass_begin_info.renderArea.extent = vk.color_attachement.extent2D;
+	lighting_render_pass_begin_info.renderArea.extent = vk.output_image.extent2D;
 	std::vector<VkClearValue> lighting_clear_values = {
 		{ 0.0f, 0.0f, 0.0f, 1.0f },
-		{ 1.0f, 0 }
+		{ 1.0f, 0 },
+		{ 0.0f, 0.0f, 0.0f, 1.0f }
 	};
 	lighting_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(lighting_clear_values.size());
 	lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
@@ -898,7 +899,8 @@ void RenderThread::lightingPass(
 			vk.camera_descriptor.sets[vk.current_frame],
 			vk.sun_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
-			vk.shadow_map_descriptor.set
+			vk.shadow_map_descriptor.set,
+			vk.water_subpass_input_attachement_descriptor.set
 		};
 
 		vkCmdBindDescriptorSets(
@@ -952,12 +954,12 @@ void RenderThread::lightingPass(
 			nullptr
 		);
 
-		float min_size = std::min(vk.color_attachement.extent2D.width, vk.color_attachement.extent2D.height);
+		float min_size = std::min(vk.output_image.extent2D.width, vk.output_image.extent2D.height);
 		float size = min_size / 40.0f;
 
 		VkViewport viewport = {};
-		viewport.x = static_cast<float>(vk.color_attachement.extent2D.width / 2 - (size / 2));
-		viewport.y = static_cast<float>(vk.color_attachement.extent2D.height / 2 - (size / 2));
+		viewport.x = static_cast<float>(vk.output_image.extent2D.width / 2 - (size / 2));
+		viewport.y = static_cast<float>(vk.output_image.extent2D.height / 2 - (size / 2));
 		viewport.width = size;
 		viewport.height = size;
 		viewport.minDepth = 0.0f;
@@ -1046,8 +1048,8 @@ void RenderThread::copyToSwapchain()
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.color_attachement.extent2D.width),
-		static_cast<int32_t>(vk.color_attachement.extent2D.height),
+		static_cast<int32_t>(vk.output_image.extent2D.width),
+		static_cast<int32_t>(vk.output_image.extent2D.height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1067,7 +1069,7 @@ void RenderThread::copyToSwapchain()
 
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.color_attachement.image,
+		vk.output_image.image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
