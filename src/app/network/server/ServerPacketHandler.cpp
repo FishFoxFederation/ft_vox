@@ -65,6 +65,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	glm::vec3 CurrentPlayerPosition = packet->GetPosition();
 	glm::vec3 CurrentPlayerChunkPosition = m_world.getChunkPosition(CurrentPlayerPosition);
 	CurrentPlayerChunkPosition.y = 0;
+	(void)CurrentPlayerChunkPosition;
 
 	//send new player to all other players
 	std::shared_ptr<IPacket> packet_to_send = std::make_shared<ConnectionPacket>(*packet);

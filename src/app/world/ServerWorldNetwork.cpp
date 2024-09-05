@@ -94,7 +94,7 @@ void ServerWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packe
 	}
 
 	//remove player ticket
-	std::lock_guard<std::mutex> lock(player->mutex);
+	std::lock_guard lock(player->mutex);
 	removeTicket(player->player_ticket_id);
 
 	//remove player observations

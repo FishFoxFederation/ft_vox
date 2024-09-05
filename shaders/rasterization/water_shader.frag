@@ -3,7 +3,8 @@
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
 layout(set = 3, binding = 0) uniform sampler2D shadow_map;
 
-layout(input_attachment_index = 0, set = 0, binding = 0) uniform subpassInput depth;
+layout(input_attachment_index = 0, set = 4, binding = 0) uniform subpassInput color;
+layout(input_attachment_index = 1, set = 4, binding = 1) uniform subpassInput depth;
 
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
@@ -62,6 +63,11 @@ float compute_shadow_factor(
 	return lighted_count / num_samples;
 }
 
+float linearize_depth(float d, float n, float f)
+{
+    return n * f / (f + d * (n - f));
+}
+
 void main()
 {
 	float min_light = 0.2;
@@ -71,7 +77,8 @@ void main()
 
 	float light = min_light + max_shadow_light * shadow_factor;
 
-	vec4 texture_color = texture(tex, frag_tex_coord);
+	vec4 water_texture_color = texture(tex, frag_tex_coord);
+	vec3 background_color = subpassLoad(color).xyz;
 
 
 	float depth_value = subpassLoad(depth).x;
@@ -82,9 +89,16 @@ void main()
 		discard;
 	}
 
-	// add water fog depending on the depth
-	float fog_factor = 1.0 - exp(-depth_diff * 0.1);
+	// convert the depth difference to meters (blocks)
+	float depth_dist = depth_diff * 1000;
 
-	// out_color = vec4(texture_color.rgb * light, texture_color.a);
-	out_color = texture_color;
+	// add water fog depending on the depth
+	float fog_factor = depth_diff * 10000;
+
+	// add fog to the background color
+	background_color = mix(background_color, vec3(0.0, 0.0, 0.0), fog_factor);
+
+	vec3 final_color = water_texture_color.a * water_texture_color.rgb + (1.0 - water_texture_color.a) * background_color;
+	
+	out_color = vec4(final_color, 1.0);
 }
