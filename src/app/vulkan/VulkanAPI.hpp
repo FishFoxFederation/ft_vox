@@ -332,6 +332,7 @@ public:
 	uint32_t current_image_index = 0;
 
 
+	Image output_image;
 	Image color_attachement;
 	Image depth_attachement;
 	Image block_textures;
@@ -359,7 +360,7 @@ public:
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
 	Descriptor shadow_map_descriptor;
-	Descriptor water_fog_descriptor;
+	Descriptor water_subpass_input_attachement_descriptor;
 	Descriptor test_image_descriptor;
 	Descriptor sun_descriptor;
 	Descriptor crosshair_image_descriptor;
