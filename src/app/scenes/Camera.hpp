@@ -69,7 +69,7 @@ public:
 		up(0.0f, 1.0f, 0.0f),
 		fov(80.0f),
 		near_plane(0.01f),
-		far_plane(1000.0f)
+		far_plane(100.0f)
 	{
 	}
 
@@ -119,7 +119,7 @@ private:
 	glm::dvec3 up{ 0.0f, 1.0f, 0.0f };
 	double fov{ 80.0f };
 	double near_plane{ 0.01f };
-	double far_plane{ 1000.0f };
+	double far_plane{ 100.0f };
 
 	mutable TracyLockableN(std::mutex, m_mutex, "Camera Mutex");
 
