@@ -1,5 +1,11 @@
 #version 450
 
+layout(set = 0, binding = 0) uniform CameraMatrices
+{
+	mat4 view;
+	mat4 projection;
+}cm;
+
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
 layout(set = 3, binding = 0) uniform sampler2D shadow_map;
 
@@ -63,7 +69,7 @@ float compute_shadow_factor(
 	return lighted_count / num_samples;
 }
 
-float linearize_depth(float d, float n, float f)
+float depth_to_distance(float d, float n, float f)
 {
     return n * f / (f + d * (n - f));
 }
@@ -81,24 +87,26 @@ void main()
 	vec3 background_color = subpassLoad(color).xyz;
 
 
-	float depth_value = subpassLoad(depth).x;
-	float depth_diff = depth_value - gl_FragCoord.z;
+	float z_depth = subpassLoad(depth).x;
+	float background_depth = depth_to_distance(z_depth, 0.01, 100.0) / 100.0;
+	float water_depth = depth_to_distance(gl_FragCoord.z, 0.01, 100.0) / 100.0;
+	float depth_diff = background_depth - water_depth;
 
-	if (depth_diff < 0.0) // if the fragment is behind the depth value
+	// if the fragment is behind the depth value
+	if (depth_diff < 0.0)
 	{
 		discard;
 	}
 
-	// convert the depth difference to meters (blocks)
-	float depth_dist = depth_diff * 1000;
-
-	// add water fog depending on the depth
-	float fog_factor = depth_diff * 10000;
+	// water fog depending on the depth
+	float fog_factor = depth_diff * 10.0;
 
 	// add fog to the background color
 	background_color = mix(background_color, vec3(0.0, 0.0, 0.0), fog_factor);
 
+	// mix the water color with the background color (alpha blending)
 	vec3 final_color = water_texture_color.a * water_texture_color.rgb + (1.0 - water_texture_color.a) * background_color;
-	
+	// vec3 final_color = vec3(depth_to_distance(z_depth, 0.01, 100.0) / 100.0);
+
 	out_color = vec4(final_color, 1.0);
 }
