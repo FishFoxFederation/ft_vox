@@ -118,4 +118,14 @@ private:
 
 	void raytrace();
 
+	std::vector<glm::mat4> getCSMLightViewProjMatrices(
+		glm::vec3 light_dir,
+		std::vector<float> split,
+		const glm::vec3 & camera_pos,
+		float cam_fov,
+		float cam_ratio,
+		float cam_near_plane,
+		float cam_far_plane
+	);
+
 };

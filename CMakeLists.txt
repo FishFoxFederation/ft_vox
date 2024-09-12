@@ -56,6 +56,7 @@ target_sources(${PROJECT_NAME}
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
+		src/app/threads/render/CascadedShadowMapping.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/pool/ThreadPool.cpp
 		src/app/threads/pool/ThreadPoolAccessor.cpp
@@ -189,6 +190,7 @@ target_sources(server
 		src/app/scenes/WorldScene.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
+		src/app/threads/render/CascadedShadowMapping.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/pool/ThreadPool.cpp
 		src/app/threads/pool/ThreadPoolAccessor.cpp
