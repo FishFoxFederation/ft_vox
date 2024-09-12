@@ -47,6 +47,9 @@ public:
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 		glm::dvec3 position = glm::dvec3(0.0f, 0.0f, 0.0f);
+		double fov = 0.0f;
+		double near_plane = 0.0f;
+		double far_plane = 0.0f;
 		ViewFrustum view_frustum = ViewFrustum(
 			glm::dvec3(0.0f, 0.0f, 0.0f),
 			glm::dvec3(0.0f, 0.0f, 0.0f),
@@ -107,6 +110,9 @@ public:
 			getViewMatrix(),
 			getProjectionMatrix(aspect_ratio),
 			position,
+			glm::radians(fov),
+			near_plane,
+			far_plane,
 			getViewFrustum(aspect_ratio)
 		};
 	}

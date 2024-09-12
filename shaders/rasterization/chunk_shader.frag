@@ -71,8 +71,8 @@ void main()
 	float max_shadow_light = 0.8;
 	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 10000, 3);
 
-	// float light = base_light + max_shadow_light * shadow_factor - max_ao_shadow * ao_factor;
-	float light = base_light - max_ao_shadow * ao_factor;
+	float light = base_light + max_shadow_light * shadow_factor - max_ao_shadow * ao_factor;
+	// float light = base_light - max_ao_shadow * ao_factor;
 
 	vec4 texture_color = texture(tex, frag_tex_coord);
 
@@ -82,5 +82,4 @@ void main()
 	}
 
 	out_color = vec4(texture_color.rgb * light, texture_color.a);
-	// out_color = vec4(texture_color.rgb * (0.7 * (1 - frag_ao / 3.0)), texture_color.a);
 }

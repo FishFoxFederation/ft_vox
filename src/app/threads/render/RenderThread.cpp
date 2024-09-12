@@ -134,7 +134,7 @@ void RenderThread::loop()
 		// 	100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
 		// );
 		const glm::dvec3 sun_offset = glm::dvec3(
-			0.0f,
+			10.0f,
 			100.0 * glm::cos(glm::radians(DebugGui::sun_theta.load())),
 			100.0 * glm::sin(glm::radians(DebugGui::sun_theta.load()))
 		);
