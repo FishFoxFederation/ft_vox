@@ -608,6 +608,8 @@ public:
 		offsets[3][dim_1] = 1;
 		offsets[3][dim_2] = 1;
 
+
+
 		std::array<glm::vec2, 4> tex_coord_factor = {
 			glm::vec2(1.0f, 1.0f),
 			glm::vec2(0.0f, 1.0f),
@@ -730,9 +732,15 @@ public:
 						glm::vec2 tex_coord = { saved_offset[dim_1], saved_offset[dim_2] };
 						// tex_coord = {1.0f, 1.0f};
 
+						glm::vec3 vertex_pos = pos;
+						if (face == BLOCK_FACE_TOP)
+						{
+							vertex_pos.y -= 0.1f;
+						}
+
 						for (int i = 0; i < 4; i++)
 						{
-							water_vertices.push_back({pos + offsets[i] * saved_offset, normal, tex_coord_factor[i] * tex_coord, data.texture, data.ao[i]});
+							water_vertices.push_back({vertex_pos + glm::vec3(offsets[i] * saved_offset), normal, tex_coord_factor[i] * tex_coord, data.texture, data.ao[i]});
 						}
 
 						if (data.ao[0] + data.ao[3] > data.ao[1] + data.ao[2]) // if the first triangle has more ambient occlusion than the second triangle
