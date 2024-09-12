@@ -308,6 +308,8 @@ public:
 	Swapchain swapchain;
 	std::vector<VkFramebuffer> lighting_framebuffers;
 	std::vector<VkFramebuffer> shadow_framebuffers;
+	std::vector<VkFramebuffer> water_framebuffers;
+	std::vector<VkFramebuffer> gui_framebuffers;
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
@@ -332,7 +334,7 @@ public:
 	uint32_t current_image_index = 0;
 
 
-	Image output_image;
+	Image output_attachement;
 	Image color_attachement;
 	Image depth_attachement;
 	Image block_textures;
@@ -360,7 +362,7 @@ public:
 	Descriptor block_textures_descriptor;
 	Descriptor cube_map_descriptor;
 	Descriptor shadow_map_descriptor;
-	Descriptor water_subpass_input_attachement_descriptor;
+	Descriptor water_renderpass_input_attachement_descriptor;
 	Descriptor test_image_descriptor;
 	Descriptor sun_descriptor;
 	Descriptor crosshair_image_descriptor;
@@ -369,6 +371,8 @@ public:
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
+	VkRenderPass water_render_pass;
+	VkRenderPass gui_render_pass;
 
 	Pipeline chunk_pipeline;
 	Pipeline water_pipeline;

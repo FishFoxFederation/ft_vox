@@ -42,16 +42,16 @@ void RenderThread::launch()
 
 		while (!m_thread.get_stop_token().stop_requested())
 		{
-			auto start_time = std::chrono::high_resolution_clock::now();
+			// auto start_time = std::chrono::high_resolution_clock::now();
 			loop();
-			auto end_time = std::chrono::high_resolution_clock::now();
+			// auto end_time = std::chrono::high_resolution_clock::now();
 
 			//i want 60fps so if not enough time passed wait a bit
-			std::chrono::nanoseconds frame_time = end_time - start_time;
-			if (frame_time < std::chrono::nanoseconds(16666666))
-			{
-				std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
-			}
+			// std::chrono::nanoseconds frame_time = end_time - start_time;
+			// if (frame_time < std::chrono::nanoseconds(16666666))
+			// {
+			// 	std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
+			// }
 		}
 	}
 	catch (const std::exception & e)
@@ -514,7 +514,7 @@ void RenderThread::lightingPass(
 	lighting_render_pass_begin_info.renderPass = vk.lighting_render_pass;
 	lighting_render_pass_begin_info.framebuffer = vk.lighting_framebuffers[vk.current_frame];
 	lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
-	lighting_render_pass_begin_info.renderArea.extent = vk.output_image.extent2D;
+	lighting_render_pass_begin_info.renderArea.extent = vk.output_attachement.extent2D;
 	std::vector<VkClearValue> lighting_clear_values = {
 		{ 0.0f, 0.0f, 0.0f, 1.0f },
 		{ 1.0f, 0 },
@@ -817,7 +817,6 @@ void RenderThread::lightingPass(
 		);
 	}
 
-
 	{ // Draw the skybox
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
@@ -888,7 +887,42 @@ void RenderThread::lightingPass(
 		);
 	}
 
-	vkCmdNextSubpass(vk.draw_command_buffers[vk.current_frame], VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
+
+
+	// copy the color attachment to the output attachement
+	VkImageCopy copy_region = {};
+	copy_region.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copy_region.srcSubresource.layerCount = 1;
+	copy_region.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copy_region.dstSubresource.layerCount = 1;
+	copy_region.extent = vk.output_attachement.extent3D;
+
+	vkCmdCopyImage(
+		vk.draw_command_buffers[vk.current_frame],
+		vk.color_attachement.image,
+		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+		vk.output_attachement.image,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		1,
+		&copy_region
+	);
+
+
+	VkRenderPassBeginInfo water_render_pass_begin_info = {};
+	water_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	water_render_pass_begin_info.renderPass = vk.water_render_pass;
+	water_render_pass_begin_info.framebuffer = vk.water_framebuffers[vk.current_frame];
+	water_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	water_render_pass_begin_info.renderArea.extent = vk.output_attachement.extent2D;
+	water_render_pass_begin_info.clearValueCount = 0;
+	water_render_pass_begin_info.pClearValues = nullptr;
+
+	vkCmdBeginRenderPass(
+		vk.draw_command_buffers[vk.current_frame],
+		&water_render_pass_begin_info,
+		VK_SUBPASS_CONTENTS_INLINE
+	);
 
 	{ // Draw water
 		ZoneScopedN("Draw water");
@@ -900,7 +934,7 @@ void RenderThread::lightingPass(
 			vk.sun_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set,
-			vk.water_subpass_input_attachement_descriptor.set
+			vk.water_renderpass_input_attachement_descriptor.set
 		};
 
 		vkCmdBindDescriptorSets(
@@ -934,7 +968,24 @@ void RenderThread::lightingPass(
 		}
 	}
 
-	vkCmdNextSubpass(vk.draw_command_buffers[vk.current_frame], VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
+
+
+
+	VkRenderPassBeginInfo gui_render_pass_begin_info = {};
+	gui_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	gui_render_pass_begin_info.renderPass = vk.gui_render_pass;
+	gui_render_pass_begin_info.framebuffer = vk.gui_framebuffers[vk.current_frame];
+	gui_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	gui_render_pass_begin_info.renderArea.extent = vk.output_attachement.extent2D;
+	gui_render_pass_begin_info.clearValueCount = 0;
+	gui_render_pass_begin_info.pClearValues = nullptr;
+
+	vkCmdBeginRenderPass(
+		vk.draw_command_buffers[vk.current_frame],
+		&gui_render_pass_begin_info,
+		VK_SUBPASS_CONTENTS_INLINE
+	);
 
 	{ // Draw gui
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
@@ -954,12 +1005,12 @@ void RenderThread::lightingPass(
 			nullptr
 		);
 
-		float min_size = std::min(vk.output_image.extent2D.width, vk.output_image.extent2D.height);
+		float min_size = std::min(vk.output_attachement.extent2D.width, vk.output_attachement.extent2D.height);
 		float size = min_size / 40.0f;
 
 		VkViewport viewport = {};
-		viewport.x = static_cast<float>(vk.output_image.extent2D.width / 2 - (size / 2));
-		viewport.y = static_cast<float>(vk.output_image.extent2D.height / 2 - (size / 2));
+		viewport.x = static_cast<float>(vk.output_attachement.extent2D.width / 2 - (size / 2));
+		viewport.y = static_cast<float>(vk.output_attachement.extent2D.height / 2 - (size / 2));
 		viewport.width = size;
 		viewport.height = size;
 		viewport.minDepth = 0.0f;
@@ -976,8 +1027,8 @@ void RenderThread::lightingPass(
 		);
 	}
 
-
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
+
 }
 
 void RenderThread::drawPlayerBodyPart(
@@ -1048,8 +1099,8 @@ void RenderThread::copyToSwapchain()
 	VkImageBlit blit = {};
 	blit.srcOffsets[0] = { 0, 0, 0 };
 	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.output_image.extent2D.width),
-		static_cast<int32_t>(vk.output_image.extent2D.height),
+		static_cast<int32_t>(vk.output_attachement.extent2D.width),
+		static_cast<int32_t>(vk.output_attachement.extent2D.height),
 		1
 	};
 	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1069,7 +1120,7 @@ void RenderThread::copyToSwapchain()
 
 	vkCmdBlitImage(
 		vk.copy_command_buffers[vk.current_frame],
-		vk.output_image.image,
+		vk.output_attachement.image,
 		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 		vk.swapchain.images[vk.current_image_index],
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
