@@ -18,6 +18,7 @@ public:
 	{
 		VkExtent2D extent;
 
+		std::string geom_path;
 		std::string vert_path;
 		std::string frag_path;
 
@@ -60,6 +61,19 @@ public:
 		m_device(device)
 	{
 		std::vector<VkPipelineShaderStageCreateInfo> shader_stages;
+
+		if (!create_info.geom_path.empty())
+		{
+			auto geom_code = readFile(create_info.geom_path);
+			VkShaderModule geom_module = createShaderModule(geom_code);
+			VkPipelineShaderStageCreateInfo geom_stage_info = {};
+			geom_stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			geom_stage_info.stage = VK_SHADER_STAGE_GEOMETRY_BIT;
+			geom_stage_info.module = geom_module;
+			geom_stage_info.pName = "main";
+
+			shader_stages.push_back(geom_stage_info);
+		}
 
 		if (!create_info.vert_path.empty())
 		{

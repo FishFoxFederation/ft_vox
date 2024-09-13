@@ -42,16 +42,16 @@ void RenderThread::launch()
 
 		while (!m_thread.get_stop_token().stop_requested())
 		{
-			// auto start_time = std::chrono::high_resolution_clock::now();
+			auto start_time = std::chrono::high_resolution_clock::now();
 			loop();
-			// auto end_time = std::chrono::high_resolution_clock::now();
+			auto end_time = std::chrono::high_resolution_clock::now();
 
-			//i want 60fps so if not enough time passed wait a bit
-			// std::chrono::nanoseconds frame_time = end_time - start_time;
-			// if (frame_time < std::chrono::nanoseconds(16666666))
-			// {
-			// 	std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
-			// }
+			// i want 60fps so if not enough time passed wait a bit
+			std::chrono::nanoseconds frame_time = end_time - start_time;
+			if (frame_time < std::chrono::nanoseconds(16666666))
+			{
+				std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
+			}
 		}
 	}
 	catch (const std::exception & e)
@@ -92,6 +92,7 @@ void RenderThread::loop()
 	std::optional<glm::vec3> target_block;
 	std::vector<WorldScene::DebugBlock> debug_blocks;
 	AtmosphereParams atmosphere_params = {};
+	std::vector<glm::mat4> light_view_proj_matrices;
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -171,6 +172,22 @@ void RenderThread::loop()
 		atmosphere_params.n_light_samples = DebugGui::n_light_samples;
 
 		use_raytracing = DebugGui::use_raytracing;
+
+		// light_view_proj_matrices = getCSMLightViewProjMatrices(
+		// 	glm::normalize(sun_position - camera.position),
+		// 	{ 0.0f, 0.1f, 0.2f, 0.4f, 1.0f },
+		// 	camera.view,
+		// 	camera.fov,
+		// 	aspect_ratio,
+		// 	camera.near_plane,
+		// 	camera.far_plane
+		// );
+		light_view_proj_matrices = {
+			sun.view * sun.proj,
+			sun.view * sun.proj,
+			sun.view * sun.proj,
+			sun.view * sun.proj
+		};
 	}
 
 	//############################################################################################################
@@ -217,7 +234,7 @@ void RenderThread::loop()
 	);
 
 	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
-	memcpy(vk.sun_ubo.mapped_memory[vk.current_frame], &sun, sizeof(sun));
+	memcpy(vk.light_view_proj_ubo.mapped_memory[vk.current_frame], light_view_proj_matrices.data(), light_view_proj_matrices.size() * sizeof(glm::mat4));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
 	if (use_raytracing)
@@ -465,7 +482,7 @@ void RenderThread::shadowPass(
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-		vk.sun_descriptor.sets[vk.current_frame]
+		vk.light_view_proj_descriptor.sets[vk.current_frame]
 	};
 
 	vkCmdBindDescriptorSets(
@@ -536,7 +553,7 @@ void RenderThread::lightingPass(
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
 			vk.camera_descriptor.sets[vk.current_frame],
-			vk.sun_descriptor.sets[vk.current_frame],
+			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set
 		};
@@ -931,7 +948,7 @@ void RenderThread::lightingPass(
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
 			vk.camera_descriptor.sets[vk.current_frame],
-			vk.sun_descriptor.sets[vk.current_frame],
+			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set,
 			vk.water_renderpass_input_attachement_descriptor.set
@@ -1025,6 +1042,33 @@ void RenderThread::lightingPass(
 			0,
 			0
 		);
+	}
+
+	{ // Draw test image
+		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+
+		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+		// 	vk.test_image_descriptor.set
+		// };
+
+		// vkCmdBindDescriptorSets(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+		// 	vk.test_image_pipeline.layout,
+		// 	0,
+		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
+		// 	test_image_descriptor_sets.data(),
+		// 	0,
+		// 	nullptr
+		// );
+
+		// vkCmdDraw(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	6,
+		// 	1,
+		// 	0,
+		// 	0
+		// );
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);

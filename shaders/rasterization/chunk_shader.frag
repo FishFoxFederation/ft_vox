@@ -1,7 +1,7 @@
 #version 450
 
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
-layout(set = 3, binding = 0) uniform sampler2D shadow_map;
+layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
 
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
@@ -13,7 +13,7 @@ layout(location = 0) out vec4 out_color;
 
 float compute_shadow_factor(
 	vec4 light_space_pos,
-	sampler2D shadow_map,
+	sampler2DArray shadow_map,
 	uint shadow_map_size,
 	uint pcf_size
 )
@@ -51,7 +51,7 @@ float compute_shadow_factor(
 			vec2 pcf_coord = shadow_map_coord + vec2(x, y) * shadow_map_texel_size;
 
 			// Check if the sample is in light or in the shadow
-			if (light_space_ndc.z <= texture(shadow_map, pcf_coord.xy).x)
+			if (light_space_ndc.z <= texture(shadow_map, vec3(pcf_coord.xy, 0.0)).x)
 			{
 				lighted_count += 1.0;
 			}
