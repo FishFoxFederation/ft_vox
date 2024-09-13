@@ -27,9 +27,9 @@ static std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4 proj, 
 }
 
 std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
-	glm::vec3 light_dir,
-	std::vector<float> split,
-	const glm::vec3 & camera_pos,
+	const glm::vec3 & light_dir,
+	const std::vector<float> & split,
+	const glm::mat4 & camera_view,
 	float cam_fov,
 	float cam_ratio,
 	float cam_near_plane,
@@ -44,7 +44,7 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 
 		std::vector<glm::vec4> frustum_corners = getFrustumCornersWorldSpace(
 			glm::perspective(glm::radians(cam_fov), cam_ratio, sub_frustum_near_plane, sub_frustum_far_plane),
-			glm::lookAt(camera_pos, camera_pos + light_dir, glm::vec3(0.0f, 1.0f, 0.0f))
+			camera_view
 		);
 
 		glm::vec3 sub_frustum_center = glm::vec3(0.0f);
@@ -53,6 +53,8 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 			sub_frustum_center += glm::vec3(corner);
 		}
 		sub_frustum_center /= static_cast<float>(frustum_corners.size());
+
+		LOG_DEBUG("sub_frustum_center: " << sub_frustum_center.x << " " << sub_frustum_center.y << " " << sub_frustum_center.z);
 
 
 		const glm::mat4 light_view = glm::lookAt(
@@ -96,6 +98,15 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		{
 			maxZ *= zMult;
 		}
+
+		minX = -50;
+		maxX = 50;
+		minY = -50;
+		maxY = 50;
+		minZ = 10.0f;
+		maxZ = 1000.0f;
+
+		// LOG_DEBUG(i << " minX: " << minX << " maxX: " << maxX << " minY: " << minY << " maxY: " << maxY << " minZ: " << minZ << " maxZ: " << maxZ);
 
 		const glm::mat4 light_proj = glm::ortho(minX, maxX, minY, maxY, minZ, maxZ);
 

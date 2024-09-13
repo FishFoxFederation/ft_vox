@@ -7,7 +7,7 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 }cm;
 
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
-layout(set = 3, binding = 0) uniform sampler2D shadow_map;
+layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
 
 layout(input_attachment_index = 0, set = 4, binding = 0) uniform subpassInput color;
 layout(input_attachment_index = 1, set = 4, binding = 1) uniform subpassInput depth;
@@ -21,7 +21,7 @@ layout(location = 0) out vec4 out_color;
 
 float compute_shadow_factor(
 	vec4 light_space_pos,
-	sampler2D shadow_map,
+	sampler2DArray shadow_map,
 	uint shadow_map_size,
 	uint pcf_size
 )
@@ -59,7 +59,7 @@ float compute_shadow_factor(
 			vec2 pcf_coord = shadow_map_coord + vec2(x, y) * shadow_map_texel_size;
 
 			// Check if the sample is in light or in the shadow
-			if (light_space_ndc.z <= texture(shadow_map, pcf_coord.xy).x)
+			if (light_space_ndc.z <= texture(shadow_map, vec3(pcf_coord.xy, 0.0)).x)
 			{
 				lighted_count += 1.0;
 			}
@@ -71,7 +71,7 @@ float compute_shadow_factor(
 
 float depth_to_distance(float d, float n, float f)
 {
-    return n * f / (f + d * (n - f));
+	return n * f / (f + d * (n - f));
 }
 
 void main()

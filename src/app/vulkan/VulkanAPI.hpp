@@ -333,6 +333,8 @@ public:
 	int current_frame = 0;
 	uint32_t current_image_index = 0;
 
+	// if you modify this, you need to modify the shader
+	const int max_shadow_maps = 4;
 
 	Image output_attachement;
 	Image color_attachement;
@@ -340,13 +342,12 @@ public:
 	Image block_textures;
 	Image skybox_cube_map;
 	Image shadow_map_depth_attachement;
-	Image water_fog_depth_attachement;
 
 	Image crosshair_image;
 	Image player_skin_image;
 
 	UBO camera_ubo;
-	UBO sun_ubo;
+	UBO light_view_proj_ubo;
 	UBO atmosphere_ubo;
 
 	// Buffers for the line vertices and indices for the frustum
@@ -364,7 +365,7 @@ public:
 	Descriptor shadow_map_descriptor;
 	Descriptor water_renderpass_input_attachement_descriptor;
 	Descriptor test_image_descriptor;
-	Descriptor sun_descriptor;
+	Descriptor light_view_proj_descriptor;
 	Descriptor crosshair_image_descriptor;
 	Descriptor player_skin_image_descriptor;
 	Descriptor atmosphere_descriptor;
@@ -530,10 +531,10 @@ private:
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
 		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
 		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
-		VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
-		VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
-		VK_KHR_RAY_QUERY_EXTENSION_NAME,
-		VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
+		// VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
+		// VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
+		// VK_KHR_RAY_QUERY_EXTENSION_NAME,
+		// VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
 		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
 		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
 		VK_KHR_8BIT_STORAGE_EXTENSION_NAME

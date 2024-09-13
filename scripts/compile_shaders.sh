@@ -1,6 +1,6 @@
 # https://github.com/google/shaderc/blob/main/downloads.md to download glslc
 
-shader_files=$(find shaders -type f -name "*.vert" -o -name "*.frag" -o -name "*.rgen" -o -name "*.rchit" -o -name "*.rmiss" -o -name "*.comp")
+shader_files=$(find shaders -type f -name "*.geom" -o -name "*.vert" -o -name "*.frag" -o -name "*.rgen" -o -name "*.rchit" -o -name "*.rmiss" -o -name "*.comp")
 
 for file in $shader_files
 do
