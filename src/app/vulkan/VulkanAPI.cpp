@@ -717,7 +717,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 		);
 	}
 
-	handleResizeRT();
+	// handleResizeRT();
 }
 
 VkSurfaceFormatKHR VulkanAPI::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
@@ -926,11 +926,11 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 
 
-	depth_attachement_info.extent = { 10000, 10000 };
+	depth_attachement_info.extent = { shadow_map_size, shadow_map_size };
 	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	depth_attachement_info.create_sampler = true;
 	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	depth_attachement_info.array_layers = max_shadow_maps;
+	depth_attachement_info.array_layers = shadow_maps_count;
 
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
@@ -961,7 +961,7 @@ void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t cou
 void VulkanAPI::createUniformBuffers()
 {
 	createUBO(camera_ubo, sizeof(ViewProjMatrices), max_frames_in_flight);
-	createUBO(light_view_proj_ubo, sizeof(glm::mat4) * max_shadow_maps, max_frames_in_flight);
+	createUBO(light_view_proj_ubo, sizeof(glm::mat4) * shadow_maps_count, max_frames_in_flight);
 	createUBO(atmosphere_ubo, sizeof(AtmosphereParams), max_frames_in_flight);
 }
 
@@ -1758,6 +1758,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.extent = shadow_map_depth_attachement.extent2D;
 		pipeline_info.geom_path = "shaders/rasterization/shadow_shader.geom.spv";
 		pipeline_info.vert_path = "shaders/rasterization/shadow_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/shadow_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		std::vector<VkVertexInputAttributeDescription> attribute_descriptions = {
 			BlockVertex::getAttributeDescriptions()[0]
@@ -1780,7 +1781,8 @@ void VulkanAPI::createPipelines()
 
 	{ // test image pipeline
 		Pipeline::CreateInfo pipeline_info = {};
-		pipeline_info.extent = { output_attachement.extent2D.width / 3, output_attachement.extent2D.height / 3 };
+		// pipeline_info.extent = { output_attachement.extent2D.width / 3, output_attachement.extent2D.height / 3 };
+		pipeline_info.extent = { 800, 800 };
 		pipeline_info.vert_path = "shaders/rasterization/test_image_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/rasterization/test_image_shader.frag.spv";
 		pipeline_info.color_formats = { output_attachement.format };
@@ -1901,7 +1903,7 @@ void VulkanAPI::createFramebuffers()
 		framebuffer_info.pAttachments = attachments.data();
 		framebuffer_info.width = shadow_map_depth_attachement.extent2D.width;
 		framebuffer_info.height = shadow_map_depth_attachement.extent2D.height;
-		framebuffer_info.layers = max_shadow_maps;
+		framebuffer_info.layers = shadow_maps_count;
 
 		VK_CHECK(
 			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &shadow_framebuffers[i]),

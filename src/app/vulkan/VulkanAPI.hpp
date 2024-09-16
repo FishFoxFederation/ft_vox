@@ -334,7 +334,8 @@ public:
 	uint32_t current_image_index = 0;
 
 	// if you modify this, you need to modify the shader
-	const int max_shadow_maps = 4;
+	const int shadow_maps_count = 4;
+	const uint shadow_map_size = 4096;
 
 	Image output_attachement;
 	Image color_attachement;

@@ -74,12 +74,14 @@ float depth_to_distance(float d, float n, float f)
 	return n * f / (f + d * (n - f));
 }
 
+const int SHADOW_MAP_SIZE = 4096;
+
 void main()
 {
 	float min_light = 0.2;
 
 	float max_shadow_light = 0.8;
-	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 10000, 3);
+	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, SHADOW_MAP_SIZE, 3);
 
 	float light = min_light + max_shadow_light * shadow_factor;
 

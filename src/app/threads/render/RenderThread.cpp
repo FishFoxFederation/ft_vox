@@ -173,21 +173,23 @@ void RenderThread::loop()
 
 		use_raytracing = DebugGui::use_raytracing;
 
-		// light_view_proj_matrices = getCSMLightViewProjMatrices(
-		// 	glm::normalize(sun_position - camera.position),
-		// 	{ 0.0f, 0.1f, 0.2f, 0.4f, 1.0f },
-		// 	camera.view,
-		// 	camera.fov,
-		// 	aspect_ratio,
-		// 	camera.near_plane,
-		// 	camera.far_plane
-		// );
-		light_view_proj_matrices = {
-			sun.view * sun.proj,
-			sun.view * sun.proj,
-			sun.view * sun.proj,
-			sun.view * sun.proj
-		};
+		light_view_proj_matrices = getCSMLightViewProjMatrices(
+			glm::normalize(sun_position - camera.position),
+			{ 0.0f, 0.1f, 0.2f, 0.4f, 1.0f },
+			// { 0.0f, 0.05f, 0.1f, 0.15f, 0.2f },
+			camera.view,
+			camera.fov,
+			aspect_ratio,
+			camera.near_plane,
+			camera.far_plane
+		);
+		for (auto & matrice : light_view_proj_matrices)
+		{
+			matrice = clip * matrice;
+		}
+		light_view_proj_matrices[1] = light_view_proj_matrices[0];
+		light_view_proj_matrices[2] = light_view_proj_matrices[0];
+		light_view_proj_matrices[3] = light_view_proj_matrices[0];
 	}
 
 	//############################################################################################################
@@ -1045,30 +1047,30 @@ void RenderThread::lightingPass(
 	}
 
 	{ // Draw test image
-		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
-		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-		// 	vk.test_image_descriptor.set
-		// };
+		const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+			vk.test_image_descriptor.set
+		};
 
-		// vkCmdBindDescriptorSets(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-		// 	vk.test_image_pipeline.layout,
-		// 	0,
-		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-		// 	test_image_descriptor_sets.data(),
-		// 	0,
-		// 	nullptr
-		// );
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.test_image_pipeline.layout,
+			0,
+			static_cast<uint32_t>(test_image_descriptor_sets.size()),
+			test_image_descriptor_sets.data(),
+			0,
+			nullptr
+		);
 
-		// vkCmdDraw(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	6,
-		// 	1,
-		// 	0,
-		// 	0
-		// );
+		vkCmdDraw(
+			vk.draw_command_buffers[vk.current_frame],
+			6,
+			1,
+			0,
+			0
+		);
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
