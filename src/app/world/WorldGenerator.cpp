@@ -56,13 +56,17 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 		for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 		{
 			//generate the relief value for the whole column
-			float value = generateReliefValue(glm::ivec2(
+			float reliefValue = generateReliefValue(glm::ivec2(
 				blockX + x * CHUNK_X_SIZE,
 				blockZ + z * CHUNK_Z_SIZE
 			));
 
-			value *= (CHUNK_Y_SIZE - 100);
-			value += 100;
+			float riverValue = std::abs(reliefValue);
+
+			reliefValue = (reliefValue + 1) / 2;
+			reliefValue = pow(2, 10 * reliefValue - 10);
+			reliefValue *= (CHUNK_Y_SIZE - 100);
+			reliefValue += 100;
 			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 			{
 
@@ -73,17 +77,24 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 				);
 				BlockID to_set;
 
-				//check to see wether above or below the relief value
-				if (value > position.y)
-					to_set = BlockID::Stone;
-				else if (value + 5 > position.y)
-					to_set = BlockID::Grass;
-				else
-					to_set = BlockID::Air;
-
-				//if above relief value and below 200 place water
-				if (to_set == BlockID::Air && position.y < 200)
-					to_set = BlockID::Water;
+				{
+					//check to see wether above or below the relief value
+					if (reliefValue > position.y)
+						to_set = BlockID::Stone;
+					else if (reliefValue + 5 > position.y)
+					{
+						if (riverValue < 0.05f)
+							to_set = BlockID::Water;
+						else 
+							to_set = BlockID::Grass;
+					}
+					else
+						to_set = BlockID::Air;
+				}
+				
+				// //if above relief value and below 200 place water
+				// if (to_set == BlockID::Air && position.y < 200)
+				// 	to_set = BlockID::Water;
 
 				//if below relief value try to carve a cave
 				if (to_set != BlockID::Air && to_set != BlockID::Water && generateCaveBlock(position) == BlockID::Air)
@@ -160,7 +171,7 @@ BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
  * @brief 
  * 
  * @param position 
- * @return float [0, 1]
+ * @return float [-1, 1]
  */
 float WorldGenerator::generateReliefValue(glm::ivec2 position)
 {
@@ -170,9 +181,9 @@ float WorldGenerator::generateReliefValue(glm::ivec2 position)
 	));
 
 
-	value = (value + 1) / 2;
+	// value = (value + 1) / 2;
 
-	value = pow(2, 10 * value - 10);
+	// value = pow(2, 10 * value - 10);
 	// value = value < 0.5 ? 4 * value * value * value : 1 - pow(-2 * value + 2, 3) / 2;
 
 	// value = pow(2, value);
