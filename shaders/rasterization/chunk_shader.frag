@@ -61,6 +61,8 @@ float compute_shadow_factor(
 	return lighted_count / num_samples;
 }
 
+const int SHADOW_MAP_SIZE = 4096;
+
 void main()
 {
 	float base_light = 1.0;
@@ -69,7 +71,7 @@ void main()
 	float ao_factor = frag_ao / 3.0;
 
 	float max_shadow_light = 0.8;
-	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, 10000, 3);
+	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, SHADOW_MAP_SIZE, 3);
 
 	float light = base_light + max_shadow_light * shadow_factor - max_ao_shadow * ao_factor;
 	// float light = base_light - max_ao_shadow * ao_factor;

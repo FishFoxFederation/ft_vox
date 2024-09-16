@@ -122,10 +122,10 @@ private:
 		const glm::vec3 & light_dir,
 		const std::vector<float> & split,
 		const glm::mat4 & camera_view,
-		float cam_fov,
-		float cam_ratio,
-		float cam_near_plane,
-		float cam_far_plane
+		const float cam_fov,
+		const float cam_ratio,
+		const float cam_near_plane,
+		const float cam_far_plane
 	);
 
 };

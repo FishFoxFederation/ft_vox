@@ -30,20 +30,22 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 	const glm::vec3 & light_dir,
 	const std::vector<float> & split,
 	const glm::mat4 & camera_view,
-	float cam_fov,
-	float cam_ratio,
-	float cam_near_plane,
-	float cam_far_plane
+	const float cam_fov,
+	const float cam_ratio,
+	const float cam_near_plane,
+	const float cam_far_plane
 )
 {
+	const float near_far_diff = cam_far_plane - cam_near_plane;
+
 	std::vector<glm::mat4> light_view_proj_matrices;
 	for (size_t i = 0; i + 1 < split.size(); i++)
 	{
-		float sub_frustum_near_plane = cam_near_plane + (cam_far_plane - cam_near_plane) * split[i];
-		float sub_frustum_far_plane = cam_near_plane + (cam_far_plane - cam_near_plane) * split[i + 1];
+		float sub_frustum_near_plane = cam_near_plane + near_far_diff * split[i];
+		float sub_frustum_far_plane = cam_near_plane + near_far_diff * split[i + 1];
 
 		std::vector<glm::vec4> frustum_corners = getFrustumCornersWorldSpace(
-			glm::perspective(glm::radians(cam_fov), cam_ratio, sub_frustum_near_plane, sub_frustum_far_plane),
+			glm::perspective(cam_fov, cam_ratio, sub_frustum_near_plane, sub_frustum_far_plane),
 			camera_view
 		);
 
@@ -54,7 +56,7 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		}
 		sub_frustum_center /= static_cast<float>(frustum_corners.size());
 
-		LOG_DEBUG("sub_frustum_center: " << sub_frustum_center.x << " " << sub_frustum_center.y << " " << sub_frustum_center.z);
+		// LOG_DEBUG("sub_frustum_center: " << sub_frustum_center.x << " " << sub_frustum_center.y << " " << sub_frustum_center.z);
 
 
 		const glm::mat4 light_view = glm::lookAt(
@@ -81,7 +83,7 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		}
 
 		// Tune this parameter according to the scene
-		constexpr float zMult = 10.0f;
+		constexpr float zMult = 1000.0f;
 		if (minZ < 0)
 		{
 			minZ *= zMult;
@@ -99,12 +101,12 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 			maxZ *= zMult;
 		}
 
-		minX = -50;
-		maxX = 50;
-		minY = -50;
-		maxY = 50;
-		minZ = 10.0f;
-		maxZ = 1000.0f;
+		// minX = -50;
+		// maxX = 50;
+		// minY = -50;
+		// maxY = 50;
+		// minZ = 10.0f;
+		// maxZ = 1000.0f;
 
 		// LOG_DEBUG(i << " minX: " << minX << " maxX: " << maxX << " minY: " << minY << " maxY: " << maxY << " minZ: " << minZ << " maxZ: " << maxZ);
 
