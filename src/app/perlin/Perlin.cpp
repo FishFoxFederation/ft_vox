@@ -7,7 +7,7 @@ Perlin::Perlin(unsigned int seed)
 }
 
 
-Perlin::Perlin(unsigned int seed, int octaves, int frequency, float persistence, float lacunarity)
+Perlin::Perlin(unsigned int seed, int octaves, float frequency, float persistence, float lacunarity)
 	: _seed(seed), _octaves(octaves), _frequency(frequency), _persistence(persistence), _lacunarity(lacunarity)
 {
 }

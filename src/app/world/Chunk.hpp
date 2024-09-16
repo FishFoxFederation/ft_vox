@@ -11,7 +11,7 @@
 #include "define.hpp"
 #include "Tracy.hpp"
 
-#define CHUNK_Y_SIZE 256
+#define CHUNK_Y_SIZE 512
 #define CHUNK_X_SIZE 16
 #define CHUNK_Z_SIZE 16
 #define BLOCKS_PER_CHUNK CHUNK_Y_SIZE * CHUNK_X_SIZE * CHUNK_Z_SIZE
@@ -72,7 +72,7 @@ public:
 	static	glm::ivec3	toCoord(const int & index);
 
 
-	// TracySharedLockableN			(Status,	status, "Chunk Status");
+	// TracySharedLockableN			(std::shared_mutex,	, "Chunk Status");
 	Status 							status;
 	std::unordered_set<uint64_t>	entity_ids;
 	std::unordered_set<uint64_t>	observing_player_ids;

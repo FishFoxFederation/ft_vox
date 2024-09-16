@@ -48,17 +48,17 @@ void ClientWorld::addChunk(std::shared_ptr<Chunk> chunk)
 	}
 
 	//set all neighbors as not visible to force a mesh update
-	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z + 1));
-	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z));
-	setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z - 1));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z + 1));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x - 1, chunk_position.z - 1));
 
-	setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z + 1));
-	setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z));
-	setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z - 1));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z + 1));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x + 1, chunk_position.z - 1));
 
-	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z + 1));
-	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z));
-	setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z - 1));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z + 1));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z));
+	// setChunkNotMeshed(glm::ivec2(chunk_position.x, chunk_position.z - 1));
 }
 
 void ClientWorld::removeChunk(const glm::ivec3 & chunkPosition)
@@ -207,6 +207,7 @@ void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 	ZoneScoped;
 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
+
 	for(auto chunkPos2D : m_loaded_chunks)
 	{
 		std::shared_ptr<Chunk> chunk = getChunk(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
