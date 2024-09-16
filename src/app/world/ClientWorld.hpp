@@ -14,6 +14,7 @@
 
 #include <unordered_map>
 #include <shared_mutex>
+#include <list>
 
 class ClientWorld : public World
 {

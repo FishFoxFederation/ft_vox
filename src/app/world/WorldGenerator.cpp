@@ -3,7 +3,7 @@
 #include <cmath>
 
 WorldGenerator::WorldGenerator()
-: m_relief_perlin(1, 3, 1, 0.5, 2),
+: m_relief_perlin(1, 7, 1, 0.35, 2),
   m_cave_perlin(1, 4, 1, 0.5, 2)
 {
 
@@ -61,6 +61,8 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 				blockZ + z * CHUNK_Z_SIZE
 			));
 
+			value *= (CHUNK_Y_SIZE - 100);
+			value += 100;
 			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 			{
 
@@ -72,9 +74,9 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 				BlockID to_set;
 
 				//check to see wether above or below the relief value
-				if (value + 128 > position.y)
+				if (value > position.y)
 					to_set = BlockID::Stone;
-				else if (value + 133 > position.y)
+				else if (value + 5 > position.y)
 					to_set = BlockID::Grass;
 				else
 					to_set = BlockID::Air;
@@ -142,24 +144,43 @@ BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
 {
 	float value = generateReliefValue(glm::ivec2(position.x, position.z));
 
-	if (value + 128 > position.y)
+	value *= CHUNK_Y_SIZE;
+
+	if (value > position.y)
 		return BlockID::Stone;
 	// else if (value > -0.05f && value < 0.05f)
 		// chunk.setBlock(blockX, blockY, blockZ, Block::Air);
-	else if (value + 133 > position.y)
+	else if (value + 3 > position.y)
 		return BlockID::Grass;
 	else
 		return BlockID::Air;
 }
 
+/**
+ * @brief 
+ * 
+ * @param position 
+ * @return float [0, 1]
+ */
 float WorldGenerator::generateReliefValue(glm::ivec2 position)
 {
 	float value = m_relief_perlin.noise(glm::vec2(
-		position.x * 0.01f,
-		position.y * 0.01f
+		position.x * 0.0080f,
+		position.y * 0.0080f
 	));
 
-	value = ((value + 1) / 2) * 128;
+
+	value = (value + 1) / 2;
+
+	value = pow(2, 10 * value - 10);
+	// value = value < 0.5 ? 4 * value * value * value : 1 - pow(-2 * value + 2, 3) / 2;
+
+	// value = pow(2, value);
+
+	// constexpr double slope = 1.0 * (1 - 0) / (2 - 0.5);
+	// value = slope * (value - 0.5);
+	//value is back to [0, 1]
+
 
 	return value;
 }

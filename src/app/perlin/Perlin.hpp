@@ -46,7 +46,7 @@ public:
 	Perlin(
 		unsigned int seed,
 		int octaves,
-		int frequency,
+		float frequency,
 		float persistence,
 		float lacunarity);
 
@@ -76,7 +76,7 @@ public:
 private:
 	unsigned int	_seed;
 	int 			_octaves = 1;
-	int				_frequency = 1;
+	float				_frequency = 1;
 	float			_persistence = 0.5;
 	float			_lacunarity = 2.0;
 
