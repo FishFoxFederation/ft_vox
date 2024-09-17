@@ -1,12 +1,12 @@
 #include "ChunkPacket.hpp"
 
 ChunkPacket::ChunkPacket()
-: m_chunk_pos(0), m_blocks()
+: m_chunk_data()
 {
 }
 
 ChunkPacket::ChunkPacket(const Chunk & chunk)
-: m_chunk_pos(chunk.getPosition()), m_blocks(chunk.getBlocks())
+: m_chunk_data{chunk.getPosition(), chunk.getBlocks(), chunk.getLight()}
 {
 }
 
@@ -15,12 +15,12 @@ ChunkPacket::~ChunkPacket()
 }
 
 ChunkPacket::ChunkPacket(ChunkPacket & other)
-: IPacket(other), m_chunk_pos(other.m_chunk_pos), m_blocks(other.m_blocks)
+: IPacket(other), m_chunk_data(other.m_chunk_data)
 {
 }
 
 ChunkPacket::ChunkPacket(ChunkPacket && other)
-: IPacket(std::move(other)), m_chunk_pos(other.m_chunk_pos), m_blocks(other.m_blocks)
+: IPacket(std::move(other)), m_chunk_data(other.m_chunk_data)
 {
 }
 
@@ -28,8 +28,7 @@ ChunkPacket & ChunkPacket::operator=(ChunkPacket & other)
 {
 	if (this != &other)
 	{
-		m_chunk_pos = other.m_chunk_pos;
-		m_blocks = other.m_blocks;
+		m_chunk_data = other.m_chunk_data;
 		::IPacket::operator=(other);
 	}
 	return *this;
@@ -39,8 +38,7 @@ ChunkPacket & ChunkPacket::operator=(ChunkPacket && other)
 {
 	if (this != &other)
 	{
-		m_chunk_pos = other.m_chunk_pos;
-		m_blocks = std::move(other.m_blocks);
+		m_chunk_data = std::move(other.m_chunk_data);
 		::IPacket::operator=(std::move(other));
 	}
 	return *this;
@@ -52,27 +50,21 @@ void ChunkPacket::Serialize(uint8_t * buffer) const
 	std::memcpy(buffer, &type, sizeof(type));
 	buffer += sizeof(type);
 
-	std::memcpy(buffer, &m_chunk_pos, sizeof(m_chunk_pos));
-	buffer += sizeof(m_chunk_pos);
-
-	std::memcpy(buffer, &m_blocks, sizeof(m_blocks));
-	buffer += sizeof(m_blocks);
+	std::memcpy(buffer, &m_chunk_data, sizeof(m_chunk_data));
+	buffer += sizeof(m_chunk_data);
 }
 
 void ChunkPacket::Deserialize(const uint8_t * buffer)
 {
 	buffer += sizeof(IPacket::STATIC_HEADER_SIZE);
 
-	std::memcpy(&m_chunk_pos, buffer, sizeof(m_chunk_pos));
-	buffer += sizeof(m_chunk_pos);
-
-	std::memcpy(&m_blocks, buffer, sizeof(m_blocks));
-	buffer += sizeof(m_blocks);
+	std::memcpy(&m_chunk_data, buffer, sizeof(m_chunk_data));
+	buffer += sizeof(m_chunk_data);
 }
 
 uint32_t ChunkPacket::Size() const
 {
-	return IPacket::STATIC_HEADER_SIZE + sizeof(m_chunk_pos) + sizeof(m_blocks);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_chunk_data);
 }
 
 bool ChunkPacket::HasDynamicSize() const
@@ -92,11 +84,10 @@ std::shared_ptr<IPacket> ChunkPacket::Clone() const
 
 std::shared_ptr<Chunk>	ChunkPacket::GetChunk() const
 {
-	return std::make_shared<Chunk>(m_chunk_pos, m_blocks);
+	return std::make_shared<Chunk>(m_chunk_data.chunk_pos, m_chunk_data.blocks);
 }
 
 void ChunkPacket::SetChunk(const Chunk & chunk)
 {
-	m_chunk_pos = chunk.getPosition();
-	m_blocks = chunk.getBlocks();
+	m_chunk_data = {chunk.getPosition(), chunk.getBlocks(), chunk.getLight()};
 }

@@ -15,6 +15,11 @@ Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks)
 {
 }
 
+Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light)
+: position(position), m_mesh_id(0), m_blocks(blocks), m_light(light)
+{
+}
+
 Chunk::Chunk(const Chunk & other)
 :	position(other.position),
 	m_mesh_id(other.m_mesh_id),
@@ -87,6 +92,40 @@ void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 void Chunk::setBlock(const glm::ivec3 & position, BlockID block)
 {
 	setBlock(position.x, position.y, position.z, block);
+}
+
+Chunk::LightArray & Chunk::getLight()
+{
+	return m_light;
+}
+
+const Chunk::LightArray & Chunk::getLight() const
+{
+	return m_light;
+}
+
+uint8_t Chunk::getLight(const int & x, const int & y, const int & z) const
+{
+	int index = toIndex(x, y, z);
+
+	return m_light[index];
+}
+
+uint8_t Chunk::getLight(const glm::ivec3 & position) const
+{
+	return getLight(position.x, position.y, position.z);
+}
+
+void Chunk::setLight(const int & x, const int & y, const int & z, uint8_t light)
+{
+	int index = toIndex(x, y, z);
+
+	m_light[index] = light;
+}
+
+void Chunk::setLight(const glm::ivec3 & position, uint8_t light)
+{
+	setLight(position.x, position.y, position.z, light);
 }
 
 const glm::ivec3 & Chunk::getPosition() const

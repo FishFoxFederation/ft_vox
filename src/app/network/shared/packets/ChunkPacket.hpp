@@ -7,6 +7,13 @@
 class ChunkPacket : public IPacket
 {
 public:
+	struct ChunkData
+	{
+		glm::ivec3			chunk_pos;
+		Chunk::BlockArray	blocks;
+		Chunk::LightArray	light;
+	};
+
 	ChunkPacket();
 	ChunkPacket(const Chunk & chunk);
 	~ChunkPacket();
@@ -32,7 +39,6 @@ public:
 	void							SetChunk(const Chunk & chunk);
 
 private:
-	glm::ivec3			m_chunk_pos;
-	Chunk::BlockArray	m_blocks;
+	ChunkData	m_chunk_data;
 };
 
