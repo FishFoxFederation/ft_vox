@@ -167,9 +167,10 @@ struct EntityMatrices
 
 struct ShadowMapLight
 {
-	glm::mat4 view;
-	glm::mat4 proj;
-	glm::mat4 model;
+	glm::mat4 view_proj[5];
+	float plane_distances[5];
+	glm::vec3 light_dir;
+	float far_plane;
 };
 
 struct GuiTextureData
@@ -333,8 +334,8 @@ public:
 	int current_frame = 0;
 	uint32_t current_image_index = 0;
 
-	// if you modify this, you need to modify the shader
-	const int shadow_maps_count = 4;
+	// if you modify this, you need to modify the shader and ShadowMapLight struct
+	const uint shadow_maps_count = 5;
 	const uint shadow_map_size = 4096;
 
 	Image output_attachement;
@@ -348,7 +349,7 @@ public:
 	Image player_skin_image;
 
 	UBO camera_ubo;
-	UBO light_view_proj_ubo;
+	UBO light_mat_ubo;
 	UBO atmosphere_ubo;
 
 	// Buffers for the line vertices and indices for the frustum
@@ -538,7 +539,8 @@ private:
 		// VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
 		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
 		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
-		VK_KHR_8BIT_STORAGE_EXTENSION_NAME
+		VK_KHR_8BIT_STORAGE_EXTENSION_NAME,
+		VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME
 	};
 
 

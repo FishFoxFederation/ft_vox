@@ -92,7 +92,7 @@ void RenderThread::loop()
 	std::optional<glm::vec3> target_block;
 	std::vector<WorldScene::DebugBlock> debug_blocks;
 	AtmosphereParams atmosphere_params = {};
-	std::vector<glm::mat4> light_view_proj_matrices;
+	ShadowMapLight shadow_map_light = {};
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -173,23 +173,29 @@ void RenderThread::loop()
 
 		use_raytracing = DebugGui::use_raytracing;
 
-		light_view_proj_matrices = getCSMLightViewProjMatrices(
-			glm::normalize(sun_position - camera.position),
-			{ 0.0f, 0.1f, 0.2f, 0.4f, 1.0f },
-			// { 0.0f, 0.05f, 0.1f, 0.15f, 0.2f },
+
+		std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.4f, 0.6f, 1.0f};
+		if (frustum_split.size() != vk.shadow_maps_count + 1)
+		{
+			LOG_ERROR("fruatume_split.size() != vk.shadow_maps_count + 1");
+		}
+		shadow_map_light.light_dir = glm::normalize(sun_position - camera.position);
+		shadow_map_light.far_plane = camera.far_plane;
+		std::vector<glm::mat4> light_view_proj_matrices = getCSMLightViewProjMatrices(
+			shadow_map_light.light_dir,
+			frustum_split,
 			camera.view,
 			camera.fov,
 			aspect_ratio,
 			camera.near_plane,
 			camera.far_plane
 		);
-		for (auto & matrice : light_view_proj_matrices)
+		for (size_t i = 0; i < vk.shadow_maps_count; i++)
 		{
-			matrice = clip * matrice;
+			shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
+			shadow_map_light.plane_distances[i] = (camera.far_plane - camera.near_plane) * frustum_split[i + 1];
 		}
-		light_view_proj_matrices[1] = light_view_proj_matrices[0];
-		light_view_proj_matrices[2] = light_view_proj_matrices[0];
-		light_view_proj_matrices[3] = light_view_proj_matrices[0];
+		// LOG_DEBUG("sizeof(ShadowMapLight): " << sizeof(ShadowMapLight));
 	}
 
 	//############################################################################################################
@@ -236,7 +242,7 @@ void RenderThread::loop()
 	);
 
 	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
-	memcpy(vk.light_view_proj_ubo.mapped_memory[vk.current_frame], light_view_proj_matrices.data(), light_view_proj_matrices.size() * sizeof(glm::mat4));
+	memcpy(vk.light_mat_ubo.mapped_memory[vk.current_frame], &shadow_map_light, sizeof(shadow_map_light));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
 	if (use_raytracing)
@@ -944,47 +950,47 @@ void RenderThread::lightingPass(
 	);
 
 	{ // Draw water
-		ZoneScopedN("Draw water");
+		// ZoneScopedN("Draw water");
 
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
+		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
-		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame],
-			vk.light_view_proj_descriptor.sets[vk.current_frame],
-			vk.block_textures_descriptor.set,
-			vk.shadow_map_descriptor.set,
-			vk.water_renderpass_input_attachement_descriptor.set
-		};
+		// const std::vector<VkDescriptorSet> descriptor_sets = {
+		// 	vk.camera_descriptor.sets[vk.current_frame],
+		// 	vk.light_view_proj_descriptor.sets[vk.current_frame],
+		// 	vk.block_textures_descriptor.set,
+		// 	vk.shadow_map_descriptor.set,
+		// 	vk.water_renderpass_input_attachement_descriptor.set
+		// };
 
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.water_pipeline.layout,
-			0,
-			static_cast<uint32_t>(descriptor_sets.size()),
-			descriptor_sets.data(),
-			0,
-			nullptr
-		);
+		// vkCmdBindDescriptorSets(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+		// 	vk.water_pipeline.layout,
+		// 	0,
+		// 	static_cast<uint32_t>(descriptor_sets.size()),
+		// 	descriptor_sets.data(),
+		// 	0,
+		// 	nullptr
+		// );
 
-		for (auto & chunk_mesh: chunk_meshes)
-		{
-			if (chunk_mesh.water_id == 0)
-			{
-				continue;
-			}
+		// for (auto & chunk_mesh: chunk_meshes)
+		// {
+		// 	if (chunk_mesh.water_id == 0)
+		// 	{
+		// 		continue;
+		// 	}
 
-			ModelMatrice model_matrice = {};
-			model_matrice.model = chunk_mesh.model;
+		// 	ModelMatrice model_matrice = {};
+		// 	model_matrice.model = chunk_mesh.model;
 
-			vk.drawMesh(
-				vk.water_pipeline,
-				chunk_mesh.water_id,
-				&model_matrice,
-				sizeof(ModelMatrice),
-				VK_SHADER_STAGE_VERTEX_BIT
-			);
-		}
+		// 	vk.drawMesh(
+		// 		vk.water_pipeline,
+		// 		chunk_mesh.water_id,
+		// 		&model_matrice,
+		// 		sizeof(ModelMatrice),
+		// 		VK_SHADER_STAGE_VERTEX_BIT
+		// 	);
+		// }
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
@@ -1047,30 +1053,30 @@ void RenderThread::lightingPass(
 	}
 
 	{ // Draw test image
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
-		const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-			vk.test_image_descriptor.set
-		};
+		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+		// 	vk.test_image_descriptor.set
+		// };
 
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.test_image_pipeline.layout,
-			0,
-			static_cast<uint32_t>(test_image_descriptor_sets.size()),
-			test_image_descriptor_sets.data(),
-			0,
-			nullptr
-		);
+		// vkCmdBindDescriptorSets(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+		// 	vk.test_image_pipeline.layout,
+		// 	0,
+		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
+		// 	test_image_descriptor_sets.data(),
+		// 	0,
+		// 	nullptr
+		// );
 
-		vkCmdDraw(
-			vk.draw_command_buffers[vk.current_frame],
-			6,
-			1,
-			0,
-			0
-		);
+		// vkCmdDraw(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	6,
+		// 	1,
+		// 	0,
+		// 	0
+		// );
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);

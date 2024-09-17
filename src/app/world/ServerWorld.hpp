@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 
 #include "Server.hpp"
@@ -71,7 +71,7 @@ public:
 	constexpr static int TICKET_LEVEL_INACTIVE = 34;
 
 	constexpr static int TICKET_LEVEL_SPAWN = 32;
-	constexpr static int TICKET_LEVEL_PLAYER = 30;
+	constexpr static int TICKET_LEVEL_PLAYER = 25;
 
 	constexpr static int SERVER_LOAD_DISTANCE = TICKET_LEVEL_INACTIVE - TICKET_LEVEL_PLAYER;
 	struct Ticket
@@ -140,7 +140,7 @@ private:
 	std::unordered_set<glm::ivec3> m_block_update_chunks;
 	std::unordered_set<glm::ivec3> m_entity_update_chunks;
 	std::unordered_set<glm::ivec3> m_border_chunks;
-	
+
 	mutable TracyLockableN(std::mutex, m_tickets_mutex, "TicketManager");
 
 	/*************************\
