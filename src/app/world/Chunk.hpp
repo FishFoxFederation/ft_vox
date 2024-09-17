@@ -23,9 +23,11 @@ class Chunk
 {
 public:
 	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
+	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
 
 	Chunk(glm::ivec3 position);
 	Chunk(const glm::ivec3 & position, const BlockArray & blocks);
+	Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light);
 
 	Chunk(const Chunk & other);
 	Chunk & operator=(const Chunk & other);
@@ -39,6 +41,13 @@ public:
 	BlockID				getBlock(const glm::ivec3 & position) const;
 	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
 	void 				setBlock(const glm::ivec3 & position, BlockID block);
+
+	LightArray &		getLight();
+	const LightArray &	getLight() const;
+	uint8_t				getLight(const int & x, const int & y, const int & z) const;
+	uint8_t				getLight(const glm::ivec3 & position) const;
+	void				setLight(const int & x, const int & y, const int & z, uint8_t light);
+	void 				setLight(const glm::ivec3 & position, uint8_t light);
 
 	const glm::ivec3 &	getPosition() const;
 	void 				setPosition(const glm::ivec3 & position);
@@ -73,5 +82,6 @@ private:
 	glm::ivec3	position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
+	LightArray	m_light;
 	int			load_level = 44;
 };
