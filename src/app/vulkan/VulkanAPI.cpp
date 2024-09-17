@@ -96,9 +96,9 @@ VulkanAPI::~VulkanAPI()
 		vma.freeMemory(device, camera_ubo.memory[i], nullptr);
 		vkDestroyBuffer(device, camera_ubo.buffers[i], nullptr);
 
-		vkUnmapMemory(device, light_view_proj_ubo.memory[i]);
-		vma.freeMemory(device, light_view_proj_ubo.memory[i], nullptr);
-		vkDestroyBuffer(device, light_view_proj_ubo.buffers[i], nullptr);
+		vkUnmapMemory(device, light_mat_ubo.memory[i]);
+		vma.freeMemory(device, light_mat_ubo.memory[i], nullptr);
+		vkDestroyBuffer(device, light_mat_ubo.buffers[i], nullptr);
 
 		vkUnmapMemory(device, atmosphere_ubo.memory[i]);
 		vma.freeMemory(device, atmosphere_ubo.memory[i], nullptr);
@@ -208,7 +208,6 @@ void VulkanAPI::createInstance()
 	create_info.pApplicationInfo = &app_info;
 
 	std::vector<const char *> extensions = getRequiredExtensions();
-
 	create_info.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 	create_info.ppEnabledExtensionNames = extensions.data();
 
@@ -218,6 +217,14 @@ void VulkanAPI::createInstance()
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
 		create_info.ppEnabledLayerNames = validation_layers.data();
 
+		// Shader printf is a feature of the validation layers that needs to be enabled
+		std::vector<VkValidationFeatureEnableEXT>  validation_feature_enables = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT };
+
+		VkValidationFeaturesEXT validation_features = { VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT };
+		validation_features.enabledValidationFeatureCount = static_cast<uint32_t>(validation_feature_enables.size());
+		validation_features.pEnabledValidationFeatures = validation_feature_enables.data();
+
+		debug_create_info.pNext = &validation_features;
 		create_info.pNext = &debug_create_info;
 	#else
 		create_info.enabledLayerCount = 0;
@@ -961,7 +968,7 @@ void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t cou
 void VulkanAPI::createUniformBuffers()
 {
 	createUBO(camera_ubo, sizeof(ViewProjMatrices), max_frames_in_flight);
-	createUBO(light_view_proj_ubo, sizeof(glm::mat4) * shadow_maps_count, max_frames_in_flight);
+	createUBO(light_mat_ubo, sizeof(ShadowMapLight), max_frames_in_flight);
 	createUBO(atmosphere_ubo, sizeof(AtmosphereParams), max_frames_in_flight);
 }
 
@@ -1323,7 +1330,7 @@ void VulkanAPI::createDescriptors()
 		ubo_layout_binding.binding = 0;
 		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT;
+		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		ubo_layout_binding.pImmutableSamplers = nullptr;
 
 		Descriptor::CreateInfo descriptor_info = {};
@@ -1336,9 +1343,9 @@ void VulkanAPI::createDescriptors()
 		for (int i = 0; i < max_frames_in_flight; i++)
 		{
 			VkDescriptorBufferInfo buffer_info = {};
-			buffer_info.buffer = light_view_proj_ubo.buffers[i];
+			buffer_info.buffer = light_mat_ubo.buffers[i];
 			buffer_info.offset = 0;
-			buffer_info.range = sizeof(ViewProjMatrices);
+			buffer_info.range = sizeof(ShadowMapLight);
 
 			VkWriteDescriptorSet descriptor_write = {};
 			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -1765,9 +1772,9 @@ void VulkanAPI::createPipelines()
 		};
 		pipeline_info.attribute_descriptions = attribute_descriptions;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
-		pipeline_info.depth_bias_enable = VK_TRUE;
-		pipeline_info.depth_bias_constant_factor = 0.0f;
-		pipeline_info.depth_bias_slope_factor = 0.1f;
+		// pipeline_info.depth_bias_enable = VK_TRUE;
+		// pipeline_info.depth_bias_constant_factor = 0.0f;
+		// pipeline_info.depth_bias_slope_factor = 0.1f;
 		pipeline_info.descriptor_set_layouts = {
 			light_view_proj_descriptor.layout
 		};

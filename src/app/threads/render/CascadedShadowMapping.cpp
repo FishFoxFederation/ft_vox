@@ -83,7 +83,7 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		}
 
 		// Tune this parameter according to the scene
-		constexpr float zMult = 1000.0f;
+		constexpr float zMult = 100.0f;
 		if (minZ < 0)
 		{
 			minZ *= zMult;
@@ -100,13 +100,6 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		{
 			maxZ *= zMult;
 		}
-
-		// minX = -50;
-		// maxX = 50;
-		// minY = -50;
-		// maxY = 50;
-		// minZ = 10.0f;
-		// maxZ = 1000.0f;
 
 		// LOG_DEBUG(i << " minX: " << minX << " maxX: " << maxX << " minY: " << minY << " maxY: " << maxY << " minZ: " << minZ << " maxZ: " << maxZ);
 
