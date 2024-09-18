@@ -168,7 +168,8 @@ struct EntityMatrices
 struct ShadowMapLight
 {
 	glm::mat4 view_proj[5];
-	float plane_distances[5];
+	// TODO: this is vec4 because of alignment, but it should be float
+	glm::vec4 plane_distances[5];
 	glm::vec3 light_dir;
 	float far_plane;
 };
