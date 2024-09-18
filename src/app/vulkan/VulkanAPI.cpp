@@ -218,13 +218,13 @@ void VulkanAPI::createInstance()
 		create_info.ppEnabledLayerNames = validation_layers.data();
 
 		// Shader printf is a feature of the validation layers that needs to be enabled
-		std::vector<VkValidationFeatureEnableEXT>  validation_feature_enables = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT };
+		// std::vector<VkValidationFeatureEnableEXT>  validation_feature_enables = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT };
 
-		VkValidationFeaturesEXT validation_features = { VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT };
-		validation_features.enabledValidationFeatureCount = static_cast<uint32_t>(validation_feature_enables.size());
-		validation_features.pEnabledValidationFeatures = validation_feature_enables.data();
+		// VkValidationFeaturesEXT validation_features = { VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT };
+		// validation_features.enabledValidationFeatureCount = static_cast<uint32_t>(validation_feature_enables.size());
+		// validation_features.pEnabledValidationFeatures = validation_feature_enables.data();
 
-		debug_create_info.pNext = &validation_features;
+		// debug_create_info.pNext = &validation_features;
 		create_info.pNext = &debug_create_info;
 	#else
 		create_info.enabledLayerCount = 0;
@@ -567,19 +567,19 @@ void VulkanAPI::createLogicalDevice()
 	device_features.geometryShader = VK_TRUE;
 
 
-	VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
-	ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-	ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
+	// VkPhysicalDeviceRayTracingPipelineFeaturesKHR ray_tracing_pipeline_features = {};
+	// ray_tracing_pipeline_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+	// ray_tracing_pipeline_features.rayTracingPipeline = VK_TRUE;
 
-	VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
-	acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-	acceleration_structure_features.accelerationStructure = VK_TRUE;
-	acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
+	// VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_structure_features = {};
+	// acceleration_structure_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+	// acceleration_structure_features.accelerationStructure = VK_TRUE;
+	// acceleration_structure_features.pNext = &ray_tracing_pipeline_features;
 
 	VkPhysicalDeviceDynamicRenderingFeaturesKHR dynamic_rendering_features = {};
 	dynamic_rendering_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
 	dynamic_rendering_features.dynamicRendering = VK_TRUE;
-	dynamic_rendering_features.pNext = &acceleration_structure_features;
+	// dynamic_rendering_features.pNext = &acceleration_structure_features;
 
 	VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
 	vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;

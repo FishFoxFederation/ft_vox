@@ -14,7 +14,7 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
 {
 	mat4 lightSpaceMatrices[SHADOW_MAP_COUNT];
-	float planeDistances[SHADOW_MAP_COUNT];
+	vec4 planeDistances[SHADOW_MAP_COUNT];
 	vec3 lightDir;
 	float farPlane;
 };
@@ -28,7 +28,7 @@ layout(location = 3) in float frag_ao;
 
 layout(location = 0) out vec4 out_color;
 
-
+int g_layer = 0;
 float compute_shadow_factor(
 	vec4 world_space_pos,
 	sampler2DArray shadowMap,
@@ -42,10 +42,8 @@ float compute_shadow_factor(
 	int layer = -1;
 	for (int i = 0; i < SHADOW_MAP_COUNT; i++)
 	{
-		if (depthValue < planeDistances[i])
+		if (depthValue < planeDistances[i].x)
 		{
-			// debugPrintfEXT("depthValue: %f, planeDistances[%d]: %f\n", depthValue, i, planeDistances[i]);
-			// debugPrintfEXT("layer: %d\n", i);
 			layer = i;
 			break;
 		}
@@ -54,6 +52,7 @@ float compute_shadow_factor(
 	{
 		layer = SHADOW_MAP_COUNT;
 	}
+	g_layer = layer;
 	vec4 fragPosLightSpace = lightSpaceMatrices[layer] * world_space_pos;
 
 	// perform perspective divide
@@ -76,7 +75,7 @@ float compute_shadow_factor(
 	}
 	else
 	{
-		bias *= 1 / (planeDistances[layer] * 0.5);
+		bias *= 1 / (planeDistances[layer].x * 0.5);
 	}
 
 	// PCF
@@ -150,39 +149,20 @@ float compute_shadow_factor(
 
 void main()
 {
-
-	// debugPrintfEXT("planeDistances: %f, %f, %f, %f, %f\n", planeDistances[0], planeDistances[1], planeDistances[2], planeDistances[3], planeDistances[4]);
-
-
 	float base_light = 1.0;
 
 	float max_ao_shadow = 0.9;
 	float ao_factor = frag_ao / 3.0;
 
-	float max_shadow_light = 0.8;
+	float max_shadow_light = 0.9;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
-	// vec3 final_color;
-	// if (shadow_factor < 0.1)
-	// {
-	// 	final_color = vec3(1.0, 0.0, 0.0);
-	// }
-	// else if (shadow_factor < 1.1)
-	// {
-	// 	final_color = vec3(0.0, 1.0, 0.0);
-	// }
-	// else if (shadow_factor < 2.1)
-	// {
-	// 	final_color = vec3(0.0, 0.0, 1.0);
-	// }
-	// else if (shadow_factor < 3.1)
-	// {
-	// 	final_color = vec3(1.0, 1.0, 0.0);
-	// }
-	// else
-	// {
-	// 	final_color = vec3(1.0, 0.0, 1.0);
-	// }
+	vec3 debug_color;
+	if (g_layer < 0.1) debug_color = vec3(1.0, 0.0, 0.0);
+	else if (g_layer < 1.1) debug_color = vec3(0.0, 1.0, 0.0);
+	else if (g_layer < 2.1) debug_color = vec3(0.0, 0.0, 1.0);
+	else if (g_layer < 3.1) debug_color = vec3(1.0, 1.0, 0.0);
+	else debug_color = vec3(1.0, 0.0, 1.0);
 
 	float light = base_light + max_shadow_light * shadow_factor - max_ao_shadow * ao_factor;
 	// float light = base_light - max_ao_shadow * ao_factor;
@@ -194,6 +174,5 @@ void main()
 		discard;
 	}
 
-	out_color = vec4(texture_color.rgb * light, texture_color.a);
-	// out_color = vec4(final_color * light, 1.0);
+	out_color = vec4(mix(texture_color.rgb, debug_color, 0.05) * light, texture_color.a);
 }

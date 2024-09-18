@@ -193,7 +193,7 @@ void RenderThread::loop()
 		for (size_t i = 0; i < vk.shadow_maps_count; i++)
 		{
 			shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
-			shadow_map_light.plane_distances[i] = (camera.far_plane - camera.near_plane) * frustum_split[i + 1];
+			shadow_map_light.plane_distances[i].x = (camera.far_plane - camera.near_plane) * frustum_split[i + 1];
 		}
 		// LOG_DEBUG("sizeof(ShadowMapLight): " << sizeof(ShadowMapLight));
 	}
@@ -1053,30 +1053,30 @@ void RenderThread::lightingPass(
 	}
 
 	{ // Draw test image
-		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
-		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-		// 	vk.test_image_descriptor.set
-		// };
+		const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+			vk.test_image_descriptor.set
+		};
 
-		// vkCmdBindDescriptorSets(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-		// 	vk.test_image_pipeline.layout,
-		// 	0,
-		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-		// 	test_image_descriptor_sets.data(),
-		// 	0,
-		// 	nullptr
-		// );
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.test_image_pipeline.layout,
+			0,
+			static_cast<uint32_t>(test_image_descriptor_sets.size()),
+			test_image_descriptor_sets.data(),
+			0,
+			nullptr
+		);
 
-		// vkCmdDraw(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	6,
-		// 	1,
-		// 	0,
-		// 	0
-		// );
+		vkCmdDraw(
+			vk.draw_command_buffers[vk.current_frame],
+			6,
+			1,
+			0,
+			0
+		);
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
