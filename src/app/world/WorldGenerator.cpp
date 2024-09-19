@@ -2,6 +2,59 @@
 
 #include <cmath>
 
+WorldGenerator::genInfo WorldGenerator::getGenInfo(int ticket_level, Chunk::genLevel old_level, glm::ivec3 chunkPos3D)
+{
+	genInfo info;
+
+	info.oldLevel = old_level;
+	if (ticket_level < TICKET_LEVEL_INACTIVE || ticket_level >= MAX_TICKET_LEVEL)
+	{
+		LOG_ERROR("Invalid ticket level: " << ticket_level);
+		throw std::runtime_error("Invalid ticket level");
+	}
+
+	switch (ticket_level)
+	{
+		case TICKET_LEVEL_INACTIVE + 1:
+		{
+			info.level = CAVE;
+			info.zoneSize = glm::ivec3(3, 3, 3);
+			break;
+		}
+		case TICKET_LEVEL_INACTIVE + 2:
+		{
+			info.level = RELIEF;
+			info.zoneSize = glm::ivec3(5, 5, 5);
+			break;
+		}
+	}
+
+	/*
+		gen level 			zone size	
+		CAVE 				3
+		RELIEF				5
+		EMPTY				NAN
+
+		if chunk is empty and we need cave level generation,
+		we need to do it on a relief sized zone because
+		if a chunk has a relief level generation then we have the garantee 
+		that all the chunks in its zone have at least the same gen level	
+	*/
+
+	//if the level difference is more than 1, then we need to change the zone size
+	if (static_cast<int>(info.oldLevel) - static_cast<int>(info.level) > 1)
+		info.zoneSize = ZONE_SIZES[static_cast<int>(info.oldLevel) - 1];
+
+	info.zoneStart = chunkPos3D;
+
+	//get the start position of the zone the chunk is in
+	info.zoneStart.x -= info.zoneStart.x % info.zoneSize.x;
+	info.zoneStart.y -= info.zoneStart.y % info.zoneSize.y;
+	info.zoneStart.z -= info.zoneStart.z % info.zoneSize.z;
+
+	return info;
+}
+
 WorldGenerator::WorldGenerator()
 : m_relief_perlin(1, 7, 1, 0.35, 2),
   m_cave_perlin(1, 4, 1, 0.5, 2)
@@ -35,7 +88,6 @@ std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const in
 			}
 		}
 	}
-	chunk->setGenerated(true);
 	return chunk;
 }
 
@@ -108,7 +160,6 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 			}
 		}
 	}
-	column->setGenerated(true);
 	return column;
 }
 
@@ -147,7 +198,6 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunk(const int & x, const int & 
 			}
 		}
 	}
-	chunk->setGenerated(true);
 	return chunk;
 }
 
@@ -254,4 +304,93 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 		return BlockID::Stone;
 
 	return BlockID::Stone;
+}
+
+void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
+{
+	using enum Chunk::genLevel;
+	if (info.level <= RELIEF && info.oldLevel > RELIEF)
+	{
+		for(size_t x = 0; x < info.zoneSize.x; x++)
+		{
+			for(size_t z = 0; z < info.zoneSize.z; z++)
+			{
+				std::shared_ptr<Chunk> chunk = chunks.at(glm::ivec3(x, 0, z));
+				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
+				{
+					for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
+					{
+						//generate the relief value for the whole chunk
+						float reliefValue = generateReliefValue(glm::ivec2(
+							blockX + x * CHUNK_X_SIZE,
+							blockZ + z * CHUNK_Z_SIZE
+						));
+
+						float riverValue = std::abs(reliefValue);
+
+						reliefValue = (reliefValue + 1) / 2;
+						reliefValue = pow(2, 10 * reliefValue - 10);
+						reliefValue *= (CHUNK_Y_SIZE - 100);
+						reliefValue += 100;
+						for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
+						{
+
+							glm::ivec3 position = glm::ivec3(
+								blockX + x * CHUNK_X_SIZE,
+								blockY,
+								blockZ + z * CHUNK_Z_SIZE
+							);
+							BlockID to_set;
+
+							{
+								//check to see wether above or below the relief value
+								if (reliefValue > position.y)
+									to_set = BlockID::Stone;
+								else if (reliefValue + 5 > position.y)
+								{
+									if (riverValue < 0.05f)
+										to_set = BlockID::Water;
+									else 
+										to_set = BlockID::Grass;
+								}
+								else
+									to_set = BlockID::Air;
+							}
+							chunk->setBlock(blockX, blockY, blockZ, to_set);
+						}
+					}
+				}
+			}
+		}
+	}
+	if (info.level <= CAVE && info.oldLevel > CAVE)
+	{
+		//generate caves
+		for(size_t x = 0; x < info.zoneSize.x; x++)
+		{
+			for(size_t z = 0; z < info.zoneSize.z; z++)
+			{
+				std::shared_ptr<Chunk> chunk = chunks.at(glm::ivec3(x, 0, z));
+				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
+				{
+					for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
+					{
+						for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
+						{
+
+							glm::ivec3 position = glm::ivec3(
+								blockX + x * CHUNK_X_SIZE,
+								blockY,
+								blockZ + z * CHUNK_Z_SIZE
+							);
+							BlockID current_block = chunk->getBlock(blockX, blockY, blockZ);
+							
+							if (current_block == BlockID::Stone && generateCaveBlock(position) == BlockID::Air)
+								chunk->setBlock(blockX, blockY, blockZ, BlockID::Stone);
+						}
+					}
+				}
+			}
+		}
+	}
 }

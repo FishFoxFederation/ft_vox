@@ -4,7 +4,7 @@ ServerWorld::ServerWorld(Server & server)
 :	World(),
 	m_server(server)
 {
-	addTicket({TICKET_LEVEL_SPAWN, glm::ivec3(0, 0, 0)});
+	addTicket({SPAWN_TICKET_LEVEL, glm::ivec3(0, 0, 0)});
 	// std::shared_ptr<Chunk> chunk;
 
 	// std::lock_guard lock(m_chunks_mutex);
@@ -44,8 +44,6 @@ void ServerWorld::update()
 	// do all chunk updates
 	updateTickets();
 
-	waitForChunkFutures();
-
 	// if player changed chunk send new chunks and update observations
 	updatePlayerPositions();
 }
@@ -69,7 +67,7 @@ void ServerWorld::savePlayerPositions()
 			//change ticket if player changed chunk
 			if (last_chunk != current_chunk)
 			{
-				Ticket next_ticket{ TICKET_LEVEL_PLAYER, current_chunk };
+				Ticket next_ticket{ PLAYER_TICKET_LEVEL, current_chunk };
 				player->player_ticket_id = changeTicket(player->player_ticket_id, next_ticket);
 			}
 		}

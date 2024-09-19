@@ -65,7 +65,7 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 		m_players.insert({CurrentPlayerId, player});
 	}
 	//create player ticket
-	Ticket ticket{ TICKET_LEVEL_PLAYER, CurrentPlayerChunkPosition };
+	Ticket ticket{ PLAYER_TICKET_LEVEL, CurrentPlayerChunkPosition };
 
 	//add ticket
 	player->player_ticket_id = addTicket(ticket);

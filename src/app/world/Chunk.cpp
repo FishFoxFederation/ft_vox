@@ -158,24 +158,20 @@ void Chunk::setMeshed(bool meshed)
 	this->meshed = meshed;
 }
 
-bool Chunk::isGenerated() const
-{
-	return gen;
-}
-
-void Chunk::setGenerated(bool gen)
-{
-	this->gen = gen;
-}
-
 int Chunk::getLoadLevel() const
 {
 	return load_level;
 }
 
+int Chunk::getHighestLoadLevel() const
+{
+	return highest_load_level;
+}
 void Chunk::setLoadLevel(const int & load_level)
 {
 	this->load_level = load_level;
+	if (this->load_level > highest_load_level)
+		highest_load_level = this->load_level;
 }
 
 int Chunk::toIndex(const int & x, const int & y, const int & z)
