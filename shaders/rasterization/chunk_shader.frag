@@ -57,8 +57,13 @@ float compute_shadow_factor(
 
 	// perform perspective divide
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-	// transform to [0,1] range
-	projCoords = projCoords * 0.5 + 0.5;
+	// transform to [0,1] range (Vulkan's Z is already in [0..1])
+	vec2 projCoordsXY = projCoords.xy * 0.5 + 0.5;
+	// keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+	if (projCoords.z > 1.0)
+	{
+		return 0.0;
+	}
 
 	// get depth of current fragment from light's perspective
 	float currentDepth = projCoords.z;
@@ -68,41 +73,49 @@ float compute_shadow_factor(
 	}
 	// calculate bias (based on depth map resolution and slope)
 	vec3 normal = normalize(frag_normal);
-	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-	if (layer == SHADOW_MAP_COUNT)
+
+	if (dot(normal, lightDir) < 0.0)
 	{
-		bias *= 1 / (farPlane * 0.5);
+		return 1.0;
 	}
-	else
-	{
-		bias *= 1 / (planeDistances[layer].x * 0.5);
-	}
+
+	// float cosTheta = clamp(dot(normal, lightDir), 0.0, 1.0);
+	// float bias = 0.0005 * tan(acos(cosTheta));
+	// bias = clamp(bias, 0.0, 0.01);
+
+	// float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+	// if (layer == SHADOW_MAP_COUNT)
+	// {
+	// 	bias *= 1 / (farPlane * 0.5);
+	// }
+	// else
+	// {
+	// 	bias *= 1 / (planeDistances[layer].x * 0.5);
+	// }
+	// bias = 0.00005;
+	// currentDepth -= bias;
 
 	// PCF
 	float shadow = 0.0;
+	float sampleCount = 0.0;
 	vec2 texelSize = 1.0 / vec2(textureSize(shadowMap, 0));
 	for(int x = -1; x <= 1; ++x)
 	{
 		for(int y = -1; y <= 1; ++y)
 		{
-			float pcfDepth = texture(
-						shadowMap,
-						vec3(projCoords.xy + vec2(x, y) * texelSize,
-						layer)
-						).r;
-			shadow += (currentDepth - bias) > pcfDepth ? 1.0 : 0.0;
+			vec3 texCoord = vec3(projCoordsXY + vec2(x, y) * texelSize, layer);
+			if (texCoord.x < 0.0 || texCoord.y < 0.0 || texCoord.x > 1.0 || texCoord.y > 1.0)
+			{
+				continue;
+			}
+			const float pcfDepth = texture(shadowMap, texCoord).r;
+			shadow += currentDepth > pcfDepth ? 1.0 : 0.0;
+			sampleCount += 1.0;
 		}
 	}
-	shadow /= 9.0;
 
-	// keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
-	if(projCoords.z > 1.0)
-	{
-		shadow = 0.0;
-	}
-
-	return shadow;
-	// return layer;
+	// 1.0 is fully in shadow, 0.0 is fully lit
+	return shadow / sampleCount;
 
 	// Compute the light space position in NDC
 	// vec3 light_space_ndc = light_space_pos.xyz /= light_space_pos.w;
@@ -154,7 +167,7 @@ void main()
 	float max_ao_shadow = 0.9;
 	float ao_factor = frag_ao / 3.0;
 
-	float max_shadow_light = 0.9;
+	float max_shadow = 0.9;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
 	vec3 debug_color;
@@ -164,8 +177,9 @@ void main()
 	else if (g_layer < 3.1) debug_color = vec3(1.0, 1.0, 0.0);
 	else debug_color = vec3(1.0, 0.0, 1.0);
 
-	float light = base_light + max_shadow_light * shadow_factor - max_ao_shadow * ao_factor;
+	// float light = base_light + max_shadow * shadow_factor - max_ao_shadow * ao_factor;
 	// float light = base_light - max_ao_shadow * ao_factor;
+	float light = base_light - max_shadow * shadow_factor;
 
 	vec4 texture_color = texture(tex, frag_tex_coord);
 
@@ -174,5 +188,5 @@ void main()
 		discard;
 	}
 
-	out_color = vec4(mix(texture_color.rgb, debug_color, 0.05) * light, texture_color.a);
+	out_color = vec4(mix(texture_color.rgb, debug_color, 0.0) * light, texture_color.a);
 }

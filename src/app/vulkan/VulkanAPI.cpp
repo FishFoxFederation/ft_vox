@@ -1772,9 +1772,9 @@ void VulkanAPI::createPipelines()
 		};
 		pipeline_info.attribute_descriptions = attribute_descriptions;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
-		// pipeline_info.depth_bias_enable = VK_TRUE;
-		// pipeline_info.depth_bias_constant_factor = 0.0f;
-		// pipeline_info.depth_bias_slope_factor = 0.1f;
+		pipeline_info.depth_bias_enable = VK_TRUE;
+		pipeline_info.depth_bias_constant_factor = 0.005f;
+		pipeline_info.depth_bias_slope_factor = 0.1f;
 		pipeline_info.descriptor_set_layouts = {
 			light_view_proj_descriptor.layout
 		};
