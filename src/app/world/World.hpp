@@ -43,6 +43,13 @@ public:
 	 */
 	static glm::vec3 	getChunkPosition(const glm::vec3 & position);
 
+	/**
+	 * @brief Get the Chunk object
+	 * 
+	 * @param position 
+	 * @retval std::shared_ptr<Chunk> if the chunk exists
+	 * @retval nullptr if the chunk does not exist
+	 */
 	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position) const;
 	void 					insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
 protected:
@@ -61,6 +68,15 @@ protected:
 
 	WorldGenerator										m_world_generator;
 
+	/**
+	 * @brief Get a chunk ptr without locking the chunks mutex
+	 * 
+	 * @warning you MUST lock the chunks mutex before calling this function
+	 * @param position 
+	 * @retval std::shared_ptr<Chunk> if the chunk exists
+	 * @retval nullptr if the chunk does not exist
+	 */
+	std::shared_ptr<Chunk> getChunkNoLock(const glm::ivec3 & position) const;
 	/*************************************
 	 *  FUTURES
 	 *************************************/

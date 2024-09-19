@@ -27,11 +27,14 @@ std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position) const
 {
 	std::lock_guard lock(m_chunks_mutex);
 	LockMark(m_chunks_mutex);
+	getChunkNoLock(position);
+}
+
+std::shared_ptr<Chunk> World::getChunkNoLock(const glm::ivec3 & position) const
+{
 	auto it = m_chunks.find(position);
 	if (it != m_chunks.end())
-	{
 		return it->second;
-	}
 	return nullptr;
 }
 

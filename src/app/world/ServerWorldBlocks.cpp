@@ -246,26 +246,44 @@ void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
 	}
 }
 
-uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D)
+ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 {
-	std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
-	if (chunk == nullptr)
+	std::lock_guard lock(m_chunks_mutex);
+	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> chunks;
+	for(int x = 0; x < zoneSize.x; x++)
 	{
-		chunk = std::make_shared<Chunk>(chunkPos3D);
-		std::lock_guard lock(m_chunks_mutex);
-		m_chunks.insert({chunkPos3D, chunk});
-		chunk->status.lock();
-		LOG_INFO("GenChunk: Chunk " << chunkPos3D.x << " " << chunkPos3D.z << " is nullptr");
+		for(int y = 0; y < zoneSize.z; y++)
+		{
+			glm::ivec3 chunk_position = zoneStart + glm::ivec3(x, 0, y);
+			std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
+			if (chunk == nullptr)
+			{
+				chunk = std::make_shared<Chunk>(chunk_position);
+				m_chunks.insert({chunk_position, chunk});
+				chunk->status.lock();
+			}
+			else
+				chunk->status.lock();
+			chunks.insert({chunk_position, chunk});
+		}
 	}
-	else
-		chunk->status.lock();
+	return chunks;
+}
 
-	assert(chunk->isGenerated() == false);
-	chunk->setGenerated(true);
-	return m_threadPool.submit([this, chunkPos3D, chunk] ()
+uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, int load_level, int current_level)
+{
+	ChunkMap chunksToGen;
+	WorldGenerator::genInfo info = m_world_generator.getGenInfo(load_level, current_level, chunkPos3D);
+
+	chunksToGen = getChunkZone(info.zoneStart, info.zoneSize);
+
+	return m_threadPool.submit([this, info, chunksToGen] () mutable
 	{
 		ZoneScopedN("Generate Chunk");
-		m_world_generator.generateChunkColumn(chunkPos3D.x, chunkPos3D.z, chunk);
-		chunk->status.unlock();
+		// m_world_generator.generateChunkColumn(chunkPos3D.x, chunkPos3D.z, chunk);
+		m_world_generator.generate(info, chunksToGen);
+
+		for (auto & [chunk_position, chunk] : chunksToGen)
+			chunk->status.unlock();
 	});
 }

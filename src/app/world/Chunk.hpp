@@ -24,6 +24,12 @@ class Chunk
 public:
 	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
 	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
+	enum class genLevel : int
+	{
+		CAVE,
+		RELIEF,
+		EMPTY,
+	};	
 
 	Chunk(glm::ivec3 position);
 	Chunk(const glm::ivec3 & position, const BlockArray & blocks);
@@ -62,10 +68,8 @@ public:
 	bool				isMeshed() const;
 	void				setMeshed(bool meshed);
 
-	bool 				isGenerated() const;
-	void 				setGenerated(bool gen);
-
 	int					getLoadLevel() const;
+	int					getHighestLoadLevel() const;
 	void				setLoadLevel(const int & load_level);
 
 	static  int			toIndex(const int & x, const int & y, const int & z);
@@ -78,10 +82,13 @@ public:
 	std::unordered_set<uint64_t>	observing_player_ids;
 private:
 	bool 		meshed = false;
-	bool 		gen = false;
 	glm::ivec3	position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
 	LightArray	m_light;
 	int			load_level = 44;
+	int			highest_load_level = 0;
+	genLevel	m_gen_level = genLevel::EMPTY;
 };
+
+typedef std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> ChunkMap;
