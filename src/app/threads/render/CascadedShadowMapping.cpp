@@ -56,11 +56,9 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		}
 		sub_frustum_center /= static_cast<float>(frustum_corners.size());
 
-		// LOG_DEBUG("sub_frustum_center: " << sub_frustum_center.x << " " << sub_frustum_center.y << " " << sub_frustum_center.z);
-
 
 		const glm::mat4 light_view = glm::lookAt(
-			sub_frustum_center - light_dir,
+			sub_frustum_center + light_dir,
 			sub_frustum_center,
 			glm::vec3(0.0f, 1.0f, 0.0f)
 		);
@@ -83,7 +81,7 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 		}
 
 		// Tune this parameter according to the scene
-		constexpr float zMult = 100.0f;
+		constexpr float zMult = 10.0f;
 		if (minZ < 0)
 		{
 			minZ *= zMult;

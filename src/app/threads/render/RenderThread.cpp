@@ -174,10 +174,11 @@ void RenderThread::loop()
 		use_raytracing = DebugGui::use_raytracing;
 
 
-		std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.4f, 0.6f, 1.0f};
+		std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.4f, 0.6f, 1.0f };
+		// std::vector<float> frustum_split = { 0.0f, 1.0f, 1.0f };
 		if (frustum_split.size() != vk.shadow_maps_count + 1)
 		{
-			LOG_ERROR("fruatume_split.size() != vk.shadow_maps_count + 1");
+			LOG_ERROR("frustume_split.size() != vk.shadow_maps_count + 1");
 		}
 		shadow_map_light.light_dir = glm::normalize(sun_position - camera.position);
 		shadow_map_light.far_plane = camera.far_plane;
@@ -195,14 +196,13 @@ void RenderThread::loop()
 			shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
 			shadow_map_light.plane_distances[i].x = (camera.far_plane - camera.near_plane) * frustum_split[i + 1];
 		}
-		// LOG_DEBUG("sizeof(ShadowMapLight): " << sizeof(ShadowMapLight));
 	}
 
-	//############################################################################################################
-	//					 																						 #
-	//								  Start the vulkan rendering process here								  #
-	//					 																						 #
-	//############################################################################################################
+	//###########################################################################################################
+	//																											#
+	//								  Start the vulkan rendering process here									#
+	//																											#
+	//###########################################################################################################
 
 	std::lock_guard lock(vk.global_mutex);
 
@@ -1053,30 +1053,30 @@ void RenderThread::lightingPass(
 	}
 
 	{ // Draw test image
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
-		const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-			vk.test_image_descriptor.set
-		};
+		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+		// 	vk.test_image_descriptor.set
+		// };
 
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.test_image_pipeline.layout,
-			0,
-			static_cast<uint32_t>(test_image_descriptor_sets.size()),
-			test_image_descriptor_sets.data(),
-			0,
-			nullptr
-		);
+		// vkCmdBindDescriptorSets(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
+		// 	vk.test_image_pipeline.layout,
+		// 	0,
+		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
+		// 	test_image_descriptor_sets.data(),
+		// 	0,
+		// 	nullptr
+		// );
 
-		vkCmdDraw(
-			vk.draw_command_buffers[vk.current_frame],
-			6,
-			1,
-			0,
-			0
-		);
+		// vkCmdDraw(
+		// 	vk.draw_command_buffers[vk.current_frame],
+		// 	6,
+		// 	1,
+		// 	0,
+		// 	0
+		// );
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
