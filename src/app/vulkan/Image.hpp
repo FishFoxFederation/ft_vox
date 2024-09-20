@@ -33,6 +33,7 @@ public:
 		bool create_sampler = false;
 		VkFilter sampler_filter = VK_FILTER_LINEAR;
 		VkSamplerAddressMode sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		VkBool32 sampler_anisotropy_enable = VK_TRUE;
 
 		bool is_cube_map = false;
 	};

@@ -174,27 +174,30 @@ void RenderThread::loop()
 		use_raytracing = DebugGui::use_raytracing;
 
 
-		std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.4f, 0.6f, 1.0f };
+		std::vector<float> frustum_split = { 0.0f, 0.01f, 0.1f, 0.3f, 0.6f, 1.0f };
+		std::vector<float> far_plane_distances;
 		// std::vector<float> frustum_split = { 0.0f, 1.0f, 1.0f };
 		if (frustum_split.size() != vk.shadow_maps_count + 1)
 		{
 			LOG_ERROR("frustume_split.size() != vk.shadow_maps_count + 1");
 		}
 		shadow_map_light.light_dir = glm::normalize(sun_position - camera.position);
-		shadow_map_light.far_plane = camera.far_plane;
+		shadow_map_light.blend_distance = 5.0f;
 		std::vector<glm::mat4> light_view_proj_matrices = getCSMLightViewProjMatrices(
 			shadow_map_light.light_dir,
 			frustum_split,
+			shadow_map_light.blend_distance,
 			camera.view,
 			camera.fov,
 			aspect_ratio,
 			camera.near_plane,
-			camera.far_plane
+			camera.far_plane,
+			far_plane_distances
 		);
 		for (size_t i = 0; i < vk.shadow_maps_count; i++)
 		{
 			shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
-			shadow_map_light.plane_distances[i].x = (camera.far_plane - camera.near_plane) * frustum_split[i + 1];
+			shadow_map_light.plane_distances[i].x = far_plane_distances[i];
 		}
 	}
 
