@@ -171,7 +171,7 @@ struct ShadowMapLight
 	// TODO: this is vec4 because of alignment, but it should be float
 	glm::vec4 plane_distances[5];
 	glm::vec3 light_dir;
-	float far_plane;
+	float blend_distance;
 };
 
 struct GuiTextureData

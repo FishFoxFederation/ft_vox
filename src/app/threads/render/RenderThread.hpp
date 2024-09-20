@@ -121,11 +121,13 @@ private:
 	std::vector<glm::mat4> getCSMLightViewProjMatrices(
 		const glm::vec3 & light_dir,
 		const std::vector<float> & split,
+		const float blend_distance,
 		const glm::mat4 & camera_view,
 		const float cam_fov,
 		const float cam_ratio,
 		const float cam_near_plane,
-		const float cam_far_plane
+		const float cam_far_plane,
+		std::vector<float> & far_plane_distances
 	);
 
 };

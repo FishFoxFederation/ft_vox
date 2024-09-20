@@ -937,6 +937,8 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	depth_attachement_info.create_sampler = true;
 	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+	depth_attachement_info.sampler_filter = VK_FILTER_LINEAR;
+	depth_attachement_info.sampler_anisotropy_enable = VK_FALSE;
 	depth_attachement_info.array_layers = shadow_maps_count;
 
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);

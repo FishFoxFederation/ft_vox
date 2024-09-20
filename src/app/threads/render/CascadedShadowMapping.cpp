@@ -29,11 +29,13 @@ static std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4 proj, 
 std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 	const glm::vec3 & light_dir,
 	const std::vector<float> & split,
+	const float blend_distance,
 	const glm::mat4 & camera_view,
 	const float cam_fov,
 	const float cam_ratio,
 	const float cam_near_plane,
-	const float cam_far_plane
+	const float cam_far_plane,
+	std::vector<float> & far_plane_distances
 )
 {
 	const float near_far_diff = cam_far_plane - cam_near_plane;
@@ -43,6 +45,11 @@ std::vector<glm::mat4> RenderThread::getCSMLightViewProjMatrices(
 	{
 		float sub_frustum_near_plane = cam_near_plane + near_far_diff * split[i];
 		float sub_frustum_far_plane = cam_near_plane + near_far_diff * split[i + 1];
+		if (i + 2 < split.size()) // Extend the far plane (except for the last cascade)
+		{
+			sub_frustum_far_plane += blend_distance;
+		}
+		far_plane_distances.push_back(sub_frustum_far_plane);
 
 		std::vector<glm::vec4> frustum_corners = getFrustumCornersWorldSpace(
 			glm::perspective(cam_fov, cam_ratio, sub_frustum_near_plane, sub_frustum_far_plane),

@@ -438,7 +438,7 @@ Image::Image(
 		sampler_create_info.addressModeU = create_info.sampler_address_mode;
 		sampler_create_info.addressModeV = create_info.sampler_address_mode;
 		sampler_create_info.addressModeW = create_info.sampler_address_mode;
-		sampler_create_info.anisotropyEnable = VK_TRUE;
+		sampler_create_info.anisotropyEnable = create_info.sampler_anisotropy_enable;
 		sampler_create_info.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
 		sampler_create_info.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
 		sampler_create_info.unnormalizedCoordinates = VK_FALSE;
