@@ -4,7 +4,6 @@
 #extension GL_EXT_scalar_block_layout : enable
 
 #define SHADOW_MAP_COUNT 8
-// #define SHADOW_MAP_SIZE 4096
 
 layout(set = 0, binding = 0) uniform CameraMatrices
 {
@@ -27,16 +26,6 @@ layout(location = 2) in vec4 frag_pos_world_space;
 layout(location = 3) in float frag_ao;
 
 layout(location = 0) out vec4 out_color;
-
-vec3 debugColor(int layer)
-{
-	if (layer == 0) return vec3(1.0, 0.0, 0.0);
-	if (layer == 1) return vec3(0.0, 1.0, 0.0);
-	if (layer == 2) return vec3(0.0, 0.0, 1.0);
-	if (layer == 3) return vec3(1.0, 1.0, 0.0);
-	if (layer == 4) return vec3(1.0, 0.0, 1.0);
-	return vec3(0.0, 1.0, 1.0);
-}
 
 float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int layer)
 {
@@ -100,9 +89,6 @@ float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int laye
 	return shadow / count;
 }
 
-int g_layer = 0;
-float g_blendFactor = 0.0;
-
 float compute_shadow_factor(
 	vec4 world_space_pos,
 	sampler2DArray shadowMap,
@@ -123,7 +109,6 @@ float compute_shadow_factor(
 			if (i < SHADOW_MAP_COUNT - 1 && depthValue > planeDistances[i].x - blendDistance)
 			{
 				blendFactor = (blendDistance + depthValue - planeDistances[i].x) / blendDistance;
-				g_blendFactor = blendFactor;
 				blend = true;
 			}
 			break;
@@ -133,7 +118,6 @@ float compute_shadow_factor(
 	{
 		layer = SHADOW_MAP_COUNT;
 	}
-	g_layer = layer;
 
 	if (blend)
 	{
@@ -155,8 +139,6 @@ void main()
 	float max_shadow = 0.5;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
-	vec3 debug_color = mix(debugColor(g_layer), debugColor(g_layer + 1), g_blendFactor);
-
 	float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
 	// float light = base_light - max_ao_shadow * ao_factor;
 	// float light = base_light - max_shadow * shadow_factor;
@@ -168,5 +150,5 @@ void main()
 		discard;
 	}
 
-	out_color = vec4(mix(texture_color.rgb, debug_color, 0.0) * light, texture_color.a);
+	out_color = vec4(texture_color.rgb * light, texture_color.a);
 }
