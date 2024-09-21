@@ -195,9 +195,6 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 			m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
 			m_vulkanAPI.destroyMesh(old_mesh_data.id);
 			m_vulkanAPI.destroyMesh(old_mesh_data.water_id);
-
-			//for raytracing
-			// m_vulkanAPI.removeMeshFromScene(mesh_id);
 		}
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
@@ -316,12 +313,6 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 			});
 			chunk->setMeshID(mesh_scene_id);
-
-			//for raytracing
-			// m_vulkanAPI.addMeshToScene(
-			// 	mesh_id,
-			// 	Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
-			// );
 		}
 
 
@@ -332,9 +323,6 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 			m_worldScene.chunk_mesh_list.erase(old_mesh_scene_id);
 			m_vulkanAPI.destroyMesh(old_mesh_data.id);
 			m_vulkanAPI.destroyMesh(old_mesh_data.water_id);
-
-			//for raytracing
-			// m_vulkanAPI.removeMeshFromScene(mesh_id);
 		}
 
 		mesh_data.unlock();

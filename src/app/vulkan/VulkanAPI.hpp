@@ -167,9 +167,9 @@ struct EntityMatrices
 
 struct ShadowMapLight
 {
-	glm::mat4 view_proj[5];
+	glm::mat4 view_proj[8];
 	// TODO: this is vec4 because of alignment, but it should be float
-	glm::vec4 plane_distances[5];
+	glm::vec4 plane_distances[8];
 	glm::vec3 light_dir;
 	float blend_distance;
 };
@@ -277,9 +277,6 @@ public:
 	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
 
-	void addMeshToScene(const uint64_t mesh_id, const glm::mat4 & transform = glm::mat4(1.0f));
-	void removeMeshFromScene(const uint64_t mesh_id);
-
 	void drawMesh(
 		const Pipeline & pipeline,
 		const uint64_t mesh_id,
@@ -336,7 +333,7 @@ public:
 	uint32_t current_image_index = 0;
 
 	// if you modify this, you need to modify the shader and ShadowMapLight struct
-	const uint shadow_maps_count = 5;
+	const uint shadow_maps_count = 8;
 	const uint shadow_map_size = 4096;
 
 	Image output_attachement;
@@ -410,96 +407,6 @@ public:
 	uint64_t player_right_arm_mesh_id;
 	uint64_t player_left_arm_mesh_id;
 
-	// Ray tracing
-	VkPhysicalDeviceRayTracingPipelinePropertiesKHR ray_tracing_properties;
-	VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_structure_properties;
-
-	struct BottomLevelAS
-	{
-		bool is_used = false;
-		VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
-		VkBuffer buffer = VK_NULL_HANDLE;
-		VkDeviceMemory memory = VK_NULL_HANDLE;
-		VkDeviceAddress address = 0;
-
-		VkBuffer transform_buffer = VK_NULL_HANDLE;
-		VkDeviceMemory transform_buffer_memory = VK_NULL_HANDLE;
-		VkDeviceAddress transform_address = 0;
-		void * transform_mapped_memory = nullptr;
-
-		uint64_t mesh_id = 0;
-		uint32_t instance_custom_index = 0;
-	};
-
-	std::vector<BottomLevelAS> blas_list;
-	uint32_t blas_count = 0;
-
-	struct InstanceData
-	{
-		bool is_used = false;
-		glm::mat4 transform = glm::mat4(1.0f);
-		uint64_t blas_address = 0;
-		uint32_t custom_index = 0;
-
-		VkBuffer buffer = VK_NULL_HANDLE;
-		VkDeviceMemory memory = VK_NULL_HANDLE;
-		VkDeviceAddress address = 0;
-		void * mapped_memory = nullptr;
-	};
-
-	std::vector<InstanceData> instance_list;
-	uint32_t instance_count = 0;
-
-	VkAccelerationStructureKHR tlas = VK_NULL_HANDLE;
-	VkBuffer tlas_buffer = VK_NULL_HANDLE;
-	VkDeviceMemory tlas_buffer_memory = VK_NULL_HANDLE;
-
-	struct RTMeshData
-	{
-		uint64_t vertex_buffer_address = 0;
-		uint64_t index_buffer_address = 0;
-	};
-
-	VkBuffer rt_mesh_data_buffer = VK_NULL_HANDLE;
-	VkDeviceMemory rt_mesh_data_buffer_memory = VK_NULL_HANDLE;
-	VkDeviceSize rt_mesh_data_buffer_size = 0;
-	uint32_t rt_mesh_data_buffer_count = 0;
-
-	VkImage rt_lighting_image;
-	VkDeviceMemory rt_lighting_image_memory;
-	VkImageView rt_lighting_image_view;
-	uint32_t rt_lighting_image_width;
-	uint32_t rt_lighting_image_height;
-
-	VkImage rt_shadow_image;
-	VkDeviceMemory rt_shadow_image_memory;
-	VkImageView rt_shadow_image_view;
-	uint32_t rt_shadow_image_width;
-	uint32_t rt_shadow_image_height;
-
-	VkImage rt_output_image;
-	VkDeviceMemory rt_output_image_memory;
-	VkImageView rt_output_image_view;
-	uint32_t rt_output_image_width;
-	uint32_t rt_output_image_height;
-
-	Descriptor rt_lighting_shadow_image_descriptor;
-	Descriptor rt_output_image_descriptor;
-	Descriptor rt_objects_descriptor;
-
-	VkPipelineLayout rt_pipeline_layout;
-	VkPipeline rt_pipeline;
-
-	VkBuffer rt_sbt_buffer;
-	VkDeviceMemory rt_sbt_buffer_memory;
-	VkStridedDeviceAddressRegionKHR rt_sbt_rgen_region = {};
-	VkStridedDeviceAddressRegionKHR rt_sbt_miss_region = {};
-	VkStridedDeviceAddressRegionKHR rt_sbt_hit_region = {};
-	VkStridedDeviceAddressRegionKHR rt_sbt_call_region = {};
-
-	VkPipeline compute_pipeline;
-	VkPipelineLayout compute_pipeline_layout;
-
 
 	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
 
@@ -513,16 +420,6 @@ public:
 	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
 	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
 
-	PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
-	PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;
-	PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR;
-	PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR;
-	PFN_vkGetAccelerationStructureDeviceAddressKHR vkGetAccelerationStructureDeviceAddressKHR;
-	PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
-	PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
-	PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
-	PFN_vkCmdTraceRaysKHR vkCmdTraceRaysKHR;
-
 
 private:
 
@@ -534,10 +431,6 @@ private:
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
 		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
 		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
-		// VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
-		// VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
-		// VK_KHR_RAY_QUERY_EXTENSION_NAME,
-		// VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
 		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
 		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
 		VK_KHR_8BIT_STORAGE_EXTENSION_NAME,
@@ -599,34 +492,6 @@ private:
 	void createMeshes();
 	void destroyMeshes();
 
-	void setupRayTracing();
-	void destroyRayTracing();
-	void handleResizeRT();
-	void getRayTracingProperties();
-	int createBottomLevelAS(uint64_t mesh_id);
-	void destroyBottomLevelAS(BottomLevelAS & blas);
-	int createInstance(const BottomLevelAS & blas, const glm::mat4 & transform);
-	void destroyInstance(InstanceData & instance);
-	void createMeshDataBuffer();
-	void createTopLevelAS(const std::vector<InstanceData> & instance_list);
-	void createRayTracingImages();
-	void createRayTracingDescriptor();
-	void updateRTImagesDescriptor();
-	void updateRTObjectsDescriptor();
-	void createRayTracingPipeline();
-	void createComputePipeline();
-	void createRayTracingShaderBindingTable();
-	std::vector<char> readFile(const std::string & filename);
-	VkShaderModule createShaderModule(const std::vector<char> & code);
-	void addMeshToTopLevelAS(
-		const uint64_t mesh_id,
-		const glm::mat4 & transform = glm::mat4(1.0f)
-	);
-	void removeMeshFromTopLevelAS(const uint64_t mesh_id);
-	VkTransformMatrixKHR glmToVkTransformMatrix(const glm::mat4 & matrix);
-	void updateInstanceTransform(const uint32_t instance_id, const glm::mat4 & transform);
-
-
 
 	void setupImgui();
 	void destroyImGuiTexture(ImGuiTexture & imgui_texture);
@@ -637,7 +502,6 @@ private:
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);
 
-	VkDeviceAddress getBufferDeviceAddress(VkBuffer buffer);
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat> & candidates,
 		VkImageTiling tiling,

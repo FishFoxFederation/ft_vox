@@ -171,10 +171,8 @@ void RenderThread::loop()
 		atmosphere_params.n_samples = DebugGui::n_samples;
 		atmosphere_params.n_light_samples = DebugGui::n_light_samples;
 
-		use_raytracing = DebugGui::use_raytracing;
 
-
-		std::vector<float> frustum_split = { 0.0f, 0.01f, 0.1f, 0.3f, 0.6f, 1.0f };
+		std::vector<float> frustum_split = { 0.0f, 0.01f, 0.05f, 0.1f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f };
 		std::vector<float> far_plane_distances;
 		// std::vector<float> frustum_split = { 0.0f, 1.0f, 1.0f };
 		if (frustum_split.size() != vk.shadow_maps_count + 1)
@@ -248,15 +246,8 @@ void RenderThread::loop()
 	memcpy(vk.light_mat_ubo.mapped_memory[vk.current_frame], &shadow_map_light, sizeof(shadow_map_light));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
-	if (use_raytracing)
-	{
-		raytrace();
-	}
-	else
-	{
-		shadowPass(chunk_meshes);
-		lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
-	}
+	shadowPass(chunk_meshes);
+	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
 
 	TracyVkCollect(vk.ctx, vk.draw_command_buffers[vk.current_frame]);
 
@@ -273,86 +264,12 @@ void RenderThread::loop()
 	render_submit_info.pSignalSemaphores = &vk.main_render_finished_semaphores[vk.current_frame];
 
 	//###########################################################################################################
-	//					 																						#
-	//										Raytracing shading with compute										#
-	//					 																						#
-	//###########################################################################################################
-
-	if (use_raytracing)
-	{
-		vkResetCommandBuffer(vk.compute_command_buffers[vk.current_frame], 0);
-
-		VkCommandBufferBeginInfo compute_begin_info = {};
-		compute_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-		VK_CHECK(
-			vkBeginCommandBuffer(vk.compute_command_buffers[vk.current_frame], &compute_begin_info),
-			"Failed to begin recording compute command buffer"
-		);
-
-		vkCmdBindPipeline(vk.compute_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_COMPUTE, vk.compute_pipeline);
-
-		const std::vector<VkDescriptorSet> compute_descriptor_sets = {
-			vk.rt_lighting_shadow_image_descriptor.sets[vk.current_frame],
-			vk.rt_output_image_descriptor.sets[vk.current_frame]
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.compute_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_COMPUTE,
-			vk.compute_pipeline_layout,
-			0,
-			static_cast<uint32_t>(compute_descriptor_sets.size()),
-			compute_descriptor_sets.data(),
-			0,
-			nullptr
-		);
-
-		vkCmdDispatch(
-			vk.compute_command_buffers[vk.current_frame],
-			vk.color_attachement.extent2D.width / 16,
-			vk.color_attachement.extent2D.height / 16,
-			1
-		);
-
-		VK_CHECK(
-			vkEndCommandBuffer(vk.compute_command_buffers[vk.current_frame]),
-			"Failed to record compute command buffer"
-		);
-	}
-
-	VkSubmitInfo compute_submit_info = {};
-	compute_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	compute_submit_info.commandBufferCount = 1;
-	compute_submit_info.pCommandBuffers = &vk.compute_command_buffers[vk.current_frame];
-
-	const std::array<VkSemaphore, 1> compute_wait_semaphores = {
-		vk.main_render_finished_semaphores[vk.current_frame]
-	};
-	const std::array<VkPipelineStageFlags, 1> compute_wait_stages = {
-		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-	};
-	compute_submit_info.waitSemaphoreCount = static_cast<uint32_t>(compute_wait_semaphores.size());
-	compute_submit_info.pWaitSemaphores = compute_wait_semaphores.data();
-	compute_submit_info.pWaitDstStageMask = compute_wait_stages.data();
-
-	compute_submit_info.signalSemaphoreCount = 1;
-	compute_submit_info.pSignalSemaphores = &vk.compute_finished_semaphores[vk.current_frame];
-
-	//###########################################################################################################
 	//																											#
 	//						Copy the color image attachment to the swap chain image with blit					#
 	//																											#
 	//###########################################################################################################
 
-	if (use_raytracing)
-	{
-		copyToSwapchainRT();
-	}
-	else
-	{
-		copyToSwapchain();
-	}
+	copyToSwapchain();
 
 	VkSubmitInfo copy_submit_info = {};
 	copy_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -367,11 +284,6 @@ void RenderThread::loop()
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
 		VK_PIPELINE_STAGE_TRANSFER_BIT
 	};
-	if (use_raytracing)
-	{
-		copy_wait_semaphores[1] = vk.compute_finished_semaphores[vk.current_frame];
-		copy_wait_stages[1] = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-	}
 	copy_submit_info.waitSemaphoreCount = static_cast<uint32_t>(copy_wait_semaphores.size());
 	copy_submit_info.pWaitSemaphores = copy_wait_semaphores.data();
 	copy_submit_info.pWaitDstStageMask = copy_wait_stages.data();
@@ -407,14 +319,7 @@ void RenderThread::loop()
 
 
 	std::vector<VkSubmitInfo> submit_infos;
-	if (use_raytracing)
-	{
-		submit_infos = { render_submit_info, compute_submit_info, copy_submit_info, imgui_submit_info };
-	}
-	else
-	{
-		submit_infos = { render_submit_info, copy_submit_info, imgui_submit_info };
-	}
+	submit_infos = { render_submit_info, copy_submit_info, imgui_submit_info };
 
 	VK_CHECK(
 		vkQueueSubmit(vk.graphics_queue, static_cast<uint32_t>(submit_infos.size()), submit_infos.data(), vk.in_flight_fences[vk.current_frame]),
@@ -1190,117 +1095,6 @@ void RenderThread::copyToSwapchain()
 	);
 }
 
-void RenderThread::copyToSwapchainRT()
-{
-	ZoneScoped;
-
-	// Acquire the next swap chain image
-	VkResult result = vkAcquireNextImageKHR(
-		vk.device,
-		vk.swapchain.swapchain,
-		std::numeric_limits<uint64_t>::max(),
-		vk.image_available_semaphores[vk.current_frame],
-		VK_NULL_HANDLE,
-		&vk.current_image_index
-	);
-
-	if (result == VK_ERROR_OUT_OF_DATE_KHR)
-	{
-		vk.recreateSwapChain(vk.window);
-		return;
-	}
-	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-	{
-		throw std::runtime_error("Failed to acquire swap chain image");
-	}
-
-
-	// Copy the color image to the swap chain image with blit
-	vkResetCommandBuffer(vk.copy_command_buffers[vk.current_frame], 0);
-
-	VkCommandBufferBeginInfo copy_begin_info = {};
-	copy_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-	VK_CHECK(
-		vkBeginCommandBuffer(vk.copy_command_buffers[vk.current_frame], &copy_begin_info),
-		"Failed to begin recording copy command buffer"
-	);
-
-	vk.setImageLayout(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.swapchain.images[vk.current_image_index],
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	vk.setImageLayout(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	VkImageBlit blit = {};
-	blit.srcOffsets[0] = { 0, 0, 0 };
-	blit.srcOffsets[1] = {
-		static_cast<int32_t>(vk.rt_output_image_width),
-		static_cast<int32_t>(vk.rt_output_image_height),
-		1
-	};
-	blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	blit.srcSubresource.mipLevel = 0;
-	blit.srcSubresource.baseArrayLayer = 0;
-	blit.srcSubresource.layerCount = 1;
-	blit.dstOffsets[0] = { 0, 0, 0 };
-	blit.dstOffsets[1] = {
-		static_cast<int32_t>(vk.swapchain.extent.width),
-		static_cast<int32_t>(vk.swapchain.extent.height),
-		1
-	};
-	blit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-	blit.dstSubresource.mipLevel = 0;
-	blit.dstSubresource.baseArrayLayer = 0;
-	blit.dstSubresource.layerCount = 1;
-
-	vkCmdBlitImage(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		vk.swapchain.images[vk.current_image_index],
-		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-		1,
-		&blit,
-		VK_FILTER_LINEAR
-	);
-
-	vk.setImageLayout(
-		vk.copy_command_buffers[vk.current_frame],
-		vk.rt_output_image,
-		VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-		VK_IMAGE_LAYOUT_GENERAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TRANSFER_BIT,
-		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-	);
-
-	VK_CHECK(
-		vkEndCommandBuffer(vk.copy_command_buffers[vk.current_frame]),
-		"Failed to record copy command buffer"
-	);
-}
-
 void RenderThread::drawDebugGui()
 {
 	ZoneScoped;
@@ -1396,48 +1190,5 @@ void RenderThread::drawDebugGui()
 	VK_CHECK(
 		vkEndCommandBuffer(vk.imgui_command_buffers[vk.current_frame]),
 		"Failed to record imgui command buffer"
-	);
-}
-
-void RenderThread::raytrace()
-{
-	ZoneScoped;
-	TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Raytrace");
-
-	if (vk.tlas == VK_NULL_HANDLE)
-	{
-		return;
-	}
-
-	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_RAY_TRACING_NV, vk.rt_pipeline);
-
-	std::vector<VkDescriptorSet> rt_descriptor_sets = {
-		vk.rt_lighting_shadow_image_descriptor.sets[vk.current_frame],
-		vk.rt_objects_descriptor.sets[vk.current_frame],
-		vk.camera_descriptor.sets[vk.current_frame],
-		vk.block_textures_descriptor.set,
-		vk.atmosphere_descriptor.sets[vk.current_frame],
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_RAY_TRACING_NV,
-		vk.rt_pipeline_layout,
-		0,
-		static_cast<uint32_t>(rt_descriptor_sets.size()),
-		rt_descriptor_sets.data(),
-		0,
-		nullptr
-	);
-
-	vk.vkCmdTraceRaysKHR(
-		vk.draw_command_buffers[vk.current_frame],
-		&vk.rt_sbt_rgen_region,
-		&vk.rt_sbt_miss_region,
-		&vk.rt_sbt_hit_region,
-		&vk.rt_sbt_call_region,
-		vk.rt_output_image_width,
-		vk.rt_output_image_height,
-		1
 	);
 }
