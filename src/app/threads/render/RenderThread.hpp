@@ -71,8 +71,6 @@ private:
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
-	bool use_raytracing;
-
 
 	// For DebugGui
 	int m_frame_count;
@@ -112,11 +110,8 @@ private:
 	);
 
 	void copyToSwapchain();
-	void copyToSwapchainRT();
 
 	void drawDebugGui();
-
-	void raytrace();
 
 	std::vector<glm::mat4> getCSMLightViewProjMatrices(
 		const glm::vec3 & light_dir,

@@ -3,7 +3,7 @@
 #extension GL_EXT_debug_printf : enable
 #extension GL_EXT_scalar_block_layout : enable
 
-#define SHADOW_MAP_COUNT 5
+#define SHADOW_MAP_COUNT 8
 // #define SHADOW_MAP_SIZE 4096
 
 layout(set = 0, binding = 0) uniform CameraMatrices
@@ -36,23 +36,6 @@ vec3 debugColor(int layer)
 	if (layer == 3) return vec3(1.0, 1.0, 0.0);
 	if (layer == 4) return vec3(1.0, 0.0, 1.0);
 	return vec3(0.0, 1.0, 1.0);
-}
-
-vec4 textureGood( sampler2DArray sam, vec2 uv, int layer )
-{
-	ivec2 ires = textureSize( sam, 0 ).xy;
-	vec2  fres = vec2( ires );
-
-	vec2 st = uv*fres - 0.5;
-	vec2 i = floor( st );
-	vec2 w = fract( st );
-
-	vec4 a = texture( sam, vec3((i+vec2(0.5,0.5))/fres, layer) );
-	vec4 b = texture( sam, vec3((i+vec2(1.5,0.5))/fres, layer) );
-	vec4 c = texture( sam, vec3((i+vec2(0.5,1.5))/fres, layer) );
-	vec4 d = texture( sam, vec3((i+vec2(1.5,1.5))/fres, layer) );
-
-	return mix(mix(a, b, w.x), mix(c, d, w.x), w.y);
 }
 
 float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int layer)
@@ -166,17 +149,17 @@ void main()
 {
 	float base_light = 1.0;
 
-	float max_ao_shadow = 0.9;
+	float max_ao_shadow = 0.5;
 	float ao_factor = frag_ao / 3.0;
 
-	float max_shadow = 0.9;
+	float max_shadow = 0.5;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
 	vec3 debug_color = mix(debugColor(g_layer), debugColor(g_layer + 1), g_blendFactor);
 
-	// float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
+	float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
 	// float light = base_light - max_ao_shadow * ao_factor;
-	float light = base_light - max_shadow * shadow_factor;
+	// float light = base_light - max_shadow * shadow_factor;
 
 	vec4 texture_color = texture(tex, frag_tex_coord);
 
