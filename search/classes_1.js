@@ -4,6 +4,5 @@ var searchData=
   ['blockactionpacket_1',['BlockActionPacket',['../classBlockActionPacket.html',1,'']]],
   ['blockupdatedata_2',['BlockUpdateData',['../structServerWorld_1_1BlockUpdateData.html',1,'ServerWorld']]],
   ['blockupdatethread_3',['BlockUpdateThread',['../classBlockUpdateThread.html',1,'']]],
-  ['blockvertex_4',['BlockVertex',['../structBlockVertex.html',1,'']]],
-  ['bottomlevelas_5',['BottomLevelAS',['../structVulkanAPI_1_1BottomLevelAS.html',1,'VulkanAPI']]]
+  ['blockvertex_4',['BlockVertex',['../structBlockVertex.html',1,'']]]
 ];

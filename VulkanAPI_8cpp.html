@@ -106,8 +106,7 @@ $(document).ready(function(){initNavTree('VulkanAPI_8cpp.html',''); initResizabl
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle"><div class="title">VulkanAPI.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -184,53 +183,8 @@ Include dependency graph for VulkanAPI.cpp:</div>
 Macros</h2></td></tr>
 <tr class="memitem:a6a6be32f4ddd153a7853299a85f579de"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8cpp.html#a6a6be32f4ddd153a7853299a85f579de">VK_LOAD_FUNCTION</a>(name)</td></tr>
 <tr class="separator:a6a6be32f4ddd153a7853299a85f579de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8f1ab644725d9596340b142a6c8b666"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8cpp.html#ac8f1ab644725d9596340b142a6c8b666">LOAD_SHADER_STAGE</a>(stage_name,  path)</td></tr>
-<tr class="separator:ac8f1ab644725d9596340b142a6c8b666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a88722cfb6c25353705b217ef62e65d4a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VulkanAPI_8cpp.html#a88722cfb6c25353705b217ef62e65d4a">alignedSize</a> (uint32_t value, uint32_t alignment)</td></tr>
-<tr class="separator:a88722cfb6c25353705b217ef62e65d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ac8f1ab644725d9596340b142a6c8b666" name="ac8f1ab644725d9596340b142a6c8b666"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8f1ab644725d9596340b142a6c8b666">&#9670;&#160;</a></span>LOAD_SHADER_STAGE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define LOAD_SHADER_STAGE</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">stage_name, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">path&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    { \</div>
-<div class="line">        <span class="keyword">auto</span> code = readFile(path); \</div>
-<div class="line">        VkShaderModule module = createShaderModule(code); \</div>
-<div class="line">        VkPipelineShaderStageCreateInfo stage_info = {}; \</div>
-<div class="line">        stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO; \</div>
-<div class="line">        stage_info.stage = stage_name; \</div>
-<div class="line">        stage_info.module = module; \</div>
-<div class="line">        stage_info.pName = <span class="stringliteral">&quot;main&quot;</span>; \</div>
-<div class="line">        shader_stages.push_back(stage_info); \</div>
-<div class="line">    }</div>
-</div><!-- fragment -->
-</div>
-</div>
 <a id="a6a6be32f4ddd153a7853299a85f579de" name="a6a6be32f4ddd153a7853299a85f579de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a6be32f4ddd153a7853299a85f579de">&#9670;&#160;</a></span>VK_LOAD_FUNCTION</h2>
 
@@ -251,35 +205,6 @@ Functions</h2></td></tr>
 <div class="line">        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Failed to load Vulkan function: &quot;</span> #name); \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a88722cfb6c25353705b217ef62e65d4a" name="a88722cfb6c25353705b217ef62e65d4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88722cfb6c25353705b217ef62e65d4a">&#9670;&#160;</a></span>alignedSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t alignedSize </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>alignment</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
 </div>
 </div>
 </div><!-- contents -->

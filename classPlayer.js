@@ -53,6 +53,7 @@ var classPlayer =
     [ "sneaking", "classPlayer.html#a890a5185f4b2ed7cf01949557a2213ee", null ],
     [ "sprint_speed_factor", "classPlayer.html#ad1c35173486925d13e32f78eaf02e55e", null ],
     [ "sprinting", "classPlayer.html#a5f126c4eb73164722430f85dd2e4f1d4", null ],
+    [ "swimming", "classPlayer.html#a1ce76a62694de65a9f47e2b6ebda3725", null ],
     [ "targeted_block", "classPlayer.html#a7fbacb030211a06f1342a56603b51802", null ],
     [ "transform", "classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d", null ],
     [ "velocity", "classPlayer.html#aa467fcbbb25423c22972d0f520e94fd1", null ],

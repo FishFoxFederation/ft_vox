@@ -121,7 +121,7 @@ Collaboration diagram for CreateMeshData:</div>
 <div class="dyncontent">
 <div class="center"><img src="classCreateMeshData__coll__graph.png" border="0" usemap="#aCreateMeshData_coll__map" alt="Collaboration graph"/></div>
 <map name="aCreateMeshData_coll__map" id="aCreateMeshData_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,171,295"/>
+<area shape="rect" title=" " alt="" coords="5,5,171,339"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -163,6 +163,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a84cb268e8f684dcda9a2400e3ec3ed27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7f45ff2e999fe0217ee8a2638645f47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#aa7f45ff2e999fe0217ee8a2638645f47">createFace</a> (const int dim_1, const int dim_2, const glm::ivec3 &amp;start, const glm::ivec3 &amp;max_iter, const std::array&lt; int, 6 &gt; &amp;indices_order, const std::array&lt; int, 6 &gt; &amp;indices_order_fliped, const glm::ivec3 &amp;abs_normal, const int normal_signe, const int face)</td></tr>
 <tr class="separator:aa7f45ff2e999fe0217ee8a2638645f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae58de72f96ced25eabb4f3239654cd57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#ae58de72f96ced25eabb4f3239654cd57">createFaceWater</a> (const int dim_1, const int dim_2, const glm::ivec3 &amp;start, const glm::ivec3 &amp;max_iter, const std::array&lt; int, 6 &gt; &amp;indices_order, const std::array&lt; int, 6 &gt; &amp;indices_order_fliped, const glm::ivec3 &amp;abs_normal, const int normal_signe, const int face)</td></tr>
+<tr class="separator:ae58de72f96ced25eabb4f3239654cd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc423bbf0cc48e6d4e7ee86c10bd1c9f"><td class="memItemLeft" align="right" valign="top">std::array&lt; uint8_t, 4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f">getAmbientOcclusion</a> (const glm::ivec3 &amp;pos, const int dim_1, const int dim_2)</td></tr>
 <tr class="separator:adc423bbf0cc48e6d4e7ee86c10bd1c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a570c9ca0e96d4663d69a4c14282fc95d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d">getAmbientOcclusion</a> (<a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> side_1, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> side_2, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> corner)</td></tr>
@@ -178,6 +180,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ac2a205bdefb6e79d75abcd60c3a249f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fcd2d65556456c67a8125b8e4733511"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a0fcd2d65556456c67a8125b8e4733511">indices</a></td></tr>
 <tr class="separator:a0fcd2d65556456c67a8125b8e4733511"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6940d0e0be95eb38ea4849988889cc7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structBlockVertex.html">BlockVertex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#ab6940d0e0be95eb38ea4849988889cc7">water_vertices</a></td></tr>
+<tr class="separator:ab6940d0e0be95eb38ea4849988889cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ba969bd083a60f5d17ad3f3d390386"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCreateMeshData.html#a15ba969bd083a60f5d17ad3f3d390386">water_indices</a></td></tr>
+<tr class="separator:a15ba969bd083a60f5d17ad3f3d390386"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a5f075a1c439c7a4316214c1e1ad759a0" name="a5f075a1c439c7a4316214c1e1ad759a0"></a>
@@ -528,6 +534,84 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae58de72f96ced25eabb4f3239654cd57" name="ae58de72f96ced25eabb4f3239654cd57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae58de72f96ced25eabb4f3239654cd57">&#9670;&#160;</a></span>createFaceWater()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CreateMeshData::createFaceWater </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dim_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>dim_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>max_iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; int, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indices_order</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; int, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indices_order_fliped</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>abs_normal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>normal_signe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>face</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a570c9ca0e96d4663d69a4c14282fc95d" name="a570c9ca0e96d4663d69a4c14282fc95d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a570c9ca0e96d4663d69a4c14282fc95d">&#9670;&#160;</a></span>getAmbientOcclusion() <span class="overload">[1/2]</span></h2>
 
@@ -751,6 +835,34 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="structBlockVertex.html">BlockVertex</a>&gt; CreateMeshData::vertices</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a15ba969bd083a60f5d17ad3f3d390386" name="a15ba969bd083a60f5d17ad3f3d390386"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ba969bd083a60f5d17ad3f3d390386">&#9670;&#160;</a></span>water_indices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint32_t&gt; CreateMeshData::water_indices</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6940d0e0be95eb38ea4849988889cc7" name="ab6940d0e0be95eb38ea4849988889cc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6940d0e0be95eb38ea4849988889cc7">&#9670;&#160;</a></span>water_vertices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structBlockVertex.html">BlockVertex</a>&gt; CreateMeshData::water_vertices</td>
         </tr>
       </table>
 </div><div class="memdoc">

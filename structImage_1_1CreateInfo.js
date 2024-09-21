@@ -12,6 +12,7 @@ var structImage_1_1CreateInfo =
     [ "memory_properties", "structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d", null ],
     [ "mip_levels", "structImage_1_1CreateInfo.html#a4ca21901d453d2e5e3958d74d3f2cad6", null ],
     [ "sampler_address_mode", "structImage_1_1CreateInfo.html#acfccb89a0bebc4a5c5636d67968609d3", null ],
+    [ "sampler_anisotropy_enable", "structImage_1_1CreateInfo.html#aaa9af7aada3cad9347de1da52abd1315", null ],
     [ "sampler_filter", "structImage_1_1CreateInfo.html#a1004e7e6f5ccc4de57295d9e76d0bd6a", null ],
     [ "tiling", "structImage_1_1CreateInfo.html#a3020f400addaf0b3295127255819ec20", null ],
     [ "usage", "structImage_1_1CreateInfo.html#aac48dd32aae5bac47a262927516a9f81", null ]

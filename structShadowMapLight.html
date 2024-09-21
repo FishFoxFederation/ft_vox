@@ -118,56 +118,72 @@ Collaboration diagram for ShadowMapLight:</div>
 <div class="dyncontent">
 <div class="center"><img src="structShadowMapLight__coll__graph.png" border="0" usemap="#aShadowMapLight_coll__map" alt="Collaboration graph"/></div>
 <map name="aShadowMapLight_coll__map" id="aShadowMapLight_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,132,89"/>
+<area shape="rect" title=" " alt="" coords="5,5,132,104"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aab1a87b60d59c37d0273bf94fa6a0655"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#aab1a87b60d59c37d0273bf94fa6a0655">view</a></td></tr>
-<tr class="separator:aab1a87b60d59c37d0273bf94fa6a0655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76cb6649d225615cb43c91451071bd26"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a76cb6649d225615cb43c91451071bd26">proj</a></td></tr>
-<tr class="separator:a76cb6649d225615cb43c91451071bd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6940614fea85b6a76426591decc9be20"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a6940614fea85b6a76426591decc9be20">model</a></td></tr>
-<tr class="separator:a6940614fea85b6a76426591decc9be20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09726be9a2ec5bbe9b7f634956cc3ab8"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a09726be9a2ec5bbe9b7f634956cc3ab8">view_proj</a> [8]</td></tr>
+<tr class="separator:a09726be9a2ec5bbe9b7f634956cc3ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcc4925569cf9dec9b117b606d930af4"><td class="memItemLeft" align="right" valign="top">glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#adcc4925569cf9dec9b117b606d930af4">plane_distances</a> [8]</td></tr>
+<tr class="separator:adcc4925569cf9dec9b117b606d930af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac937185edc116e838c519e906689ca7c"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#ac937185edc116e838c519e906689ca7c">light_dir</a></td></tr>
+<tr class="separator:ac937185edc116e838c519e906689ca7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ceed06673a71dcafe3454dfa5cba61f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a7ceed06673a71dcafe3454dfa5cba61f">blend_distance</a></td></tr>
+<tr class="separator:a7ceed06673a71dcafe3454dfa5cba61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6940614fea85b6a76426591decc9be20" name="a6940614fea85b6a76426591decc9be20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6940614fea85b6a76426591decc9be20">&#9670;&#160;</a></span>model</h2>
+<a id="a7ceed06673a71dcafe3454dfa5cba61f" name="a7ceed06673a71dcafe3454dfa5cba61f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ceed06673a71dcafe3454dfa5cba61f">&#9670;&#160;</a></span>blend_distance</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::mat4 ShadowMapLight::model</td>
+          <td class="memname">float ShadowMapLight::blend_distance</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a76cb6649d225615cb43c91451071bd26" name="a76cb6649d225615cb43c91451071bd26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76cb6649d225615cb43c91451071bd26">&#9670;&#160;</a></span>proj</h2>
+<a id="ac937185edc116e838c519e906689ca7c" name="ac937185edc116e838c519e906689ca7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac937185edc116e838c519e906689ca7c">&#9670;&#160;</a></span>light_dir</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::mat4 ShadowMapLight::proj</td>
+          <td class="memname">glm::vec3 ShadowMapLight::light_dir</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aab1a87b60d59c37d0273bf94fa6a0655" name="aab1a87b60d59c37d0273bf94fa6a0655"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab1a87b60d59c37d0273bf94fa6a0655">&#9670;&#160;</a></span>view</h2>
+<a id="adcc4925569cf9dec9b117b606d930af4" name="adcc4925569cf9dec9b117b606d930af4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcc4925569cf9dec9b117b606d930af4">&#9670;&#160;</a></span>plane_distances</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::mat4 ShadowMapLight::view</td>
+          <td class="memname">glm::vec4 ShadowMapLight::plane_distances[8]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09726be9a2ec5bbe9b7f634956cc3ab8" name="a09726be9a2ec5bbe9b7f634956cc3ab8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09726be9a2ec5bbe9b7f634956cc3ab8">&#9670;&#160;</a></span>view_proj</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::mat4 ShadowMapLight::view_proj[8]</td>
         </tr>
       </table>
 </div><div class="memdoc">

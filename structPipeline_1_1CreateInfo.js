@@ -15,9 +15,11 @@ var structPipeline_1_1CreateInfo =
     [ "extent", "structPipeline_1_1CreateInfo.html#adf162273ffab300c95b4fa8257db63c7", null ],
     [ "frag_path", "structPipeline_1_1CreateInfo.html#a9a7242854bbd28737eeb70e4b19fe553", null ],
     [ "front_face", "structPipeline_1_1CreateInfo.html#a7d4781e1cf4c88222b707fc99bdebc92", null ],
+    [ "geom_path", "structPipeline_1_1CreateInfo.html#a55aadbc1d6eb858af6c4a008fb08a314", null ],
     [ "polygon_mode", "structPipeline_1_1CreateInfo.html#a228d42d483c49a3e93892fdae2928304", null ],
     [ "push_constant_ranges", "structPipeline_1_1CreateInfo.html#ad71d7079bfbfe032392e48c3c1f2b57e", null ],
     [ "render_pass", "structPipeline_1_1CreateInfo.html#ab40d996acb993a2798c34273f04ce458", null ],
+    [ "subpass", "structPipeline_1_1CreateInfo.html#a38b345019d04b2d8f217d23bf53b0718", null ],
     [ "topology", "structPipeline_1_1CreateInfo.html#afadf397780e7d6489b9fa660069805f4", null ],
     [ "vert_path", "structPipeline_1_1CreateInfo.html#aa660f137d0ccf59854db69dc936769e5", null ]
 ];

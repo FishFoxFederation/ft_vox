@@ -126,6 +126,8 @@ Collaboration diagram for Pipeline::CreateInfo:</div>
 Public Attributes</h2></td></tr>
 <tr class="memitem:adf162273ffab300c95b4fa8257db63c7"><td class="memItemLeft" align="right" valign="top">VkExtent2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#adf162273ffab300c95b4fa8257db63c7">extent</a></td></tr>
 <tr class="separator:adf162273ffab300c95b4fa8257db63c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55aadbc1d6eb858af6c4a008fb08a314"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a55aadbc1d6eb858af6c4a008fb08a314">geom_path</a></td></tr>
+<tr class="separator:a55aadbc1d6eb858af6c4a008fb08a314"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa660f137d0ccf59854db69dc936769e5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#aa660f137d0ccf59854db69dc936769e5">vert_path</a></td></tr>
 <tr class="separator:aa660f137d0ccf59854db69dc936769e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a7242854bbd28737eeb70e4b19fe553"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a9a7242854bbd28737eeb70e4b19fe553">frag_path</a></td></tr>
@@ -160,6 +162,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad71d7079bfbfe032392e48c3c1f2b57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab40d996acb993a2798c34273f04ce458"><td class="memItemLeft" align="right" valign="top">VkRenderPass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#ab40d996acb993a2798c34273f04ce458">render_pass</a> = VK_NULL_HANDLE</td></tr>
 <tr class="separator:ab40d996acb993a2798c34273f04ce458"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38b345019d04b2d8f217d23bf53b0718"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a38b345019d04b2d8f217d23bf53b0718">subpass</a> = 0</td></tr>
+<tr class="separator:a38b345019d04b2d8f217d23bf53b0718"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f5176bb1185e2f0b2da53af19e3fa22"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDynamicState &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a7f5176bb1185e2f0b2da53af19e3fa22">dynamic_states</a> = {}</td></tr>
 <tr class="separator:a7f5176bb1185e2f0b2da53af19e3fa22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25e64b656083d8b970deb9cda588d088"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPipeline_1_1CreateInfo.html#a25e64b656083d8b970deb9cda588d088">enable_alpha_blending</a> = false</td></tr>
@@ -376,6 +380,20 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a55aadbc1d6eb858af6c4a008fb08a314" name="a55aadbc1d6eb858af6c4a008fb08a314"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55aadbc1d6eb858af6c4a008fb08a314">&#9670;&#160;</a></span>geom_path</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Pipeline::CreateInfo::geom_path</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a228d42d483c49a3e93892fdae2928304" name="a228d42d483c49a3e93892fdae2928304"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a228d42d483c49a3e93892fdae2928304">&#9670;&#160;</a></span>polygon_mode</h2>
 
@@ -412,6 +430,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">VkRenderPass Pipeline::CreateInfo::render_pass = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38b345019d04b2d8f217d23bf53b0718" name="a38b345019d04b2d8f217d23bf53b0718"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38b345019d04b2d8f217d23bf53b0718">&#9670;&#160;</a></span>subpass</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Pipeline::CreateInfo::subpass = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">

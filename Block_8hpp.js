@@ -9,6 +9,7 @@ var Block_8hpp =
     [ "BLOCK_FACE_RIGHT", "Block_8hpp.html#aebc7ca26651a7601015b02cf720220dc", null ],
     [ "BLOCK_FACE_TOP", "Block_8hpp.html#aac9bd84159982d113cfd30e2bf361d41", null ],
     [ "BLOCK_PROPERTY_CUBE", "Block_8hpp.html#a03f647e3fa4bbfb59dfcdf8b268cb1d4", null ],
+    [ "BLOCK_PROPERTY_FLUID", "Block_8hpp.html#a1a91a3b564308d7c33561c6dd465e1c7", null ],
     [ "BLOCK_PROPERTY_LIGHT", "Block_8hpp.html#a7b867f1721c0e596365e40122301d822", null ],
     [ "BLOCK_PROPERTY_NONE", "Block_8hpp.html#a7208759f17440102bcbf1e3ac291858a", null ],
     [ "BLOCK_PROPERTY_OPAQUE", "Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03", null ],
@@ -20,6 +21,8 @@ var Block_8hpp =
       [ "Air", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a71c546fa61f3964d72bdf25223b78669", null ],
       [ "Grass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaac9a63596f76a62bb9f61a5dd7c0d25", null ],
       [ "Dirt", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a7cf334b79a84091f27dfc019b4b79229", null ],
-      [ "Stone", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2", null ]
+      [ "Stone", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2", null ],
+      [ "Water", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a27634ff8002b12e75d98e07ccd005d18", null ],
+      [ "Glass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaae44179fda7ddcbf8916aff53846128", null ]
     ] ]
 ];

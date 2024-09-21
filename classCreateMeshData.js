@@ -13,6 +13,7 @@ var classCreateMeshData =
     [ "block", "classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c", null ],
     [ "create", "classCreateMeshData.html#a84cb268e8f684dcda9a2400e3ec3ed27", null ],
     [ "createFace", "classCreateMeshData.html#aa7f45ff2e999fe0217ee8a2638645f47", null ],
+    [ "createFaceWater", "classCreateMeshData.html#ae58de72f96ced25eabb4f3239654cd57", null ],
     [ "getAmbientOcclusion", "classCreateMeshData.html#a570c9ca0e96d4663d69a4c14282fc95d", null ],
     [ "getAmbientOcclusion", "classCreateMeshData.html#adc423bbf0cc48e6d4e7ee86c10bd1c9f", null ],
     [ "getCenterChunk", "classCreateMeshData.html#a0fb32c66a7f3e692bb8ce61addc3b506", null ],
@@ -21,5 +22,7 @@ var classCreateMeshData =
     [ "unlock", "classCreateMeshData.html#ad38f0692830fb519424088722614e4a4", null ],
     [ "chunks", "classCreateMeshData.html#a140c6938511a12eab9cd515cc8e76e10", null ],
     [ "indices", "classCreateMeshData.html#a0fcd2d65556456c67a8125b8e4733511", null ],
-    [ "vertices", "classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2", null ]
+    [ "vertices", "classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2", null ],
+    [ "water_indices", "classCreateMeshData.html#a15ba969bd083a60f5d17ad3f3d390386", null ],
+    [ "water_vertices", "classCreateMeshData.html#ab6940d0e0be95eb38ea4849988889cc7", null ]
 ];

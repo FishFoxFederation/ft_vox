@@ -1,5 +1,7 @@
 <map id="WorldScene" name="WorldScene">
-<area shape="rect" id="node1" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="29,432,175,707"/>
+<area shape="rect" id="node1" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="137,417,283,692"/>
 <area shape="rect" id="node2" href="$classIdList.html" title=" " alt="" coords="5,124,199,355"/>
-<area shape="rect" id="node3" title=" " alt="" coords="24,5,180,75"/>
+<area shape="rect" id="node3" title=" " alt="" coords="14,5,190,75"/>
+<area shape="rect" id="node4" href="$classIdList.html" title=" " alt="" coords="223,124,416,355"/>
+<area shape="rect" id="node5" title=" " alt="" coords="241,5,397,75"/>
 </map>

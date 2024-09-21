@@ -1,7 +1,7 @@
 var classWorldScene =
 [
+    [ "ChunkMeshRenderData", "structWorldScene_1_1ChunkMeshRenderData.html", "structWorldScene_1_1ChunkMeshRenderData" ],
     [ "DebugBlock", "structWorldScene_1_1DebugBlock.html", "structWorldScene_1_1DebugBlock" ],
-    [ "MeshList", "classWorldScene_1_1MeshList.html", "classWorldScene_1_1MeshList" ],
     [ "MeshRenderData", "structWorldScene_1_1MeshRenderData.html", "structWorldScene_1_1MeshRenderData" ],
     [ "PlayerRenderData", "structWorldScene_1_1PlayerRenderData.html", "structWorldScene_1_1PlayerRenderData" ],
     [ "WorldScene", "classWorldScene.html#a86c5a4b83213d28ce5c62eba9d35da64", null ],
@@ -19,7 +19,7 @@ var classWorldScene =
     [ "setTargetBlock", "classWorldScene.html#a4235cb886fbf5bd62b70d274a91e9a81", null ],
     [ "targetBlock", "classWorldScene.html#aba9acd92f94920f1ee870a735b38b0c8", null ],
     [ "TracyLockableN", "classWorldScene.html#a9ac4be621afef099e56afdbb6e08510f", null ],
-    [ "chunk_mesh_list", "classWorldScene.html#a375d67e327f3d44016f47e62ba3b6230", null ],
+    [ "chunk_mesh_list", "classWorldScene.html#ad21716e0b0ba9a66b1338020682218ac", null ],
     [ "entity_mesh_list", "classWorldScene.html#a39a8384c40aa13380dcae1d593e6f3cb", null ],
     [ "m_players", "classWorldScene.html#aec9e9052db57d23eafa3acf6d1562baa", null ]
 ];
