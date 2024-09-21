@@ -12,6 +12,7 @@ var hierarchy =
     [ "VulkanAPI::BottomLevelAS", "structVulkanAPI_1_1BottomLevelAS.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "Chunk", "classChunk.html", null ],
+    [ "ChunkPacket::ChunkData", "structChunkPacket_1_1ChunkData.html", null ],
     [ "ServerWorld::ChunkLoadUnloadData", "structServerWorld_1_1ChunkLoadUnloadData.html", null ],
     [ "Client", "classClient.html", null ],
     [ "ClientPacketHandler", "classClientPacketHandler.html", null ],

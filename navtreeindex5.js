@@ -1,5 +1,13 @@
 var NAVTREEINDEX5 =
 {
+"classVulkanAPI.html#aebc102cf15cf5e7bd6bf392aecf09266":[10,0,85,60],
+"classVulkanAPI.html#aed55454df00de407ecbd6443cfb83fcb":[10,0,85,31],
+"classVulkanAPI.html#aeec288c213c1e8aa4de860a8e16f7c44":[10,0,85,124],
+"classVulkanAPI.html#af0178da68566ea2136a91746e686efdf":[10,0,85,6],
+"classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a":[10,0,85,76],
+"classVulkanAPI.html#af0fc9d116584aa25c04587c6ac9b43cc":[10,0,85,4],
+"classVulkanAPI.html#af620c1c039315ba3962c5ca935530fbb":[10,0,85,44],
+"classVulkanAPI.html#af630bfb30c0110e84fbf6a4b2ccf2a84":[10,0,85,80],
 "classVulkanAPI.html#afd7a78636e48569ba47ccb75ff107cfd":[10,0,85,68],
 "classVulkanAPI.html#afe362f2320ed6115d2eb627efed9d530":[10,0,85,133],
 "classWindow.html":[10,0,86],
@@ -112,8 +120,8 @@ var NAVTREEINDEX5 =
 "example_8cpp.html":[11,0,0,0,0],
 "example_8cpp.html#a6a70aecb0c57b266c13dbf5447ec498e":[11,0,0,0,0,0],
 "files.html":[11,0],
-"functions.html":[10,3,0,0],
 "functions.html":[10,3,0],
+"functions.html":[10,3,0,0],
 "functions_b.html":[10,3,0,1],
 "functions_c.html":[10,3,0,2],
 "functions_d.html":[10,3,0,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX5 =
 "namespacevk__helper.html#a504632a9a86fdd8b07015b5da6493e38":[9,0,1,0],
 "namespacevk__helper.html#a71c0f42868e6edd14e06b352890f5acc":[9,0,1,1],
 "pages.html":[],
-"render_loop.html":[6],
-"render_loop.html#conclusion":[6,4],
-"render_loop.html#imgui":[6,2],
-"render_loop.html#main_rendering":[6,0],
-"render_loop.html#present":[6,3],
-"render_loop.html#swapchain":[6,1],
-"server__define_8hpp.html":[11,0,1,5],
-"server__define_8hpp_source.html":[11,0,1,5],
-"server__main_8cpp.html":[11,0,1,6]
+"render_loop.html":[6]
 };
