@@ -18,7 +18,7 @@ add_executable(${PROJECT_NAME})
 target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
-		# -g3
+		-g3
 		# -fsanitize=thread
 		-Wall
 		-Wextra
@@ -153,7 +153,7 @@ add_executable(server)
 target_compile_options(server
 	PRIVATE
 		-O3
-		# -g3
+		-g3
 		# -fsanitize=thread
 		-Wall
 		-Wextra

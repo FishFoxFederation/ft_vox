@@ -77,6 +77,9 @@ protected:
 	 * @retval nullptr if the chunk does not exist
 	 */
 	std::shared_ptr<Chunk> getChunkNoLock(const glm::ivec3 & position) const;
+
+
+	void					insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
 	/*************************************
 	 *  FUTURES
 	 *************************************/

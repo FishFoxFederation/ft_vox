@@ -248,14 +248,13 @@ void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
 
 ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 {
-	std::lock_guard lock(m_chunks_mutex);
 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> chunks;
 	for(int x = 0; x < zoneSize.x; x++)
 	{
 		for(int y = 0; y < zoneSize.z; y++)
 		{
 			glm::ivec3 chunk_position = zoneStart + glm::ivec3(x, 0, y);
-			std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
+			std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
 			if (chunk == nullptr)
 			{
 				chunk = std::make_shared<Chunk>(chunk_position);
@@ -270,10 +269,10 @@ ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 	return chunks;
 }
 
-uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, int load_level, int current_level)
+uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, Chunk::genLevel gen_level , Chunk::genLevel current_gen_level = Chunk::genLevel::EMPTY)
 {
 	ChunkMap chunksToGen;
-	WorldGenerator::genInfo info = m_world_generator.getGenInfo(load_level, current_level, chunkPos3D);
+	WorldGenerator::genInfo info = m_world_generator.getGenInfo(gen_level, current_gen_level, chunkPos3D);
 
 	chunksToGen = getChunkZone(info.zoneStart, info.zoneSize);
 
@@ -287,3 +286,46 @@ uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, int load_leve
 			chunk->status.unlock();
 	});
 }
+
+void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
+{
+	while (!chunks_to_gen.empty())
+	{
+		auto [chunk_position, desired_gen_level] = *chunks_to_gen.begin();
+		LOG_INFO("launching gen for chunk at pos" << chunk_position.x << " " << chunk_position.y << " " << chunk_position.z);
+
+		std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
+		chunk->status.lock();
+		Chunk::genLevel current_gen_level = chunk->getGenLevel();
+		chunk->status.unlock();
+
+		ChunkMap chunkZone;
+		WorldGenerator::genInfo info = m_world_generator.getGenInfo(desired_gen_level, current_gen_level, chunk_position);
+
+		chunkZone = getChunkZone(info.zoneStart, info.zoneSize);
+
+		for (auto [position, chunk] : chunkZone)
+		{
+			auto iter = chunks_to_gen.find(position);
+
+			//if the chunk is in the gen list but is already in the current gen zone we remove it
+			if (iter != chunks_to_gen.end() && iter->second >= desired_gen_level)
+				chunks_to_gen.erase(iter);
+		}
+
+		uint64_t future_id = m_threadPool.submit([this, info, chunkZone] () mutable
+		{
+			ZoneScopedN("Generate Chunk");
+			LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
+			m_world_generator.generate(info, chunkZone);
+
+			for (auto & [chunk_position, chunk] : chunkZone)
+				chunk->status.unlock();
+		});
+
+		{
+			std::lock_guard lock(m_chunk_futures_ids_mutex);
+			m_chunk_futures_ids.push_back(future_id);
+		}
+	}
+};

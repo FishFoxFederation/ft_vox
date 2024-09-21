@@ -151,6 +151,7 @@ public:
 
 
 private:
+	typedef std::unordered_map<glm::ivec3, Chunk::genLevel> ChunkGenList;
 	/*********************************\
 	 * NETWORK
 	\*********************************/
@@ -201,7 +202,7 @@ private:
 	 * 
 	 * @param tickets 
 	 */
-	void			floodFill(const TicketMultiMap & tickets);
+	void			floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk_gen_list);
 
 	/** @brief util for floodfill */
 	void			clearChunksLoadLevel();
@@ -217,24 +218,30 @@ private:
 	 * @warning NOT thread safe MUST be called from the main thread
 	 * 
 	 * @param ticket 
+	 * @return true if the ticket was added, false otherwise
 	 */
-	void			applyTicketToChunk(const Ticket & ticket);
+	bool			applyTicketToChunk(const Ticket & ticket, ChunkGenList & chunk_gen_list);
 	/*********************************\
 	 * BLOCKS
 	\*********************************/
 	std::queue<BlockUpdateData> m_block_updates;
 	mutable TracyLockableN(std::mutex, m_block_updates_mutex, "BlockUpdateQueue");
 
+
+	void 					doChunkGens(ChunkGenList & chunks_to_gen);
+
 	/**
 	 * @brief generate a chunk or a region of chunks asynchronously
 	 * 
 	 * 
 	 * @param chunk_position 
-	 * @param load_level desired load level
-	 * @param current_level current load level
+	 * @param gen_level desired gen level
+	 * @param current_gen_level optionnal, current generation level of the chunk
 	 * @return the id of the future that will generate the chunk
 	 */
-	uint64_t				asyncGenChunk(const glm::ivec3 & chunk_position, int load_level, int current_level);
+	uint64_t				asyncGenChunk(const glm::ivec3 & chunk_position, Chunk::genLevel gen_level, Chunk::genLevel current_level);
+
+
 	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id);
 	void 					removeChunkObservations(std::shared_ptr<Player> player);
 

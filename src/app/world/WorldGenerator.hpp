@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 #include "define.hpp"
 
+#include "hashes.hpp"
 #include "Perlin.hpp"
 #include "Chunk.hpp"
 #include "Block.hpp"
@@ -20,9 +22,14 @@ public:
 		glm::ivec3 zoneSize;
 		glm::ivec3 zoneStart;
 	};
+
+	/**
+	 * @warning the zone sizes must be in the same order as the genLevel enum
+	 * @warning the zone sizes must be multiples of the zone sizes of the previous gen level (ex 5x5 and 10x10) 
+	 */
 	constexpr static std::array<glm::ivec3, 2> ZONE_SIZES = {
-		glm::ivec3(3, 3, 3),
-		glm::ivec3(5, 5, 5)
+		glm::ivec3(1, 0, 1),
+		glm::ivec3(1, 0, 1)
 	};
 	constexpr static int MAX_TICKET_LEVEL = TICKET_LEVEL_INACTIVE + 2;
 
@@ -34,14 +41,16 @@ public:
 	~WorldGenerator();
 
 	/**
-	 * @brief get the generation info for the given ticket level and chunk position
+	 * @brief get the generation info for the given gen level and chunk position
 	 * 
-	 * @param ticket_level
+	 * @param gen_level
 	 * @param old_level
 	 * @param chunkPos3D
 	 * @return a genInfo struct
 	 */
-	static genInfo getGenInfo(int ticket_level, Chunk::genLevel old_level, glm::ivec3 chunkPos3D);
+	static genInfo getGenInfo(Chunk::genLevel gen_level, Chunk::genLevel old_level, glm::ivec3 chunkPos3D);
+
+	static Chunk::genLevel ticketToGenLevel(int ticket_level);
 
 	/**
 	 * @brief will do a generation pass to the chunks

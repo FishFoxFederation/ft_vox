@@ -35,6 +35,7 @@ int main()
 	IncomingPacketList & incoming_packets = server.get_incoming_packets();
 	uint64_t last_time = 0;
 	uint64_t last_time_count = 0;
+	(void)last_time_count;
 	uint64_t max_packet = 0;
 	while (running)
 	{
