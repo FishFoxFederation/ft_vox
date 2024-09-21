@@ -1,11 +1,21 @@
 #version 450
 
+#extension GL_EXT_scalar_block_layout : enable
+
+#define SHADOW_MAP_COUNT 8
+
 layout(set = 0, binding = 0) uniform CameraMatrices
 {
 	mat4 view;
 	mat4 projection;
 }cm;
-
+layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
+{
+	mat4 lightSpaceMatrices[SHADOW_MAP_COUNT];
+	vec4 planeDistances[SHADOW_MAP_COUNT];
+	vec3 lightDir;
+	float blendDistance;
+};
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
 layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
 
@@ -14,59 +24,111 @@ layout(input_attachment_index = 1, set = 4, binding = 1) uniform subpassInput de
 
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
-layout(location = 2) in vec4 shadow_coords;
+layout(location = 2) in vec4 frag_pos_world_space;
 
 layout(location = 0) out vec4 out_color;
 
 
-float compute_shadow_factor(
-	vec4 light_space_pos,
-	sampler2DArray shadow_map,
-	uint shadow_map_size,
-	uint pcf_size
-)
+float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int layer)
 {
-	// Compute the light space position in NDC
-	vec3 light_space_ndc = light_space_pos.xyz /= light_space_pos.w;
-
-	if (
-		abs(light_space_ndc.x) > 1.0 ||
-		abs(light_space_ndc.y) > 1.0 ||
-		abs(light_space_ndc.z) > 1.0
-	)
+	vec4 fragPosLightSpace = lightSpaceMatrices[layer] * world_space_pos;
+	// perform perspective divide
+	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	// transform to [0,1] range (Vulkan's Z is already in [0..1])
+	vec2 uv = projCoords.xy * 0.5 + 0.5;
+	// keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+	if (projCoords.z > 1.0)
 	{
-	 	return 0.5;
+		return 0.0;
 	}
 
-	// Translate from NDC to shadow map space (Vulkan's Z is already in [0..1])
-	vec2 shadow_map_coord = light_space_ndc.xy * 0.5 + 0.5;
-
-	// compute total number of samples to take from the shadow map
-	int pcf_size_minus_1 = int(pcf_size - 1);
-	float kernel_size = 2.0 * pcf_size_minus_1 + 1.0;
-	float num_samples = kernel_size * kernel_size;
-
-	// Counter for the shadow map samples not in the shadow
-	float lighted_count = 0.0;
-
-	// Take samples from the shadow map
-	float shadow_map_texel_size = 1.0 / shadow_map_size;
-	for (int x = -pcf_size_minus_1; x <= pcf_size_minus_1; x++)
+	// get depth of current fragment from light's perspective
+	float currentDepth = projCoords.z;
+	if (currentDepth  > 1.0)
 	{
-		for (int y = -pcf_size_minus_1; y <= pcf_size_minus_1; y++)
-		{
-			// Compute coordinate for this PFC sample
-			vec2 pcf_coord = shadow_map_coord + vec2(x, y) * shadow_map_texel_size;
+		return 0.0;
+	}
 
-			// Check if the sample is in light or in the shadow
-			if (light_space_ndc.z <= texture(shadow_map, vec3(pcf_coord.xy, 0.0)).x)
-			{
-				lighted_count += 1.0;
-			}
+	// return full shadow if the fragment is facing away from the light
+	vec3 normal = normalize(frag_normal);
+	if (dot(normal, lightDir) < 0.0)
+	{
+		return 1.0;
+	}
+
+	// calculate texel size
+	vec2 texSize = textureSize(shadowMap, 0).xy;
+	vec2 texelSize = 1.0 / texSize;
+
+	// PCF
+	float shadow = 0.0;
+	int range = 2;
+	float count = 0.0;
+	for(int x = -range; x <= range; ++x)
+	{
+		for(int y = -range; y <= range; ++y)
+		{
+			vec3 texCoord = vec3(uv + vec2(x, y) * texelSize, layer);
+			const float pcfDepth = texture(shadowMap, texCoord).r;
+			shadow += currentDepth > pcfDepth ? 1.0 : 0.0;
+
+			// Bilinear filtering
+			// float offset = 0.5;
+			// vec2 st = texCoord.xy * texSize - 0.5;
+			// vec2 i = floor(st);
+			// vec2 w = fract(st);
+			// float a = currentDepth > texture(shadowMap, vec3((i + vec2(-offset,-offset)) / texSize, layer)).r ? 1.0 : 0.0;
+			// float b = currentDepth > texture(shadowMap, vec3((i + vec2( offset,-offset)) / texSize, layer)).r ? 1.0 : 0.0;
+			// float c = currentDepth > texture(shadowMap, vec3((i + vec2(-offset, offset)) / texSize, layer)).r ? 1.0 : 0.0;
+			// float d = currentDepth > texture(shadowMap, vec3((i + vec2( offset, offset)) / texSize, layer)).r ? 1.0 : 0.0;
+			// shadow += mix(mix(a, b, w.x), mix(c, d, w.x), w.y);
+
+			count += 1.0;
 		}
 	}
 
-	return lighted_count / num_samples;
+	// 1.0 is fully in shadow, 0.0 is fully lit
+	return shadow / count;
+}
+
+float compute_shadow_factor(
+	vec4 world_space_pos,
+	sampler2DArray shadowMap,
+	uint pcf_size
+)
+{
+	vec4 fragPosViewSpace = cm.view * world_space_pos;
+	float depthValue = abs(fragPosViewSpace.z);
+
+	int layer = -1;
+	float blendFactor = 0.0;
+	bool blend = false;
+	for (int i = 0; i < SHADOW_MAP_COUNT; i++)
+	{
+		if (depthValue < planeDistances[i].x)
+		{
+			layer = i;
+			if (i < SHADOW_MAP_COUNT - 1 && depthValue > planeDistances[i].x - blendDistance)
+			{
+				blendFactor = (blendDistance + depthValue - planeDistances[i].x) / blendDistance;
+				blend = true;
+			}
+			break;
+		}
+	}
+	if (layer == -1)
+	{
+		layer = SHADOW_MAP_COUNT;
+	}
+
+	if (blend)
+	{
+		float shadow1 = sample_shadow_map(world_space_pos, shadowMap, layer);
+		float shadow2 = sample_shadow_map(world_space_pos, shadowMap, layer + 1);
+		return mix(shadow1, shadow2, blendFactor);
+	}
+
+	return sample_shadow_map(world_space_pos, shadowMap, layer);
 }
 
 float depth_to_distance(float d, float n, float f)
@@ -74,14 +136,12 @@ float depth_to_distance(float d, float n, float f)
 	return n * f / (f + d * (n - f));
 }
 
-const int SHADOW_MAP_SIZE = 4096;
-
 void main()
 {
 	float min_light = 0.2;
 
 	float max_shadow_light = 0.8;
-	float shadow_factor = compute_shadow_factor(shadow_coords, shadow_map, SHADOW_MAP_SIZE, 3);
+	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
 	float light = min_light + max_shadow_light * shadow_factor;
 
