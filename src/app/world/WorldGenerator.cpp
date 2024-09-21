@@ -2,38 +2,52 @@
 
 #include <cmath>
 
-WorldGenerator::genInfo WorldGenerator::getGenInfo(int ticket_level, Chunk::genLevel old_level, glm::ivec3 chunkPos3D)
+Chunk::genLevel WorldGenerator::ticketToGenLevel(int ticket_level)
+{
+	if (ticket_level <= TICKET_LEVEL_INACTIVE)
+		return Chunk::genLevel::CAVE;
+	switch (ticket_level)
+	{
+		case TICKET_LEVEL_INACTIVE:
+			return Chunk::genLevel::CAVE;
+		case TICKET_LEVEL_INACTIVE + 1:
+			return Chunk::genLevel::RELIEF;
+		default:
+			throw std::invalid_argument("WorldGenerator::ticketToGenLevel: Invalid ticket level");
+	}
+}
+
+WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_level, Chunk::genLevel old_gen_level, glm::ivec3 chunkPos3D)
 {
 	genInfo info;
 
-	info.oldLevel = old_level;
-	if (ticket_level < TICKET_LEVEL_INACTIVE || ticket_level >= MAX_TICKET_LEVEL)
+	info.oldLevel = old_gen_level;
+	
+	switch (desired_gen_level)
 	{
-		LOG_ERROR("Invalid ticket level: " << ticket_level);
-		throw std::runtime_error("Invalid ticket level");
-	}
-
-	switch (ticket_level)
-	{
-		case TICKET_LEVEL_INACTIVE + 1:
+		case CAVE:
 		{
 			info.level = CAVE;
-			info.zoneSize = glm::ivec3(3, 3, 3);
+			info.zoneSize = ZONE_SIZES[static_cast<int>(CAVE)];
 			break;
 		}
-		case TICKET_LEVEL_INACTIVE + 2:
+		case RELIEF:
 		{
 			info.level = RELIEF;
-			info.zoneSize = glm::ivec3(5, 5, 5);
+			info.zoneSize = ZONE_SIZES[static_cast<int>(RELIEF)];
 			break;
+		}
+		default:
+		{
+			throw std::invalid_argument("Invalid desired gen level");
 		}
 	}
 
 	/*
 		gen level 			zone size	
-		CAVE 				3
-		RELIEF				5
-		EMPTY				NAN
+		CAVE 				5
+		RELIEF				10
+		EMPTY				NULL
 
 		if chunk is empty and we need cave level generation,
 		we need to do it on a relief sized zone because
@@ -49,7 +63,7 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(int ticket_level, Chunk::genL
 
 	//get the start position of the zone the chunk is in
 	info.zoneStart.x -= info.zoneStart.x % info.zoneSize.x;
-	info.zoneStart.y -= info.zoneStart.y % info.zoneSize.y;
+	info.zoneStart.y = 0;
 	info.zoneStart.z -= info.zoneStart.z % info.zoneSize.z;
 
 	return info;
@@ -311,19 +325,21 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 	using enum Chunk::genLevel;
 	if (info.level <= RELIEF && info.oldLevel > RELIEF)
 	{
-		for(size_t x = 0; x < info.zoneSize.x; x++)
+		for(int x = 0; x < info.zoneSize.x; x++)
 		{
-			for(size_t z = 0; z < info.zoneSize.z; z++)
+			for(int z = 0; z < info.zoneSize.z; z++)
 			{
-				std::shared_ptr<Chunk> chunk = chunks.at(glm::ivec3(x, 0, z));
+				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
+				std::shared_ptr<Chunk> chunk = chunks.at(chunkPos3D);
+				chunk->setGenLevel(RELIEF);
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 				{
 					for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 					{
 						//generate the relief value for the whole chunk
 						float reliefValue = generateReliefValue(glm::ivec2(
-							blockX + x * CHUNK_X_SIZE,
-							blockZ + z * CHUNK_Z_SIZE
+							blockX + chunkPos3D.x * CHUNK_X_SIZE,
+							blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 						));
 
 						float riverValue = std::abs(reliefValue);
@@ -336,9 +352,9 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 						{
 
 							glm::ivec3 position = glm::ivec3(
-								blockX + x * CHUNK_X_SIZE,
+								blockX + chunkPos3D.x * CHUNK_X_SIZE,
 								blockY,
-								blockZ + z * CHUNK_Z_SIZE
+								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
 							BlockID to_set;
 
@@ -366,11 +382,13 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 	if (info.level <= CAVE && info.oldLevel > CAVE)
 	{
 		//generate caves
-		for(size_t x = 0; x < info.zoneSize.x; x++)
+		for(int x = 0; x < info.zoneSize.x; x++)
 		{
-			for(size_t z = 0; z < info.zoneSize.z; z++)
+			for(int z = 0; z < info.zoneSize.z; z++)
 			{
-				std::shared_ptr<Chunk> chunk = chunks.at(glm::ivec3(x, 0, z));
+				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
+				std::shared_ptr<Chunk> chunk = chunks.at(chunkPos3D);
+				chunk->setGenLevel(CAVE);
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 				{
 					for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
@@ -379,9 +397,9 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 						{
 
 							glm::ivec3 position = glm::ivec3(
-								blockX + x * CHUNK_X_SIZE,
+								blockX + chunkPos3D.x * CHUNK_X_SIZE,
 								blockY,
-								blockZ + z * CHUNK_Z_SIZE
+								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
 							BlockID current_block = chunk->getBlock(blockX, blockY, blockZ);
 							

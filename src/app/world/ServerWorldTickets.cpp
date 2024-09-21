@@ -19,7 +19,7 @@ const ServerWorld::TicketMultiMap & ServerWorld::getTickets() const
 uint64_t ServerWorld::addTicket(const ServerWorld::Ticket & ticket)
 {
 	std::lock_guard lock(m_tickets_mutex);
-	// LOG_INFO("Adding ticket: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
+	LOG_INFO("Adding ticket: " << ticket.position.x << " " << ticket.position.z << " level: " << ticket.level);
 	m_tickets_to_add.insert({ticket.hash(), ticket});
 	return (ticket.hash());
 }
@@ -41,7 +41,8 @@ uint64_t ServerWorld::changeTicket(const uint64_t & old_ticket_id, const ServerW
 void ServerWorld::updateTickets()
 {
 	ZoneScopedN("Update Tickets");
-	std::lock_guard lock(m_tickets_mutex);
+	std::lock_guard lock(m_chunks_mutex);
+	std::lock_guard lock2(m_tickets_mutex);
 	bool changed = false;
 
 
@@ -75,7 +76,10 @@ void ServerWorld::updateTickets()
 
 	if (changed)
 	{
-		floodFill(m_active_tickets);
+		ChunkGenList chunk_gen_list;
+
+		floodFill(m_active_tickets, chunk_gen_list);
+		doChunkGens(chunk_gen_list);
 		waitForChunkFutures();
 	}
 }
@@ -89,7 +93,7 @@ void ServerWorld::clearChunksLoadLevel()
 	m_border_chunks.clear();
 }
 
-void ServerWorld::floodFill(const TicketMultiMap & tickets)
+void ServerWorld::floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk_gen_list)
 {
 	// LOG_INFO("ENTERING FLOODFILL");
 	std::queue<Ticket> queue;
@@ -106,7 +110,8 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets)
 			continue;
 
 		//visit the chunk
-		applyTicketToChunk(current);
+		if (!applyTicketToChunk(current, chunk_gen_list))
+			continue;
 
 		// add the neighbors
 		for (int x = -1; x <= 1; x++)
@@ -123,30 +128,37 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets)
 	}
 }
 
-void ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket)
+bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, ServerWorld::ChunkGenList & chunk_gen_list)
 {
-	std::shared_ptr<Chunk> chunk = getChunk(ticket.position);
+	std::shared_ptr<Chunk> chunk = getChunkNoLock(ticket.position);
 	if (chunk == nullptr)
 	{
 		chunk = std::make_shared<Chunk>(ticket.position);
-		insertChunk(ticket.position, chunk);
+		insertChunkNoLock(ticket.position, chunk);
 	}
+	std::lock_guard lock(chunk->status);
 
-	chunk->status.lock_shared();
-	const int highest_level = chunk->getHighestLoadLevel();
-	const int current_level = chunk->getLoadLevel();
-	chunk->status.unlock_shared();
+	const int current_ticket_level = chunk->getLoadLevel();
+	const Chunk::genLevel current_gen_level = chunk->getGenLevel();
 
+	if (current_ticket_level < ticket.level || ticket.level >= WorldGenerator::MAX_TICKET_LEVEL)
+		return false;
 
 	//if the chunk is currently not at a high enough generation level
 	// we need to generate it
 	//since generation is never downgraded we check the highest level
-	if (ticket.level <= WorldGenerator::MAX_TICKET_LEVEL && 
-		highest_level >= ticket.level && 
-		highest_level > TICKET_LEVEL_INACTIVE) 
+	Chunk::genLevel desired_gen_level = WorldGenerator::ticketToGenLevel(ticket.level);
+		
+	
+	if (
+		desired_gen_level != Chunk::genLevel::EMPTY &&
+		desired_gen_level < current_gen_level)
 	{
-		std::lock_guard lock(m_chunk_futures_ids_mutex);
-		m_chunk_futures_ids.push_back(asyncGenChunk(ticket.position, ticket.level, current_level));
+		//add chunk to the list of chunks that need to be generated associated with its level
+		chunk_gen_list.insert({ticket.position, desired_gen_level});
+
+		// std::lock_guard lock(m_chunk_futures_ids_mutex);
+		// m_chunk_futures_ids.push_back(asyncGenChunk(ticket.position, desired_gen_level, current_gen_level));
 	}
 
 	if (ticket.level <= TICKET_LEVEL_ENTITY_UPDATE)
@@ -156,7 +168,6 @@ void ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket)
 	if (ticket.level <= TICKET_LEVEL_BORDER)
 		m_border_chunks.insert(ticket.position);
 
-	chunk->status.lock();
 	chunk->setLoadLevel(ticket.level);
-	chunk->status.unlock();
+	return true;
 }

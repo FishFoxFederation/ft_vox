@@ -27,7 +27,7 @@ std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position) const
 {
 	std::lock_guard lock(m_chunks_mutex);
 	LockMark(m_chunks_mutex);
-	getChunkNoLock(position);
+	return getChunkNoLock(position);
 }
 
 std::shared_ptr<Chunk> World::getChunkNoLock(const glm::ivec3 & position) const
@@ -41,6 +41,20 @@ std::shared_ptr<Chunk> World::getChunkNoLock(const glm::ivec3 & position) const
 void World::insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk)
 {
 	std::lock_guard lock(m_chunks_mutex);
+	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
+	if (!ret.second)
+	{
+		LOG_ERROR("Failed to insert chunk");
+	}
+
+	if (!m_chunks.contains(position))
+	{
+		LOG_CRITICAL("IDK WTF");
+	}
+}
+
+void World::insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk)
+{
 	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
 	if (!ret.second)
 	{

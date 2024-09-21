@@ -72,6 +72,9 @@ public:
 	int					getHighestLoadLevel() const;
 	void				setLoadLevel(const int & load_level);
 
+	genLevel			getGenLevel() const;
+	void				setGenLevel(const genLevel & level);
+
 	static  int			toIndex(const int & x, const int & y, const int & z);
 	static	glm::ivec3	toCoord(const int & index);
 
@@ -87,6 +90,7 @@ private:
 	BlockArray	m_blocks;
 	LightArray	m_light;
 	int			load_level = 44;
+	int			load_level = TICKET_LEVEL_INACTIVE + 10;
 	int			highest_load_level = 0;
 	genLevel	m_gen_level = genLevel::EMPTY;
 };

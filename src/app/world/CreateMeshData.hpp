@@ -498,6 +498,7 @@ public:
 					if (data.texture != 0)
 					{
 						int merge_count = 0;
+						(void)merge_count;
 						// check if the block has identical neighbors for greedy meshing
 						// if so, then merge the blocks into one mesh
 						glm::ivec3 offset{0, 0, 0};
@@ -668,6 +669,7 @@ public:
 					if (data.texture != 0)
 					{
 						int merge_count = 0;
+						(void)merge_count;
 						// check if the block has identical neighbors for greedy meshing
 						// if so, then merge the blocks into one mesh
 						glm::ivec3 offset{0, 0, 0};

@@ -174,6 +174,16 @@ void Chunk::setLoadLevel(const int & load_level)
 		highest_load_level = this->load_level;
 }
 
+Chunk::genLevel Chunk::getGenLevel() const
+{
+	return m_gen_level;
+}
+
+void Chunk::setGenLevel(const genLevel & level)
+{
+	m_gen_level = level;
+}
+
 int Chunk::toIndex(const int & x, const int & y, const int & z)
 {
 	return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
