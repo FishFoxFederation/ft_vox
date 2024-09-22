@@ -100,7 +100,7 @@ void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
 	(void)packet;
 	std::shared_ptr<Chunk> chunk = packet->GetChunk();
-	// LOG_INFO("Received chunk pos " << chunk->getPosition().x << " " << chunk->getPosition().y << " " << chunk->getPosition().z);
+	LOG_INFO("Received chunk pos " << chunk->getPosition().x << " " << chunk->getPosition().y << " " << chunk->getPosition().z);
 	m_world.addChunk(std::move(chunk));
 }
 

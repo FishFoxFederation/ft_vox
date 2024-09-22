@@ -89,7 +89,6 @@ private:
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
 	LightArray	m_light;
-	int			load_level = 44;
 	int			load_level = TICKET_LEVEL_INACTIVE + 10;
 	int			highest_load_level = 0;
 	genLevel	m_gen_level = genLevel::EMPTY;

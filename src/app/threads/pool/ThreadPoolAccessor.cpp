@@ -49,7 +49,7 @@ void ThreadPoolAccessor::waitForTasks(const std::vector<uint64_t> & ids)
 
 void ThreadPoolAccessor::waitTask(uint64_t id)
 {
-	LOG_INFO("Waiting for task " << id);
+	// LOG_INFO("Waiting for task " << id);
 	auto & future = m_futures.at(id);
 	future.get();
 	m_futures.erase(id);
