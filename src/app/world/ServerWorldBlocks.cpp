@@ -292,7 +292,7 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 	while (!chunks_to_gen.empty())
 	{
 		auto [chunk_position, desired_gen_level] = *chunks_to_gen.begin();
-		LOG_INFO("launching gen for chunk at pos" << chunk_position.x << " " << chunk_position.y << " " << chunk_position.z);
+		chunks_to_gen.erase(chunks_to_gen.begin());
 
 		std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
 		chunk->status.lock();
@@ -300,23 +300,30 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 		chunk->status.unlock();
 
 		ChunkMap chunkZone;
+		// LOG_INFO("CHUNK: " << chunk_position.x << " " << chunk_position.z);
 		WorldGenerator::genInfo info = m_world_generator.getGenInfo(desired_gen_level, current_gen_level, chunk_position);
 
 		chunkZone = getChunkZone(info.zoneStart, info.zoneSize);
+		// LOG_INFO("CHUNK: " << chunk_position.x << " " << chunk_position.z);
+		// LOG_INFO("LEVEL :" << static_cast<int>(desired_gen_level) << " " << static_cast<int>(current_gen_level));
+		// LOG_INFO("ZONE SIZE: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
+		// LOG_INFO("ZONE START: " << info.zoneStart.x << " " << info.zoneStart.y << " " << info.zoneStart.z);
 
 		for (auto [position, chunk] : chunkZone)
 		{
 			auto iter = chunks_to_gen.find(position);
-
 			//if the chunk is in the gen list but is already in the current gen zone we remove it
 			if (iter != chunks_to_gen.end() && iter->second >= desired_gen_level)
+			{
+				// LOG_INFO("ERASE: " << position.x << " " << position.z);
 				chunks_to_gen.erase(iter);
+			}
 		}
 
 		uint64_t future_id = m_threadPool.submit([this, info, chunkZone] () mutable
 		{
 			ZoneScopedN("Generate Chunk");
-			LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
+			// LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
 			m_world_generator.generate(info, chunkZone);
 
 			for (auto & [chunk_position, chunk] : chunkZone)

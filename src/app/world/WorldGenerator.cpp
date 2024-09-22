@@ -60,11 +60,18 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 		info.zoneSize = ZONE_SIZES[static_cast<int>(info.oldLevel) - 1];
 
 	info.zoneStart = chunkPos3D;
-
+	// LOG_INFO("CHUNKPOS: " << chunkPos3D.x << " " << chunkPos3D.z << " SIZE: " << info.zoneSize.x);
 	//get the start position of the zone the chunk is in
-	info.zoneStart.x -= info.zoneStart.x % info.zoneSize.x;
 	info.zoneStart.y = 0;
+
+	if (info.zoneStart.x < 0)
+		info.zoneStart.x -= info.zoneSize.x;
+	info.zoneStart.x -= info.zoneStart.x % info.zoneSize.x;
+	if (info.zoneStart.z < 0)
+		info.zoneStart.z -= info.zoneSize.z;
 	info.zoneStart.z -= info.zoneStart.z % info.zoneSize.z;
+	
+	// LOG_INFO("ZONE START: " << info.zoneStart.x << " " << info.zoneStart.z);
 
 	return info;
 }
