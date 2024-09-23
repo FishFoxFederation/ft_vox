@@ -5,6 +5,7 @@
 #include <glm/vec3.hpp>
 #include <mutex>
 #include <condition_variable>
+#include <unordered_map>
 #include <unordered_set>
 #include "Block.hpp"
 #include "Status.hpp"
@@ -29,7 +30,7 @@ public:
 		CAVE,
 		RELIEF,
 		EMPTY,
-	};	
+	};
 
 	Chunk(glm::ivec3 position);
 	Chunk(const glm::ivec3 & position, const BlockArray & blocks);

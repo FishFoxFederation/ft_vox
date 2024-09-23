@@ -1746,6 +1746,7 @@ void VulkanAPI::createPipelines()
 			BlockVertex::getAttributeDescriptions()[0]
 		};
 		pipeline_info.attribute_descriptions = attribute_descriptions;
+		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
 		pipeline_info.depth_bias_enable = VK_TRUE;
 		pipeline_info.depth_bias_constant_factor = 0.005f;

@@ -5,13 +5,13 @@
 Chunk::genLevel WorldGenerator::ticketToGenLevel(int ticket_level)
 {
 	if (ticket_level <= TICKET_LEVEL_INACTIVE)
-		return Chunk::genLevel::CAVE;
+		return CAVE;
 	switch (ticket_level)
 	{
 		case TICKET_LEVEL_INACTIVE:
-			return Chunk::genLevel::CAVE;
+			return CAVE;
 		case TICKET_LEVEL_INACTIVE + 1:
-			return Chunk::genLevel::RELIEF;
+			return RELIEF;
 		default:
 			throw std::invalid_argument("WorldGenerator::ticketToGenLevel: Invalid ticket level");
 	}
@@ -22,7 +22,7 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 	genInfo info;
 
 	info.oldLevel = old_gen_level;
-	
+
 	switch (desired_gen_level)
 	{
 		case CAVE:
@@ -44,15 +44,15 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 	}
 
 	/*
-		gen level 			zone size	
+		gen level 			zone size
 		CAVE 				5
 		RELIEF				10
 		EMPTY				NULL
 
 		if chunk is empty and we need cave level generation,
 		we need to do it on a relief sized zone because
-		if a chunk has a relief level generation then we have the garantee 
-		that all the chunks in its zone have at least the same gen level	
+		if a chunk has a relief level generation then we have the garantee
+		that all the chunks in its zone have at least the same gen level
 	*/
 
 	//if the level difference is more than 1, then we need to change the zone size
@@ -70,7 +70,7 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 	if (info.zoneStart.z < 0)
 		info.zoneStart.z -= info.zoneSize.z;
 	info.zoneStart.z -= info.zoneStart.z % info.zoneSize.z;
-	
+
 	// LOG_INFO("ZONE START: " << info.zoneStart.x << " " << info.zoneStart.z);
 
 	return info;
@@ -158,13 +158,13 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 					{
 						if (riverValue < 0.05f)
 							to_set = BlockID::Water;
-						else 
+						else
 							to_set = BlockID::Grass;
 					}
 					else
 						to_set = BlockID::Air;
 				}
-				
+
 				// //if above relief value and below 200 place water
 				// if (to_set == BlockID::Air && position.y < 200)
 				// 	to_set = BlockID::Water;
@@ -239,9 +239,9 @@ BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
 }
 
 /**
- * @brief 
- * 
- * @param position 
+ * @brief
+ *
+ * @param position
  * @return float [-1, 1]
  */
 float WorldGenerator::generateReliefValue(glm::ivec2 position)
@@ -329,7 +329,6 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 
 void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 {
-	using enum Chunk::genLevel;
 	if (info.level <= RELIEF && info.oldLevel > RELIEF)
 	{
 		for(int x = 0; x < info.zoneSize.x; x++)
@@ -373,7 +372,7 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 								{
 									if (riverValue < 0.05f)
 										to_set = BlockID::Water;
-									else 
+									else
 										to_set = BlockID::Grass;
 								}
 								else
@@ -409,7 +408,7 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
 							BlockID current_block = chunk->getBlock(blockX, blockY, blockZ);
-							
+
 							if (current_block == BlockID::Stone && generateCaveBlock(position) == BlockID::Air)
 								chunk->setBlock(blockX, blockY, blockZ, BlockID::Stone);
 						}

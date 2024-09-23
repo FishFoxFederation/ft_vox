@@ -31,7 +31,7 @@ void ServerWorld::updateBlocks()
 			{
 				break;
 			}
-		
+
 		}
 	}
 }
@@ -51,7 +51,7 @@ std::shared_ptr<Chunk> ServerWorld::getAndLoadChunk(const glm::ivec3 & chunk_pos
 		loadChunk(chunk_position);
 		chunk = getChunk(chunk_position);
 	}
-	
+
 	return chunk;
 }
 
@@ -63,7 +63,7 @@ void ServerWorld::placeBlock(const glm::vec3 & position, BlockID block)
 	std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
 	if (chunk == nullptr)
 		return;
-	
+
 	auto packet = std::make_shared<BlockActionPacket>(block, position, BlockActionPacket::Action::PLACE);
 	{
 		std::lock_guard lock(chunk->status);
@@ -150,7 +150,7 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
 			data.chunks_to_load.push_back(chunk);
 		}
 	}
-	
+
 	return data;
 }
 
@@ -335,4 +335,4 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 			m_chunk_futures_ids.push_back(future_id);
 		}
 	}
-};
+}
