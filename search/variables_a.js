@@ -4,7 +4,7 @@ var searchData=
   ['left_5farm_5fpos_1',['left_arm_pos',['../classPlayerModel.html#afe1dedbe53d9db08568dc8364887a812',1,'PlayerModel']]],
   ['left_5fleg_5fpos_2',['left_leg_pos',['../classPlayerModel.html#a6c97633d415df2c594c6dd3c02bffb3e',1,'PlayerModel']]],
   ['leg_5fsize_3',['leg_size',['../classPlayerModel.html#addaf70e0f9fd2491d0dbbf9a8fcae9a1',1,'PlayerModel']]],
-  ['level_4',['level',['../structServerWorld_1_1Ticket.html#aef4d65e8169df5ef755b7cdc22e1f114',1,'ServerWorld::Ticket']]],
+  ['level_4',['level',['../structServerWorld_1_1Ticket.html#aef4d65e8169df5ef755b7cdc22e1f114',1,'ServerWorld::Ticket::level()'],['../structWorldGenerator_1_1genInfo.html#a1ef4aa9828f45de3bec0463708c4c153',1,'WorldGenerator::genInfo::level()']]],
   ['light_5',['light',['../structChunkPacket_1_1ChunkData.html#a18eb2ed49a43e964ad2cb3d76c16668f',1,'ChunkPacket::ChunkData']]],
   ['light_5fdir_6',['light_dir',['../structShadowMapLight.html#ac937185edc116e838c519e906689ca7c',1,'ShadowMapLight']]],
   ['light_5fmat_5fubo_7',['light_mat_ubo',['../classVulkanAPI.html#acdddd58d6fe5785ac53838b6748ef46c',1,'VulkanAPI']]],

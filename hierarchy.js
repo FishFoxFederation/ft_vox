@@ -34,6 +34,7 @@ var hierarchy =
       [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ]
     ] ],
     [ "Face", "structFace.html", null ],
+    [ "WorldGenerator::genInfo", "structWorldGenerator_1_1genInfo.html", null ],
     [ "GuiTextureData", "structGuiTextureData.html", null ],
     [ "ServerWorld::Ticket::hash", "structServerWorld_1_1Ticket_1_1hash.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],

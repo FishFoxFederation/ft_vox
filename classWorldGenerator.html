@@ -106,7 +106,10 @@ $(document).ready(function(){initNavTree('classWorldGenerator.html',''); initRes
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classWorldGenerator-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">WorldGenerator Class Reference</div></div>
 </div><!--header-->
@@ -118,16 +121,24 @@ Collaboration diagram for WorldGenerator:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldGenerator__coll__graph.png" border="0" usemap="#aWorldGenerator_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldGenerator_coll__map" id="aWorldGenerator_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,177,163"/>
+<area shape="rect" title=" " alt="" coords="5,5,177,236"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structWorldGenerator_1_1genInfo.html">genInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4f4abec2013abad54ec417e3b2b6d70"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#ac4f4abec2013abad54ec417e3b2b6d70">WorldGenerator</a> ()</td></tr>
 <tr class="separator:ac4f4abec2013abad54ec417e3b2b6d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afed7aa2e501ab283bb41bbaa6fbdf24a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#afed7aa2e501ab283bb41bbaa6fbdf24a">~WorldGenerator</a> ()</td></tr>
 <tr class="separator:afed7aa2e501ab283bb41bbaa6fbdf24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12725d4e6de2b7cc8f96b225c9ac0191"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#a12725d4e6de2b7cc8f96b225c9ac0191">generate</a> (<a class="el" href="structWorldGenerator_1_1genInfo.html">genInfo</a> info, <a class="el" href="Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba">ChunkMap</a> &amp;chunks)</td></tr>
+<tr class="memdesc:a12725d4e6de2b7cc8f96b225c9ac0191"><td class="mdescLeft">&#160;</td><td class="mdescRight">will do a generation pass to the chunks  <a href="classWorldGenerator.html#a12725d4e6de2b7cc8f96b225c9ac0191">More...</a><br /></td></tr>
+<tr class="separator:a12725d4e6de2b7cc8f96b225c9ac0191"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab939a203a9e4fac11c978433b06881cb"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#ab939a203a9e4fac11c978433b06881cb">generateChunkColumn</a> (const int &amp;x, const int &amp;z)</td></tr>
 <tr class="separator:ab939a203a9e4fac11c978433b06881cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6290c8f18c8bab3af0a0670c3495bd10"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#a6290c8f18c8bab3af0a0670c3495bd10">generateChunk</a> (const int &amp;x, const int &amp;y, const int &amp;z)</td></tr>
@@ -140,6 +151,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a141ef39af27eab97b1b9d2958f9ba2c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5e4a557f16fdcc639d2ab2af464a83d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#ad5e4a557f16fdcc639d2ab2af464a83d">generateFullChunk</a> (const int &amp;x, const int &amp;y, const int &amp;z, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
 <tr class="separator:ad5e4a557f16fdcc639d2ab2af464a83d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a360a033c938cf5ac11f71f4980a9bd08"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structWorldGenerator_1_1genInfo.html">genInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#a360a033c938cf5ac11f71f4980a9bd08">getGenInfo</a> (<a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a> gen_level, <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a> old_level, glm::ivec3 chunkPos3D)</td></tr>
+<tr class="memdesc:a360a033c938cf5ac11f71f4980a9bd08"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the generation info for the given gen level and chunk position  <a href="classWorldGenerator.html#a360a033c938cf5ac11f71f4980a9bd08">More...</a><br /></td></tr>
+<tr class="separator:a360a033c938cf5ac11f71f4980a9bd08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2cca4d566d9d7d711cbe189f141f0eb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#ae2cca4d566d9d7d711cbe189f141f0eb">ticketToGenLevel</a> (int ticket_level)</td></tr>
+<tr class="separator:ae2cca4d566d9d7d711cbe189f141f0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:ad23c55aa0b96fbc545432bd7341d427a"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; glm::ivec3, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#ad23c55aa0b96fbc545432bd7341d427a">ZONE_SIZES</a></td></tr>
+<tr class="separator:ad23c55aa0b96fbc545432bd7341d427a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c56d23f7b2245a22aa329bd39d8d837"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldGenerator.html#a8c56d23f7b2245a22aa329bd39d8d837">MAX_TICKET_LEVEL</a> = TICKET_LEVEL_INACTIVE + 2</td></tr>
+<tr class="separator:a8c56d23f7b2245a22aa329bd39d8d837"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac4f4abec2013abad54ec417e3b2b6d70" name="ac4f4abec2013abad54ec417e3b2b6d70"></a>
@@ -177,6 +203,44 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a12725d4e6de2b7cc8f96b225c9ac0191" name="a12725d4e6de2b7cc8f96b225c9ac0191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12725d4e6de2b7cc8f96b225c9ac0191">&#9670;&#160;</a></span>generate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WorldGenerator::generate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structWorldGenerator_1_1genInfo.html">genInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba">ChunkMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunks</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>will do a generation pass to the chunks </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>the struct returned by the getGenInfo function </td></tr>
+    <tr><td class="paramname">chunks</td><td>the chunks to generate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>the chunks MUST be locked before calling and unlocked after </dd></dl>
+
+</div>
+</div>
 <a id="a6290c8f18c8bab3af0a0670c3495bd10" name="a6290c8f18c8bab3af0a0670c3495bd10"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6290c8f18c8bab3af0a0670c3495bd10">&#9670;&#160;</a></span>generateChunk() <span class="overload">[1/2]</span></h2>
 
@@ -384,6 +448,137 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a360a033c938cf5ac11f71f4980a9bd08" name="a360a033c938cf5ac11f71f4980a9bd08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a360a033c938cf5ac11f71f4980a9bd08">&#9670;&#160;</a></span>getGenInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structWorldGenerator_1_1genInfo.html">WorldGenerator::genInfo</a> WorldGenerator::getGenInfo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a>&#160;</td>
+          <td class="paramname"><em>gen_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a>&#160;</td>
+          <td class="paramname"><em>old_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::ivec3&#160;</td>
+          <td class="paramname"><em>chunkPos3D</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get the generation info for the given gen level and chunk position </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gen_level</td><td></td></tr>
+    <tr><td class="paramname">old_level</td><td></td></tr>
+    <tr><td class="paramname">chunkPos3D</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="structWorldGenerator_1_1genInfo.html">genInfo</a> struct </dd></dl>
+
+</div>
+</div>
+<a id="ae2cca4d566d9d7d711cbe189f141f0eb" name="ae2cca4d566d9d7d711cbe189f141f0eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2cca4d566d9d7d711cbe189f141f0eb">&#9670;&#160;</a></span>ticketToGenLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a> WorldGenerator::ticketToGenLevel </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ticket_level</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8c56d23f7b2245a22aa329bd39d8d837" name="a8c56d23f7b2245a22aa329bd39d8d837"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c56d23f7b2245a22aa329bd39d8d837">&#9670;&#160;</a></span>MAX_TICKET_LEVEL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int WorldGenerator::MAX_TICKET_LEVEL = TICKET_LEVEL_INACTIVE + 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad23c55aa0b96fbc545432bd7341d427a" name="ad23c55aa0b96fbc545432bd7341d427a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad23c55aa0b96fbc545432bd7341d427a">&#9670;&#160;</a></span>ZONE_SIZES</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::array&lt;glm::ivec3, 2&gt; WorldGenerator::ZONE_SIZES</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">        glm::ivec3(4, 0, 4),</div>
+<div class="line">        glm::ivec3(8, 0, 8)</div>
+<div class="line">    }</div>
+</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>the zone sizes must be in the same order as the genLevel enum </dd>
+<dd>
+the zone sizes must be multiples of the zone sizes of the previous gen level (ex 5x5 and 10x10) </dd></dl>
 
 </div>
 </div>

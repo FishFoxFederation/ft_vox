@@ -107,7 +107,8 @@ $(document).ready(function(){initNavTree('Chunk_8hpp.html',''); initResizable();
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle"><div class="title">Chunk.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -216,7 +217,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a953c741ba256712c6f72ae2c30518a20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a>&#160;&#160;&#160;256</td></tr>
+<tr class="memitem:a953c741ba256712c6f72ae2c30518a20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a>&#160;&#160;&#160;512</td></tr>
 <tr class="separator:a953c741ba256712c6f72ae2c30518a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78f1b70acf986005160e8bb23fb610a5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a>&#160;&#160;&#160;16</td></tr>
 <tr class="separator:a78f1b70acf986005160e8bb23fb610a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,6 +229,11 @@ Macros</h2></td></tr>
 <tr class="separator:a6f076f66a2e2b8c32529115c9c1c0a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61ce72c858dd50cfd4ac19d7e6c9a89c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#a61ce72c858dd50cfd4ac19d7e6c9a89c">CHUNK_SIZE_VEC3</a>&#160;&#160;&#160;glm::vec3(<a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a>, <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a>)</td></tr>
 <tr class="separator:a61ce72c858dd50cfd4ac19d7e6c9a89c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ae1731276a4c3053e478351f184bc96ba"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map&lt; glm::ivec3, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba">ChunkMap</a></td></tr>
+<tr class="separator:ae1731276a4c3053e478351f184bc96ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a43f266fc7456ae5714f5a528b80b3ba3" name="a43f266fc7456ae5714f5a528b80b3ba3"></a>
@@ -293,7 +299,7 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CHUNK_Y_SIZE&#160;&#160;&#160;256</td>
+          <td class="memname">#define CHUNK_Y_SIZE&#160;&#160;&#160;512</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -308,6 +314,21 @@ Macros</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define CHUNK_Z_SIZE&#160;&#160;&#160;16</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="ae1731276a4c3053e478351f184bc96ba" name="ae1731276a4c3053e478351f184bc96ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1731276a4c3053e478351f184bc96ba">&#9670;&#160;</a></span>ChunkMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::unordered_map&lt;glm::ivec3, std::shared_ptr&lt;<a class="el" href="classChunk.html">Chunk</a>&gt; &gt; <a class="el" href="Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba">ChunkMap</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

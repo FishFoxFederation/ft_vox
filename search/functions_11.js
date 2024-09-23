@@ -25,7 +25,7 @@ var searchData=
   ['setconnectionid_22',['SetConnectionId',['../classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9',1,'IPacket']]],
   ['setdebugblock_23',['setDebugBlock',['../classWorldScene.html#a4af382fc1d4b7db877a750b07ceaf4b6',1,'WorldScene']]],
   ['setdisplacement_24',['SetDisplacement',['../classPlayerMovePacket.html#a139b9846419c59844079d9c5e70e64c7',1,'PlayerMovePacket']]],
-  ['setgenerated_25',['setGenerated',['../classChunk.html#a55df90d1187a69aea5b16db22e386a45',1,'Chunk']]],
+  ['setgenlevel_25',['setGenLevel',['../classChunk.html#a64d6d1200c9f45e364868c113cc3c219',1,'Chunk']]],
   ['setid_26',['SetId',['../classPingPacket.html#aa9f35aa171aaad32531d3c0a6f2a52a8',1,'PingPacket']]],
   ['setimagelayout_27',['setImageLayout',['../namespacevk__helper.html#a71c0f42868e6edd14e06b352890f5acc',1,'vk_helper::setImageLayout()'],['../classVulkanAPI.html#a5cf827ed1548a6c79b7c0113cf726892',1,'VulkanAPI::setImageLayout()']]],
   ['setlevel_28',['setLevel',['../classLogger.html#ab138ded838fa6698b7e6f74f5fc57efc',1,'Logger']]],

@@ -109,7 +109,6 @@ $(document).ready(function(){initNavTree('classServerWorld.html',''); initResiza
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classServerWorld-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">ServerWorld Class Reference</div></div>
 </div><!--header-->
@@ -121,8 +120,8 @@ Inheritance diagram for ServerWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classServerWorld__inherit__graph.png" border="0" usemap="#aServerWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aServerWorld_inherit__map" id="aServerWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,372,207,705"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="18,5,194,324"/>
+<area shape="rect" title=" " alt="" coords="19,401,167,603"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="5,5,181,353"/>
 </map>
 </div>
 <div class="dynheader">
@@ -130,10 +129,10 @@ Collaboration diagram for ServerWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classServerWorld__coll__graph.png" border="0" usemap="#aServerWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aServerWorld_coll__map" id="aServerWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="87,608,288,941"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="99,269,275,559"/>
-<area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,5,175,207"/>
-<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,27,371,185"/>
+<area shape="rect" title=" " alt="" coords="113,667,261,868"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="99,299,275,617"/>
+<area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,20,175,221"/>
+<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,5,371,236"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -182,16 +181,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afd97b8fca06c1d7e9a6ae80c82407432"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ChunkLoadUnloadData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#afd97b8fca06c1d7e9a6ae80c82407432">getChunksToUnload</a> (const glm::vec3 &amp;old_player_position, const glm::vec3 &amp;new_player_position)</td></tr>
 <tr class="separator:afd97b8fca06c1d7e9a6ae80c82407432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ebb95bb7fa6a543052907b8b304608"><td class="memItemLeft" align="right" valign="top">const std::unordered_set&lt; glm::ivec3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#ae1ebb95bb7fa6a543052907b8b304608">getBlockUpdateChunks</a> () const</td></tr>
+<tr class="memdesc:ae1ebb95bb7fa6a543052907b8b304608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of Chunks that need to get a block update tick.  <a href="classServerWorld.html#ae1ebb95bb7fa6a543052907b8b304608">More...</a><br /></td></tr>
 <tr class="separator:ae1ebb95bb7fa6a543052907b8b304608"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c7e95561e5b1048cb407c4a0e16e70b"><td class="memItemLeft" align="right" valign="top">const std::unordered_set&lt; glm::ivec3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a1c7e95561e5b1048cb407c4a0e16e70b">getEntityUpdateChunks</a> () const</td></tr>
+<tr class="memdesc:a1c7e95561e5b1048cb407c4a0e16e70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of Chunks that need to get an entity update tick.  <a href="classServerWorld.html#a1c7e95561e5b1048cb407c4a0e16e70b">More...</a><br /></td></tr>
 <tr class="separator:a1c7e95561e5b1048cb407c4a0e16e70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79557166e9e4448e9e467acaee42f998"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classServerWorld.html#a2734abb3a43b9347baa9be53e8093bda">TicketMultiMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a79557166e9e4448e9e467acaee42f998">getTickets</a> () const</td></tr>
+<tr class="memdesc:a79557166e9e4448e9e467acaee42f998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of Tickets ( May contains duplicates )  <a href="classServerWorld.html#a79557166e9e4448e9e467acaee42f998">More...</a><br /></td></tr>
 <tr class="separator:a79557166e9e4448e9e467acaee42f998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57b09255108fe8e16e112fbc9d1b05fa"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a57b09255108fe8e16e112fbc9d1b05fa">addTicket</a> (const <a class="el" href="structServerWorld_1_1Ticket.html">Ticket</a> &amp;ticket)</td></tr>
+<tr class="memdesc:a57b09255108fe8e16e112fbc9d1b05fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a ticket to the ticket manager.  <a href="classServerWorld.html#a57b09255108fe8e16e112fbc9d1b05fa">More...</a><br /></td></tr>
 <tr class="separator:a57b09255108fe8e16e112fbc9d1b05fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a011796df74c5e6f16bfa7e4d78b93e95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a011796df74c5e6f16bfa7e4d78b93e95">removeTicket</a> (const uint64_t &amp;ticket_id)</td></tr>
+<tr class="memdesc:a011796df74c5e6f16bfa7e4d78b93e95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a ticket from the ticket manager.  <a href="classServerWorld.html#a011796df74c5e6f16bfa7e4d78b93e95">More...</a><br /></td></tr>
 <tr class="separator:a011796df74c5e6f16bfa7e4d78b93e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb795975e6d2fa4ee76a05ecdadf4615"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#aeb795975e6d2fa4ee76a05ecdadf4615">changeTicket</a> (const uint64_t &amp;old_ticket_id, const <a class="el" href="structServerWorld_1_1Ticket.html">Ticket</a> &amp;new_ticket)</td></tr>
+<tr class="memdesc:aeb795975e6d2fa4ee76a05ecdadf4615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shortcut to remove a ticket and add a new one.  <a href="classServerWorld.html#aeb795975e6d2fa4ee76a05ecdadf4615">More...</a><br /></td></tr>
 <tr class="separator:aeb795975e6d2fa4ee76a05ecdadf4615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47301946b8c5bc0957ee6cc853cb2cc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a47301946b8c5bc0957ee6cc853cb2cc7">handlePacket</a> (std::shared_ptr&lt; <a class="el" href="classIPacket.html">IPacket</a> &gt; packet)</td></tr>
 <tr class="separator:a47301946b8c5bc0957ee6cc853cb2cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,26 +224,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af69b86b3ac37a2168715401267d104ab inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld.html">World</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">operator=</a> (<a class="el" href="classWorld.html">World</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:af69b86b3ac37a2168715401267d104ab inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77cd7a90b8768b6e34f0f4937b96cda4 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a77cd7a90b8768b6e34f0f4937b96cda4">getChunk</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="memdesc:a77cd7a90b8768b6e34f0f4937b96cda4 inherit pub_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classChunk.html">Chunk</a> object.  <a href="classWorld.html#a77cd7a90b8768b6e34f0f4937b96cda4">More...</a><br /></td></tr>
 <tr class="separator:a77cd7a90b8768b6e34f0f4937b96cda4 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfd5f2a2c19381826debe4d0b5ac3c50 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#acfd5f2a2c19381826debe4d0b5ac3c50">insertChunk</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
 <tr class="separator:acfd5f2a2c19381826debe4d0b5ac3c50 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a88dfed9827389c3311c5bb3c4fd0b8a3"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a88dfed9827389c3311c5bb3c4fd0b8a3">TICKET_LEVEL_ENTITY_UPDATE</a> = 31</td></tr>
-<tr class="separator:a88dfed9827389c3311c5bb3c4fd0b8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a019348b5fe4d508e8d6e6b48ae491dc4"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a019348b5fe4d508e8d6e6b48ae491dc4">TICKET_LEVEL_BLOCK_UPDATE</a> = 32</td></tr>
-<tr class="separator:a019348b5fe4d508e8d6e6b48ae491dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67b82ec0f52732390556aa2bf499c2a0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a67b82ec0f52732390556aa2bf499c2a0">TICKET_LEVEL_BORDER</a> = 33</td></tr>
-<tr class="separator:a67b82ec0f52732390556aa2bf499c2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6888801ef91a7255eb097c1ba97de195"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a6888801ef91a7255eb097c1ba97de195">TICKET_LEVEL_INACTIVE</a> = 34</td></tr>
-<tr class="separator:a6888801ef91a7255eb097c1ba97de195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac97956e2db082c0f7b71ee24697684a8"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#ac97956e2db082c0f7b71ee24697684a8">TICKET_LEVEL_SPAWN</a> = 32</td></tr>
-<tr class="separator:ac97956e2db082c0f7b71ee24697684a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f91d49257fcbf0fca2d99c060089fd0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a3f91d49257fcbf0fca2d99c060089fd0">TICKET_LEVEL_PLAYER</a> = 25</td></tr>
-<tr class="separator:a3f91d49257fcbf0fca2d99c060089fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa452cff199cbe72eb22a8ce01a09a97a"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#aa452cff199cbe72eb22a8ce01a09a97a">SERVER_LOAD_DISTANCE</a> = <a class="el" href="classServerWorld.html#a6888801ef91a7255eb097c1ba97de195">TICKET_LEVEL_INACTIVE</a> - <a class="el" href="classServerWorld.html#a3f91d49257fcbf0fca2d99c060089fd0">TICKET_LEVEL_PLAYER</a></td></tr>
-<tr class="separator:aa452cff199cbe72eb22a8ce01a09a97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -256,6 +245,11 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a456108e02a2cf121c20b3436d293614a inherit pro_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2aceeb77eacb247872f3c3a1b422cd15 inherit pro_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a2aceeb77eacb247872f3c3a1b422cd15">TracyLockableN</a> (std::mutex, m_chunks_mutex, &quot;Chunks&quot;)</td></tr>
 <tr class="separator:a2aceeb77eacb247872f3c3a1b422cd15 inherit pro_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a024d70e06aa8f5a8c0dc8025898bfc7d inherit pro_methods_classWorld"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a024d70e06aa8f5a8c0dc8025898bfc7d">getChunkNoLock</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="memdesc:a024d70e06aa8f5a8c0dc8025898bfc7d inherit pro_methods_classWorld"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a chunk ptr without locking the chunks mutex.  <a href="classWorld.html#a024d70e06aa8f5a8c0dc8025898bfc7d">More...</a><br /></td></tr>
+<tr class="separator:a024d70e06aa8f5a8c0dc8025898bfc7d inherit pro_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500a24a178550859843850732f9e8f55 inherit pro_methods_classWorld"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a500a24a178550859843850732f9e8f55">insertChunkNoLock</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
+<tr class="separator:a500a24a178550859843850732f9e8f55 inherit pro_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classWorld')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classWorld.html">World</a></td></tr>
 <tr class="memitem:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, std::shared_ptr&lt; <a class="el" href="classPlayer.html">Player</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9b6166c32096dff1f9e29a78743945f1">m_players</a></td></tr>
 <tr class="separator:a9b6166c32096dff1f9e29a78743945f1 inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -408,6 +402,17 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Add a ticket to the ticket manager. </p>
+<p >The new ticket will be active on the next tick</p>
+<p >You can keep track of the ticket for further deletion with the ticket id</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ticket</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint64_t </dd></dl>
+
 </div>
 </div>
 <a id="aeb795975e6d2fa4ee76a05ecdadf4615" name="aeb795975e6d2fa4ee76a05ecdadf4615"></a>
@@ -435,6 +440,18 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Shortcut to remove a ticket and add a new one. </p>
+<p >the new ticket will be active on the next tick</p>
+<p >you can keep track of the ticket for further deletion with the ticket id</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">old_ticket_id</td><td></td></tr>
+    <tr><td class="paramname">new_ticket</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint64_t </dd></dl>
 
 </div>
 </div>
@@ -470,6 +487,9 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Get the list of Chunks that need to get a block update tick. </p>
+<dl class="section return"><dt>Returns</dt><dd>const std::unordered_set&lt;glm::ivec3&gt;&amp; </dd></dl>
 
 </div>
 </div>
@@ -516,6 +536,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Get the list of Chunks that need to get an entity update tick. </p>
+<dl class="section return"><dt>Returns</dt><dd>const std::unordered_set&lt;glm::ivec3&gt;&amp; </dd></dl>
+
 </div>
 </div>
 <a id="a79557166e9e4448e9e467acaee42f998" name="a79557166e9e4448e9e467acaee42f998"></a>
@@ -532,6 +555,9 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Get the list of Tickets ( May contains duplicates ) </p>
+<dl class="section return"><dt>Returns</dt><dd>const TicketMultiMap&amp; </dd></dl>
 
 </div>
 </div>
@@ -739,6 +765,14 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Remove a ticket from the ticket manager. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ticket_id</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a53e41cd4cc868b9c4fef6eb7600d10e7" name="a53e41cd4cc868b9c4fef6eb7600d10e7"></a>
@@ -827,161 +861,6 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa452cff199cbe72eb22a8ce01a09a97a" name="aa452cff199cbe72eb22a8ce01a09a97a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa452cff199cbe72eb22a8ce01a09a97a">&#9670;&#160;</a></span>SERVER_LOAD_DISTANCE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::SERVER_LOAD_DISTANCE = <a class="el" href="classServerWorld.html#a6888801ef91a7255eb097c1ba97de195">TICKET_LEVEL_INACTIVE</a> - <a class="el" href="classServerWorld.html#a3f91d49257fcbf0fca2d99c060089fd0">TICKET_LEVEL_PLAYER</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a019348b5fe4d508e8d6e6b48ae491dc4" name="a019348b5fe4d508e8d6e6b48ae491dc4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a019348b5fe4d508e8d6e6b48ae491dc4">&#9670;&#160;</a></span>TICKET_LEVEL_BLOCK_UPDATE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_BLOCK_UPDATE = 32</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a67b82ec0f52732390556aa2bf499c2a0" name="a67b82ec0f52732390556aa2bf499c2a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67b82ec0f52732390556aa2bf499c2a0">&#9670;&#160;</a></span>TICKET_LEVEL_BORDER</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_BORDER = 33</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a88dfed9827389c3311c5bb3c4fd0b8a3" name="a88dfed9827389c3311c5bb3c4fd0b8a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88dfed9827389c3311c5bb3c4fd0b8a3">&#9670;&#160;</a></span>TICKET_LEVEL_ENTITY_UPDATE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_ENTITY_UPDATE = 31</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6888801ef91a7255eb097c1ba97de195" name="a6888801ef91a7255eb097c1ba97de195"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6888801ef91a7255eb097c1ba97de195">&#9670;&#160;</a></span>TICKET_LEVEL_INACTIVE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_INACTIVE = 34</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3f91d49257fcbf0fca2d99c060089fd0" name="a3f91d49257fcbf0fca2d99c060089fd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f91d49257fcbf0fca2d99c060089fd0">&#9670;&#160;</a></span>TICKET_LEVEL_PLAYER</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_PLAYER = 25</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac97956e2db082c0f7b71ee24697684a8" name="ac97956e2db082c0f7b71ee24697684a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac97956e2db082c0f7b71ee24697684a8">&#9670;&#160;</a></span>TICKET_LEVEL_SPAWN</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr int ServerWorld::TICKET_LEVEL_SPAWN = 32</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

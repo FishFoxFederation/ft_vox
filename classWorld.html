@@ -121,9 +121,9 @@ Inheritance diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__inherit__graph.png" border="0" usemap="#aWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aWorld_inherit__map" id="aWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="122,5,298,324"/>
-<area shape="rect" href="classClientWorld.html" title=" " alt="" coords="5,431,196,647"/>
-<area shape="rect" href="classServerWorld.html" title=" " alt="" coords="220,372,421,705"/>
+<area shape="rect" title=" " alt="" coords="109,5,285,353"/>
+<area shape="rect" href="classClientWorld.html" title=" " alt="" coords="5,401,196,617"/>
+<area shape="rect" href="classServerWorld.html" title=" " alt="" coords="220,409,368,610"/>
 </map>
 </div>
 <div class="dynheader">
@@ -131,9 +131,9 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="99,269,275,559"/>
-<area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,5,175,207"/>
-<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,27,371,185"/>
+<area shape="rect" title=" " alt="" coords="99,299,275,617"/>
+<area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,20,175,221"/>
+<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,5,371,236"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -152,6 +152,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af69b86b3ac37a2168715401267d104ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld.html">World</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#af69b86b3ac37a2168715401267d104ab">operator=</a> (<a class="el" href="classWorld.html">World</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:af69b86b3ac37a2168715401267d104ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77cd7a90b8768b6e34f0f4937b96cda4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a77cd7a90b8768b6e34f0f4937b96cda4">getChunk</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="memdesc:a77cd7a90b8768b6e34f0f4937b96cda4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classChunk.html">Chunk</a> object.  <a href="classWorld.html#a77cd7a90b8768b6e34f0f4937b96cda4">More...</a><br /></td></tr>
 <tr class="separator:a77cd7a90b8768b6e34f0f4937b96cda4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfd5f2a2c19381826debe4d0b5ac3c50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#acfd5f2a2c19381826debe4d0b5ac3c50">insertChunk</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
 <tr class="separator:acfd5f2a2c19381826debe4d0b5ac3c50"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,6 +174,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a456108e02a2cf121c20b3436d293614a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2aceeb77eacb247872f3c3a1b422cd15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a2aceeb77eacb247872f3c3a1b422cd15">TracyLockableN</a> (std::mutex, m_chunks_mutex, &quot;Chunks&quot;)</td></tr>
 <tr class="separator:a2aceeb77eacb247872f3c3a1b422cd15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a024d70e06aa8f5a8c0dc8025898bfc7d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a024d70e06aa8f5a8c0dc8025898bfc7d">getChunkNoLock</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="memdesc:a024d70e06aa8f5a8c0dc8025898bfc7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a chunk ptr without locking the chunks mutex.  <a href="classWorld.html#a024d70e06aa8f5a8c0dc8025898bfc7d">More...</a><br /></td></tr>
+<tr class="separator:a024d70e06aa8f5a8c0dc8025898bfc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500a24a178550859843850732f9e8f55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a500a24a178550859843850732f9e8f55">insertChunkNoLock</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
+<tr class="separator:a500a24a178550859843850732f9e8f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -328,6 +334,63 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Get the <a class="el" href="classChunk.html">Chunk</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">position</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">std::shared_ptr&lt;Chunk&gt;</td><td>if the chunk exists </td></tr>
+    <tr><td class="paramname">nullptr</td><td>if the chunk does not exist </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a024d70e06aa8f5a8c0dc8025898bfc7d" name="a024d70e06aa8f5a8c0dc8025898bfc7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a024d70e06aa8f5a8c0dc8025898bfc7d">&#9670;&#160;</a></span>getChunkNoLock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; World::getChunkNoLock </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a chunk ptr without locking the chunks mutex. </p>
+<dl class="section warning"><dt>Warning</dt><dd>you MUST lock the chunks mutex before calling this function </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">position</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">std::shared_ptr&lt;Chunk&gt;</td><td>if the chunk exists </td></tr>
+    <tr><td class="paramname">nullptr</td><td>if the chunk does not exist </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ae27a9fda577f8532ab2c2e2a84a212e6" name="ae27a9fda577f8532ab2c2e2a84a212e6"></a>
@@ -389,6 +452,42 @@ Protected Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a500a24a178550859843850732f9e8f55" name="a500a24a178550859843850732f9e8f55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a500a24a178550859843850732f9e8f55">&#9670;&#160;</a></span>insertChunkNoLock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::insertChunkNoLock </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

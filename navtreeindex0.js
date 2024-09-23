@@ -51,6 +51,7 @@ var NAVTREEINDEX0 =
 "Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5":[11,0,1,0,6,3,4],
 "Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100":[11,0,1,0,6,3,6],
 "Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20":[11,0,1,0,6,3,5],
+"Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba":[11,0,1,0,6,3,7],
 "Chunk_8hpp_source.html":[11,0,1,0,6,3],
 "ClientPacketHandler_8cpp.html":[11,0,1,0,0,0,2],
 "ClientPacketHandler_8hpp.html":[11,0,1,0,0,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classBlockActionPacket.html#a3a3e1a4a81f58fb508fa6bb3637fd728":[10,0,5,12],
 "classBlockActionPacket.html#a3eb6bc5fde3980a9c141a91c883f487c":[10,0,5,2],
 "classBlockActionPacket.html#a43874c9eee033c627b3f246a868794db":[10,0,5,8],
-"classBlockActionPacket.html#a43c1a22b128c4a647a7d7aa4b40613d8":[10,0,5,10],
-"classBlockActionPacket.html#a5c740f550b4b486e91ab38366378907c":[10,0,5,5]
+"classBlockActionPacket.html#a43c1a22b128c4a647a7d7aa4b40613d8":[10,0,5,10]
 };

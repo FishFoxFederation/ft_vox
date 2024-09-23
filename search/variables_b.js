@@ -13,11 +13,12 @@ var searchData=
   ['main_5frender_5ffinished_5fsemaphores_10',['main_render_finished_semaphores',['../classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71',1,'VulkanAPI']]],
   ['mapped_5fmemory_11',['mapped_memory',['../structUBO.html#ad6e39e96922eb09a0d0fc845b5c4fbeb',1,'UBO::mapped_memory()'],['../structImGuiTexture.html#a9e4e3e36fd24067f4efc48a3f6e57688',1,'ImGuiTexture::mapped_memory()']]],
   ['max_5fframes_5fin_5fflight_12',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
-  ['memory_13',['memory',['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../structUBO.html#a898dc9f88760fccd39d64ce8da010baf',1,'UBO::memory()'],['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()']]],
-  ['memory_5fproperties_14',['memory_properties',['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo']]],
-  ['memory_5fsize_15',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],
-  ['mesh_5fids_5fto_5fdestroy_16',['mesh_ids_to_destroy',['../classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a',1,'VulkanAPI']]],
-  ['mesh_5fmap_17',['mesh_map',['../classVulkanAPI.html#a1e5b9f3211f503442e2db8d286caeb72',1,'VulkanAPI']]],
-  ['mip_5flevels_18',['mip_levels',['../structImage_1_1CreateInfo.html#a4ca21901d453d2e5e3958d74d3f2cad6',1,'Image::CreateInfo::mip_levels()'],['../classImage.html#abb630a854e037463e527f46d65371c3e',1,'Image::mip_levels()']]],
-  ['model_19',['model',['../structWorldScene_1_1ChunkMeshRenderData.html#a12f114fc6fe7f9532489587b4f7713de',1,'WorldScene::ChunkMeshRenderData::model()'],['../structWorldScene_1_1MeshRenderData.html#a33226daebed590f617a7fe43ec8e0176',1,'WorldScene::MeshRenderData::model()'],['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5',1,'ModelMatrice::model()'],['../structEntityMatrices.html#a8d194c819c768c87c8e093100dccfd8c',1,'EntityMatrices::model()']]]
+  ['max_5fticket_5flevel_13',['MAX_TICKET_LEVEL',['../classWorldGenerator.html#a8c56d23f7b2245a22aa329bd39d8d837',1,'WorldGenerator']]],
+  ['memory_14',['memory',['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../structUBO.html#a898dc9f88760fccd39d64ce8da010baf',1,'UBO::memory()'],['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()']]],
+  ['memory_5fproperties_15',['memory_properties',['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo']]],
+  ['memory_5fsize_16',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],
+  ['mesh_5fids_5fto_5fdestroy_17',['mesh_ids_to_destroy',['../classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a',1,'VulkanAPI']]],
+  ['mesh_5fmap_18',['mesh_map',['../classVulkanAPI.html#a1e5b9f3211f503442e2db8d286caeb72',1,'VulkanAPI']]],
+  ['mip_5flevels_19',['mip_levels',['../structImage_1_1CreateInfo.html#a4ca21901d453d2e5e3958d74d3f2cad6',1,'Image::CreateInfo::mip_levels()'],['../classImage.html#abb630a854e037463e527f46d65371c3e',1,'Image::mip_levels()']]],
+  ['model_20',['model',['../structWorldScene_1_1ChunkMeshRenderData.html#a12f114fc6fe7f9532489587b4f7713de',1,'WorldScene::ChunkMeshRenderData::model()'],['../structWorldScene_1_1MeshRenderData.html#a33226daebed590f617a7fe43ec8e0176',1,'WorldScene::MeshRenderData::model()'],['../structModelMatrix__push__constant.html#ae1fa257e2d2a8fce48c41d07ac6da290',1,'ModelMatrix_push_constant::model()'],['../structModelMatrice.html#a3824832bb0d1687e930f25489a7c1dd5',1,'ModelMatrice::model()'],['../structEntityMatrices.html#a8d194c819c768c87c8e093100dccfd8c',1,'EntityMatrices::model()']]]
 ];

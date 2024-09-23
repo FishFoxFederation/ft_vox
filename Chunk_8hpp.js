@@ -6,5 +6,6 @@ var Chunk_8hpp =
     [ "CHUNK_SIZE_VEC3", "Chunk_8hpp.html#a61ce72c858dd50cfd4ac19d7e6c9a89c", null ],
     [ "CHUNK_X_SIZE", "Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5", null ],
     [ "CHUNK_Y_SIZE", "Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20", null ],
-    [ "CHUNK_Z_SIZE", "Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100", null ]
+    [ "CHUNK_Z_SIZE", "Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100", null ],
+    [ "ChunkMap", "Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba", null ]
 ];

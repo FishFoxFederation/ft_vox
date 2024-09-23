@@ -128,6 +128,11 @@ Collaboration diagram for Chunk:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:aaf4def713a4b3e92fa40fa38e1e8afa1"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">genLevel</a> : int { <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1a14db90e75f1308d303d0bceb0be66ac1">CAVE</a>
+, <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1a6ce749e5dda52baa62b8d952e315ccc6">RELIEF</a>
+, <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1aba2b45bdc11e2a4a6e86aab2ac693cbb">EMPTY</a>
+ }</td></tr>
+<tr class="separator:aaf4def713a4b3e92fa40fa38e1e8afa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88ee5de5ab052189e31a7446d6acac1e"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">BlockArray</a></td></tr>
 <tr class="separator:a88ee5de5ab052189e31a7446d6acac1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13d358ee7b03766f8e45ccec50aece7b"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; uint8_t, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a></td></tr>
@@ -193,14 +198,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6db3df2c63c66f8f1ce2ecbf335e6194"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae79fe0a5c6220712dc1d3fb321987ce3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ae79fe0a5c6220712dc1d3fb321987ce3">setMeshed</a> (bool meshed)</td></tr>
 <tr class="separator:ae79fe0a5c6220712dc1d3fb321987ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a809faeba8eb570bdc4d378f706a8a692"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a809faeba8eb570bdc4d378f706a8a692">isGenerated</a> () const</td></tr>
-<tr class="separator:a809faeba8eb570bdc4d378f706a8a692"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55df90d1187a69aea5b16db22e386a45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a55df90d1187a69aea5b16db22e386a45">setGenerated</a> (bool gen)</td></tr>
-<tr class="separator:a55df90d1187a69aea5b16db22e386a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae44723155b8a00e6c523d27ebd3f5e7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ae44723155b8a00e6c523d27ebd3f5e7d">getLoadLevel</a> () const</td></tr>
 <tr class="separator:ae44723155b8a00e6c523d27ebd3f5e7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a927846cf2f611445e3d50ff2035b44b9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a927846cf2f611445e3d50ff2035b44b9">getHighestLoadLevel</a> () const</td></tr>
+<tr class="separator:a927846cf2f611445e3d50ff2035b44b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa72d16adb85c7fe255e3c6736475fbc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa72d16adb85c7fe255e3c6736475fbc4">setLoadLevel</a> (const int &amp;load_level)</td></tr>
 <tr class="separator:aa72d16adb85c7fe255e3c6736475fbc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f3e541e9054181df6866af17ebb45d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">genLevel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a9f3e541e9054181df6866af17ebb45d9">getGenLevel</a> () const</td></tr>
+<tr class="separator:a9f3e541e9054181df6866af17ebb45d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64d6d1200c9f45e364868c113cc3c219"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a64d6d1200c9f45e364868c113cc3c219">setGenLevel</a> (const <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">genLevel</a> &amp;level)</td></tr>
+<tr class="separator:a64d6d1200c9f45e364868c113cc3c219"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -244,6 +251,34 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="aaf4def713a4b3e92fa40fa38e1e8afa1" name="aaf4def713a4b3e92fa40fa38e1e8afa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf4def713a4b3e92fa40fa38e1e8afa1">&#9670;&#160;</a></span>genLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aaf4def713a4b3e92fa40fa38e1e8afa1a14db90e75f1308d303d0bceb0be66ac1" name="aaf4def713a4b3e92fa40fa38e1e8afa1a14db90e75f1308d303d0bceb0be66ac1"></a>CAVE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aaf4def713a4b3e92fa40fa38e1e8afa1a6ce749e5dda52baa62b8d952e315ccc6" name="aaf4def713a4b3e92fa40fa38e1e8afa1a6ce749e5dda52baa62b8d952e315ccc6"></a>RELIEF&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aaf4def713a4b3e92fa40fa38e1e8afa1aba2b45bdc11e2a4a6e86aab2ac693cbb" name="aaf4def713a4b3e92fa40fa38e1e8afa1aba2b45bdc11e2a4a6e86aab2ac693cbb"></a>EMPTY&#160;</td><td class="fielddoc"></td></tr>
+</table>
 
 </div>
 </div>
@@ -468,6 +503,40 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9f3e541e9054181df6866af17ebb45d9" name="a9f3e541e9054181df6866af17ebb45d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f3e541e9054181df6866af17ebb45d9">&#9670;&#160;</a></span>getGenLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">Chunk::genLevel</a> Chunk::getGenLevel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a927846cf2f611445e3d50ff2035b44b9" name="a927846cf2f611445e3d50ff2035b44b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a927846cf2f611445e3d50ff2035b44b9">&#9670;&#160;</a></span>getHighestLoadLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Chunk::getHighestLoadLevel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0a55525abd3504e35a9c14cf563f4462" name="a0a55525abd3504e35a9c14cf563f4462"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0a55525abd3504e35a9c14cf563f4462">&#9670;&#160;</a></span>getLight() <span class="overload">[1/4]</span></h2>
 
@@ -605,23 +674,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a809faeba8eb570bdc4d378f706a8a692" name="a809faeba8eb570bdc4d378f706a8a692"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a809faeba8eb570bdc4d378f706a8a692">&#9670;&#160;</a></span>isGenerated()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Chunk::isGenerated </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a6db3df2c63c66f8f1ce2ecbf335e6194" name="a6db3df2c63c66f8f1ce2ecbf335e6194"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6db3df2c63c66f8f1ce2ecbf335e6194">&#9670;&#160;</a></span>isMeshed()</h2>
 
@@ -743,17 +795,17 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a55df90d1187a69aea5b16db22e386a45" name="a55df90d1187a69aea5b16db22e386a45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55df90d1187a69aea5b16db22e386a45">&#9670;&#160;</a></span>setGenerated()</h2>
+<a id="a64d6d1200c9f45e364868c113cc3c219" name="a64d6d1200c9f45e364868c113cc3c219"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64d6d1200c9f45e364868c113cc3c219">&#9670;&#160;</a></span>setGenLevel()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Chunk::setGenerated </td>
+          <td class="memname">void Chunk::setGenLevel </td>
           <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>gen</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classChunk.html#aaf4def713a4b3e92fa40fa38e1e8afa1">genLevel</a> &amp;&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
