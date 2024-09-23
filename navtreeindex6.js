@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"structCamera_1_1RenderInfo.html#af53a68193879157974c91056ac0e08a5":[10,0,8,0,1],
 "structCamera_1_1RenderInfo.html#affb1235a9187f360d9517a7faf67e67c":[10,0,8,0,0],
 "structChunkPacket_1_1ChunkData.html":[10,0,10,0],
 "structChunkPacket_1_1ChunkData.html#a18eb2ed49a43e964ad2cb3d76c16668f":[10,0,10,0,2],

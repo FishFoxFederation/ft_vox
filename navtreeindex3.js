@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classPingPacket.html#a49cd0a5c95666f2b170e822e93acd275":[10,0,54,9],
 "classPingPacket.html#a55fe3d993b683a0862ccdb14c3e0e19b":[10,0,54,2],
 "classPingPacket.html#a66830ec578950d75949284ee74434af6":[10,0,54,8],
 "classPingPacket.html#a67be10cd6c39bb90e40752c3e1b6e39f":[10,0,54,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "classSettings.html#a01967d720dac441bb8d40f6f062abccf":[10,0,70,4],
 "classSettings.html#a3235cc319f2ca06193bc5f709a3387c3":[10,0,70,3],
 "classSettings.html#a4a65be5921dfc9fddc476e5320541d89":[10,0,70,1],
-"classSettings.html#a7c476b3924dbd1e3a2e0d9c9ba1d22b0":[10,0,70,7]
+"classSettings.html#a7c476b3924dbd1e3a2e0d9c9ba1d22b0":[10,0,70,7],
+"classSettings.html#ab7169a6eefce79566dd07db3b1e5e967":[10,0,70,0]
 };
