@@ -85,8 +85,6 @@ namespace std
 	};
 }
 
-typedef std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> ChunkMap;
-
 class CreateMeshData
 {
 

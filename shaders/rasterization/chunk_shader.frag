@@ -139,7 +139,10 @@ void main()
 	float max_shadow = 0.5;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
+	const float min_light = 0.05;
 	float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
+	light = clamp(light, 0.0, 1.0);
+	light = min_light + light * (1.0 - min_light);
 	// float light = base_light - max_ao_shadow * ao_factor;
 	// float light = base_light - max_shadow * shadow_factor;
 
