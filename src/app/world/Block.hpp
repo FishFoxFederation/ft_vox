@@ -43,6 +43,8 @@ struct Data
 	const TextureID texture[6];
 	const BlockProperties properties;
 	const HitBox hitbox;
+	const int emit_light; // light level emitted by the block
+	const int absorb_light; // light level absorbed by the block
 };
 
 struct Block
@@ -85,16 +87,11 @@ struct Block
 
 	static inline const Data Air = {
 		.id = BlockID::Air,
-		.texture = {
-			0,
-			0,
-			0,
-			0,
-			0,
-			0
-		},
+		.texture = { 0, 0, 0, 0, 0, 0 },
 		.properties = BLOCK_PROPERTY_NONE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 0,
+		.absorb_light = 0
 	};
 	static inline const Data Grass = {
 		.id = BlockID::Grass,
@@ -110,7 +107,9 @@ struct Block
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 0,
+		.absorb_light = 15
 	};
 	static inline const Data Dirt = {
 		.id = BlockID::Dirt,
@@ -126,7 +125,9 @@ struct Block
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 0,
+		.absorb_light = 15
 	};
 	static inline const Data Stone = {
 		.id = BlockID::Stone,
@@ -142,7 +143,9 @@ struct Block
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_OPAQUE
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 0,
+		.absorb_light = 15
 	};
 	static inline const Data Water = {
 		.id = BlockID::Water,
@@ -156,7 +159,9 @@ struct Block
 		},
 		.properties =
 			BLOCK_PROPERTY_FLUID,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 0,
+		.absorb_light = 1
 	};
 	static inline const Data Glass = {
 		.id = BlockID::Glass,
@@ -171,7 +176,9 @@ struct Block
 		.properties =
 			BLOCK_PROPERTY_SOLID
 			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}}
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 0,
+		.absorb_light = 0
 	};
 
 };

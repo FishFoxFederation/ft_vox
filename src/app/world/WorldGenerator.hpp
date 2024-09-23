@@ -25,9 +25,10 @@ public:
 
 	/**
 	 * @warning the zone sizes must be in the same order as the genLevel enum
-	 * @warning the zone sizes must be multiples of the zone sizes of the previous gen level (ex 5x5 and 10x10) 
+	 * @warning the zone sizes must be multiples of the zone sizes of the previous gen level (ex 5x5 and 10x10)
 	 */
-	constexpr static std::array<glm::ivec3, 2> ZONE_SIZES = {
+	constexpr static std::array<glm::ivec3, 3> ZONE_SIZES = {
+		glm::ivec3(1, 0, 1),
 		glm::ivec3(4, 0, 4),
 		glm::ivec3(8, 0, 8)
 	};
@@ -42,7 +43,7 @@ public:
 
 	/**
 	 * @brief get the generation info for the given gen level and chunk position
-	 * 
+	 *
 	 * @param gen_level
 	 * @param old_level
 	 * @param chunkPos3D
@@ -54,10 +55,10 @@ public:
 
 	/**
 	 * @brief will do a generation pass to the chunks
-	 * 
+	 *
 	 * @param info the struct returned by the getGenInfo function
 	 * @param chunks the chunks to generate
-	 * 
+	 *
 	 * @warning the chunks MUST be locked before calling and unlocked after
 	 */
 	void 					generate(genInfo info, ChunkMap & chunks);

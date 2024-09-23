@@ -41,6 +41,8 @@ void ServerWorld::update()
 	// do all block updates
 	updateBlocks();
 
+	updateLights();
+
 	// do all chunk updates
 	updateTickets();
 
