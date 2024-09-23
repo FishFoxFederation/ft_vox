@@ -1,16 +1,19 @@
 #include "WorldGenerator.hpp"
 
 #include <cmath>
+#include <queue>
 
 Chunk::genLevel WorldGenerator::ticketToGenLevel(int ticket_level)
 {
 	if (ticket_level <= TICKET_LEVEL_INACTIVE)
-		return CAVE;
+		return LIGHT;
 	switch (ticket_level)
 	{
 		case TICKET_LEVEL_INACTIVE:
-			return CAVE;
+			return LIGHT;
 		case TICKET_LEVEL_INACTIVE + 1:
+			return CAVE;
+		case TICKET_LEVEL_INACTIVE + 2:
 			return RELIEF;
 		default:
 			throw std::invalid_argument("WorldGenerator::ticketToGenLevel: Invalid ticket level");
@@ -25,6 +28,12 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 
 	switch (desired_gen_level)
 	{
+		case LIGHT:
+		{
+			info.level = LIGHT;
+			info.zoneSize = ZONE_SIZES[static_cast<int>(LIGHT)];
+			break;
+		}
 		case CAVE:
 		{
 			info.level = CAVE;
@@ -37,7 +46,7 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 			info.zoneSize = ZONE_SIZES[static_cast<int>(RELIEF)];
 			break;
 		}
-		default:
+		case EMPTY:
 		{
 			throw std::invalid_argument("Invalid desired gen level");
 		}
@@ -80,7 +89,11 @@ WorldGenerator::WorldGenerator()
 : m_relief_perlin(1, 7, 1, 0.35, 2),
   m_cave_perlin(1, 4, 1, 0.5, 2)
 {
-
+	for(size_t i = 0; i + 1 < ZONE_SIZES.size(); i++)
+	{
+		if (ZONE_SIZES[i + 1].x % ZONE_SIZES[i].x != 0)
+			throw std::logic_error("WorldGenerator: constructor: ZONE_SIZES must be multiples of the previous zone size");
+	}
 }
 
 WorldGenerator::~WorldGenerator()
@@ -327,6 +340,91 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	return BlockID::Stone;
 }
 
+// static void setSkyLight(
+// 	ChunkMap & chunks,
+// 	const glm::ivec3 & chunk_pos
+// )
+// {
+// 	std::shared_ptr<Chunk> start_chunk = chunks.at(chunk_pos);
+// 	if (start_chunk == nullptr)
+// 		return;
+
+// 	std::queue<glm::ivec3> light_queue;
+// 	for (int x = 0; x < CHUNK_X_SIZE; x++)
+// 	{
+// 		for (int z = 0; z < CHUNK_Z_SIZE; z++)
+// 		{
+// 			const glm::ivec3 block_chunk_pos = glm::ivec3(x, 0, z);
+// 			const glm::ivec3 block_world_pos = chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
+// 			const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
+// 			if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
+// 			{
+// 				const int absorbed_light = Block::getData(block_id).absorb_light;
+// 				const int new_light = 15 - absorbed_light;
+// 				start_chunk->setLight(block_chunk_pos, new_light);
+// 				light_queue.push(block_world_pos);
+// 			}
+// 		}
+// 	}
+
+// 	constexpr std::array<glm::ivec3, 6> NEIGHBOR_OFFSETS = {
+// 		glm::ivec3(1, 0, 0),
+// 		glm::ivec3(-1, 0, 0),
+// 		glm::ivec3(0, 1, 0),
+// 		glm::ivec3(0, -1, 0),
+// 		glm::ivec3(0, 0, 1),
+// 		glm::ivec3(0, 0, -1)
+// 	};
+
+// 	while (!light_queue.empty())
+// 	{
+// 		const glm::ivec3 current_block_pos_world_space = light_queue.front();
+// 		light_queue.pop();
+
+// 		const glm::ivec3 chunk_pos = (current_block_pos_world_space + CHUNK_SIZE_IVEC3) / CHUNK_SIZE_IVEC3;
+// 		const glm::ivec3 block_chunk_pos = (current_block_pos_world_space + CHUNK_SIZE_IVEC3) % CHUNK_SIZE_IVEC3;
+// 		std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
+
+// 		// const BlockID current_id = chunk->getBlock(block_chunk_pos);
+// 		const int current_light = chunk->getLight(block_chunk_pos);
+
+// 		if (current_light == 0)
+// 			continue;
+
+// 		for (int i = 0; i < 6; i++)
+// 		{
+// 			const glm::ivec3 neighbor_pos = current_block_pos_world_space + NEIGHBOR_OFFSETS[i];
+// 			const glm::ivec3 neighbor_chunk_pos = (neighbor_pos + CHUNK_SIZE_IVEC3) / CHUNK_SIZE_IVEC3;
+// 			const glm::ivec3 neighbor_block_chunk_pos = (neighbor_pos + CHUNK_SIZE_IVEC3) % CHUNK_SIZE_IVEC3;
+
+// 			if (chunks.contains(neighbor_chunk_pos))
+// 			{
+// 				std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
+// 				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+// 				const int neighbor_light = neighbor_chunk->getLight(neighbor_block_chunk_pos);
+
+// 				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+// 				{
+// 					const int absorbed_light = Block::getData(neighbor_id).absorb_light;
+// 					const int new_light = current_light - absorbed_light - (i == 3 ? 0 : 1); // -1 if not below
+// 					if (neighbor_light < new_light)
+// 					{
+// 						if (new_light <= 0)
+// 						{
+// 							neighbor_chunk->setLight(neighbor_block_chunk_pos, 0);
+// 						}
+// 						else
+// 						{
+// 							neighbor_chunk->setLight(neighbor_block_chunk_pos, new_light);
+// 							light_queue.push(neighbor_pos);
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
 void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 {
 	if (info.level <= RELIEF && info.oldLevel > RELIEF)
@@ -387,7 +485,6 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 	}
 	if (info.level <= CAVE && info.oldLevel > CAVE)
 	{
-		//generate caves
 		for(int x = 0; x < info.zoneSize.x; x++)
 		{
 			for(int z = 0; z < info.zoneSize.z; z++)
@@ -395,6 +492,7 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
 				std::shared_ptr<Chunk> chunk = chunks.at(chunkPos3D);
 				chunk->setGenLevel(CAVE);
+
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 				{
 					for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
@@ -409,11 +507,25 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 							);
 							BlockID current_block = chunk->getBlock(blockX, blockY, blockZ);
 
-							if (current_block == BlockID::Stone && generateCaveBlock(position) == BlockID::Air)
-								chunk->setBlock(blockX, blockY, blockZ, BlockID::Stone);
+							if (current_block != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
+								chunk->setBlock(blockX, blockY, blockZ, BlockID::Air);
 						}
 					}
 				}
+			}
+		}
+	}
+	if (info.level <= LIGHT && info.oldLevel > LIGHT)
+	{
+		for(int x = 0; x < info.zoneSize.x; x++)
+		{
+			for(int z = 0; z < info.zoneSize.z; z++)
+			{
+				glm::ivec3 chunk_pos_3D = info.zoneStart + glm::ivec3(x, 0, z);
+				std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos_3D);
+				chunk->setGenLevel(LIGHT);
+
+				// setSkyLight(chunks, chunk_pos_3D);
 			}
 		}
 	}

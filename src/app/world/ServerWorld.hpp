@@ -65,7 +65,7 @@ public:
 	/*********************************\
 	 * TICKET MANAGER
 	\*********************************/
-	
+
 	struct Ticket
 	{
 		bool operator==(const Ticket & other) const = default;
@@ -88,54 +88,54 @@ public:
 
 	/**
 	 * @brief Get the list of Chunks that need to get a block update tick
-	 * 
-	 * @return const std::unordered_set<glm::ivec3>& 
+	 *
+	 * @return const std::unordered_set<glm::ivec3>&
 	 */
 	const std::unordered_set<glm::ivec3> &	getBlockUpdateChunks() const;
 
 	/**
 	 * @brief Get the list of Chunks that need to get an entity update tick
-	 * 
-	 * @return const std::unordered_set<glm::ivec3>& 
+	 *
+	 * @return const std::unordered_set<glm::ivec3>&
 	 */
 	const std::unordered_set<glm::ivec3> &	getEntityUpdateChunks() const;
 
 	/**
 	 * @brief Get the list of Tickets ( May contains duplicates )
-	 * 
-	 * @return const TicketMultiMap& 
+	 *
+	 * @return const TicketMultiMap&
 	 */
 	const TicketMultiMap &					getTickets() const;
 
 	/**
 	 * @brief Add a ticket to the ticket manager
-	 * 
+	 *
 	 * The new ticket will be active on the next tick
-	 * 
+	 *
 	 * You can keep track of the ticket for further deletion with the ticket id
-	 * 
-	 * @param ticket 
-	 * @return uint64_t 
+	 *
+	 * @param ticket
+	 * @return uint64_t
 	 */
 	uint64_t								addTicket(const Ticket & ticket);
 
 	/**
 	 * @brief Remove a ticket from the ticket manager
-	 * 
-	 * @param ticket_id 
+	 *
+	 * @param ticket_id
 	 */
 	void									removeTicket(const uint64_t & ticket_id);
 
 	/**
 	 * @brief Shortcut to remove a ticket and add a new one
-	 * 
+	 *
 	 * the new ticket will be active on the next tick
-	 * 
+	 *
 	 * you can keep track of the ticket for further deletion with the ticket id
-	 * 
-	 * @param old_ticket_id 
-	 * @param new_ticket 
-	 * @return uint64_t 
+	 *
+	 * @param old_ticket_id
+	 * @param new_ticket
+	 * @return uint64_t
 	 */
 	uint64_t								changeTicket(const uint64_t & old_ticket_id, const Ticket & new_ticket);
 
@@ -185,22 +185,22 @@ private:
 	\*************************/
 	/**
 	 * @brief will go through every load ticket to add and to remove and update the chunks load levels accordingly,
-	 * 
+	 *
 	 * this function will also generate chunks that need to be generated,
-	 * 
+	 *
 	 * it will use multiple threads and wait for them to finish
-	 * 
+	 *
 	 * @warning NOT thread safe MUST be called from the main thread
  	*/
 	void			updateTickets();
 
 	/**
 	 * @brief will apply every ticket in the ticket list to the world,
-	 * 
+	 *
 	 * @warning NOT thread safe MUST be called from the main thread
 	 * @warning will launch async tasks you MUST wait for tasks to finish
-	 * 
-	 * @param tickets 
+	 *
+	 * @param tickets
 	 */
 	void			floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk_gen_list);
 
@@ -210,14 +210,14 @@ private:
 
 	/**
 	 * @brief apply a ticket to a chunk
-	 * 
+	 *
 	 * will update the load level and add the chunk to the corresponding lists
-	 * 
+	 *
 	 * will also generate the chunk to a sufficient level of detail
-	 * 
+	 *
 	 * @warning NOT thread safe MUST be called from the main thread
-	 * 
-	 * @param ticket 
+	 *
+	 * @param ticket
 	 * @return true if the ticket was added, false otherwise
 	 */
 	bool			applyTicketToChunk(const Ticket & ticket, ChunkGenList & chunk_gen_list);
@@ -232,14 +232,20 @@ private:
 
 	/**
 	 * @brief generate a chunk or a region of chunks asynchronously
-	 * 
-	 * 
-	 * @param chunk_position 
+	 *
+	 *
+	 * @param chunk_position
 	 * @param gen_level desired gen level
 	 * @param current_gen_level optionnal, current generation level of the chunk
 	 * @return the id of the future that will generate the chunk
 	 */
 	uint64_t				asyncGenChunk(const glm::ivec3 & chunk_position, Chunk::genLevel gen_level, Chunk::genLevel current_level);
+
+	//LIGHTS
+	std::queue<BlockUpdateData> m_light_updates;
+	mutable TracyLockableN(std::mutex, m_light_updates_mutex, "LightUpdateQueue");
+
+	void    			updateLights();
 
 
 	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id);
@@ -255,7 +261,7 @@ private:
 	TracyLockableN(std::mutex, m_chunk_futures_ids_mutex, "ChunkFuturesIds");
 
 
-	
+
 	ChunkMap getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize);
 
 	void savePlayerPositions();

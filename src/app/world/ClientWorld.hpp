@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "define.hpp"
@@ -193,6 +194,8 @@ private:
 	void 	updateChunks(const glm::vec3 & playerPosition);
 
 	void 	doBlockSets();
+
+	void 	updateLights();
 
 	void	setChunkNotMeshed(const glm::ivec2 & chunkPosition);
 

@@ -25,8 +25,9 @@ class Chunk
 public:
 	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
 	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
-	enum class genLevel : int
+	enum class genLevel
 	{
+		LIGHT,
 		CAVE,
 		RELIEF,
 		EMPTY,

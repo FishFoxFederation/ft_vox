@@ -336,3 +336,19 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 		}
 	}
 }
+
+void ServerWorld::updateLights()
+{
+	std::lock_guard lock(m_light_updates_mutex);
+	std::lock_guard lock2(m_chunks_mutex);
+
+
+	while(!m_light_updates.empty())
+	{
+		auto light_update = m_light_updates.front();
+		m_light_updates.pop();
+
+		//do magic
+		(void)light_update;
+	}
+}

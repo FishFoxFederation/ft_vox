@@ -343,8 +343,11 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 	std::lock_guard lock(m_loaded_chunks_mutex);
 	// loadChunks(playerPosition);
 	// unloadChunks(playerPosition);
-	meshChunks(playerPosition);
 	doBlockSets();
+
+	updateLights();
+
+	meshChunks(playerPosition);
 }
 
 void ClientWorld::doBlockSets()
@@ -384,6 +387,8 @@ void ClientWorld::doBlockSets()
 
 			chunk->status.lock();
 			chunk->setBlock(block_chunk_position, block_id);
+			//if chunk is meshed we need to update the light
+
 			chunk->setMeshed(false);
 			chunk->status.unlock();
 
@@ -403,6 +408,11 @@ void ClientWorld::doBlockSets()
 		// }
 	// });
 	// m_futures.insert(std::make_pair(current_id, std::move(future)));
+}
+
+void ClientWorld::updateLights()
+{
+
 }
 
 void ClientWorld::updateEntities()
