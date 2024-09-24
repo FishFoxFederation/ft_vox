@@ -23,6 +23,7 @@ struct BlockVertex
 	glm::vec2 texCoord;
 	uint32_t texLayer;
 	uint8_t ao;
+	uint8_t light;
 
 	static VkVertexInputBindingDescription getBindingDescription()
 	{
@@ -36,7 +37,7 @@ struct BlockVertex
 
 	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
 	{
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(5);
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(6);
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
@@ -63,12 +64,22 @@ struct BlockVertex
 		attributeDescriptions[4].format = VK_FORMAT_R8_UINT;
 		attributeDescriptions[4].offset = offsetof(BlockVertex, ao);
 
+		attributeDescriptions[5].binding = 0;
+		attributeDescriptions[5].location = 5;
+		attributeDescriptions[5].format = VK_FORMAT_R8_UINT;
+		attributeDescriptions[5].offset = offsetof(BlockVertex, light);
+
 		return attributeDescriptions;
 	}
 
 	bool operator==(const BlockVertex& other) const
 	{
-		return pos == other.pos && normal == other.normal && texCoord == other.texCoord && texLayer == other.texLayer && ao == other.ao;
+		return pos == other.pos
+			&& normal == other.normal
+			&& texCoord == other.texCoord
+			&& texLayer == other.texLayer
+			&& ao == other.ao
+			&& light == other.light;
 	}
 };
 
@@ -217,7 +228,7 @@ public:
 		Z = 2
 	};
 
-	BlockID block(const int x, const int y, const int z)
+	BlockID getBlock(const int x, const int y, const int z)
 	{
 		const int chunk_x = (x + CHUNK_X_SIZE) / CHUNK_X_SIZE;
 		const int chunk_y = (y + CHUNK_Y_SIZE) / CHUNK_Y_SIZE;
@@ -235,9 +246,32 @@ public:
 		return chunks[chunk_x][chunk_y][chunk_z]->getBlock(block_x, block_y, block_z);
 	}
 
-	BlockID block(const glm::ivec3 & pos)
+	BlockID getBlock(const glm::ivec3 & pos)
 	{
-		return block(pos.x, pos.y, pos.z);
+		return getBlock(pos.x, pos.y, pos.z);
+	}
+
+	uint8_t getLight(const int x, const int y, const int z)
+	{
+		const int chunk_x = (x + CHUNK_X_SIZE) / CHUNK_X_SIZE;
+		const int chunk_y = (y + CHUNK_Y_SIZE) / CHUNK_Y_SIZE;
+		const int chunk_z = (z + CHUNK_Z_SIZE) / CHUNK_Z_SIZE;
+
+		const int block_x = (x + CHUNK_X_SIZE) % CHUNK_X_SIZE;
+		const int block_y = (y + CHUNK_Y_SIZE) % CHUNK_Y_SIZE;
+		const int block_z = (z + CHUNK_Z_SIZE) % CHUNK_Z_SIZE;
+
+		if (chunks[chunk_x][chunk_y][chunk_z] == nullptr)
+		{
+			return 0;
+		}
+
+		return chunks[chunk_x][chunk_y][chunk_z]->getLight(block_x, block_y, block_z);
+	}
+
+	uint8_t getLight(const glm::ivec3 & pos)
+	{
+		return getLight(pos.x, pos.y, pos.z);
 	}
 
 	void create()
@@ -444,8 +478,8 @@ public:
 			{
 				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					BlockID block_id = block(pos);
-					BlockID neighbor_id = block(pos + normal);
+					BlockID block_id = getBlock(pos);
+					BlockID neighbor_id = getBlock(pos + normal);
 
 					bool should_render = true;
 					bool block_is_opaque = Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE);
@@ -466,20 +500,22 @@ public:
 
 					if (should_render)
 					{
-						std::array<uint8_t, 4UL> ao = {0, 0, 0, 0};
+						std::array<uint8_t, 4> ao = {0, 0, 0, 0};
 						if (block_is_opaque)
 						{
 							ao = getAmbientOcclusion(pos + normal, dim_1, dim_2);
 						}
+						uint8_t neighbor_light = getLight(pos + normal);
 
 						face_data[pos.x][pos.y][pos.z] = {
 							Block::getData(block_id).texture[face],
-							ao
+							ao,
+							neighbor_light
 						};
 					}
 					else
 					{
-						face_data[pos.x][pos.y][pos.z] = {0, 0};
+						face_data[pos.x][pos.y][pos.z] = {0, 0, 0};
 					}
 				}
 			}
@@ -495,8 +531,6 @@ public:
 
 					if (data.texture != 0)
 					{
-						int merge_count = 0;
-						(void)merge_count;
 						// check if the block has identical neighbors for greedy meshing
 						// if so, then merge the blocks into one mesh
 						glm::ivec3 offset{0, 0, 0};
@@ -512,7 +546,6 @@ public:
 									{
 										break;
 									}
-									merge_count++;
 								}
 								// save the offset if it's the first iteration
 								if (saved_offset.z == 0)
@@ -538,8 +571,6 @@ public:
 						}
 						saved_offset.x = offset.x;
 
-						// saved_offset = glm::ivec3(pos.x + 1, pos.y + 1, pos.z + 1);
-
 						for (offset.x = pos.x; offset.x < saved_offset.x; offset.x++)
 						{
 							for (offset.y = pos.y; offset.y < saved_offset.y; offset.y++)
@@ -563,7 +594,14 @@ public:
 
 						for (int i = 0; i < 4; i++)
 						{
-							vertices.push_back({pos + offsets[i] * saved_offset, normal, tex_coord_factor[i] * tex_coord, data.texture, data.ao[i]});
+							vertices.push_back({
+								pos + offsets[i] * saved_offset,
+								normal,
+								tex_coord_factor[i] * tex_coord,
+								data.texture,
+								data.ao[i],
+								data.light
+							});
 						}
 
 						if (data.ao[0] + data.ao[3] > data.ao[1] + data.ao[2]) // if the first triangle has more ambient occlusion than the second triangle
@@ -634,8 +672,8 @@ public:
 			{
 				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					BlockID block_id = block(pos);
-					BlockID neighbor_id = block(pos + normal);
+					BlockID block_id = getBlock(pos);
+					BlockID neighbor_id = getBlock(pos + normal);
 
 					if (
 						block_id == BlockID::Water
@@ -645,12 +683,12 @@ public:
 					{
 						face_data[pos.x][pos.y][pos.z] = {
 							Block::getData(block_id).texture[face],
-							0
+							0, 0
 						};
 					}
 					else
 					{
-						face_data[pos.x][pos.y][pos.z] = {0, 0};
+						face_data[pos.x][pos.y][pos.z] = {0, 0, 0};
 					}
 				}
 			}
@@ -666,8 +704,6 @@ public:
 
 					if (data.texture != 0)
 					{
-						int merge_count = 0;
-						(void)merge_count;
 						// check if the block has identical neighbors for greedy meshing
 						// if so, then merge the blocks into one mesh
 						glm::ivec3 offset{0, 0, 0};
@@ -683,7 +719,6 @@ public:
 									{
 										break;
 									}
-									merge_count++;
 								}
 								// save the offset if it's the first iteration
 								if (saved_offset.z == 0)
@@ -780,7 +815,7 @@ public:
 		side_2[dim_2]--;
 		corner[dim_1]--;
 		corner[dim_2]--;
-		ao[0] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+		ao[0] = getAmbientOcclusion(getBlock(side_1), getBlock(side_2), getBlock(corner));
 
 		side_1 = pos;
 		side_2 = pos;
@@ -790,7 +825,7 @@ public:
 		side_2[dim_2]--;
 		corner[dim_1]++;
 		corner[dim_2]--;
-		ao[1] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+		ao[1] = getAmbientOcclusion(getBlock(side_1), getBlock(side_2), getBlock(corner));
 
 		side_1 = pos;
 		side_2 = pos;
@@ -800,7 +835,7 @@ public:
 		side_2[dim_2]++;
 		corner[dim_1]--;
 		corner[dim_2]++;
-		ao[2] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+		ao[2] = getAmbientOcclusion(getBlock(side_1), getBlock(side_2), getBlock(corner));
 
 		side_1 = pos;
 		side_2 = pos;
@@ -810,7 +845,7 @@ public:
 		side_2[dim_2]++;
 		corner[dim_1]++;
 		corner[dim_2]++;
-		ao[3] = getAmbientOcclusion(block(side_1), block(side_2), block(corner));
+		ao[3] = getAmbientOcclusion(getBlock(side_1), getBlock(side_2), getBlock(corner));
 
 		return ao;
 	}
@@ -844,10 +879,11 @@ private:
 	{
 		TextureID texture;
 		std::array<uint8_t, 4> ao;
+		uint8_t light;
 
 		bool operator==(const FaceData & other) const
 		{
-			return texture == other.texture && ao == other.ao;
+			return texture == other.texture && ao == other.ao && light == other.light;
 		}
 	};
 

@@ -24,6 +24,7 @@ layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
 layout(location = 2) in vec4 frag_pos_world_space;
 layout(location = 3) in float frag_ao;
+layout(location = 4) in float frag_light;
 
 layout(location = 0) out vec4 out_color;
 
@@ -129,9 +130,19 @@ float compute_shadow_factor(
 	return sample_shadow_map(world_space_pos, shadowMap, layer);
 }
 
+vec3 debugColor(float value)
+{
+	if (value < 0.01) return vec3(1.0, 0.0, 0.0);
+	if (value < 1.01) return vec3(0.0, 1.0, 0.0);
+	if (value < 2.01) return vec3(0.0, 0.0, 1.0);
+	if (value < 3.01) return vec3(0.0, 1.0, 1.0);
+	if (value < 4.01) return vec3(1.0, 1.0, 0.0);
+	if (value < 5.01) return vec3(1.0, 0.0, 1.0);
+	return vec3(0.5, 0.5, 0.5);
+}
+
 void main()
 {
-	float base_light = 1.0;
 
 	float max_ao_shadow = 0.5;
 	float ao_factor = frag_ao / 3.0;
@@ -139,12 +150,16 @@ void main()
 	float max_shadow = 0.5;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
+	float sky_light = frag_light / 15.0;
+
+	float base_light = sky_light;
+
 	const float min_light = 0.05;
-	float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
+	// float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
+	float light = base_light - max_ao_shadow * ao_factor;
+	// float light = base_light - max_shadow * shadow_factor;
 	light = clamp(light, 0.0, 1.0);
 	light = min_light + light * (1.0 - min_light);
-	// float light = base_light - max_ao_shadow * ao_factor;
-	// float light = base_light - max_shadow * shadow_factor;
 
 	vec4 texture_color = texture(tex, frag_tex_coord);
 

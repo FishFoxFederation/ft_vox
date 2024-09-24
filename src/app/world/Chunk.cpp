@@ -1,5 +1,6 @@
 #include "Chunk.hpp"
 #include "logger.hpp"
+#include <cstring>
 
 Chunk::Chunk(glm::ivec3 position)
 : position(position), m_mesh_id(0)
@@ -8,51 +9,58 @@ Chunk::Chunk(glm::ivec3 position)
 	// LOG_INFO("Chunk created at position: " << position.x << " " << position.y << " " << position.z);
 	for(int i = 0; i < BLOCKS_PER_CHUNK; i++)
 		m_blocks[i] = BlockID::Air;
+
+	memset(m_light.data(), 0, BLOCKS_PER_CHUNK);
 }
 
-Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks)
-: position(position), m_mesh_id(0), m_blocks(blocks)
-{
-}
+// Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks)
+// : position(position), m_mesh_id(0), m_blocks(blocks)
+// {
+// 	memset(m_light.data(), 0, BLOCKS_PER_CHUNK);
+// }
 
 Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light)
 : position(position), m_mesh_id(0), m_blocks(blocks), m_light(light)
 {
 }
 
-Chunk::Chunk(const Chunk & other)
-:	position(other.position),
-	m_mesh_id(other.m_mesh_id),
-	m_blocks(other.m_blocks)
-{
-}
+// Chunk::Chunk(const Chunk & other)
+// :	position(other.position),
+// 	m_mesh_id(other.m_mesh_id),
+// 	m_blocks(other.m_blocks),
+// 	m_light(other.m_light)
+// {
+// }
 
-Chunk::Chunk(Chunk && other)
-:	
-	// status(other.status),
-	position(other.position),
-	m_mesh_id(other.m_mesh_id),
-	m_blocks(std::move(other.m_blocks))
-{
-}
+// Chunk::Chunk(Chunk && other)
+// :
+// 	// status(other.status),
+// 	position(other.position),
+// 	m_mesh_id(other.m_mesh_id),
+// 	m_blocks(std::move(other.m_blocks)),
+// 	m_light(std::move(other.m_light))
+// {
+// }
 
-Chunk & Chunk::operator=(const Chunk & other)
-{
-	position = other.position;
-	m_mesh_id = other.m_mesh_id;
-	m_blocks = other.m_blocks;
-	// status = other.status;
-	return *this;
-}
+// Chunk & Chunk::operator=(const Chunk & other)
+// {
+// 	position = other.position;
+// 	m_mesh_id = other.m_mesh_id;
+// 	m_blocks = other.m_blocks;
+// 	m_light = other.m_light;
+// 	// status = other.status;
+// 	return *this;
+// }
 
-Chunk & Chunk::operator=(const Chunk && other)
-{
-	position = other.position;
-	m_mesh_id = other.m_mesh_id;
-	m_blocks = std::move(other.m_blocks);
-	// status = other.status;
-	return *this;
-}
+// Chunk & Chunk::operator=(const Chunk && other)
+// {
+// 	position = other.position;
+// 	m_mesh_id = other.m_mesh_id;
+// 	m_blocks = std::move(other.m_blocks);
+// 	m_light = std::move(other.m_light);
+// 	// status = other.status;
+// 	return *this;
+// }
 
 Chunk::~Chunk()
 {

@@ -19,6 +19,7 @@ bool running = true;
 
 int main()
 {
+	logger.configure("log_server");
 	LOG_INFO("Server started");
 	// ThreadPool threadPool;
 	signal(SIGINT, [](int signum) {
@@ -27,7 +28,7 @@ int main()
 	try {
 	Server server(4245);
 	ServerWorld world(server);
-	ServerBlockUpdateThread block_update_thread(world);	
+	ServerBlockUpdateThread block_update_thread(world);
 	ServerPacketHandler packet_handler(server, world);
 	// std::thread server_thread([&server](){
 	// 	server.run();

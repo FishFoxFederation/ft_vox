@@ -16,11 +16,13 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoords;
 layout(location = 3) in uint texLayer;
 layout(location = 4) in uint ao;
+layout(location = 5) in uint light;
 
 layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec3 fragTexCoords;
 layout(location = 2) out vec4 fragPosWorldSpace;
 layout(location = 3) out float fragAO;
+layout(location = 4) out float fragLight;
 
 void main()
 {
@@ -32,4 +34,5 @@ void main()
 	fragPosWorldSpace = pc.model * vec4(positions, 1.0);
 
 	fragAO = float(ao);
+	fragLight = float(light);
 }

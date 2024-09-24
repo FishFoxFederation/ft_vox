@@ -34,13 +34,13 @@ public:
 	};
 
 	Chunk(glm::ivec3 position);
-	Chunk(const glm::ivec3 & position, const BlockArray & blocks);
+	// Chunk(const glm::ivec3 & position, const BlockArray & blocks);
 	Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light);
 
-	Chunk(const Chunk & other);
-	Chunk & operator=(const Chunk & other);
-	Chunk & operator=(const Chunk && other);
-	Chunk(Chunk && other);
+	Chunk(const Chunk & other) = delete;
+	Chunk(Chunk && other) = delete;
+	Chunk & operator=(const Chunk & other) = delete;
+	Chunk & operator=(const Chunk && other) = delete;
 	~Chunk();
 
 	BlockArray &		getBlocks();

@@ -43,8 +43,8 @@ struct Data
 	const TextureID texture[6];
 	const BlockProperties properties;
 	const HitBox hitbox;
-	const int emit_light; // light level emitted by the block
-	const int absorb_light; // light level absorbed by the block
+	const uint8_t emit_light; // light level emitted by the block
+	const uint8_t absorb_light; // light level absorbed by the block
 };
 
 struct Block
