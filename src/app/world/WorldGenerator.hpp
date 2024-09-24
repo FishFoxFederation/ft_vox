@@ -28,7 +28,7 @@ public:
 	 * @warning the zone sizes must be multiples of the zone sizes of the previous gen level (ex 5x5 and 10x10)
 	 */
 	constexpr static std::array<glm::ivec3, 3> ZONE_SIZES = {
-		glm::ivec3(1, 0, 1),
+		glm::ivec3(4, 0, 4),
 		glm::ivec3(4, 0, 4),
 		glm::ivec3(8, 0, 8)
 	};

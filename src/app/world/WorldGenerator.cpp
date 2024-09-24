@@ -353,6 +353,7 @@ static glm::ivec3 getChunkPos(const glm::ivec3 & block_pos)
 	//    It means that whend you divide -16 by 16 you get -1 and not 0. So we need to add 1 to the initial block_pos.
 	//    We can use the following formula: ((block_pos - (block_pos >> 31)) / 16) + (block_pos >> 31)
 	//    See the explanation of the first problem to understand why we need to subtract (block_pos >> 31).
+
 	constexpr int shift = sizeof(int) * 8 - 1;
 	const glm::ivec3 shifted = block_pos >> shift;
 	return ((block_pos - shifted) / CHUNK_SIZE_IVEC3) + shifted;
@@ -368,6 +369,7 @@ static glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos)
 	// If block_pos is negative, it's sign bit will be 1, so block_pos >> 31 will be 0xFFFFFFFF, and 16 & 0xFFFFFFFF = 16.
 	// If block_pos is positive, it's sign bit will be 0, so block_pos >> 31 will be 0x00000000, and 16 & 0x00000000 = 0.
 	// Note that we do ((block_pos % 16) >> 31) and not (block_pos >> 31) so that when block_pos is 16, the result will be 0 and not considered as negative.
+
 	constexpr int shift = sizeof(int) * 8 - 1;
 	const glm::ivec3 mod = block_pos % CHUNK_SIZE_IVEC3;
 	return mod + (CHUNK_SIZE_IVEC3 & (mod >> shift));
@@ -387,14 +389,16 @@ static void setSkyLight(
 		{
 			const glm::ivec3 block_chunk_pos = glm::ivec3(x, CHUNK_Y_SIZE - 1, z);
 			const glm::ivec3 block_world_pos = chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
-			const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
-			if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
-			{
-				const int absorbed_light = Block::getData(block_id).absorb_light;
-				const int new_light = 15 - absorbed_light;
-				start_chunk->setLight(block_chunk_pos, new_light);
-				light_queue.push(block_world_pos);
-			}
+			// const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
+			// if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
+			// {
+			// 	const int absorbed_light = Block::getData(block_id).absorb_light;
+			// 	const int new_light = 15 - absorbed_light;
+			// 	start_chunk->setLight(block_chunk_pos, new_light);
+			// 	light_queue.push(block_world_pos);
+			// }
+			start_chunk->setLight(block_chunk_pos, 15);
+			light_queue.push(block_world_pos);
 		}
 	}
 
@@ -419,6 +423,12 @@ static void setSkyLight(
 		// const BlockID current_id = chunk->getBlock(block_chunk_pos);
 		const int current_light = chunk->getLight(block_chunk_pos);
 
+		if (current_light > 15)
+		{
+			LOG_ERROR("Light current value is higher than 15: " << (int)current_light);
+			continue;
+		}
+
 		if (current_light == 0)
 			continue;
 
@@ -440,12 +450,18 @@ static void setSkyLight(
 					const int new_light = current_light - absorbed_light - (i == 3 ? 0 : 1); // -1 if not below
 					if (neighbor_light < new_light)
 					{
+						// light being initialized at 0, we probably don't need this
 						if (new_light <= 0)
 						{
 							neighbor_chunk->setLight(neighbor_block_chunk_pos, 0);
 						}
 						else
 						{
+							if (new_light > 15)
+							{
+								LOG_ERROR("Light new value is higher than 15: " << (int)new_light);
+								continue;
+							}
 							neighbor_chunk->setLight(neighbor_block_chunk_pos, new_light);
 							light_queue.push(neighbor_world_pos);
 						}
