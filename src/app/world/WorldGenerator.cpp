@@ -340,41 +340,6 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	return BlockID::Stone;
 }
 
-static glm::ivec3 getChunkPos(const glm::ivec3 & block_pos)
-{
-	// (block_pos / 16) works for positive numbers
-	// but for negative numbers there is two problems:
-	// 1) -1 / 16 = 0 and not -1: the first negative chunk has a coordinate of -1, but the result of the division is 0.
-	//    It means that every negative chunk will give a result higher by 1 than it should be. So we need to subtract 1.
-	//    We can use the following formula: (block_pos / 16) + (block_pos >> 31)
-	//    If block_pos is negative, it's sign bit will be 1, so block_pos >> 31 will be 0xFFFFFFFF, and 0xFFFFFFFF = -1.
-	//    If block_pos is positive, it's sign bit will be 0, so block_pos >> 31 will be 0x00000000, and 0x00000000 = 0.
-	// 2) The block positions for the first negative chunk are in the range [-16, -1] and not [-15, 0].
-	//    It means that whend you divide -16 by 16 you get -1 and not 0. So we need to add 1 to the initial block_pos.
-	//    We can use the following formula: ((block_pos - (block_pos >> 31)) / 16) + (block_pos >> 31)
-	//    See the explanation of the first problem to understand why we need to subtract (block_pos >> 31).
-
-	constexpr int shift = sizeof(int) * 8 - 1;
-	const glm::ivec3 shifted = block_pos >> shift;
-	return ((block_pos - shifted) / CHUNK_SIZE_IVEC3) + shifted;
-}
-
-static glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos)
-{
-	// (block_pos % 16) works for positive numbers
-	// but for negative numbers there is a problem:
-	// The block positions for the first negative chunk are in the range [-16, -1] and not [0, 15].
-	// So we need to add 16 to the result of the modulo operation. Execpt for -16, because -16 % 16 = 0.
-	// We can use the following formula: (block_pos % 16) + (16 & ((block_pos % 16) >> 31))
-	// If block_pos is negative, it's sign bit will be 1, so block_pos >> 31 will be 0xFFFFFFFF, and 16 & 0xFFFFFFFF = 16.
-	// If block_pos is positive, it's sign bit will be 0, so block_pos >> 31 will be 0x00000000, and 16 & 0x00000000 = 0.
-	// Note that we do ((block_pos % 16) >> 31) and not (block_pos >> 31) so that when block_pos is 16, the result will be 0 and not considered as negative.
-
-	constexpr int shift = sizeof(int) * 8 - 1;
-	const glm::ivec3 mod = block_pos % CHUNK_SIZE_IVEC3;
-	return mod + (CHUNK_SIZE_IVEC3 & (mod >> shift));
-}
-
 static void setSkyLight(
 	ChunkMap & chunks,
 	const glm::ivec3 & chunk_pos
@@ -389,16 +354,14 @@ static void setSkyLight(
 		{
 			const glm::ivec3 block_chunk_pos = glm::ivec3(x, CHUNK_Y_SIZE - 1, z);
 			const glm::ivec3 block_world_pos = chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
-			// const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
-			// if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
-			// {
-			// 	const int absorbed_light = Block::getData(block_id).absorb_light;
-			// 	const int new_light = 15 - absorbed_light;
-			// 	start_chunk->setLight(block_chunk_pos, new_light);
-			// 	light_queue.push(block_world_pos);
-			// }
-			start_chunk->setLight(block_chunk_pos, 15);
-			light_queue.push(block_world_pos);
+			const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
+			if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
+			{
+				const int absorbed_light = Block::getData(block_id).absorb_light;
+				const int new_light = 15 - absorbed_light;
+				start_chunk->setSkyLight(block_chunk_pos, new_light);
+				light_queue.push(block_world_pos);
+			}
 		}
 	}
 
@@ -421,13 +384,7 @@ static void setSkyLight(
 		std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
 
 		// const BlockID current_id = chunk->getBlock(block_chunk_pos);
-		const int current_light = chunk->getLight(block_chunk_pos);
-
-		if (current_light > 15)
-		{
-			LOG_ERROR("Light current value is higher than 15: " << (int)current_light);
-			continue;
-		}
+		const int current_light = chunk->getSkyLight(block_chunk_pos);
 
 		if (current_light == 0)
 			continue;
@@ -442,7 +399,7 @@ static void setSkyLight(
 			{
 				std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
 				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
-				const int neighbor_light = neighbor_chunk->getLight(neighbor_block_chunk_pos);
+				const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
 
 				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
 				{
@@ -450,21 +407,86 @@ static void setSkyLight(
 					const int new_light = current_light - absorbed_light - (i == 3 ? 0 : 1); // -1 if not below
 					if (neighbor_light < new_light)
 					{
-						// light being initialized at 0, we probably don't need this
-						if (new_light <= 0)
-						{
-							neighbor_chunk->setLight(neighbor_block_chunk_pos, 0);
-						}
-						else
-						{
-							if (new_light > 15)
-							{
-								LOG_ERROR("Light new value is higher than 15: " << (int)new_light);
-								continue;
-							}
-							neighbor_chunk->setLight(neighbor_block_chunk_pos, new_light);
-							light_queue.push(neighbor_world_pos);
-						}
+						neighbor_chunk->setSkyLight(neighbor_block_chunk_pos, new_light);
+						light_queue.push(neighbor_world_pos);
+					}
+				}
+			}
+		}
+	}
+}
+
+static void setBlockLight(
+	ChunkMap & chunks,
+	const glm::ivec3 & chunk_pos
+)
+{
+	std::shared_ptr<Chunk> start_chunk = chunks.at(chunk_pos);
+
+	std::queue<glm::ivec3> light_queue;
+	for (int x = 0; x < CHUNK_X_SIZE; x++)
+	{
+		for (int y = 0; y < CHUNK_Y_SIZE; y++)
+		{
+			for (int z = 0; z < CHUNK_Z_SIZE; z++)
+			{
+				const glm::ivec3 block_chunk_pos = glm::ivec3(x, y, z);
+				const glm::ivec3 block_world_pos = chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
+				const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
+				if (Block::hasProperty(block_id, BLOCK_PROPERTY_LIGHT))
+				{
+					const int emit_light = Block::getData(block_id).emit_light;
+					start_chunk->setBlockLight(block_chunk_pos, emit_light);
+					light_queue.push(block_world_pos);
+				}
+			}
+		}
+	}
+
+	constexpr std::array<glm::ivec3, 6> NEIGHBOR_OFFSETS = {
+		glm::ivec3(1, 0, 0),
+		glm::ivec3(-1, 0, 0),
+		glm::ivec3(0, 1, 0),
+		glm::ivec3(0, -1, 0),
+		glm::ivec3(0, 0, 1),
+		glm::ivec3(0, 0, -1)
+	};
+
+	while (!light_queue.empty())
+	{
+		const glm::ivec3 current_block_world_pos = light_queue.front();
+		light_queue.pop();
+
+		const glm::ivec3 chunk_pos = getChunkPos(current_block_world_pos);
+		const glm::ivec3 block_chunk_pos = getBlockChunkPos(current_block_world_pos);
+		std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
+
+		// const BlockID current_id = chunk->getBlock(block_chunk_pos);
+		const int current_light = chunk->getBlockLight(block_chunk_pos);
+
+		if (current_light == 0)
+			continue;
+
+		for (int i = 0; i < 6; i++)
+		{
+			const glm::ivec3 neighbor_world_pos = current_block_world_pos + NEIGHBOR_OFFSETS[i];
+			const glm::ivec3 neighbor_chunk_pos = getChunkPos(neighbor_world_pos);
+			const glm::ivec3 neighbor_block_chunk_pos = getBlockChunkPos(neighbor_world_pos);
+
+			if (chunks.contains(neighbor_chunk_pos))
+			{
+				std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
+				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+				const int neighbor_light = neighbor_chunk->getBlockLight(neighbor_block_chunk_pos);
+
+				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+				{
+					const int absorbed_light = Block::getData(neighbor_id).absorb_light;
+					const int new_light = current_light - absorbed_light - 1;
+					if (neighbor_light < new_light)
+					{
+						neighbor_chunk->setBlockLight(neighbor_block_chunk_pos, new_light);
+						light_queue.push(neighbor_world_pos);
 					}
 				}
 			}
@@ -573,6 +595,7 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 				chunk->setGenLevel(LIGHT);
 
 				setSkyLight(chunks, chunk_pos_3D);
+				setBlockLight(chunks, chunk_pos_3D);
 			}
 		}
 	}

@@ -45,8 +45,8 @@ public:
 
 	/**
 	 * @brief Get the Chunk object
-	 * 
-	 * @param position 
+	 *
+	 * @param position
 	 * @retval std::shared_ptr<Chunk> if the chunk exists
 	 * @retval nullptr if the chunk does not exist
 	 */
@@ -70,9 +70,9 @@ protected:
 
 	/**
 	 * @brief Get a chunk ptr without locking the chunks mutex
-	 * 
+	 *
 	 * @warning you MUST lock the chunks mutex before calling this function
-	 * @param position 
+	 * @param position
 	 * @retval std::shared_ptr<Chunk> if the chunk exists
 	 * @retval nullptr if the chunk does not exist
 	 */
@@ -85,4 +85,22 @@ protected:
 	 *************************************/
 	// void	waitForFinishedFutures();
 	// void	waitForFutures();
+
+	/*************************************
+	 *  LIGHTS
+	 *************************************/
+
+	/**
+	 * @brief Update the sky light of the chunk containing the block
+	 *
+	 * @param block_position the position of the block in the world
+	 */
+	void updateSkyLight(const glm::ivec3 & block_position);
+
+	/**
+	 * @brief Update the block light of the chunk containing the block
+	 *
+	 * @param block_position the position of the block in the world
+	 */
+	void updateBlockLight(const glm::ivec3 & block_position);
 };

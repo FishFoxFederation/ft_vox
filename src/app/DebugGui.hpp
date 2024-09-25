@@ -114,6 +114,7 @@ public:
 	static inline Atomic<glm::vec3> player_position;
 	static inline Atomic<glm::vec3> player_velocity_vec;
 	static inline std::atomic<double> player_velocity;
+	static inline std::atomic<int> looked_face_light;
 
 	// Render Thread times
 	static inline History<float, 100> frame_time_history;
@@ -150,6 +151,4 @@ public:
 	static inline std::atomic<float> g = 0.95f;
 	static inline std::atomic<int> n_samples = 8.0f;
 	static inline std::atomic<int> n_light_samples = 4.0f;
-
-	static inline std::atomic<bool> use_raytracing = false;
 };
