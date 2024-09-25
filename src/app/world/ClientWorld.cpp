@@ -13,7 +13,7 @@ ClientWorld::ClientWorld(
 	// m_players(),
 {
 	m_my_player_id = my_player_id;
-	addPlayer(m_my_player_id, glm::dvec3(0.0, 220.0, 0.0));
+	addPlayer(m_my_player_id, glm::dvec3(0.0, 150.0, 0.0));
 }
 
 ClientWorld::~ClientWorld()
@@ -387,10 +387,13 @@ void ClientWorld::doBlockSets()
 
 			chunk->status.lock();
 			chunk->setBlock(block_chunk_position, block_id);
-			//if chunk is meshed we need to update the light
-
 			chunk->setMeshed(false);
 			chunk->status.unlock();
+
+			{
+				std::lock_guard lock(m_block_light_update_mutex);
+				m_block_light_update.push(glm::ivec3(position));
+			}
 
 			if (block_chunk_position.x == 0)
 				setChunkNotMeshed(glm::ivec2(chunk_position2D.x - 1, chunk_position2D.y));
@@ -412,7 +415,29 @@ void ClientWorld::doBlockSets()
 
 void ClientWorld::updateLights()
 {
+	while (1)
+	{
+		glm::ivec3 position;
+		{
+			std::lock_guard light_update_lock(m_block_light_update_mutex);
+			if (m_block_light_update.empty())
+				break;
 
+			position = m_block_light_update.front();
+			m_block_light_update.pop();
+		}
+
+		const glm::ivec3 chunk_position = getChunkPosition(position);
+		std::shared_ptr<Chunk> chunk;
+		{
+			std::lock_guard chunks_lock(m_chunks_mutex);
+			if (!m_loaded_chunks.contains(glm::ivec2(chunk_position.x, chunk_position.z)))
+				continue;
+			chunk = m_chunks.at(chunk_position);
+		}
+
+		updateSkyLight(position);
+	}
 }
 
 void ClientWorld::updateEntities()
@@ -663,6 +688,29 @@ void ClientWorld::updatePlayerTargetBlock(
 	m_worldScene.setTargetBlock(target_block);
 
 	player->targeted_block = raycast;
+
+	if (player->targeted_block.hit)
+	{
+		glm::ivec3 pos = player->targeted_block.block_position + player->targeted_block.normal;
+		glm::ivec3 chunk_pos = getChunkPosition(pos);
+		if (m_chunks.contains(chunk_pos))
+		{
+			std::shared_ptr<Chunk> chunk = m_chunks.at(chunk_pos);
+			if (chunk->status.try_lock_shared())
+			{
+				const glm::ivec3 block_chunk_pos = getBlockChunkPosition(pos);
+				uint8_t light = chunk->getLight(block_chunk_pos);
+				chunk->status.unlock_shared();
+
+				DebugGui::looked_face_light = light;
+			}
+		}
+	}
+	else
+	{
+		DebugGui::looked_face_light = -1;
+	}
+
 }
 
 std::pair<bool, glm::vec3> ClientWorld::playerAttack(

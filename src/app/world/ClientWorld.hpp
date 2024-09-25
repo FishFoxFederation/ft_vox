@@ -125,6 +125,9 @@ private:
 	std::queue<std::pair<glm::vec3, BlockID>> m_blocks_to_set;
 	TracyLockableN							(std::mutex, m_blocks_to_set_mutex, "Blocks to set");
 
+	std::queue<glm::ivec3> 					m_block_light_update;
+	TracyLockableN							(std::mutex, m_block_light_update_mutex, "Block light update");
+
 
 
 	/*********************************************************

@@ -102,6 +102,7 @@ void Chunk::setBlock(const glm::ivec3 & position, BlockID block)
 	setBlock(position.x, position.y, position.z, block);
 }
 
+
 Chunk::LightArray & Chunk::getLight()
 {
 	return m_light;
@@ -135,6 +136,53 @@ void Chunk::setLight(const glm::ivec3 & position, uint8_t light)
 {
 	setLight(position.x, position.y, position.z, light);
 }
+
+
+uint8_t Chunk::getSkyLight(const int & x, const int & y, const int & z) const
+{
+	const int index = toIndex(x, y, z);
+	return m_light[index] & 0b00001111;
+}
+
+uint8_t Chunk::getSkyLight(const glm::ivec3 & position) const
+{
+	return getSkyLight(position.x, position.y, position.z);
+}
+
+void Chunk::setSkyLight(const int & x, const int & y, const int & z, uint8_t sky_light)
+{
+	const int index = toIndex(x, y, z);
+	m_light[index] = (m_light[index] & 0b11110000) | (sky_light & 0b00001111);
+}
+
+void Chunk::setSkyLight(const glm::ivec3 & position, uint8_t light)
+{
+	setSkyLight(position.x, position.y, position.z, light);
+}
+
+
+uint8_t Chunk::getBlockLight(const int & x, const int & y, const int & z) const
+{
+	const int index = toIndex(x, y, z);
+	return (m_light[index] >> 4) & 0b00001111;
+}
+
+uint8_t Chunk::getBlockLight(const glm::ivec3 & position) const
+{
+	return getBlockLight(position.x, position.y, position.z);
+}
+
+void Chunk::setBlockLight(const int & x, const int & y, const int & z, uint8_t block_light)
+{
+	const int index = toIndex(x, y, z);
+	m_light[index] = (m_light[index] & 0b00001111) | ((block_light & 0b00001111) << 4);
+}
+
+void Chunk::setBlockLight(const glm::ivec3 & position, uint8_t light)
+{
+	setBlockLight(position.x, position.y, position.z, light);
+}
+
 
 const glm::ivec3 & Chunk::getPosition() const
 {
@@ -203,4 +251,41 @@ glm::ivec3	Chunk::toCoord(const int & index)
 	int y = (index - x) % CHUNK_Y_SIZE;
 	int z = (index - x - y) % CHUNK_Z_SIZE;
 	return glm::ivec3(x, y, z);
+}
+
+
+
+glm::ivec3 getChunkPos(const glm::ivec3 & block_pos)
+{
+	// (block_pos / 16) works for positive numbers
+	// but for negative numbers there is two problems:
+	// 1) -1 / 16 = 0 and not -1: the first negative chunk has a coordinate of -1, but the result of the division is 0.
+	//    It means that every negative chunk will give a result higher by 1 than it should be. So we need to subtract 1.
+	//    We can use the following formula: (block_pos / 16) + (block_pos >> 31)
+	//    If block_pos is negative, it's sign bit will be 1, so block_pos >> 31 will be 0xFFFFFFFF, and 0xFFFFFFFF = -1.
+	//    If block_pos is positive, it's sign bit will be 0, so block_pos >> 31 will be 0x00000000, and 0x00000000 = 0.
+	// 2) The block positions for the first negative chunk are in the range [-16, -1] and not [-15, 0].
+	//    It means that whend you divide -16 by 16 you get -1 and not 0. So we need to add 1 to the initial block_pos.
+	//    We can use the following formula: ((block_pos - (block_pos >> 31)) / 16) + (block_pos >> 31)
+	//    See the explanation of the first problem to understand why we need to subtract (block_pos >> 31).
+
+	constexpr int shift = sizeof(int) * 8 - 1;
+	const glm::ivec3 shifted = block_pos >> shift;
+	return ((block_pos - shifted) / CHUNK_SIZE_IVEC3) + shifted;
+}
+
+glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos)
+{
+	// (block_pos % 16) works for positive numbers
+	// but for negative numbers there is a problem:
+	// The block positions for the first negative chunk are in the range [-16, -1] and not [0, 15].
+	// So we need to add 16 to the result of the modulo operation. Execpt for -16, because -16 % 16 = 0.
+	// We can use the following formula: (block_pos % 16) + (16 & ((block_pos % 16) >> 31))
+	// If block_pos is negative, it's sign bit will be 1, so block_pos >> 31 will be 0xFFFFFFFF, and 16 & 0xFFFFFFFF = 16.
+	// If block_pos is positive, it's sign bit will be 0, so block_pos >> 31 will be 0x00000000, and 16 & 0x00000000 = 0.
+	// Note that we do ((block_pos % 16) >> 31) and not (block_pos >> 31) so that when block_pos is 16, the result will be 0 and not considered as negative.
+
+	constexpr int shift = sizeof(int) * 8 - 1;
+	const glm::ivec3 mod = block_pos % CHUNK_SIZE_IVEC3;
+	return mod + (CHUNK_SIZE_IVEC3 & (mod >> shift));
 }

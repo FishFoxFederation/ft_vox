@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <array>
 #include <glm/vec3.hpp>
 #include <mutex>
@@ -19,6 +18,8 @@
 #define CHUNK_SIZE_IVEC3 glm::ivec3(CHUNK_X_SIZE, CHUNK_Y_SIZE, CHUNK_Z_SIZE)
 #define CHUNK_SIZE_VEC3 glm::vec3(CHUNK_X_SIZE, CHUNK_Y_SIZE, CHUNK_Z_SIZE)
 
+glm::ivec3 getChunkPos(const glm::ivec3 & block_pos);
+glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos);
 
 class Chunk
 {
@@ -57,6 +58,16 @@ public:
 	void				setLight(const int & x, const int & y, const int & z, uint8_t light);
 	void 				setLight(const glm::ivec3 & position, uint8_t light);
 
+	uint8_t				getSkyLight(const int & x, const int & y, const int & z) const;
+	uint8_t				getSkyLight(const glm::ivec3 & position) const;
+	void				setSkyLight(const int & x, const int & y, const int & z, uint8_t light);
+	void 				setSkyLight(const glm::ivec3 & position, uint8_t light);
+
+	uint8_t				getBlockLight(const int & x, const int & y, const int & z) const;
+	uint8_t				getBlockLight(const glm::ivec3 & position) const;
+	void				setBlockLight(const int & x, const int & y, const int & z, uint8_t light);
+	void 				setBlockLight(const glm::ivec3 & position, uint8_t light);
+
 	const glm::ivec3 &	getPosition() const;
 	void 				setPosition(const glm::ivec3 & position);
 
@@ -90,6 +101,7 @@ private:
 	glm::ivec3	position;
 	uint64_t	m_mesh_id;
 	BlockArray	m_blocks;
+	// 4 left bits for block light, 4 right bits for sky light
 	LightArray	m_light;
 	int			load_level = TICKET_LEVEL_INACTIVE + 10;
 	int			highest_load_level = 0;

@@ -39,6 +39,7 @@ void DebugGui::updateImGui()
 				ImGui::Text("V XYZ: %.3f %.3f %.3f", player_velocity_vec.get().x, player_velocity_vec.get().y, player_velocity_vec.get().z);
 				ImGui::Text("Velocity: %.3f", player_velocity.load());
 				ImGui::Text("Chunk: %f %f %f", std::floor(player_position.get().x / 16) , std::floor(player_position.get().y / 256), std::floor(player_position.get().z / 16));
+				ImGui::Text("Looked face light: %d", looked_face_light.load());
 
 				ImGui::Separator();
 
@@ -105,12 +106,6 @@ void DebugGui::updateImGui()
 
 			if (ImGui::BeginTabItem("Graphic"))
 			{
-				bool tmp = use_raytracing;
-				ImGui::Checkbox("Raytracing", &tmp);
-				use_raytracing = tmp;
-
-				ImGui::Separator();
-
 				// slidders for atmosphere parrams
 				FLOAT_SLIDER(sun_theta, 0.0f, 360.0f)
 				FLOAT_SLIDER(earth_radius, 0.0f, 10000000.0f)
