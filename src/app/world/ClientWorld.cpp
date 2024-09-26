@@ -437,6 +437,7 @@ void ClientWorld::updateLights()
 		}
 
 		updateSkyLight(position);
+		updateBlockLight(position);
 	}
 }
 
@@ -699,16 +700,19 @@ void ClientWorld::updatePlayerTargetBlock(
 			if (chunk->status.try_lock_shared())
 			{
 				const glm::ivec3 block_chunk_pos = getBlockChunkPosition(pos);
-				uint8_t light = chunk->getLight(block_chunk_pos);
+				uint8_t sky_light = chunk->getSkyLight(block_chunk_pos);
+				uint8_t block_light = chunk->getBlockLight(block_chunk_pos);
 				chunk->status.unlock_shared();
 
-				DebugGui::looked_face_light = light;
+				DebugGui::looked_face_sky_light = sky_light;
+				DebugGui::looked_face_block_light = block_light;
 			}
 		}
 	}
 	else
 	{
-		DebugGui::looked_face_light = -1;
+		DebugGui::looked_face_sky_light = -1;
+		DebugGui::looked_face_block_light = -1;
 	}
 
 }

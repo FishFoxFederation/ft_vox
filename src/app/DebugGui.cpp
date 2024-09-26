@@ -39,7 +39,8 @@ void DebugGui::updateImGui()
 				ImGui::Text("V XYZ: %.3f %.3f %.3f", player_velocity_vec.get().x, player_velocity_vec.get().y, player_velocity_vec.get().z);
 				ImGui::Text("Velocity: %.3f", player_velocity.load());
 				ImGui::Text("Chunk: %f %f %f", std::floor(player_position.get().x / 16) , std::floor(player_position.get().y / 256), std::floor(player_position.get().z / 16));
-				ImGui::Text("Looked face light: %d", looked_face_light.load());
+				ImGui::Text("Looked face sky light: %d", looked_face_sky_light.load());
+				ImGui::Text("Looked face block light: %d", looked_face_block_light.load());
 
 				ImGui::Separator();
 

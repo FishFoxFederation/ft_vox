@@ -164,8 +164,7 @@ void main()
 	float fog_factor = depth_diff * 100.0;
 
 	// add fog to the background color
-	// background_color = mix(background_color, vec3(0.0, 0.0, 0.0), fog_factor);
-	background_color *= 1.0 - fog_factor;
+	// background_color *= 1.0 - fog_factor;
 
 	// mix the water color with the background color (alpha blending)
 	vec3 final_color = water_texture_color.a * water_texture_color.rgb + (1.0 - water_texture_color.a) * background_color;
