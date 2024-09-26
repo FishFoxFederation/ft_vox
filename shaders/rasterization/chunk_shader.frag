@@ -24,7 +24,8 @@ layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
 layout(location = 2) in vec4 frag_pos_world_space;
 layout(location = 3) in float frag_ao;
-layout(location = 4) in float frag_light;
+layout(location = 4) in float frag_sky_light;
+layout(location = 5) in float frag_block_light;
 
 layout(location = 0) out vec4 out_color;
 
@@ -150,9 +151,10 @@ void main()
 	float max_shadow = 0.5;
 	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
 
-	float sky_light = frag_light / 15.0;
+	float sky_light = frag_sky_light / 15.0;
+	float block_light = frag_block_light / 15.0;
 
-	float base_light = sky_light;
+	float base_light = max(sky_light, block_light);
 
 	const float min_light = 0.05;
 	// float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;

@@ -18,7 +18,8 @@ enum class BlockID : BlockType
 	Dirt,
 	Stone,
 	Water,
-	Glass
+	Glass,
+	Light
 };
 
 // Block properties
@@ -57,7 +58,8 @@ struct Block
 		"assets/textures/block/dirt.png", // 3
 		"assets/textures/block/stone.png", // 4
 		"assets/textures/block/water.png", // 5
-		"assets/textures/block/glass_clear.png", // 5
+		"assets/textures/block/glass_clear.png", // 6
+		"assets/textures/block/light.png", // 7
 		// "assets/textures/block/debug/white.png",
 		// "assets/textures/block/debug/right.png",
 		// "assets/textures/block/debug/left.png",
@@ -76,6 +78,7 @@ struct Block
 		case BlockID::Stone: return Stone;
 		case BlockID::Water: return Water;
 		case BlockID::Glass: return Glass;
+		case BlockID::Light: return Light;
 		default: return Air;
 		}
 	}
@@ -178,6 +181,25 @@ struct Block
 			| BLOCK_PROPERTY_CUBE,
 		.hitbox = {{0, 0, 0}, {1, 1, 1}},
 		.emit_light = 0,
+		.absorb_light = 0
+	};
+	static inline const Data Light = {
+		.id = BlockID::Light,
+		.texture = {
+			7, // light
+			7, // light
+			7, // light
+			7, // light
+			7, // light
+			7  // light
+		},
+		.properties =
+			BLOCK_PROPERTY_SOLID
+			| BLOCK_PROPERTY_OPAQUE
+			| BLOCK_PROPERTY_CUBE
+			| BLOCK_PROPERTY_LIGHT,
+		.hitbox = {{0, 0, 0}, {1, 1, 1}},
+		.emit_light = 15,
 		.absorb_light = 0
 	};
 

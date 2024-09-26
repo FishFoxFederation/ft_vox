@@ -96,9 +96,28 @@ void World::insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk
 // 	}
 // }
 
-void World::updateSkyLight(const glm::ivec3 & block_position)
+static bool insideSkyLightInfluenceZone(const glm::ivec3 & origin, const glm::ivec3 & position)
 {
-	const glm::ivec3 start_chunk_pos = getChunkPos(block_position);
+	const glm::ivec3 diff = glm::abs(position - origin);
+	const bool is_below = position.y <= origin.y;
+	// return is_below ? (diff.x + diff.z <= 16) : (diff.x + diff.y + diff.z <= 16);
+	return (is_below && (diff.x + diff.z <= 16)) || (!is_below && (diff.x + diff.y + diff.z <= 16));
+}
+
+void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
+{
+	/*
+	 * https://minecraft.fandom.com/wiki/Light#Sky_light
+	 *
+	 * When sky light of a level of 15 spreads down through a transparent block, the level remains unchanged.
+	 * When it spreads horizontally or upward, it reduces 1 light level.
+	 * However, when it spreads through a light-filtering block, it does not follow the above two rules and attenuates specific light levels.
+	 * Sky light with a level less than 15 spreads as block light - when it propagates to adjacent (including top and bottom, six blocks in total) blocks,
+	 * it is attenuated until it is 0.
+	 *
+	 * This implementation reduces the light level by 1 even when passing through a light-filtering block.
+	*/
+	const glm::ivec3 start_chunk_pos = getChunkPos(start_block_world_pos);
 	std::shared_ptr<Chunk> start_chunk = getChunk(start_chunk_pos);
 	if (start_chunk == nullptr)
 	{
@@ -115,45 +134,116 @@ void World::updateSkyLight(const glm::ivec3 & block_position)
 		glm::ivec3(0, 0, -1)
 	};
 
-	start_chunk->status.lock_shared();
-	for (int x = 0; x < CHUNK_X_SIZE; x++)
-	{
-		for (int y = 0; y < CHUNK_Y_SIZE; y++)
-		{
-			for (int z = 0; z < CHUNK_Z_SIZE; z++)
-			{
-				start_chunk->setSkyLight(x, y, z, 0);
-			}
-		}
-	}
-
 	std::queue<glm::ivec3> light_queue;
-	for (int x = 0; x < CHUNK_X_SIZE; x++)
+	std::queue<glm::ivec3> start_light_queue;
+	std::unordered_set<glm::ivec3> visited_blocks;
+	start_light_queue.push(start_block_world_pos);
+
+	int count_1 = 0, count_2 = 0;
+	while (!start_light_queue.empty())
 	{
-		for (int z = 0; z < CHUNK_Z_SIZE; z++)
+		count_1++;
+		if (start_light_queue.size() > BLOCKS_PER_CHUNK)
 		{
-			const glm::ivec3 block_chunk_pos = glm::ivec3(x, CHUNK_Y_SIZE - 1, z);
-			const glm::ivec3 block_world_pos = start_chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
-			const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
+			LOG_WARNING("World::updateSkyLight: first loop: start_light_queue size > BLOCKS_PER_CHUNK (" << BLOCKS_PER_CHUNK << ")");
+			break;
+		}
 
-			if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
+		const glm::ivec3 current_block_world_pos = start_light_queue.front();
+		start_light_queue.pop();
+
+		const glm::ivec3 current_chunk_pos = getChunkPos(current_block_world_pos);
+		const glm::ivec3 current_block_chunk_pos = getBlockChunkPos(current_block_world_pos);
+		const std::shared_ptr<Chunk> current_chunk = getChunk(current_chunk_pos);
+		if (current_chunk == nullptr)
+		{
+			LOG_WARNING("World::updateSkyLight: first loop: visited chunk is nullptr.");
+			continue;
+		}
+
+		current_chunk->status.lock_shared();
+		const BlockID current_id = current_chunk->getBlock(current_block_chunk_pos);
+		// not const because it can change when looking at neighbors
+		// int current_light = current_chunk->getSkyLight(current_block_chunk_pos);
+		current_chunk->status.unlock_shared();
+		const int current_absorb_light = Block::getData(current_id).absorb_light;
+
+		for (int i = 0; i < 6; i++)
+		{
+			const glm::ivec3 neighbor_world_pos = current_block_world_pos + NEIGHBOR_OFFSETS[i];
+			const glm::ivec3 neighbor_chunk_pos = getChunkPos(neighbor_world_pos);
+			const glm::ivec3 neighbor_block_chunk_pos = getBlockChunkPos(neighbor_world_pos);
+
+			if (neighbor_chunk_pos.y == 1)
 			{
-				const int absorbed_light = Block::getData(block_id).absorb_light;
-				const int new_light = 15 - absorbed_light;
+				// if the neighbor is above the start chunk, then the current block is at the top of the chunk and then the light should be 15
+				current_chunk->status.lock();
+				const BlockID block_id = current_chunk->getBlock(current_block_chunk_pos);
 
-				start_chunk->setSkyLight(block_chunk_pos, new_light);
-				light_queue.push(block_world_pos);
+				if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
+				{
+					const int absorbed_light = Block::getData(block_id).absorb_light;
+					const int new_light = 15 - absorbed_light;
+
+					current_chunk->setSkyLight(current_block_chunk_pos, new_light);
+					light_queue.push(current_block_world_pos);
+				}
+				current_chunk->status.unlock();
+				visited_blocks.insert(neighbor_world_pos);
+				continue;
+			}
+
+			if (neighbor_chunk_pos.y != 0)
+				continue;
+
+			std::shared_ptr<Chunk> neighbor_chunk = getChunk(neighbor_chunk_pos);
+			if (neighbor_chunk != nullptr)
+			{
+				neighbor_chunk->status.lock_shared();
+				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+				const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
+				neighbor_chunk->status.unlock_shared();
+
+				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
+				{
+					if (insideSkyLightInfluenceZone(start_block_world_pos, neighbor_world_pos))
+					{
+						neighbor_chunk->status.lock();
+						neighbor_chunk->setSkyLight(neighbor_block_chunk_pos, 0);
+						neighbor_chunk->status.unlock();
+						start_light_queue.push(neighbor_world_pos);
+					}
+					else
+					{
+						int current_new_light = neighbor_light - current_absorb_light
+							- (i != 2 || neighbor_light != 15) * 1; // i == 2 is when the neighbor light spreads down
+						current_new_light = std::max(current_new_light, 0);
+
+						current_chunk->status.lock();
+						current_chunk->setSkyLight(current_block_chunk_pos, current_new_light);
+						current_chunk->status.unlock();
+
+						if (current_new_light > 0)
+						{
+							light_queue.push(current_block_world_pos);
+						}
+					}
+					visited_blocks.insert(neighbor_world_pos);
+				}
+			}
+			else
+			{
+				LOG_WARNING("World::updateSkyLight: first loop: neighbor_chunk is nullptr.");
 			}
 		}
 	}
-	start_chunk->status.unlock_shared();
 
-	std::unordered_set<glm::ivec3> chunks_that_should_be_remeshed;
 	while (!light_queue.empty())
 	{
+		count_2++;
 		if (light_queue.size() > BLOCKS_PER_CHUNK)
 		{
-			LOG_WARNING("World::updateSkyLight: light_queue size > BLOCKS_PER_CHUNK (" << BLOCKS_PER_CHUNK << ")");
+			LOG_WARNING("World::updateSkyLight: second loop: light_queue size > BLOCKS_PER_CHUNK (" << BLOCKS_PER_CHUNK << ")");
 			break;
 		}
 
@@ -165,7 +255,7 @@ void World::updateSkyLight(const glm::ivec3 & block_position)
 		const std::shared_ptr<Chunk> chunk = getChunk(chunk_pos);
 		if (chunk == nullptr)
 		{
-			LOG_WARNING("World::updateSkyLight: visited chunk is nullptr.");
+			LOG_WARNING("World::updateSkyLight: second loop: current_chunk is nullptr.");
 			continue;
 		}
 
@@ -188,7 +278,7 @@ void World::updateSkyLight(const glm::ivec3 & block_position)
 			std::shared_ptr<Chunk> neighbor_chunk = getChunk(neighbor_chunk_pos);
 			if (neighbor_chunk != nullptr)
 			{
-				neighbor_chunk->status.lock_shared();
+				neighbor_chunk->status.lock();
 				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 				const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
 
@@ -196,24 +286,10 @@ void World::updateSkyLight(const glm::ivec3 & block_position)
 				{
 					const int neighbor_absorbed_light = Block::getData(neighbor_id).absorb_light;
 
-					/*
-					 * https://minecraft.fandom.com/wiki/Light#Sky_light
-					 *
-					 * When sky light of a level of 15 spreads down through a transparent block, the level remains unchanged.
-					 * When it spreads horizontally or upward, it reduces 1 light level.
-					 * However, when it spreads through a light-filtering block, it does not follow the above two rules and attenuates specific light levels.
-					 * Sky light with a level less than 15 spreads as block light - when it propagates to adjacent (including top and bottom, six blocks in total) blocks,
-					 * it is attenuated until it is 0.
-					 *
-					 * This implementation reduces the light level by 1 even when passing through a light-filtering block.
-					*/
-
-					int neighbor_new_light = current_light
-						- (neighbor_absorbed_light > 0) * neighbor_absorbed_light
+					int neighbor_new_light = current_light - neighbor_absorbed_light
 						- (i != 3 || current_light != 15) * 1; // i == 3 is when the current light spreads down
 
-					int current_new_light = neighbor_light
-						- (current_absorb_light > 0) * current_absorb_light
+					int current_new_light = neighbor_light - current_absorb_light
 						- (i != 2 || neighbor_light != 15) * 1; // i == 2 is when the neighbor light spreads down
 
 
@@ -232,17 +308,215 @@ void World::updateSkyLight(const glm::ivec3 & block_position)
 						current_light = current_new_light;
 					}
 				}
-				neighbor_chunk->status.unlock_shared();
+				neighbor_chunk->status.unlock();
 			}
 			else
 			{
-				LOG_WARNING("World::updateSkyLight: neighbor_chunk  is nullptr.");
+				LOG_WARNING("World::updateSkyLight: second loop: neighbor_chunk is nullptr.");
 			}
 		}
 	}
+	// LOG_DEBUG("World::updateSkyLight: iterations: first loop: " << count_1 << ", second loop: " << count_2);
 }
 
-void World::updateBlockLight(const glm::ivec3 & block_position)
+static bool insideBlockLightInfluenceZone(const glm::ivec3 & origin, const glm::ivec3 & position)
 {
+	const glm::ivec3 diff = glm::abs(position - origin);
+	return diff.x + diff.y + diff.z <= 16;
+}
 
+void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
+{
+	const glm::ivec3 start_chunk_pos = getChunkPos(start_block_world_pos);
+	std::shared_ptr<Chunk> start_chunk = getChunk(start_chunk_pos);
+	if (start_chunk == nullptr)
+	{
+		LOG_WARNING("World::updateBlockLight: start_chunk is nullptr.");
+		return;
+	}
+
+	constexpr std::array<glm::ivec3, 6> NEIGHBOR_OFFSETS = {
+		glm::ivec3(1, 0, 0),
+		glm::ivec3(-1, 0, 0),
+		glm::ivec3(0, 1, 0),
+		glm::ivec3(0, -1, 0),
+		glm::ivec3(0, 0, 1),
+		glm::ivec3(0, 0, -1)
+	};
+
+	std::queue<glm::ivec3> light_queue;
+	std::queue<glm::ivec3> start_light_queue;
+	std::unordered_set<glm::ivec3> visited_blocks;
+	start_light_queue.push(start_block_world_pos);
+
+	int count_1 = 0, count_2 = 0;
+	while (!start_light_queue.empty())
+	{
+		count_1++;
+		if (start_light_queue.size() > BLOCKS_PER_CHUNK)
+		{
+			LOG_WARNING("World::updateBlockLight: first loop: start_light_queue size > BLOCKS_PER_CHUNK (" << BLOCKS_PER_CHUNK << ")");
+			break;
+		}
+
+		const glm::ivec3 current_block_world_pos = start_light_queue.front();
+		start_light_queue.pop();
+
+		const glm::ivec3 current_chunk_pos = getChunkPos(current_block_world_pos);
+		const glm::ivec3 current_block_chunk_pos = getBlockChunkPos(current_block_world_pos);
+		const std::shared_ptr<Chunk> current_chunk = getChunk(current_chunk_pos);
+		if (current_chunk == nullptr)
+		{
+			LOG_WARNING("World::updateBlockLight: first loop: visited chunk is nullptr.");
+			continue;
+		}
+
+		current_chunk->status.lock_shared();
+		const BlockID current_id = current_chunk->getBlock(current_block_chunk_pos);
+		current_chunk->status.unlock_shared();
+		const int current_absorb_light = Block::getData(current_id).absorb_light;
+
+		for (int i = 0; i < 6; i++)
+		{
+			const glm::ivec3 neighbor_world_pos = current_block_world_pos + NEIGHBOR_OFFSETS[i];
+			const glm::ivec3 neighbor_chunk_pos = getChunkPos(neighbor_world_pos);
+			const glm::ivec3 neighbor_block_chunk_pos = getBlockChunkPos(neighbor_world_pos);
+
+			if (neighbor_chunk_pos.y == 1)
+			{
+				// if the neighbor is above the start chunk, then the current block is at the top of the chunk and then the light should be 15
+				current_chunk->status.lock();
+				const BlockID block_id = current_chunk->getBlock(current_block_chunk_pos);
+
+				if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
+				{
+					const int absorbed_light = Block::getData(block_id).absorb_light;
+					const int new_light = 15 - absorbed_light;
+
+					current_chunk->setBlockLight(current_block_chunk_pos, new_light);
+					light_queue.push(current_block_world_pos);
+				}
+				current_chunk->status.unlock();
+				visited_blocks.insert(neighbor_world_pos);
+				continue;
+			}
+
+			if (neighbor_chunk_pos.y != 0)
+				continue;
+
+			std::shared_ptr<Chunk> neighbor_chunk = getChunk(neighbor_chunk_pos);
+			if (neighbor_chunk != nullptr)
+			{
+				neighbor_chunk->status.lock_shared();
+				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+				const int neighbor_light = neighbor_chunk->getBlockLight(neighbor_block_chunk_pos);
+				neighbor_chunk->status.unlock_shared();
+
+				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
+				{
+					if (insideBlockLightInfluenceZone(start_block_world_pos, neighbor_world_pos))
+					{
+						neighbor_chunk->status.lock();
+						neighbor_chunk->setBlockLight(neighbor_block_chunk_pos, 0);
+						neighbor_chunk->status.unlock();
+						start_light_queue.push(neighbor_world_pos);
+					}
+					else
+					{
+						int current_new_light = neighbor_light - current_absorb_light - 1;
+						current_new_light = std::max(current_new_light, 0);
+
+						current_chunk->status.lock();
+						current_chunk->setBlockLight(current_block_chunk_pos, current_new_light);
+						current_chunk->status.unlock();
+
+						if (current_new_light > 0)
+						{
+							light_queue.push(current_block_world_pos);
+						}
+					}
+					visited_blocks.insert(neighbor_world_pos);
+				}
+			}
+			else
+			{
+				LOG_WARNING("World::updateBlockLight: first loop: neighbor_chunk is nullptr.");
+			}
+		}
+	}
+
+	while (!light_queue.empty())
+	{
+		count_2++;
+		if (light_queue.size() > BLOCKS_PER_CHUNK)
+		{
+			LOG_WARNING("World::updateBlockLight: second loop: light_queue size > BLOCKS_PER_CHUNK (" << BLOCKS_PER_CHUNK << ")");
+			break;
+		}
+
+		const glm::ivec3 current_block_world_pos = light_queue.front();
+		light_queue.pop();
+
+		const glm::ivec3 chunk_pos = getChunkPos(current_block_world_pos);
+		const glm::ivec3 block_chunk_pos = getBlockChunkPos(current_block_world_pos);
+		const std::shared_ptr<Chunk> chunk = getChunk(chunk_pos);
+		if (chunk == nullptr)
+		{
+			LOG_WARNING("World::updateBlockLight: second loop: current_chunk is nullptr.");
+			continue;
+		}
+
+		chunk->status.lock_shared();
+		const BlockID current_id = chunk->getBlock(block_chunk_pos);
+		// not const because it can change when looking at neighbors
+		int current_light = chunk->getBlockLight(block_chunk_pos);
+		chunk->status.unlock_shared();
+		const int current_absorb_light = Block::getData(current_id).absorb_light;
+
+		for (int i = 0; i < 6; i++)
+		{
+			const glm::ivec3 neighbor_world_pos = current_block_world_pos + NEIGHBOR_OFFSETS[i];
+			const glm::ivec3 neighbor_chunk_pos = getChunkPos(neighbor_world_pos);
+			const glm::ivec3 neighbor_block_chunk_pos = getBlockChunkPos(neighbor_world_pos);
+
+			if (neighbor_chunk_pos.y != 0)
+				continue;
+
+			std::shared_ptr<Chunk> neighbor_chunk = getChunk(neighbor_chunk_pos);
+			if (neighbor_chunk != nullptr)
+			{
+				neighbor_chunk->status.lock();
+				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+				const int neighbor_light = neighbor_chunk->getBlockLight(neighbor_block_chunk_pos);
+
+				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+				{
+					const int neighbor_absorbed_light = Block::getData(neighbor_id).absorb_light;
+					const int neighbor_new_light = current_light - neighbor_absorbed_light - 1;
+					const int current_new_light = neighbor_light - current_absorb_light - 1;
+
+					if (neighbor_new_light > neighbor_light)
+					{
+						neighbor_chunk->setBlockLight(neighbor_block_chunk_pos, neighbor_new_light);
+						light_queue.push(neighbor_world_pos);
+						// remesh the neighbor chunk
+						neighbor_chunk->setMeshed(false);
+					}
+					else if (current_new_light > current_light)
+					{
+						chunk->setBlockLight(block_chunk_pos, current_new_light);
+						light_queue.push(current_block_world_pos);
+						// update the local variable current_light for the next neighbors
+						current_light = current_new_light;
+					}
+				}
+				neighbor_chunk->status.unlock();
+			}
+			else
+			{
+				LOG_WARNING("World::updateBlockLight: second loop: neighbor_chunk is nullptr.");
+			}
+		}
+	}
+	// LOG_DEBUG("World::updateBlockLight: iterations: first loop: " << count_1 << ", second loop: " << count_2);
 }

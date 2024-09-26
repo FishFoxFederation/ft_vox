@@ -164,7 +164,7 @@ void UpdateThread::readInput()
 	ret = m_world.playerUse(m_world.m_my_player_id, m_use);
 	if (ret.first)
 	{
-		auto packet = std::make_shared<BlockActionPacket>(BlockID::Stone, ret.second, BlockActionPacket::Action::PLACE);
+		auto packet = std::make_shared<BlockActionPacket>(BlockID::Light, ret.second, BlockActionPacket::Action::PLACE);
 		m_client.sendPacket(packet);
 	}
 
