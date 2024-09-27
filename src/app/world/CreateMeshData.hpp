@@ -501,16 +501,17 @@ public:
 					if (should_render)
 					{
 						std::array<uint8_t, 4> ao = {0, 0, 0, 0};
+						std::array<uint8_t, 4> light = {0, 0, 0, 0};
 						if (block_is_opaque)
 						{
 							ao = getAmbientOcclusion(pos + normal, dim_1, dim_2);
+							light = getLight(pos + normal, dim_1, dim_2);
 						}
-						uint8_t neighbor_light = getLight(pos + normal);
 
 						face_data[pos.x][pos.y][pos.z] = {
 							Block::getData(block_id).texture[face],
 							ao,
-							neighbor_light
+							light
 						};
 					}
 					else
@@ -600,7 +601,7 @@ public:
 								tex_coord_factor[i] * tex_coord,
 								data.texture,
 								data.ao[i],
-								data.light
+								data.light[i]
 							});
 						}
 
@@ -861,6 +862,67 @@ public:
 				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE);
 	}
 
+	std::array<uint8_t, 4> getLight(
+		const glm::ivec3 & pos,
+		const int dim_1,
+		const int dim_2
+	)
+	{
+		std::array<uint8_t, 4> light = {0, 0, 0, 0};
+
+		uint8_t pos_light = getLight(pos);
+
+		glm::ivec3 side_1 = pos;
+		glm::ivec3 side_2 = pos;
+		glm::ivec3 corner = pos;
+
+		side_1[dim_1]--;
+		side_2[dim_2]--;
+		corner[dim_1]--;
+		corner[dim_2]--;
+		light[0] = getLight(pos_light, getLight(side_1), getLight(side_2), getLight(corner));
+
+		side_1 = pos;
+		side_2 = pos;
+		corner = pos;
+
+		side_1[dim_1]++;
+		side_2[dim_2]--;
+		corner[dim_1]++;
+		corner[dim_2]--;
+		light[1] = getLight(pos_light, getLight(side_1), getLight(side_2), getLight(corner));
+
+		side_1 = pos;
+		side_2 = pos;
+		corner = pos;
+
+		side_1[dim_1]--;
+		side_2[dim_2]++;
+		corner[dim_1]--;
+		corner[dim_2]++;
+		light[2] = getLight(pos_light, getLight(side_1), getLight(side_2), getLight(corner));
+
+		side_1 = pos;
+		side_2 = pos;
+		corner = pos;
+
+		side_1[dim_1]++;
+		side_2[dim_2]++;
+		corner[dim_1]++;
+		corner[dim_2]++;
+		light[3] = getLight(pos_light, getLight(side_1), getLight(side_2), getLight(corner));
+
+		return light;
+	}
+
+	uint8_t getLight(uint8_t pos, uint8_t side_1, uint8_t side_2, uint8_t corner)
+	{
+		constexpr uint8_t mask = 0b00001111;
+		const uint8_t sky_light = std::max({ pos & mask, side_1 & mask, side_2 & mask, corner & mask });
+		const uint8_t block_light = std::max({ (pos >> 4) & mask, (side_1 >> 4) & mask, (side_2 >> 4) & mask, (corner >> 4) & mask });
+		return (sky_light & mask) | ((block_light & mask) << 4);
+	}
+
 	std::vector<std::vector<std::vector<std::shared_ptr<Chunk>>>> chunks;
 	std::vector<BlockVertex> vertices;
 	std::vector<uint32_t> indices;
@@ -879,7 +941,7 @@ private:
 	{
 		TextureID texture;
 		std::array<uint8_t, 4> ao;
-		uint8_t light;
+		std::array<uint8_t, 4> light;
 
 		bool operator==(const FaceData & other) const
 		{
