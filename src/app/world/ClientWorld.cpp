@@ -415,7 +415,14 @@ void ClientWorld::doBlockSets()
 
 void ClientWorld::updateLights()
 {
-	while (1)
+	/*
+	 * This function is the same for the server and the client.
+	 * TODO: decide if it should be moved to the World class
+	 *
+	 * If this comment is still here and the functions are different,
+	 * ask me why the fuck it is the case :)
+	 */
+	for (;;)
 	{
 		glm::ivec3 position;
 		{
@@ -427,14 +434,12 @@ void ClientWorld::updateLights()
 			m_block_light_update.pop();
 		}
 
+		// This check is also present in the updateLight functions below
+		// TODO: decide where it should be kept
 		const glm::ivec3 chunk_position = getChunkPosition(position);
-		std::shared_ptr<Chunk> chunk;
-		{
-			std::lock_guard chunks_lock(m_chunks_mutex);
-			if (!m_loaded_chunks.contains(glm::ivec2(chunk_position.x, chunk_position.z)))
-				continue;
-			chunk = m_chunks.at(chunk_position);
-		}
+		std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
+		if (chunk == nullptr)
+			continue;
 
 		updateSkyLight(position);
 		updateBlockLight(position);

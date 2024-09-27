@@ -74,6 +74,10 @@ void ServerWorld::placeBlock(const glm::vec3 & position, BlockID block)
 			m_server.send(packet);
 		}
 	}
+	{ // Add the world position of the block to the light update queue
+		std::lock_guard light_lock(m_block_light_update_mutex);
+		m_block_light_update.push(position);
+	}
 }
 
 void ServerWorld::setBlock(const glm::vec3 & position, BlockID block)
@@ -339,16 +343,33 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 
 void ServerWorld::updateLights()
 {
-	std::lock_guard lock(m_light_updates_mutex);
-	std::lock_guard lock2(m_chunks_mutex);
-
-
-	while(!m_light_updates.empty())
+	/*
+	 * This function is the same for the server and the client.
+	 * TODO: decide if it should be moved to the World class
+	 *
+	 * If this comment is still here and the functions are different,
+	 * ask me why the fuck it is the case :)
+	 */
+	for (;;)
 	{
-		auto light_update = m_light_updates.front();
-		m_light_updates.pop();
+		glm::ivec3 position;
+		{
+			std::lock_guard light_update_lock(m_block_light_update_mutex);
+			if (m_block_light_update.empty())
+				break;
 
-		//do magic
-		(void)light_update;
+			position = m_block_light_update.front();
+			m_block_light_update.pop();
+		}
+
+		// This check is also present in the updateLight functions below
+		// TODO: decide where it should be kept
+		const glm::ivec3 chunk_position = getChunkPosition(position);
+		std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
+		if (chunk == nullptr)
+			continue;
+
+		updateSkyLight(position);
+		updateBlockLight(position);
 	}
 }

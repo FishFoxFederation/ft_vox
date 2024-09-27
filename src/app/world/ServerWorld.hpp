@@ -242,10 +242,10 @@ private:
 	uint64_t				asyncGenChunk(const glm::ivec3 & chunk_position, Chunk::genLevel gen_level, Chunk::genLevel current_level);
 
 	//LIGHTS
-	std::queue<BlockUpdateData> m_light_updates;
-	mutable TracyLockableN(std::mutex, m_light_updates_mutex, "LightUpdateQueue");
+	std::queue<glm::ivec3> 	m_block_light_update;
+	TracyLockableN			(std::mutex, m_block_light_update_mutex, "Block light update");
 
-	void    			updateLights();
+	void    				updateLights();
 
 
 	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id);
