@@ -83,9 +83,14 @@ struct Block
 		}
 	}
 
-	static bool hasProperty(const BlockID id, const BlockProperties property)
+	static bool hasProperty(const BlockID id, const BlockProperties properties)
 	{
-		return (getData(id).properties & property) == property;
+		return (getData(id).properties & properties) == properties;
+	}
+
+	static bool hasProperty(const BlockID id, const BlockProperties properties, const BlockProperties not_properties)
+	{
+		return (getData(id).properties & (properties | not_properties)) == properties;
 	}
 
 	static inline const Data Air = {

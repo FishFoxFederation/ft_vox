@@ -145,23 +145,30 @@ vec3 debugColor(float value)
 void main()
 {
 
-	float max_ao_shadow = 0.5;
-	float ao_factor = frag_ao / 3.0;
+	float max_ao = 0.8;
+	float ao_factor = 1.0 - (frag_ao / 3.0 * max_ao);
 
 	float max_shadow = 0.5;
-	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3);
+	float shadow_factor = 1.0 - compute_shadow_factor(frag_pos_world_space, shadow_map, 3) * max_shadow;
 
 	float sky_light = frag_sky_light / 15.0;
 	float block_light = frag_block_light / 15.0;
-
+	float max_base_light = 0.8;
 	float base_light = max(sky_light, block_light);
 
 	const float min_light = 0.05;
-	// float light = base_light - max_shadow * shadow_factor - max_ao_shadow * ao_factor;
-	float light = base_light - max_ao_shadow * ao_factor;
-	// float light = base_light - max_shadow * shadow_factor;
-	light = clamp(light, 0.0, 1.0);
-	light = min_light + light * (1.0 - min_light);
+	float light = min_light + base_light * (1.0 - min_light);
+	light = min_light + light * ao_factor * (1.0 - min_light);
+	light = min_light + light * shadow_factor * (1.0 - min_light);
+
+	// light is now ine the range [-max_ao - max_shadow, 1.0]
+	// I want to map it to [min_light, 1.0]
+	// const float in_min = -max_ao - max_shadow;
+	// const float in_max = 1.0;
+	// const float out_min = min_light;
+	// const float out_max = 1.0;
+	// const float slope = (out_max - out_min) / (in_max - in_min);
+	// light = slope * (light - in_min) + out_min;
 
 	vec4 texture_color = texture(tex, frag_tex_coord);
 
