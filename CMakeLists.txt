@@ -32,7 +32,7 @@ target_compile_options(${PROJECT_NAME}
 		-Wno-empty-body
 		-Wno-unused-result
 		-Wno-c11-extensions
-		# -Wno-maybe-uninitialized
+		-Wno-maybe-uninitialized
 )
 
 target_link_options(${PROJECT_NAME}
@@ -204,6 +204,7 @@ target_sources(server
 		src/app/vulkan/Command.cpp
 		src/app/vulkan/Descriptor.cpp
 		src/app/vulkan/Swapchain.cpp
+		src/app/vulkan/TextRenderer.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -281,6 +282,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
 		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
+		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
 )
 
-target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient)
+target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype)

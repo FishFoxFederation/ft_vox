@@ -51,6 +51,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	createMeshes();
 
+	setupTextRenderer();
+
 	setupImgui();
 	createImGuiTexture(100, 100);
 
@@ -72,6 +74,8 @@ VulkanAPI::~VulkanAPI()
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+
+	destroyTextRenderer();
 
 	{
 		std::lock_guard lock(mesh_map_mutex);
@@ -875,6 +879,7 @@ void VulkanAPI::createColorAttachement()
 	color_attachement_info.final_layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	color_attachement_info.create_view = true;
 
+	LOG_DEBUG(__LINE__);
 	color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 
 
@@ -882,6 +887,7 @@ void VulkanAPI::createColorAttachement()
 								| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 								| VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
+	LOG_DEBUG(__LINE__);
 	output_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 }
 
@@ -903,6 +909,7 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depth_attachement_info.create_view = true;
 
+	LOG_DEBUG(__LINE__);
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 
 
@@ -914,6 +921,7 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.sampler_anisotropy_enable = VK_FALSE;
 	depth_attachement_info.array_layers = shadow_maps_count;
 
+	LOG_DEBUG(__LINE__);
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
@@ -923,6 +931,7 @@ void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t cou
 	ubo.memory.resize(count);
 	ubo.mapped_memory.resize(count);
 
+	LOG_DEBUG(__LINE__);
 	for (uint32_t i = 0; i < count; i++)
 	{
 		createBuffer(
@@ -963,6 +972,7 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
+	LOG_DEBUG(__LINE__);
 	block_textures = Image(device, physical_device, command_buffer, image_info);
 }
 
@@ -983,6 +993,7 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 
 	SingleTimeCommand command_buffer_2(device, command_pool, graphics_queue);
 
+	LOG_DEBUG(__LINE__);
 	skybox_cube_map = Image(device, physical_device, command_buffer_2, _image_info);
 }
 
@@ -1007,6 +1018,7 @@ void VulkanAPI::createFrustumLineBuffers()
 		0, 4, 1, 5, 2, 6, 3, 7
 	};
 
+	LOG_DEBUG(__LINE__);
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		createBuffer(
@@ -1046,6 +1058,7 @@ void VulkanAPI::createTextureImage()
 
 		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
+	LOG_DEBUG(__LINE__);
 		crosshair_image = Image(device, physical_device, command_buffer, image_info);
 	}
 
@@ -1063,6 +1076,7 @@ void VulkanAPI::createTextureImage()
 
 		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
+	LOG_DEBUG(__LINE__);
 		player_skin_image = Image(device, physical_device, command_buffer, image_info);
 	}
 }
@@ -2022,11 +2036,93 @@ void VulkanAPI::createMeshes()
 	}
 }
 
+
+void VulkanAPI::setupTextRenderer()
+{
+	text_renderer.initialize();
+
+	VkPhysicalDeviceMemoryProperties mem_properties;
+	vkGetPhysicalDeviceMemoryProperties(physical_device, &mem_properties);
+
+	for (uint32_t i = 0; i < mem_properties.memoryTypeCount; i++)
+	{
+		LOG_DEBUG("Memory type " << i << " flags: ");
+		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+		{
+			LOG_DEBUG("   VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT");
+		}
+		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+		{
+			LOG_DEBUG("   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT");
+		}
+		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+		{
+			LOG_DEBUG("   VK_MEMORY_PROPERTY_HOST_COHERENT_BIT");
+		}
+		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
+		{
+			LOG_DEBUG("   VK_MEMORY_PROPERTY_HOST_CACHED_BIT");
+		}
+	}
+
+	{
+		Image::CreateInfo image_info = {};
+		image_info.extent = { 1024, 1024 };
+		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+		image_info.tiling = VK_IMAGE_TILING_OPTIMAL;
+		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		image_info.final_layout = VK_IMAGE_LAYOUT_GENERAL;
+
+		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+		LOG_DEBUG("Creating text test image");
+		text_test_image = Image(device, physical_device, command_buffer, image_info);
+		LOG_DEBUG("Creating text test image done");
+	}
+
+	// void * target;
+	// VK_CHECK(
+	// 	vkMapMemory(device, text_test_image.memory, 0, VK_WHOLE_SIZE, 0, &target),
+	// 	"Failed to map memory for text test image"
+	// );
+
+	// std::vector<uint8_t> data(1024 * 1024 * 4, 0);
+	// for (int i = 0; i < 1024; i++)
+	// {
+	// 	for (int j = 0; j < 1024; j++)
+	// 	{
+	// 		data[(i * 1024 + j) * 4 + 0] = 255;
+	// 		data[(i * 1024 + j) * 4 + 1] = 255;
+	// 		data[(i * 1024 + j) * 4 + 2] = 255;
+	// 		data[(i * 1024 + j) * 4 + 3] = 255;
+	// 	}
+	// }
+	// memcpy(target, data.data(), 1024 * 1024 * 4);
+
+	// text_renderer.renderText(
+	// 	"Hello, World!",
+	// 	100, 100,
+	// 	20,
+	// 	target, 1024, 1024
+	// );
+
+	throw std::runtime_error("Text rendering is not implemented yet");
+}
+
+void VulkanAPI::destroyTextRenderer()
+{
+	text_test_image.clear();
+	text_renderer.destroy();
+}
+
+
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
 {
 	imgui_texture.extent = { width, height };
 	imgui_texture.format = VK_FORMAT_R8G8B8A8_SRGB;
 
+	LOG_DEBUG(__LINE__);
 	createImage(
 		imgui_texture.extent.width,
 		imgui_texture.extent.height,
@@ -2366,6 +2462,7 @@ void VulkanAPI::createImage(
 	VkMemoryAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.allocationSize = mem_requirements.size;
+	LOG_DEBUG(__LINE__);
 	alloc_info.memoryTypeIndex = vk_helper::findMemoryType(physical_device, mem_requirements.memoryTypeBits, properties);
 
 	VK_CHECK(

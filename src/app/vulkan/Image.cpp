@@ -123,6 +123,7 @@ Image::Image(
 		staging_image_create_info.memory_properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		staging_image_create_info.final_layout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
+		LOG_DEBUG("Creating staging image");
 		Image staging_image = Image(device, physical_device, command_buffer, staging_image_create_info);
 
 
