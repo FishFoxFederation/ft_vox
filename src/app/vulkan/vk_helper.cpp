@@ -1,4 +1,7 @@
 #include "vk_helper.hpp"
+#include "logger.hpp"
+
+#include <bitset>
 
 namespace vk_helper
 {
@@ -10,6 +13,8 @@ namespace vk_helper
 	{
 		VkPhysicalDeviceMemoryProperties mem_properties;
 		vkGetPhysicalDeviceMemoryProperties(physical_device, &mem_properties);
+
+		LOG_DEBUG("type_filter: " << std::bitset<32>(type_filter));
 
 		for (uint32_t i = 0; i < mem_properties.memoryTypeCount; i++)
 		{

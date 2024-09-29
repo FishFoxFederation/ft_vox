@@ -11,6 +11,7 @@
 #include "Chunk.hpp"
 #include "CreateMeshData.hpp"
 #include "List.hpp"
+#include "TextRenderer.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -292,6 +293,8 @@ public:
 
 	GLFWwindow * window;
 
+	TextRenderer text_renderer;
+
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debug_messenger;
 	VkPhysicalDevice physical_device = VK_NULL_HANDLE;
@@ -345,6 +348,8 @@ public:
 
 	Image crosshair_image;
 	Image player_skin_image;
+
+	Image text_test_image;
 
 	UBO camera_ubo;
 	UBO light_mat_ubo;
@@ -492,6 +497,9 @@ private:
 	void createMeshes();
 	void destroyMeshes();
 
+
+	void setupTextRenderer();
+	void destroyTextRenderer();
 
 	void setupImgui();
 	void destroyImGuiTexture(ImGuiTexture & imgui_texture);
