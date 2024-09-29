@@ -7,6 +7,7 @@
 ./scripts/download_imgui.sh
 ./scripts/download_glslc.sh
 ./scripts/download_tracy.sh
+./scripts/download_freetype.sh
 
 # Compile shaders
 ./scripts/compile_shaders.sh

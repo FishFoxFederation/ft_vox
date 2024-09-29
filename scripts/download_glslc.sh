@@ -12,11 +12,11 @@ then
 		mkdir -p external/glslc &&
 		mv ./tmp/install/bin/glslc external/glslc &&
 		rm -rf ./tmp/install.tgz ./tmp/install
+	else
+		curl -o ~/goinfre/install.tgz $url &&
+		tar -xf ~/goinfre/install.tgz -C ~/goinfre &&
+		mkdir -p external/glslc &&
+		mv ~/goinfre/install/bin/glslc external/glslc &&
+		rm -rf ~/goinfre/install.tgz ~/goinfre/install
 	fi
-
-	curl -o ~/goinfre/install.tgz $url &&
-	tar -xf ~/goinfre/install.tgz -C ~/goinfre &&
-	mkdir -p external/glslc &&
-	mv ~/goinfre/install/bin/glslc external/glslc &&
-	rm -rf ~/goinfre/install.tgz ~/goinfre/install
 fi
