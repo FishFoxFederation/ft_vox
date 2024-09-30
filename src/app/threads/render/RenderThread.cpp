@@ -948,7 +948,8 @@ void RenderThread::lightingPass(
 			vk.drawHudImage(vk.crosshair_image_descriptor, viewport);
 		}
 
-		{ // Debug info
+		if (m_world_scene.show_debug_text) // Debug info
+		{
 			float size = 512.0f;
 
 			VkViewport viewport = {};

@@ -16,6 +16,7 @@
 #include <optional>
 #include <map>
 #include <algorithm>
+#include <atomic>
 
 /**
  * @brief Class to hold the world scene. The instance of this class will be
@@ -117,6 +118,8 @@ public:
 
 	std::map<uint64_t, PlayerRenderData> m_players;
 	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
+
+	std::atomic<bool> show_debug_text = false;
 
 private:
 
