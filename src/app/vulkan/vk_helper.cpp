@@ -14,8 +14,6 @@ namespace vk_helper
 		VkPhysicalDeviceMemoryProperties mem_properties;
 		vkGetPhysicalDeviceMemoryProperties(physical_device, &mem_properties);
 
-		LOG_DEBUG("type_filter: " << std::bitset<32>(type_filter));
-
 		for (uint32_t i = 0; i < mem_properties.memoryTypeCount; i++)
 		{
 			if (
