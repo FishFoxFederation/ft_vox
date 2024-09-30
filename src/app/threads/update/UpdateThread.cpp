@@ -155,6 +155,12 @@ void UpdateThread::readInput()
 		m_client.sendPacket(packet);
 	}
 
+	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
+	if (f3_key_status == Input::KeyState::PRESSED)
+	{
+		m_world_scene.show_debug_text = !m_world_scene.show_debug_text;
+	}
+
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
 	if (ret.first)
 	{
