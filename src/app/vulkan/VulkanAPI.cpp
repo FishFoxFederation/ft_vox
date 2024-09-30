@@ -110,13 +110,13 @@ VulkanAPI::~VulkanAPI()
 		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, gui_framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
 	}
 
 	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 	vkDestroyRenderPass(device, shadow_render_pass, nullptr);
 	vkDestroyRenderPass(device, water_render_pass, nullptr);
-	vkDestroyRenderPass(device, gui_render_pass, nullptr);
+	vkDestroyRenderPass(device, hud_render_pass, nullptr);
 
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
@@ -149,6 +149,7 @@ VulkanAPI::~VulkanAPI()
 		skybox_cube_map.clear();
 		crosshair_image.clear();
 		player_skin_image.clear();
+		debug_info_image.clear();
 
 		camera_descriptor.clear();
 		block_textures_descriptor.clear();
@@ -160,6 +161,7 @@ VulkanAPI::~VulkanAPI()
 		crosshair_image_descriptor.clear();
 		player_skin_image_descriptor.clear();
 		atmosphere_descriptor.clear();
+		debug_info_image_descriptor.clear();
 
 		chunk_pipeline.clear();
 		water_pipeline.clear();
@@ -170,7 +172,7 @@ VulkanAPI::~VulkanAPI()
 		test_image_pipeline.clear();
 		entity_pipeline.clear();
 		player_pipeline.clear();
-		gui_pipeline.clear();
+		hud_pipeline.clear();
 
 		swapchain.clear();
 	}
@@ -639,7 +641,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, gui_framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
 	}
 
 	createSwapChain(window);
@@ -879,7 +881,6 @@ void VulkanAPI::createColorAttachement()
 	color_attachement_info.final_layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 	color_attachement_info.create_view = true;
 
-	LOG_DEBUG(__LINE__);
 	color_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 
 
@@ -887,7 +888,6 @@ void VulkanAPI::createColorAttachement()
 								| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 								| VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
-	LOG_DEBUG(__LINE__);
 	output_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 }
 
@@ -909,7 +909,6 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 	depth_attachement_info.create_view = true;
 
-	LOG_DEBUG(__LINE__);
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 
 
@@ -921,7 +920,6 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.sampler_anisotropy_enable = VK_FALSE;
 	depth_attachement_info.array_layers = shadow_maps_count;
 
-	LOG_DEBUG(__LINE__);
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
@@ -931,7 +929,6 @@ void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t cou
 	ubo.memory.resize(count);
 	ubo.mapped_memory.resize(count);
 
-	LOG_DEBUG(__LINE__);
 	for (uint32_t i = 0; i < count; i++)
 	{
 		createBuffer(
@@ -972,7 +969,6 @@ void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, 
 
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
-	LOG_DEBUG(__LINE__);
 	block_textures = Image(device, physical_device, command_buffer, image_info);
 }
 
@@ -993,7 +989,6 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 
 	SingleTimeCommand command_buffer_2(device, command_pool, graphics_queue);
 
-	LOG_DEBUG(__LINE__);
 	skybox_cube_map = Image(device, physical_device, command_buffer_2, _image_info);
 }
 
@@ -1018,7 +1013,6 @@ void VulkanAPI::createFrustumLineBuffers()
 		0, 4, 1, 5, 2, 6, 3, 7
 	};
 
-	LOG_DEBUG(__LINE__);
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		createBuffer(
@@ -1045,23 +1039,6 @@ void VulkanAPI::createFrustumLineBuffers()
 
 void VulkanAPI::createTextureImage()
 {
-	{ // crosshair
-		Image::CreateInfo image_info = {};
-		image_info.file_paths = {"assets/textures/gui/crosshair.png"};
-		image_info.extent = {32, 32};
-		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
-		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.create_view = true;
-		image_info.create_sampler = true;
-
-		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
-
-	LOG_DEBUG(__LINE__);
-		crosshair_image = Image(device, physical_device, command_buffer, image_info);
-	}
-
 	{ // player skin
 		Image::CreateInfo image_info = {};
 		image_info.file_paths = {"assets/textures/skin/player/steve.png"};
@@ -1076,9 +1053,65 @@ void VulkanAPI::createTextureImage()
 
 		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
-	LOG_DEBUG(__LINE__);
 		player_skin_image = Image(device, physical_device, command_buffer, image_info);
 	}
+
+	{ // crosshair
+		Image::CreateInfo image_info = {};
+		image_info.file_paths = {"assets/textures/hud/crosshair.png"};
+		image_info.extent = {64, 64};
+		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.create_view = true;
+		image_info.create_sampler = true;
+
+		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+		crosshair_image = Image(device, physical_device, command_buffer, image_info);
+	}
+
+	{ // Debug info
+		Image::CreateInfo image_info = {};
+		image_info.extent = {512, 512};
+		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		image_info.create_view = true;
+		image_info.create_sampler = true;
+
+		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+		debug_info_image = Image(device, physical_device, command_buffer, image_info);
+	}
+}
+
+void VulkanAPI::createHudDescriptors(
+	const Image & image,
+	Descriptor & descriptor
+)
+{
+	VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+	sampler_layout_binding.binding = 0;
+	sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	sampler_layout_binding.descriptorCount = 1;
+	sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	sampler_layout_binding.pImmutableSamplers = nullptr;
+
+	Descriptor::CreateInfo descriptor_info = {};
+	descriptor_info.bindings = { sampler_layout_binding };
+	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+	descriptor = Descriptor(device, descriptor_info);
+
+	descriptor.update(
+		device,
+		image.view,
+		image.sampler,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+	);
 }
 
 void VulkanAPI::createDescriptors()
@@ -1270,26 +1303,9 @@ void VulkanAPI::createDescriptors()
 		);
 	}
 
-	{ // CrossHair image descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		crosshair_image_descriptor = Descriptor(device, descriptor_info);
-
-		crosshair_image_descriptor.update(
-			device,
-			crosshair_image.view,
-			crosshair_image.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
+	{ // Hud image descriptor
+		createHudDescriptors(crosshair_image, crosshair_image_descriptor);
+		createHudDescriptors(debug_info_image, debug_info_image_descriptor);
 	}
 
 	{ // Player skin image descriptor
@@ -1629,7 +1645,7 @@ void VulkanAPI::createRenderPass()
 		render_pass_info.pDependencies = nullptr;
 
 		VK_CHECK(
-			vkCreateRenderPass(device, &render_pass_info, nullptr, &gui_render_pass),
+			vkCreateRenderPass(device, &render_pass_info, nullptr, &hud_render_pass),
 			"Failed to create render pass"
 		);
 	}
@@ -1780,8 +1796,8 @@ void VulkanAPI::createPipelines()
 		Pipeline::CreateInfo pipeline_info = {};
 		// pipeline_info.extent = { output_attachement.extent2D.width / 3, output_attachement.extent2D.height / 3 };
 		pipeline_info.extent = { 800, 800 };
-		pipeline_info.vert_path = "shaders/rasterization/gui/test_image_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/rasterization/gui/test_image_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/hud/test_image_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/hud/test_image_shader.frag.spv";
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
@@ -1790,7 +1806,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
 		};
-		pipeline_info.render_pass = gui_render_pass;
+		pipeline_info.render_pass = hud_render_pass;
 
 		test_image_pipeline = Pipeline(device, pipeline_info);
 	}
@@ -1836,23 +1852,20 @@ void VulkanAPI::createPipelines()
 		player_pipeline = Pipeline(device, pipeline_info);
 	}
 
-	{ // Gui pipeline
+	{ // Hud pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = output_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/rasterization/gui/gui_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/rasterization/gui/gui_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/hud/hud_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/hud/hud_shader.frag.spv";
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.descriptor_set_layouts = {
 			crosshair_image_descriptor.layout
 		};
-		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(GuiTextureData) }
-		};
-		pipeline_info.render_pass = gui_render_pass;
+		pipeline_info.render_pass = hud_render_pass;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_VIEWPORT };
 		pipeline_info.enable_alpha_blending = true;
 
-		gui_pipeline = Pipeline(device, pipeline_info);
+		hud_pipeline = Pipeline(device, pipeline_info);
 	}
 
 }
@@ -1862,7 +1875,7 @@ void VulkanAPI::createFramebuffers()
 	lighting_framebuffers.resize(max_frames_in_flight);
 	shadow_framebuffers.resize(max_frames_in_flight);
 	water_framebuffers.resize(max_frames_in_flight);
-	gui_framebuffers.resize(max_frames_in_flight);
+	hud_framebuffers.resize(max_frames_in_flight);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -1939,7 +1952,7 @@ void VulkanAPI::createFramebuffers()
 
 		VkFramebufferCreateInfo framebuffer_info = {};
 		framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		framebuffer_info.renderPass = gui_render_pass;
+		framebuffer_info.renderPass = hud_render_pass;
 		framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
 		framebuffer_info.pAttachments = attachments.data();
 		framebuffer_info.width = output_attachement.extent2D.width;
@@ -1947,7 +1960,7 @@ void VulkanAPI::createFramebuffers()
 		framebuffer_info.layers = 1;
 
 		VK_CHECK(
-			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &gui_framebuffers[i]),
+			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &hud_framebuffers[i]),
 			"Failed to create framebuffer"
 		);
 	}
@@ -2040,80 +2053,85 @@ void VulkanAPI::createMeshes()
 void VulkanAPI::setupTextRenderer()
 {
 	text_renderer.initialize();
-
-	VkPhysicalDeviceMemoryProperties mem_properties;
-	vkGetPhysicalDeviceMemoryProperties(physical_device, &mem_properties);
-
-	for (uint32_t i = 0; i < mem_properties.memoryTypeCount; i++)
-	{
-		LOG_DEBUG("Memory type " << i << " flags: ");
-		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-		{
-			LOG_DEBUG("   VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT");
-		}
-		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
-		{
-			LOG_DEBUG("   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT");
-		}
-		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
-		{
-			LOG_DEBUG("   VK_MEMORY_PROPERTY_HOST_COHERENT_BIT");
-		}
-		if (mem_properties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
-		{
-			LOG_DEBUG("   VK_MEMORY_PROPERTY_HOST_CACHED_BIT");
-		}
-	}
-
-	{
-		Image::CreateInfo image_info = {};
-		image_info.extent = { 1024, 1024 };
-		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
-		image_info.tiling = VK_IMAGE_TILING_OPTIMAL;
-		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		image_info.final_layout = VK_IMAGE_LAYOUT_GENERAL;
-
-		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
-
-		LOG_DEBUG("Creating text test image");
-		text_test_image = Image(device, physical_device, command_buffer, image_info);
-		LOG_DEBUG("Creating text test image done");
-	}
-
-	// void * target;
-	// VK_CHECK(
-	// 	vkMapMemory(device, text_test_image.memory, 0, VK_WHOLE_SIZE, 0, &target),
-	// 	"Failed to map memory for text test image"
-	// );
-
-	// std::vector<uint8_t> data(1024 * 1024 * 4, 0);
-	// for (int i = 0; i < 1024; i++)
-	// {
-	// 	for (int j = 0; j < 1024; j++)
-	// 	{
-	// 		data[(i * 1024 + j) * 4 + 0] = 255;
-	// 		data[(i * 1024 + j) * 4 + 1] = 255;
-	// 		data[(i * 1024 + j) * 4 + 2] = 255;
-	// 		data[(i * 1024 + j) * 4 + 3] = 255;
-	// 	}
-	// }
-	// memcpy(target, data.data(), 1024 * 1024 * 4);
-
-	// text_renderer.renderText(
-	// 	"Hello, World!",
-	// 	100, 100,
-	// 	20,
-	// 	target, 1024, 1024
-	// );
-
-	throw std::runtime_error("Text rendering is not implemented yet");
 }
 
 void VulkanAPI::destroyTextRenderer()
 {
-	text_test_image.clear();
 	text_renderer.destroy();
+}
+
+void VulkanAPI::writeTextToImage(
+	Image & image,
+	const std::string & text,
+	const uint32_t x,
+	const uint32_t y,
+	const uint32_t font_size
+)
+{
+	const VkDeviceSize image_size = image.extent2D.width * image.extent2D.height * 4;
+
+	VkBuffer staging_buffer;
+	VkDeviceMemory staging_buffer_memory;
+	createBuffer(
+		image_size,
+		VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+		staging_buffer,
+		staging_buffer_memory
+	);
+
+	void * target;
+	VK_CHECK(
+		vkMapMemory(device, staging_buffer_memory, 0, VK_WHOLE_SIZE, 0, &target),
+		"Failed to map memory for text test image"
+	);
+	memset(target, 0, image_size);
+
+	text_renderer.renderText(
+		text,
+		x, y,
+		font_size,
+		target, image.extent2D.width, image.extent2D.height
+	);
+
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+	VkBufferImageCopy region = {};
+	region.bufferOffset = 0;
+	region.bufferRowLength = 0;
+	region.bufferImageHeight = 0;
+	region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	region.imageSubresource.mipLevel = 0;
+	region.imageSubresource.baseArrayLayer = 0;
+	region.imageSubresource.layerCount = 1;
+	region.imageOffset = { 0, 0, 0 };
+	region.imageExtent = { image.extent2D.width, image.extent2D.height, 1 };
+
+	image.transitionLayout(
+		command_buffer,
+		VK_IMAGE_LAYOUT_UNDEFINED,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+	);
+
+	vkCmdCopyBufferToImage(
+		command_buffer,
+		staging_buffer,
+		image.image,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		1,
+		&region
+	);
+
+	image.transitionLayout(
+		command_buffer,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+	);
+
+	command_buffer.end();
+
+	vkDestroyBuffer(device, staging_buffer, nullptr);
+	vkFreeMemory(device, staging_buffer_memory, nullptr);
 }
 
 
@@ -2122,7 +2140,6 @@ uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t heig
 	imgui_texture.extent = { width, height };
 	imgui_texture.format = VK_FORMAT_R8G8B8A8_SRGB;
 
-	LOG_DEBUG(__LINE__);
 	createImage(
 		imgui_texture.extent.width,
 		imgui_texture.extent.height,
@@ -2398,6 +2415,32 @@ void VulkanAPI::drawMesh(
 	);
 }
 
+void VulkanAPI::drawHudImage(
+	const Descriptor & descriptor,
+	const VkViewport & viewport
+)
+{
+	vkCmdBindDescriptorSets(
+		draw_command_buffers[current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		hud_pipeline.layout,
+		0,
+		1,
+		descriptor.sets.data(),
+		0,
+		nullptr
+	);
+
+	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);
+
+	vkCmdDraw(
+		draw_command_buffers[current_frame],
+		6,
+		1,
+		0,
+		0
+	);
+}
 
 
 VkFormat VulkanAPI::findSupportedFormat(
@@ -2462,7 +2505,6 @@ void VulkanAPI::createImage(
 	VkMemoryAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	alloc_info.allocationSize = mem_requirements.size;
-	LOG_DEBUG(__LINE__);
 	alloc_info.memoryTypeIndex = vk_helper::findMemoryType(physical_device, mem_requirements.memoryTypeBits, properties);
 
 	VK_CHECK(

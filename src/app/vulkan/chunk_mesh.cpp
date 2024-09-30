@@ -30,7 +30,6 @@ uint64_t VulkanAPI::storeMesh(
 
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
-	LOG_DEBUG("Store mesh staging buffer");
 	createBuffer(
 		buffer_size,
 		VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -48,7 +47,6 @@ uint64_t VulkanAPI::storeMesh(
 	std::memcpy(static_cast<char *>(data) + vertex_buffer_size, indices, static_cast<size_t>(index_buffer_size));
 	vkUnmapMemory(device, staging_buffer_memory);
 
-	LOG_DEBUG("Store mesh buffer");
 	createBuffer(
 		buffer_size,
 		VK_BUFFER_USAGE_TRANSFER_DST_BIT

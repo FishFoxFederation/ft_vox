@@ -175,12 +175,6 @@ struct ShadowMapLight
 	float blend_distance;
 };
 
-struct GuiTextureData
-{
-	glm::vec2 position;
-	glm::vec2 size;
-};
-
 struct AtmosphereParams
 {
 	glm::vec3 sun_direction;
@@ -286,6 +280,19 @@ public:
 		const VkShaderStageFlags push_constants_stage
 	);
 
+	void writeTextToImage(
+		Image & image,
+		const std::string & text,
+		const uint32_t x,
+		const uint32_t y,
+		const uint32_t font_size
+	);
+
+	void drawHudImage(
+		const Descriptor & descriptor,
+		const VkViewport & viewport
+	);
+
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 
 
@@ -311,7 +318,7 @@ public:
 	std::vector<VkFramebuffer> lighting_framebuffers;
 	std::vector<VkFramebuffer> shadow_framebuffers;
 	std::vector<VkFramebuffer> water_framebuffers;
-	std::vector<VkFramebuffer> gui_framebuffers;
+	std::vector<VkFramebuffer> hud_framebuffers;
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
@@ -349,7 +356,7 @@ public:
 	Image crosshair_image;
 	Image player_skin_image;
 
-	Image text_test_image;
+	Image debug_info_image;
 
 	UBO camera_ubo;
 	UBO light_mat_ubo;
@@ -374,11 +381,12 @@ public:
 	Descriptor crosshair_image_descriptor;
 	Descriptor player_skin_image_descriptor;
 	Descriptor atmosphere_descriptor;
+	Descriptor debug_info_image_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
 	VkRenderPass water_render_pass;
-	VkRenderPass gui_render_pass;
+	VkRenderPass hud_render_pass;
 
 	Pipeline chunk_pipeline;
 	Pipeline water_pipeline;
@@ -389,7 +397,7 @@ public:
 	Pipeline test_image_pipeline;
 	Pipeline entity_pipeline;
 	Pipeline player_pipeline;
-	Pipeline gui_pipeline;
+	Pipeline hud_pipeline;
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
@@ -490,6 +498,10 @@ private:
 	void createTextureImage();
 
 	void createDescriptors();
+	void createHudDescriptors(
+		const Image & image,
+		Descriptor & descriptor
+	);
 	void createRenderPass();
 	void createPipelines();
 	void createFramebuffers();

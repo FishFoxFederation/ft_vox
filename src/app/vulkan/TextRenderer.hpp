@@ -23,8 +23,4 @@ private:
 
 	FT_Library m_ft;
 	FT_Face m_face;
-	FT_Bitmap m_bitmap;
-
-	std::array<FT_Bitmap, 128> m_basic_glyph_bitmaps;
-
 };

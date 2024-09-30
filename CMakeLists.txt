@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(TRACY_ENABLE "" OFF)
-add_subdirectory (external/tracy)
-
+add_subdirectory(external/tracy)
+add_subdirectory(external/freetype/freetype-2.13.3)
 
 
 add_executable(${PROJECT_NAME})
@@ -70,6 +70,7 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/Command.cpp
 		src/app/vulkan/Descriptor.cpp
 		src/app/vulkan/Swapchain.cpp
+		src/app/vulkan/TextRenderer.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -143,9 +144,10 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
 		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
+		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
 )
 
-target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient)
+target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype)
 
 
 add_executable(server)
@@ -204,6 +206,7 @@ target_sources(server
 		src/app/vulkan/Command.cpp
 		src/app/vulkan/Descriptor.cpp
 		src/app/vulkan/Swapchain.cpp
+		src/app/vulkan/TextRenderer.cpp
 		src/app/vulkan/TextRenderer.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp

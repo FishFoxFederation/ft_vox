@@ -1,6 +1,7 @@
 #include "RenderThread.hpp"
 #include "logger.hpp"
 #include "Model.hpp"
+#include "ft_format.hpp"
 
 #include <iostream>
 #include <array>
@@ -93,6 +94,7 @@ void RenderThread::loop()
 	std::vector<WorldScene::DebugBlock> debug_blocks;
 	AtmosphereParams atmosphere_params = {};
 	ShadowMapLight shadow_map_light = {};
+	std::string debug_text;
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -174,7 +176,6 @@ void RenderThread::loop()
 
 		std::vector<float> frustum_split = { 0.0f, 0.01f, 0.05f, 0.1f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f };
 		std::vector<float> far_plane_distances;
-		// std::vector<float> frustum_split = { 0.0f, 1.0f, 1.0f };
 		if (frustum_split.size() != vk.shadow_maps_count + 1)
 		{
 			LOG_ERROR("frustume_split.size() != vk.shadow_maps_count + 1");
@@ -197,6 +198,13 @@ void RenderThread::loop()
 			shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
 			shadow_map_light.plane_distances[i].x = far_plane_distances[i];
 		}
+
+
+		debug_text = ft_format(
+			"fps: %d\nxyz: %.2f %.2f %.2f",
+			DebugGui::fps.load(),
+			DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z
+		);
 	}
 
 	//###########################################################################################################
@@ -245,6 +253,8 @@ void RenderThread::loop()
 	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 	memcpy(vk.light_mat_ubo.mapped_memory[vk.current_frame], &shadow_map_light, sizeof(shadow_map_light));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
+
+	vk.writeTextToImage(vk.debug_info_image, debug_text, 10, 10, 32);
 
 	shadowPass(chunk_meshes);
 	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
@@ -905,59 +915,52 @@ void RenderThread::lightingPass(
 
 
 
-	VkRenderPassBeginInfo gui_render_pass_begin_info = {};
-	gui_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	gui_render_pass_begin_info.renderPass = vk.gui_render_pass;
-	gui_render_pass_begin_info.framebuffer = vk.gui_framebuffers[vk.current_frame];
-	gui_render_pass_begin_info.renderArea.offset = { 0, 0 };
-	gui_render_pass_begin_info.renderArea.extent = vk.output_attachement.extent2D;
-	gui_render_pass_begin_info.clearValueCount = 0;
-	gui_render_pass_begin_info.pClearValues = nullptr;
+	VkRenderPassBeginInfo hud_render_pass_begin_info = {};
+	hud_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	hud_render_pass_begin_info.renderPass = vk.hud_render_pass;
+	hud_render_pass_begin_info.framebuffer = vk.hud_framebuffers[vk.current_frame];
+	hud_render_pass_begin_info.renderArea.offset = { 0, 0 };
+	hud_render_pass_begin_info.renderArea.extent = vk.output_attachement.extent2D;
+	hud_render_pass_begin_info.clearValueCount = 0;
+	hud_render_pass_begin_info.pClearValues = nullptr;
 
 	vkCmdBeginRenderPass(
 		vk.draw_command_buffers[vk.current_frame],
-		&gui_render_pass_begin_info,
+		&hud_render_pass_begin_info,
 		VK_SUBPASS_CONTENTS_INLINE
 	);
 
-	{ // Draw gui
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.gui_pipeline.pipeline);
+	{ // Draw hud
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.hud_pipeline.pipeline);
 
-		const std::vector<VkDescriptorSet> gui_descriptor_sets = {
-			vk.crosshair_image_descriptor.set
-		};
+		{ // Crosshair
+			float min_size = std::min(vk.output_attachement.extent2D.width, vk.output_attachement.extent2D.height);
+			float size = min_size / 40.0f;
 
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.gui_pipeline.layout,
-			0,
-			static_cast<uint32_t>(gui_descriptor_sets.size()),
-			gui_descriptor_sets.data(),
-			0,
-			nullptr
-		);
+			VkViewport viewport = {};
+			viewport.x = static_cast<float>(vk.output_attachement.extent2D.width / 2 - (size / 2));
+			viewport.y = static_cast<float>(vk.output_attachement.extent2D.height / 2 - (size / 2));
+			viewport.width = size;
+			viewport.height = size;
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
 
-		float min_size = std::min(vk.output_attachement.extent2D.width, vk.output_attachement.extent2D.height);
-		float size = min_size / 40.0f;
+			vk.drawHudImage(vk.crosshair_image_descriptor, viewport);
+		}
 
-		VkViewport viewport = {};
-		viewport.x = static_cast<float>(vk.output_attachement.extent2D.width / 2 - (size / 2));
-		viewport.y = static_cast<float>(vk.output_attachement.extent2D.height / 2 - (size / 2));
-		viewport.width = size;
-		viewport.height = size;
-		viewport.minDepth = 0.0f;
-		viewport.maxDepth = 1.0f;
+		{ // Debug info
+			float size = 512.0f;
 
-		vkCmdSetViewport(vk.draw_command_buffers[vk.current_frame], 0, 1, &viewport);
+			VkViewport viewport = {};
+			viewport.x = 0;
+			viewport.y = 0;
+			viewport.width = size;
+			viewport.height = size;
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
 
-		vkCmdDraw(
-			vk.draw_command_buffers[vk.current_frame],
-			6,
-			1,
-			0,
-			0
-		);
+			vk.drawHudImage(vk.debug_info_image_descriptor, viewport);
+		}
 	}
 
 	{ // Draw test image
@@ -988,7 +991,6 @@ void RenderThread::lightingPass(
 	}
 
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
-
 }
 
 void RenderThread::drawPlayerBodyPart(
