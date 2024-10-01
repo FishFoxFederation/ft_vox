@@ -6,6 +6,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#define THROW_CHECK(f, msg) if (f) { throw std::runtime_error(msg); }
+
 class TextRenderer
 {
 

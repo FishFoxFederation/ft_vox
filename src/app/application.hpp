@@ -12,6 +12,7 @@
 #include "NetworkThread.hpp"
 #include "ThreadPool.hpp"
 #include "Client.hpp"
+#include "SoundEngine.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -40,5 +41,6 @@ private:
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
 	BlockUpdateThread	m_block_update_thread;
+	SoundEngine			m_sound_engine;
 	// NetworkThread		m_network_thread;
 };
