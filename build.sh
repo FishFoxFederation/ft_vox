@@ -8,6 +8,7 @@
 ./scripts/download_glslc.sh
 ./scripts/download_tracy.sh
 ./scripts/download_freetype.sh
+./scripts/download_portaudio.sh
 
 # Compile shaders
 ./scripts/compile_shaders.sh
@@ -21,5 +22,5 @@ mkdir -p build
 
 # build the project
 cd build
-cmake .. -D CMAKE_CXX_COMPILER=g++-11
+cmake .. -D CMAKE_CXX_COMPILER=g++-11 &&
 make -j

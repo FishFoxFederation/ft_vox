@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.15)
 
 project(ft_vox
 	VERSION 0.0.1
-	LANGUAGES CXX
 )
 
 set(CMAKE_CXX_STANDARD 20)
@@ -11,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(TRACY_ENABLE "" OFF)
 add_subdirectory(external/tracy)
 add_subdirectory(external/freetype/freetype-2.13.3)
+add_subdirectory(external/portaudio EXCLUDE_FROM_ALL)
 
 
 add_executable(${PROJECT_NAME})
@@ -103,6 +103,7 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/packets/ChunkUnloadPacket.cpp
 		src/app/network/shared/packets/PlayerMovePacket.cpp
 		src/app/network/shared/packets/ConnectionPacket.cpp
+		src/app/sound/SoundEngine.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -138,6 +139,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/sound
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
@@ -145,9 +147,10 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
 		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
 		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
+		${CMAKE_CURRENT_SOURCE_DIR}/external/portaudio/include
 )
 
-target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype)
+target_link_libraries(${PROJECT_NAME} glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype portaudio_static)
 
 
 add_executable(server)
@@ -244,6 +247,7 @@ target_sources(server
 		src/app/network/shared/packets/ChunkUnloadPacket.cpp
 		src/app/network/shared/packets/PlayerMovePacket.cpp
 		src/app/network/shared/packets/ConnectionPacket.cpp
+		src/app/sound/SoundEngine.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -279,6 +283,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/sound
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
@@ -286,6 +291,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
 		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
 		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
+		${CMAKE_CURRENT_SOURCE_DIR}/external/portaudio/include
 )
 
-target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype)
+target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype portaudio_static)

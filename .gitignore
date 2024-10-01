@@ -38,7 +38,5 @@
 latex
 html
 build
-glslc
-glm
 imgui.ini
-freetype
+external/*
