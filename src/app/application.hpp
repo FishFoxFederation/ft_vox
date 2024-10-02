@@ -37,10 +37,10 @@ private:
 	WorldScene			m_world_scene;
 	Window				m_window;
 	VulkanAPI			m_vulkan_api;
+	SoundEngine			m_sound_engine;
 	ClientWorld			m_world;
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
 	BlockUpdateThread	m_block_update_thread;
-	SoundEngine			m_sound_engine;
 	// NetworkThread		m_network_thread;
 };
