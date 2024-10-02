@@ -8,6 +8,7 @@
 #include "VulkanAPI.hpp"
 #include "Client.hpp"
 #include "ClientPacketHandler.hpp"
+#include "SoundEngine.hpp"
 #include <chrono>
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -23,6 +24,7 @@ public:
 		WorldScene & world_scene,
 		ClientWorld & world,
 		VulkanAPI & vulkan_api,
+		SoundEngine & sound_engine,
 		std::chrono::nanoseconds start_time
 	);
 	~UpdateThread();
@@ -41,6 +43,7 @@ private:
 	VulkanAPI & m_vulkan_api;
 	Client & m_client;
 	ClientPacketHandler m_packet_handler;
+	SoundEngine & m_sound_engine;
 
 
 	std::chrono::nanoseconds m_start_time;

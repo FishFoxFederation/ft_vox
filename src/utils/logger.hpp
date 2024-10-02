@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ft_format.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -15,6 +17,13 @@
 #define LOG_INFO(...) logger << Logger::Level::INFO << __VA_ARGS__ << std::endl
 #define LOG_DEBUG(...) logger << Logger::Level::DEBUG << __VA_ARGS__ << std::endl
 #define LOG_TRACE(...) logger << Logger::Level::TRACE << __VA_ARGS__ << std::endl
+
+#define LOG_CRITICAL_FMT(fmt, ...) logger << Logger::Level::CRITICAL << ft_format(fmt, __VA_ARGS__) << std::endl
+#define LOG_ERROR_FMT(fmt, ...) logger << Logger::Level::ERROR << ft_format(fmt, __VA_ARGS__) << std::endl
+#define LOG_WARNING_FMT(fmt, ...) logger << Logger::Level::WARNING << ft_format(fmt, __VA_ARGS__) << std::endl
+#define LOG_INFO_FMT(fmt, ...) logger << Logger::Level::INFO << ft_format(fmt, __VA_ARGS__) << std::endl
+#define LOG_DEBUG_FMT(fmt, ...) logger << Logger::Level::DEBUG << ft_format(fmt, __VA_ARGS__) << std::endl
+#define LOG_TRACE_FMT(fmt, ...) logger << Logger::Level::TRACE << ft_format(fmt, __VA_ARGS__) << std::endl
 
 // #define LOG_CRITICAL_FMT(fmt, ...) logger << Logger::Level::CRITICAL << fmt << std::endl, __VA_ARGS__
 

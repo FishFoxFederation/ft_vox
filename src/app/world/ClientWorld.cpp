@@ -4,13 +4,14 @@
 ClientWorld::ClientWorld(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
+	SoundEngine & soundEngine,
 	uint64_t my_player_id
 )
 :
 	World(),
 	m_worldScene(WorldScene),
-	m_vulkanAPI(vulkanAPI)
-	// m_players(),
+	m_vulkanAPI(vulkanAPI),
+	m_sound_engine(soundEngine)
 {
 	m_my_player_id = my_player_id;
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 150.0, 0.0));

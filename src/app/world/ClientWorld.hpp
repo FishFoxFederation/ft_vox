@@ -12,6 +12,7 @@
 #include "VulkanAPI.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
+#include "SoundEngine.hpp"
 
 #include <unordered_map>
 #include <shared_mutex>
@@ -25,6 +26,7 @@ public:
 	ClientWorld(
 		WorldScene & WorldScene,
 		VulkanAPI & vulkanAPI,
+		SoundEngine & soundEngine,
 		uint64_t my_player_id = 0
 	);
 	~ClientWorld();
@@ -109,6 +111,7 @@ private:
 
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
+	SoundEngine &							m_sound_engine;
 
 	/*************************************
 	 *  CHUNKS AND MAP
