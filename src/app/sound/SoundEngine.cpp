@@ -32,7 +32,24 @@ int paCallback(
 
 SoundEngine::SoundEngine()
 {
-	PA_THROW_CHECK(Pa_Initialize());
+	PA_THROW_CHECK(Pa_Initialize(), "Failed to initialize PortAudio");
+
+	PaHostApiIndex hostApiCount = Pa_GetHostApiCount();
+	PaHostApiIndex hostApiIndex = Pa_GetDefaultHostApi();
+
+	if (hostApiCount > 0)
+	{
+		const PaHostApiInfo *hostApiInfo = Pa_GetHostApiInfo(hostApiIndex);
+		LOG_INFO("PortAudio: Default host API name: " + std::string(hostApiInfo->name));
+	}
+	else
+	{
+		LOG_WARNING("PortAudio: No host APIs found: " + std::string(Pa_GetErrorText(hostApiIndex)));
+		return;
+	}
+
+	PaDeviceIndex deviceCount =  Pa_GetDeviceCount();
+	PaDeviceIndex deviceIndex =  Pa_GetDefaultInputDevice();
 
 	PA_THROW_CHECK(
 		Pa_OpenDefaultStream(
@@ -44,18 +61,19 @@ SoundEngine::SoundEngine()
 			paFramesPerBufferUnspecified, // frames per buffer
 			paCallback,
 			this
-		)
+		),
+		"Failed to open stream"
 	);
 
-	PA_THROW_CHECK(Pa_StartStream(m_stream));
+	PA_THROW_CHECK(Pa_StartStream(m_stream), "Failed to start stream");
 	Pa_Sleep(2*1000);
-	PA_THROW_CHECK(Pa_StopStream(m_stream));
+	PA_THROW_CHECK(Pa_StopStream(m_stream), "Failed to stop stream");
 
 }
 
 SoundEngine::~SoundEngine()
 {
-	PA_WARNING_CHECK(Pa_CloseStream(m_stream));
-	PA_WARNING_CHECK(Pa_Terminate());
+	PA_WARNING_CHECK(Pa_CloseStream(m_stream), "Failed to close stream");
+	PA_WARNING_CHECK(Pa_Terminate(), "Failed to terminate PortAudio");
 }
 
