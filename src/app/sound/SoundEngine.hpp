@@ -4,21 +4,21 @@
 
 #include <portaudio.h>
 
-#define PA_THROW_CHECK(expr) \
+#define PA_THROW_CHECK(expr, msg) \
 { \
 	PaError err = expr; \
 	if (err != paNoError) \
 	{ \
-		throw std::runtime_error("portaudio: " + std::string(Pa_GetErrorText(err))); \
+		throw std::runtime_error(std::string("Portaudio: ") + msg + " (" + std::string(Pa_GetErrorText(err)) + ")"); \
 	} \
 }
 
-#define PA_WARNING_CHECK(expr) \
+#define PA_WARNING_CHECK(expr, msg) \
 { \
 	PaError err = expr; \
 	if (err != paNoError) \
 	{ \
-		LOG_WARNING("portaudio: " + std::string(Pa_GetErrorText(err))); \
+		LOG_WARNING(std::string("Portaudio: ") + msg + " (" + std::string(Pa_GetErrorText(err)) + ")"); \
 	} \
 }
 
