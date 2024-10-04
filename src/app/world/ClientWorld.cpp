@@ -4,14 +4,14 @@
 ClientWorld::ClientWorld(
 	WorldScene & WorldScene,
 	VulkanAPI & vulkanAPI,
-	SoundEngine & soundEngine,
+	Sound::Engine & sound_engine,
 	uint64_t my_player_id
 )
 :
 	World(),
 	m_worldScene(WorldScene),
 	m_vulkanAPI(vulkanAPI),
-	m_sound_engine(soundEngine)
+	m_sound_engine(sound_engine)
 {
 	m_my_player_id = my_player_id;
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 150.0, 0.0));
@@ -490,6 +490,17 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 
 		// update camera
 		m_worldScene.camera() = player->camera();
+	}
+
+	// play footstep sound
+	static auto last_footstep = std::chrono::steady_clock::now();
+	if (player->on_ground &&
+		glm::length(player->velocity) > 0.1 &&
+		player_id == m_my_player_id &&
+		std::chrono::steady_clock::now() - last_footstep > std::chrono::milliseconds(400))
+	{
+		m_sound_engine.playSound(SoundName::GRASS1);
+		last_footstep = std::chrono::steady_clock::now();
 	}
 }
 

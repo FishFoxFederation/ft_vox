@@ -26,7 +26,7 @@ public:
 	ClientWorld(
 		WorldScene & WorldScene,
 		VulkanAPI & vulkanAPI,
-		SoundEngine & soundEngine,
+		Sound::Engine & soundEngine,
 		uint64_t my_player_id = 0
 	);
 	~ClientWorld();
@@ -111,7 +111,7 @@ private:
 
 	WorldScene &							m_worldScene;
 	VulkanAPI &								m_vulkanAPI;
-	SoundEngine &							m_sound_engine;
+	Sound::Engine &							m_sound_engine;
 
 	/*************************************
 	 *  CHUNKS AND MAP

@@ -24,7 +24,7 @@ public:
 		WorldScene & world_scene,
 		ClientWorld & world,
 		VulkanAPI & vulkan_api,
-		SoundEngine & sound_engine,
+		Sound::Engine & sound_engine,
 		std::chrono::nanoseconds start_time
 	);
 	~UpdateThread();
@@ -43,7 +43,7 @@ private:
 	VulkanAPI & m_vulkan_api;
 	Client & m_client;
 	ClientPacketHandler m_packet_handler;
-	SoundEngine & m_sound_engine;
+	Sound::Engine & m_sound_engine;
 
 
 	std::chrono::nanoseconds m_start_time;

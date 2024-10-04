@@ -13,7 +13,7 @@ UpdateThread::UpdateThread(
 	WorldScene & world_scene,
 	ClientWorld & world,
 	VulkanAPI & vulkan_api,
-	SoundEngine & sound_engine,
+	Sound::Engine & sound_engine,
 	std::chrono::nanoseconds start_time
 ):
 	m_settings(settings),
@@ -155,6 +155,8 @@ void UpdateThread::readInput()
 		auto packet = std::make_shared<PingPacket>(id);
 		m_client.m_pings[id] = std::chrono::high_resolution_clock::now();
 		m_client.sendPacket(packet);
+
+		m_sound_engine.playSound(SoundName::PING);
 	}
 
 	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
@@ -260,7 +262,6 @@ void UpdateThread::movePlayer()
 	if (glm::length(displacement) > 0.01)
 	{
 		// glm::vec3 new_position = position + displacement;
-		// LOG_DEBUG("DISPLACEMENT LENGTH: " << displacement.length());
 		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
 		m_client.sendPacket(packet);
 	}

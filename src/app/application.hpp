@@ -37,7 +37,7 @@ private:
 	WorldScene			m_world_scene;
 	Window				m_window;
 	VulkanAPI			m_vulkan_api;
-	SoundEngine			m_sound_engine;
+	Sound::Engine		m_sound_engine;
 	ClientWorld			m_world;
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
