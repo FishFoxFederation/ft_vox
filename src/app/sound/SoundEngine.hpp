@@ -1,8 +1,14 @@
 #pragma once
 
+#include "AudioData.hpp"
+#include "SoundList.hpp"
 #include "logger.hpp"
 
 #include <portaudio.h>
+
+#include <memory>
+#include <vector>
+#include <mutex>
 
 #define PA_THROW_CHECK(expr, msg) \
 { \
@@ -22,27 +28,43 @@
 	} \
 }
 
-class SoundEngine
+namespace Sound
 {
+	struct Instance
+	{
+		Data *audio_data = nullptr;
+		uint32_t cursor = 0;
+		bool loop = false;
+		bool ended = false;
+	};
 
-public:
+	class Engine
+	{
 
-	SoundEngine();
-	~SoundEngine();
+	public:
 
-private:
+		Engine();
+		~Engine();
 
-	PaStream *m_stream = nullptr;
+		void playSound(const SoundName audio_index, bool loop = false);
 
-	float left_phase = 0;
-    float right_phase = 0;
+	private:
 
-	friend int paCallback(
-		const void *inputBuffer,
-		void *outputBuffer,
-		unsigned long framesPerBuffer,
-		const PaStreamCallbackTimeInfo *timeInfo,
-		PaStreamCallbackFlags statusFlags,
-		void *userData
-	);
-};
+		PaStream *m_stream = nullptr;
+
+		std::vector<std::unique_ptr<Data>> m_audio_datas;
+
+		std::mutex m_sound_instances_mutex;
+		std::vector<Instance> m_sound_instances;
+
+		friend int paCallback_stereo(
+			const void *inputBuffer,
+			void *outputBuffer,
+			unsigned long framesPerBuffer,
+			const PaStreamCallbackTimeInfo *timeInfo,
+			PaStreamCallbackFlags statusFlags,
+			void *userData
+		);
+	};
+
+}
