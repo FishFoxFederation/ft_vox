@@ -862,6 +862,19 @@ void ClientWorld::changePlayerViewMode(
 	}
 }
 
+void ClientWorld::manageScroll(
+	const double x_offset,
+	const double y_offset
+)
+{
+	std::shared_ptr<Player> player = m_players.at(m_my_player_id);
+	std::lock_guard lock(player->mutex);
+
+	player->toolbar_cursor = (player->toolbar_cursor - static_cast<int>(y_offset) + 9) % 9;
+
+	m_world_scene.toolbar_cursor_index = player->toolbar_cursor;
+}
+
 void ClientWorld::updatePlayer(
 	const uint64_t player_id,
 	std::function<void(Player &)> update

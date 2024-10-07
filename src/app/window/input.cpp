@@ -10,6 +10,7 @@ Input::Input(GLFWwindow* glfwWindow):
 	glfwSetKeyCallback(m_window, keyCallback);
 	glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 	glfwSetCursorPosCallback(m_window, cursorPosCallback);
+	glfwSetScrollCallback(m_window, mouseScrollCallback);
 
 	glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 }
@@ -58,6 +59,16 @@ void Input::getCursorPos(double& xpos, double& ypos)
 	std::lock_guard lock(m_cursor_mutex);
 	xpos = m_cursor_x;
 	ypos = m_cursor_y;
+}
+
+void Input::getScroll(double & xoffset, double & yoffset)
+{
+	std::lock_guard lock(m_scroll_mutex);
+	xoffset = m_scroll_x;
+	yoffset = m_scroll_y;
+
+	m_scroll_x = 0.0;
+	m_scroll_y = 0.0;
 }
 
 void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -140,4 +151,13 @@ void Input::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 	std::lock_guard lock(input->m_cursor_mutex);
 	input->m_cursor_x = xpos;
 	input->m_cursor_y = ypos;
+}
+
+void Input::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	Input* input = static_cast<Input*>(glfwGetWindowUserPointer(window));
+
+	std::lock_guard lock(input->m_scroll_mutex);
+	input->m_scroll_x += xoffset;
+	input->m_scroll_y += yoffset;
 }
