@@ -94,6 +94,8 @@ public:
 	bool jumping = false;
 	bool swimming = false;
 
+	BlockID ground_block = BlockID::Air;
+
 	Transform transform = Transform({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
 	HitBox hitbox = HitBox({-0.3, 0, -0.3}, {0.6, 1.8, 0.6});
 	HitBox feet = HitBox({-0.3, -0.01, -0.3}, {0.6, 0.1, 0.6});

@@ -105,6 +105,8 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/packets/ConnectionPacket.cpp
 		src/app/sound/SoundEngine.cpp
 		src/app/sound/AudioData.cpp
+		src/app/event/AbstractEvent.cpp
+		src/app/event/EventManager.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -141,6 +143,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/sound
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/event
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
@@ -250,6 +253,8 @@ target_sources(server
 		src/app/network/shared/packets/ConnectionPacket.cpp
 		src/app/sound/SoundEngine.cpp
 		src/app/sound/AudioData.cpp
+		src/app/event/AbstractEvent.cpp
+		src/app/event/EventManager.cpp
 
 		external/imgui/imgui.cpp
 		external/imgui/imgui_draw.cpp
@@ -286,6 +291,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/shared/packets
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/sound
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/event
 
 		${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
