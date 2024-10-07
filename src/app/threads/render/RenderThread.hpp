@@ -101,7 +101,8 @@ private:
 		const std::vector<WorldScene::PlayerRenderData> & players,
 		const std::optional<glm::vec3> & target_block,
 		const std::vector<WorldScene::DebugBlock> & debug_blocks,
-		const glm::dvec3 & sun_position
+		const glm::dvec3 & sun_position,
+		const int & toolbar_cursor_index
 	);
 
 	void drawPlayerBodyPart(

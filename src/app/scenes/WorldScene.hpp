@@ -121,6 +121,9 @@ public:
 
 	std::atomic<bool> show_debug_text = false;
 
+	// hud
+	std::atomic<int> toolbar_cursor_index = 0;
+
 private:
 
 	Camera m_camera;

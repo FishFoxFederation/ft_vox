@@ -151,6 +151,7 @@ VulkanAPI::~VulkanAPI()
 		skybox_cube_map.clear();
 		crosshair_image.clear();
 		toolbar_image.clear();
+		toolbar_cursor_image.clear();
 		player_skin_image.clear();
 		debug_info_image.clear();
 
@@ -163,6 +164,7 @@ VulkanAPI::~VulkanAPI()
 		light_view_proj_descriptor.clear();
 		crosshair_image_descriptor.clear();
 		toolbar_image_descriptor.clear();
+		toolbar_cursor_image_descriptor.clear();
 		player_skin_image_descriptor.clear();
 		atmosphere_descriptor.clear();
 		debug_info_image_descriptor.clear();
@@ -1041,6 +1043,25 @@ void VulkanAPI::createFrustumLineBuffers()
 	}
 }
 
+void VulkanAPI::createHudImages(
+	const std::string & file_path,
+	Image & image
+)
+{
+	Image::CreateInfo image_info = {};
+	image_info.file_paths = {file_path};
+	image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+	image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+	image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	image_info.create_view = true;
+	image_info.create_sampler = true;
+
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+	image = Image(device, physical_device, command_buffer, image_info);
+}
+
 void VulkanAPI::createTextureImage()
 {
 	{ // player skin
@@ -1060,34 +1081,10 @@ void VulkanAPI::createTextureImage()
 		player_skin_image = Image(device, physical_device, command_buffer, image_info);
 	}
 
-	{ // crosshair
-		Image::CreateInfo image_info = {};
-		image_info.file_paths = {"assets/textures/hud/crosshair.png"};
-		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
-		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.create_view = true;
-		image_info.create_sampler = true;
-
-		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
-
-		crosshair_image = Image(device, physical_device, command_buffer, image_info);
-	}
-
-	{ // toolbar
-		Image::CreateInfo image_info = {};
-		image_info.file_paths = {"assets/textures/hud/toolbar.png"};
-		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
-		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-		image_info.final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		image_info.create_view = true;
-		image_info.create_sampler = true;
-
-		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
-
-		toolbar_image = Image(device, physical_device, command_buffer, image_info);
+	{ // Hud images
+		createHudImages("assets/textures/hud/crosshair.png", crosshair_image);
+		createHudImages("assets/textures/hud/toolbar.png", toolbar_image);
+		createHudImages("assets/textures/hud/toolbar_cursor.png", toolbar_cursor_image);
 	}
 
 	{ // Debug info
@@ -1325,6 +1322,7 @@ void VulkanAPI::createDescriptors()
 		createHudDescriptors(crosshair_image, crosshair_image_descriptor);
 		createHudDescriptors(debug_info_image, debug_info_image_descriptor);
 		createHudDescriptors(toolbar_image, toolbar_image_descriptor);
+		createHudDescriptors(toolbar_cursor_image, toolbar_cursor_image_descriptor);
 	}
 
 	{ // Player skin image descriptor

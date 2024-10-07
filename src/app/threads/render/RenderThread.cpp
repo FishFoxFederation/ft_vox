@@ -95,6 +95,7 @@ void RenderThread::loop()
 	AtmosphereParams atmosphere_params = {};
 	ShadowMapLight shadow_map_light = {};
 	std::string debug_text;
+	int toolbar_cursor_index = 0;
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -205,6 +206,9 @@ void RenderThread::loop()
 			DebugGui::fps.load(),
 			DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z
 		);
+
+
+		toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
 	}
 
 	//###########################################################################################################
@@ -257,7 +261,7 @@ void RenderThread::loop()
 	vk.writeTextToImage(vk.debug_info_image, debug_text, 10, 10, 32);
 
 	shadowPass(chunk_meshes);
-	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position);
+	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position, toolbar_cursor_index);
 
 	TracyVkCollect(vk.ctx, vk.draw_command_buffers[vk.current_frame]);
 
@@ -446,7 +450,8 @@ void RenderThread::lightingPass(
 	const std::vector<WorldScene::PlayerRenderData> & players,
 	const std::optional<glm::vec3> & target_block,
 	const std::vector<WorldScene::DebugBlock> & debug_blocks,
-	const glm::dvec3 & sun_position
+	const glm::dvec3 & sun_position,
+	const int & toolbar_cursor_index
 )
 {
 	ZoneScoped;
@@ -948,17 +953,40 @@ void RenderThread::lightingPass(
 			vk.drawHudImage(vk.crosshair_image_descriptor, viewport);
 		}
 
+		const glm::vec2 toolbar_pos = {
+			static_cast<float>(vk.output_attachement.extent2D.width / 2 - (vk.toolbar_image.extent2D.width / 2)),
+			static_cast<float>(vk.output_attachement.extent2D.height - vk.toolbar_image.extent2D.height - 10)
+		};
+
 		{ // Toolbar
 			VkExtent2D size = vk.toolbar_image.extent2D;
 			VkViewport viewport = {};
-			viewport.x = static_cast<float>(vk.output_attachement.extent2D.width / 2 - (size.width / 2));
-			viewport.y = static_cast<float>(vk.output_attachement.extent2D.height - size.height);
+			viewport.x = toolbar_pos.x;
+			viewport.y = toolbar_pos.y;
 			viewport.width = size.width;
 			viewport.height = size.height;
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
 			vk.drawHudImage(vk.toolbar_image_descriptor, viewport);
+		}
+
+		const glm::vec2 toolbar_cursor_pos = {
+			toolbar_pos.x + (toolbar_cursor_index * vk.toolbar_cursor_image.extent2D.width),
+			toolbar_pos.y
+		};
+
+		{ // Toolbar cursor
+			VkExtent2D size = vk.toolbar_cursor_image.extent2D;
+			VkViewport viewport = {};
+			viewport.x = toolbar_cursor_pos.x;
+			viewport.y = toolbar_cursor_pos.y;
+			viewport.width = size.width;
+			viewport.height = size.height;
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
+
+			vk.drawHudImage(vk.toolbar_cursor_image_descriptor, viewport);
 		}
 
 		if (m_world_scene.show_debug_text) // Debug info

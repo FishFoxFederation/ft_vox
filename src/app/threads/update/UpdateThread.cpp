@@ -228,6 +228,11 @@ void UpdateThread::readInput()
 	}
 
 	m_window.input().getCursorPos(m_mouse_x, m_mouse_y);
+
+
+	double scroll_x, scroll_y;
+	m_window.input().getScroll(scroll_x, scroll_y);
+	m_world.manageScroll(scroll_x, scroll_y);
 }
 
 void UpdateThread::movePlayer()

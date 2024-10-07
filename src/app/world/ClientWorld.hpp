@@ -71,6 +71,10 @@ public:
 	void changePlayerViewMode(
 		const uint64_t player_id
 	);
+	void manageScroll(
+		const double x_offset,
+		const double y_offset
+	);
 	void updatePlayer(
 		const uint64_t player_id,
 		std::function<void(Player &)> update

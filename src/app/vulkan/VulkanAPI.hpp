@@ -344,6 +344,7 @@ public:
 
 	Image crosshair_image;
 	Image toolbar_image;
+	Image toolbar_cursor_image;
 	Image player_skin_image;
 
 	Image debug_info_image;
@@ -370,6 +371,7 @@ public:
 	Descriptor light_view_proj_descriptor;
 	Descriptor crosshair_image_descriptor;
 	Descriptor toolbar_image_descriptor;
+	Descriptor toolbar_cursor_image_descriptor;
 	Descriptor player_skin_image_descriptor;
 	Descriptor atmosphere_descriptor;
 	Descriptor debug_info_image_descriptor;
@@ -486,13 +488,18 @@ private:
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
 	void createFrustumLineBuffers();
+	void createHudImages(
+		const std::string & file_path,
+		Image & image
+	);
 	void createTextureImage();
 
-	void createDescriptors();
 	void createHudDescriptors(
 		const Image & image,
 		Descriptor & descriptor
 	);
+	void createDescriptors();
+
 	void createRenderPass();
 	void createPipelines();
 	void createFramebuffers();

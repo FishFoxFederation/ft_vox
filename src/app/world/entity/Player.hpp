@@ -15,6 +15,7 @@
 #include <chrono>
 #include <mutex>
 #include <optional>
+#include <array>
 
 struct RayCastOnBlockResult
 {
@@ -25,6 +26,7 @@ struct RayCastOnBlockResult
 	BlockID block;
 	bool inside_block;
 };
+
 class Player
 {
 
@@ -113,6 +115,10 @@ public:
 	uint64_t connection_id = 0;
 	uint64_t player_id = 0;
 	uint64_t player_ticket_id = 0;
+
+
+	// std::array<Item, 9> toolbar;
+	int toolbar_cursor = 0;
 
 private:
 

@@ -54,13 +54,21 @@ public:
 	 * @param xpos The x position of the cursor
 	 * @param ypos The y position of the cursor
 	 */
-	void getCursorPos(double& xpos, double& ypos);
+	void getCursorPos(double & xpos, double & ypos);
 
 	bool isCursorCaptured()
 	{
 		std::lock_guard lock(m_cursor_mutex);
 		return m_cursor_captured;
 	}
+
+	/**
+	 * @brief Get the scroll values
+	 *
+	 * @param xoffset The x offset of the scroll
+	 * @param yoffset The y offset of the scroll
+	 */
+	void getScroll(double & xoffset, double & yoffset);
 
 private:
 
@@ -74,6 +82,10 @@ private:
 	double m_cursor_y;
 	bool m_cursor_captured = false;
 	std::mutex m_cursor_mutex;
+
+	double m_scroll_x;
+	double m_scroll_y;
+	std::mutex m_scroll_mutex;
 
 	GLFWwindow* m_window;
 
@@ -106,5 +118,14 @@ private:
 	 * @param ypos The y position of the cursor
 	*/
 	static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+
+	/**
+	 * @brief The mouse scroll callback function
+	 *
+	 * @param window The GLFWwindow object
+	 * @param xoffset
+	 * @param yoffset
+	 */
+	static void mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 };
