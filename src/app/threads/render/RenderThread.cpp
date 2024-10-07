@@ -948,6 +948,19 @@ void RenderThread::lightingPass(
 			vk.drawHudImage(vk.crosshair_image_descriptor, viewport);
 		}
 
+		{ // Toolbar
+			VkExtent2D size = vk.toolbar_image.extent2D;
+			VkViewport viewport = {};
+			viewport.x = static_cast<float>(vk.output_attachement.extent2D.width / 2 - (size.width / 2));
+			viewport.y = static_cast<float>(vk.output_attachement.extent2D.height - size.height);
+			viewport.width = size.width;
+			viewport.height = size.height;
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
+
+			vk.drawHudImage(vk.toolbar_image_descriptor, viewport);
+		}
+
 		if (m_world_scene.show_debug_text) // Debug info
 		{
 			float size = 512.0f;

@@ -37,15 +37,6 @@
 #include <queue>
 #include <memory>
 
-#define VK_CHECK_RESULT(f)																				\
-{																										\
-	VkResult res = (f);																					\
-	if (res != VK_SUCCESS)																				\
-	{																									\
-		throw ("fatal error");																	\
-	}																									\
-}
-
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphics_family;
@@ -296,8 +287,6 @@ public:
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 
 
-	VulaknMemoryAllocator vma;
-
 	GLFWwindow * window;
 
 	TextRenderer text_renderer;
@@ -354,6 +343,7 @@ public:
 	Image shadow_map_depth_attachement;
 
 	Image crosshair_image;
+	Image toolbar_image;
 	Image player_skin_image;
 
 	Image debug_info_image;
@@ -379,6 +369,7 @@ public:
 	Descriptor test_image_descriptor;
 	Descriptor light_view_proj_descriptor;
 	Descriptor crosshair_image_descriptor;
+	Descriptor toolbar_image_descriptor;
 	Descriptor player_skin_image_descriptor;
 	Descriptor atmosphere_descriptor;
 	Descriptor debug_info_image_descriptor;

@@ -2,15 +2,15 @@
 #include "logger.hpp"
 #include "DebugGui.hpp"
 
-VulaknMemoryAllocator::VulaknMemoryAllocator()
+VulkanMemoryAllocator::VulkanMemoryAllocator()
 {
 }
 
-VulaknMemoryAllocator::~VulaknMemoryAllocator()
+VulkanMemoryAllocator::~VulkanMemoryAllocator()
 {
 }
 
-VkResult VulaknMemoryAllocator::allocateMemory(
+VkResult VulkanMemoryAllocator::allocateMemory(
 	VkDevice device,
 	const VkMemoryAllocateInfo * pAllocateInfo,
 	const VkAllocationCallbacks * pAllocator,
@@ -30,7 +30,7 @@ VkResult VulaknMemoryAllocator::allocateMemory(
 	return result;
 }
 
-void VulaknMemoryAllocator::freeMemory(
+void VulkanMemoryAllocator::freeMemory(
 	VkDevice device,
 	VkDeviceMemory memory,
 	const VkAllocationCallbacks * pAllocator
@@ -47,13 +47,13 @@ void VulaknMemoryAllocator::freeMemory(
 	DebugGui::gpu_allocated_memory = m_allocated_memory_size;
 }
 
-VkDeviceSize VulaknMemoryAllocator::allocatedMemorySize() const
+VkDeviceSize VulkanMemoryAllocator::allocatedMemorySize() const
 {
 	std::unique_lock lock(m_mutex);
 	return m_allocated_memory_size;
 }
 
-uint32_t VulaknMemoryAllocator::allocatedMemoryCount() const
+uint32_t VulkanMemoryAllocator::allocatedMemoryCount() const
 {
 	std::unique_lock lock(m_mutex);
 	return m_allocated_memory.size();

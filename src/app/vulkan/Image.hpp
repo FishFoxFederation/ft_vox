@@ -2,6 +2,7 @@
 
 #include "vk_define.hpp"
 #include "Command.hpp"
+#include "VulkanMemoryAllocator.hpp"
 
 #include <string>
 #include <vector>
