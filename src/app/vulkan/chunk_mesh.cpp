@@ -62,6 +62,7 @@ uint64_t VulkanAPI::storeMesh(
 	copyBuffer(staging_buffer, mesh.buffer, buffer_size);
 
 	vkDestroyBuffer(device, staging_buffer, nullptr);
+	VulkanMemoryAllocator & vma = VulkanMemoryAllocator::getInstance();
 	vma.freeMemory(device, staging_buffer_memory, nullptr);
 
 	mesh.vertex_count = vertex_count;
@@ -109,6 +110,7 @@ void VulkanAPI::destroyMeshes()
 			if (mesh.is_used == false)
 			{
 				vkDestroyBuffer(device, mesh.buffer, nullptr);
+				VulkanMemoryAllocator & vma = VulkanMemoryAllocator::getInstance();
 				vma.freeMemory(device, mesh.buffer_memory, nullptr);
 				mesh_map.erase(id);
 				// removeMeshFromTopLevelAS(id);

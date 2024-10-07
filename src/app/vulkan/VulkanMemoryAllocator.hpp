@@ -7,18 +7,25 @@
 #include <map>
 #include <mutex>
 
-class VulaknMemoryAllocator
+/**
+ * @brief Singleton class to keep track of allocated memory
+ *
+ */
+class VulkanMemoryAllocator
 {
 
 public:
 
-	VulaknMemoryAllocator();
-	~VulaknMemoryAllocator();
+	static VulkanMemoryAllocator & getInstance()
+	{
+		static VulkanMemoryAllocator instance;
+		return instance;
+	}
 
-	VulaknMemoryAllocator(const VulaknMemoryAllocator &) = delete;
-	VulaknMemoryAllocator(VulaknMemoryAllocator &&) = delete;
-	VulaknMemoryAllocator & operator=(const VulaknMemoryAllocator &) = delete;
-	VulaknMemoryAllocator & operator=(VulaknMemoryAllocator &&) = delete;
+	VulkanMemoryAllocator(const VulkanMemoryAllocator &) = delete;
+	VulkanMemoryAllocator(VulkanMemoryAllocator &&) = delete;
+	VulkanMemoryAllocator & operator=(const VulkanMemoryAllocator &) = delete;
+	VulkanMemoryAllocator & operator=(VulkanMemoryAllocator &&) = delete;
 
 	VkResult allocateMemory(
 		VkDevice device,
@@ -38,6 +45,9 @@ public:
 	uint32_t allocatedMemoryCount() const;
 
 private:
+
+	VulkanMemoryAllocator();
+	~VulkanMemoryAllocator();
 
 	std::map<VkDeviceMemory, VkDeviceSize> m_allocated_memory;
 
