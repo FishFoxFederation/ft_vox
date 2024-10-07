@@ -14,6 +14,7 @@ UpdateThread::UpdateThread(
 	ClientWorld & world,
 	VulkanAPI & vulkan_api,
 	Sound::Engine & sound_engine,
+	Event::Manager & event_manager,
 	std::chrono::nanoseconds start_time
 ):
 	m_settings(settings),
@@ -24,6 +25,7 @@ UpdateThread::UpdateThread(
 	m_client(client),
 	m_packet_handler(client, world),
 	m_sound_engine(sound_engine),
+	m_event_manager(event_manager),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_update_count(0),

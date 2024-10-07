@@ -13,6 +13,7 @@
 #include "Camera.hpp"
 #include "World.hpp"
 #include "SoundEngine.hpp"
+#include "EventManager.hpp"
 
 #include <unordered_map>
 #include <shared_mutex>
@@ -24,9 +25,10 @@ class ClientWorld : public World
 public:
 
 	ClientWorld(
-		WorldScene & WorldScene,
-		VulkanAPI & vulkanAPI,
-		Sound::Engine & soundEngine,
+		WorldScene & world_scene,
+		VulkanAPI & vulkan_api,
+		Sound::Engine & sound_engine,
+		Event::Manager & event_manager,
 		uint64_t my_player_id = 0
 	);
 	~ClientWorld();
@@ -109,9 +111,10 @@ public:
 	uint64_t m_my_player_id;
 private:
 
-	WorldScene &							m_worldScene;
-	VulkanAPI &								m_vulkanAPI;
+	WorldScene &							m_world_scene;
+	VulkanAPI &								m_vulkan_api;
 	Sound::Engine &							m_sound_engine;
+	Event::Manager &						m_event_manager;
 
 	/*************************************
 	 *  CHUNKS AND MAP

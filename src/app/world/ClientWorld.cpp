@@ -2,16 +2,18 @@
 #include "DebugGui.hpp"
 
 ClientWorld::ClientWorld(
-	WorldScene & WorldScene,
-	VulkanAPI & vulkanAPI,
+	WorldScene & world_scene,
+	VulkanAPI & vulkan_api,
 	Sound::Engine & sound_engine,
+	Event::Manager & event_manager,
 	uint64_t my_player_id
 )
 :
 	World(),
-	m_worldScene(WorldScene),
-	m_vulkanAPI(vulkanAPI),
-	m_sound_engine(sound_engine)
+	m_world_scene(world_scene),
+	m_vulkan_api(vulkan_api),
+	m_sound_engine(sound_engine),
+	m_event_manager(event_manager)
 {
 	m_my_player_id = my_player_id;
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 150.0, 0.0));
@@ -190,12 +192,12 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 		mesh_scene_id = chunk->getMeshID();
 
-		if (m_worldScene.chunk_mesh_list.contains(mesh_scene_id))
+		if (m_world_scene.chunk_mesh_list.contains(mesh_scene_id))
 		{
-			WorldScene::ChunkMeshRenderData old_mesh_data = m_worldScene.chunk_mesh_list.get(mesh_scene_id);
-			m_worldScene.chunk_mesh_list.erase(mesh_scene_id);
-			m_vulkanAPI.destroyMesh(old_mesh_data.id);
-			m_vulkanAPI.destroyMesh(old_mesh_data.water_id);
+			WorldScene::ChunkMeshRenderData old_mesh_data = m_world_scene.chunk_mesh_list.get(mesh_scene_id);
+			m_world_scene.chunk_mesh_list.erase(mesh_scene_id);
+			m_vulkan_api.destroyMesh(old_mesh_data.id);
+			m_vulkan_api.destroyMesh(old_mesh_data.water_id);
 		}
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
@@ -290,14 +292,14 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 		mesh_data.create(); //CPU intensive task to create the mesh
 		//storing mesh in the GPU
-		uint64_t mesh_id = m_vulkanAPI.storeMesh(
+		uint64_t mesh_id = m_vulkan_api.storeMesh(
 			mesh_data.vertices.data(),
 			mesh_data.vertices.size(),
 			sizeof(BlockVertex),
 			mesh_data.indices.data(),
 			mesh_data.indices.size()
 		);
-		uint64_t water_mesh_id = m_vulkanAPI.storeMesh(
+		uint64_t water_mesh_id = m_vulkan_api.storeMesh(
 			mesh_data.water_vertices.data(),
 			mesh_data.water_vertices.size(),
 			sizeof(BlockVertex),
@@ -309,7 +311,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		//adding mesh id to the scene so it is rendered
 		// if (mesh_id != IdList<uint64_t, Mesh>::invalid_id)
 		{
-			uint64_t mesh_scene_id = m_worldScene.chunk_mesh_list.insert({
+			uint64_t mesh_scene_id = m_world_scene.chunk_mesh_list.insert({
 				mesh_id,
 				water_mesh_id,
 				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
@@ -319,12 +321,12 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 
 		//destroy old mesh if it exists
-		if (m_worldScene.chunk_mesh_list.contains(old_mesh_scene_id))
+		if (m_world_scene.chunk_mesh_list.contains(old_mesh_scene_id))
 		{
-			WorldScene::ChunkMeshRenderData old_mesh_data = m_worldScene.chunk_mesh_list.get(old_mesh_scene_id);
-			m_worldScene.chunk_mesh_list.erase(old_mesh_scene_id);
-			m_vulkanAPI.destroyMesh(old_mesh_data.id);
-			m_vulkanAPI.destroyMesh(old_mesh_data.water_id);
+			WorldScene::ChunkMeshRenderData old_mesh_data = m_world_scene.chunk_mesh_list.get(old_mesh_scene_id);
+			m_world_scene.chunk_mesh_list.erase(old_mesh_scene_id);
+			m_vulkan_api.destroyMesh(old_mesh_data.id);
+			m_vulkan_api.destroyMesh(old_mesh_data.water_id);
 		}
 
 		mesh_data.unlock();
@@ -462,8 +464,8 @@ void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dve
 	DebugGui::player_position = player->transform.position;
 
 	{
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_world_scene.m_players.at(player_id);
 		data.position = player->transform.position;
 	}
 }
@@ -479,8 +481,8 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 	player->transform.position = position;
 
 	{
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_world_scene.m_players.at(player_id);
 		data.position = player->transform.position;
 	}
 
@@ -489,7 +491,7 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 		DebugGui::player_position = player->transform.position;
 
 		// update camera
-		m_worldScene.camera() = player->camera();
+		m_world_scene.camera() = player->camera();
 	}
 
 	// play footstep sound
@@ -523,9 +525,6 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	}
 	std::lock_guard lock(player->mutex);
 
-	std::pair<glm::dvec3, glm::dvec3> result;
-
-	// determine if player is on the ground or in the air and detect
 	bool on_ground = hitboxCollisionWithBlock(player->feet, player->transform.position, BLOCK_PROPERTY_SOLID);
 	bool in_fluid = hitboxCollisionWithBlock(player->feet, player->transform.position, BLOCK_PROPERTY_FLUID);
 	if (on_ground && !player->on_ground) // player just landed
@@ -537,6 +536,16 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	{
 		player->startFall();
 	}
+
+	if (on_ground)
+	{
+		player->ground_block = rayCastOnBlock(player->transform.position, glm::dvec3(0.0, -1.0, 0.0), 1.0).block;
+	}
+	else
+	{
+		player->ground_block = BlockID::Air;
+	}
+
 	player->on_ground = on_ground;
 	player->swimming = in_fluid;
 
@@ -669,8 +678,8 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	DebugGui::player_velocity = glm::length(player->velocity);
 
 	{ // update player walking animation
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_world_scene.m_players.at(player_id);
 		if (glm::length(move) > 0.0)
 		{
 			if (data.walk_animation.isActive() == false)
@@ -684,9 +693,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 		}
 	}
 
-	result.first = player->transform.position;
-	result.second = displacement;
-	return result;
+	return std::make_pair(player->transform.position, displacement);
 }
 
 void ClientWorld::updatePlayerTargetBlock(
@@ -703,7 +710,7 @@ void ClientWorld::updatePlayerTargetBlock(
 
 	std::optional<glm::vec3> target_block = raycast.hit && !raycast.inside_block ? std::make_optional(raycast.block_position) : std::nullopt;
 
-	m_worldScene.setTargetBlock(target_block);
+	m_world_scene.setTargetBlock(target_block);
 
 	player->targeted_block = raycast;
 
@@ -747,8 +754,8 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 	player->startAttack();
 
 	{ // update player attack animation
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_world_scene.m_players.at(player_id);
 		if (data.attack_animation.isActive() == false)
 		{
 			data.attack_animation.start();
@@ -787,8 +794,8 @@ std::pair<bool, glm::vec3> ClientWorld::playerUse(
 	player->startUse();
 
 	{ // update player attack animation
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_world_scene.m_players.at(player_id);
 		if (data.attack_animation.isActive() == false)
 		{
 			data.attack_animation.start();
@@ -827,8 +834,8 @@ void ClientWorld::updatePlayerCamera(
 	player->moveDirection(x_offset, y_offset);
 
 	{
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		WorldScene::PlayerRenderData & data = m_worldScene.m_players.at(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		WorldScene::PlayerRenderData & data = m_world_scene.m_players.at(player_id);
 		data.pitch = player->pitch;
 		data.yaw = player->yaw;
 	}
@@ -840,17 +847,17 @@ void ClientWorld::changePlayerViewMode(
 {
 	std::shared_ptr<Player> player = m_players.at(player_id);
 	std::lock_guard lock(player->mutex);
-	std::lock_guard lock1(m_worldScene.m_player_mutex);
+	std::lock_guard lock1(m_world_scene.m_player_mutex);
 
 	switch (player->view_mode)
 	{
 	case Player::ViewMode::FIRST_PERSON:
 		player->view_mode = Player::ViewMode::THIRD_PERSON_BACK;
-		m_worldScene.m_players.at(player_id).visible = true;
+		m_world_scene.m_players.at(player_id).visible = true;
 		break;
 	case Player::ViewMode::THIRD_PERSON_BACK:
 		player->view_mode = Player::ViewMode::FIRST_PERSON;
-		m_worldScene.m_players.at(player_id).visible = false;
+		m_world_scene.m_players.at(player_id).visible = false;
 		break;
 	}
 }
@@ -875,11 +882,11 @@ void ClientWorld::createMob()
 	m_mobs.insert(std::make_pair(mob_id, mob));
 
 	{
-		// auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
-		m_worldScene.entity_mesh_list.insert(
+		// auto world_scene_lock = m_world_scene.entity_mesh_list.lock();
+		m_world_scene.entity_mesh_list.insert(
 			mob_id,
 			{
-				m_vulkanAPI.cube_mesh_id,
+				m_vulkan_api.cube_mesh_id,
 				Transform(
 					mob->transform.position + mob->hitbox.position,
 					glm::vec3(0.0f),
@@ -1012,8 +1019,8 @@ void ClientWorld::updateMobs(
 		mob->transform.position += displacement;
 
 		{ // update mob mesh
-			auto world_scene_lock = m_worldScene.entity_mesh_list.lock();
-			m_worldScene.entity_mesh_list.at(id).model = Transform(
+			auto world_scene_lock = m_world_scene.entity_mesh_list.lock();
+			m_world_scene.entity_mesh_list.at(id).model = Transform(
 				mob->transform.position + mob->hitbox.position,
 				glm::vec3(0.0f),
 				mob->hitbox.size
@@ -1184,12 +1191,12 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 	m_players.insert(std::make_pair(player_id, player));
 
 	{
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		m_worldScene.m_players.insert(std::make_pair(player_id, WorldScene::PlayerRenderData{position}));
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		m_world_scene.m_players.insert(std::make_pair(player_id, WorldScene::PlayerRenderData{position}));
 		LOG_INFO("Adding player mesh: " << player_id);
 		if (player_id == m_my_player_id) // default player view mode is first person
 		{
-			m_worldScene.m_players.at(player_id).visible = false;
+			m_world_scene.m_players.at(player_id).visible = false;
 		}
 	}
 }
@@ -1202,8 +1209,8 @@ void ClientWorld::removePlayer(const uint64_t player_id)
 	m_players.erase(player_id);
 	{
 		LOG_INFO("Removing player mesh: " << player_id);
-		std::lock_guard lock(m_worldScene.m_player_mutex);
-		m_worldScene.m_players.erase(player_id);
+		std::lock_guard lock(m_world_scene.m_player_mutex);
+		m_world_scene.m_players.erase(player_id);
 	}
 }
 

@@ -13,6 +13,7 @@
 #include "ThreadPool.hpp"
 #include "Client.hpp"
 #include "SoundEngine.hpp"
+#include "EventManager.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -37,6 +38,7 @@ private:
 	WorldScene			m_world_scene;
 	Window				m_window;
 	VulkanAPI			m_vulkan_api;
+	Event::Manager		m_event_manager;
 	Sound::Engine		m_sound_engine;
 	ClientWorld			m_world;
 	RenderThread		m_render_thread;
