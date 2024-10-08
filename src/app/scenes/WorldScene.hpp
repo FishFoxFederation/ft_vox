@@ -6,6 +6,7 @@
 #include "Camera.hpp"
 #include "List.hpp"
 #include "Model.hpp"
+#include "Item.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -122,6 +123,8 @@ public:
 	std::atomic<bool> show_debug_text = false;
 
 	// hud
+	std::array<Item::Type, 9> toolbar_items;
+	mutable std::mutex toolbar_items_mutex;
 	std::atomic<int> toolbar_cursor_index = 0;
 
 private:

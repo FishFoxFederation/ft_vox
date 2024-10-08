@@ -115,6 +115,51 @@ struct EntityVertex
 	}
 };
 
+struct ItemVertex
+{
+	glm::vec3 pos;
+	glm::vec3 normal;
+	glm::vec2 tex_coord;
+	uint32_t texture_index;
+
+	static VkVertexInputBindingDescription getBindingDescription()
+	{
+		VkVertexInputBindingDescription bindingDescription{};
+		bindingDescription.binding = 0;
+		bindingDescription.stride = sizeof(ItemVertex);
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return bindingDescription;
+	}
+
+	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
+	{
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(4);
+
+		attributeDescriptions[0].binding = 0;
+		attributeDescriptions[0].location = 0;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[0].offset = offsetof(ItemVertex, pos);
+
+		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].location = 1;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[1].offset = offsetof(ItemVertex, normal);
+
+		attributeDescriptions[2].binding = 0;
+		attributeDescriptions[2].location = 2;
+		attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[2].offset = offsetof(ItemVertex, tex_coord);
+
+		attributeDescriptions[3].binding = 0;
+		attributeDescriptions[3].location = 3;
+		attributeDescriptions[3].format = VK_FORMAT_R32_UINT;
+		attributeDescriptions[3].offset = offsetof(ItemVertex, texture_index);
+
+		return attributeDescriptions;
+	}
+};
+
 struct Mesh
 {
 	VkBuffer buffer;
@@ -164,6 +209,17 @@ struct ShadowMapLight
 	glm::vec4 plane_distances[8];
 	glm::vec3 light_dir;
 	float blend_distance;
+};
+
+struct PreRenderItemIconPushConstant
+{
+	glm::mat4 MVP;
+	int layer;
+};
+
+struct ItemIconPushConstant
+{
+	int layer;
 };
 
 struct AtmosphereParams
@@ -264,6 +320,7 @@ public:
 	void destroyMesh(const uint64_t & mesh_id);
 
 	void drawMesh(
+		VkCommandBuffer command_buffer,
 		const Pipeline & pipeline,
 		const uint64_t mesh_id,
 		const void * push_constants,
@@ -282,6 +339,10 @@ public:
 	void drawHudImage(
 		const Descriptor & descriptor,
 		const VkViewport & viewport
+	);
+	void drawItemIcon(
+		const VkViewport & viewport,
+		const uint32_t layer
 	);
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
@@ -308,6 +369,7 @@ public:
 	std::vector<VkFramebuffer> shadow_framebuffers;
 	std::vector<VkFramebuffer> water_framebuffers;
 	std::vector<VkFramebuffer> hud_framebuffers;
+	VkFramebuffer prerender_item_icon_framebuffer;
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
@@ -346,6 +408,7 @@ public:
 	Image toolbar_image;
 	Image toolbar_cursor_image;
 	Image player_skin_image;
+	Image item_icon_images;
 
 	Image debug_info_image;
 
@@ -375,11 +438,13 @@ public:
 	Descriptor player_skin_image_descriptor;
 	Descriptor atmosphere_descriptor;
 	Descriptor debug_info_image_descriptor;
+	Descriptor item_icon_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
 	VkRenderPass water_render_pass;
 	VkRenderPass hud_render_pass;
+	VkRenderPass prerender_item_icon_render_pass;
 
 	Pipeline chunk_pipeline;
 	Pipeline water_pipeline;
@@ -391,6 +456,8 @@ public:
 	Pipeline entity_pipeline;
 	Pipeline player_pipeline;
 	Pipeline hud_pipeline;
+	Pipeline prerender_item_icon_pipeline;
+	Pipeline item_icon_pipeline;
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
@@ -505,6 +572,7 @@ private:
 	void createFramebuffers();
 
 	void createMeshes();
+	void createItemMeshes();
 	void destroyMeshes();
 
 
@@ -516,6 +584,10 @@ private:
 
 	void setupTracy();
 	void destroyTracy();
+
+
+	void prerenderItemIconImages();
+
 
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);

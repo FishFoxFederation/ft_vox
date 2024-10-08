@@ -5,6 +5,7 @@
 #include "Camera.hpp"
 #include "HitBox.hpp"
 #include "Block.hpp"
+#include "Item.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -117,7 +118,17 @@ public:
 	uint64_t player_ticket_id = 0;
 
 
-	// std::array<Item, 9> toolbar;
+	std::array<Item::Type, 9> toolbar_items = {
+		Item::Type::GrassBlock,
+		Item::Type::DirtBlock,
+		Item::Type::StoneBlock,
+		Item::Type::WaterBlock,
+		Item::Type::GlassBlock,
+		Item::Type::LightBlock,
+		Item::Type::None,
+		Item::Type::None,
+		Item::Type::None
+	};
 	int toolbar_cursor = 0;
 
 private:

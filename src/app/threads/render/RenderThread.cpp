@@ -80,38 +80,21 @@ void RenderThread::loop()
 	//					 																						 #
 	//############################################################################################################
 
-	int window_width, window_height;
-	double aspect_ratio;
-	glm::mat4 clip;
-	Camera::RenderInfo camera;
-	ViewProjMatrices camera_matrices = {};
-	std::vector<WorldScene::ChunkMeshRenderData> chunk_meshes;
-	std::vector<WorldScene::MeshRenderData> entity_meshes;
-	std::vector<WorldScene::PlayerRenderData> players;
-	ViewProjMatrices sun = {};
-	glm::dvec3 sun_position;
-	std::optional<glm::vec3> target_block;
-	std::vector<WorldScene::DebugBlock> debug_blocks;
-	AtmosphereParams atmosphere_params = {};
-	ShadowMapLight shadow_map_light = {};
-	std::string debug_text;
-	int toolbar_cursor_index = 0;
-
 	{
 		ZoneScopedN("Prepare frame");
 
 		updateTime();
+		m_frame_count++;
+		if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
+		{
+			DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
+			m_frame_count = 0;
+			m_start_time_counting_fps = m_current_time;
+		}
 
 		glfwGetFramebufferSize(vk.window, &window_width, &window_height);
 
 		aspect_ratio = static_cast<double>(window_width) / static_cast<double>(window_height);
-
-		clip = glm::mat4(
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f,-1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 0.5f, 0.0f,
-			0.0f, 0.0f, 0.5f, 1.0f
-		);
 
 		camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
@@ -122,13 +105,6 @@ void RenderThread::loop()
 		entity_meshes = m_world_scene.entity_mesh_list.values();
 		players = m_world_scene.getPlayers();
 
-		m_frame_count++;
-		if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
-		{
-			DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
-			m_frame_count = 0;
-			m_start_time_counting_fps = m_current_time;
-		}
 
 		DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
@@ -200,15 +176,17 @@ void RenderThread::loop()
 			shadow_map_light.plane_distances[i].x = far_plane_distances[i];
 		}
 
-
 		debug_text = ft_format(
 			"fps: %d\nxyz: %.2f %.2f %.2f",
 			DebugGui::fps.load(),
 			DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z
 		);
 
-
 		toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
+		{
+			std::lock_guard lock(m_world_scene.toolbar_items_mutex);
+			toolbar_items = m_world_scene.toolbar_items;
+		}
 	}
 
 	//###########################################################################################################
@@ -260,8 +238,8 @@ void RenderThread::loop()
 
 	vk.writeTextToImage(vk.debug_info_image, debug_text, 10, 10, 32);
 
-	shadowPass(chunk_meshes);
-	lightingPass(camera, chunk_meshes, entity_meshes, players, target_block, debug_blocks, sun_position, toolbar_cursor_index);
+	shadowPass();
+	lightingPass();
 
 	TracyVkCollect(vk.ctx, vk.draw_command_buffers[vk.current_frame]);
 
@@ -383,9 +361,7 @@ void RenderThread::updateTime()
 	m_last_frame_time = m_current_time;
 }
 
-void RenderThread::shadowPass(
-	const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes
-)
+void RenderThread::shadowPass()
 {
 	ZoneScoped;
 	TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Shadow pass");
@@ -432,6 +408,7 @@ void RenderThread::shadowPass(
 		model_matrice.model = chunk_mesh.model;
 
 		vk.drawMesh(
+			vk.draw_command_buffers[vk.current_frame],
 			vk.shadow_pipeline,
 			chunk_mesh.id,
 			&model_matrice,
@@ -443,16 +420,7 @@ void RenderThread::shadowPass(
 	vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 }
 
-void RenderThread::lightingPass(
-	const Camera::RenderInfo & camera,
-	const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes,
-	const std::vector<WorldScene::MeshRenderData> & entity_meshes,
-	const std::vector<WorldScene::PlayerRenderData> & players,
-	const std::optional<glm::vec3> & target_block,
-	const std::vector<WorldScene::DebugBlock> & debug_blocks,
-	const glm::dvec3 & sun_position,
-	const int & toolbar_cursor_index
-)
+void RenderThread::lightingPass()
 {
 	ZoneScoped;
 	TracyVkZone(vk.ctx, vk.draw_command_buffers[vk.current_frame], "Lighting pass");
@@ -506,6 +474,7 @@ void RenderThread::lightingPass(
 			model_matrice.model = chunk_mesh.model;
 
 			vk.drawMesh(
+				vk.draw_command_buffers[vk.current_frame],
 				vk.chunk_pipeline,
 				chunk_mesh.id,
 				&model_matrice,
@@ -542,6 +511,7 @@ void RenderThread::lightingPass(
 			entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 			vk.drawMesh(
+				vk.draw_command_buffers[vk.current_frame],
 				vk.entity_pipeline,
 				entity_mesh.id,
 				&entity_matrice,
@@ -827,6 +797,7 @@ void RenderThread::lightingPass(
 		sky_shader_data.model = glm::translate(glm::dmat4(1.0f), camera.position);
 
 		vk.drawMesh(
+			vk.draw_command_buffers[vk.current_frame],
 			vk.sun_pipeline,
 			vk.icosphere_mesh_id,
 			&sky_shader_data,
@@ -907,6 +878,7 @@ void RenderThread::lightingPass(
 			model_matrice.model = chunk_mesh.model;
 
 			vk.drawMesh(
+				vk.draw_command_buffers[vk.current_frame],
 				vk.water_pipeline,
 				chunk_mesh.water_id,
 				&model_matrice,
@@ -970,6 +942,62 @@ void RenderThread::lightingPass(
 
 			vk.drawHudImage(vk.toolbar_image_descriptor, viewport);
 		}
+
+
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.item_icon_pipeline.pipeline);
+
+		const std::array<Item::Type, 9> toolbar_items = {
+			Item::Type::GrassBlock,
+			Item::Type::DirtBlock,
+			Item::Type::StoneBlock,
+			Item::Type::WaterBlock,
+			Item::Type::GlassBlock,
+			Item::Type::LightBlock,
+			Item::Type::None,
+			Item::Type::None,
+			Item::Type::None
+		};
+		{ // Toolbar items
+			const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
+				vk.item_icon_descriptor.set
+			};
+
+			vkCmdBindDescriptorSets(
+				vk.draw_command_buffers[vk.current_frame],
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				vk.item_icon_pipeline.layout,
+				0,
+				static_cast<uint32_t>(toolbar_item_descriptor_sets.size()),
+				toolbar_item_descriptor_sets.data(),
+				0,
+				nullptr
+			);
+
+			for (size_t i = 0; i < 9; i++)
+			{
+				if (toolbar_items[i] == Item::Type::None)
+				{
+					continue;
+				}
+
+				const glm::vec2 toolbar_item_pos = {
+					toolbar_pos.x + (i * 64),
+					toolbar_pos.y
+				};
+
+				VkViewport viewport = {};
+				viewport.x = toolbar_item_pos.x + 3;
+				viewport.y = toolbar_item_pos.y + 3;
+				viewport.width = 64 - 6;
+				viewport.height = 64 - 6;
+				viewport.minDepth = 0.0f;
+				viewport.maxDepth = 1.0f;
+
+				vk.drawItemIcon(viewport, static_cast<uint32_t>(toolbar_items[i]));
+			}
+		}
+
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.hud_pipeline.pipeline);
 
 		const glm::vec2 toolbar_cursor_pos = {
 			toolbar_pos.x + (toolbar_cursor_index * vk.toolbar_cursor_image.extent2D.width),
@@ -1044,6 +1072,7 @@ void RenderThread::drawPlayerBodyPart(
 	player_matrice.model = model;
 
 	vk.drawMesh(
+		vk.draw_command_buffers[vk.current_frame],
 		vk.player_pipeline,
 		mesh_id,
 		&player_matrice,

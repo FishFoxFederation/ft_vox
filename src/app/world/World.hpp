@@ -52,7 +52,9 @@ public:
 	 */
 	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position) const;
 	void 					insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
+
 protected:
+
 	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
 	TracyLockableN											(std::mutex, m_players_mutex, "Players");
 
@@ -76,7 +78,7 @@ protected:
 	 * @retval std::shared_ptr<Chunk> if the chunk exists
 	 * @retval nullptr if the chunk does not exist
 	 */
-	std::shared_ptr<Chunk> getChunkNoLock(const glm::ivec3 & position) const;
+	std::shared_ptr<Chunk>	getChunkNoLock(const glm::ivec3 & position) const;
 
 
 	void					insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);

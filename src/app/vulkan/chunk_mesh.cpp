@@ -17,7 +17,7 @@ uint64_t VulkanAPI::storeMesh(
 
 	if (vertex_count == 0 || index_count == 0)
 	{
-		return IdList<uint64_t, Mesh>::invalid_id;
+		return invalid_mesh_id;
 	}
 
 

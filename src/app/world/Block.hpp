@@ -33,12 +33,12 @@ enum class BlockID : BlockType
 // Block faces coresponding to the texture array
 #define BLOCK_FACE_TOP		0
 #define BLOCK_FACE_BOTTOM	1
-#define BLOCK_FACE_LEFT		2
-#define BLOCK_FACE_RIGHT	3
+#define BLOCK_FACE_RIGHT	2
+#define BLOCK_FACE_LEFT		3
 #define BLOCK_FACE_FRONT	4
 #define BLOCK_FACE_BACK		5
 
-struct Data
+struct BlockData
 {
 	const BlockID id;
 	const TextureID texture[6];
@@ -68,7 +68,7 @@ struct Block
 		// "assets/textures/block/debug/back_bottom.png",
 	};
 
-	static const Data & getData(const BlockID id)
+	static const BlockData & getData(const BlockID id)
 	{
 		switch (id)
 		{
@@ -93,7 +93,7 @@ struct Block
 		return (getData(id).properties & (properties | not_properties)) == properties;
 	}
 
-	static inline const Data Air = {
+	static inline const BlockData Air = {
 		.id = BlockID::Air,
 		.texture = { 0, 0, 0, 0, 0, 0 },
 		.properties = BLOCK_PROPERTY_NONE,
@@ -101,7 +101,7 @@ struct Block
 		.emit_light = 0,
 		.absorb_light = 0
 	};
-	static inline const Data Grass = {
+	static inline const BlockData Grass = {
 		.id = BlockID::Grass,
 		.texture = {
 			1, // grass_top
@@ -119,7 +119,7 @@ struct Block
 		.emit_light = 0,
 		.absorb_light = 15
 	};
-	static inline const Data Dirt = {
+	static inline const BlockData Dirt = {
 		.id = BlockID::Dirt,
 		.texture = {
 			3, // dirt
@@ -137,7 +137,7 @@ struct Block
 		.emit_light = 0,
 		.absorb_light = 15
 	};
-	static inline const Data Stone = {
+	static inline const BlockData Stone = {
 		.id = BlockID::Stone,
 		.texture = {
 			4, // stone
@@ -155,7 +155,7 @@ struct Block
 		.emit_light = 0,
 		.absorb_light = 15
 	};
-	static inline const Data Water = {
+	static inline const BlockData Water = {
 		.id = BlockID::Water,
 		.texture = {
 			5, // water
@@ -171,7 +171,7 @@ struct Block
 		.emit_light = 0,
 		.absorb_light = 1
 	};
-	static inline const Data Glass = {
+	static inline const BlockData Glass = {
 		.id = BlockID::Glass,
 		.texture = {
 			6, // glass
@@ -188,7 +188,7 @@ struct Block
 		.emit_light = 0,
 		.absorb_light = 0
 	};
-	static inline const Data Light = {
+	static inline const BlockData Light = {
 		.id = BlockID::Light,
 		.texture = {
 			7, // light
