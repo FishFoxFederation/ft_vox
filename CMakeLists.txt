@@ -19,7 +19,7 @@ target_compile_options(${PROJECT_NAME}
 	PRIVATE
 		-O3
 		-g3
-		# -fsanitize=thread
+		# -fsanitize=address
 		-Wall
 		-Wextra
 		-Werror
@@ -37,7 +37,7 @@ target_compile_options(${PROJECT_NAME}
 
 target_link_options(${PROJECT_NAME}
 	PRIVATE
-		# -fsanitize=thread
+		# -fsanitize=address
 )
 
 target_sources(${PROJECT_NAME}
@@ -72,6 +72,7 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/Swapchain.cpp
 		src/app/vulkan/TextRenderer.cpp
 		src/app/vulkan/Buffer.cpp
+		src/app/vulkan/item_mesh.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -216,6 +217,7 @@ target_sources(server
 		src/app/vulkan/Swapchain.cpp
 		src/app/vulkan/TextRenderer.cpp
 		src/app/vulkan/Buffer.cpp
+		src/app/vulkan/item_mesh.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp

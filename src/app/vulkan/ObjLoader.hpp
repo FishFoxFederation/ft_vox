@@ -21,7 +21,7 @@ struct ObjVertex
 {
 	glm::vec3 pos;
 	glm::vec3 normal;
-	glm::vec2 texCoord;
+	glm::vec2 tex_coord;
 
 	static VkVertexInputBindingDescription getBindingDescription()
 	{
@@ -50,14 +50,14 @@ struct ObjVertex
 		attributeDescriptions[2].binding = 0;
 		attributeDescriptions[2].location = 2;
 		attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-		attributeDescriptions[2].offset = offsetof(ObjVertex, texCoord);
+		attributeDescriptions[2].offset = offsetof(ObjVertex, tex_coord);
 
 		return attributeDescriptions;
 	}
 
 	bool operator==(const ObjVertex& other) const
 	{
-		return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
+		return pos == other.pos && normal == other.normal && tex_coord == other.tex_coord;
 	}
 };
 
@@ -69,7 +69,7 @@ namespace std
 		{
 			return ((hash<glm::vec3>()(vertex.pos) ^
 				(hash<glm::vec3>()(vertex.normal) << 1)) >> 1) ^
-				(hash<glm::vec2>()(vertex.texCoord) << 1);
+				(hash<glm::vec2>()(vertex.tex_coord) << 1);
 		}
 	};
 }
@@ -331,11 +331,11 @@ private:
 
 				if (this->m_hasTexCoords)
 				{
-					vertex.texCoord = this->m_texCoords[face.texCoordIndex[i] - 1];
+					vertex.tex_coord = this->m_texCoords[face.texCoordIndex[i] - 1];
 				}
 				else
 				{
-					vertex.texCoord = arbitraryTexCoords[i];
+					vertex.tex_coord = arbitraryTexCoords[i];
 				}
 
 				if (this->m_hasNormals)

@@ -24,6 +24,13 @@ class ClientWorld : public World
 
 public:
 
+	struct PlayerUseResult
+	{
+		bool hit;
+		glm::vec3 block_position;
+		Item::Type used_item;
+	};
+
 	ClientWorld(
 		WorldScene & world_scene,
 		VulkanAPI & vulkan_api,
@@ -64,7 +71,7 @@ public:
 		const uint64_t player_id,
 		bool attack
 	);
-	std::pair<bool, glm::vec3> playerUse(
+	PlayerUseResult playerUse(
 		const uint64_t player_id,
 		bool use
 	);
@@ -111,6 +118,7 @@ public:
 
 	std::shared_ptr<Chunk> localGetChunk(const glm::ivec3 & position) const;
 
+	void 	otherUpdate();
 
 	uint64_t m_my_player_id;
 private:

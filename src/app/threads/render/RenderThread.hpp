@@ -76,7 +76,40 @@ private:
 	int m_frame_count;
 	std::chrono::nanoseconds m_start_time_counting_fps;
 
+	// Scene data
+	int window_width, window_height;
+	double aspect_ratio;
 
+	const glm::mat4 clip = glm::mat4(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f,-1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.0f, 0.0f, 0.5f, 1.0f
+	);
+	Camera::RenderInfo camera;
+	ViewProjMatrices camera_matrices = {};
+
+	std::vector<WorldScene::ChunkMeshRenderData> chunk_meshes;
+	std::vector<WorldScene::MeshRenderData> entity_meshes;
+	std::vector<WorldScene::PlayerRenderData> players;
+
+	ViewProjMatrices sun = {};
+	glm::dvec3 sun_position;
+
+	std::optional<glm::vec3> target_block;
+	std::vector<WorldScene::DebugBlock> debug_blocks;
+
+	AtmosphereParams atmosphere_params = {};
+
+	ShadowMapLight shadow_map_light = {};
+
+	std::string debug_text;
+
+	std::array<Item::Type, 9> toolbar_items;
+	int toolbar_cursor_index = 0;
+
+
+	// Should be the last member
 	std::jthread m_thread;
 
 	/**
@@ -90,20 +123,8 @@ private:
 
 	void updateTime();
 
-	void shadowPass(
-		const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes
-	);
-
-	void lightingPass(
-		const Camera::RenderInfo & camera,
-		const std::vector<WorldScene::ChunkMeshRenderData> & chunk_meshes,
-		const std::vector<WorldScene::MeshRenderData> & entity_meshes,
-		const std::vector<WorldScene::PlayerRenderData> & players,
-		const std::optional<glm::vec3> & target_block,
-		const std::vector<WorldScene::DebugBlock> & debug_blocks,
-		const glm::dvec3 & sun_position,
-		const int & toolbar_cursor_index
-	);
+	void shadowPass();
+	void lightingPass();
 
 	void drawPlayerBodyPart(
 		const uint64_t mesh_id,

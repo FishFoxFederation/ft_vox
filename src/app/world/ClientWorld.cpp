@@ -506,6 +506,18 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 	}
 }
 
+void ClientWorld::otherUpdate()
+{
+	ZoneScoped;
+
+	{
+		std::shared_ptr<Player> player = m_players.at(m_my_player_id);
+		std::lock_guard player_lock(player->mutex);
+
+		std::lock_guard toolbar_lock(m_world_scene.toolbar_items_mutex);
+		m_world_scene.toolbar_items = player->toolbar_items;
+	}
+}
 
 std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	const uint64_t player_id,
@@ -781,7 +793,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 	return std::make_pair(false, glm::vec3(0.0));
 }
 
-std::pair<bool, glm::vec3> ClientWorld::playerUse(
+ClientWorld::PlayerUseResult ClientWorld::playerUse(
 	const uint64_t player_id,
 	bool use
 )
@@ -792,6 +804,8 @@ std::pair<bool, glm::vec3> ClientWorld::playerUse(
 	if (!use || !player->canUse())
 		return {false, glm::vec3(0.0)};
 	player->startUse();
+
+	Item::Type item_type = player->toolbar_items.at(player->toolbar_cursor);
 
 	{ // update player attack animation
 		std::lock_guard lock(m_world_scene.m_player_mutex);
@@ -813,13 +827,13 @@ std::pair<bool, glm::vec3> ClientWorld::playerUse(
 			Block::getData(player->targeted_block.block).hitbox,
 			block_placed_position
 		))
-			return {false, glm::vec3(0.0)};
+			return {false, glm::vec3(0.0), item_type};
 
 		// std::lock_guard lock(m_blocks_to_set_mutex);
 		// m_blocks_to_set.push({block_placed_position, Block::Stone.id});
-		return {true, block_placed_position};
+		return {true, block_placed_position, item_type};
 	}
-	return {false, glm::vec3(0.0)};
+	return {false, glm::vec3(0.0), item_type};
 }
 
 void ClientWorld::updatePlayerCamera(
@@ -871,7 +885,6 @@ void ClientWorld::manageScroll(
 	std::lock_guard lock(player->mutex);
 
 	player->toolbar_cursor = (player->toolbar_cursor - static_cast<int>(y_offset) + 9) % 9;
-
 	m_world_scene.toolbar_cursor_index = player->toolbar_cursor;
 }
 

@@ -3,6 +3,7 @@
 #include "Block.hpp"
 #include "Model.hpp"
 #include "ObjLoader.hpp"
+#include "Item.hpp"
 
 #include "Tracy.hpp"
 
@@ -50,8 +51,11 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createFramebuffers();
 
 	createMeshes();
+	createItemMeshes();
 
 	setupTextRenderer();
+
+	prerenderItemIconImages();
 
 	setupImgui();
 	createImGuiTexture(100, 100);
@@ -114,11 +118,13 @@ VulkanAPI::~VulkanAPI()
 		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
 	}
+	vkDestroyFramebuffer(device, prerender_item_icon_framebuffer, nullptr);
 
 	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 	vkDestroyRenderPass(device, shadow_render_pass, nullptr);
 	vkDestroyRenderPass(device, water_render_pass, nullptr);
 	vkDestroyRenderPass(device, hud_render_pass, nullptr);
+	vkDestroyRenderPass(device, prerender_item_icon_render_pass, nullptr);
 
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
@@ -154,6 +160,7 @@ VulkanAPI::~VulkanAPI()
 		toolbar_cursor_image.clear();
 		player_skin_image.clear();
 		debug_info_image.clear();
+		item_icon_images.clear();
 
 		camera_descriptor.clear();
 		block_textures_descriptor.clear();
@@ -168,6 +175,7 @@ VulkanAPI::~VulkanAPI()
 		player_skin_image_descriptor.clear();
 		atmosphere_descriptor.clear();
 		debug_info_image_descriptor.clear();
+		item_icon_descriptor.clear();
 
 		chunk_pipeline.clear();
 		water_pipeline.clear();
@@ -179,6 +187,8 @@ VulkanAPI::~VulkanAPI()
 		entity_pipeline.clear();
 		player_pipeline.clear();
 		hud_pipeline.clear();
+		prerender_item_icon_pipeline.clear();
+		item_icon_pipeline.clear();
 
 		swapchain.clear();
 	}
@@ -1101,7 +1111,26 @@ void VulkanAPI::createTextureImage()
 
 		debug_info_image = Image(device, physical_device, command_buffer, image_info);
 	}
+
+	{ // Item icons
+		Image::CreateInfo image_info = {};
+		image_info.extent = {256, 256};
+		image_info.array_layers = Items::list.size();
+		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
+		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		image_info.final_layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		image_info.create_view = true;
+		image_info.create_sampler = true;
+		image_info.sampler_filter = VK_FILTER_NEAREST;
+
+		SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+		item_icon_images = Image(device, physical_device, command_buffer, image_info);
+	}
+
 }
+
 
 void VulkanAPI::createHudDescriptors(
 	const Image & image,
@@ -1428,6 +1457,29 @@ void VulkanAPI::createDescriptors()
 			);
 		}
 	}
+
+	{ // Item icon descriptor
+		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
+		sampler_layout_binding.binding = 0;
+		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		sampler_layout_binding.descriptorCount = 1;
+		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+		sampler_layout_binding.pImmutableSamplers = nullptr;
+
+		Descriptor::CreateInfo descriptor_info = {};
+		descriptor_info.bindings = { sampler_layout_binding };
+		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+
+		item_icon_descriptor = Descriptor(device, descriptor_info);
+
+		item_icon_descriptor.update(
+			device,
+			item_icon_images.view,
+			item_icon_images.sampler,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+		);
+
+	}
 }
 
 void VulkanAPI::createRenderPass()
@@ -1622,7 +1674,7 @@ void VulkanAPI::createRenderPass()
 		);
 	}
 
-	{ // gui render pass
+	{ // hud render pass
 		VkAttachmentDescription output_attachement_description = {};
 		output_attachement_description.format = output_attachement.format;
 		output_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -1642,13 +1694,13 @@ void VulkanAPI::createRenderPass()
 		output_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
 
-		VkSubpassDescription gui_subpass = {};
-		gui_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		gui_subpass.colorAttachmentCount = 1;
-		gui_subpass.pColorAttachments = &output_attachement_ref;
+		VkSubpassDescription hud_subpass = {};
+		hud_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		hud_subpass.colorAttachmentCount = 1;
+		hud_subpass.pColorAttachments = &output_attachement_ref;
 
 		std::vector<VkSubpassDescription> subpasses = {
-			gui_subpass
+			hud_subpass
 		};
 
 
@@ -1663,6 +1715,52 @@ void VulkanAPI::createRenderPass()
 
 		VK_CHECK(
 			vkCreateRenderPass(device, &render_pass_info, nullptr, &hud_render_pass),
+			"Failed to create render pass"
+		);
+	}
+
+	{ // item icon render pass
+		VkAttachmentDescription color_attachement_description = {};
+		color_attachement_description.format = item_icon_images.format;
+		color_attachement_description.samples = VK_SAMPLE_COUNT_1_BIT;
+		color_attachement_description.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		color_attachement_description.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		color_attachement_description.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		color_attachement_description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		color_attachement_description.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		color_attachement_description.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+		std::vector<VkAttachmentDescription> attachments = {
+			color_attachement_description
+		};
+
+
+		VkAttachmentReference color_attachement_ref = {};
+		color_attachement_ref.attachment = 0;
+		color_attachement_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+
+		VkSubpassDescription subpass = {};
+		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		subpass.colorAttachmentCount = 1;
+		subpass.pColorAttachments = &color_attachement_ref;
+
+		std::vector<VkSubpassDescription> subpasses = {
+			subpass
+		};
+
+
+		VkRenderPassCreateInfo render_pass_info = {};
+		render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		render_pass_info.pAttachments = attachments.data();
+		render_pass_info.subpassCount = static_cast<uint32_t>(subpasses.size());
+		render_pass_info.pSubpasses = subpasses.data();
+		render_pass_info.dependencyCount = 0;
+		render_pass_info.pDependencies = nullptr;
+
+		VK_CHECK(
+			vkCreateRenderPass(device, &render_pass_info, nullptr, &prerender_item_icon_render_pass),
 			"Failed to create render pass"
 		);
 	}
@@ -1785,8 +1883,8 @@ void VulkanAPI::createPipelines()
 	{ // shadow map pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = shadow_map_depth_attachement.extent2D;
-		pipeline_info.geom_path = "shaders/rasterization/shadow/shadow_shader.geom.spv";
 		pipeline_info.vert_path = "shaders/rasterization/shadow/shadow_shader.vert.spv";
+		pipeline_info.geom_path = "shaders/rasterization/shadow/shadow_shader.geom.spv";
 		pipeline_info.frag_path = "shaders/rasterization/shadow/shadow_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		std::vector<VkVertexInputAttributeDescription> attribute_descriptions = {
@@ -1885,6 +1983,45 @@ void VulkanAPI::createPipelines()
 		hud_pipeline = Pipeline(device, pipeline_info);
 	}
 
+	{ // Prerender item icon pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = item_icon_images.extent2D;
+		pipeline_info.vert_path = "shaders/rasterization/misc/prerender_item_icon_shader.vert.spv";
+		pipeline_info.geom_path = "shaders/rasterization/misc/prerender_item_icon_shader.geom.spv";
+		pipeline_info.frag_path = "shaders/rasterization/misc/prerender_item_icon_shader.frag.spv";
+		pipeline_info.binding_description = ItemVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = ItemVertex::getAttributeDescriptions();
+		pipeline_info.color_formats = { item_icon_images.format };
+		pipeline_info.descriptor_set_layouts = {
+			block_textures_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, 0, sizeof(PreRenderItemIconPushConstant) }
+		};
+		pipeline_info.render_pass = prerender_item_icon_render_pass;
+		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
+
+		prerender_item_icon_pipeline = Pipeline(device, pipeline_info);
+	}
+
+	{ // Item icon pipeline
+		Pipeline::CreateInfo pipeline_info = {};
+		pipeline_info.extent = output_attachement.extent2D;
+		pipeline_info.vert_path = "shaders/rasterization/hud/item_icon_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/hud/item_icon_shader.frag.spv";
+		pipeline_info.color_formats = { output_attachement.format };
+		pipeline_info.descriptor_set_layouts = {
+			item_icon_descriptor.layout
+		};
+		pipeline_info.push_constant_ranges = {
+			{ VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ItemIconPushConstant) }
+		};
+		pipeline_info.render_pass = hud_render_pass;
+		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_VIEWPORT };
+		pipeline_info.enable_alpha_blending = true;
+
+		item_icon_pipeline = Pipeline(device, pipeline_info);
+	}
 }
 
 void VulkanAPI::createFramebuffers()
@@ -1982,6 +2119,25 @@ void VulkanAPI::createFramebuffers()
 		);
 	}
 
+	{ // item icon framebuffer
+		std::vector<VkImageView> attachments = {
+			item_icon_images.view
+		};
+
+		VkFramebufferCreateInfo framebuffer_info = {};
+		framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebuffer_info.renderPass = prerender_item_icon_render_pass;
+		framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+		framebuffer_info.pAttachments = attachments.data();
+		framebuffer_info.width = item_icon_images.extent2D.width;
+		framebuffer_info.height = item_icon_images.extent2D.height;
+		framebuffer_info.layers = item_icon_images.array_layers;
+
+		VK_CHECK(
+			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &prerender_item_icon_framebuffer),
+			"Failed to create framebuffer"
+		);
+	}
 }
 
 void VulkanAPI::createMeshes()
@@ -2313,6 +2469,79 @@ void VulkanAPI::destroyTracy()
 	TracyVkDestroy(ctx);
 }
 
+
+void VulkanAPI::prerenderItemIconImages()
+{
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
+
+	VkRenderPassBeginInfo render_pass_info = {};
+	render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	render_pass_info.renderPass = prerender_item_icon_render_pass;
+	render_pass_info.framebuffer = prerender_item_icon_framebuffer;
+	render_pass_info.renderArea.offset = { 0, 0 };
+	render_pass_info.renderArea.extent = item_icon_images.extent2D;
+	VkClearValue clear_color = { 0.0f, 0.0f, 0.0f, 0.0f };
+	render_pass_info.clearValueCount = 1;
+	render_pass_info.pClearValues = &clear_color;
+
+	vkCmdBeginRenderPass(command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
+
+	vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, prerender_item_icon_pipeline.pipeline);
+
+	std::vector<VkDescriptorSet> descriptor_sets = { block_textures_descriptor.set };
+	vkCmdBindDescriptorSets(
+		command_buffer,
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		prerender_item_icon_pipeline.layout,
+		0,
+		static_cast<uint32_t>(descriptor_sets.size()),
+		descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
+	// should probably fit the model bounding box or something like that
+	const glm::mat4 clip = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.0f, 0.0f, 0.5f, 1.0f
+	};
+	glm::mat4 proj = glm::ortho(
+		-1.0f, 1.0f,
+		-1.0f, 1.0f,
+		0.0f, 5.0f
+	);
+	glm::mat4 view = glm::lookAt(
+		glm::vec3(2.0f, 2.0f, 2.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f)
+	);
+	glm::mat4 model = glm::mat4(1.0f);
+
+	PreRenderItemIconPushConstant push_constants = {};
+	push_constants.MVP = clip * proj * view * model;
+
+	for (size_t i = 0; i < Items::list.size(); i++)
+	{
+		push_constants.layer = i;
+
+		drawMesh(
+			command_buffer,
+			prerender_item_icon_pipeline,
+			Items::list[i].mesh_id,
+			&push_constants,
+			sizeof(PreRenderItemIconPushConstant),
+			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT
+		);
+	}
+
+	vkCmdEndRenderPass(command_buffer);
+
+	command_buffer.end();
+}
+
+
 VkCommandBuffer VulkanAPI::beginSingleTimeCommands()
 {
 	VK_CHECK(
@@ -2371,6 +2600,7 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 
 
 void VulkanAPI::drawMesh(
+	VkCommandBuffer command_buffer,
 	const Pipeline & pipeline,
 	const uint64_t mesh_id,
 	const void * push_constants,
@@ -2401,14 +2631,14 @@ void VulkanAPI::drawMesh(
 	const VkBuffer vertex_buffers[] = { mesh.buffer };
 	const VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(
-		draw_command_buffers[current_frame],
+		command_buffer,
 		0, 1,
 		vertex_buffers,
 		offsets
 	);
 
 	vkCmdBindIndexBuffer(
-		draw_command_buffers[current_frame],
+		command_buffer,
 		mesh.buffer,
 		mesh.index_offset,
 		VK_INDEX_TYPE_UINT32
@@ -2417,7 +2647,7 @@ void VulkanAPI::drawMesh(
 	if (push_constants_size > 0)
 	{
 		vkCmdPushConstants(
-			draw_command_buffers[current_frame],
+			command_buffer,
 			pipeline.layout,
 			push_constants_stage,
 			0,
@@ -2427,7 +2657,7 @@ void VulkanAPI::drawMesh(
 	}
 
 	vkCmdDrawIndexed(
-		draw_command_buffers[current_frame],
+		command_buffer,
 		static_cast<uint32_t>(mesh.index_count),
 		1, 0, 0, 0
 	);
@@ -2447,6 +2677,34 @@ void VulkanAPI::drawHudImage(
 		descriptor.sets.data(),
 		0,
 		nullptr
+	);
+
+	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);
+
+	vkCmdDraw(
+		draw_command_buffers[current_frame],
+		6,
+		1,
+		0,
+		0
+	);
+}
+
+void VulkanAPI::drawItemIcon(
+	const VkViewport & viewport,
+	const uint32_t layer
+)
+{
+	ItemIconPushConstant push_constants = {};
+	push_constants.layer = layer;
+
+	vkCmdPushConstants(
+		draw_command_buffers[current_frame],
+		item_icon_pipeline.layout,
+		VK_SHADER_STAGE_FRAGMENT_BIT,
+		0,
+		sizeof(ItemIconPushConstant),
+		&push_constants
 	);
 
 	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);
