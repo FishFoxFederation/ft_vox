@@ -12,6 +12,7 @@
 #include "CreateMeshData.hpp"
 #include "List.hpp"
 #include "TextRenderer.hpp"
+#include "ShaderCommun.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -183,43 +184,6 @@ struct UBO
 	std::vector<VkBuffer> buffers;
 	std::vector<VkDeviceMemory> memory;
 	std::vector<void *> mapped_memory;
-};
-
-struct ViewProjMatrices
-{
-	glm::mat4 view;
-	glm::mat4 proj;
-};
-
-struct ModelMatrice
-{
-	glm::mat4 model;
-};
-
-struct EntityMatrices
-{
-	glm::mat4 model;
-	glm::vec4 color;
-};
-
-struct ShadowMapLight
-{
-	glm::mat4 view_proj[8];
-	// TODO: this is vec4 because of alignment, but it should be float
-	glm::vec4 plane_distances[8];
-	glm::vec3 light_dir;
-	float blend_distance;
-};
-
-struct PreRenderItemIconPushConstant
-{
-	glm::mat4 MVP;
-	int layer;
-};
-
-struct ItemIconPushConstant
-{
-	int layer;
 };
 
 struct AtmosphereParams

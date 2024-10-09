@@ -1,13 +1,14 @@
 #version 450 core
 
+#include "common.glsl"
+
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
 layout(push_constant) uniform PushConstants
 {
-	mat4 mvp;
-	int layer;
-}pc;
+	PreRenderItemIconPushConstant pc;
+};
 
 layout(location = 0) in vec3 vert_normal[];
 layout(location = 1) in vec3 vert_tex_coords[];

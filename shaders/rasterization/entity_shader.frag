@@ -1,10 +1,11 @@
 #version 450
 
+#include "common.glsl"
+
 layout(push_constant) uniform PushConstants
 {
-	mat4 model;
-	vec4 color;
-}pc;
+	EntityMatrices pc;
+};
 
 layout(location = 0) in vec3 fragNorm;
 
