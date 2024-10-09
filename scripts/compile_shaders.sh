@@ -4,7 +4,7 @@ shader_files=$(find shaders -type f -name "*.geom" -o -name "*.vert" -o -name "*
 
 for file in $shader_files
 do
-	./external/glslc/glslc $file -o $file.spv --target-spv=spv1.4
+	./external/glslc/glslc $file -o $file.spv --target-spv=spv1.4 -Ishaders
 	if [ $? -ne 0 ]; then
 		echo "Failed to compile $file"
 		exit 1

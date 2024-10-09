@@ -1,11 +1,13 @@
 #version 450
 
-layout(location = 0) in vec3 positions;
+#include "common.glsl"
 
 layout(push_constant) uniform PushConstants
 {
-	mat4 model;
-}pc;
+	ModelMatrice pc;
+};
+
+layout(location = 0) in vec3 positions;
 
 void main()
 {

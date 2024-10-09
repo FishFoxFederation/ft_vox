@@ -3,19 +3,15 @@
 #extension GL_EXT_debug_printf : enable
 #extension GL_EXT_scalar_block_layout : enable
 
-#define SHADOW_MAP_COUNT 8
+#include "common.glsl"
 
 layout(set = 0, binding = 0) uniform CameraMatrices
 {
-	mat4 view;
-	mat4 projection;
-}cm;
+	ViewProjMatrices cm;
+};
 layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
 {
-	mat4 lightSpaceMatrices[SHADOW_MAP_COUNT];
-	vec4 planeDistances[SHADOW_MAP_COUNT];
-	vec3 lightDir;
-	float blendDistance;
+	ShadowMapLight shadow_map_light;
 };
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
 layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
@@ -31,7 +27,7 @@ layout(location = 0) out vec4 out_color;
 
 float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int layer)
 {
-	vec4 fragPosLightSpace = lightSpaceMatrices[layer] * world_space_pos;
+	vec4 fragPosLightSpace = shadow_map_light.view_proj[layer] * world_space_pos;
 	// perform perspective divide
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 	// transform to [0,1] range (Vulkan's Z is already in [0..1])
@@ -51,7 +47,7 @@ float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int laye
 
 	// return full shadow if the fragment is facing away from the light
 	vec3 normal = normalize(frag_normal);
-	if (dot(normal, lightDir) < 0.0)
+	if (dot(normal, shadow_map_light.light_dir) < 0.0)
 	{
 		return 1.0;
 	}
@@ -103,14 +99,14 @@ float compute_shadow_factor(
 	int layer = -1;
 	float blendFactor = 0.0;
 	bool blend = false;
-	for (int i = 0; i < SHADOW_MAP_COUNT; i++)
+	for (int i = 0; i < SHADOW_MAP_MAX_COUNT; i++)
 	{
-		if (depthValue < planeDistances[i].x)
+		if (depthValue < shadow_map_light.plane_distances[i].x)
 		{
 			layer = i;
-			if (i < SHADOW_MAP_COUNT - 1 && depthValue > planeDistances[i].x - blendDistance)
+			if (i < SHADOW_MAP_MAX_COUNT - 1 && depthValue > shadow_map_light.plane_distances[i].x - shadow_map_light.blend_distance)
 			{
-				blendFactor = (blendDistance + depthValue - planeDistances[i].x) / blendDistance;
+				blendFactor = (shadow_map_light.blend_distance + depthValue - shadow_map_light.plane_distances[i].x) / shadow_map_light.blend_distance;
 				blend = true;
 			}
 			break;
@@ -118,7 +114,7 @@ float compute_shadow_factor(
 	}
 	if (layer == -1)
 	{
-		layer = SHADOW_MAP_COUNT;
+		layer = SHADOW_MAP_MAX_COUNT;
 	}
 
 	if (blend)

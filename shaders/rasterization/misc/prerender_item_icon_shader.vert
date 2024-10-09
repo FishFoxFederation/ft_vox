@@ -1,10 +1,11 @@
 #version 450
 
+#include "common.glsl"
+
 layout(push_constant) uniform PushConstants
 {
-	mat4 mvp;
-	int layer;
-}pc;
+	PreRenderItemIconPushConstant pc;
+};
 
 layout(location = 0) in vec3 positions;
 layout(location = 1) in vec3 normal;
@@ -16,7 +17,7 @@ layout(location = 1) out vec3 fragTexCoords;
 
 void main()
 {
-	gl_Position = pc.mvp * vec4(positions, 1.0);
+	gl_Position = pc.MVP * vec4(positions, 1.0);
 
 	fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);
