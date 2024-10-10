@@ -10,6 +10,7 @@ var searchData=
   ['playerlistpacket_7',['PlayerListPacket',['../classPlayerListPacket.html',1,'']]],
   ['playermodel_8',['PlayerModel',['../classPlayerModel.html',1,'']]],
   ['playermovepacket_9',['PlayerMovePacket',['../classPlayerMovePacket.html',1,'']]],
-  ['playerrenderdata_10',['PlayerRenderData',['../structWorldScene_1_1PlayerRenderData.html',1,'WorldScene']]],
-  ['poller_11',['Poller',['../classPoller.html',1,'']]]
+  ['playermoving_10',['PlayerMoving',['../classEvent_1_1PlayerMoving.html',1,'Event']]],
+  ['playerrenderdata_11',['PlayerRenderData',['../structWorldScene_1_1PlayerRenderData.html',1,'WorldScene']]],
+  ['poller_12',['Poller',['../classPoller.html',1,'']]]
 ];

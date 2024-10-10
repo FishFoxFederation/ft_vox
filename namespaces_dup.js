@@ -1,5 +1,6 @@
 var namespaces_dup =
 [
+    [ "Event", "namespaceEvent.html", "namespaceEvent" ],
     [ "Sound", "namespaceSound.html", "namespaceSound" ],
     [ "std", "namespacestd.html", "namespacestd" ],
     [ "vk_helper", "namespacevk__helper.html", [

@@ -1,5 +1,12 @@
 var annotated_dup =
 [
+    [ "Event", "namespaceEvent.html", [
+      [ "AbstractEvent", "classEvent_1_1AbstractEvent.html", "classEvent_1_1AbstractEvent" ],
+      [ "HandlerWrapper", "classEvent_1_1HandlerWrapper.html", "classEvent_1_1HandlerWrapper" ],
+      [ "HandlerWrapperInterface", "classEvent_1_1HandlerWrapperInterface.html", "classEvent_1_1HandlerWrapperInterface" ],
+      [ "Manager", "classEvent_1_1Manager.html", "classEvent_1_1Manager" ],
+      [ "PlayerMoving", "classEvent_1_1PlayerMoving.html", "classEvent_1_1PlayerMoving" ]
+    ] ],
     [ "Sound", "namespaceSound.html", [
       [ "Data", "classSound_1_1Data.html", "classSound_1_1Data" ],
       [ "DataChunk", "structSound_1_1DataChunk.html", "structSound_1_1DataChunk" ],

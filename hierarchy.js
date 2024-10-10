@@ -1,5 +1,8 @@
 var hierarchy =
 [
+    [ "Event::AbstractEvent", "classEvent_1_1AbstractEvent.html", [
+      [ "Event::PlayerMoving", "classEvent_1_1PlayerMoving.html", null ]
+    ] ],
     [ "Application", "classApplication.html", null ],
     [ "AtmosphereParams", "structAtmosphereParams.html", null ],
     [ "Atomic< T >", "classAtomic.html", null ],
@@ -39,6 +42,9 @@ var hierarchy =
     [ "Face", "structFace.html", null ],
     [ "Sound::FMTChunk", "structSound_1_1FMTChunk.html", null ],
     [ "WorldGenerator::genInfo", "structWorldGenerator_1_1genInfo.html", null ],
+    [ "Event::HandlerWrapperInterface", "classEvent_1_1HandlerWrapperInterface.html", [
+      [ "Event::HandlerWrapper< EventType >", "classEvent_1_1HandlerWrapper.html", null ]
+    ] ],
     [ "ServerWorld::Ticket::hash", "structServerWorld_1_1Ticket_1_1hash.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
     [ "std::hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", null ],
@@ -76,6 +82,7 @@ var hierarchy =
     [ "JoinThreads", "classJoinThreads.html", null ],
     [ "LineVertex", "structLineVertex.html", null ],
     [ "Logger", "classLogger.html", null ],
+    [ "Event::Manager", "classEvent_1_1Manager.html", null ],
     [ "Mat4", "classMat4.html", null ],
     [ "Mesh", "structMesh.html", null ],
     [ "WorldScene::MeshRenderData", "structWorldScene_1_1MeshRenderData.html", null ],

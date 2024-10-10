@@ -40,6 +40,7 @@ var classPlayer =
     [ "flying", "classPlayer.html#a9084b2ce7b780355ab0dd3b6df0ead19", null ],
     [ "gameMode", "classPlayer.html#a39ad689468b2763f5b735a5e4fb78113", null ],
     [ "gravity", "classPlayer.html#a2ea78fd8cb75bda147dcd592d259a2a4", null ],
+    [ "ground_block", "classPlayer.html#aa611c288503015402acd86aa6c45e51e", null ],
     [ "hitbox", "classPlayer.html#aa47053be56466d5290fb346782946529", null ],
     [ "jump_force", "classPlayer.html#a917e00c68233d0d719b764e0ca8dfca7", null ],
     [ "jump_remaining", "classPlayer.html#ae3bc5504d2ac3d8fd40354c7e92c1656", null ],

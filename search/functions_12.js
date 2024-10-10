@@ -13,6 +13,7 @@ var searchData=
   ['transitionimagelayout_10',['transitionImageLayout',['../classVulkanAPI.html#a48f6b428d99ea240a6ebdc1ad4dba0cd',1,'VulkanAPI']]],
   ['transitionlayout_11',['transitionLayout',['../classImage.html#accc61110a5c1048242212d482c63f5c8',1,'Image']]],
   ['translate_12',['translate',['../classMat4.html#ad2746477f1d64566df1db42792dd0022',1,'Mat4']]],
-  ['try_5flock_13',['try_lock',['../classStatus.html#aa01d58908a9c84614bbfd0db352ccab4',1,'Status']]],
-  ['try_5flock_5fshared_14',['try_lock_shared',['../classStatus.html#a2dc3f38c68d1264ee9a0e9c088b907b0',1,'Status']]]
+  ['triggerevent_13',['triggerEvent',['../classEvent_1_1Manager.html#a03622d14fc20b1c7d3ae025b62787ac2',1,'Event::Manager']]],
+  ['try_5flock_14',['try_lock',['../classStatus.html#aa01d58908a9c84614bbfd0db352ccab4',1,'Status']]],
+  ['try_5flock_5fshared_15',['try_lock_shared',['../classStatus.html#a2dc3f38c68d1264ee9a0e9c088b907b0',1,'Status']]]
 ];

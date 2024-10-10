@@ -79,7 +79,8 @@ var NAVTREE =
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ]
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -112,14 +113,14 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"AudioData_8cpp.html",
-"World_8hpp_source.html",
-"classConnectionPacket.html#ac4e67287d0606a3f6d34813f1f87a9d6",
-"classMob.html#a9291eb09ed8333a6189c98242783ed19",
-"classServerWorld.html",
-"classVulkanAPI.html#a760a68bd1116cac8ed2756832cea2020",
-"functions_y.html",
-"structSound_1_1FMTChunk.html#a13bbdd29a6d01432b8797299b0de1740"
+"AbstractEvent_8cpp.html",
+"VulkanMemoryAllocator_8hpp_source.html",
+"classConnectionPacket.html#a1720e2359dfb00268e3542fd7449afb9",
+"classIncomingPacketList.html#ad4a824f2a0fd3821d7bba9e8f10f10c4",
+"classPlayerMovePacket.html#ac42bf5390c649565b2ef954e7a5e6a96",
+"classVulkanAPI.html#a05b49068f5c9218b7422d6074d897f64",
+"functions_func_o.html",
+"structPipeline_1_1CreateInfo.html#a9a7242854bbd28737eeb70e4b19fe553"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
