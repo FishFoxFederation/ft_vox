@@ -1,11 +1,15 @@
 #version 450
 
-layout(location = 0) in vec3 fragColors;
+#include "common.glsl"
+
+layout(push_constant) uniform PushConstants
+{
+	LinePipelinePushConstant pc;
+};
 
 layout(location = 0) out vec4 outColor;
 
 void main()
 {
-    // outColor = vec4(fragColors, 1.0);
-	outColor = vec4(0.0, 0.0, 0.0, 1.0);
+	outColor = pc.color;
 }
