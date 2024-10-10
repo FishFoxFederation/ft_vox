@@ -563,37 +563,37 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 								blockY,
 								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
-							BlockID to_set = BlockID::Air;
+							BlockInfo::Type to_set = BlockInfo::Type::Air;
 
 							{
 								if (isOcean)
 								{
 									if (position.y < reliefValue)
-										to_set = BlockID::Stone;
+										to_set = BlockInfo::Type::Stone;
 									else if (position.y < 80)
-										to_set = BlockID::Water;
+										to_set = BlockInfo::Type::Water;
 									else
-										to_set = BlockID::Air;
+										to_set = BlockInfo::Type::Air;
 								}
 								else if (isCoast)
 								{
 									if (position.y > 80)
 									{
 										if (position.y < reliefValue - 5)
-											to_set = BlockID::Stone;
+											to_set = BlockInfo::Type::Stone;
 										else if (position.y < reliefValue - 1 )
-											to_set = BlockID::Dirt;
+											to_set = BlockInfo::Type::Dirt;
 										else if (position.y < reliefValue)
-											to_set = BlockID::Grass;
+											to_set = BlockInfo::Type::Grass;
 										else
-											to_set = BlockID::Air;
+											to_set = BlockInfo::Type::Air;
 									}
 									else
 									{
 										if (position.y < reliefValue)
-											to_set = BlockID::Stone;
+											to_set = BlockInfo::Type::Stone;
 										else
-											to_set = BlockID::Water;
+											to_set = BlockInfo::Type::Water;
 									}
 								}
 								else if (isLand)
@@ -601,27 +601,27 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 									(void)riverValue;
 									//check to see wether above or below the relief value
 									// if (reliefValue > position.y)
-										// to_set = BlockID::Stone;
+										// to_set = BlockInfo::Type::Stone;
 									// else if (reliefValue + 5 > position.y)
 									// {
 									// 	if (riverValue < 0.05f)
-									// 		to_set = BlockID::Water;
+									// 		to_set = BlockInfo::Type::Water;
 									// 	else
-									// 		to_set = BlockID::Grass;
+									// 		to_set = BlockInfo::Type::Grass;
 									// }
 									// else
-										// to_set = BlockID::Air;
+										// to_set = BlockInfo::Type::Air;
 									if (position.y < reliefValue - 5)
-										to_set = BlockID::Stone;
+										to_set = BlockInfo::Type::Stone;
 									else if (position.y < reliefValue - 1)
-										to_set = BlockID::Dirt;
+										to_set = BlockInfo::Type::Dirt;
 									else if (position.y < reliefValue)
-										to_set = BlockID::Grass;
+										to_set = BlockInfo::Type::Grass;
 									else
-										to_set = BlockID::Air;
+										to_set = BlockInfo::Type::Air;
 								}
 								// if (isCoast)
-								// 	to_set = BlockID::Glass;
+								// 	to_set = BlockInfo::Type::Glass;
 							}
 							chunk->setBlock(blockX, blockY, blockZ, to_set);
 						}
