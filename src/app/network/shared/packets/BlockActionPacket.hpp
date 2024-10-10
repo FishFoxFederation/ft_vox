@@ -12,7 +12,7 @@ public:
 	};
 
 	BlockActionPacket();
-	BlockActionPacket(BlockID block_id, glm::vec3 position, Action action);
+	BlockActionPacket(BlockInfo::Type block_id, glm::vec3 position, Action action);
 	~BlockActionPacket();
 
 	BlockActionPacket(const BlockActionPacket& other);
@@ -34,15 +34,15 @@ public:
 	 * ATTRIBUTES
 	 * *****************************/
 
-	BlockID		GetBlockID() const;
+	BlockInfo::Type		GetBlockID() const;
 	glm::vec3	GetPosition() const;
 	Action		GetAction() const;
 
-	void		SetBlockID(BlockID block_id);
+	void		SetBlockID(BlockInfo::Type block_id);
 	void		SetPosition(glm::vec3 position);
 	void		SetAction(Action action);
 private:
-	BlockID		m_block_id;
+	BlockInfo::Type		m_block_id;
 	glm::vec3	m_position;
 	Action		m_action;
 };

@@ -118,7 +118,7 @@ std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const in
 		{
 			for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 			{
-				chunk->setBlock(blockX, blockY, blockZ, BlockID::Stone);
+				chunk->setBlock(blockX, blockY, blockZ, BlockInfo::Type::Stone);
 			}
 		}
 	}
@@ -161,30 +161,30 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 					blockY,
 					blockZ + z * CHUNK_Z_SIZE
 				);
-				BlockID to_set;
+				BlockInfo::Type to_set;
 
 				{
 					//check to see wether above or below the relief value
 					if (reliefValue > position.y)
-						to_set = BlockID::Stone;
+						to_set = BlockInfo::Type::Stone;
 					else if (reliefValue + 5 > position.y)
 					{
 						if (riverValue < 0.05f)
-							to_set = BlockID::Water;
+							to_set = BlockInfo::Type::Water;
 						else
-							to_set = BlockID::Grass;
+							to_set = BlockInfo::Type::Grass;
 					}
 					else
-						to_set = BlockID::Air;
+						to_set = BlockInfo::Type::Air;
 				}
 
 				// //if above relief value and below 200 place water
-				// if (to_set == BlockID::Air && position.y < 200)
-				// 	to_set = BlockID::Water;
+				// if (to_set == BlockInfo::Type::Air && position.y < 200)
+				// 	to_set = BlockInfo::Type::Water;
 
 				//if below relief value try to carve a cave
-				if (to_set != BlockID::Air && to_set != BlockID::Water && generateCaveBlock(position) == BlockID::Air)
-					to_set = BlockID::Air;
+				if (to_set != BlockInfo::Type::Air && to_set != BlockInfo::Type::Water && generateCaveBlock(position) == BlockInfo::Type::Air)
+					to_set = BlockInfo::Type::Air;
 				// try {
 				column->setBlock(blockX, blockY, blockZ, to_set);
 				// } catch (std::exception & e)
@@ -214,19 +214,19 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunk(const int & x, const int & 
 					blockY + y * CHUNK_Y_SIZE,
 					blockZ + z * CHUNK_Z_SIZE
 				);
-				BlockID to_set;
+				BlockInfo::Type to_set;
 
 				// if( position.y == 128)
-				// 	to_set = Block::Air;
+				// 	to_set = BlockInfo::Air;
 				// else
 				// {
 					to_set = generateReliefBlock(position);
-					if (to_set != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
-						to_set = BlockID::Air;
+					if (to_set != BlockInfo::Type::Air && generateCaveBlock(position) == BlockInfo::Type::Air)
+						to_set = BlockInfo::Type::Air;
 				// }
-				// if (to_set != Block::Air && position.y > 128)
+				// if (to_set != BlockInfo::Air && position.y > 128)
 				// {
-				// 	to_set = Block::Grass;
+				// 	to_set = BlockInfo::Grass;
 				// }
 				chunk->setBlock(blockX, blockY, blockZ, to_set);
 			}
@@ -235,20 +235,20 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunk(const int & x, const int & 
 	return chunk;
 }
 
-BlockID WorldGenerator::generateReliefBlock(glm::ivec3 position)
+BlockInfo::Type WorldGenerator::generateReliefBlock(glm::ivec3 position)
 {
 	float value = generateReliefValue(glm::ivec2(position.x, position.z));
 
 	value *= CHUNK_Y_SIZE;
 
 	if (value > position.y)
-		return BlockID::Stone;
+		return BlockInfo::Type::Stone;
 	// else if (value > -0.05f && value < 0.05f)
-		// chunk.setBlock(blockX, blockY, blockZ, Block::Air);
+		// chunk.setBlock(blockX, blockY, blockZ, BlockInfo::Air);
 	else if (value + 3 > position.y)
-		return BlockID::Grass;
+		return BlockInfo::Type::Grass;
 	else
-		return BlockID::Air;
+		return BlockInfo::Type::Air;
 }
 
 /**
@@ -280,7 +280,7 @@ float WorldGenerator::generateReliefValue(glm::ivec2 position)
 	return value;
 }
 
-BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
+BlockInfo::Type WorldGenerator::generateCaveBlock(glm::ivec3 position)
 {
 
 
@@ -309,7 +309,7 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 	// m_called++;
 
 	if (value < threshold)
-		return BlockID::Air;
+		return BlockInfo::Type::Air;
 
 	// else try to create cheese cave
 
@@ -333,11 +333,11 @@ BlockID WorldGenerator::generateCaveBlock(glm::ivec3 position)
 		edge = 0;
 
 	if (valueA > 0 && valueA < edge)
-		return BlockID::Air;
+		return BlockInfo::Type::Air;
 	else
-		return BlockID::Stone;
+		return BlockInfo::Type::Stone;
 
-	return BlockID::Stone;
+	return BlockInfo::Type::Stone;
 }
 
 static void setSkyLight(
@@ -354,10 +354,10 @@ static void setSkyLight(
 		{
 			const glm::ivec3 block_chunk_pos = glm::ivec3(x, CHUNK_Y_SIZE - 1, z);
 			const glm::ivec3 block_world_pos = chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
-			const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
-			if (!Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
+			const BlockInfo::Type block_id = start_chunk->getBlock(block_chunk_pos);
+			if (!g_blocks_info.hasProperty(block_id, BLOCK_PROPERTY_OPAQUE))
 			{
-				const int absorbed_light = Block::getData(block_id).absorb_light;
+				const int absorbed_light = g_blocks_info.get(block_id).absorb_light;
 				const int new_light = 15 - absorbed_light;
 				start_chunk->setSkyLight(block_chunk_pos, new_light);
 				light_queue.push(block_world_pos);
@@ -383,7 +383,7 @@ static void setSkyLight(
 		const glm::ivec3 block_chunk_pos = getBlockChunkPos(current_block_world_pos);
 		std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
 
-		// const BlockID current_id = chunk->getBlock(block_chunk_pos);
+		// const BlockInfo::Type current_id = chunk->getBlock(block_chunk_pos);
 		const int current_light = chunk->getSkyLight(block_chunk_pos);
 
 		if (current_light == 0)
@@ -398,12 +398,12 @@ static void setSkyLight(
 			if (chunks.contains(neighbor_chunk_pos))
 			{
 				std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
-				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+				const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 				const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
 
-				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+				if (!g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
 				{
-					const int absorbed_light = Block::getData(neighbor_id).absorb_light;
+					const int absorbed_light = g_blocks_info.get(neighbor_id).absorb_light;
 					const int new_light = current_light - absorbed_light - (i == 3 ? 0 : 1); // -1 if not below
 					if (neighbor_light < new_light)
 					{
@@ -432,10 +432,10 @@ static void setBlockLight(
 			{
 				const glm::ivec3 block_chunk_pos = glm::ivec3(x, y, z);
 				const glm::ivec3 block_world_pos = chunk_pos * CHUNK_SIZE_IVEC3 + block_chunk_pos;
-				const BlockID block_id = start_chunk->getBlock(block_chunk_pos);
-				if (Block::hasProperty(block_id, BLOCK_PROPERTY_LIGHT))
+				const BlockInfo::Type block_id = start_chunk->getBlock(block_chunk_pos);
+				if (g_blocks_info.hasProperty(block_id, BLOCK_PROPERTY_LIGHT))
 				{
-					const int emit_light = Block::getData(block_id).emit_light;
+					const int emit_light = g_blocks_info.get(block_id).emit_light;
 					start_chunk->setBlockLight(block_chunk_pos, emit_light);
 					light_queue.push(block_world_pos);
 				}
@@ -461,7 +461,7 @@ static void setBlockLight(
 		const glm::ivec3 block_chunk_pos = getBlockChunkPos(current_block_world_pos);
 		std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
 
-		// const BlockID current_id = chunk->getBlock(block_chunk_pos);
+		// const BlockInfo::Type current_id = chunk->getBlock(block_chunk_pos);
 		const int current_light = chunk->getBlockLight(block_chunk_pos);
 
 		if (current_light == 0)
@@ -476,12 +476,12 @@ static void setBlockLight(
 			if (chunks.contains(neighbor_chunk_pos))
 			{
 				std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
-				const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+				const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 				const int neighbor_light = neighbor_chunk->getBlockLight(neighbor_block_chunk_pos);
 
-				if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+				if (!g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
 				{
-					const int absorbed_light = Block::getData(neighbor_id).absorb_light;
+					const int absorbed_light = g_blocks_info.get(neighbor_id).absorb_light;
 					const int new_light = current_light - absorbed_light - 1;
 					if (neighbor_light < new_light)
 					{
@@ -529,21 +529,21 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 								blockY,
 								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
-							BlockID to_set;
+							BlockInfo::Type to_set;
 
 							{
 								//check to see wether above or below the relief value
 								if (reliefValue > position.y)
-									to_set = BlockID::Stone;
+									to_set = BlockInfo::Type::Stone;
 								else if (reliefValue + 5 > position.y)
 								{
 									if (riverValue < 0.05f)
-										to_set = BlockID::Water;
+										to_set = BlockInfo::Type::Water;
 									else
-										to_set = BlockID::Grass;
+										to_set = BlockInfo::Type::Grass;
 								}
 								else
-									to_set = BlockID::Air;
+									to_set = BlockInfo::Type::Air;
 							}
 							chunk->setBlock(blockX, blockY, blockZ, to_set);
 						}
@@ -574,10 +574,10 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 								blockY,
 								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
-							BlockID current_block = chunk->getBlock(blockX, blockY, blockZ);
+							BlockInfo::Type current_block = chunk->getBlock(blockX, blockY, blockZ);
 
-							if (current_block != BlockID::Air && generateCaveBlock(position) == BlockID::Air)
-								chunk->setBlock(blockX, blockY, blockZ, BlockID::Air);
+							if (current_block != BlockInfo::Type::Air && generateCaveBlock(position) == BlockInfo::Type::Air)
+								chunk->setBlock(blockX, blockY, blockZ, BlockInfo::Type::Air);
 						}
 					}
 				}

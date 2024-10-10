@@ -105,7 +105,7 @@ private:
 
 	std::string debug_text;
 
-	std::array<Item::Type, 9> toolbar_items;
+	std::array<ItemInfo::Type, 9> toolbar_items;
 	int toolbar_cursor_index = 0;
 
 

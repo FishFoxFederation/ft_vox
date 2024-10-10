@@ -366,7 +366,7 @@ void ClientWorld::doBlockSets()
 		while(1)
 		{
 			glm::vec3 position;
-			BlockID block_id;
+			BlockInfo::Type block_id;
 			glm::vec3 block_chunk_position;
 			glm::vec3 chunk_position;
 			glm::ivec2 chunk_position2D;
@@ -555,7 +555,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	}
 	else
 	{
-		player->ground_block = BlockID::Air;
+		player->ground_block = BlockInfo::Type::Air;
 	}
 
 	player->on_ground = on_ground;
@@ -782,7 +782,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 		// );
 
 		// std::lock_guard lock(m_blocks_to_set_mutex);
-		// m_blocks_to_set.push({player->targeted_block.block_position, Block::Air.id});
+		// m_blocks_to_set.push({player->targeted_block.block_position, BlockInfo::Type::Air});
 
 		return std::make_pair(true, player->targeted_block.block_position);
 	}
@@ -805,7 +805,7 @@ ClientWorld::PlayerUseResult ClientWorld::playerUse(
 		return {false, glm::vec3(0.0)};
 	player->startUse();
 
-	Item::Type item_type = player->toolbar_items.at(player->toolbar_cursor);
+	ItemInfo::Type item_type = player->toolbar_items.at(player->toolbar_cursor);
 
 	{ // update player attack animation
 		std::lock_guard lock(m_world_scene.m_player_mutex);
@@ -824,13 +824,13 @@ ClientWorld::PlayerUseResult ClientWorld::playerUse(
 		if (isColliding(
 			player->hitbox,
 			player->transform.position,
-			Block::getData(player->targeted_block.block).hitbox,
+			g_blocks_info.get(player->targeted_block.block).hitbox,
 			block_placed_position
 		))
 			return {false, glm::vec3(0.0), item_type};
 
 		// std::lock_guard lock(m_blocks_to_set_mutex);
-		// m_blocks_to_set.push({block_placed_position, Block::Stone.id});
+		// m_blocks_to_set.push({block_placed_position, BlockInfo::Stone.id});
 		return {true, block_placed_position, item_type};
 	}
 	return {false, glm::vec3(0.0), item_type};
@@ -1093,12 +1093,12 @@ bool ClientWorld::hitboxCollisionWithBlock(
 					continue;
 
 				chunk->status.lock_shared();
-				BlockID block_id = chunk->getBlock(block_chunk_position);
+				BlockInfo::Type block_id = chunk->getBlock(block_chunk_position);
 				chunk->status.unlock_shared();
 
-				if (Block::hasProperty(block_id, block_properties))
+				if (g_blocks_info.hasProperty(block_id, block_properties))
 				{
-					HitBox block_hitbox = Block::getData(block_id).hitbox;
+					HitBox block_hitbox = g_blocks_info.get(block_id).hitbox;
 
 					if (isColliding(hitbox, position, block_hitbox, block_position))
 					{
@@ -1148,10 +1148,10 @@ RayCastOnBlockResult ClientWorld::rayCastOnBlock(
 			if (chunk != nullptr)
 			{
 				chunk->status.lock_shared();
-				BlockID block_id = chunk->getBlock(block_chunk_position);
+				BlockInfo::Type block_id = chunk->getBlock(block_chunk_position);
 				chunk->status.unlock_shared();
 
-				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
+				if (g_blocks_info.hasProperty(block_id, BLOCK_PROPERTY_SOLID))
 				{
 					// for now treat all blocks as cubes
 					glm::vec3 normal = glm::vec3(0.0f);
@@ -1205,7 +1205,7 @@ RayCastOnBlockResult ClientWorld::rayCastOnBlock(
 		glm::vec3(0.0f),
 		glm::vec3(0.0f),
 		glm::vec3(0.0f),
-		BlockID::Air,
+		BlockInfo::Type::Air,
 		false
 	};
 }
@@ -1240,7 +1240,7 @@ void ClientWorld::removePlayer(const uint64_t player_id)
 	}
 }
 
-void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockID & block_id)
+void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockInfo::Type & block_id)
 {
 	std::lock_guard lock(m_blocks_to_set_mutex);
 	m_blocks_to_set.push({position, block_id});

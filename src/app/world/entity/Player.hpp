@@ -24,7 +24,7 @@ struct RayCastOnBlockResult
 	glm::vec3 block_position;
 	glm::vec3 normal;
 	glm::vec3 hit_position;
-	BlockID block;
+	BlockInfo::Type block;
 	bool inside_block;
 };
 
@@ -97,7 +97,7 @@ public:
 	bool jumping = false;
 	bool swimming = false;
 
-	BlockID ground_block = BlockID::Air;
+	BlockInfo::Type ground_block = BlockInfo::Type::Air;
 
 	Transform transform = Transform({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0});
 	HitBox hitbox = HitBox({-0.3, 0, -0.3}, {0.6, 1.8, 0.6});
@@ -111,23 +111,23 @@ public:
 	double yaw = 0.0;
 	double pitch = 0.0;
 
-	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), Block::Air.id, false};
+	RayCastOnBlockResult targeted_block{false, glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0), BlockInfo::Type::Air, false};
 
 	uint64_t connection_id = 0;
 	uint64_t player_id = 0;
 	uint64_t player_ticket_id = 0;
 
 
-	std::array<Item::Type, 9> toolbar_items = {
-		Item::Type::GrassBlock,
-		Item::Type::DirtBlock,
-		Item::Type::StoneBlock,
-		Item::Type::WaterBlock,
-		Item::Type::GlassBlock,
-		Item::Type::LightBlock,
-		Item::Type::None,
-		Item::Type::None,
-		Item::Type::None
+	std::array<ItemInfo::Type, 9> toolbar_items = {
+		ItemInfo::Type::GrassBlock,
+		ItemInfo::Type::DirtBlock,
+		ItemInfo::Type::StoneBlock,
+		ItemInfo::Type::WaterBlock,
+		ItemInfo::Type::GlassBlock,
+		ItemInfo::Type::LightBlock,
+		ItemInfo::Type::None,
+		ItemInfo::Type::None,
+		ItemInfo::Type::None
 	};
 	int toolbar_cursor = 0;
 
