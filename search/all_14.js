@@ -22,6 +22,7 @@ var searchData=
   ['updatethread_2ecpp_19',['UpdateThread.cpp',['../UpdateThread_8cpp.html',1,'']]],
   ['updatethread_2ehpp_20',['UpdateThread.hpp',['../UpdateThread_8hpp.html',1,'']]],
   ['ups_21',['ups',['../classDebugGui.html#a9324388f937008f1670d57e780ccf7e1',1,'DebugGui']]],
-  ['usage_22',['usage',['../structImage_1_1CreateInfo.html#aac48dd32aae5bac47a262927516a9f81',1,'Image::CreateInfo']]],
-  ['used_5fby_5fframe_23',['used_by_frame',['../structMesh.html#ae9c8ca91934b5f535e62d2637a3d400a',1,'Mesh']]]
+  ['usage_22',['usage',['../structBuffer_1_1CreateInfo.html#aad2b342293cedfb68e3f4e92d0de2614',1,'Buffer::CreateInfo::usage()'],['../structImage_1_1CreateInfo.html#aac48dd32aae5bac47a262927516a9f81',1,'Image::CreateInfo::usage()']]],
+  ['used_5fby_5fframe_23',['used_by_frame',['../structMesh.html#ae9c8ca91934b5f535e62d2637a3d400a',1,'Mesh']]],
+  ['used_5fitem_24',['used_item',['../structClientWorld_1_1PlayerUseResult.html#aab79305d1d54d4bb302fe7cdbf488dc7',1,'ClientWorld::PlayerUseResult']]]
 ];

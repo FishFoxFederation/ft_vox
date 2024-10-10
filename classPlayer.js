@@ -56,6 +56,8 @@ var classPlayer =
     [ "sprinting", "classPlayer.html#a5f126c4eb73164722430f85dd2e4f1d4", null ],
     [ "swimming", "classPlayer.html#a1ce76a62694de65a9f47e2b6ebda3725", null ],
     [ "targeted_block", "classPlayer.html#a7fbacb030211a06f1342a56603b51802", null ],
+    [ "toolbar_cursor", "classPlayer.html#a50c627af08b58cc3435671d583afa0a4", null ],
+    [ "toolbar_items", "classPlayer.html#ae3808467ff1cb6a54de3c0d40fedc728", null ],
     [ "transform", "classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d", null ],
     [ "velocity", "classPlayer.html#aa467fcbbb25423c22972d0f520e94fd1", null ],
     [ "view_mode", "classPlayer.html#aac46fc99a79a19b208a7057f7814225d", null ],

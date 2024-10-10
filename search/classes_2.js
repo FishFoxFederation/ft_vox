@@ -16,6 +16,6 @@ var searchData=
   ['connection_13',['Connection',['../classConnection.html',1,'']]],
   ['connectionpacket_14',['ConnectionPacket',['../classConnectionPacket.html',1,'']]],
   ['connectionsocket_15',['ConnectionSocket',['../classConnectionSocket.html',1,'']]],
-  ['createinfo_16',['CreateInfo',['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
+  ['createinfo_16',['CreateInfo',['../structBuffer_1_1CreateInfo.html',1,'Buffer::CreateInfo'],['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
   ['createmeshdata_17',['CreateMeshData',['../classCreateMeshData.html',1,'']]]
 ];

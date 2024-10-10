@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['absorb_5flight_0',['absorb_light',['../structData.html#ab0e802851062e818b918b6170a9c78bb',1,'Data']]],
+  ['absorb_5flight_0',['absorb_light',['../structBlockData.html#a545b975527d3d7e7377a64a7e97f36b1',1,'BlockData']]],
   ['abstractevent_1',['AbstractEvent',['../classEvent_1_1AbstractEvent.html#a0d9d7e2b0fb8f428a9b3be78dcc81f79',1,'Event::AbstractEvent::AbstractEvent()'],['../classEvent_1_1AbstractEvent.html',1,'Event::AbstractEvent']]],
   ['abstractevent_2ecpp_2',['AbstractEvent.cpp',['../AbstractEvent_8cpp.html',1,'']]],
   ['abstractevent_2ehpp_3',['AbstractEvent.hpp',['../AbstractEvent_8hpp.html',1,'']]],
@@ -12,10 +12,10 @@ var searchData=
   ['addcomponent_9',['addComponent',['../classECS.html#a739775aaafcccb7e7e5a7b1f45a3b2dc',1,'ECS']]],
   ['addplayer_10',['addPlayer',['../classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f',1,'ClientWorld']]],
   ['addticket_11',['addTicket',['../classServerWorld.html#a57b09255108fe8e16e112fbc9d1b05fa',1,'ServerWorld']]],
-  ['air_12',['Air',['../structBlock.html#abb1008ce22b49dd675adb4e2a57a1c60',1,'Block::Air()'],['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a71c546fa61f3964d72bdf25223b78669',1,'Air():&#160;Block.hpp']]],
-  ['allocatedmemorycount_13',['allocatedMemoryCount',['../classVulaknMemoryAllocator.html#a60913e108db4f217d055b60dad4dc5cf',1,'VulaknMemoryAllocator']]],
-  ['allocatedmemorysize_14',['allocatedMemorySize',['../classVulaknMemoryAllocator.html#a1e8bdce0ad9934c59a9cee1fabbf96fd',1,'VulaknMemoryAllocator']]],
-  ['allocatememory_15',['allocateMemory',['../classVulaknMemoryAllocator.html#abc18cb0bcf63d92384bb7c88b95d22bf',1,'VulaknMemoryAllocator']]],
+  ['air_12',['Air',['../structBlock.html#aeeb410194f0c94778b413433e5d5f52c',1,'Block::Air()'],['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a71c546fa61f3964d72bdf25223b78669',1,'Air():&#160;Block.hpp']]],
+  ['allocatedmemorycount_13',['allocatedMemoryCount',['../classVulkanMemoryAllocator.html#ab8d3db71c669fb28d4575524da62ded3',1,'VulkanMemoryAllocator']]],
+  ['allocatedmemorysize_14',['allocatedMemorySize',['../classVulkanMemoryAllocator.html#ac45613880412485ef9804eec271269b9',1,'VulkanMemoryAllocator']]],
+  ['allocatememory_15',['allocateMemory',['../classVulkanMemoryAllocator.html#ae5322646819de17ff53cff19642e7ea7',1,'VulkanMemoryAllocator']]],
   ['alternative_5fmain_2ecpp_16',['alternative_main.cpp',['../alternative__main_8cpp.html',1,'']]],
   ['angle_17',['angle',['../classPlayerModel_1_1WalkAnimation.html#aaaa593b12fe7394b1fa3429c9918e00e',1,'PlayerModel::WalkAnimation']]],
   ['anglex_18',['angleX',['../classPlayerModel_1_1AttackAnimation.html#a54de7fbd78d3aa24f830ba485d4c37ee',1,'PlayerModel::AttackAnimation']]],

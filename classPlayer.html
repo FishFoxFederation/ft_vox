@@ -246,6 +246,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a5eff2a91101a259c208f1aab98a6eda9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac816c2d75be6b91def176df1eb92b806"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ac816c2d75be6b91def176df1eb92b806">player_ticket_id</a> = 0</td></tr>
 <tr class="separator:ac816c2d75be6b91def176df1eb92b806"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3808467ff1cb6a54de3c0d40fedc728"><td class="memItemLeft" align="right" valign="top">std::array&lt; <a class="el" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bac">Item::Type</a>, 9 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ae3808467ff1cb6a54de3c0d40fedc728">toolbar_items</a></td></tr>
+<tr class="separator:ae3808467ff1cb6a54de3c0d40fedc728"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50c627af08b58cc3435671d583afa0a4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a50c627af08b58cc3435671d583afa0a4">toolbar_cursor</a> = 0</td></tr>
+<tr class="separator:a50c627af08b58cc3435671d583afa0a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a72e63c4dee307c57567fe40a08bb292d" name="a72e63c4dee307c57567fe40a08bb292d"></a>
@@ -1094,6 +1098,52 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a id="a50c627af08b58cc3435671d583afa0a4" name="a50c627af08b58cc3435671d583afa0a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50c627af08b58cc3435671d583afa0a4">&#9670;&#160;</a></span>toolbar_cursor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Player::toolbar_cursor = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae3808467ff1cb6a54de3c0d40fedc728" name="ae3808467ff1cb6a54de3c0d40fedc728"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3808467ff1cb6a54de3c0d40fedc728">&#9670;&#160;</a></span>toolbar_items</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;<a class="el" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bac">Item::Type</a>, 9&gt; Player::toolbar_items</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca3f838d433c2e02c97194e9356c55b51a">Item::Type::GrassBlock</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca20f3dcb57070288ee0ddf10cc74f0227">Item::Type::DirtBlock</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca3cbcd79e6f222546fb99ee953e9be064">Item::Type::StoneBlock</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca2ab9cca6084f8f97f1cea26ffe5519ee">Item::Type::WaterBlock</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bacae1181c592b58c854544170da195ef749">Item::Type::GlassBlock</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bacaa298bd451b145dd41effea6e7cb2f0c5">Item::Type::LightBlock</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca6adf97f83acf6453d4a6a4b1070f3754">Item::Type::None</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca6adf97f83acf6453d4a6a4b1070f3754">Item::Type::None</a>,</div>
+<div class="line">        <a class="code hl_enumvalue" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca6adf97f83acf6453d4a6a4b1070f3754">Item::Type::None</a></div>
+<div class="line">    }</div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07baca20f3dcb57070288ee0ddf10cc74f0227"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca20f3dcb57070288ee0ddf10cc74f0227">Item::Type::DirtBlock</a></div><div class="ttdeci">@ DirtBlock</div></div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07baca2ab9cca6084f8f97f1cea26ffe5519ee"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca2ab9cca6084f8f97f1cea26ffe5519ee">Item::Type::WaterBlock</a></div><div class="ttdeci">@ WaterBlock</div></div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07baca3cbcd79e6f222546fb99ee953e9be064"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca3cbcd79e6f222546fb99ee953e9be064">Item::Type::StoneBlock</a></div><div class="ttdeci">@ StoneBlock</div></div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07baca3f838d433c2e02c97194e9356c55b51a"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca3f838d433c2e02c97194e9356c55b51a">Item::Type::GrassBlock</a></div><div class="ttdeci">@ GrassBlock</div></div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07baca6adf97f83acf6453d4a6a4b1070f3754"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07baca6adf97f83acf6453d4a6a4b1070f3754">Item::Type::None</a></div><div class="ttdeci">@ None</div></div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07bacaa298bd451b145dd41effea6e7cb2f0c5"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bacaa298bd451b145dd41effea6e7cb2f0c5">Item::Type::LightBlock</a></div><div class="ttdeci">@ LightBlock</div></div>
+<div class="ttc" id="aclassItem_html_a80deca8a41c4d2865748ae8ba8b07bacae1181c592b58c854544170da195ef749"><div class="ttname"><a href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bacae1181c592b58c854544170da195ef749">Item::Type::GlassBlock</a></div><div class="ttdeci">@ GlassBlock</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a2bbab5a2f0739cb231d161e9ed479b9d" name="a2bbab5a2f0739cb231d161e9ed479b9d"></a>

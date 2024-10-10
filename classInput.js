@@ -11,5 +11,6 @@ var classInput =
     [ "getCursorPos", "classInput.html#af27940a5ccc50e41923999fc859033cb", null ],
     [ "getKeyState", "classInput.html#a271f9ae0888e9d9e594a678d54438a39", null ],
     [ "getMouseButtonState", "classInput.html#af6cd2f591860019c65f4ccf7076f195a", null ],
+    [ "getScroll", "classInput.html#af25d84c4040545af992719baa33177ac", null ],
     [ "isCursorCaptured", "classInput.html#abc3e0e7f94a824fbdc65957d51fe6eda", null ]
 ];

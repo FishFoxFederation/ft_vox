@@ -26,13 +26,14 @@ var searchData=
   ['history_3c_20float_2c_20100_20_3e_23',['History&lt; float, 100 &gt;',['../classHistory.html',1,'']]],
   ['history_3c_20float_2c_201000_20_3e_24',['History&lt; float, 1000 &gt;',['../classHistory.html',1,'']]],
   ['history_3c_20size_5ft_2c_20100_20_3e_25',['History&lt; size_t, 100 &gt;',['../classHistory.html',1,'']]],
-  ['hit_26',['hit',['../structRayCastOnBlockResult.html#af41c76ea3f31a96aed257117fd225555',1,'RayCastOnBlockResult']]],
+  ['hit_26',['hit',['../structClientWorld_1_1PlayerUseResult.html#adf7842724d6b6b37b3c243b873e3a789',1,'ClientWorld::PlayerUseResult::hit()'],['../structRayCastOnBlockResult.html#af41c76ea3f31a96aed257117fd225555',1,'RayCastOnBlockResult::hit()']]],
   ['hit_5fposition_27',['hit_position',['../structRayCastOnBlockResult.html#a1b2c364f714039f75448327f8761323e',1,'RayCastOnBlockResult']]],
-  ['hitbox_28',['HitBox',['../classHitBox.html',1,'HitBox'],['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default']]],
-  ['hitbox_29',['hitbox',['../structData.html#a13ca4e62b7ef5bc1fb3e56b1de438d7a',1,'Data::hitbox()'],['../classMob.html#a0c11b0314eced9673f0ce74792361b4c',1,'Mob::hitbox()'],['../classPlayer.html#aa47053be56466d5290fb346782946529',1,'Player::hitbox()']]],
-  ['hitbox_2ecpp_30',['HitBox.cpp',['../HitBox_8cpp.html',1,'']]],
-  ['hitbox_2ehpp_31',['HitBox.hpp',['../HitBox_8hpp.html',1,'']]],
-  ['hud_5fframebuffers_32',['hud_framebuffers',['../classVulkanAPI.html#a27cf544260c51fd169353b10c6607233',1,'VulkanAPI']]],
-  ['hud_5fpipeline_33',['hud_pipeline',['../classVulkanAPI.html#a96888336776595c476b4f5922008638c',1,'VulkanAPI']]],
-  ['hud_5frender_5fpass_34',['hud_render_pass',['../classVulkanAPI.html#a08cef78415d715935de317f9e69df12e',1,'VulkanAPI']]]
+  ['hitbox_28',['HitBox',['../classHitBox.html',1,'']]],
+  ['hitbox_29',['hitbox',['../structBlockData.html#a8dd1f278e7fab6931ef31d80617403cf',1,'BlockData::hitbox()'],['../classMob.html#a0c11b0314eced9673f0ce74792361b4c',1,'Mob::hitbox()'],['../classPlayer.html#aa47053be56466d5290fb346782946529',1,'Player::hitbox()']]],
+  ['hitbox_30',['HitBox',['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default']]],
+  ['hitbox_2ecpp_31',['HitBox.cpp',['../HitBox_8cpp.html',1,'']]],
+  ['hitbox_2ehpp_32',['HitBox.hpp',['../HitBox_8hpp.html',1,'']]],
+  ['hud_5fframebuffers_33',['hud_framebuffers',['../classVulkanAPI.html#a27cf544260c51fd169353b10c6607233',1,'VulkanAPI']]],
+  ['hud_5fpipeline_34',['hud_pipeline',['../classVulkanAPI.html#a96888336776595c476b4f5922008638c',1,'VulkanAPI']]],
+  ['hud_5frender_5fpass_35',['hud_render_pass',['../classVulkanAPI.html#a08cef78415d715935de317f9e69df12e',1,'VulkanAPI']]]
 ];

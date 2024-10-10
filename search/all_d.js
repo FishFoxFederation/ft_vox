@@ -14,12 +14,13 @@ var searchData=
   ['neut_11',['NEUT',['../classCreateMeshData.html#a5f075a1c439c7a4316214c1e1ad759a0af464f33765f31f59f6f7886ae4f85926',1,'CreateMeshData']]],
   ['next_5fmesh_5fid_12',['next_mesh_id',['../classVulkanAPI.html#a6ebdad6fe938979f82df36ab8796a6c7',1,'VulkanAPI']]],
   ['nextid_13',['nextId',['../classIdGenerator.html#acfd2b8b0efb3d131509575b961333b69',1,'IdGenerator']]],
-  ['noise_14',['noise',['../classPerlin.html#a5e65dd9a201248a3d27da333d42bbd70',1,'Perlin::noise(const float &amp;x) const'],['../classPerlin.html#acd2456017152d413ce1f14d4726fff6c',1,'Perlin::noise(const glm::vec2 &amp;v) const'],['../classPerlin.html#ae571597e43864f2e2d35fcb3af2fa68c',1,'Perlin::noise(const glm::vec3 &amp;v) const']]],
+  ['noise_14',['noise',['../classPerlin.html#acd2456017152d413ce1f14d4726fff6c',1,'Perlin::noise(const glm::vec2 &amp;v) const'],['../classPerlin.html#ae571597e43864f2e2d35fcb3af2fa68c',1,'Perlin::noise(const glm::vec3 &amp;v) const'],['../classPerlin.html#a5e65dd9a201248a3d27da333d42bbd70',1,'Perlin::noise(const float &amp;x) const']]],
   ['none_15',['NONE',['../classInput.html#a0be44bf062481fd4b60c21607a2ee50aab50339a10e1de285ac99d4c3990b8693',1,'Input']]],
-  ['normal_16',['normal',['../structPlayerModel_1_1Vertex.html#a028cacefdf8dd9ea4c852797966cb747',1,'PlayerModel::Vertex::normal()'],['../structObjVertex.html#a8738d2fd21588dbe1cf1c644192c6c36',1,'ObjVertex::normal()'],['../structEntityVertex.html#ae751b23c5f929c9407723ace1263644a',1,'EntityVertex::normal()'],['../structBlockVertex.html#aaf98e3657aea0f75a5601d73aa1a52a3',1,'BlockVertex::normal()'],['../structRayCastOnBlockResult.html#afa3d886e9c79eca27405f9fc62b728f1',1,'RayCastOnBlockResult::normal()']]],
-  ['normalindex_17',['normalIndex',['../structFace.html#a00626d19b7221a5a9abe11f35833e1b9',1,'Face']]],
-  ['ntl_18',['ntl',['../classViewFrustum.html#afd88c0f94ae5fc640b58bbe6f51eebb8',1,'ViewFrustum']]],
-  ['ntr_19',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]],
-  ['num_5fchannels_20',['num_channels',['../structSound_1_1FMTChunk.html#a3c7582ff04823929f1158bfc0dd4eef8',1,'Sound::FMTChunk::num_channels()'],['../classSound_1_1Data.html#a2f10a6704fdb642d6c9b82f88c8e4331',1,'Sound::Data::num_channels()']]],
-  ['num_5fsamples_21',['num_samples',['../classSound_1_1Data.html#af774ce5cd6690b807abd6f7467f08ad9',1,'Sound::Data']]]
+  ['none_16',['None',['../classItem.html#a80deca8a41c4d2865748ae8ba8b07baca6adf97f83acf6453d4a6a4b1070f3754',1,'Item']]],
+  ['normal_17',['normal',['../structPlayerModel_1_1Vertex.html#a028cacefdf8dd9ea4c852797966cb747',1,'PlayerModel::Vertex::normal()'],['../structObjVertex.html#a8738d2fd21588dbe1cf1c644192c6c36',1,'ObjVertex::normal()'],['../structEntityVertex.html#ae751b23c5f929c9407723ace1263644a',1,'EntityVertex::normal()'],['../structItemVertex.html#a1080d9d4c63eb2a3f0ce08a2d9800efa',1,'ItemVertex::normal()'],['../structBlockVertex.html#aaf98e3657aea0f75a5601d73aa1a52a3',1,'BlockVertex::normal()'],['../structRayCastOnBlockResult.html#afa3d886e9c79eca27405f9fc62b728f1',1,'RayCastOnBlockResult::normal()']]],
+  ['normalindex_18',['normalIndex',['../structFace.html#a00626d19b7221a5a9abe11f35833e1b9',1,'Face']]],
+  ['ntl_19',['ntl',['../classViewFrustum.html#afd88c0f94ae5fc640b58bbe6f51eebb8',1,'ViewFrustum']]],
+  ['ntr_20',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]],
+  ['num_5fchannels_21',['num_channels',['../structSound_1_1FMTChunk.html#a3c7582ff04823929f1158bfc0dd4eef8',1,'Sound::FMTChunk::num_channels()'],['../classSound_1_1Data.html#a2f10a6704fdb642d6c9b82f88c8e4331',1,'Sound::Data::num_channels()']]],
+  ['num_5fsamples_22',['num_samples',['../classSound_1_1Data.html#af774ce5cd6690b807abd6f7467f08ad9',1,'Sound::Data']]]
 ];

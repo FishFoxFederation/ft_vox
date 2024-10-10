@@ -4,7 +4,7 @@ var searchData=
   ['ecs_1',['ECS',['../classECS.html',1,'ECS'],['../classECS.html#a08c1a2f42b48e1ab2d2b2e920e1cd665',1,'ECS::ECS(ECS &amp;&amp;other)=delete'],['../classECS.html#a770488554384d17e0a437c713a9b82f8',1,'ECS::ECS(ECS &amp;other)=delete'],['../classECS.html#a7fba8bcfbb8d238085ab7302d96a332f',1,'ECS::ECS()']]],
   ['ecs_2ehpp_2',['ECS.hpp',['../ECS_8hpp.html',1,'']]],
   ['elapsed_3',['elapsed',['../classTimer.html#aed63e63649306ee13ffc02c28e2e8311',1,'Timer']]],
-  ['emit_5flight_4',['emit_light',['../structData.html#a0d9d44ae924027f52127e2302d497ba7',1,'Data']]],
+  ['emit_5flight_4',['emit_light',['../structBlockData.html#a4e604efee68ec1cc90403242d4bae3b7',1,'BlockData']]],
   ['empty_5',['EMPTY',['../classChunk.html#ada26dbdea430b4b05379f7124c0a9b40aba2b45bdc11e2a4a6e86aab2ac693cbb',1,'Chunk']]],
   ['empty_6',['empty',['../classIncomingPacketList.html#af72d903b8cf3985c378d488d1d60689e',1,'IncomingPacketList']]],
   ['enable_5falpha_5fblending_7',['enable_alpha_blending',['../structPipeline_1_1CreateInfo.html#a25e64b656083d8b970deb9cda588d088',1,'Pipeline::CreateInfo']]],

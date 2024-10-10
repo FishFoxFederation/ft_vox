@@ -1,7 +1,7 @@
 var searchData=
 [
   ['earth_5fradius_0',['earth_radius',['../classDebugGui.html#a907d342e33f24d510311e141bb8702a9',1,'DebugGui::earth_radius()'],['../structAtmosphereParams.html#ae969f1ceb76b7975c898f1dd0a4da034',1,'AtmosphereParams::earth_radius()']]],
-  ['emit_5flight_1',['emit_light',['../structData.html#a0d9d44ae924027f52127e2302d497ba7',1,'Data']]],
+  ['emit_5flight_1',['emit_light',['../structBlockData.html#a4e604efee68ec1cc90403242d4bae3b7',1,'BlockData']]],
   ['enable_5falpha_5fblending_2',['enable_alpha_blending',['../structPipeline_1_1CreateInfo.html#a25e64b656083d8b970deb9cda588d088',1,'Pipeline::CreateInfo']]],
   ['ended_3',['ended',['../structSound_1_1Instance.html#a3061aea8b34cb0bfdcc5064007995418',1,'Sound::Instance']]],
   ['entity_5fids_4',['entity_ids',['../classChunk.html#aa9be7205972b0ef732c338037f717cef',1,'Chunk']]],

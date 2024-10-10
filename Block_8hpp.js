@@ -1,6 +1,6 @@
 var Block_8hpp =
 [
-    [ "Data", "structData.html", "structData" ],
+    [ "BlockData", "structBlockData.html", "structBlockData" ],
     [ "Block", "structBlock.html", null ],
     [ "BLOCK_FACE_BACK", "Block_8hpp.html#acdc50e3ae7204b9a9281913ce0c4ed54", null ],
     [ "BLOCK_FACE_BOTTOM", "Block_8hpp.html#aea576020eabcf8b7dca0825e42edf1b2", null ],

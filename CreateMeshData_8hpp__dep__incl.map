@@ -1,15 +1,16 @@
 <map id="src/app/world/CreateMeshData.hpp" name="src/app/world/CreateMeshData.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="444,5,618,45"/>
-<area shape="rect" id="node2" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="596,93,794,119"/>
-<area shape="rect" id="node20" href="$ClientWorld_8hpp.html" title=" " alt="" coords="187,174,382,199"/>
+<area shape="rect" id="node1" title=" " alt="" coords="421,5,596,45"/>
+<area shape="rect" id="node2" href="$VulkanAPI_8hpp.html" title=" " alt="" coords="632,93,830,119"/>
+<area shape="rect" id="node21" href="$ClientWorld_8hpp.html" title=" " alt="" coords="187,174,382,199"/>
 <area shape="rect" id="node3" href="$application_8hpp.html" title=" " alt="" coords="652,438,807,463"/>
 <area shape="rect" id="node7" href="$ClientPacketHandler_8hpp.html" title=" " alt="" coords="262,255,432,295"/>
 <area shape="rect" id="node9" href="$UpdateThread_8hpp.html" title=" " alt="" coords="278,343,432,383"/>
 <area shape="rect" id="node11" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="507,255,718,295"/>
-<area shape="rect" id="node13" href="$NetworkThread_8hpp.html" title=" " alt="" coords="674,167,836,207"/>
-<area shape="rect" id="node15" href="$RenderThread_8hpp.html" title=" " alt="" coords="864,167,1016,207"/>
-<area shape="rect" id="node18" href="$VulkanAPI_8cpp.html" title=" " alt="" coords="1040,174,1238,199"/>
-<area shape="rect" id="node19" href="$chunk__mesh_8cpp.html" title=" " alt="" coords="1262,167,1408,207"/>
+<area shape="rect" id="node13" href="$NetworkThread_8hpp.html" title=" " alt="" coords="650,167,812,207"/>
+<area shape="rect" id="node15" href="$RenderThread_8hpp.html" title=" " alt="" coords="836,167,988,207"/>
+<area shape="rect" id="node18" href="$VulkanAPI_8cpp.html" title=" " alt="" coords="1012,174,1210,199"/>
+<area shape="rect" id="node19" href="$chunk__mesh_8cpp.html" title=" " alt="" coords="1234,167,1380,207"/>
+<area shape="rect" id="node20" href="$item__mesh_8cpp.html" title=" " alt="" coords="1404,167,1540,207"/>
 <area shape="rect" id="node4" href="$alternative__main_8cpp.html" title=" " alt="" coords="466,519,628,544"/>
 <area shape="rect" id="node5" href="$application_8cpp.html" title=" " alt="" coords="652,519,807,544"/>
 <area shape="rect" id="node6" href="$main_8cpp.html" title=" " alt="" coords="831,519,927,544"/>
@@ -19,5 +20,5 @@
 <area shape="rect" id="node14" href="$NetworkThread_8cpp.html" title=" " alt="" coords="792,255,955,295"/>
 <area shape="rect" id="node16" href="$CascadedShadowMapping_8cpp.html" title=" " alt="" coords="1206,255,1410,295"/>
 <area shape="rect" id="node17" href="$RenderThread_8cpp.html" title=" " alt="" coords="979,255,1131,295"/>
-<area shape="rect" id="node21" href="$ClientWorld_8cpp.html" title=" " alt="" coords="43,262,238,287"/>
+<area shape="rect" id="node22" href="$ClientWorld_8cpp.html" title=" " alt="" coords="43,262,238,287"/>
 </map>

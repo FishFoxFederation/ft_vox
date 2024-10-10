@@ -12,5 +12,7 @@ var searchData=
   ['playermovepacket_9',['PlayerMovePacket',['../classPlayerMovePacket.html',1,'']]],
   ['playermoving_10',['PlayerMoving',['../classEvent_1_1PlayerMoving.html',1,'Event']]],
   ['playerrenderdata_11',['PlayerRenderData',['../structWorldScene_1_1PlayerRenderData.html',1,'WorldScene']]],
-  ['poller_12',['Poller',['../classPoller.html',1,'']]]
+  ['playeruseresult_12',['PlayerUseResult',['../structClientWorld_1_1PlayerUseResult.html',1,'ClientWorld']]],
+  ['poller_13',['Poller',['../classPoller.html',1,'']]],
+  ['prerenderitemiconpushconstant_14',['PreRenderItemIconPushConstant',['../structPreRenderItemIconPushConstant.html',1,'']]]
 ];

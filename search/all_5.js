@@ -22,7 +22,7 @@ var searchData=
   ['fps_19',['fps',['../classDebugGui.html#ab769bb8977dff721cd5db648458c8f3d',1,'DebugGui']]],
   ['frag_5fpath_20',['frag_path',['../structPipeline_1_1CreateInfo.html#a9a7242854bbd28737eeb70e4b19fe553',1,'Pipeline::CreateInfo']]],
   ['frame_5ftime_5fhistory_21',['frame_time_history',['../classDebugGui.html#ac39ff26773e3f64810069871933c01da',1,'DebugGui']]],
-  ['freememory_22',['freeMemory',['../classVulaknMemoryAllocator.html#ad1c0a8ecac91777362f8db2ee181b15b',1,'VulaknMemoryAllocator']]],
+  ['freememory_22',['freeMemory',['../classVulkanMemoryAllocator.html#adecb8e3b9971b7a47dc5f3e9e84d043c',1,'VulkanMemoryAllocator']]],
   ['front_5fface_23',['front_face',['../structPipeline_1_1CreateInfo.html#a7d4781e1cf4c88222b707fc99bdebc92',1,'Pipeline::CreateInfo']]],
   ['frustum_5fline_5fbuffers_24',['frustum_line_buffers',['../classVulkanAPI.html#a82633a1238d22ee5e5524dbf61423f8e',1,'VulkanAPI']]],
   ['frustum_5fline_5fbuffers_5fmapped_5fmemory_25',['frustum_line_buffers_mapped_memory',['../classVulkanAPI.html#a2d948986f95421aaf88c715c6e724b30',1,'VulkanAPI']]],

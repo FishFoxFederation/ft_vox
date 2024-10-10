@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['data_0',['Data',['../structData.html',1,'Data'],['../classSound_1_1Data.html',1,'Sound::Data']]],
+  ['data_0',['Data',['../classSound_1_1Data.html',1,'Sound']]],
   ['datachunk_1',['DataChunk',['../structSound_1_1DataChunk.html',1,'Sound']]],
   ['debugblock_2',['DebugBlock',['../structWorldScene_1_1DebugBlock.html',1,'WorldScene']]],
   ['debuggui_3',['DebugGui',['../classDebugGui.html',1,'']]],

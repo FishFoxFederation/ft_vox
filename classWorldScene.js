@@ -22,5 +22,8 @@ var classWorldScene =
     [ "chunk_mesh_list", "classWorldScene.html#ad21716e0b0ba9a66b1338020682218ac", null ],
     [ "entity_mesh_list", "classWorldScene.html#a39a8384c40aa13380dcae1d593e6f3cb", null ],
     [ "m_players", "classWorldScene.html#aec9e9052db57d23eafa3acf6d1562baa", null ],
-    [ "show_debug_text", "classWorldScene.html#ab474095db5d0fdbaba9a05a3d5fae4af", null ]
+    [ "show_debug_text", "classWorldScene.html#ab474095db5d0fdbaba9a05a3d5fae4af", null ],
+    [ "toolbar_cursor_index", "classWorldScene.html#af4c1baa7200142d73a36afca4d440905", null ],
+    [ "toolbar_items", "classWorldScene.html#ace972b4193e6ccf9db7d26ad2538c177", null ],
+    [ "toolbar_items_mutex", "classWorldScene.html#aad5b6063a77a929054759c27291a8b88", null ]
 ];

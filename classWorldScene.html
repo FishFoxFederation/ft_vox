@@ -123,7 +123,7 @@ Collaboration diagram for WorldScene:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldScene__coll__graph.png" border="0" usemap="#aWorldScene_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_coll__map" id="aWorldScene_coll__map">
-<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="137,417,283,707"/>
+<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="133,417,287,751"/>
 <area shape="rect" href="classIdList.html" title=" " alt="" coords="5,124,199,355"/>
 <area shape="rect" title=" " alt="" coords="14,5,190,75"/>
 <area shape="rect" href="classIdList.html" title=" " alt="" coords="223,124,416,355"/>
@@ -191,6 +191,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aec9e9052db57d23eafa3acf6d1562baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab474095db5d0fdbaba9a05a3d5fae4af"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#ab474095db5d0fdbaba9a05a3d5fae4af">show_debug_text</a> = false</td></tr>
 <tr class="separator:ab474095db5d0fdbaba9a05a3d5fae4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace972b4193e6ccf9db7d26ad2538c177"><td class="memItemLeft" align="right" valign="top">std::array&lt; <a class="el" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bac">Item::Type</a>, 9 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#ace972b4193e6ccf9db7d26ad2538c177">toolbar_items</a></td></tr>
+<tr class="separator:ace972b4193e6ccf9db7d26ad2538c177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad5b6063a77a929054759c27291a8b88"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aad5b6063a77a929054759c27291a8b88">toolbar_items_mutex</a></td></tr>
+<tr class="separator:aad5b6063a77a929054759c27291a8b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4c1baa7200142d73a36afca4d440905"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#af4c1baa7200142d73a36afca4d440905">toolbar_cursor_index</a> = 0</td></tr>
+<tr class="separator:af4c1baa7200142d73a36afca4d440905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class to hold the world scene. The instance of this class will be accessed by multiple threads so it will include synchronization logic. </p>
@@ -605,6 +611,56 @@ Public Attributes</h2></td></tr>
           <td class="memname">std::atomic&lt;bool&gt; WorldScene::show_debug_text = false</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af4c1baa7200142d73a36afca4d440905" name="af4c1baa7200142d73a36afca4d440905"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4c1baa7200142d73a36afca4d440905">&#9670;&#160;</a></span>toolbar_cursor_index</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;int&gt; WorldScene::toolbar_cursor_index = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ace972b4193e6ccf9db7d26ad2538c177" name="ace972b4193e6ccf9db7d26ad2538c177"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace972b4193e6ccf9db7d26ad2538c177">&#9670;&#160;</a></span>toolbar_items</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;<a class="el" href="classItem.html#a80deca8a41c4d2865748ae8ba8b07bac">Item::Type</a>, 9&gt; WorldScene::toolbar_items</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad5b6063a77a929054759c27291a8b88" name="aad5b6063a77a929054759c27291a8b88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad5b6063a77a929054759c27291a8b88">&#9670;&#160;</a></span>toolbar_items_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex WorldScene::toolbar_items_mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
