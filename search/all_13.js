@@ -48,6 +48,6 @@ var searchData=
   ['translate_45',['translate',['../classMat4.html#ad2746477f1d64566df1db42792dd0022',1,'Mat4']]],
   ['try_5flock_46',['try_lock',['../classStatus.html#aa01d58908a9c84614bbfd0db352ccab4',1,'Status']]],
   ['try_5flock_5fshared_47',['try_lock_shared',['../classStatus.html#a2dc3f38c68d1264ee9a0e9c088b907b0',1,'Status']]],
-  ['type_48',['Type',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569',1,'IPacket::Type()'],['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fc',1,'ServerWorld::BlockUpdateData::Type()']]],
-  ['type_49',['type',['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData']]]
+  ['type_48',['type',['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData']]],
+  ['type_49',['Type',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569',1,'IPacket::Type()'],['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fc',1,'ServerWorld::BlockUpdateData::Type()']]]
 ];

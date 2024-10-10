@@ -15,7 +15,7 @@ var searchData=
   ['hash_3c_20objvertex_20_3e_12',['hash&lt; ObjVertex &gt;',['../structstd_1_1hash_3_01ObjVertex_01_4.html',1,'std']]],
   ['hash_3c_20serverworld_3a_3aticket_20_3e_13',['hash&lt; ServerWorld::Ticket &gt;',['../structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html',1,'std']]],
   ['hashes_2ehpp_14',['hashes.hpp',['../hashes_8hpp.html',1,'']]],
-  ['hasproperty_15',['hasProperty',['../structBlock.html#a4eb13c88e8e43b8c2e3a7c2f328e8893',1,'Block']]],
+  ['hasproperty_15',['hasProperty',['../structBlock.html#a92336b319e55324a36a1ca89c4e379d8',1,'Block::hasProperty(const BlockID id, const BlockProperties properties)'],['../structBlock.html#a1dfbffcacdb898295e09822affc7b93d',1,'Block::hasProperty(const BlockID id, const BlockProperties properties, const BlockProperties not_properties)']]],
   ['head_5fpos_16',['head_pos',['../classPlayerModel.html#abae8362e20e7452d1d8596360731e3db',1,'PlayerModel']]],
   ['head_5fsize_17',['head_size',['../classPlayerModel.html#a7322d348a0cd8abb452cf09e8e90a1f5',1,'PlayerModel']]],
   ['height_18',['height',['../structImGuiTexture.html#a66c085d7946ee7eddd64faf5ee263326',1,'ImGuiTexture']]],

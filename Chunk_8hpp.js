@@ -7,5 +7,7 @@ var Chunk_8hpp =
     [ "CHUNK_X_SIZE", "Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5", null ],
     [ "CHUNK_Y_SIZE", "Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20", null ],
     [ "CHUNK_Z_SIZE", "Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100", null ],
-    [ "ChunkMap", "Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba", null ]
+    [ "ChunkMap", "Chunk_8hpp.html#ae1731276a4c3053e478351f184bc96ba", null ],
+    [ "getBlockChunkPos", "Chunk_8hpp.html#af254eff961efe9d8267f7ded9d858045", null ],
+    [ "getChunkPos", "Chunk_8hpp.html#a13c2796488b0973725a341c85f9bf68a", null ]
 ];

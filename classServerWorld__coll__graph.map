@@ -1,6 +1,6 @@
 <map id="ServerWorld" name="ServerWorld">
-<area shape="rect" id="node1" title=" " alt="" coords="113,667,261,868"/>
-<area shape="rect" id="node2" href="$classWorld.html" title=" " alt="" coords="99,299,275,617"/>
+<area shape="rect" id="node1" title=" " alt="" coords="113,696,261,897"/>
+<area shape="rect" id="node2" href="$classWorld.html" title=" " alt="" coords="99,299,275,647"/>
 <area shape="rect" id="node3" href="$classThreadPoolAccessor.html" title=" " alt="" coords="5,20,175,221"/>
 <area shape="rect" id="node4" href="$classWorldGenerator.html" title=" " alt="" coords="199,5,371,236"/>
 </map>

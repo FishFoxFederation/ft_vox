@@ -23,6 +23,7 @@ var Block_8hpp =
       [ "Dirt", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a7cf334b79a84091f27dfc019b4b79229", null ],
       [ "Stone", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2", null ],
       [ "Water", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a27634ff8002b12e75d98e07ccd005d18", null ],
-      [ "Glass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaae44179fda7ddcbf8916aff53846128", null ]
+      [ "Glass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaae44179fda7ddcbf8916aff53846128", null ],
+      [ "Light", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a9914a0ce04a7b7b6a8e39bec55064b82", null ]
     ] ]
 ];

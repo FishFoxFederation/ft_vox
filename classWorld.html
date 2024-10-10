@@ -121,9 +121,9 @@ Inheritance diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__inherit__graph.png" border="0" usemap="#aWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aWorld_inherit__map" id="aWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="109,5,285,353"/>
-<area shape="rect" href="classClientWorld.html" title=" " alt="" coords="5,401,196,617"/>
-<area shape="rect" href="classServerWorld.html" title=" " alt="" coords="220,409,368,610"/>
+<area shape="rect" title=" " alt="" coords="109,5,285,383"/>
+<area shape="rect" href="classClientWorld.html" title=" " alt="" coords="5,431,196,647"/>
+<area shape="rect" href="classServerWorld.html" title=" " alt="" coords="220,438,368,639"/>
 </map>
 </div>
 <div class="dynheader">
@@ -131,7 +131,7 @@ Collaboration diagram for World:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="99,299,275,617"/>
+<area shape="rect" title=" " alt="" coords="99,299,275,647"/>
 <area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,20,175,221"/>
 <area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,5,371,236"/>
 </map>
@@ -179,6 +179,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a024d70e06aa8f5a8c0dc8025898bfc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a500a24a178550859843850732f9e8f55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a500a24a178550859843850732f9e8f55">insertChunkNoLock</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
 <tr class="separator:a500a24a178550859843850732f9e8f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67642e359f5aeb54ab5a87a1323d5775"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a67642e359f5aeb54ab5a87a1323d5775">updateSkyLight</a> (const glm::ivec3 &amp;block_position)</td></tr>
+<tr class="memdesc:a67642e359f5aeb54ab5a87a1323d5775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the sky light of the chunk containing the block.  <a href="classWorld.html#a67642e359f5aeb54ab5a87a1323d5775">More...</a><br /></td></tr>
+<tr class="separator:a67642e359f5aeb54ab5a87a1323d5775"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ec67043d5b6dce8aa4733bc8503a35c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a0ec67043d5b6dce8aa4733bc8503a35c">updateBlockLight</a> (const glm::ivec3 &amp;block_position)</td></tr>
+<tr class="memdesc:a0ec67043d5b6dce8aa4733bc8503a35c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the block light of the chunk containing the block.  <a href="classWorld.html#a0ec67043d5b6dce8aa4733bc8503a35c">More...</a><br /></td></tr>
+<tr class="separator:a0ec67043d5b6dce8aa4733bc8503a35c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -667,6 +673,74 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ec67043d5b6dce8aa4733bc8503a35c" name="a0ec67043d5b6dce8aa4733bc8503a35c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ec67043d5b6dce8aa4733bc8503a35c">&#9670;&#160;</a></span>updateBlockLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::updateBlockLight </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>block_position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Update the block light of the chunk containing the block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block_position</td><td>the position of the block in the world </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a67642e359f5aeb54ab5a87a1323d5775" name="a67642e359f5aeb54ab5a87a1323d5775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67642e359f5aeb54ab5a87a1323d5775">&#9670;&#160;</a></span>updateSkyLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::updateSkyLight </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
+          <td class="paramname"><em>block_position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Update the sky light of the chunk containing the block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block_position</td><td>the position of the block in the world </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

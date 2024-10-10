@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['spectator_0',['SPECTATOR',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19',1,'Player']]],
-  ['stone_1',['Stone',['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2',1,'Block.hpp']]],
-  ['survival_2',['SURVIVAL',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292da1089b25a43df6bce533f9729d6640317',1,'Player']]]
+  ['random_0',['RANDOM',['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fca170e02e86972c2be8559884cc3c12254',1,'ServerWorld::BlockUpdateData']]],
+  ['released_1',['RELEASED',['../classInput.html#a0be44bf062481fd4b60c21607a2ee50aa109d54efbb64d71f9a6ab18d0fb8add8',1,'Input']]],
+  ['relief_2',['RELIEF',['../classChunk.html#ada26dbdea430b4b05379f7124c0a9b40a6ce749e5dda52baa62b8d952e315ccc6',1,'Chunk']]],
+  ['repeated_3',['REPEATED',['../classInput.html#a0be44bf062481fd4b60c21607a2ee50aa5f7fd05d6eee2cf377a64ae7f4adcd6b',1,'Input']]]
 ];

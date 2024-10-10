@@ -13,6 +13,8 @@ var classWorld =
     [ "TracyLockableN", "classWorld.html#a2aceeb77eacb247872f3c3a1b422cd15", null ],
     [ "TracyLockableN", "classWorld.html#a456108e02a2cf121c20b3436d293614a", null ],
     [ "TracyLockableN", "classWorld.html#a4430c3b7f548d58f0aa64deabf26357c", null ],
+    [ "updateBlockLight", "classWorld.html#a0ec67043d5b6dce8aa4733bc8503a35c", null ],
+    [ "updateSkyLight", "classWorld.html#a67642e359f5aeb54ab5a87a1323d5775", null ],
     [ "m_chunks", "classWorld.html#afe23d5e9f0c87a03212fad1b73249926", null ],
     [ "m_mob_id", "classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05", null ],
     [ "m_mobs", "classWorld.html#a9befd190fce3a87e810b479bbfad356f", null ],

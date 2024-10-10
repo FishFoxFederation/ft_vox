@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['third_5fperson_5fback_0',['THIRD_PERSON_BACK',['../classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8a5ab0e529c894afbf4bc850f1122df09b',1,'Player']]],
-  ['trace_1',['TRACE',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90',1,'Logger']]]
+  ['spectator_0',['SPECTATOR',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292daad7525991fe98a3b121c1c71df633c19',1,'Player']]],
+  ['stone_1',['Stone',['../Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2',1,'Block.hpp']]],
+  ['survival_2',['SURVIVAL',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292da1089b25a43df6bce533f9729d6640317',1,'Player']]]
 ];

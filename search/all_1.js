@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['beta_5fmie_0',['beta_mie',['../classDebugGui.html#a4d0566d3def30d863177ced5c62b862e',1,'DebugGui::beta_mie()'],['../structAtmosphereParams.html#a05c52dad9b664b2204ca44fe506a0948',1,'AtmosphereParams::beta_mie()']]],
+  ['beta_5fmie_0',['beta_mie',['../structAtmosphereParams.html#a05c52dad9b664b2204ca44fe506a0948',1,'AtmosphereParams::beta_mie()'],['../classDebugGui.html#a4d0566d3def30d863177ced5c62b862e',1,'DebugGui::beta_mie()']]],
   ['beta_5frayleigh_1',['beta_rayleigh',['../structAtmosphereParams.html#a8fc984f2211475946f96611451129dc3',1,'AtmosphereParams::beta_rayleigh()'],['../classDebugGui.html#a510640e2f81849f29456590e078b6678',1,'DebugGui::beta_rayleigh()']]],
   ['binding_5fdescription_2',['binding_description',['../structPipeline_1_1CreateInfo.html#a98a9203deb394878a54df0bd399debd7',1,'Pipeline::CreateInfo']]],
   ['bindings_3',['bindings',['../structDescriptor_1_1CreateInfo.html#a2adb4c296c558b7b62ed92771dc8ec55',1,'Descriptor::CreateInfo']]],
   ['blend_5fdistance_4',['blend_distance',['../structShadowMapLight.html#a7ceed06673a71dcafe3454dfa5cba61f',1,'ShadowMapLight']]],
   ['block_5',['Block',['../structBlock.html',1,'']]],
-  ['block_6',['block',['../classCreateMeshData.html#a62f5b52d9f5460c2e38576026fdf5883',1,'CreateMeshData::block(const glm::ivec3 &amp;pos)'],['../classCreateMeshData.html#a52bfd670f68e7e5298d44a73295fdc4c',1,'CreateMeshData::block(const int x, const int y, const int z)'],['../structServerWorld_1_1BlockUpdateData.html#aadf621a9fd9bc2c45c57b91248faa38b',1,'ServerWorld::BlockUpdateData::block()'],['../structRayCastOnBlockResult.html#a9c1b9ca974dc4d1b48f3fc5828f28a21',1,'RayCastOnBlockResult::block()']]],
+  ['block_6',['block',['../structServerWorld_1_1BlockUpdateData.html#aadf621a9fd9bc2c45c57b91248faa38b',1,'ServerWorld::BlockUpdateData::block()'],['../structRayCastOnBlockResult.html#a9c1b9ca974dc4d1b48f3fc5828f28a21',1,'RayCastOnBlockResult::block()']]],
   ['block_2ehpp_7',['Block.hpp',['../Block_8hpp.html',1,'']]],
   ['block_5faction_8',['BLOCK_ACTION',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae',1,'IPacket']]],
   ['block_5fface_5fback_9',['BLOCK_FACE_BACK',['../Block_8hpp.html#acdc50e3ae7204b9a9281913ce0c4ed54',1,'Block.hpp']]],

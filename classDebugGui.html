@@ -119,7 +119,7 @@ Collaboration diagram for DebugGui:</div>
 <div class="dyncontent">
 <div class="center"><img src="classDebugGui__coll__graph.png" border="0" usemap="#aDebugGui_coll__map" alt="Collaboration graph"/></div>
 <map name="aDebugGui_coll__map" id="aDebugGui_coll__map">
-<area shape="rect" title=" " alt="" coords="261,269,427,515"/>
+<area shape="rect" title=" " alt="" coords="258,269,430,515"/>
 <area shape="rect" href="classAtomic.html" title=" " alt="" coords="5,5,152,133"/>
 <area shape="rect" href="classHistory.html" title=" " alt="" coords="176,13,317,126"/>
 <area shape="rect" href="classHistory.html" title=" " alt="" coords="369,13,517,126"/>
@@ -152,6 +152,10 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a534caf562206036d66f3a896f10409b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae630bf16ed5917994648e49ea5f640d0"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ae630bf16ed5917994648e49ea5f640d0">player_velocity</a></td></tr>
 <tr class="separator:ae630bf16ed5917994648e49ea5f640d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c4f0eb830713e86ad4d101d6979ab01"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a8c4f0eb830713e86ad4d101d6979ab01">looked_face_sky_light</a></td></tr>
+<tr class="separator:a8c4f0eb830713e86ad4d101d6979ab01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45a48109e6d7a93d9eae7244efbcbe5b"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a45a48109e6d7a93d9eae7244efbcbe5b">looked_face_block_light</a></td></tr>
+<tr class="separator:a45a48109e6d7a93d9eae7244efbcbe5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac39ff26773e3f64810069871933c01da"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#ac39ff26773e3f64810069871933c01da">frame_time_history</a></td></tr>
 <tr class="separator:ac39ff26773e3f64810069871933c01da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29e6325358b57a6c69acccbdcf0e379e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHistory.html">History</a>&lt; float, 100 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a29e6325358b57a6c69acccbdcf0e379e">cpu_time_history</a></td></tr>
@@ -204,8 +208,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a19a64509ef3f8efdd2c7e1ed32ce274d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cd78a701dbd23879665ec41c43033cd"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a6cd78a701dbd23879665ec41c43033cd">n_light_samples</a> = 4.0f</td></tr>
 <tr class="separator:a6cd78a701dbd23879665ec41c43033cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f065240f685eacbccab5ddbfd0aa328"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDebugGui.html#a0f065240f685eacbccab5ddbfd0aa328">use_raytracing</a> = false</td></tr>
-<tr class="separator:a0f065240f685eacbccab5ddbfd0aa328"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a23e2594d0e7208444ffc46c8b34a5e37" name="a23e2594d0e7208444ffc46c8b34a5e37"></a>
@@ -679,6 +681,50 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a45a48109e6d7a93d9eae7244efbcbe5b" name="a45a48109e6d7a93d9eae7244efbcbe5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45a48109e6d7a93d9eae7244efbcbe5b">&#9670;&#160;</a></span>looked_face_block_light</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;int&gt; DebugGui::looked_face_block_light</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c4f0eb830713e86ad4d101d6979ab01" name="a8c4f0eb830713e86ad4d101d6979ab01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c4f0eb830713e86ad4d101d6979ab01">&#9670;&#160;</a></span>looked_face_sky_light</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;int&gt; DebugGui::looked_face_sky_light</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6cd78a701dbd23879665ec41c43033cd" name="a6cd78a701dbd23879665ec41c43033cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6cd78a701dbd23879665ec41c43033cd">&#9670;&#160;</a></span>n_light_samples</h2>
 
@@ -976,28 +1022,6 @@ Static Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::atomic&lt;uint32_t&gt; DebugGui::ups = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0f065240f685eacbccab5ddbfd0aa328" name="a0f065240f685eacbccab5ddbfd0aa328"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f065240f685eacbccab5ddbfd0aa328">&#9670;&#160;</a></span>use_raytracing</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::atomic&lt;bool&gt; DebugGui::use_raytracing = false</td>
         </tr>
       </table>
   </td>
