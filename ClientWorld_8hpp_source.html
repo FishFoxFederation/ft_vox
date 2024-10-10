@@ -122,218 +122,223 @@ $(document).ready(function(){initNavTree('ClientWorld_8hpp_source.html',''); ini
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="Camera_8hpp.html">Camera.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="World_8hpp.html">World.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;shared_mutex&gt;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;list&gt;</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classClientWorld.html">   20</a></span><span class="keyword">class </span><a class="code hl_class" href="classClientWorld.html">ClientWorld</a> : <span class="keyword">public</span> <a class="code hl_class" href="classWorld.html">World</a></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>{</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <a class="code hl_class" href="classClientWorld.html">ClientWorld</a>(</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp; <a class="code hl_class" href="classWorldScene.html">WorldScene</a>,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vulkanAPI,</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        uint64_t my_player_id = 0</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    );</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <a class="code hl_function" href="classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2">~ClientWorld</a>();</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">   32</a></span>    <a class="code hl_function" href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">ClientWorld</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71">   33</a></span>    <a class="code hl_function" href="classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71">ClientWorld</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6">   34</a></span>    <a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; <a class="code hl_function" href="classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6">operator=</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">   35</a></span>    <a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; <a class="code hl_function" href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">operator=</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a">updateEntities</a>();</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">updateBlock</a>(glm::dvec3 position);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    std::pair&lt;glm::dvec3, glm::dvec3&gt; <a class="code hl_function" href="classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b">calculatePlayerMovement</a>(</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">const</span> uint64_t player_id,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keyword">const</span> int8_t forward,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">const</span> int8_t backward,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keyword">const</span> int8_t left,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">const</span> int8_t right,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">const</span> int8_t up,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keyword">const</span> int8_t down,</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> delta_time_second</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    );</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d">updatePlayerCamera</a>(</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">const</span> uint64_t player_id,</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> x_offset,</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> y_offset</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    );</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a23026d1f22c925ce84a857dfdf5ad1ee">updatePlayerTargetBlock</a>(</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keyword">const</span> uint64_t player_id</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    );</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::pair&lt;bool, glm::vec3&gt; <a class="code hl_function" href="classClientWorld.html#a6af9215e00db9f81aa57c372f94076ba">playerAttack</a>(</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keyword">const</span> uint64_t player_id,</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordtype">bool</span> attack</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    );</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    std::pair&lt;bool, glm::vec3&gt; <a class="code hl_function" href="classClientWorld.html#a9d0b57d1ea29ac3171d6e2171f7622f4">playerUse</a>(</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keyword">const</span> uint64_t player_id,</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordtype">bool</span> use</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    );</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285">changePlayerViewMode</a>(</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keyword">const</span> uint64_t player_id</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    );</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a4f620b1218a121e9da762980863a81bd">updatePlayer</a>(</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keyword">const</span> uint64_t player_id,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_class" href="classPlayer.html">Player</a> &amp;)&gt; update</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    );</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8">createMob</a>();</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a5266ea08f07e22e6c050114d8936db96">updateMobs</a>(</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> delta_time_second</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    );</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7">modifyBlock</a>(</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keyword">const</span> glm::vec3 &amp; position,</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keyword">const</span> <a class="code hl_enumeration" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp; block_id</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    );</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">//Server side</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">   86</a></span>    uint64_t    <a class="code hl_function" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">createPlayer</a>(<span class="keyword">const</span> glm::vec3 &amp; position);</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="comment">//Client side</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f">addPlayer</a>(<span class="keyword">const</span> uint64_t player_id, <span class="keyword">const</span> glm::dvec3 &amp; position);</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#ab5d44cde6ec584aa13cc20e23f627cea">removePlayer</a>(<span class="keyword">const</span> uint64_t player_id);</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#a3cd752b37c26a7e4cd171ba780809bf2">updatePlayerPosition</a>(<span class="keyword">const</span> uint64_t &amp; player_id, <span class="keyword">const</span> glm::dvec3 &amp; position);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d">applyPlayerMovement</a>(<span class="keyword">const</span> uint64_t &amp; player_id, <span class="keyword">const</span> glm::dvec3 &amp; displacement);</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <a class="code hl_class" href="classCamera.html">Camera</a> <a class="code hl_function" href="classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a">getCamera</a>(<span class="keyword">const</span> uint64_t player_id);</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    glm::dvec3 <a class="code hl_function" href="classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50">getPlayerPosition</a>(<span class="keyword">const</span> uint64_t player_id);</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keywordtype">void</span>                    <a class="code hl_function" href="classClientWorld.html#a204e9e1edf450416eaa081171c08e6ab">addChunk</a>(std::shared_ptr&lt;Chunk&gt; chunk);</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordtype">void</span>                    <a class="code hl_function" href="classClientWorld.html#abe665919a07f30afaece37189ac7b361">removeChunk</a>(<span class="keyword">const</span> glm::ivec3 &amp; chunkPosition);</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classClientWorld.html#ac0f3bce19e6ccd73922fa70740508688">  101</a></span>    std::vector&lt;glm::ivec3&gt; <a class="code hl_function" href="classClientWorld.html#ac0f3bce19e6ccd73922fa70740508688">getNeededChunks</a>(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    std::shared_ptr&lt;Chunk&gt; <a class="code hl_function" href="classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8">localGetChunk</a>(<span class="keyword">const</span> glm::ivec3 &amp; position) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="SoundEngine_8hpp.html">SoundEngine.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;shared_mutex&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;list&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classClientWorld.html">   21</a></span><span class="keyword">class </span><a class="code hl_class" href="classClientWorld.html">ClientWorld</a> : <span class="keyword">public</span> <a class="code hl_class" href="classWorld.html">World</a></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>{</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <a class="code hl_class" href="classClientWorld.html">ClientWorld</a>(</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp; <a class="code hl_class" href="classWorldScene.html">WorldScene</a>,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp; vulkanAPI,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_class" href="classSound_1_1Engine.html">Sound::Engine</a> &amp; soundEngine,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        uint64_t my_player_id = 0</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    );</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_function" href="classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2">~ClientWorld</a>();</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">   34</a></span>    <a class="code hl_function" href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">ClientWorld</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71">   35</a></span>    <a class="code hl_function" href="classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71">ClientWorld</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6">   36</a></span>    <a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; <a class="code hl_function" href="classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6">operator=</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">   37</a></span>    <a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp; <a class="code hl_function" href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">operator=</a>(<a class="code hl_class" href="classClientWorld.html">ClientWorld</a> &amp;&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a">updateEntities</a>();</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">updateBlock</a>(glm::dvec3 position);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    std::pair&lt;glm::dvec3, glm::dvec3&gt; <a class="code hl_function" href="classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b">calculatePlayerMovement</a>(</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">const</span> uint64_t player_id,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keyword">const</span> int8_t forward,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">const</span> int8_t backward,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">const</span> int8_t left,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keyword">const</span> int8_t right,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">const</span> int8_t up,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keyword">const</span> int8_t down,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> delta_time_second</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    );</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d">updatePlayerCamera</a>(</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">const</span> uint64_t player_id,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> x_offset,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> y_offset</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    );</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a23026d1f22c925ce84a857dfdf5ad1ee">updatePlayerTargetBlock</a>(</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keyword">const</span> uint64_t player_id</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    );</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    std::pair&lt;bool, glm::vec3&gt; <a class="code hl_function" href="classClientWorld.html#a6af9215e00db9f81aa57c372f94076ba">playerAttack</a>(</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keyword">const</span> uint64_t player_id,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="keywordtype">bool</span> attack</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    );</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    std::pair&lt;bool, glm::vec3&gt; <a class="code hl_function" href="classClientWorld.html#a9d0b57d1ea29ac3171d6e2171f7622f4">playerUse</a>(</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keyword">const</span> uint64_t player_id,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordtype">bool</span> use</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    );</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285">changePlayerViewMode</a>(</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keyword">const</span> uint64_t player_id</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    );</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a4f620b1218a121e9da762980863a81bd">updatePlayer</a>(</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keyword">const</span> uint64_t player_id,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_class" href="classPlayer.html">Player</a> &amp;)&gt; update</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    );</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8">createMob</a>();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#a5266ea08f07e22e6c050114d8936db96">updateMobs</a>(</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> delta_time_second</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    );</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7">modifyBlock</a>(</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keyword">const</span> glm::vec3 &amp; position,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keyword">const</span> <a class="code hl_enumeration" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> &amp; block_id</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    );</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="comment">//Server side</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">   88</a></span>    uint64_t    <a class="code hl_function" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">createPlayer</a>(<span class="keyword">const</span> glm::vec3 &amp; position);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="comment">//Client side</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f">addPlayer</a>(<span class="keyword">const</span> uint64_t player_id, <span class="keyword">const</span> glm::dvec3 &amp; position);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#ab5d44cde6ec584aa13cc20e23f627cea">removePlayer</a>(<span class="keyword">const</span> uint64_t player_id);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#a3cd752b37c26a7e4cd171ba780809bf2">updatePlayerPosition</a>(<span class="keyword">const</span> uint64_t &amp; player_id, <span class="keyword">const</span> glm::dvec3 &amp; position);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordtype">void</span>        <a class="code hl_function" href="classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d">applyPlayerMovement</a>(<span class="keyword">const</span> uint64_t &amp; player_id, <span class="keyword">const</span> glm::dvec3 &amp; displacement);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <a class="code hl_class" href="classCamera.html">Camera</a> <a class="code hl_function" href="classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a">getCamera</a>(<span class="keyword">const</span> uint64_t player_id);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    glm::dvec3 <a class="code hl_function" href="classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50">getPlayerPosition</a>(<span class="keyword">const</span> uint64_t player_id);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    <span class="keywordtype">void</span>                    <a class="code hl_function" href="classClientWorld.html#a204e9e1edf450416eaa081171c08e6ab">addChunk</a>(std::shared_ptr&lt;Chunk&gt; chunk);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordtype">void</span>                    <a class="code hl_function" href="classClientWorld.html#abe665919a07f30afaece37189ac7b361">removeChunk</a>(<span class="keyword">const</span> glm::ivec3 &amp; chunkPosition);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="classClientWorld.html#ac0f3bce19e6ccd73922fa70740508688">  103</a></span>    std::vector&lt;glm::ivec3&gt; <a class="code hl_function" href="classClientWorld.html#ac0f3bce19e6ccd73922fa70740508688">getNeededChunks</a>(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">  107</a></span>    uint64_t <a class="code hl_variable" href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">m_my_player_id</a>;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp;                            m_worldScene;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp;                             m_vulkanAPI;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">     *  CHUNKS AND MAP</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">    *************************************/</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    std::unordered_set&lt;glm::ivec2&gt;          m_loaded_chunks;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    TracyLockableN                          (std::mutex, m_loaded_chunks_mutex, <span class="stringliteral">&quot;Loaded Chunks&quot;</span>);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="comment">// std::unordered_set&lt;glm::ivec2&gt;           m_visible_chunks;</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="comment">// std::mutex                               m_visible_chunks_mutex;</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    std::shared_ptr&lt;Chunk&gt; <a class="code hl_function" href="classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8">localGetChunk</a>(<span class="keyword">const</span> glm::ivec3 &amp; position) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">  109</a></span>    uint64_t <a class="code hl_variable" href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">m_my_player_id</a>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <a class="code hl_class" href="classWorldScene.html">WorldScene</a> &amp;                            m_worldScene;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <a class="code hl_class" href="classVulkanAPI.html">VulkanAPI</a> &amp;                             m_vulkanAPI;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <a class="code hl_class" href="classSound_1_1Engine.html">Sound::Engine</a> &amp;                         m_sound_engine;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">     *  CHUNKS AND MAP</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">    *************************************/</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    std::unordered_set&lt;glm::ivec2&gt;          m_loaded_chunks;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    TracyLockableN                          (std::mutex, m_loaded_chunks_mutex, <span class="stringliteral">&quot;Loaded Chunks&quot;</span>);</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    std::unordered_set&lt;glm::ivec2&gt;          m_unload_set;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    TracyLockableN                          (std::mutex, m_unload_set_mutex, <span class="stringliteral">&quot;Unload Set&quot;</span>);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="comment">// std::unordered_set&lt;glm::ivec2&gt;           m_visible_chunks;</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="comment">// std::mutex                               m_visible_chunks_mutex;</span></div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    std::queue&lt;std::pair&lt;glm::vec3, BlockID&gt;&gt; m_blocks_to_set;</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    TracyLockableN                          (std::mutex, m_blocks_to_set_mutex, <span class="stringliteral">&quot;Blocks to set&quot;</span>);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    std::unordered_set&lt;glm::ivec2&gt;          m_unload_set;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    TracyLockableN                          (std::mutex, m_unload_set_mutex, <span class="stringliteral">&quot;Unload Set&quot;</span>);</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    std::queue&lt;glm::ivec3&gt;                  m_block_light_update;</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    TracyLockableN                          (std::mutex, m_block_light_update_mutex, <span class="stringliteral">&quot;Block light update&quot;</span>);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    std::queue&lt;std::pair&lt;glm::vec3, BlockID&gt;&gt; m_blocks_to_set;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    TracyLockableN                          (std::mutex, m_blocks_to_set_mutex, <span class="stringliteral">&quot;Blocks to set&quot;</span>);</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">    /*********************************************************</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">     *</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">     *  METHODS</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">     *</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">    *********************************************************/</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">     *  CHUNKS AND MAP</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">    *************************************/</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordtype">void</span>    unloadChunk(<span class="keyword">const</span> glm::ivec3 &amp; chunkPosition);</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keywordtype">void</span>    meshChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keywordtype">void</span>    meshChunk(<span class="keyword">const</span> glm::ivec2 &amp; chunkPosition);</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="keywordtype">void</span>    updateChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">void</span>    doBlockSets();</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keywordtype">void</span>    updateLights();</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keywordtype">void</span>    setChunkNotMeshed(<span class="keyword">const</span> glm::ivec2 &amp; chunkPosition);</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    std::queue&lt;glm::ivec3&gt;                  m_block_light_update;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    TracyLockableN                          (std::mutex, m_block_light_update_mutex, <span class="stringliteral">&quot;Block light update&quot;</span>);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">    /*********************************************************</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">     *  METHODS</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">    *********************************************************/</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">     *  CHUNKS AND MAP</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">    *************************************/</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="keywordtype">void</span>    loadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keywordtype">void</span>    unloadChunks(<span class="keyword">const</span> std::vector&lt;glm::vec3&gt; &amp; playerPositions);</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    <span class="keywordtype">void</span>    unloadChunk(<span class="keyword">const</span> glm::ivec3 &amp; chunkPosition);</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <span class="keywordtype">void</span>    meshChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordtype">void</span>    meshChunk(<span class="keyword">const</span> glm::ivec2 &amp; chunkPosition);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    <span class="keywordtype">void</span>    updateChunks(<span class="keyword">const</span> glm::vec3 &amp; playerPosition);</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <span class="keywordtype">void</span>    doBlockSets();</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">void</span>    updateLights();</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="comment">     *  ENTITIES</span></div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="comment">     *************************************/</span></div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="keywordtype">bool</span> hitboxCollisionWithBlock(</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        <span class="keyword">const</span> <a class="code hl_class" href="classHitBox.html">HitBox</a> &amp; hitbox,</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <span class="keyword">const</span> glm::dvec3 &amp; position,</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keyword">const</span> uint64_t block_properties</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    );</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="comment">    /*************************************</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="comment">     *  RAYCAST</span></div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="comment">     *************************************/</span></div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <a class="code hl_struct" href="structRayCastOnBlockResult.html">RayCastOnBlockResult</a> rayCastOnBlock(</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        <span class="keyword">const</span> glm::vec3 &amp; origin,</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <span class="keyword">const</span> glm::vec3 &amp; direction,</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> max_distance</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    );</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>};</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="keywordtype">void</span>    setChunkNotMeshed(<span class="keyword">const</span> glm::ivec2 &amp; chunkPosition);</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment">     *  ENTITIES</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment">     *************************************/</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    <span class="keywordtype">bool</span> hitboxCollisionWithBlock(</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        <span class="keyword">const</span> <a class="code hl_class" href="classHitBox.html">HitBox</a> &amp; hitbox,</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <span class="keyword">const</span> glm::dvec3 &amp; position,</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keyword">const</span> uint64_t block_properties</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    );</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="comment">    /*************************************</span></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="comment">     *  RAYCAST</span></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="comment">     *************************************/</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <a class="code hl_struct" href="structRayCastOnBlockResult.html">RayCastOnBlockResult</a> rayCastOnBlock(</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        <span class="keyword">const</span> glm::vec3 &amp; origin,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <span class="keyword">const</span> glm::vec3 &amp; direction,</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> max_distance</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    );</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>};</div>
 <div class="ttc" id="aBlock_8hpp_html_abad59f5fb8fc1b8d052677de5da5c509"><div class="ttname"><a href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a></div><div class="ttdeci">BlockID</div><div class="ttdef"><b>Definition:</b> Block.hpp:15</div></div>
 <div class="ttc" id="aCamera_8hpp_html"><div class="ttname"><a href="Camera_8hpp.html">Camera.hpp</a></div></div>
 <div class="ttc" id="aCreateMeshData_8hpp_html"><div class="ttname"><a href="CreateMeshData_8hpp.html">CreateMeshData.hpp</a></div></div>
 <div class="ttc" id="aList_8hpp_html"><div class="ttname"><a href="List_8hpp.html">List.hpp</a></div></div>
 <div class="ttc" id="aPlayer_8hpp_html"><div class="ttname"><a href="Player_8hpp.html">Player.hpp</a></div></div>
+<div class="ttc" id="aSoundEngine_8hpp_html"><div class="ttname"><a href="SoundEngine_8hpp.html">SoundEngine.hpp</a></div></div>
 <div class="ttc" id="aVulkanAPI_8hpp_html"><div class="ttname"><a href="VulkanAPI_8hpp.html">VulkanAPI.hpp</a></div></div>
 <div class="ttc" id="aWorldGenerator_8hpp_html"><div class="ttname"><a href="WorldGenerator_8hpp.html">WorldGenerator.hpp</a></div></div>
 <div class="ttc" id="aWorldScene_8hpp_html"><div class="ttname"><a href="WorldScene_8hpp.html">WorldScene.hpp</a></div></div>
 <div class="ttc" id="aWorld_8hpp_html"><div class="ttname"><a href="World_8hpp.html">World.hpp</a></div></div>
 <div class="ttc" id="aclassCamera_html"><div class="ttname"><a href="classCamera.html">Camera</a></div><div class="ttdoc">A simple camera class.</div><div class="ttdef"><b>Definition:</b> Camera.hpp:41</div></div>
-<div class="ttc" id="aclassClientWorld_html"><div class="ttname"><a href="classClientWorld.html">ClientWorld</a></div><div class="ttdef"><b>Definition:</b> ClientWorld.hpp:21</div></div>
+<div class="ttc" id="aclassClientWorld_html"><div class="ttname"><a href="classClientWorld.html">ClientWorld</a></div><div class="ttdef"><b>Definition:</b> ClientWorld.hpp:22</div></div>
 <div class="ttc" id="aclassClientWorld_html_a041fb65a6c3188a57a7d5f1d68660ca6"><div class="ttname"><a href="classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6">ClientWorld::operator=</a></div><div class="ttdeci">ClientWorld &amp; operator=(ClientWorld &amp;other)=delete</div></div>
-<div class="ttc" id="aclassClientWorld_html_a0795485822cc9d84e6061ca726e0ecc8"><div class="ttname"><a href="classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8">ClientWorld::localGetChunk</a></div><div class="ttdeci">std::shared_ptr&lt; Chunk &gt; localGetChunk(const glm::ivec3 &amp;position) const</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1213</div></div>
-<div class="ttc" id="aclassClientWorld_html_a1d5fcfb66258c5fc0cd611c24e8e3d8d"><div class="ttname"><a href="classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d">ClientWorld::applyPlayerMovement</a></div><div class="ttdeci">void applyPlayerMovement(const uint64_t &amp;player_id, const glm::dvec3 &amp;displacement)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:453</div></div>
-<div class="ttc" id="aclassClientWorld_html_a204e9e1edf450416eaa081171c08e6ab"><div class="ttname"><a href="classClientWorld.html#a204e9e1edf450416eaa081171c08e6ab">ClientWorld::addChunk</a></div><div class="ttdeci">void addChunk(std::shared_ptr&lt; Chunk &gt; chunk)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:37</div></div>
-<div class="ttc" id="aclassClientWorld_html_a23026d1f22c925ce84a857dfdf5ad1ee"><div class="ttname"><a href="classClientWorld.html#a23026d1f22c925ce84a857dfdf5ad1ee">ClientWorld::updatePlayerTargetBlock</a></div><div class="ttdeci">void updatePlayerTargetBlock(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:680</div></div>
-<div class="ttc" id="aclassClientWorld_html_a311ae115a5f778d3dbe6ba1ac40a145b"><div class="ttname"><a href="classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b">ClientWorld::calculatePlayerMovement</a></div><div class="ttdeci">std::pair&lt; glm::dvec3, glm::dvec3 &gt; calculatePlayerMovement(const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time_second)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:496</div></div>
-<div class="ttc" id="aclassClientWorld_html_a33c674a4aad2e0f04a26813940a77d45"><div class="ttname"><a href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">ClientWorld::updateBlock</a></div><div class="ttdeci">void updateBlock(glm::dvec3 position)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:23</div></div>
+<div class="ttc" id="aclassClientWorld_html_a0795485822cc9d84e6061ca726e0ecc8"><div class="ttname"><a href="classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8">ClientWorld::localGetChunk</a></div><div class="ttdeci">std::shared_ptr&lt; Chunk &gt; localGetChunk(const glm::ivec3 &amp;position) const</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1225</div></div>
+<div class="ttc" id="aclassClientWorld_html_a1d5fcfb66258c5fc0cd611c24e8e3d8d"><div class="ttname"><a href="classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d">ClientWorld::applyPlayerMovement</a></div><div class="ttdeci">void applyPlayerMovement(const uint64_t &amp;player_id, const glm::dvec3 &amp;displacement)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:454</div></div>
+<div class="ttc" id="aclassClientWorld_html_a204e9e1edf450416eaa081171c08e6ab"><div class="ttname"><a href="classClientWorld.html#a204e9e1edf450416eaa081171c08e6ab">ClientWorld::addChunk</a></div><div class="ttdeci">void addChunk(std::shared_ptr&lt; Chunk &gt; chunk)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:38</div></div>
+<div class="ttc" id="aclassClientWorld_html_a23026d1f22c925ce84a857dfdf5ad1ee"><div class="ttname"><a href="classClientWorld.html#a23026d1f22c925ce84a857dfdf5ad1ee">ClientWorld::updatePlayerTargetBlock</a></div><div class="ttdeci">void updatePlayerTargetBlock(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:692</div></div>
+<div class="ttc" id="aclassClientWorld_html_a311ae115a5f778d3dbe6ba1ac40a145b"><div class="ttname"><a href="classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b">ClientWorld::calculatePlayerMovement</a></div><div class="ttdeci">std::pair&lt; glm::dvec3, glm::dvec3 &gt; calculatePlayerMovement(const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time_second)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:508</div></div>
+<div class="ttc" id="aclassClientWorld_html_a33c674a4aad2e0f04a26813940a77d45"><div class="ttname"><a href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">ClientWorld::updateBlock</a></div><div class="ttdeci">void updateBlock(glm::dvec3 position)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:24</div></div>
 <div class="ttc" id="aclassClientWorld_html_a3c76d0cf45ce665a46c5f0c28b33e0cf"><div class="ttname"><a href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">ClientWorld::ClientWorld</a></div><div class="ttdeci">ClientWorld(ClientWorld &amp;other)=delete</div></div>
-<div class="ttc" id="aclassClientWorld_html_a3cd752b37c26a7e4cd171ba780809bf2"><div class="ttname"><a href="classClientWorld.html#a3cd752b37c26a7e4cd171ba780809bf2">ClientWorld::updatePlayerPosition</a></div><div class="ttdeci">void updatePlayerPosition(const uint64_t &amp;player_id, const glm::dvec3 &amp;position)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:470</div></div>
-<div class="ttc" id="aclassClientWorld_html_a4f620b1218a121e9da762980863a81bd"><div class="ttname"><a href="classClientWorld.html#a4f620b1218a121e9da762980863a81bd">ClientWorld::updatePlayer</a></div><div class="ttdeci">void updatePlayer(const uint64_t player_id, std::function&lt; void(Player &amp;)&gt; update)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:846</div></div>
-<div class="ttc" id="aclassClientWorld_html_a51cba826d6ee2909fd71070af6451c5a"><div class="ttname"><a href="classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a">ClientWorld::updateEntities</a></div><div class="ttdeci">void updateEntities()</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:449</div></div>
-<div class="ttc" id="aclassClientWorld_html_a5266ea08f07e22e6c050114d8936db96"><div class="ttname"><a href="classClientWorld.html#a5266ea08f07e22e6c050114d8936db96">ClientWorld::updateMobs</a></div><div class="ttdeci">void updateMobs(const double delta_time_second)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:881</div></div>
-<div class="ttc" id="aclassClientWorld_html_a5fc5217d0b6d449d3ec9f1bb08fead5d"><div class="ttname"><a href="classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d">ClientWorld::updatePlayerCamera</a></div><div class="ttdeci">void updatePlayerCamera(const uint64_t player_id, const double x_offset, const double y_offset)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:806</div></div>
-<div class="ttc" id="aclassClientWorld_html_a6af9215e00db9f81aa57c372f94076ba"><div class="ttname"><a href="classClientWorld.html#a6af9215e00db9f81aa57c372f94076ba">ClientWorld::playerAttack</a></div><div class="ttdeci">std::pair&lt; bool, glm::vec3 &gt; playerAttack(const uint64_t player_id, bool attack)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:725</div></div>
-<div class="ttc" id="aclassClientWorld_html_a75d4842d4a395c63c3c3c05b3f6a352f"><div class="ttname"><a href="classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f">ClientWorld::addPlayer</a></div><div class="ttdeci">void addPlayer(const uint64_t player_id, const glm::dvec3 &amp;position)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1168</div></div>
-<div class="ttc" id="aclassClientWorld_html_a8b2f0d47fdee9822ca8bd17f80fde285"><div class="ttname"><a href="classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285">ClientWorld::changePlayerViewMode</a></div><div class="ttdeci">void changePlayerViewMode(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:825</div></div>
-<div class="ttc" id="aclassClientWorld_html_a906723ee7a94d67937f57f1fc3d320c2"><div class="ttname"><a href="classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2">ClientWorld::~ClientWorld</a></div><div class="ttdeci">~ClientWorld()</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:19</div></div>
-<div class="ttc" id="aclassClientWorld_html_a99ff03b7be1e020be0d27863f221cb50"><div class="ttname"><a href="classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50">ClientWorld::getPlayerPosition</a></div><div class="ttdeci">glm::dvec3 getPlayerPosition(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1020</div></div>
-<div class="ttc" id="aclassClientWorld_html_a9d0b57d1ea29ac3171d6e2171f7622f4"><div class="ttname"><a href="classClientWorld.html#a9d0b57d1ea29ac3171d6e2171f7622f4">ClientWorld::playerUse</a></div><div class="ttdeci">std::pair&lt; bool, glm::vec3 &gt; playerUse(const uint64_t player_id, bool use)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:765</div></div>
-<div class="ttc" id="aclassClientWorld_html_aaf9929d0310650c8d517efcd7110f05a"><div class="ttname"><a href="classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a">ClientWorld::getCamera</a></div><div class="ttdeci">Camera getCamera(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1013</div></div>
-<div class="ttc" id="aclassClientWorld_html_ab5d44cde6ec584aa13cc20e23f627cea"><div class="ttname"><a href="classClientWorld.html#ab5d44cde6ec584aa13cc20e23f627cea">ClientWorld::removePlayer</a></div><div class="ttdeci">void removePlayer(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1185</div></div>
-<div class="ttc" id="aclassClientWorld_html_aba77edcc6093915f6df289bf88e8acd7"><div class="ttname"><a href="classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7">ClientWorld::modifyBlock</a></div><div class="ttdeci">void modifyBlock(const glm::vec3 &amp;position, const BlockID &amp;block_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1198</div></div>
-<div class="ttc" id="aclassClientWorld_html_abe665919a07f30afaece37189ac7b361"><div class="ttname"><a href="classClientWorld.html#abe665919a07f30afaece37189ac7b361">ClientWorld::removeChunk</a></div><div class="ttdeci">void removeChunk(const glm::ivec3 &amp;chunkPosition)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:64</div></div>
+<div class="ttc" id="aclassClientWorld_html_a3cd752b37c26a7e4cd171ba780809bf2"><div class="ttname"><a href="classClientWorld.html#a3cd752b37c26a7e4cd171ba780809bf2">ClientWorld::updatePlayerPosition</a></div><div class="ttdeci">void updatePlayerPosition(const uint64_t &amp;player_id, const glm::dvec3 &amp;position)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:471</div></div>
+<div class="ttc" id="aclassClientWorld_html_a4f620b1218a121e9da762980863a81bd"><div class="ttname"><a href="classClientWorld.html#a4f620b1218a121e9da762980863a81bd">ClientWorld::updatePlayer</a></div><div class="ttdeci">void updatePlayer(const uint64_t player_id, std::function&lt; void(Player &amp;)&gt; update)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:858</div></div>
+<div class="ttc" id="aclassClientWorld_html_a51cba826d6ee2909fd71070af6451c5a"><div class="ttname"><a href="classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a">ClientWorld::updateEntities</a></div><div class="ttdeci">void updateEntities()</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:450</div></div>
+<div class="ttc" id="aclassClientWorld_html_a5266ea08f07e22e6c050114d8936db96"><div class="ttname"><a href="classClientWorld.html#a5266ea08f07e22e6c050114d8936db96">ClientWorld::updateMobs</a></div><div class="ttdeci">void updateMobs(const double delta_time_second)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:893</div></div>
+<div class="ttc" id="aclassClientWorld_html_a5fc5217d0b6d449d3ec9f1bb08fead5d"><div class="ttname"><a href="classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d">ClientWorld::updatePlayerCamera</a></div><div class="ttdeci">void updatePlayerCamera(const uint64_t player_id, const double x_offset, const double y_offset)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:818</div></div>
+<div class="ttc" id="aclassClientWorld_html_a6af9215e00db9f81aa57c372f94076ba"><div class="ttname"><a href="classClientWorld.html#a6af9215e00db9f81aa57c372f94076ba">ClientWorld::playerAttack</a></div><div class="ttdeci">std::pair&lt; bool, glm::vec3 &gt; playerAttack(const uint64_t player_id, bool attack)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:737</div></div>
+<div class="ttc" id="aclassClientWorld_html_a75d4842d4a395c63c3c3c05b3f6a352f"><div class="ttname"><a href="classClientWorld.html#a75d4842d4a395c63c3c3c05b3f6a352f">ClientWorld::addPlayer</a></div><div class="ttdeci">void addPlayer(const uint64_t player_id, const glm::dvec3 &amp;position)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1180</div></div>
+<div class="ttc" id="aclassClientWorld_html_a8b2f0d47fdee9822ca8bd17f80fde285"><div class="ttname"><a href="classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285">ClientWorld::changePlayerViewMode</a></div><div class="ttdeci">void changePlayerViewMode(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:837</div></div>
+<div class="ttc" id="aclassClientWorld_html_a906723ee7a94d67937f57f1fc3d320c2"><div class="ttname"><a href="classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2">ClientWorld::~ClientWorld</a></div><div class="ttdeci">~ClientWorld()</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:20</div></div>
+<div class="ttc" id="aclassClientWorld_html_a99ff03b7be1e020be0d27863f221cb50"><div class="ttname"><a href="classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50">ClientWorld::getPlayerPosition</a></div><div class="ttdeci">glm::dvec3 getPlayerPosition(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1032</div></div>
+<div class="ttc" id="aclassClientWorld_html_a9d0b57d1ea29ac3171d6e2171f7622f4"><div class="ttname"><a href="classClientWorld.html#a9d0b57d1ea29ac3171d6e2171f7622f4">ClientWorld::playerUse</a></div><div class="ttdeci">std::pair&lt; bool, glm::vec3 &gt; playerUse(const uint64_t player_id, bool use)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:777</div></div>
+<div class="ttc" id="aclassClientWorld_html_aaf9929d0310650c8d517efcd7110f05a"><div class="ttname"><a href="classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a">ClientWorld::getCamera</a></div><div class="ttdeci">Camera getCamera(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1025</div></div>
+<div class="ttc" id="aclassClientWorld_html_ab5d44cde6ec584aa13cc20e23f627cea"><div class="ttname"><a href="classClientWorld.html#ab5d44cde6ec584aa13cc20e23f627cea">ClientWorld::removePlayer</a></div><div class="ttdeci">void removePlayer(const uint64_t player_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1197</div></div>
+<div class="ttc" id="aclassClientWorld_html_aba77edcc6093915f6df289bf88e8acd7"><div class="ttname"><a href="classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7">ClientWorld::modifyBlock</a></div><div class="ttdeci">void modifyBlock(const glm::vec3 &amp;position, const BlockID &amp;block_id)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:1210</div></div>
+<div class="ttc" id="aclassClientWorld_html_abe665919a07f30afaece37189ac7b361"><div class="ttname"><a href="classClientWorld.html#abe665919a07f30afaece37189ac7b361">ClientWorld::removeChunk</a></div><div class="ttdeci">void removeChunk(const glm::ivec3 &amp;chunkPosition)</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:65</div></div>
 <div class="ttc" id="aclassClientWorld_html_ac0f3bce19e6ccd73922fa70740508688"><div class="ttname"><a href="classClientWorld.html#ac0f3bce19e6ccd73922fa70740508688">ClientWorld::getNeededChunks</a></div><div class="ttdeci">std::vector&lt; glm::ivec3 &gt; getNeededChunks(const glm::vec3 &amp;playerPosition)</div></div>
-<div class="ttc" id="aclassClientWorld_html_adb218b2a8ad54ecef9672a47ce3523d8"><div class="ttname"><a href="classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8">ClientWorld::createMob</a></div><div class="ttdeci">void createMob()</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:856</div></div>
+<div class="ttc" id="aclassClientWorld_html_adb218b2a8ad54ecef9672a47ce3523d8"><div class="ttname"><a href="classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8">ClientWorld::createMob</a></div><div class="ttdeci">void createMob()</div><div class="ttdef"><b>Definition:</b> ClientWorld.cpp:868</div></div>
 <div class="ttc" id="aclassClientWorld_html_ae2509dff67daeeeb0ee9286ec46aad71"><div class="ttname"><a href="classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71">ClientWorld::ClientWorld</a></div><div class="ttdeci">ClientWorld(ClientWorld &amp;&amp;other)=delete</div></div>
 <div class="ttc" id="aclassClientWorld_html_aef09acc81148b113eed7332cdd7c4fa8"><div class="ttname"><a href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">ClientWorld::operator=</a></div><div class="ttdeci">ClientWorld &amp; operator=(ClientWorld &amp;&amp;other)=delete</div></div>
-<div class="ttc" id="aclassClientWorld_html_aef2faefc960964a89102ebbe9c0c037a"><div class="ttname"><a href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">ClientWorld::m_my_player_id</a></div><div class="ttdeci">uint64_t m_my_player_id</div><div class="ttdef"><b>Definition:</b> ClientWorld.hpp:107</div></div>
+<div class="ttc" id="aclassClientWorld_html_aef2faefc960964a89102ebbe9c0c037a"><div class="ttname"><a href="classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a">ClientWorld::m_my_player_id</a></div><div class="ttdeci">uint64_t m_my_player_id</div><div class="ttdef"><b>Definition:</b> ClientWorld.hpp:109</div></div>
 <div class="ttc" id="aclassClientWorld_html_af78a9ed84b89171654b282666c51baf9"><div class="ttname"><a href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">ClientWorld::createPlayer</a></div><div class="ttdeci">uint64_t createPlayer(const glm::vec3 &amp;position)</div></div>
 <div class="ttc" id="aclassHitBox_html"><div class="ttname"><a href="classHitBox.html">HitBox</a></div><div class="ttdef"><b>Definition:</b> HitBox.hpp:11</div></div>
 <div class="ttc" id="aclassPlayer_html"><div class="ttname"><a href="classPlayer.html">Player</a></div><div class="ttdef"><b>Definition:</b> Player.hpp:29</div></div>
+<div class="ttc" id="aclassSound_1_1Engine_html"><div class="ttname"><a href="classSound_1_1Engine.html">Sound::Engine</a></div><div class="ttdef"><b>Definition:</b> SoundEngine.hpp:42</div></div>
 <div class="ttc" id="aclassVulkanAPI_html"><div class="ttname"><a href="classVulkanAPI.html">VulkanAPI</a></div><div class="ttdef"><b>Definition:</b> VulkanAPI.hpp:227</div></div>
 <div class="ttc" id="aclassWorldScene_html"><div class="ttname"><a href="classWorldScene.html">WorldScene</a></div><div class="ttdoc">Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ...</div><div class="ttdef"><b>Definition:</b> WorldScene.hpp:28</div></div>
 <div class="ttc" id="aclassWorld_html"><div class="ttname"><a href="classWorld.html">World</a></div><div class="ttdef"><b>Definition:</b> World.hpp:20</div></div>

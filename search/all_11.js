@@ -26,11 +26,12 @@ var searchData=
   ['renderthread_2ecpp_23',['RenderThread.cpp',['../RenderThread_8cpp.html',1,'']]],
   ['renderthread_2ehpp_24',['RenderThread.hpp',['../RenderThread_8hpp.html',1,'']]],
   ['repeated_25',['REPEATED',['../classInput.html#a0be44bf062481fd4b60c21607a2ee50aa5f7fd05d6eee2cf377a64ae7f4adcd6b',1,'Input']]],
-  ['right_5farm_5fpos_26',['right_arm_pos',['../classPlayerModel.html#a8e853e1616b34c91ad097baa49c07aa1',1,'PlayerModel']]],
-  ['right_5fleg_5fpos_27',['right_leg_pos',['../classPlayerModel.html#a308ce43f763ed01a3909d11def1396f2',1,'PlayerModel']]],
-  ['rotate_28',['rotate',['../classMat4.html#a3ef488276ad5977343c5a6d7a2202c71',1,'Mat4']]],
-  ['rotation_29',['rotation',['../classTransform.html#a936da2a177bd9dec2a5e14c30865dff8',1,'Transform']]],
-  ['run_30',['run',['../classApplication.html#a68965449404743bf1add056784d6cf81',1,'Application::run()'],['../classClient.html#ae0bc335d720265d4d6e8a72cf7a2a9aa',1,'Client::run()'],['../classServer.html#abb27d30b40a94326e3fd629d3b30b7d5',1,'Server::run()']]],
-  ['running_31',['running',['../server__main_8cpp.html#a36f7b6be7108281af77939ceaec42fd6',1,'server_main.cpp']]],
-  ['runonce_32',['runOnce',['../classClient.html#af888552c0bffe55dad7dfb0b8cd25d8a',1,'Client::runOnce()'],['../classServer.html#ada8fbd5cf5ba8aca9acc32138558ccaf',1,'Server::runOnce()']]]
+  ['riffchunk_26',['RIFFChunk',['../structSound_1_1RIFFChunk.html',1,'Sound']]],
+  ['right_5farm_5fpos_27',['right_arm_pos',['../classPlayerModel.html#a8e853e1616b34c91ad097baa49c07aa1',1,'PlayerModel']]],
+  ['right_5fleg_5fpos_28',['right_leg_pos',['../classPlayerModel.html#a308ce43f763ed01a3909d11def1396f2',1,'PlayerModel']]],
+  ['rotate_29',['rotate',['../classMat4.html#a3ef488276ad5977343c5a6d7a2202c71',1,'Mat4']]],
+  ['rotation_30',['rotation',['../classTransform.html#a936da2a177bd9dec2a5e14c30865dff8',1,'Transform']]],
+  ['run_31',['run',['../classApplication.html#a68965449404743bf1add056784d6cf81',1,'Application::run()'],['../classClient.html#ae0bc335d720265d4d6e8a72cf7a2a9aa',1,'Client::run()'],['../classServer.html#abb27d30b40a94326e3fd629d3b30b7d5',1,'Server::run()']]],
+  ['running_32',['running',['../server__main_8cpp.html#a36f7b6be7108281af77939ceaec42fd6',1,'server_main.cpp']]],
+  ['runonce_33',['runOnce',['../classClient.html#af888552c0bffe55dad7dfb0b8cd25d8a',1,'Client::runOnce()'],['../classServer.html#ada8fbd5cf5ba8aca9acc32138558ccaf',1,'Server::runOnce()']]]
 ];

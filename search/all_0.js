@@ -26,15 +26,19 @@ var searchData=
   ['architecture_2emd_23',['architecture.md',['../architecture_8md.html',1,'']]],
   ['arm_5fsize_24',['arm_size',['../classPlayerModel.html#a140fa0ab69f4fdc46bfa3a778b4eb0e8',1,'PlayerModel']]],
   ['array_5flayers_25',['array_layers',['../classImage.html#aaa95fc16a964f6f0285e7c51265b397c',1,'Image::array_layers()'],['../structImage_1_1CreateInfo.html#a86115631b00251ee0c4d95cfc6cbf879',1,'Image::CreateInfo::array_layers()']]],
-  ['aspect_5fmask_26',['aspect_mask',['../structImage_1_1CreateInfo.html#a73a5de06d37620888162186ba5282fb2',1,'Image::CreateInfo::aspect_mask()'],['../classImage.html#abfca1ef9581fd7f4797b24b67ae4300e',1,'Image::aspect_mask()']]],
+  ['aspect_5fmask_26',['aspect_mask',['../classImage.html#abfca1ef9581fd7f4797b24b67ae4300e',1,'Image::aspect_mask()'],['../structImage_1_1CreateInfo.html#a73a5de06d37620888162186ba5282fb2',1,'Image::CreateInfo::aspect_mask()']]],
   ['atmosphere_5fdescriptor_27',['atmosphere_descriptor',['../classVulkanAPI.html#a76d76cfa414af100d5aeffb55c220119',1,'VulkanAPI']]],
-  ['atmosphere_5fradius_28',['atmosphere_radius',['../structAtmosphereParams.html#a5651e641393aa5b448c9b33489f9df9d',1,'AtmosphereParams::atmosphere_radius()'],['../classDebugGui.html#a2e003c42d424bb61482bfa9694e06eaa',1,'DebugGui::atmosphere_radius()']]],
+  ['atmosphere_5fradius_28',['atmosphere_radius',['../classDebugGui.html#a2e003c42d424bb61482bfa9694e06eaa',1,'DebugGui::atmosphere_radius()'],['../structAtmosphereParams.html#a5651e641393aa5b448c9b33489f9df9d',1,'AtmosphereParams::atmosphere_radius()']]],
   ['atmosphere_5fubo_29',['atmosphere_ubo',['../classVulkanAPI.html#a487ef8017a9c009c2e23143ae1e49b05',1,'VulkanAPI']]],
   ['atmosphereparams_30',['AtmosphereParams',['../structAtmosphereParams.html',1,'']]],
-  ['atomic_31',['Atomic',['../classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3',1,'Atomic::Atomic()=default'],['../classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1',1,'Atomic::Atomic(T value)'],['../classAtomic.html',1,'Atomic&lt; T &gt;']]],
+  ['atomic_31',['Atomic',['../classAtomic.html',1,'Atomic&lt; T &gt;'],['../classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3',1,'Atomic::Atomic()=default'],['../classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1',1,'Atomic::Atomic(T value)']]],
   ['atomic_3c_20glm_3a_3avec3_20_3e_32',['Atomic&lt; glm::vec3 &gt;',['../classAtomic.html',1,'']]],
   ['attack_5fanimation_33',['attack_animation',['../structWorldScene_1_1PlayerRenderData.html#a117e3c0a1934877c0379e6660e19115a',1,'WorldScene::PlayerRenderData']]],
   ['attackanimation_34',['AttackAnimation',['../classPlayerModel_1_1AttackAnimation.html#a39fb6e44a47cf4500d8ad24715544c03',1,'PlayerModel::AttackAnimation::AttackAnimation()'],['../classPlayerModel_1_1AttackAnimation.html',1,'PlayerModel::AttackAnimation']]],
   ['attribute_5fdescriptions_35',['attribute_descriptions',['../structPipeline_1_1CreateInfo.html#a1cdc58779c520317193b8e4275aa0b8f',1,'Pipeline::CreateInfo']]],
-  ['average_36',['average',['../classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6',1,'History::average()'],['../classTimer.html#af188795a135958a87538a21a20423649',1,'Timer::average()']]]
+  ['audio_5fdata_36',['audio_data',['../structSound_1_1Instance.html#a17d2fb73f664f4c7c940b0499a260083',1,'Sound::Instance']]],
+  ['audio_5fformat_37',['audio_format',['../structSound_1_1FMTChunk.html#ac9f50d9cdaf18e1319d6bf928dcdbc3e',1,'Sound::FMTChunk::audio_format()'],['../classSound_1_1Data.html#ab9742b51dee32a543af8051e8064d136',1,'Sound::Data::audio_format()']]],
+  ['audiodata_2ecpp_38',['AudioData.cpp',['../AudioData_8cpp.html',1,'']]],
+  ['audiodata_2ehpp_39',['AudioData.hpp',['../AudioData_8hpp.html',1,'']]],
+  ['average_40',['average',['../classHistory.html#ab3669e563bc3aa8e094b53bff1fb2ca6',1,'History::average()'],['../classTimer.html#af188795a135958a87538a21a20423649',1,'Timer::average()']]]
 ];

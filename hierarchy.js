@@ -23,10 +23,13 @@ var hierarchy =
     [ "Swapchain::CreateInfo", "structSwapchain_1_1CreateInfo.html", null ],
     [ "CreateMeshData", "classCreateMeshData.html", null ],
     [ "Data", "structData.html", null ],
+    [ "Sound::Data", "classSound_1_1Data.html", null ],
+    [ "Sound::DataChunk", "structSound_1_1DataChunk.html", null ],
     [ "WorldScene::DebugBlock", "structWorldScene_1_1DebugBlock.html", null ],
     [ "DebugGui", "classDebugGui.html", null ],
     [ "Descriptor", "classDescriptor.html", null ],
     [ "ECS", "classECS.html", null ],
+    [ "Sound::Engine", "classSound_1_1Engine.html", null ],
     [ "EntityMatrices", "structEntityMatrices.html", null ],
     [ "EntityVertex", "structEntityVertex.html", null ],
     [ "std::exception", null, [
@@ -34,6 +37,7 @@ var hierarchy =
       [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ]
     ] ],
     [ "Face", "structFace.html", null ],
+    [ "Sound::FMTChunk", "structSound_1_1FMTChunk.html", null ],
     [ "WorldGenerator::genInfo", "structWorldGenerator_1_1genInfo.html", null ],
     [ "ServerWorld::Ticket::hash", "structServerWorld_1_1Ticket_1_1hash.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
@@ -53,6 +57,7 @@ var hierarchy =
     [ "ImGuiTexture", "structImGuiTexture.html", null ],
     [ "IncomingPacketList", "classIncomingPacketList.html", null ],
     [ "Input", "classInput.html", null ],
+    [ "Sound::Instance", "structSound_1_1Instance.html", null ],
     [ "IPacket", "classIPacket.html", [
       [ "BlockActionPacket", "classBlockActionPacket.html", null ],
       [ "ChunkPacket", "classChunkPacket.html", null ],
@@ -95,6 +100,7 @@ var hierarchy =
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", null ],
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],
     [ "RenderThread", "classRenderThread.html", null ],
+    [ "Sound::RIFFChunk", "structSound_1_1RIFFChunk.html", null ],
     [ "Server", "classServer.html", null ],
     [ "ServerBlockUpdateThread", "classServerBlockUpdateThread.html", null ],
     [ "ServerPacketHandler", "classServerPacketHandler.html", null ],

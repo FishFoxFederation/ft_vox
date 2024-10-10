@@ -10,5 +10,7 @@ var searchData=
   ['atmosphere_5fradius_7',['atmosphere_radius',['../classDebugGui.html#a2e003c42d424bb61482bfa9694e06eaa',1,'DebugGui::atmosphere_radius()'],['../structAtmosphereParams.html#a5651e641393aa5b448c9b33489f9df9d',1,'AtmosphereParams::atmosphere_radius()']]],
   ['atmosphere_5fubo_8',['atmosphere_ubo',['../classVulkanAPI.html#a487ef8017a9c009c2e23143ae1e49b05',1,'VulkanAPI']]],
   ['attack_5fanimation_9',['attack_animation',['../structWorldScene_1_1PlayerRenderData.html#a117e3c0a1934877c0379e6660e19115a',1,'WorldScene::PlayerRenderData']]],
-  ['attribute_5fdescriptions_10',['attribute_descriptions',['../structPipeline_1_1CreateInfo.html#a1cdc58779c520317193b8e4275aa0b8f',1,'Pipeline::CreateInfo']]]
+  ['attribute_5fdescriptions_10',['attribute_descriptions',['../structPipeline_1_1CreateInfo.html#a1cdc58779c520317193b8e4275aa0b8f',1,'Pipeline::CreateInfo']]],
+  ['audio_5fdata_11',['audio_data',['../structSound_1_1Instance.html#a17d2fb73f664f4c7c940b0499a260083',1,'Sound::Instance']]],
+  ['audio_5fformat_12',['audio_format',['../structSound_1_1FMTChunk.html#ac9f50d9cdaf18e1319d6bf928dcdbc3e',1,'Sound::FMTChunk::audio_format()'],['../classSound_1_1Data.html#ab9742b51dee32a543af8051e8064d136',1,'Sound::Data::audio_format()']]]
 ];

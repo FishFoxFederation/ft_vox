@@ -10,5 +10,6 @@ var searchData=
   ['imguitexture_7',['ImGuiTexture',['../structImGuiTexture.html',1,'']]],
   ['incomingpacketlist_8',['IncomingPacketList',['../classIncomingPacketList.html',1,'']]],
   ['input_9',['Input',['../classInput.html',1,'']]],
-  ['ipacket_10',['IPacket',['../classIPacket.html',1,'']]]
+  ['instance_10',['Instance',['../structSound_1_1Instance.html',1,'Sound']]],
+  ['ipacket_11',['IPacket',['../classIPacket.html',1,'']]]
 ];

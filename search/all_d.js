@@ -19,5 +19,7 @@ var searchData=
   ['normal_16',['normal',['../structPlayerModel_1_1Vertex.html#a028cacefdf8dd9ea4c852797966cb747',1,'PlayerModel::Vertex::normal()'],['../structObjVertex.html#a8738d2fd21588dbe1cf1c644192c6c36',1,'ObjVertex::normal()'],['../structEntityVertex.html#ae751b23c5f929c9407723ace1263644a',1,'EntityVertex::normal()'],['../structBlockVertex.html#aaf98e3657aea0f75a5601d73aa1a52a3',1,'BlockVertex::normal()'],['../structRayCastOnBlockResult.html#afa3d886e9c79eca27405f9fc62b728f1',1,'RayCastOnBlockResult::normal()']]],
   ['normalindex_17',['normalIndex',['../structFace.html#a00626d19b7221a5a9abe11f35833e1b9',1,'Face']]],
   ['ntl_18',['ntl',['../classViewFrustum.html#afd88c0f94ae5fc640b58bbe6f51eebb8',1,'ViewFrustum']]],
-  ['ntr_19',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]]
+  ['ntr_19',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]],
+  ['num_5fchannels_20',['num_channels',['../structSound_1_1FMTChunk.html#a3c7582ff04823929f1158bfc0dd4eef8',1,'Sound::FMTChunk::num_channels()'],['../classSound_1_1Data.html#a2f10a6704fdb642d6c9b82f88c8e4331',1,'Sound::Data::num_channels()']]],
+  ['num_5fsamples_21',['num_samples',['../classSound_1_1Data.html#af774ce5cd6690b807abd6f7467f08ad9',1,'Sound::Data']]]
 ];

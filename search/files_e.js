@@ -19,9 +19,12 @@ var searchData=
   ['settings_2ehpp_16',['Settings.hpp',['../Settings_8hpp.html',1,'']]],
   ['socket_2ecpp_17',['Socket.cpp',['../Socket_8cpp.html',1,'']]],
   ['socket_2ehpp_18',['Socket.hpp',['../Socket_8hpp.html',1,'']]],
-  ['status_2ecpp_19',['Status.cpp',['../Status_8cpp.html',1,'']]],
-  ['status_2ehpp_20',['Status.hpp',['../Status_8hpp.html',1,'']]],
-  ['style_5fguide_2emd_21',['style_guide.md',['../style__guide_8md.html',1,'']]],
-  ['swapchain_2ecpp_22',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
-  ['swapchain_2ehpp_23',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
+  ['soundengine_2ecpp_19',['SoundEngine.cpp',['../SoundEngine_8cpp.html',1,'']]],
+  ['soundengine_2ehpp_20',['SoundEngine.hpp',['../SoundEngine_8hpp.html',1,'']]],
+  ['soundlist_2ehpp_21',['SoundList.hpp',['../SoundList_8hpp.html',1,'']]],
+  ['status_2ecpp_22',['Status.cpp',['../Status_8cpp.html',1,'']]],
+  ['status_2ehpp_23',['Status.hpp',['../Status_8hpp.html',1,'']]],
+  ['style_5fguide_2emd_24',['style_guide.md',['../style__guide_8md.html',1,'']]],
+  ['swapchain_2ecpp_25',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
+  ['swapchain_2ehpp_26',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
 ];

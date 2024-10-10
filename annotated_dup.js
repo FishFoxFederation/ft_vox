@@ -1,5 +1,13 @@
 var annotated_dup =
 [
+    [ "Sound", "namespaceSound.html", [
+      [ "Data", "classSound_1_1Data.html", "classSound_1_1Data" ],
+      [ "DataChunk", "structSound_1_1DataChunk.html", "structSound_1_1DataChunk" ],
+      [ "Engine", "classSound_1_1Engine.html", "classSound_1_1Engine" ],
+      [ "FMTChunk", "structSound_1_1FMTChunk.html", "structSound_1_1FMTChunk" ],
+      [ "Instance", "structSound_1_1Instance.html", "structSound_1_1Instance" ],
+      [ "RIFFChunk", "structSound_1_1RIFFChunk.html", "structSound_1_1RIFFChunk" ]
+    ] ],
     [ "std", "namespacestd.html", [
       [ "hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", "structstd_1_1hash_3_01BlockVertex_01_4" ],
       [ "hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec2_01_4" ],
