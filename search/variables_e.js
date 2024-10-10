@@ -4,7 +4,7 @@ var searchData=
   ['physical_5fdevice_1',['physical_device',['../classVulkanAPI.html#a70fc3d9525d7e52852bb0b7be66af812',1,'VulkanAPI']]],
   ['pipeline_2',['pipeline',['../classPipeline.html#a372ca1f1579d6350790b5a40f9e1292a',1,'Pipeline']]],
   ['pitch_3',['pitch',['../structWorldScene_1_1PlayerRenderData.html#ae2f0e054725b472fe7d8b5e4d416ff23',1,'WorldScene::PlayerRenderData::pitch()'],['../classPlayer.html#affddc950dc472ad3dfd65e752957d946',1,'Player::pitch()']]],
-  ['plane_5fdistances_4',['plane_distances',['../structShadowMapLight.html#adcc4925569cf9dec9b117b606d930af4',1,'ShadowMapLight']]],
+  ['plane_5fdistances_4',['plane_distances',['../structShadowMapLight.html#ae9868931b52484e3d61b0379305255ab',1,'ShadowMapLight']]],
   ['player_5fchest_5fmesh_5fid_5',['player_chest_mesh_id',['../classVulkanAPI.html#af630bfb30c0110e84fbf6a4b2ccf2a84',1,'VulkanAPI']]],
   ['player_5fhead_5fmesh_5fid_6',['player_head_mesh_id',['../classVulkanAPI.html#a1b80e03954d5522659cc2e333fe1811c',1,'VulkanAPI']]],
   ['player_5fheight_7',['player_height',['../classDebugGui.html#a2edde5f303c28ebbceefbf33487e1de1',1,'DebugGui::player_height()'],['../classPlayerModel.html#af349559a5df096309986249e8a880903',1,'PlayerModel::player_height()'],['../structAtmosphereParams.html#aab4021f231eb7ccf378dbc49fdd9993a',1,'AtmosphereParams::player_height()']]],
@@ -31,7 +31,7 @@ var searchData=
   ['present_5fmode_28',['present_mode',['../structSwapchain_1_1CreateInfo.html#a9c00a0a7b2354b178a6817008ef6b92c',1,'Swapchain::CreateInfo']]],
   ['present_5fmodes_29',['present_modes',['../structSwapchain_1_1SupportDetails.html#ac0f4f61750c7a405c1ab2ef0183b17bf',1,'Swapchain::SupportDetails']]],
   ['present_5fqueue_30',['present_queue',['../classVulkanAPI.html#acd95a2f7af31d3ccba7de8553aeed384',1,'VulkanAPI']]],
-  ['proj_31',['proj',['../structViewProjMatrices.html#a884b600e32d477a8b9bb9ddbae105a29',1,'ViewProjMatrices']]],
+  ['proj_31',['proj',['../structViewProjMatrices.html#ac8820bbed54d35d5349fae31ca989a93',1,'ViewProjMatrices']]],
   ['projection_32',['projection',['../structCamera_1_1RenderInfo.html#a58c6cf4540ac7b4ee498c74345fb91c8',1,'Camera::RenderInfo']]],
   ['properties_33',['properties',['../structBlockData.html#a101c2d42007128997927949f7834ea2f',1,'BlockData']]],
   ['push_5fconstant_5franges_34',['push_constant_ranges',['../structPipeline_1_1CreateInfo.html#ad71d7079bfbfe032392e48c3c1f2b57e',1,'Pipeline::CreateInfo']]]

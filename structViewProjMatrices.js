@@ -1,5 +1,5 @@
 var structViewProjMatrices =
 [
-    [ "proj", "structViewProjMatrices.html#a884b600e32d477a8b9bb9ddbae105a29", null ],
-    [ "view", "structViewProjMatrices.html#a75bed5a79358936fb1700d91a245d415", null ]
+    [ "proj", "structViewProjMatrices.html#ac8820bbed54d35d5349fae31ca989a93", null ],
+    [ "view", "structViewProjMatrices.html#aacd4b64181f8bbf0ef4d0deb6091931b", null ]
 ];

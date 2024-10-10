@@ -112,7 +112,7 @@ $(document).ready(function(){initNavTree('structShadowMapLight.html',''); initRe
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="VulkanAPI_8hpp_source.html">VulkanAPI.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="ShaderCommun_8hpp_source.html">ShaderCommun.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for ShadowMapLight:</div>
 <div class="dyncontent">
@@ -124,12 +124,12 @@ Collaboration diagram for ShadowMapLight:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a09726be9a2ec5bbe9b7f634956cc3ab8"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a09726be9a2ec5bbe9b7f634956cc3ab8">view_proj</a> [8]</td></tr>
-<tr class="separator:a09726be9a2ec5bbe9b7f634956cc3ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcc4925569cf9dec9b117b606d930af4"><td class="memItemLeft" align="right" valign="top">glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#adcc4925569cf9dec9b117b606d930af4">plane_distances</a> [8]</td></tr>
-<tr class="separator:adcc4925569cf9dec9b117b606d930af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac937185edc116e838c519e906689ca7c"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#ac937185edc116e838c519e906689ca7c">light_dir</a></td></tr>
-<tr class="separator:ac937185edc116e838c519e906689ca7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a99b58f2f8fafb0425e20bd8f910e16"><td class="memItemLeft" align="right" valign="top">mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a9a99b58f2f8fafb0425e20bd8f910e16">view_proj</a> [<a class="el" href="ShaderCommun_8hpp.html#a25e71ed1f4801c4a36132ade5e97cf57">SHADOW_MAP_MAX_COUNT</a>]</td></tr>
+<tr class="separator:a9a99b58f2f8fafb0425e20bd8f910e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9868931b52484e3d61b0379305255ab"><td class="memItemLeft" align="right" valign="top">vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#ae9868931b52484e3d61b0379305255ab">plane_distances</a> [<a class="el" href="ShaderCommun_8hpp.html#a25e71ed1f4801c4a36132ade5e97cf57">SHADOW_MAP_MAX_COUNT</a>]</td></tr>
+<tr class="separator:ae9868931b52484e3d61b0379305255ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03f271b17639d8b15b28050787f4dbc0"><td class="memItemLeft" align="right" valign="top">vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a03f271b17639d8b15b28050787f4dbc0">light_dir</a></td></tr>
+<tr class="separator:a03f271b17639d8b15b28050787f4dbc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ceed06673a71dcafe3454dfa5cba61f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html#a7ceed06673a71dcafe3454dfa5cba61f">blend_distance</a></td></tr>
 <tr class="separator:a7ceed06673a71dcafe3454dfa5cba61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -148,42 +148,42 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac937185edc116e838c519e906689ca7c" name="ac937185edc116e838c519e906689ca7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac937185edc116e838c519e906689ca7c">&#9670;&#160;</a></span>light_dir</h2>
+<a id="a03f271b17639d8b15b28050787f4dbc0" name="a03f271b17639d8b15b28050787f4dbc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03f271b17639d8b15b28050787f4dbc0">&#9670;&#160;</a></span>light_dir</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec3 ShadowMapLight::light_dir</td>
+          <td class="memname">vec3 ShadowMapLight::light_dir</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="adcc4925569cf9dec9b117b606d930af4" name="adcc4925569cf9dec9b117b606d930af4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcc4925569cf9dec9b117b606d930af4">&#9670;&#160;</a></span>plane_distances</h2>
+<a id="ae9868931b52484e3d61b0379305255ab" name="ae9868931b52484e3d61b0379305255ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9868931b52484e3d61b0379305255ab">&#9670;&#160;</a></span>plane_distances</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec4 ShadowMapLight::plane_distances[8]</td>
+          <td class="memname">vec4 ShadowMapLight::plane_distances[<a class="el" href="ShaderCommun_8hpp.html#a25e71ed1f4801c4a36132ade5e97cf57">SHADOW_MAP_MAX_COUNT</a>]</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a09726be9a2ec5bbe9b7f634956cc3ab8" name="a09726be9a2ec5bbe9b7f634956cc3ab8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09726be9a2ec5bbe9b7f634956cc3ab8">&#9670;&#160;</a></span>view_proj</h2>
+<a id="a9a99b58f2f8fafb0425e20bd8f910e16" name="a9a99b58f2f8fafb0425e20bd8f910e16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a99b58f2f8fafb0425e20bd8f910e16">&#9670;&#160;</a></span>view_proj</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::mat4 ShadowMapLight::view_proj[8]</td>
+          <td class="memname">mat4 ShadowMapLight::view_proj[<a class="el" href="ShaderCommun_8hpp.html#a25e71ed1f4801c4a36132ade5e97cf57">SHADOW_MAP_MAX_COUNT</a>]</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -191,7 +191,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/app/vulkan/<a class="el" href="VulkanAPI_8hpp_source.html">VulkanAPI.hpp</a></li>
+<li>src/app/vulkan/<a class="el" href="ShaderCommun_8hpp_source.html">ShaderCommun.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

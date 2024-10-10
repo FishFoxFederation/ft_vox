@@ -1,10 +1,13 @@
 var NAVTREEINDEX1 =
 {
-"VulkanAPI_8hpp.html#ab91f325a54d3e35fe831a86d6382c2a9":[11,0,1,0,6,20,15],
-"VulkanAPI_8hpp_source.html":[11,0,1,0,6,20],
-"VulkanMemoryAllocator_8cpp.html":[11,0,1,0,6,21],
-"VulkanMemoryAllocator_8hpp.html":[11,0,1,0,6,22],
-"VulkanMemoryAllocator_8hpp_source.html":[11,0,1,0,6,22],
+"VulkanAPI_8cpp.html":[11,0,1,0,6,20],
+"VulkanAPI_8cpp.html#a6a6be32f4ddd153a7853299a85f579de":[11,0,1,0,6,20,0],
+"VulkanAPI_8hpp.html":[11,0,1,0,6,21],
+"VulkanAPI_8hpp.html#ab91f325a54d3e35fe831a86d6382c2a9":[11,0,1,0,6,21,9],
+"VulkanAPI_8hpp_source.html":[11,0,1,0,6,21],
+"VulkanMemoryAllocator_8cpp.html":[11,0,1,0,6,22],
+"VulkanMemoryAllocator_8hpp.html":[11,0,1,0,6,23],
+"VulkanMemoryAllocator_8hpp_source.html":[11,0,1,0,6,23],
 "WorldGenerator_8cpp.html":[11,0,1,0,8,15],
 "WorldGenerator_8hpp.html":[11,0,1,0,8,16],
 "WorldGenerator_8hpp_source.html":[11,0,1,0,8,16],
@@ -246,8 +249,5 @@ var NAVTREEINDEX1 =
 "classConnection.html":[10,0,21],
 "classConnection.html#a00bec3d81bc203c1403e5966a10b795b":[10,0,21,12],
 "classConnection.html#a2e4352edf667bea83001569e9da8a24d":[10,0,21,1],
-"classConnection.html#a426e5dbbc9c94e010c53fdc84564251f":[10,0,21,4],
-"classConnection.html#a5c86d3a286f0eec453742b49ca15088a":[10,0,21,2],
-"classConnection.html#a8393cac931d8bf5668c28d5bee53f76c":[10,0,21,5],
-"classConnection.html#a879b3872793ee5810b73ee09cde15309":[10,0,21,15]
+"classConnection.html#a426e5dbbc9c94e010c53fdc84564251f":[10,0,21,4]
 };
