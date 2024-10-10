@@ -17,7 +17,7 @@ var classClientWorld =
     [ "getPlayerPosition", "classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50", null ],
     [ "localGetChunk", "classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8", null ],
     [ "manageScroll", "classClientWorld.html#a50e2ffd8f1ee39429a1135c3a17bbd42", null ],
-    [ "modifyBlock", "classClientWorld.html#aba77edcc6093915f6df289bf88e8acd7", null ],
+    [ "modifyBlock", "classClientWorld.html#a46b60cf51949d3e24641a942cfd5582d", null ],
     [ "operator=", "classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8", null ],
     [ "operator=", "classClientWorld.html#a041fb65a6c3188a57a7d5f1d68660ca6", null ],
     [ "otherUpdate", "classClientWorld.html#a1b4ee2813100580cd0fc967e4d9806fd", null ],

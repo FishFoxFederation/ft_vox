@@ -17,7 +17,7 @@ var searchData=
   ['memory_14',['memory',['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()'],['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../structUBO.html#a898dc9f88760fccd39d64ce8da010baf',1,'UBO::memory()'],['../classBuffer.html#a16117b97df69e911ac1b289210083bd7',1,'Buffer::memory()']]],
   ['memory_5fproperties_15',['memory_properties',['../structBuffer_1_1CreateInfo.html#a6435db83175844d6c4a17ad6ea64568c',1,'Buffer::CreateInfo::memory_properties()'],['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo::memory_properties()']]],
   ['memory_5fsize_16',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],
-  ['mesh_5fid_17',['mesh_id',['../classItem.html#a73d2d391ecbfcb48b4cc45a478a87174',1,'Item']]],
+  ['mesh_5fid_17',['mesh_id',['../classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab',1,'ItemInfo']]],
   ['mesh_5fids_5fto_5fdestroy_18',['mesh_ids_to_destroy',['../classVulkanAPI.html#af077051ab8c2e9346f85ebef42b87f5a',1,'VulkanAPI']]],
   ['mesh_5fmap_19',['mesh_map',['../classVulkanAPI.html#a1e5b9f3211f503442e2db8d286caeb72',1,'VulkanAPI']]],
   ['mip_5flevels_20',['mip_levels',['../structImage_1_1CreateInfo.html#a4ca21901d453d2e5e3958d74d3f2cad6',1,'Image::CreateInfo::mip_levels()'],['../classImage.html#abb630a854e037463e527f46d65371c3e',1,'Image::mip_levels()']]],

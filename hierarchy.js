@@ -8,8 +8,8 @@ var hierarchy =
     [ "Atomic< T >", "classAtomic.html", null ],
     [ "Atomic< glm::vec3 >", "classAtomic.html", null ],
     [ "PlayerModel::AttackAnimation", "classPlayerModel_1_1AttackAnimation.html", null ],
-    [ "Block", "structBlock.html", null ],
-    [ "BlockData", "structBlockData.html", null ],
+    [ "BlockInfo", "classBlockInfo.html", null ],
+    [ "BlocksInfo", "classBlocksInfo.html", null ],
     [ "ServerWorld::BlockUpdateData", "structServerWorld_1_1BlockUpdateData.html", null ],
     [ "BlockUpdateThread", "classBlockUpdateThread.html", null ],
     [ "BlockVertex", "structBlockVertex.html", null ],
@@ -81,9 +81,9 @@ var hierarchy =
     [ "IServerToClientPacket", null, [
       [ "EntityMovePacket", "classEntityMovePacket.html", null ]
     ] ],
-    [ "Item", "classItem.html", null ],
     [ "ItemIconPushConstant", "structItemIconPushConstant.html", null ],
-    [ "Items", "structItems.html", null ],
+    [ "ItemInfo", "classItemInfo.html", null ],
+    [ "ItemsInfo", "classItemsInfo.html", null ],
     [ "ItemVertex", "structItemVertex.html", null ],
     [ "JoinThreads", "classJoinThreads.html", null ],
     [ "LineVertex", "structLineVertex.html", null ],

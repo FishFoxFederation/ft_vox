@@ -134,8 +134,8 @@ Public Types</h2></td></tr>
 , <a class="el" href="classChunk.html#ada26dbdea430b4b05379f7124c0a9b40aba2b45bdc11e2a4a6e86aab2ac693cbb">EMPTY</a>
  }</td></tr>
 <tr class="separator:ada26dbdea430b4b05379f7124c0a9b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88ee5de5ab052189e31a7446d6acac1e"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">BlockArray</a></td></tr>
-<tr class="separator:a88ee5de5ab052189e31a7446d6acac1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba2fc7065a2a8d20d1f8dedae21063cd"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a></td></tr>
+<tr class="separator:aba2fc7065a2a8d20d1f8dedae21063cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13d358ee7b03766f8e45ccec50aece7b"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; uint8_t, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a></td></tr>
 <tr class="separator:a13d358ee7b03766f8e45ccec50aece7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -143,7 +143,7 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a76523171d0b51437c6d1d24c5001fa6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a76523171d0b51437c6d1d24c5001fa6e">Chunk</a> (glm::ivec3 position)</td></tr>
 <tr class="separator:a76523171d0b51437c6d1d24c5001fa6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a275d1f98ec1e1a86c0f0d84f2ae4e906"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a275d1f98ec1e1a86c0f0d84f2ae4e906">Chunk</a> (const glm::ivec3 &amp;position, const <a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">BlockArray</a> &amp;blocks, const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;light)</td></tr>
+<tr class="memitem:a275d1f98ec1e1a86c0f0d84f2ae4e906"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a275d1f98ec1e1a86c0f0d84f2ae4e906">Chunk</a> (const glm::ivec3 &amp;position, const <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a> &amp;blocks, const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;light)</td></tr>
 <tr class="separator:a275d1f98ec1e1a86c0f0d84f2ae4e906"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bdeedf9cffec565e91294437efdf7b1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a1bdeedf9cffec565e91294437efdf7b1">Chunk</a> (const <a class="el" href="classChunk.html">Chunk</a> &amp;other)=delete</td></tr>
 <tr class="separator:a1bdeedf9cffec565e91294437efdf7b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,18 +155,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab8a268a44dafc825f81b26e7ad4c0835"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad21b515f41c9a1d21740b9e7e3f8eede"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ad21b515f41c9a1d21740b9e7e3f8eede">~Chunk</a> ()</td></tr>
 <tr class="separator:ad21b515f41c9a1d21740b9e7e3f8eede"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a4bb18cbeb141214c2930437f29985c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">BlockArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a2a4bb18cbeb141214c2930437f29985c">getBlocks</a> ()</td></tr>
+<tr class="memitem:a2a4bb18cbeb141214c2930437f29985c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a2a4bb18cbeb141214c2930437f29985c">getBlocks</a> ()</td></tr>
 <tr class="separator:a2a4bb18cbeb141214c2930437f29985c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4a3f38b4519d9e6aa6a9170e7b35bfa"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">BlockArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ad4a3f38b4519d9e6aa6a9170e7b35bfa">getBlocks</a> () const</td></tr>
+<tr class="memitem:ad4a3f38b4519d9e6aa6a9170e7b35bfa"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ad4a3f38b4519d9e6aa6a9170e7b35bfa">getBlocks</a> () const</td></tr>
 <tr class="separator:ad4a3f38b4519d9e6aa6a9170e7b35bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3e99d768a4ba79aac8a87709c0be630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ad3e99d768a4ba79aac8a87709c0be630">getBlock</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#a13e0fddb7e57040210637ee07fbba9ab">y</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>) const</td></tr>
-<tr class="separator:ad3e99d768a4ba79aac8a87709c0be630"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34c940d831b138ad4da2063f94d14bf4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a34c940d831b138ad4da2063f94d14bf4">getBlock</a> (const glm::ivec3 &amp;position) const</td></tr>
-<tr class="separator:a34c940d831b138ad4da2063f94d14bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a039e0832d7569b13673c8b4e47c5842d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a039e0832d7569b13673c8b4e47c5842d">setBlock</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#a13e0fddb7e57040210637ee07fbba9ab">y</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> block)</td></tr>
-<tr class="separator:a039e0832d7569b13673c8b4e47c5842d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04669945ccd1ebd801e2261104f522ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a04669945ccd1ebd801e2261104f522ad">setBlock</a> (const glm::ivec3 &amp;position, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> block)</td></tr>
-<tr class="separator:a04669945ccd1ebd801e2261104f522ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b53010a040b2da885407d85beef502"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa7b53010a040b2da885407d85beef502">getBlock</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#a13e0fddb7e57040210637ee07fbba9ab">y</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>) const</td></tr>
+<tr class="separator:aa7b53010a040b2da885407d85beef502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ec4e65f8f34d3e781ee75aeaf475601"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a0ec4e65f8f34d3e781ee75aeaf475601">getBlock</a> (const glm::ivec3 &amp;position) const</td></tr>
+<tr class="separator:a0ec4e65f8f34d3e781ee75aeaf475601"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d2be9024e95b3caa684b3396dac6d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a96d2be9024e95b3caa684b3396dac6d0">setBlock</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#a13e0fddb7e57040210637ee07fbba9ab">y</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>, <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> block)</td></tr>
+<tr class="separator:a96d2be9024e95b3caa684b3396dac6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49e6f8ac762b5194ad3e15653310a967"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a49e6f8ac762b5194ad3e15653310a967">setBlock</a> (const glm::ivec3 &amp;position, <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> block)</td></tr>
+<tr class="separator:a49e6f8ac762b5194ad3e15653310a967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a55525abd3504e35a9c14cf563f4462"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a0a55525abd3504e35a9c14cf563f4462">getLight</a> ()</td></tr>
 <tr class="separator:a0a55525abd3504e35a9c14cf563f4462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44c2d43e835c8f0efd86a81597f49d7e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a44c2d43e835c8f0efd86a81597f49d7e">getLight</a> () const</td></tr>
@@ -241,14 +241,14 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a057de54f4cc465177fa249fad8c304df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a88ee5de5ab052189e31a7446d6acac1e" name="a88ee5de5ab052189e31a7446d6acac1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88ee5de5ab052189e31a7446d6acac1e">&#9670;&#160;</a></span>BlockArray</h2>
+<a id="aba2fc7065a2a8d20d1f8dedae21063cd" name="aba2fc7065a2a8d20d1f8dedae21063cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba2fc7065a2a8d20d1f8dedae21063cd">&#9670;&#160;</a></span>BlockArray</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::array&lt;<a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a>&gt; <a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">Chunk::BlockArray</a></td>
+          <td class="memname">typedef std::array&lt;<a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a>&gt; <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">Chunk::BlockArray</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -332,7 +332,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">BlockArray</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a> &amp;&#160;</td>
           <td class="paramname"><em>blocks</em>, </td>
         </tr>
         <tr>
@@ -421,14 +421,14 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a34c940d831b138ad4da2063f94d14bf4" name="a34c940d831b138ad4da2063f94d14bf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34c940d831b138ad4da2063f94d14bf4">&#9670;&#160;</a></span>getBlock() <span class="overload">[1/2]</span></h2>
+<a id="a0ec4e65f8f34d3e781ee75aeaf475601" name="a0ec4e65f8f34d3e781ee75aeaf475601"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ec4e65f8f34d3e781ee75aeaf475601">&#9670;&#160;</a></span>getBlock() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> Chunk::getBlock </td>
+          <td class="memname"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> Chunk::getBlock </td>
           <td>(</td>
           <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
           <td class="paramname"><em>position</em></td><td>)</td>
@@ -439,14 +439,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad3e99d768a4ba79aac8a87709c0be630" name="ad3e99d768a4ba79aac8a87709c0be630"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3e99d768a4ba79aac8a87709c0be630">&#9670;&#160;</a></span>getBlock() <span class="overload">[2/2]</span></h2>
+<a id="aa7b53010a040b2da885407d85beef502" name="aa7b53010a040b2da885407d85beef502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7b53010a040b2da885407d85beef502">&#9670;&#160;</a></span>getBlock() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> Chunk::getBlock </td>
+          <td class="memname"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> Chunk::getBlock </td>
           <td>(</td>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -532,7 +532,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">Chunk::BlockArray</a> &amp; Chunk::getBlocks </td>
+          <td class="memname"><a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">Chunk::BlockArray</a> &amp; Chunk::getBlocks </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -549,7 +549,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classChunk.html#a88ee5de5ab052189e31a7446d6acac1e">Chunk::BlockArray</a> &amp; Chunk::getBlocks </td>
+          <td class="memname">const <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">Chunk::BlockArray</a> &amp; Chunk::getBlocks </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -851,8 +851,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a04669945ccd1ebd801e2261104f522ad" name="a04669945ccd1ebd801e2261104f522ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04669945ccd1ebd801e2261104f522ad">&#9670;&#160;</a></span>setBlock() <span class="overload">[1/2]</span></h2>
+<a id="a49e6f8ac762b5194ad3e15653310a967" name="a49e6f8ac762b5194ad3e15653310a967"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49e6f8ac762b5194ad3e15653310a967">&#9670;&#160;</a></span>setBlock() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -866,7 +866,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td>
           <td class="paramname"><em>block</em>&#160;</td>
         </tr>
         <tr>
@@ -879,8 +879,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a039e0832d7569b13673c8b4e47c5842d" name="a039e0832d7569b13673c8b4e47c5842d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a039e0832d7569b13673c8b4e47c5842d">&#9670;&#160;</a></span>setBlock() <span class="overload">[2/2]</span></h2>
+<a id="a96d2be9024e95b3caa684b3396dac6d0" name="a96d2be9024e95b3caa684b3396dac6d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96d2be9024e95b3caa684b3396dac6d0">&#9670;&#160;</a></span>setBlock() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -906,7 +906,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td>
           <td class="paramname"><em>block</em>&#160;</td>
         </tr>
         <tr>

@@ -1,7 +1,7 @@
 var Block_8hpp =
 [
-    [ "BlockData", "structBlockData.html", "structBlockData" ],
-    [ "Block", "structBlock.html", null ],
+    [ "BlockInfo", "classBlockInfo.html", "classBlockInfo" ],
+    [ "BlocksInfo", "classBlocksInfo.html", "classBlocksInfo" ],
     [ "BLOCK_FACE_BACK", "Block_8hpp.html#acdc50e3ae7204b9a9281913ce0c4ed54", null ],
     [ "BLOCK_FACE_BOTTOM", "Block_8hpp.html#aea576020eabcf8b7dca0825e42edf1b2", null ],
     [ "BLOCK_FACE_FRONT", "Block_8hpp.html#ab8b856d7513a2a0459d4a88061f8388f", null ],
@@ -17,13 +17,5 @@ var Block_8hpp =
     [ "BlockProperties", "Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c", null ],
     [ "BlockType", "Block_8hpp.html#aa38934da64b62c122965f1699b71e2cb", null ],
     [ "TextureID", "Block_8hpp.html#a89c717f0912ef81a8573e40d87a93519", null ],
-    [ "BlockID", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509", [
-      [ "Air", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a71c546fa61f3964d72bdf25223b78669", null ],
-      [ "Grass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaac9a63596f76a62bb9f61a5dd7c0d25", null ],
-      [ "Dirt", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a7cf334b79a84091f27dfc019b4b79229", null ],
-      [ "Stone", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a2ff4ab1d379832d3edee28194fb4e7b2", null ],
-      [ "Water", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a27634ff8002b12e75d98e07ccd005d18", null ],
-      [ "Glass", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509aaae44179fda7ddcbf8916aff53846128", null ],
-      [ "Light", "Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509a9914a0ce04a7b7b6a8e39bec55064b82", null ]
-    ] ]
+    [ "g_blocks_info", "Block_8hpp.html#a4444a80e08217e1267cd9cd5816cd523", null ]
 ];

@@ -24,10 +24,10 @@ var classServerWorld =
     [ "loadChunk", "classServerWorld.html#ab94c2e4a75be7491f310ee8695703ad2", null ],
     [ "operator=", "classServerWorld.html#a1f64a72ff8360e15fe31bada5e991933", null ],
     [ "operator=", "classServerWorld.html#a5d9719c24f535bfde5b33add26b9bff4", null ],
-    [ "placeBlock", "classServerWorld.html#a874f2bc33c6756585ceebf557258dbf4", null ],
+    [ "placeBlock", "classServerWorld.html#a73098b5afa011220a051a827843506a7", null ],
     [ "removeTicket", "classServerWorld.html#a011796df74c5e6f16bfa7e4d78b93e95", null ],
     [ "sendChunkLoadUnloadData", "classServerWorld.html#a53e41cd4cc868b9c4fef6eb7600d10e7", null ],
-    [ "setBlock", "classServerWorld.html#a1a2ee49bbb18ffbffb29ae453b6757a2", null ],
+    [ "setBlock", "classServerWorld.html#a158c0e26aed57aff784fad6d20a72a20", null ],
     [ "update", "classServerWorld.html#a3c1b24daa5bca947dc841ad7edec54be", null ],
     [ "updateBlocks", "classServerWorld.html#a7f8de8a9ac580e3ba3f8a44ae0bcedef", null ]
 ];

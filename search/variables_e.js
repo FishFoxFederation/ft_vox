@@ -33,6 +33,6 @@ var searchData=
   ['present_5fqueue_30',['present_queue',['../classVulkanAPI.html#acd95a2f7af31d3ccba7de8553aeed384',1,'VulkanAPI']]],
   ['proj_31',['proj',['../structViewProjMatrices.html#ac8820bbed54d35d5349fae31ca989a93',1,'ViewProjMatrices']]],
   ['projection_32',['projection',['../structCamera_1_1RenderInfo.html#a58c6cf4540ac7b4ee498c74345fb91c8',1,'Camera::RenderInfo']]],
-  ['properties_33',['properties',['../structBlockData.html#a101c2d42007128997927949f7834ea2f',1,'BlockData']]],
+  ['properties_33',['properties',['../classBlockInfo.html#a816871364c37adaebfd051ae5d84668c',1,'BlockInfo']]],
   ['push_5fconstant_5franges_34',['push_constant_ranges',['../structPipeline_1_1CreateInfo.html#ad71d7079bfbfe032392e48c3c1f2b57e',1,'Pipeline::CreateInfo']]]
 ];

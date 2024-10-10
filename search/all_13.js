@@ -14,9 +14,9 @@ var searchData=
   ['textrenderer_11',['TextRenderer',['../classTextRenderer.html#a2ffb5baddcc264fbaccda8fb7c660814',1,'TextRenderer::TextRenderer()'],['../classTextRenderer.html',1,'TextRenderer']]],
   ['textrenderer_2ecpp_12',['TextRenderer.cpp',['../TextRenderer_8cpp.html',1,'']]],
   ['textrenderer_2ehpp_13',['TextRenderer.hpp',['../TextRenderer_8hpp.html',1,'']]],
-  ['texture_14',['texture',['../structBlockData.html#afd479a42bc5f78cd1a40ebe7cf895cfe',1,'BlockData']]],
+  ['texture_14',['texture',['../classBlockInfo.html#aac1d220c6dabfdebeb508f075daa3b12',1,'BlockInfo']]],
   ['texture_5findex_15',['texture_index',['../structItemVertex.html#ac7f27d1c8ccd852254ae7004510fa088',1,'ItemVertex']]],
-  ['texture_5fnames_16',['texture_names',['../structBlock.html#aebef79a6d35d204084f018e75e82ed4b',1,'Block']]],
+  ['texture_5fnames_16',['texture_names',['../classBlockInfo.html#a2995c4f043a7dfbbd79400fc0c2f43b7',1,'BlockInfo']]],
   ['textureid_17',['TextureID',['../Block_8hpp.html#a89c717f0912ef81a8573e40d87a93519',1,'Block.hpp']]],
   ['third_5fperson_5fback_18',['THIRD_PERSON_BACK',['../classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8a5ab0e529c894afbf4bc850f1122df09b',1,'Player']]],
   ['thread_2emd_19',['thread.md',['../thread_8md.html',1,'']]],
@@ -43,7 +43,7 @@ var searchData=
   ['toolbar_5fcursor_5findex_40',['toolbar_cursor_index',['../classWorldScene.html#af4c1baa7200142d73a36afca4d440905',1,'WorldScene']]],
   ['toolbar_5fimage_41',['toolbar_image',['../classVulkanAPI.html#a706d2eb8e6ae954906b5822f4cc6e5e9',1,'VulkanAPI']]],
   ['toolbar_5fimage_5fdescriptor_42',['toolbar_image_descriptor',['../classVulkanAPI.html#a9fd2ce82f81a14307893a7140f142325',1,'VulkanAPI']]],
-  ['toolbar_5fitems_43',['toolbar_items',['../classWorldScene.html#ace972b4193e6ccf9db7d26ad2538c177',1,'WorldScene::toolbar_items()'],['../classPlayer.html#ae3808467ff1cb6a54de3c0d40fedc728',1,'Player::toolbar_items()']]],
+  ['toolbar_5fitems_43',['toolbar_items',['../classWorldScene.html#a4daf1c8bf26318c7882cd540f28c9536',1,'WorldScene::toolbar_items()'],['../classPlayer.html#a52f0375ccfff72f62197c9c0b4df8bc7',1,'Player::toolbar_items()']]],
   ['toolbar_5fitems_5fmutex_44',['toolbar_items_mutex',['../classWorldScene.html#aad5b6063a77a929054759c27291a8b88',1,'WorldScene']]],
   ['topology_45',['topology',['../structPipeline_1_1CreateInfo.html#afadf397780e7d6489b9fa660069805f4',1,'Pipeline::CreateInfo']]],
   ['trace_46',['TRACE',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa8a60917dff9a8d8ae408cf3d4db1bd90',1,'Logger']]],
@@ -64,6 +64,7 @@ var searchData=
   ['triggerevent_61',['triggerEvent',['../classEvent_1_1Manager.html#a03622d14fc20b1c7d3ae025b62787ac2',1,'Event::Manager']]],
   ['try_5flock_62',['try_lock',['../classStatus.html#aa01d58908a9c84614bbfd0db352ccab4',1,'Status']]],
   ['try_5flock_5fshared_63',['try_lock_shared',['../classStatus.html#a2dc3f38c68d1264ee9a0e9c088b907b0',1,'Status']]],
-  ['type_64',['type',['../classItem.html#a54a8e5975f44745b82d845d8b847e0fa',1,'Item::type()'],['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData::type()']]],
-  ['type_65',['Type',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569',1,'IPacket::Type()'],['../classItem.html#a80deca8a41c4d2865748ae8ba8b07bac',1,'Item::Type()'],['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fc',1,'ServerWorld::BlockUpdateData::Type()'],['../namespaceEvent.html#acc31ef60c792ef43a3b614fd80bcbbf9',1,'Event::Type()']]]
+  ['type_64',['Type',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569',1,'IPacket::Type()'],['../classBlockInfo.html#a45820c5fd9afbf3c099019879095db75',1,'BlockInfo::Type()'],['../classItemInfo.html#a9d898f32712d5daa690f863d6e59362b',1,'ItemInfo::Type()'],['../structServerWorld_1_1BlockUpdateData.html#a8adf80cf0e8c47dd7077b4336168c9fc',1,'ServerWorld::BlockUpdateData::Type()']]],
+  ['type_65',['type',['../classItemInfo.html#af0b5870812676ce07c60450db4499cb7',1,'ItemInfo::type()'],['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData::type()']]],
+  ['type_66',['Type',['../namespaceEvent.html#acc31ef60c792ef43a3b614fd80bcbbf9',1,'Event']]]
 ];

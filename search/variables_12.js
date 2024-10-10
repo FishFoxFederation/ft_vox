@@ -9,9 +9,9 @@ var searchData=
   ['texcoordindex_6',['texCoordIndex',['../structFace.html#ac3aca04b695727e2d43e62f2ddbe876b',1,'Face']]],
   ['texlayer_7',['texLayer',['../structBlockVertex.html#aa28ce0b62638b482e3201fce87d3d101',1,'BlockVertex']]],
   ['text_5frenderer_8',['text_renderer',['../classVulkanAPI.html#a45b5513ed644a7d06f561c664a2f60ed',1,'VulkanAPI']]],
-  ['texture_9',['texture',['../structBlockData.html#afd479a42bc5f78cd1a40ebe7cf895cfe',1,'BlockData']]],
+  ['texture_9',['texture',['../classBlockInfo.html#aac1d220c6dabfdebeb508f075daa3b12',1,'BlockInfo']]],
   ['texture_5findex_10',['texture_index',['../structItemVertex.html#ac7f27d1c8ccd852254ae7004510fa088',1,'ItemVertex']]],
-  ['texture_5fnames_11',['texture_names',['../structBlock.html#aebef79a6d35d204084f018e75e82ed4b',1,'Block']]],
+  ['texture_5fnames_11',['texture_names',['../classBlockInfo.html#a2995c4f043a7dfbbd79400fc0c2f43b7',1,'BlockInfo']]],
   ['tiling_12',['tiling',['../structImage_1_1CreateInfo.html#a3020f400addaf0b3295127255819ec20',1,'Image::CreateInfo']]],
   ['toolbar_5fcursor_13',['toolbar_cursor',['../classPlayer.html#a50c627af08b58cc3435671d583afa0a4',1,'Player']]],
   ['toolbar_5fcursor_5fimage_14',['toolbar_cursor_image',['../classVulkanAPI.html#a4e6e94b0fbb586cf525cd2aef1e72d3c',1,'VulkanAPI']]],
@@ -19,7 +19,7 @@ var searchData=
   ['toolbar_5fcursor_5findex_16',['toolbar_cursor_index',['../classWorldScene.html#af4c1baa7200142d73a36afca4d440905',1,'WorldScene']]],
   ['toolbar_5fimage_17',['toolbar_image',['../classVulkanAPI.html#a706d2eb8e6ae954906b5822f4cc6e5e9',1,'VulkanAPI']]],
   ['toolbar_5fimage_5fdescriptor_18',['toolbar_image_descriptor',['../classVulkanAPI.html#a9fd2ce82f81a14307893a7140f142325',1,'VulkanAPI']]],
-  ['toolbar_5fitems_19',['toolbar_items',['../classWorldScene.html#ace972b4193e6ccf9db7d26ad2538c177',1,'WorldScene::toolbar_items()'],['../classPlayer.html#ae3808467ff1cb6a54de3c0d40fedc728',1,'Player::toolbar_items()']]],
+  ['toolbar_5fitems_19',['toolbar_items',['../classWorldScene.html#a4daf1c8bf26318c7882cd540f28c9536',1,'WorldScene::toolbar_items()'],['../classPlayer.html#a52f0375ccfff72f62197c9c0b4df8bc7',1,'Player::toolbar_items()']]],
   ['toolbar_5fitems_5fmutex_20',['toolbar_items_mutex',['../classWorldScene.html#aad5b6063a77a929054759c27291a8b88',1,'WorldScene']]],
   ['topology_21',['topology',['../structPipeline_1_1CreateInfo.html#afadf397780e7d6489b9fa660069805f4',1,'Pipeline::CreateInfo']]],
   ['transfer_5fcommand_5fbuffers_22',['transfer_command_buffers',['../classVulkanAPI.html#a77a5993a4ce2374bb9c920a52476a669',1,'VulkanAPI']]],
@@ -27,5 +27,5 @@ var searchData=
   ['transfer_5ffamily_24',['transfer_family',['../structQueueFamilyIndices.html#a44f40b1ee7642edba5edcf8c7da9a8f7',1,'QueueFamilyIndices']]],
   ['transfer_5fqueue_25',['transfer_queue',['../classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960',1,'VulkanAPI']]],
   ['transform_26',['transform',['../classMob.html#ae5fea291d4689996bdf6a86b06396c44',1,'Mob::transform()'],['../classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d',1,'Player::transform()']]],
-  ['type_27',['type',['../classItem.html#a54a8e5975f44745b82d845d8b847e0fa',1,'Item::type()'],['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData::type()']]]
+  ['type_27',['type',['../classItemInfo.html#af0b5870812676ce07c60450db4499cb7',1,'ItemInfo::type()'],['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData::type()']]]
 ];

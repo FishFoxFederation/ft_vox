@@ -174,10 +174,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7f8de8a9ac580e3ba3f8a44ae0bcedef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab94c2e4a75be7491f310ee8695703ad2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#ab94c2e4a75be7491f310ee8695703ad2">loadChunk</a> (const glm::ivec3 &amp;chunk_position)</td></tr>
 <tr class="separator:ab94c2e4a75be7491f310ee8695703ad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a874f2bc33c6756585ceebf557258dbf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a874f2bc33c6756585ceebf557258dbf4">placeBlock</a> (const glm::vec3 &amp;position, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> block)</td></tr>
-<tr class="separator:a874f2bc33c6756585ceebf557258dbf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a2ee49bbb18ffbffb29ae453b6757a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a1a2ee49bbb18ffbffb29ae453b6757a2">setBlock</a> (const glm::vec3 &amp;position, <a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a> block)</td></tr>
-<tr class="separator:a1a2ee49bbb18ffbffb29ae453b6757a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73098b5afa011220a051a827843506a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a73098b5afa011220a051a827843506a7">placeBlock</a> (const glm::vec3 &amp;position, <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> block)</td></tr>
+<tr class="separator:a73098b5afa011220a051a827843506a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a158c0e26aed57aff784fad6d20a72a20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a158c0e26aed57aff784fad6d20a72a20">setBlock</a> (const glm::vec3 &amp;position, <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> block)</td></tr>
+<tr class="separator:a158c0e26aed57aff784fad6d20a72a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd97b8fca06c1d7e9a6ae80c82407432"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ChunkLoadUnloadData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#afd97b8fca06c1d7e9a6ae80c82407432">getChunksToUnload</a> (const glm::vec3 &amp;old_player_position, const glm::vec3 &amp;new_player_position)</td></tr>
 <tr class="separator:afd97b8fca06c1d7e9a6ae80c82407432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ebb95bb7fa6a543052907b8b304608"><td class="memItemLeft" align="right" valign="top">const std::unordered_set&lt; glm::ivec3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#ae1ebb95bb7fa6a543052907b8b304608">getBlockUpdateChunks</a> () const</td></tr>
@@ -727,8 +727,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a874f2bc33c6756585ceebf557258dbf4" name="a874f2bc33c6756585ceebf557258dbf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a874f2bc33c6756585ceebf557258dbf4">&#9670;&#160;</a></span>placeBlock()</h2>
+<a id="a73098b5afa011220a051a827843506a7" name="a73098b5afa011220a051a827843506a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73098b5afa011220a051a827843506a7">&#9670;&#160;</a></span>placeBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -742,7 +742,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td>
           <td class="paramname"><em>block</em>&#160;</td>
         </tr>
         <tr>
@@ -809,8 +809,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a1a2ee49bbb18ffbffb29ae453b6757a2" name="a1a2ee49bbb18ffbffb29ae453b6757a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a2ee49bbb18ffbffb29ae453b6757a2">&#9670;&#160;</a></span>setBlock()</h2>
+<a id="a158c0e26aed57aff784fad6d20a72a20" name="a158c0e26aed57aff784fad6d20a72a20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a158c0e26aed57aff784fad6d20a72a20">&#9670;&#160;</a></span>setBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -824,7 +824,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="Block_8hpp.html#abad59f5fb8fc1b8d052677de5da5c509">BlockID</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td>
           <td class="paramname"><em>block</em>&#160;</td>
         </tr>
         <tr>
