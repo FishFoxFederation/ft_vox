@@ -42,7 +42,6 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 		"assets/textures/skybox/front.jpg",
 		"assets/textures/skybox/back.jpg"
 	}, 512);
-	createFrustumLineBuffers();
 	createTextureImage();
 
 	createDescriptors();
@@ -94,10 +93,6 @@ VulkanAPI::~VulkanAPI()
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
-		vkUnmapMemory(device, frustum_line_buffers_memory[i]);
-		vma.freeMemory(device, frustum_line_buffers_memory[i], nullptr);
-		vkDestroyBuffer(device, frustum_line_buffers[i], nullptr);
-
 		vkUnmapMemory(device, camera_ubo.memory[i]);
 		vma.freeMemory(device, camera_ubo.memory[i], nullptr);
 		vkDestroyBuffer(device, camera_ubo.buffers[i], nullptr);
@@ -1009,51 +1004,6 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	skybox_cube_map = Image(device, physical_device, command_buffer_2, _image_info);
 }
 
-void VulkanAPI::createFrustumLineBuffers()
-{
-	frustum_line_vertex_count = 8;
-	frustum_line_index_count = 24;
-
-	VkDeviceSize vertex_buffer_size = sizeof(LineVertex) * frustum_line_vertex_count;
-	VkDeviceSize index_buffer_size = sizeof(uint32_t) * frustum_line_index_count;
-	VkDeviceSize buffer_size = vertex_buffer_size + index_buffer_size;
-
-	frustum_line_index_offset = vertex_buffer_size;
-
-	frustum_line_buffers.resize(max_frames_in_flight);
-	frustum_line_buffers_memory.resize(max_frames_in_flight);
-	frustum_line_buffers_mapped_memory.resize(max_frames_in_flight);
-
-	std::vector<uint32_t> indices = {
-		0, 1, 1, 2, 2, 3, 3, 0,
-		4, 5, 5, 6, 6, 7, 7, 4,
-		0, 4, 1, 5, 2, 6, 3, 7
-	};
-
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		createBuffer(
-			buffer_size,
-			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-			frustum_line_buffers[i],
-			frustum_line_buffers_memory[i]
-		);
-
-		VK_CHECK(
-			vkMapMemory(device, frustum_line_buffers_memory[i], 0, buffer_size, 0, &frustum_line_buffers_mapped_memory[i]),
-			"Failed to map memory for frustum line buffer."
-		);
-
-		// Copy the indices to the buffer because they are static
-		memcpy(
-			static_cast<char *>(frustum_line_buffers_mapped_memory[i]) + vertex_buffer_size,
-			indices.data(),
-			static_cast<size_t>(index_buffer_size)
-		);
-	}
-}
-
 void VulkanAPI::createHudImages(
 	const std::string & file_path,
 	Image & image
@@ -1795,8 +1745,8 @@ void VulkanAPI::createPipelines()
 	{ // water pipeline
 		Pipeline::CreateInfo pipeline_info = {};
 		pipeline_info.extent = output_attachement.extent2D;
-		pipeline_info.vert_path = "shaders/rasterization/water_shader.vert.spv";
-		pipeline_info.frag_path = "shaders/rasterization/water_shader.frag.spv";
+		pipeline_info.vert_path = "shaders/rasterization/water/water_shader.vert.spv";
+		pipeline_info.frag_path = "shaders/rasterization/water/water_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { output_attachement.format };
@@ -1832,7 +1782,7 @@ void VulkanAPI::createPipelines()
 			camera_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(LinePipelinePushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_LINE_WIDTH };
@@ -1888,17 +1838,21 @@ void VulkanAPI::createPipelines()
 		pipeline_info.geom_path = "shaders/rasterization/shadow/shadow_shader.geom.spv";
 		pipeline_info.frag_path = "shaders/rasterization/shadow/shadow_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
-		std::vector<VkVertexInputAttributeDescription> attribute_descriptions = {
-			BlockVertex::getAttributeDescriptions()[0]
+		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions = BlockVertex::getAttributeDescriptions();
+		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions_2 = {
+			attribute_descriptions[0],
+			attribute_descriptions[2],
+			attribute_descriptions[3]
 		};
-		pipeline_info.attribute_descriptions = attribute_descriptions;
+		pipeline_info.attribute_descriptions = attribute_descriptions_2;
 		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
 		pipeline_info.depth_bias_enable = VK_TRUE;
 		pipeline_info.depth_bias_constant_factor = 0.005f;
 		pipeline_info.depth_bias_slope_factor = 0.1f;
 		pipeline_info.descriptor_set_layouts = {
-			light_view_proj_descriptor.layout
+			light_view_proj_descriptor.layout,
+			block_textures_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }

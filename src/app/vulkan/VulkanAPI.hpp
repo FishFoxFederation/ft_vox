@@ -53,7 +53,6 @@ struct QueueFamilyIndices
 struct LineVertex
 {
 	glm::vec3 pos;
-	glm::vec3 color;
 
 	static VkVertexInputBindingDescription getBindingDescription()
 	{
@@ -67,17 +66,12 @@ struct LineVertex
 
 	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
 	{
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(1);
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
 		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 		attributeDescriptions[0].offset = offsetof(LineVertex, pos);
-
-		attributeDescriptions[1].binding = 0;
-		attributeDescriptions[1].location = 1;
-		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		attributeDescriptions[1].offset = offsetof(LineVertex, color);
 
 		return attributeDescriptions;
 	}
@@ -380,14 +374,6 @@ public:
 	UBO light_mat_ubo;
 	UBO atmosphere_ubo;
 
-	// Buffers for the line vertices and indices for the frustum
-	std::vector<VkBuffer> frustum_line_buffers;
-	std::vector<VkDeviceMemory> frustum_line_buffers_memory;
-	std::vector<void *> frustum_line_buffers_mapped_memory;
-	VkDeviceSize frustum_line_index_offset;
-	uint32_t frustum_line_vertex_count;
-	uint32_t frustum_line_index_count;
-
 	Descriptor swapchain_image_descriptor;
 	Descriptor camera_descriptor;
 	Descriptor block_textures_descriptor;
@@ -518,7 +504,6 @@ private:
 	void createUniformBuffers();
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
 	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
-	void createFrustumLineBuffers();
 	void createHudImages(
 		const std::string & file_path,
 		Image & image

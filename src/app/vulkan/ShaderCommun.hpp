@@ -56,6 +56,12 @@ struct ItemIconPushConstant
 	int layer;
 };
 
+struct LinePipelinePushConstant
+{
+	mat4 model;
+	vec4 color;
+};
+
 
 
 #endif // SHADER_COMMUN_HPP

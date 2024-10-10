@@ -388,7 +388,8 @@ void RenderThread::shadowPass()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-		vk.light_view_proj_descriptor.sets[vk.current_frame]
+		vk.light_view_proj_descriptor.sets[vk.current_frame],
+		vk.block_textures_descriptor.set
 	};
 
 	vkCmdBindDescriptorSets(
@@ -715,15 +716,19 @@ void RenderThread::lightingPass()
 			VK_INDEX_TYPE_UINT32
 		);
 
-		ModelMatrice target_block_matrice = {};
-		target_block_matrice.model = glm::translate(glm::mat4(1.0f), target_block.value()) * glm::scale(glm::mat4(1.0f), glm::vec3(1.001f));
+		const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block.value() - glm::vec3(0.005f));
+		const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.01f));
+		const LinePipelinePushConstant target_block_push_constant = {
+			target_block_model * target_block_scale,
+			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+		};
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.line_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT,
+			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
 			0,
-			sizeof(ModelMatrice),
-			&target_block_matrice
+			sizeof(LinePipelinePushConstant),
+			&target_block_push_constant
 		);
 
 		vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 2.0f);
