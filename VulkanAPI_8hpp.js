@@ -9,7 +9,6 @@ var VulkanAPI_8hpp =
     [ "ModelMatrice", "structModelMatrice.html", "structModelMatrice" ],
     [ "EntityMatrices", "structEntityMatrices.html", "structEntityMatrices" ],
     [ "ShadowMapLight", "structShadowMapLight.html", "structShadowMapLight" ],
-    [ "GuiTextureData", "structGuiTextureData.html", "structGuiTextureData" ],
     [ "AtmosphereParams", "structAtmosphereParams.html", "structAtmosphereParams" ],
     [ "ImGuiTexture", "structImGuiTexture.html", "structImGuiTexture" ],
     [ "VulkanAPI", "classVulkanAPI.html", "classVulkanAPI" ],

@@ -11,6 +11,8 @@ var dir_b1761ed663595ed5d6faaeadad515f12 =
     [ "Pipeline.hpp", "Pipeline_8hpp.html", "Pipeline_8hpp" ],
     [ "Swapchain.cpp", "Swapchain_8cpp.html", null ],
     [ "Swapchain.hpp", "Swapchain_8hpp.html", "Swapchain_8hpp" ],
+    [ "TextRenderer.cpp", "TextRenderer_8cpp.html", "TextRenderer_8cpp" ],
+    [ "TextRenderer.hpp", "TextRenderer_8hpp.html", "TextRenderer_8hpp" ],
     [ "vk_define.hpp", "vk__define_8hpp.html", "vk__define_8hpp" ],
     [ "vk_helper.cpp", "vk__helper_8cpp.html", "vk__helper_8cpp" ],
     [ "vk_helper.hpp", "vk__helper_8hpp.html", "vk__helper_8hpp" ],

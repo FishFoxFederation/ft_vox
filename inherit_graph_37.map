@@ -1,13 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classIPacket.html" title=" " alt="" coords="5,228,72,253"/>
-<area shape="rect" id="node2" href="$classBlockActionPacket.html" title=" " alt="" coords="134,5,267,31"/>
-<area shape="rect" id="node3" href="$classChunkPacket.html" title=" " alt="" coords="151,55,251,80"/>
-<area shape="rect" id="node4" href="$classChunkRequestPacket.html" title=" " alt="" coords="127,104,275,129"/>
-<area shape="rect" id="node5" href="$classChunkUnloadPacket.html" title=" " alt="" coords="130,153,271,179"/>
-<area shape="rect" id="node6" href="$classConnectionPacket.html" title=" " alt="" coords="137,203,265,228"/>
-<area shape="rect" id="node7" href="$classDisconnectPacket.html" title=" " alt="" coords="137,252,265,277"/>
-<area shape="rect" id="node8" href="$classPingPacket.html" title=" " alt="" coords="156,301,245,327"/>
-<area shape="rect" id="node9" href="$classPlayerConnectedPacket.html" title=" " alt="" coords="120,351,281,376"/>
-<area shape="rect" id="node10" href="$classPlayerListPacket.html" title=" " alt="" coords="140,400,261,425"/>
-<area shape="rect" id="node11" href="$classPlayerMovePacket.html" title=" " alt="" coords="135,449,266,475"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,159,31"/>
+<area shape="rect" id="node2" href="$classEntityMovePacket.html" title=" " alt="" coords="207,5,333,31"/>
 </map>

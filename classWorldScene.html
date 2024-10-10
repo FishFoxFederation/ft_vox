@@ -123,7 +123,7 @@ Collaboration diagram for WorldScene:</div>
 <div class="dyncontent">
 <div class="center"><img src="classWorldScene__coll__graph.png" border="0" usemap="#aWorldScene_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorldScene_coll__map" id="aWorldScene_coll__map">
-<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="137,417,283,692"/>
+<area shape="rect" title="Class to hold the world scene. The instance of this class will be accessed by multiple threads so it ..." alt="" coords="137,417,283,707"/>
 <area shape="rect" href="classIdList.html" title=" " alt="" coords="5,124,199,355"/>
 <area shape="rect" title=" " alt="" coords="14,5,190,75"/>
 <area shape="rect" href="classIdList.html" title=" " alt="" coords="223,124,416,355"/>
@@ -189,6 +189,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a39a8384c40aa13380dcae1d593e6f3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec9e9052db57d23eafa3acf6d1562baa"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint64_t, <a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#aec9e9052db57d23eafa3acf6d1562baa">m_players</a></td></tr>
 <tr class="separator:aec9e9052db57d23eafa3acf6d1562baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab474095db5d0fdbaba9a05a3d5fae4af"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorldScene.html#ab474095db5d0fdbaba9a05a3d5fae4af">show_debug_text</a> = false</td></tr>
+<tr class="separator:ab474095db5d0fdbaba9a05a3d5fae4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class to hold the world scene. The instance of this class will be accessed by multiple threads so it will include synchronization logic. </p>
@@ -587,6 +589,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::map&lt;uint64_t, <a class="el" href="structWorldScene_1_1PlayerRenderData.html">PlayerRenderData</a>&gt; WorldScene::m_players</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab474095db5d0fdbaba9a05a3d5fae4af" name="ab474095db5d0fdbaba9a05a3d5fae4af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab474095db5d0fdbaba9a05a3d5fae4af">&#9670;&#160;</a></span>show_debug_text</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;bool&gt; WorldScene::show_debug_text = false</td>
         </tr>
       </table>
 </div><div class="memdoc">

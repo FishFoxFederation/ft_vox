@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VOX: Member List</title>
+<title>VOX: src/app/vulkan/TextRenderer.cpp File Reference</title>
 <!--BEGIN PROJECT_ICON-->
 <link rel="icon" href="$projecticon" type="image/x-icon" />
 <!--END PROJECT_ICON-->
@@ -79,7 +79,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('structGuiTextureData.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('TextRenderer_8cpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -105,19 +105,77 @@ $(document).ready(function(){initNavTree('structGuiTextureData.html',''); initRe
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">GuiTextureData Member List</div></div>
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">TextRenderer.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="TextRenderer_8hpp_source.html">TextRenderer.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="logger_8hpp_source.html">logger.hpp</a>&quot;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for TextRenderer.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="TextRenderer_8cpp__incl.png" border="0" usemap="#asrc_2app_2vulkan_2TextRenderer_8cpp" alt=""/></div>
+<map name="asrc_2app_2vulkan_2TextRenderer_8cpp" id="asrc_2app_2vulkan_2TextRenderer_8cpp">
+<area shape="rect" title=" " alt="" coords="461,5,673,31"/>
+<area shape="rect" href="TextRenderer_8hpp.html" title=" " alt="" coords="92,79,215,104"/>
+<area shape="rect" href="logger_8hpp.html" title=" " alt="" coords="526,79,607,104"/>
+<area shape="rect" title=" " alt="" coords="631,79,710,104"/>
+<area shape="rect" title=" " alt="" coords="5,152,56,177"/>
+<area shape="rect" title=" " alt="" coords="81,152,135,177"/>
+<area shape="rect" title=" " alt="" coords="160,152,235,177"/>
+<area shape="rect" title=" " alt="" coords="259,152,331,177"/>
+<area shape="rect" title=" " alt="" coords="355,152,421,177"/>
+<area shape="rect" title=" " alt="" coords="445,152,515,177"/>
+<area shape="rect" title=" " alt="" coords="539,152,594,177"/>
+<area shape="rect" title=" " alt="" coords="619,152,685,177"/>
+<area shape="rect" title=" " alt="" coords="709,152,789,177"/>
+<area shape="rect" title=" " alt="" coords="814,152,882,177"/>
+<area shape="rect" title=" " alt="" coords="906,152,963,177"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a3ab7cf82226d7b4f31da0763e6e6d026"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextRenderer_8cpp.html#a3ab7cf82226d7b4f31da0763e6e6d026">THROW_CHECK</a>(f,  msg)&#160;&#160;&#160;if (f) { throw std::runtime_error(msg); }</td></tr>
+<tr class="separator:a3ab7cf82226d7b4f31da0763e6e6d026"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a3ab7cf82226d7b4f31da0763e6e6d026" name="a3ab7cf82226d7b4f31da0763e6e6d026"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ab7cf82226d7b4f31da0763e6e6d026">&#9670;&#160;</a></span>THROW_CHECK</h2>
 
-<p>This is the complete list of members for <a class="el" href="structGuiTextureData.html">GuiTextureData</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="structGuiTextureData.html#a29ad53e912ebc87e7ccf826589b92431">position</a></td><td class="entry"><a class="el" href="structGuiTextureData.html">GuiTextureData</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="structGuiTextureData.html#aab3ce22724c357c35624ad1b91e67f39">size</a></td><td class="entry"><a class="el" href="structGuiTextureData.html">GuiTextureData</a></td><td class="entry"></td></tr>
-</table></div><!-- contents -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define THROW_CHECK</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">f, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">msg&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;if (f) { throw std::runtime_error(msg); }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5194e5fea318fda12687127c23f8aba1.html">app</a></li><li class="navelem"><a class="el" href="dir_b1761ed663595ed5d6faaeadad515f12.html">vulkan</a></li><li class="navelem"><a class="el" href="TextRenderer_8cpp.html">TextRenderer.cpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>
