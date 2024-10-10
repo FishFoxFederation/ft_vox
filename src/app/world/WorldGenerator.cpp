@@ -1,10 +1,12 @@
 #include "WorldGenerator.hpp"
 
+#include "math_utils.hpp"
 #include <cmath>
 #include <queue>
 
 Chunk::genLevel WorldGenerator::ticketToGenLevel(int ticket_level)
 {
+	return LIGHT;
 	if (ticket_level <= TICKET_LEVEL_INACTIVE)
 		return LIGHT;
 	switch (ticket_level)
@@ -87,7 +89,8 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 
 WorldGenerator::WorldGenerator()
 : m_relief_perlin(1, 7, 1, 0.35, 2),
-  m_cave_perlin(1, 4, 1, 0.5, 2)
+  m_cave_perlin(1, 4, 1, 0.5, 2),
+  m_continentalness_perlin(10, 7, 1, 0.4, 2)
 {
 	for(size_t i = 0; i + 1 < ZONE_SIZES.size(); i++)
 	{
@@ -509,6 +512,14 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 				{
 					for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 					{
+						// check the continentalness of the chunk
+						float continentalness = m_continentalness_perlin.noise(glm::vec2(
+							(blockX + chunkPos3D.x * CHUNK_X_SIZE) * 0.00090f,
+							(blockZ + chunkPos3D.z * CHUNK_Z_SIZE) * 0.00090f
+						));
+
+						// continentalness *= 4; // map from [-1, 1] to [-4, 4]
+
 						//generate the relief value for the whole chunk
 						float reliefValue = generateReliefValue(glm::ivec2(
 							blockX + chunkPos3D.x * CHUNK_X_SIZE,
@@ -517,10 +528,33 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 
 						float riverValue = std::abs(reliefValue);
 
-						reliefValue = (reliefValue + 1) / 2;
-						reliefValue = pow(2, 10 * reliefValue - 10);
-						reliefValue *= (CHUNK_Y_SIZE - 100);
-						reliefValue += 100;
+						reliefValue = (reliefValue + 1) / 2; // map from [-1, 1] to [0, 1]
+						reliefValue = pow(2, 10 * reliefValue - 10); // map from [0, 1] to [0, 1] with a slope
+						
+						float oceanReliefValue = (reliefValue * -60) + 60; // map from [0, 1] to [60, 0]
+						float landReliefValue = (reliefValue * (CHUNK_Y_SIZE - 80)) + 80; // map from [0, 1] to [80, CHUNK_Y_SIZE]
+
+						bool isLand = continentalness > 0.2f;
+						bool isOcean = continentalness < 0.00f;
+						bool isCoast = !isLand && !isOcean;
+
+						if (isOcean)
+						{
+							reliefValue = oceanReliefValue;
+						}
+						else if (isCoast)
+						{
+							// reliefValue *= (CHUNK_Y_SIZE - 100); // map from [0, 1] to [0, CHUNK_Y_SIZE - 100]
+							// reliefValue += 100; // map from [0, CHUNK_Y_SIZE - 100] to [100, CHUNK_Y_SIZE]
+							reliefValue = std::lerp(oceanReliefValue, landReliefValue, mapRange(continentalness, 0.0f, 0.2f, 0.0f, 1.0f));
+						}
+						else if (isLand)
+						{
+							// reliefValue *= (CHUNK_Y_SIZE - 100); // map from [0, 1] to [0, CHUNK_Y_SIZE - 100]
+							// reliefValue += 100; // map from [0, CHUNK_Y_SIZE - 100] to [100, CHUNK_Y_SIZE]
+							reliefValue = landReliefValue;
+						}
+
 						for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 						{
 
@@ -529,21 +563,65 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 								blockY,
 								blockZ + chunkPos3D.z * CHUNK_Z_SIZE
 							);
-							BlockInfo::Type to_set;
+							BlockID to_set = BlockID::Air;
 
 							{
-								//check to see wether above or below the relief value
-								if (reliefValue > position.y)
-									to_set = BlockInfo::Type::Stone;
-								else if (reliefValue + 5 > position.y)
+								if (isOcean)
 								{
-									if (riverValue < 0.05f)
-										to_set = BlockInfo::Type::Water;
+									if (position.y < reliefValue)
+										to_set = BlockID::Stone;
+									else if (position.y < 80)
+										to_set = BlockID::Water;
 									else
-										to_set = BlockInfo::Type::Grass;
+										to_set = BlockID::Air;
 								}
-								else
-									to_set = BlockInfo::Type::Air;
+								else if (isCoast)
+								{
+									if (position.y > 80)
+									{
+										if (position.y < reliefValue - 5)
+											to_set = BlockID::Stone;
+										else if (position.y < reliefValue - 1 )
+											to_set = BlockID::Dirt;
+										else if (position.y < reliefValue)
+											to_set = BlockID::Grass;
+										else
+											to_set = BlockID::Air;
+									}
+									else
+									{
+										if (position.y < reliefValue)
+											to_set = BlockID::Stone;
+										else
+											to_set = BlockID::Water;
+									}
+								}
+								else if (isLand)
+								{
+									(void)riverValue;
+									//check to see wether above or below the relief value
+									// if (reliefValue > position.y)
+										// to_set = BlockID::Stone;
+									// else if (reliefValue + 5 > position.y)
+									// {
+									// 	if (riverValue < 0.05f)
+									// 		to_set = BlockID::Water;
+									// 	else
+									// 		to_set = BlockID::Grass;
+									// }
+									// else
+										// to_set = BlockID::Air;
+									if (position.y < reliefValue - 5)
+										to_set = BlockID::Stone;
+									else if (position.y < reliefValue - 1)
+										to_set = BlockID::Dirt;
+									else if (position.y < reliefValue)
+										to_set = BlockID::Grass;
+									else
+										to_set = BlockID::Air;
+								}
+								// if (isCoast)
+								// 	to_set = BlockID::Glass;
 							}
 							chunk->setBlock(blockX, blockY, blockZ, to_set);
 						}
