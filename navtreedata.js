@@ -119,9 +119,9 @@ var NAVTREEINDEX =
 "classIdList.html#a7a325affc5650075383909a95651034b",
 "classPlayerListPacket.html#a48a7c7a0b2291b38d439cdf984eae761",
 "classThreadPoolAccessor.html#a34fe797b87652519f96f763fe3f041ee",
-"define_8hpp.html#a614217d263be1fb1a5f76e2ff7be19a2",
-"structEntityVertex.html#a1d6ed7bf852bdd04b2a8f00ef473e473",
-"tracy__globals_8cpp.html#a8e16bdf07075cd8395584764f837dc49"
+"dir_16a327e0eea9858bdb366df3e314b663.html",
+"structFace.html#ac3aca04b695727e2d43e62f2ddbe876b",
+"tracy__globals_8hpp.html#a3bb732a180b8a1c84118472ff9e2c111"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

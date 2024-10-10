@@ -6,5 +6,6 @@ var ShaderCommun_8hpp =
     [ "ShadowMapLight", "structShadowMapLight.html", "structShadowMapLight" ],
     [ "PreRenderItemIconPushConstant", "structPreRenderItemIconPushConstant.html", "structPreRenderItemIconPushConstant" ],
     [ "ItemIconPushConstant", "structItemIconPushConstant.html", "structItemIconPushConstant" ],
+    [ "LinePipelinePushConstant", "structLinePipelinePushConstant.html", "structLinePipelinePushConstant" ],
     [ "SHADOW_MAP_MAX_COUNT", "ShaderCommun_8hpp.html#a25e71ed1f4801c4a36132ade5e97cf57", null ]
 ];

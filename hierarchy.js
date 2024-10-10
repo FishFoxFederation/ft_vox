@@ -86,6 +86,7 @@ var hierarchy =
     [ "ItemsInfo", "classItemsInfo.html", null ],
     [ "ItemVertex", "structItemVertex.html", null ],
     [ "JoinThreads", "classJoinThreads.html", null ],
+    [ "LinePipelinePushConstant", "structLinePipelinePushConstant.html", null ],
     [ "LineVertex", "structLineVertex.html", null ],
     [ "Logger", "classLogger.html", null ],
     [ "Event::Manager", "classEvent_1_1Manager.html", null ],

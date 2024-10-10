@@ -78,7 +78,7 @@ var searchData=
   ['close_75',['close',['../classSocket.html#a75ee749264ccbcfc4dfbf5442e55dcb8',1,'Socket']]],
   ['code_20style_20guide_76',['Code style guide',['../codestyleguide.html',1,'']]],
   ['code_5fstyle_5fguide_2emd_77',['code_style_guide.md',['../code__style__guide_8md.html',1,'']]],
-  ['color_78',['color',['../structWorldScene_1_1DebugBlock.html#a370fe086d8e76cf71c6f573231035def',1,'WorldScene::DebugBlock::color()'],['../structEntityMatrices.html#a856f103f6a53de5f36128805eceaa04c',1,'EntityMatrices::color()'],['../structLineVertex.html#af461b7f3416e020d0af52f440a764d2c',1,'LineVertex::color()']]],
+  ['color_78',['color',['../structWorldScene_1_1DebugBlock.html#a370fe086d8e76cf71c6f573231035def',1,'WorldScene::DebugBlock::color()'],['../structEntityMatrices.html#a856f103f6a53de5f36128805eceaa04c',1,'EntityMatrices::color()'],['../structLinePipelinePushConstant.html#a5f312d405991d2d64c40353d87e91f86',1,'LinePipelinePushConstant::color()']]],
   ['color_5fattachement_79',['color_attachement',['../classVulkanAPI.html#a7598e68cc5cf8b943ee619b76483b77d',1,'VulkanAPI']]],
   ['color_5fformats_80',['color_formats',['../structPipeline_1_1CreateInfo.html#a9cb9c18feed0563d0f3a9943ee708fb6',1,'Pipeline::CreateInfo']]],
   ['command_2ecpp_81',['Command.cpp',['../Command_8cpp.html',1,'']]],

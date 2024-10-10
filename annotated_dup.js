@@ -67,6 +67,7 @@ var annotated_dup =
     [ "ItemsInfo", "classItemsInfo.html", "classItemsInfo" ],
     [ "ItemVertex", "structItemVertex.html", "structItemVertex" ],
     [ "JoinThreads", "classJoinThreads.html", "classJoinThreads" ],
+    [ "LinePipelinePushConstant", "structLinePipelinePushConstant.html", "structLinePipelinePushConstant" ],
     [ "LineVertex", "structLineVertex.html", "structLineVertex" ],
     [ "Logger", "classLogger.html", "classLogger" ],
     [ "Mat4", "classMat4.html", "classMat4" ],
