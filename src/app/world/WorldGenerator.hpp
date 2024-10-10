@@ -78,8 +78,12 @@ private:
 
 	Perlin	m_relief_perlin;
 	Perlin	m_cave_perlin;
+	
+	// BIOMES PERLINS
+	Perlin	m_continentalness_perlin;
 
 	BlockInfo::Type generateCaveBlock(glm::ivec3 position);
 	BlockInfo::Type generateReliefBlock(glm::ivec3 position);
+
 	float	generateReliefValue(glm::ivec2 position);
 };
