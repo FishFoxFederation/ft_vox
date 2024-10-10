@@ -106,10 +106,10 @@ static void createItemCubeMesh(
 
 static void setTextureIndices(
 	std::vector<ItemVertex> & vertices,
-	const Item & item
+	const ItemInfo & itemInfo
 )
 {
-	const BlockData &block_data = Block::getData(item.block_id);
+	const BlockInfo &block_data = g_blocks_info.get(itemInfo.block_id);
 
 	for (size_t i = 0; i < 6; i++)
 	{
@@ -124,17 +124,17 @@ static void setTextureIndices(
 
 void VulkanAPI::createItemMeshes()
 {
-	for (uint32_t i = 0; i < Items::list.size(); i++)
+	for (size_t i = 0; i < g_items_info.count(); i++)
 	{
-		Item &item = Items::list[i];
+		ItemInfo & itemInfo = g_items_info.get(i);
 
 		std::vector<ItemVertex> vertices;
 		std::vector<uint32_t> indices;
 
 		createItemCubeMesh(vertices, indices);
-		setTextureIndices(vertices, item);
+		setTextureIndices(vertices, itemInfo);
 
-		item.mesh_id = storeMesh(
+		itemInfo.mesh_id = storeMesh(
 			vertices.data(),
 			vertices.size(),
 			sizeof(ItemVertex),
@@ -142,7 +142,7 @@ void VulkanAPI::createItemMeshes()
 			indices.size()
 		);
 
-		if (item.mesh_id == invalid_mesh_id)
+		if (itemInfo.mesh_id == invalid_mesh_id)
 		{
 			LOG_WARNING_FMT("Failed to create mesh for item: %d", i);
 		}

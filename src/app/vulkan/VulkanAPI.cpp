@@ -33,7 +33,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createColorAttachement();
 	createDepthAttachement();
 	createUniformBuffers();
-	createTextureArray(Block::texture_names, 64);
+	createTextureArray(BlockInfo::texture_names, 64);
 	createCubeMap({
 		"assets/textures/skybox/right.jpg",
 		"assets/textures/skybox/left.jpg",
@@ -659,6 +659,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
 	}
+	vkDestroyFramebuffer(device, prerender_item_icon_framebuffer, nullptr);
 
 	createSwapChain(window);
 	createColorAttachement();
@@ -2522,14 +2523,14 @@ void VulkanAPI::prerenderItemIconImages()
 	PreRenderItemIconPushConstant push_constants = {};
 	push_constants.MVP = clip * proj * view * model;
 
-	for (size_t i = 0; i < Items::list.size(); i++)
+	for (size_t i = 0; i < g_items_info.count(); i++)
 	{
 		push_constants.layer = i;
 
 		drawMesh(
 			command_buffer,
 			prerender_item_icon_pipeline,
-			Items::list[i].mesh_id,
+			g_items_info.get(i).mesh_id,
 			&push_constants,
 			sizeof(PreRenderItemIconPushConstant),
 			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT

@@ -8,7 +8,7 @@ Chunk::Chunk(glm::ivec3 position)
 	(void)position;
 	// LOG_INFO("Chunk created at position: " << position.x << " " << position.y << " " << position.z);
 	for(int i = 0; i < BLOCKS_PER_CHUNK; i++)
-		m_blocks[i] = BlockID::Air;
+		m_blocks[i] = BlockInfo::Type::Air;
 
 	memset(m_light.data(), 0, BLOCKS_PER_CHUNK);
 }
@@ -77,19 +77,19 @@ const Chunk::BlockArray & Chunk::getBlocks() const
 	return m_blocks;
 }
 
-BlockID Chunk::getBlock(const int & x, const int & y, const int & z) const
+BlockInfo::Type Chunk::getBlock(const int & x, const int & y, const int & z) const
 {
 	int index = toIndex(x, y, z);
 
 	return m_blocks[index];
 }
 
-BlockID Chunk::getBlock(const glm::ivec3 & position) const
+BlockInfo::Type Chunk::getBlock(const glm::ivec3 & position) const
 {
 	return getBlock(position.x, position.y, position.z);
 }
 
-void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
+void Chunk::setBlock(const int & x, const int & y, const int & z, BlockInfo::Type block)
 {
 	int index = toIndex(x, y, z);
 
@@ -97,7 +97,7 @@ void Chunk::setBlock(const int & x, const int & y, const int & z, BlockID block)
 	//REGENERATE MESH HERE
 }
 
-void Chunk::setBlock(const glm::ivec3 & position, BlockID block)
+void Chunk::setBlock(const glm::ivec3 & position, BlockInfo::Type block)
 {
 	setBlock(position.x, position.y, position.z, block);
 }

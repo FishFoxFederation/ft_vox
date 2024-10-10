@@ -160,9 +160,9 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 		}
 
 		current_chunk->status.lock_shared();
-		const BlockID current_id = current_chunk->getBlock(current_block_chunk_pos);
+		const BlockInfo::Type current_id = current_chunk->getBlock(current_block_chunk_pos);
 		current_chunk->status.unlock_shared();
-		const int current_absorb_light = Block::getData(current_id).absorb_light;
+		const int current_absorb_light = g_blocks_info.get(current_id).absorb_light;
 		int current_light = 0;
 
 		for (int i = 0; i < 6; i++)
@@ -174,7 +174,7 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 			// if current is at the top of the world
 			if (neighbor_chunk_pos.y == 1)
 			{
-				if (!Block::hasProperty(current_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
+				if (!g_blocks_info.hasProperty(current_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
 				{
 					const int current_new_light = 15 - current_absorb_light;
 					if (current_new_light > current_light)
@@ -197,11 +197,11 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 			}
 
 			neighbor_chunk->status.lock_shared();
-			const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+			const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 			const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
 			neighbor_chunk->status.unlock_shared();
 
-			if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
+			if (!g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE) && visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
 			{
 				if (insideSkyLightInfluenceZone(start_block_world_pos, neighbor_world_pos))
 				{
@@ -253,11 +253,11 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 		}
 
 		chunk->status.lock_shared();
-		const BlockID current_id = chunk->getBlock(block_chunk_pos);
+		const BlockInfo::Type current_id = chunk->getBlock(block_chunk_pos);
 		// not const because it can change when looking at neighbors
 		int current_light = chunk->getSkyLight(block_chunk_pos);
 		chunk->status.unlock_shared();
-		const int current_absorb_light = Block::getData(current_id).absorb_light;
+		const int current_absorb_light = g_blocks_info.get(current_id).absorb_light;
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -276,13 +276,13 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 			}
 
 			neighbor_chunk->status.lock();
-			const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+			const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 			const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
 			neighbor_chunk->status.unlock();
 
-			if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+			if (!g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
 			{
-				const int neighbor_absorbed_light = Block::getData(neighbor_id).absorb_light;
+				const int neighbor_absorbed_light = g_blocks_info.get(neighbor_id).absorb_light;
 				const int neighbor_new_light = current_light - neighbor_absorbed_light
 					- (i != 3 || current_light != 15) * 1; // i == 3 is when the current light spreads down
 				const int current_new_light = neighbor_light - current_absorb_light
@@ -360,9 +360,9 @@ void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 		}
 
 		current_chunk->status.lock_shared();
-		const BlockID current_id = current_chunk->getBlock(current_block_chunk_pos);
-		const int current_absorb_light = Block::getData(current_id).absorb_light;
-		const int current_emit_light = Block::getData(current_id).emit_light;
+		const BlockInfo::Type current_id = current_chunk->getBlock(current_block_chunk_pos);
+		const int current_absorb_light = g_blocks_info.get(current_id).absorb_light;
+		const int current_emit_light = g_blocks_info.get(current_id).emit_light;
 		int current_light = current_emit_light;
 		current_chunk->setMeshed(false);
 		current_chunk->status.unlock_shared();
@@ -384,10 +384,10 @@ void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 			}
 
 			neighbor_chunk->status.lock_shared();
-			const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+			const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 			const int neighbor_light = neighbor_chunk->getBlockLight(neighbor_block_chunk_pos);
 			neighbor_chunk->status.unlock_shared();
-			const BlockProperties neighbor_properties = Block::getData(neighbor_id).properties;
+			const BlockProperties neighbor_properties = g_blocks_info.get(neighbor_id).properties;
 
 			if ((!(neighbor_properties & BLOCK_PROPERTY_OPAQUE) || (neighbor_properties & BLOCK_PROPERTY_LIGHT))
 				&& visited_blocks.find(neighbor_world_pos) == visited_blocks.end())
@@ -438,11 +438,11 @@ void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 		}
 
 		chunk->status.lock_shared();
-		const BlockID current_id = chunk->getBlock(block_chunk_pos);
+		const BlockInfo::Type current_id = chunk->getBlock(block_chunk_pos);
 		// not const because it can change when looking at neighbors
 		int current_light = chunk->getBlockLight(block_chunk_pos);
 		chunk->status.unlock_shared();
-		const int current_absorb_light = Block::getData(current_id).absorb_light;
+		const int current_absorb_light = g_blocks_info.get(current_id).absorb_light;
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -461,13 +461,13 @@ void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 			}
 
 			neighbor_chunk->status.lock();
-			const BlockID neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
+			const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 			const int neighbor_light = neighbor_chunk->getBlockLight(neighbor_block_chunk_pos);
 			neighbor_chunk->status.unlock();
 
-			if (!Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
+			if (!g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
 			{
-				const int neighbor_absorbed_light = Block::getData(neighbor_id).absorb_light;
+				const int neighbor_absorbed_light = g_blocks_info.get(neighbor_id).absorb_light;
 				const int neighbor_new_light = current_light - neighbor_absorbed_light - 1;
 				const int current_new_light = neighbor_light - current_absorb_light - 1;
 

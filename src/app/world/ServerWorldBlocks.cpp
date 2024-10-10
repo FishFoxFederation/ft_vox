@@ -20,7 +20,7 @@ void ServerWorld::updateBlocks()
 			}
 			case BlockUpdateData::Type::DESTROY:
 			{
-				placeBlock(block_update.position, BlockID::Air);
+				placeBlock(block_update.position, BlockInfo::Type::Air);
 				break;
 			}
 			case BlockUpdateData::Type::UPDATE:
@@ -55,7 +55,7 @@ std::shared_ptr<Chunk> ServerWorld::getAndLoadChunk(const glm::ivec3 & chunk_pos
 	return chunk;
 }
 
-void ServerWorld::placeBlock(const glm::vec3 & position, BlockID block)
+void ServerWorld::placeBlock(const glm::vec3 & position, BlockInfo::Type block)
 {
 	glm::ivec3 chunk_position = getChunkPosition(position);
 	glm::ivec3 block_chunk_position = getBlockChunkPosition(position);
@@ -80,7 +80,7 @@ void ServerWorld::placeBlock(const glm::vec3 & position, BlockID block)
 	}
 }
 
-void ServerWorld::setBlock(const glm::vec3 & position, BlockID block)
+void ServerWorld::setBlock(const glm::vec3 & position, BlockInfo::Type block)
 {
 	glm::ivec3 chunk_position = getChunkPosition(position);
 	glm::ivec3 block_chunk_position = getBlockChunkPosition(position);

@@ -228,7 +228,7 @@ public:
 		Z = 2
 	};
 
-	BlockID getBlock(const int x, const int y, const int z)
+	BlockInfo::Type getBlock(const int x, const int y, const int z)
 	{
 		const int chunk_x = (x + CHUNK_X_SIZE) / CHUNK_X_SIZE;
 		const int chunk_y = (y + CHUNK_Y_SIZE) / CHUNK_Y_SIZE;
@@ -240,13 +240,13 @@ public:
 
 		if (chunks[chunk_x][chunk_y][chunk_z] == nullptr)
 		{
-			return BlockID::Air;
+			return BlockInfo::Type::Air;
 		}
 
 		return chunks[chunk_x][chunk_y][chunk_z]->getBlock(block_x, block_y, block_z);
 	}
 
-	BlockID getBlock(const glm::ivec3 & pos)
+	BlockInfo::Type getBlock(const glm::ivec3 & pos)
 	{
 		return getBlock(pos.x, pos.y, pos.z);
 	}
@@ -478,22 +478,22 @@ public:
 			{
 				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					BlockID block_id = getBlock(pos);
-					BlockID neighbor_id = getBlock(pos + normal);
+					BlockInfo::Type block_id = getBlock(pos);
+					BlockInfo::Type neighbor_id = getBlock(pos + normal);
 
 					bool should_render = true;
-					bool block_is_opaque = Block::hasProperty(block_id, BLOCK_PROPERTY_OPAQUE);
-					bool neighbor_is_opaque = Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE);
+					bool block_is_opaque = g_blocks_info.hasProperty(block_id, BLOCK_PROPERTY_OPAQUE);
+					bool neighbor_is_opaque = g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE);
 
-					if (block_id == BlockID::Air || neighbor_is_opaque)
+					if (block_id == BlockInfo::Type::Air || neighbor_is_opaque)
 					{
 						should_render = false;
 					}
-					else if (block_id == BlockID::Glass && neighbor_id == BlockID::Glass)
+					else if (block_id == BlockInfo::Type::Glass && neighbor_id == BlockInfo::Type::Glass)
 					{
 						should_render = false;
 					}
-					else if (block_id == BlockID::Water)
+					else if (block_id == BlockInfo::Type::Water)
 					{
 						should_render = false;
 					}
@@ -509,7 +509,7 @@ public:
 						}
 
 						face_data[pos.x][pos.y][pos.z] = {
-							Block::getData(block_id).texture[face],
+							g_blocks_info.get(block_id).texture[face],
 							ao,
 							light
 						};
@@ -673,17 +673,17 @@ public:
 			{
 				for (pos.z = start.z; pos.z < final_max_iter.z; pos.z++)
 				{
-					BlockID block_id = getBlock(pos);
-					BlockID neighbor_id = getBlock(pos + normal);
+					BlockInfo::Type block_id = getBlock(pos);
+					BlockInfo::Type neighbor_id = getBlock(pos + normal);
 
 					if (
-						block_id == BlockID::Water
-						&& !Block::hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE)
-						&& neighbor_id != BlockID::Water
+						block_id == BlockInfo::Type::Water
+						&& !g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE)
+						&& neighbor_id != BlockInfo::Type::Water
 					)
 					{
 						face_data[pos.x][pos.y][pos.z] = {
-							Block::getData(block_id).texture[face],
+							g_blocks_info.get(block_id).texture[face],
 							0, 0
 						};
 					}
@@ -852,14 +852,14 @@ public:
 	}
 
 	int getAmbientOcclusion(
-		BlockID side_1,
-		BlockID side_2,
-		BlockID corner
+		BlockInfo::Type side_1,
+		BlockInfo::Type side_2,
+		BlockInfo::Type corner
 	)
 	{
-		return Block::hasProperty(side_1, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE) +
-				Block::hasProperty(side_2, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE) +
-				Block::hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE);
+		return g_blocks_info.hasProperty(side_1, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE) +
+				g_blocks_info.hasProperty(side_2, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE) +
+				g_blocks_info.hasProperty(corner, BLOCK_PROPERTY_OPAQUE | BLOCK_PROPERTY_CUBE);
 	}
 
 	std::array<uint8_t, 4> getLight(

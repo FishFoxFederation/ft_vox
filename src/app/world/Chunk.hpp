@@ -24,7 +24,7 @@ glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos);
 class Chunk
 {
 public:
-	typedef std::array<BlockID, BLOCKS_PER_CHUNK> BlockArray;
+	typedef std::array<BlockInfo::Type, BLOCKS_PER_CHUNK> BlockArray;
 	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
 	enum class genLevel
 	{
@@ -46,10 +46,10 @@ public:
 
 	BlockArray &		getBlocks();
 	const BlockArray &	getBlocks() const;
-	BlockID				getBlock(const int & x, const int & y, const int & z) const;
-	BlockID				getBlock(const glm::ivec3 & position) const;
-	void				setBlock(const int & x, const int & y, const int & z, BlockID block);
-	void 				setBlock(const glm::ivec3 & position, BlockID block);
+	BlockInfo::Type				getBlock(const int & x, const int & y, const int & z) const;
+	BlockInfo::Type				getBlock(const glm::ivec3 & position) const;
+	void				setBlock(const int & x, const int & y, const int & z, BlockInfo::Type block);
+	void 				setBlock(const glm::ivec3 & position, BlockInfo::Type block);
 
 	LightArray &		getLight();
 	const LightArray &	getLight() const;

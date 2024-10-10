@@ -4,7 +4,7 @@ BlockActionPacket::BlockActionPacket()
 {
 }
 
-BlockActionPacket::BlockActionPacket(BlockID block_id, glm::vec3 position, Action action)
+BlockActionPacket::BlockActionPacket(BlockInfo::Type block_id, glm::vec3 position, Action action)
 : m_block_id(block_id), m_position(position), m_action(action)
 {
 }
@@ -97,7 +97,7 @@ std::shared_ptr<IPacket> BlockActionPacket::Clone() const
 	return std::make_shared<BlockActionPacket>();
 }
 
-BlockID BlockActionPacket::GetBlockID() const
+BlockInfo::Type BlockActionPacket::GetBlockID() const
 {
 	return m_block_id;
 }
@@ -112,7 +112,7 @@ BlockActionPacket::Action BlockActionPacket::GetAction() const
 	return m_action;
 }
 
-void BlockActionPacket::SetBlockID(BlockID block_id)
+void BlockActionPacket::SetBlockID(BlockInfo::Type block_id)
 {
 	m_block_id = block_id;
 }

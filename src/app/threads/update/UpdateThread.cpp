@@ -172,14 +172,14 @@ void UpdateThread::readInput()
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
 	if (ret.first)
 	{
-		auto packet = std::make_shared<BlockActionPacket>(BlockID::Air, ret.second, BlockActionPacket::Action::PLACE);
+		auto packet = std::make_shared<BlockActionPacket>(BlockInfo::Type::Air, ret.second, BlockActionPacket::Action::PLACE);
 		m_client.sendPacket(packet);
 	}
 	ClientWorld::PlayerUseResult player_use = m_world.playerUse(m_world.m_my_player_id, m_use);
-	if (player_use.hit && player_use.used_item != Item::Type::None)
+	if (player_use.hit && player_use.used_item != ItemInfo::Type::None)
 	{
 		auto packet = std::make_shared<BlockActionPacket>(
-			Items::list.at(static_cast<int>(player_use.used_item)).block_id,
+			g_items_info.get(player_use.used_item).block_id,
 			player_use.block_position,
 			BlockActionPacket::Action::PLACE
 		);

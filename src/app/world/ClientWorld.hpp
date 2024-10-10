@@ -28,7 +28,7 @@ public:
 	{
 		bool hit;
 		glm::vec3 block_position;
-		Item::Type used_item;
+		ItemInfo::Type used_item;
 	};
 
 	ClientWorld(
@@ -94,7 +94,7 @@ public:
 
 	void modifyBlock(
 		const glm::vec3 & position,
-		const BlockID & block_id
+		const BlockInfo::Type & block_id
 	);
 
 	//Server side
@@ -140,7 +140,7 @@ private:
 	std::unordered_set<glm::ivec2> 			m_unload_set;
 	TracyLockableN							(std::mutex, m_unload_set_mutex, "Unload Set");
 
-	std::queue<std::pair<glm::vec3, BlockID>> m_blocks_to_set;
+	std::queue<std::pair<glm::vec3, BlockInfo::Type>> m_blocks_to_set;
 	TracyLockableN							(std::mutex, m_blocks_to_set_mutex, "Blocks to set");
 
 	std::queue<glm::ivec3> 					m_block_light_update;

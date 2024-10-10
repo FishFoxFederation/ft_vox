@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-class Item
+class ItemInfo
 {
 
 public:
@@ -23,21 +23,44 @@ public:
 
 	} const type = Type::None;
 
-	const BlockID block_id;
+	const BlockInfo::Type block_id;
 	uint64_t mesh_id = 0;
 
 private:
 
 };
 
-struct Items
+class ItemsInfo
 {
-	static inline std::vector<Item> list = {
-		{ Item::Type::GrassBlock, BlockID::Grass },
-		{ Item::Type::DirtBlock, BlockID::Dirt },
-		{ Item::Type::StoneBlock, BlockID::Stone },
-		{ Item::Type::WaterBlock, BlockID::Water },
-		{ Item::Type::GlassBlock, BlockID::Glass },
-		{ Item::Type::LightBlock, BlockID::Light }
-	};
+
+public:
+
+	static ItemsInfo & getInstance()
+	{
+		static ItemsInfo instance;
+		return instance;
+	}
+
+	ItemInfo & get(const ItemInfo::Type type)
+	{
+		return m_info[static_cast<size_t>(type)];
+	}
+
+	ItemInfo & get(const size_t index)
+	{
+		return m_info[index];
+	}
+
+	size_t count() const
+	{
+		return m_info.size();
+	}
+
+private:
+
+	std::vector<ItemInfo> m_info;
+
+	ItemsInfo();
 };
+
+extern ItemsInfo & g_items_info;

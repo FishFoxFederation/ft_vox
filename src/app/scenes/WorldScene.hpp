@@ -123,7 +123,7 @@ public:
 	std::atomic<bool> show_debug_text = false;
 
 	// hud
-	std::array<Item::Type, 9> toolbar_items;
+	std::array<ItemInfo::Type, 9> toolbar_items;
 	mutable std::mutex toolbar_items_mutex;
 	std::atomic<int> toolbar_cursor_index = 0;
 

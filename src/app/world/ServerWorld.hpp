@@ -46,15 +46,15 @@ public:
 		};
 		Type		type;
 		glm::ivec3	position;
-		BlockID		block;
+		BlockInfo::Type		block;
 
 	};
 	void addBlockUpdate(const BlockUpdateData & data);
 	void updateBlocks();
 	void loadChunk(const glm::ivec3 & chunk_position);
 
-	void placeBlock(const glm::vec3 & position, BlockID block);
-	void setBlock(const glm::vec3 & position, BlockID block);
+	void placeBlock(const glm::vec3 & position, BlockInfo::Type block);
+	void setBlock(const glm::vec3 & position, BlockInfo::Type block);
 
 	ChunkLoadUnloadData			getChunksToUnload(
 		const glm::vec3 & old_player_position,

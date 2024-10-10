@@ -9,18 +9,6 @@
 typedef int_fast8_t	BlockType;
 typedef uint64_t BlockProperties;
 typedef uint32_t TextureID;
-//more to come soon
-
-enum class BlockID : BlockType
-{
-	Air,
-	Grass,
-	Dirt,
-	Stone,
-	Water,
-	Glass,
-	Light
-};
 
 // Block properties
 #define BLOCK_PROPERTY_NONE		0U		// default
@@ -38,18 +26,31 @@ enum class BlockID : BlockType
 #define BLOCK_FACE_FRONT	4
 #define BLOCK_FACE_BACK		5
 
-struct BlockData
+class BlockInfo
 {
-	const BlockID id;
+
+public:
+
+	enum class Type : uint16_t
+	{
+		Air,
+		Grass,
+		Dirt,
+		Stone,
+		Water,
+		Glass,
+		Light,
+
+		None
+
+	} const id = Type::None;
+
 	const TextureID texture[6];
 	const BlockProperties properties;
 	const HitBox hitbox;
 	const uint8_t emit_light; // light level emitted by the block
 	const uint8_t absorb_light; // light level absorbed by the block
-};
 
-struct Block
-{
 
 	static inline const std::vector<std::string> texture_names = {
 		"assets/textures/block/grass_top.png", // 0
@@ -68,144 +69,40 @@ struct Block
 		// "assets/textures/block/debug/back_bottom.png",
 	};
 
-	static const BlockData & getData(const BlockID id)
+};
+
+class BlocksInfo
+{
+
+public:
+
+	static BlocksInfo & getInstance()
 	{
-		switch (id)
-		{
-		case BlockID::Air: return Air;
-		case BlockID::Grass: return Grass;
-		case BlockID::Dirt: return Dirt;
-		case BlockID::Stone: return Stone;
-		case BlockID::Water: return Water;
-		case BlockID::Glass: return Glass;
-		case BlockID::Light: return Light;
-		default: return Air;
-		}
+		static BlocksInfo instance;
+		return instance;
 	}
 
-	static bool hasProperty(const BlockID id, const BlockProperties properties)
+	const BlockInfo & get(const BlockInfo::Type id)
 	{
-		return (getData(id).properties & properties) == properties;
+		return m_infos[static_cast<size_t>(id)];
 	}
 
-	static bool hasProperty(const BlockID id, const BlockProperties properties, const BlockProperties not_properties)
+	bool hasProperty(const BlockInfo::Type id, const BlockProperties properties)
 	{
-		return (getData(id).properties & (properties | not_properties)) == properties;
+		return (get(id).properties & properties) == properties;
 	}
 
-	static inline const BlockData Air = {
-		.id = BlockID::Air,
-		.texture = { 0, 0, 0, 0, 0, 0 },
-		.properties = BLOCK_PROPERTY_NONE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 0,
-		.absorb_light = 0
-	};
-	static inline const BlockData Grass = {
-		.id = BlockID::Grass,
-		.texture = {
-			1, // grass_top
-			3, // dirt
-			2, // grass_side
-			2, // grass_side
-			2, // grass_side
-			2  // grass_side
-		},
-		.properties =
-			BLOCK_PROPERTY_SOLID
-			| BLOCK_PROPERTY_OPAQUE
-			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 0,
-		.absorb_light = 15
-	};
-	static inline const BlockData Dirt = {
-		.id = BlockID::Dirt,
-		.texture = {
-			3, // dirt
-			3, // dirt
-			3, // dirt
-			3, // dirt
-			3, // dirt
-			3  // dirt
-		},
-		.properties =
-			BLOCK_PROPERTY_SOLID
-			| BLOCK_PROPERTY_OPAQUE
-			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 0,
-		.absorb_light = 15
-	};
-	static inline const BlockData Stone = {
-		.id = BlockID::Stone,
-		.texture = {
-			4, // stone
-			4, // stone
-			4, // stone
-			4, // stone
-			4, // stone
-			4  // stone
-		},
-		.properties =
-			BLOCK_PROPERTY_SOLID
-			| BLOCK_PROPERTY_OPAQUE
-			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 0,
-		.absorb_light = 15
-	};
-	static inline const BlockData Water = {
-		.id = BlockID::Water,
-		.texture = {
-			5, // water
-			5, // water
-			5, // water
-			5, // water
-			5, // water
-			5  // water
-		},
-		.properties =
-			BLOCK_PROPERTY_FLUID,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 0,
-		.absorb_light = 1
-	};
-	static inline const BlockData Glass = {
-		.id = BlockID::Glass,
-		.texture = {
-			6, // glass
-			6, // glass
-			6, // glass
-			6, // glass
-			6, // glass
-			6  // glass
-		},
-		.properties =
-			BLOCK_PROPERTY_SOLID
-			| BLOCK_PROPERTY_CUBE,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 0,
-		.absorb_light = 0
-	};
-	static inline const BlockData Light = {
-		.id = BlockID::Light,
-		.texture = {
-			7, // light
-			7, // light
-			7, // light
-			7, // light
-			7, // light
-			7  // light
-		},
-		.properties =
-			BLOCK_PROPERTY_SOLID
-			| BLOCK_PROPERTY_OPAQUE
-			| BLOCK_PROPERTY_CUBE
-			| BLOCK_PROPERTY_LIGHT,
-		.hitbox = {{0, 0, 0}, {1, 1, 1}},
-		.emit_light = 15,
-		.absorb_light = 0
-	};
+	bool hasProperty(const BlockInfo::Type id, const BlockProperties properties, const BlockProperties not_properties)
+	{
+		return (get(id).properties & (properties | not_properties)) == properties;
+	}
+
+private:
+
+	std::vector<BlockInfo> m_infos;
+
+	BlocksInfo();
 
 };
+
+extern BlocksInfo & g_blocks_info;
