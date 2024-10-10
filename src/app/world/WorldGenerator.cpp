@@ -73,10 +73,10 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 	//get the start position of the zone the chunk is in
 	info.zoneStart.y = 0;
 
-	if (info.zoneStart.x < 0)
+	if (info.zoneStart.x < 0 && info.zoneSize.x > 1)
 		info.zoneStart.x -= info.zoneSize.x;
 	info.zoneStart.x -= info.zoneStart.x % info.zoneSize.x;
-	if (info.zoneStart.z < 0)
+	if (info.zoneStart.z < 0 && info.zoneSize.z > 1)
 		info.zoneStart.z -= info.zoneSize.z;
 	info.zoneStart.z -= info.zoneStart.z % info.zoneSize.z;
 
