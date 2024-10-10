@@ -1116,7 +1116,7 @@ void VulkanAPI::createTextureImage()
 	{ // Item icons
 		Image::CreateInfo image_info = {};
 		image_info.extent = {256, 256};
-		image_info.array_layers = Items::list.size();
+		image_info.array_layers = g_items_info.count();
 		image_info.format = VK_FORMAT_R8G8B8A8_SRGB;
 		image_info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		image_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
