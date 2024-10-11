@@ -1,12 +1,12 @@
 #include "WorldGenerator.hpp"
+#include "World.hpp"
 
 #include "math_utils.hpp"
 #include <cmath>
 #include <queue>
 
-Chunk::genLevel WorldGenerator::ticketToGenLevel(int ticket_level)
+Chunk::genLevel World::WorldGenerator::ticketToGenLevel(int ticket_level)
 {
-	return LIGHT;
 	if (ticket_level <= TICKET_LEVEL_INACTIVE)
 		return LIGHT;
 	switch (ticket_level)
@@ -14,15 +14,15 @@ Chunk::genLevel WorldGenerator::ticketToGenLevel(int ticket_level)
 		case TICKET_LEVEL_INACTIVE:
 			return LIGHT;
 		case TICKET_LEVEL_INACTIVE + 1:
-			return CAVE;
 		case TICKET_LEVEL_INACTIVE + 2:
-			return RELIEF;
+			return CAVE;
+			// return RELIEF;
 		default:
-			throw std::invalid_argument("WorldGenerator::ticketToGenLevel: Invalid ticket level");
+			throw std::invalid_argument("World::WorldGenerator::ticketToGenLevel: Invalid ticket level");
 	}
 }
 
-WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_level, Chunk::genLevel old_gen_level, glm::ivec3 chunkPos3D)
+World::WorldGenerator::genInfo World::WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_level, Chunk::genLevel old_gen_level, glm::ivec3 chunkPos3D)
 {
 	genInfo info;
 
@@ -87,29 +87,30 @@ WorldGenerator::genInfo WorldGenerator::getGenInfo(Chunk::genLevel desired_gen_l
 	return info;
 }
 
-WorldGenerator::WorldGenerator()
+World::WorldGenerator::WorldGenerator(World & world)
 : m_relief_perlin(1, 7, 1, 0.35, 2),
   m_cave_perlin(1, 4, 1, 0.5, 2),
-  m_continentalness_perlin(10, 7, 1, 0.4, 2)
+  m_continentalness_perlin(10, 7, 1, 0.4, 2),
+  m_world(world)
 {
 	for(size_t i = 0; i + 1 < ZONE_SIZES.size(); i++)
 	{
 		if (ZONE_SIZES[i + 1].x % ZONE_SIZES[i].x != 0)
-			throw std::logic_error("WorldGenerator: constructor: ZONE_SIZES must be multiples of the previous zone size");
+			throw std::logic_error("World::WorldGenerator: constructor: ZONE_SIZES must be multiples of the previous zone size");
 	}
 }
 
-WorldGenerator::~WorldGenerator()
+World::WorldGenerator::~WorldGenerator()
 {
 
 }
 
-std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z)
+std::shared_ptr<Chunk> World::WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z)
 {
 	return generateFullChunk(x, y, z, nullptr);
 }
 
-std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk)
+std::shared_ptr<Chunk> World::WorldGenerator::generateFullChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk)
 {
 	if (chunk == nullptr)
 		chunk = std::make_shared<Chunk>(glm::ivec3(x, y, z));
@@ -128,12 +129,12 @@ std::shared_ptr<Chunk> WorldGenerator::generateFullChunk(const int & x, const in
 	return chunk;
 }
 
-std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int & z)
+std::shared_ptr<Chunk> World::WorldGenerator::generateChunkColumn(const int & x, const int & z)
 {
 	return generateChunkColumn(x, z, nullptr);
 }
 
-std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const int & z, std::shared_ptr<Chunk> column)
+std::shared_ptr<Chunk> World::WorldGenerator::generateChunkColumn(const int & x, const int & z, std::shared_ptr<Chunk> column)
 {
 	if (column == nullptr)
 		column = std::make_shared<Chunk>(glm::ivec3(x, 0, z));
@@ -200,7 +201,7 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunkColumn(const int & x, const 
 	return column;
 }
 
-std::shared_ptr<Chunk> WorldGenerator::generateChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk)
+std::shared_ptr<Chunk> World::WorldGenerator::generateChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk)
 {
 	if (chunk == nullptr)
 		chunk = std::make_shared<Chunk>(glm::ivec3(x, y, z));
@@ -238,7 +239,7 @@ std::shared_ptr<Chunk> WorldGenerator::generateChunk(const int & x, const int & 
 	return chunk;
 }
 
-BlockInfo::Type WorldGenerator::generateReliefBlock(glm::ivec3 position)
+BlockInfo::Type World::WorldGenerator::generateReliefBlock(glm::ivec3 position)
 {
 	float value = generateReliefValue(glm::ivec2(position.x, position.z));
 
@@ -260,7 +261,7 @@ BlockInfo::Type WorldGenerator::generateReliefBlock(glm::ivec3 position)
  * @param position
  * @return float [-1, 1]
  */
-float WorldGenerator::generateReliefValue(glm::ivec2 position)
+float World::WorldGenerator::generateReliefValue(glm::ivec2 position)
 {
 	float value = m_relief_perlin.noise(glm::vec2(
 		position.x * 0.0080f,
@@ -283,7 +284,7 @@ float WorldGenerator::generateReliefValue(glm::ivec2 position)
 	return value;
 }
 
-BlockInfo::Type WorldGenerator::generateCaveBlock(glm::ivec3 position)
+BlockInfo::Type World::WorldGenerator::generateCaveBlock(glm::ivec3 position)
 {
 
 
@@ -497,7 +498,7 @@ static void setBlockLight(
 	}
 }
 
-void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
+void World::WorldGenerator::generate(genInfo info, ChunkMap & chunkGenGrid)
 {
 	if (info.level <= RELIEF && info.oldLevel > RELIEF)
 	{
@@ -506,7 +507,7 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 			for(int z = 0; z < info.zoneSize.z; z++)
 			{
 				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
-				std::shared_ptr<Chunk> chunk = chunks.at(chunkPos3D);
+				std::shared_ptr<Chunk> chunk = chunkGenGrid.at(chunkPos3D);
 				chunk->setGenLevel(RELIEF);
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 				{
@@ -637,7 +638,7 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 			for(int z = 0; z < info.zoneSize.z; z++)
 			{
 				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
-				std::shared_ptr<Chunk> chunk = chunks.at(chunkPos3D);
+				std::shared_ptr<Chunk> chunk = chunkGenGrid.at(chunkPos3D);
 				chunk->setGenLevel(CAVE);
 
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
@@ -654,7 +655,9 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 							);
 							BlockInfo::Type current_block = chunk->getBlock(blockX, blockY, blockZ);
 
-							if (current_block != BlockInfo::Type::Air && generateCaveBlock(position) == BlockInfo::Type::Air)
+							if (current_block != BlockInfo::Type::Air
+								&& current_block != BlockInfo::Type::Water
+								&& generateCaveBlock(position) == BlockInfo::Type::Air)
 								chunk->setBlock(blockX, blockY, blockZ, BlockInfo::Type::Air);
 						}
 					}
@@ -669,11 +672,11 @@ void WorldGenerator::generate(genInfo info, ChunkMap & chunks)
 			for(int z = 0; z < info.zoneSize.z; z++)
 			{
 				glm::ivec3 chunk_pos_3D = info.zoneStart + glm::ivec3(x, 0, z);
-				std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos_3D);
+				std::shared_ptr<Chunk> chunk = chunkGenGrid.at(chunk_pos_3D);
 				chunk->setGenLevel(LIGHT);
 
-				setSkyLight(chunks, chunk_pos_3D);
-				setBlockLight(chunks, chunk_pos_3D);
+				setSkyLight(chunkGenGrid, chunk_pos_3D);
+				setBlockLight(chunkGenGrid, chunk_pos_3D);
 			}
 		}
 	}
