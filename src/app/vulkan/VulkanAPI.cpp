@@ -1773,8 +1773,12 @@ void VulkanAPI::createPipelines()
 		pipeline_info.extent = color_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/rasterization/line_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/rasterization/line_shader.frag.spv";
-		pipeline_info.binding_description = LineVertex::getBindingDescription();
-		pipeline_info.attribute_descriptions = LineVertex::getAttributeDescriptions();
+		pipeline_info.binding_description = ObjVertex::getBindingDescription();
+		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions = ObjVertex::getAttributeDescriptions();
+		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions_2 = {
+			attribute_descriptions[0]
+		};
+		pipeline_info.attribute_descriptions = attribute_descriptions_2;
 		pipeline_info.polygon_mode = VK_POLYGON_MODE_LINE;
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
