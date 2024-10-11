@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"tracy__globals_8hpp.html":[11,0,1,8],
 "tracy__globals_8hpp.html#a3bb732a180b8a1c84118472ff9e2c111":[11,0,1,8,1],
 "tracy__globals_8hpp.html#a3e1975859a5a4da5a9bdbc6610002973":[11,0,1,8,4],
 "tracy__globals_8hpp.html#a476c540d89d442fa24a2f1e9325cdba9":[11,0,1,8,0],
