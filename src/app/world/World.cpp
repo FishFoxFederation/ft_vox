@@ -1,6 +1,7 @@
 #include "World.hpp"
 
 World::World()
+: m_world_generator(*this)
 {
 }
 
