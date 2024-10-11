@@ -84,6 +84,7 @@ target_sources(${PROJECT_NAME}
 		src/app/world/WorldGenerator.cpp
 		src/app/world/Block.cpp
 		src/app/world/Item.cpp
+		src/app/world/CreateMeshData.cpp
 		src/app/network/client/Client.cpp
 		src/app/network/client/ClientSocket.cpp
 		src/app/network/client/ClientPacketHandler.cpp
@@ -235,6 +236,7 @@ target_sources(server
 		src/app/world/WorldGenerator.cpp
 		src/app/world/Block.cpp
 		src/app/world/Item.cpp
+		src/app/world/CreateMeshData.cpp
 		src/app/network/client/Client.cpp
 		src/app/network/client/ClientSocket.cpp
 		src/app/network/client/ClientPacketHandler.cpp
