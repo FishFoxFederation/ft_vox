@@ -716,8 +716,9 @@ void RenderThread::lightingPass()
 			VK_INDEX_TYPE_UINT32
 		);
 
-		const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block.value() - glm::vec3(0.005f));
-		const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.01f));
+		const float scale_factor = 1.001f;
+		const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block.value() - glm::vec3((scale_factor - 1.0f) / 2.0f));
+		const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale_factor));
 		const LinePipelinePushConstant target_block_push_constant = {
 			target_block_model * target_block_scale,
 			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
