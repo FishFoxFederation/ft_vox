@@ -90,10 +90,10 @@ void CreateMeshData::unlock()
 			{
 				if (chunks[x][y][z] != nullptr)
 				{
-					if (x == NEUT && y == NEUT && z == NEUT)
-						chunks[x][y][z]->status.unlock();
-					else
-						chunks[x][y][z]->status.unlock_shared();
+					// if (x == NEUT && y == NEUT && z == NEUT)
+						// chunks[x][y][z]->status.unlock();
+					// else
+					chunks[x][y][z]->status.unlock_shared();
 				}
 			}
 		}
