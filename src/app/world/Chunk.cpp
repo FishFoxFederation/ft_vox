@@ -194,7 +194,7 @@ void Chunk::setPosition(const glm::ivec3 & position)
 	this->position = position;
 }
 
-const uint64_t & Chunk::getMeshID() const
+uint64_t Chunk::getMeshID() const
 {
 	return m_mesh_id;
 }
