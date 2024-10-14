@@ -75,7 +75,7 @@ public:
 	const int & 		y()const {return position.y;};
 	const int & 		z()const {return position.z;};
 
-	const uint64_t	&	getMeshID() const;
+	uint64_t			getMeshID() const;
 	void				setMeshID(const uint64_t & mesh_id);
 
 	bool				isMeshed() const;
@@ -97,9 +97,10 @@ public:
 	std::unordered_set<uint64_t>	entity_ids;
 	std::unordered_set<uint64_t>	observing_player_ids;
 private:
-	bool 		meshed = false;
+	std::atomic<bool> 		meshed = false;
 	glm::ivec3	position;
-	uint64_t	m_mesh_id;
+	std::atomic<uint64_t>	m_mesh_id;
+	mutable TracyLockableN	(std::mutex, m_mesh_id_mutex, "Mesh ID");
 	BlockArray	m_blocks;
 	// 4 left bits for block light, 4 right bits for sky light
 	LightArray	m_light;

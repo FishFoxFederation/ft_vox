@@ -180,13 +180,17 @@ protected:
 	 * @brief Update the sky light of the chunk containing the block
 	 *
 	 * @param block_position the position of the block in the world
+	 * 
+	 * @return a set of chunks that have been modified ( and might need remeshing )
 	 */
-	void updateSkyLight(const glm::ivec3 & block_position);
+	std::unordered_set<glm::ivec3> updateSkyLight(const glm::ivec3 & block_position);
 
 	/**
 	 * @brief Update the block light of the chunk containing the block
 	 *
 	 * @param block_position the position of the block in the world
+	 * 
+	 * @return a set of chunks that have been modified ( and might need remeshing )
 	 */
-	void updateBlockLight(const glm::ivec3 & block_position);
+	std::unordered_set<glm::ivec3> updateBlockLight(const glm::ivec3 & block_position);
 };

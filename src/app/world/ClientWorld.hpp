@@ -137,6 +137,9 @@ private:
 	// std::unordered_set<glm::ivec2>			m_visible_chunks;
 	// std::mutex								m_visible_chunks_mutex;
 
+	std::unordered_set<glm::ivec2>          m_chunks_to_mesh;
+	TracyLockableN							(std::mutex, m_chunks_to_mesh_mutex, "Chunks to mesh");
+
 	std::unordered_set<glm::ivec2> 			m_unload_set;
 	TracyLockableN							(std::mutex, m_unload_set_mutex, "Unload Set");
 
@@ -159,38 +162,39 @@ private:
 	 *  CHUNKS AND MAP
 	*************************************/
 
-	/**
-	 * @brief will load all chunks around the player
-	 * @warning you must lock m_chunks_mutex before calling this function
-	 *
-	 * @param playerPosition
-	 */
-	void 	loadChunks(const glm::vec3 & playerPosition);
+	// /**
+	//  * @brief will load all chunks around the player
+	//  * @warning you must lock m_chunks_mutex before calling this function
+	//  *
+	//  * @param playerPosition
+	//  */
+	// void 	loadChunks(const glm::vec3 & playerPosition);
 
-	/**
-	 * @brief will load all chunks around the players
-	 * @warning you must lock m_chunks_mutex before calling this function
-	 *
-	 * @param playerPositions
-	 */
-	void 	loadChunks(const std::vector<glm::vec3> & playerPositions);
+	// /**
+	//  * @brief will load all chunks around the players
+	//  * @warning you must lock m_chunks_mutex before calling this function
+	//  *
+	//  * @param playerPositions
+	//  */
+	// void 	loadChunks(const std::vector<glm::vec3> & playerPositions);
 
-	/**
-	 * @brief will unload chunk that are too far from the player
-	 * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
-	 * @param playerPosition
-	 */
-	void	unloadChunks(const glm::vec3 & playerPosition);
+	// /**
+	//  * @brief will unload chunk that are too far from the player
+	//  * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
+	//  * @param playerPosition
+	//  */
+	// void	unloadChunks(const glm::vec3 & playerPosition);
 
-	/**
-	 * @brief will unload chunk that are too far from the players
-	 * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
-	 *
-	 * @param playerPositions
-	 */
-	void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
+	// /**
+	//  * @brief will unload chunk that are too far from the players
+	//  * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
+	//  *
+	//  * @param playerPositions
+	//  */
+	// void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
 
 	void 	unloadChunk(const glm::ivec3 & chunkPosition);
+
 	/**
 	 * @brief will mesh chunks that are meshable around the player
 	 * @warning you must lock m_chunks_mutex as well as m_visible_chunks_mutex

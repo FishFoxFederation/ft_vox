@@ -105,7 +105,7 @@ static bool insideSkyLightInfluenceZone(const glm::ivec3 & origin, const glm::iv
 	return (is_below && (diff.x + diff.z <= 16)) || (!is_below && (diff.x + diff.y + diff.z <= 16));
 }
 
-void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
+std::unordered_set<glm::ivec3> World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 {
 	/*
 	 * https://minecraft.fandom.com/wiki/Light#Sky_light
@@ -118,12 +118,13 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 	 *
 	 * This implementation reduces the light level by 1 even when passing through a light-filtering block.
 	*/
+	std::unordered_set<glm::ivec3> modified_chunks;
 	const glm::ivec3 start_chunk_pos = getChunkPos(start_block_world_pos);
 	std::shared_ptr<Chunk> start_chunk = getChunk(start_chunk_pos);
 	if (start_chunk == nullptr)
 	{
 		LOG_WARNING("World::updateSkyLight: start_chunk is nullptr.");
-		return;
+		return modified_chunks;
 	}
 
 	constexpr std::array<glm::ivec3, 6> NEIGHBOR_OFFSETS = {
@@ -294,6 +295,7 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 					neighbor_chunk->status.lock();
 					neighbor_chunk->setSkyLight(neighbor_block_chunk_pos, neighbor_new_light);
 					neighbor_chunk->setMeshed(false);
+					modified_chunks.insert(neighbor_chunk_pos);
 					neighbor_chunk->status.unlock();
 					light_source_queue.push(neighbor_world_pos);
 				}
@@ -308,6 +310,7 @@ void World::updateSkyLight(const glm::ivec3 & start_block_world_pos)
 			}
 		}
 	}
+	return modified_chunks;
 }
 
 static bool insideBlockLightInfluenceZone(const glm::ivec3 & origin, const glm::ivec3 & position)
@@ -316,14 +319,15 @@ static bool insideBlockLightInfluenceZone(const glm::ivec3 & origin, const glm::
 	return diff.x + diff.y + diff.z <= 16;
 }
 
-void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
+std::unordered_set<glm::ivec3> World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 {
+	std::unordered_set<glm::ivec3> modified_chunks;
 	const glm::ivec3 start_chunk_pos = getChunkPos(start_block_world_pos);
 	std::shared_ptr<Chunk> start_chunk = getChunk(start_chunk_pos);
 	if (start_chunk == nullptr)
 	{
 		LOG_WARNING("World::updateBlockLight: start_chunk is nullptr.");
-		return;
+		return modified_chunks;
 	}
 
 	constexpr std::array<glm::ivec3, 6> NEIGHBOR_OFFSETS = {
@@ -367,6 +371,7 @@ void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 		int current_light = current_emit_light;
 		current_chunk->setMeshed(false);
 		current_chunk->status.unlock_shared();
+		modified_chunks.insert(current_chunk_pos);
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -490,4 +495,5 @@ void World::updateBlockLight(const glm::ivec3 & start_block_world_pos)
 			}
 		}
 	}
+	return modified_chunks;
 }

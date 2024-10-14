@@ -28,13 +28,13 @@ CreateMeshData::CreateMeshData(const glm::ivec3 & pos, const glm::ivec3 & size, 
 				{
 					// LOG_INFO("CHUNK FOUND " << chunk_pos.x << " " << chunk_pos.y << " " << chunk_pos.z);
 					chunks[x + 1][y + 1][z + 1] = it->second;
-					if (x == 0 && y == 0 && z == 0)
-					{
-						// LOG_DEBUG("LOCKING CENTER CHUNK");
-						it->second->status.lock();
-					}
-					else
-						it->second->status.lock_shared();
+					// if (x == 0 && y == 0 && z == 0)
+					// {
+					// 	// LOG_DEBUG("LOCKING CENTER CHUNK");
+					// 	// it->second->status.lock();
+					// }
+					// else
+					it->second->status.lock_shared();
 				}
 			}
 		}
