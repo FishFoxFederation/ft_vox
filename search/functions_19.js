@@ -67,6 +67,6 @@ var searchData=
   ['_7ewalkanimation_64',['~WalkAnimation',['../classPlayerModel_1_1WalkAnimation.html#a7d8c2041817d3623dc798e4f64a052a8',1,'PlayerModel::WalkAnimation']]],
   ['_7ewindow_65',['~Window',['../classWindow.html#a245d821e6016fa1f6970ccbbedd635f6',1,'Window']]],
   ['_7eworld_66',['~World',['../classWorld.html#a8c73fba541a5817fff65147ba47cd827',1,'World']]],
-  ['_7eworldgenerator_67',['~WorldGenerator',['../classWorldGenerator.html#afed7aa2e501ab283bb41bbaa6fbdf24a',1,'WorldGenerator']]],
+  ['_7eworldgenerator_67',['~WorldGenerator',['../classWorld_1_1WorldGenerator.html#a8e1838540faf6c83c89182f8e105ea2b',1,'World::WorldGenerator']]],
   ['_7eworldscene_68',['~WorldScene',['../classWorldScene.html#a96919a2cba5b6b6e544cc9b749e13ac8',1,'WorldScene']]]
 ];

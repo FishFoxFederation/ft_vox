@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['zone_5fsizes_0',['ZONE_SIZES',['../classWorldGenerator.html#a8268be2d9ea368b03e275e53834fe1c3',1,'WorldGenerator']]],
-  ['zonesize_1',['zoneSize',['../structWorldGenerator_1_1genInfo.html#af633f9452d78458f9689c898f8e55263',1,'WorldGenerator::genInfo']]],
-  ['zonestart_2',['zoneStart',['../structWorldGenerator_1_1genInfo.html#a75000cac0e530fffebdd102253cf8a4c',1,'WorldGenerator::genInfo']]]
+  ['zone_5fsizes_0',['ZONE_SIZES',['../classWorld_1_1WorldGenerator.html#a0a0f21c7c7c6314255cf3463710d7e8b',1,'World::WorldGenerator']]],
+  ['zonesize_1',['zoneSize',['../structWorld_1_1WorldGenerator_1_1genInfo.html#af7b0c2efd67d901f04d6f743e1da9fcc',1,'World::WorldGenerator::genInfo']]],
+  ['zonestart_2',['zoneStart',['../structWorld_1_1WorldGenerator_1_1genInfo.html#a557e431cd56a853085b813b20cbd3eb2',1,'World::WorldGenerator::genInfo']]]
 ];

@@ -43,7 +43,7 @@ var hierarchy =
     ] ],
     [ "Face", "structFace.html", null ],
     [ "Sound::FMTChunk", "structSound_1_1FMTChunk.html", null ],
-    [ "WorldGenerator::genInfo", "structWorldGenerator_1_1genInfo.html", null ],
+    [ "World::WorldGenerator::genInfo", "structWorld_1_1WorldGenerator_1_1genInfo.html", null ],
     [ "Event::HandlerWrapperInterface", "classEvent_1_1HandlerWrapperInterface.html", [
       [ "Event::HandlerWrapper< EventType >", "classEvent_1_1HandlerWrapper.html", null ]
     ] ],
@@ -155,6 +155,6 @@ var hierarchy =
       [ "ClientWorld", "classClientWorld.html", null ],
       [ "ServerWorld", "classServerWorld.html", null ]
     ] ],
-    [ "WorldGenerator", "classWorldGenerator.html", null ],
+    [ "World::WorldGenerator", "classWorld_1_1WorldGenerator.html", null ],
     [ "WorldScene", "classWorldScene.html", null ]
 ];

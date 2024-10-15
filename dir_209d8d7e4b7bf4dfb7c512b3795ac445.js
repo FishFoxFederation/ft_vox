@@ -19,5 +19,5 @@ var dir_209d8d7e4b7bf4dfb7c512b3795ac445 =
     [ "World.cpp", "World_8cpp.html", null ],
     [ "World.hpp", "World_8hpp.html", "World_8hpp" ],
     [ "WorldGenerator.cpp", "WorldGenerator_8cpp.html", null ],
-    [ "WorldGenerator.hpp", "WorldGenerator_8hpp.html", "WorldGenerator_8hpp" ]
+    [ "WorldGenerator.hpp", "WorldGenerator_8hpp.html", null ]
 ];

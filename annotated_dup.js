@@ -116,6 +116,5 @@ var annotated_dup =
     [ "VulkanMemoryAllocator", "classVulkanMemoryAllocator.html", "classVulkanMemoryAllocator" ],
     [ "Window", "classWindow.html", "classWindow" ],
     [ "World", "classWorld.html", "classWorld" ],
-    [ "WorldGenerator", "classWorldGenerator.html", "classWorldGenerator" ],
     [ "WorldScene", "classWorldScene.html", "classWorldScene" ]
 ];

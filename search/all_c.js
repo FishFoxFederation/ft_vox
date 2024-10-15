@@ -24,7 +24,7 @@ var searchData=
   ['max_21',['MAX',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fab12bf449ab3c91f3e649df42f9448c12',1,'Logger']]],
   ['max_5fbacklog_22',['MAX_BACKLOG',['../ServerSocket_8hpp.html#ad5765300a9df69229ca7cf5bd438ce73',1,'ServerSocket.hpp']]],
   ['max_5fframes_5fin_5fflight_23',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
-  ['max_5fticket_5flevel_24',['MAX_TICKET_LEVEL',['../classWorldGenerator.html#a8c56d23f7b2245a22aa329bd39d8d837',1,'WorldGenerator']]],
+  ['max_5fticket_5flevel_24',['MAX_TICKET_LEVEL',['../classWorld_1_1WorldGenerator.html#af13c098afb1cfcfa092e58ce8e5d238f',1,'World::WorldGenerator']]],
   ['memory_25',['memory',['../classBuffer.html#a16117b97df69e911ac1b289210083bd7',1,'Buffer::memory()'],['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../structUBO.html#a898dc9f88760fccd39d64ce8da010baf',1,'UBO::memory()'],['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()']]],
   ['memory_5fproperties_26',['memory_properties',['../structBuffer_1_1CreateInfo.html#a6435db83175844d6c4a17ad6ea64568c',1,'Buffer::CreateInfo::memory_properties()'],['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo::memory_properties()']]],
   ['memory_5fsize_27',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],

@@ -13,7 +13,7 @@ var searchData=
   ['main_5frender_5ffinished_5fsemaphores_10',['main_render_finished_semaphores',['../classVulkanAPI.html#a1d0897c4f64ec32ad6d320b3b2108f71',1,'VulkanAPI']]],
   ['mapped_5fmemory_11',['mapped_memory',['../structUBO.html#ad6e39e96922eb09a0d0fc845b5c4fbeb',1,'UBO::mapped_memory()'],['../structImGuiTexture.html#a9e4e3e36fd24067f4efc48a3f6e57688',1,'ImGuiTexture::mapped_memory()']]],
   ['max_5fframes_5fin_5fflight_12',['max_frames_in_flight',['../classVulkanAPI.html#a3a845af151ddc322c31030ae33a7725f',1,'VulkanAPI']]],
-  ['max_5fticket_5flevel_13',['MAX_TICKET_LEVEL',['../classWorldGenerator.html#a8c56d23f7b2245a22aa329bd39d8d837',1,'WorldGenerator']]],
+  ['max_5fticket_5flevel_13',['MAX_TICKET_LEVEL',['../classWorld_1_1WorldGenerator.html#af13c098afb1cfcfa092e58ce8e5d238f',1,'World::WorldGenerator']]],
   ['memory_14',['memory',['../structImGuiTexture.html#ae1319fa631bbefe09543d75d295ac2c1',1,'ImGuiTexture::memory()'],['../classImage.html#af5329c640531fa376014bd387a8657c2',1,'Image::memory()'],['../classBuffer.html#a16117b97df69e911ac1b289210083bd7',1,'Buffer::memory()'],['../structUBO.html#a898dc9f88760fccd39d64ce8da010baf',1,'UBO::memory()']]],
   ['memory_5fproperties_15',['memory_properties',['../structBuffer_1_1CreateInfo.html#a6435db83175844d6c4a17ad6ea64568c',1,'Buffer::CreateInfo::memory_properties()'],['../structImage_1_1CreateInfo.html#a5144e475594ec9671b0c894965cfe12d',1,'Image::CreateInfo::memory_properties()']]],
   ['memory_5fsize_16',['memory_size',['../structMesh.html#a7a2014516f01a52710e83ed41d7f9165',1,'Mesh']]],

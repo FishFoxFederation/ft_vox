@@ -6,7 +6,7 @@ var searchData=
   ['observing_5fplayer_5fids_3',['observing_player_ids',['../classChunk.html#a057de54f4cc465177fa249fad8c304df',1,'Chunk']]],
   ['old_5fposition_4',['old_position',['../classEvent_1_1PlayerMoving.html#a8724824d78267153cd7dd69f169cb0f9',1,'Event::PlayerMoving']]],
   ['old_5fswapchain_5',['old_swapchain',['../structSwapchain_1_1CreateInfo.html#ad1c102bab8c5453ff798c6d2127d3e97',1,'Swapchain::CreateInfo']]],
-  ['oldlevel_6',['oldLevel',['../structWorldGenerator_1_1genInfo.html#a7bc9328c2f5631e9d95a3d3a84219419',1,'WorldGenerator::genInfo']]],
+  ['oldlevel_6',['oldLevel',['../structWorld_1_1WorldGenerator_1_1genInfo.html#a2ec1c0007ec9c43ec175aac9b72d7200',1,'World::WorldGenerator::genInfo']]],
   ['on_5fground_7',['on_ground',['../classMob.html#acd48dd3342ecb31bb74b644f55a7cd3c',1,'Mob::on_ground()'],['../classPlayer.html#a51098c4bc3a16a6c76947828e6f81528',1,'Player::on_ground()']]],
   ['operator_20t_8',['operator T',['../classAtomic.html#ad71da5d05cc49a4cc28e684ec144e291',1,'Atomic']]],
   ['operator_20vkcommandbuffer_9',['operator VkCommandBuffer',['../classSingleTimeCommand.html#a4090c145cfe3c16c85531b73b44da45b',1,'SingleTimeCommand']]],

@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classWorld.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -133,10 +134,15 @@ Collaboration diagram for World:</div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
 <area shape="rect" title=" " alt="" coords="99,299,275,647"/>
 <area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,20,175,221"/>
-<area shape="rect" href="classWorldGenerator.html" title=" " alt="" coords="199,5,371,236"/>
+<area shape="rect" href="classWorld_1_1WorldGenerator.html" title=" " alt="" coords="199,5,371,236"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld_1_1WorldGenerator.html">WorldGenerator</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afa39d4e6f714a7a3691ac0c656f5e8a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a> ()</td></tr>
@@ -179,12 +185,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a024d70e06aa8f5a8c0dc8025898bfc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a500a24a178550859843850732f9e8f55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a500a24a178550859843850732f9e8f55">insertChunkNoLock</a> (const glm::ivec3 &amp;position, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; chunk)</td></tr>
 <tr class="separator:a500a24a178550859843850732f9e8f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67642e359f5aeb54ab5a87a1323d5775"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a67642e359f5aeb54ab5a87a1323d5775">updateSkyLight</a> (const glm::ivec3 &amp;block_position)</td></tr>
-<tr class="memdesc:a67642e359f5aeb54ab5a87a1323d5775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the sky light of the chunk containing the block.  <a href="classWorld.html#a67642e359f5aeb54ab5a87a1323d5775">More...</a><br /></td></tr>
-<tr class="separator:a67642e359f5aeb54ab5a87a1323d5775"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ec67043d5b6dce8aa4733bc8503a35c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a0ec67043d5b6dce8aa4733bc8503a35c">updateBlockLight</a> (const glm::ivec3 &amp;block_position)</td></tr>
-<tr class="memdesc:a0ec67043d5b6dce8aa4733bc8503a35c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the block light of the chunk containing the block.  <a href="classWorld.html#a0ec67043d5b6dce8aa4733bc8503a35c">More...</a><br /></td></tr>
-<tr class="separator:a0ec67043d5b6dce8aa4733bc8503a35c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bf0e5a75ff7b9537f4b6235ca5435e3"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; glm::ivec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a5bf0e5a75ff7b9537f4b6235ca5435e3">updateSkyLight</a> (const glm::ivec3 &amp;block_position)</td></tr>
+<tr class="memdesc:a5bf0e5a75ff7b9537f4b6235ca5435e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the sky light of the chunk containing the block.  <a href="classWorld.html#a5bf0e5a75ff7b9537f4b6235ca5435e3">More...</a><br /></td></tr>
+<tr class="separator:a5bf0e5a75ff7b9537f4b6235ca5435e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9892b1ed768e9414d4e03ebe13ca3bb0"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; glm::ivec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a9892b1ed768e9414d4e03ebe13ca3bb0">updateBlockLight</a> (const glm::ivec3 &amp;block_position)</td></tr>
+<tr class="memdesc:a9892b1ed768e9414d4e03ebe13ca3bb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the block light of the chunk containing the block.  <a href="classWorld.html#a9892b1ed768e9414d4e03ebe13ca3bb0">More...</a><br /></td></tr>
+<tr class="separator:a9892b1ed768e9414d4e03ebe13ca3bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -198,7 +204,7 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:afe23d5e9f0c87a03212fad1b73249926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae465315b182161c0902e98055d03395f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classThreadPoolAccessor.html">ThreadPoolAccessor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ae465315b182161c0902e98055d03395f">m_threadPool</a></td></tr>
 <tr class="separator:ae465315b182161c0902e98055d03395f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47cc090d4ed08b81df6748abb8daea0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorldGenerator.html">WorldGenerator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a47cc090d4ed08b81df6748abb8daea0e">m_world_generator</a></td></tr>
+<tr class="memitem:a47cc090d4ed08b81df6748abb8daea0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld_1_1WorldGenerator.html">WorldGenerator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a47cc090d4ed08b81df6748abb8daea0e">m_world_generator</a></td></tr>
 <tr class="separator:a47cc090d4ed08b81df6748abb8daea0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -676,8 +682,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0ec67043d5b6dce8aa4733bc8503a35c" name="a0ec67043d5b6dce8aa4733bc8503a35c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ec67043d5b6dce8aa4733bc8503a35c">&#9670;&#160;</a></span>updateBlockLight()</h2>
+<a id="a9892b1ed768e9414d4e03ebe13ca3bb0" name="a9892b1ed768e9414d4e03ebe13ca3bb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9892b1ed768e9414d4e03ebe13ca3bb0">&#9670;&#160;</a></span>updateBlockLight()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -686,7 +692,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void World::updateBlockLight </td>
+          <td class="memname">std::unordered_set&lt; glm::ivec3 &gt; World::updateBlockLight </td>
           <td>(</td>
           <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
           <td class="paramname"><em>block_position</em></td><td>)</td>
@@ -703,15 +709,16 @@ Protected Attributes</h2></td></tr>
 <p>Update the block light of the chunk containing the block. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">block_position</td><td>the position of the block in the world </td></tr>
+    <tr><td class="paramname">block_position</td><td>the position of the block in the world</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>a set of chunks that have been modified ( and might need remeshing ) </dd></dl>
 
 </div>
 </div>
-<a id="a67642e359f5aeb54ab5a87a1323d5775" name="a67642e359f5aeb54ab5a87a1323d5775"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67642e359f5aeb54ab5a87a1323d5775">&#9670;&#160;</a></span>updateSkyLight()</h2>
+<a id="a5bf0e5a75ff7b9537f4b6235ca5435e3" name="a5bf0e5a75ff7b9537f4b6235ca5435e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bf0e5a75ff7b9537f4b6235ca5435e3">&#9670;&#160;</a></span>updateSkyLight()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -720,7 +727,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void World::updateSkyLight </td>
+          <td class="memname">std::unordered_set&lt; glm::ivec3 &gt; World::updateSkyLight </td>
           <td>(</td>
           <td class="paramtype">const glm::ivec3 &amp;&#160;</td>
           <td class="paramname"><em>block_position</em></td><td>)</td>
@@ -737,10 +744,11 @@ Protected Attributes</h2></td></tr>
 <p>Update the sky light of the chunk containing the block. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">block_position</td><td>the position of the block in the world </td></tr>
+    <tr><td class="paramname">block_position</td><td>the position of the block in the world</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>a set of chunks that have been modified ( and might need remeshing ) </dd></dl>
 
 </div>
 </div>
@@ -865,7 +873,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classWorldGenerator.html">WorldGenerator</a> World::m_world_generator</td>
+          <td class="memname"><a class="el" href="classWorld_1_1WorldGenerator.html">WorldGenerator</a> World::m_world_generator</td>
         </tr>
       </table>
   </td>
