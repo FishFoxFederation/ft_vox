@@ -13,6 +13,7 @@
 #include "List.hpp"
 #include "TextRenderer.hpp"
 #include "ShaderCommun.hpp"
+#include "BindlessDescriptor.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -389,6 +390,8 @@ public:
 	Descriptor atmosphere_descriptor;
 	Descriptor debug_info_image_descriptor;
 	Descriptor item_icon_descriptor;
+
+	BindlessDescriptor bindless_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
