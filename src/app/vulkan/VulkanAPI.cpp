@@ -172,6 +172,8 @@ VulkanAPI::~VulkanAPI()
 		debug_info_image_descriptor.clear();
 		item_icon_descriptor.clear();
 
+		bindless_descriptor.clear();
+
 		chunk_pipeline.clear();
 		water_pipeline.clear();
 		line_pipeline.clear();
@@ -579,6 +581,8 @@ void VulkanAPI::createLogicalDevice()
 	vulkan_12_features.descriptorIndexing = VK_TRUE;
 	vulkan_12_features.shaderInt8 = VK_TRUE;
 	vulkan_12_features.storageBuffer8BitAccess = VK_TRUE;
+	vulkan_12_features.descriptorIndexing = VK_TRUE;
+	vulkan_12_features.descriptorBindingPartiallyBound = VK_TRUE;
 	vulkan_12_features.pNext = &dynamic_rendering_features;
 
 
@@ -1431,6 +1435,8 @@ void VulkanAPI::createDescriptors()
 		);
 
 	}
+
+	bindless_descriptor = BindlessDescriptor(device, 1024);
 }
 
 void VulkanAPI::createRenderPass()
