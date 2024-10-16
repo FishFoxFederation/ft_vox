@@ -1,7 +1,5 @@
 #version 450 core
 
-#extension GL_EXT_debug_printf : enable
-
 #include "common.glsl"
 
 layout(triangles, invocations = SHADOW_MAP_MAX_COUNT) in;

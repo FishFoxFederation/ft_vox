@@ -12,7 +12,7 @@
 #include "CreateMeshData.hpp"
 #include "List.hpp"
 #include "TextRenderer.hpp"
-#include "ShaderCommun.hpp"
+#include "ShaderCommon.hpp"
 #include "BindlessDescriptor.hpp"
 
 #include "Tracy.hpp"
@@ -392,6 +392,7 @@ public:
 	Descriptor item_icon_descriptor;
 
 	BindlessDescriptor bindless_descriptor;
+	std::vector<BindlessDescriptorParams> bindless_params;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;

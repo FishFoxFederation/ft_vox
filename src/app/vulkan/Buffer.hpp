@@ -19,6 +19,7 @@ public:
 		VkMemoryPropertyFlags memory_properties;
 	};
 
+	Buffer();
 	Buffer(
 		VkDevice device,
 		VkPhysicalDevice physical_device,
@@ -33,10 +34,14 @@ public:
 
 	void clear();
 
+	VkDeviceSize size() const { return m_size; }
+
 	VkBuffer buffer;
 	VkDeviceMemory memory;
 
 private:
 
 	VkDevice m_device;
+
+	VkDeviceSize m_size;
 };

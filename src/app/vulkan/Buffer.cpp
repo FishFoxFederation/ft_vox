@@ -1,12 +1,22 @@
 #include "Buffer.hpp"
 #include "vk_helper.hpp"
+#include "logger.hpp"
+
+Buffer::Buffer():
+	buffer(VK_NULL_HANDLE),
+	memory(VK_NULL_HANDLE),
+	m_device(VK_NULL_HANDLE),
+	m_size(0)
+{
+}
 
 Buffer::Buffer(
 	VkDevice device,
 	VkPhysicalDevice physical_device,
 	const CreateInfo & create_info
 ):
-	m_device(device)
+	m_device(device),
+	m_size(create_info.size)
 {
 	VkBufferCreateInfo buffer_info = {};
 	buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -53,7 +63,8 @@ Buffer::~Buffer()
 Buffer::Buffer(Buffer && other) noexcept:
 	buffer(other.buffer),
 	memory(other.memory),
-	m_device(other.m_device)
+	m_device(other.m_device),
+	m_size(other.m_size)
 {
 	other.buffer = VK_NULL_HANDLE;
 	other.memory = VK_NULL_HANDLE;
@@ -69,6 +80,7 @@ Buffer & Buffer::operator=(Buffer && other) noexcept
 		buffer = other.buffer;
 		memory = other.memory;
 		m_device = other.m_device;
+		m_size = other.m_size;
 
 		other.buffer = VK_NULL_HANDLE;
 		other.memory = VK_NULL_HANDLE;

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "vk_define.hpp"
+#include "ShaderCommon.hpp"
+#include "Buffer.hpp"
 
-#include <array>
+#include <vector>
 #include <list>
 
 class BindlessDescriptor
@@ -13,7 +15,8 @@ public:
 	BindlessDescriptor();
 	BindlessDescriptor(
 		VkDevice device,
-		uint32_t max_descriptor_count
+		VkPhysicalDevice physical_device,
+		uint32_t max_frames_in_flight
 	);
 	~BindlessDescriptor();
 
@@ -25,27 +28,37 @@ public:
 
 	void clear();
 
-	VkDescriptorSetLayout getSetLayout() const { return m_descriptor_set_layout; }
-	VkDescriptorSet getSet() const { return m_descriptor_set; }
+	VkDescriptorSetLayout layout() const { return m_descriptor_set_layout; }
+	VkDescriptorSet set() const { return m_descriptor_set; }
 
-	uint32_t storeUniformBuffer(VkBuffer buffer, VkDeviceSize offset, VkDeviceSize range);
-	uint32_t storeStorageBuffer(VkBuffer buffer, VkDeviceSize offset, VkDeviceSize range);
-	uint32_t storeCombinedImageSampler(VkImageView imageView, VkSampler sampler);
+	uint32_t storeUniformBuffer(VkBuffer buffer, VkDeviceSize offset, VkDeviceSize range, uint32_t index = invalid_descriptor_index);
+	uint32_t storeStorageBuffer(VkBuffer buffer, VkDeviceSize offset, VkDeviceSize range, uint32_t index = invalid_descriptor_index);
+	uint32_t storeCombinedImageSampler(VkImageView imageView, VkSampler sampler, uint32_t index = invalid_descriptor_index);
+
+	void setParams(BindlessDescriptorParams params, uint32_t current_frame);
+	uint32_t getParamsOffset(uint32_t current_frame) const;
 
 private:
 
+	static const uint32_t invalid_descriptor_index = std::numeric_limits<uint32_t>::max();
+
 	VkDevice m_device;
 
-	uint32_t m_max_descriptor_count;
+	uint32_t m_max_frames_in_flight;
 
 	VkDescriptorSetLayout m_descriptor_set_layout;
 	VkDescriptorPool m_descriptor_pool;
 	VkDescriptorSet m_descriptor_set;
 
-	std::array<std::list<uint32_t>, 3> m_free_descriptor_indices;
+	std::vector<std::list<uint32_t>> m_free_descriptor_indices;
 
-	static constexpr uint32_t m_uniform_buffer_binding = 0;
-	static constexpr uint32_t m_storage_buffer_binding = 1;
-	static constexpr uint32_t m_combined_image_sampler_binding = 2;
+	Buffer m_parameter_buffer;
+	VkDeviceSize m_parameter_object_size;
 
+	uint32_t padSizeToMinAlignment(uint32_t originalSize, uint32_t minAlignment)
+	{
+		return (originalSize + minAlignment - 1) & ~(minAlignment - 1);
+	}
+
+	uint32_t checkAndGetFreeDescriptorIndex(uint32_t index, uint32_t descriptor_binding);
 };

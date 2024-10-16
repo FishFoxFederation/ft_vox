@@ -2,10 +2,15 @@
 
 #include "common.glsl"
 
-layout(set = 0, binding = 0) uniform CameraMatrices
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_PARAMS_BINDING) uniform bindlessParams
+{
+	BindlessDescriptorParams bindless_params;
+};
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING) uniform CameraMatrices
 {
 	ViewProjMatrices cm;
-};
+} camera_matrices[BINDLESS_DESCRIPTOR_MAX_COUNT];
+
 layout(push_constant) uniform PushConstants
 {
 	ModelMatrice pc;
@@ -27,7 +32,10 @@ layout(location = 5) out float fragBlockLight;
 
 void main()
 {
-	gl_Position = cm.proj * cm.view * pc.model * vec4(positions, 1.0);
+	const uint camera_ubo_index = bindless_params.camera_ubo_index;
+
+	const ViewProjMatrices cam = camera_matrices[camera_ubo_index].cm;
+	gl_Position = cam.proj * cam.view * pc.model * vec4(positions, 1.0);
 
 	fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);
