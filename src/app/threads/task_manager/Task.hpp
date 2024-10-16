@@ -9,12 +9,15 @@ namespace task
 class Task
 {
 public:
-	Task();
-	~Task();
-	Task(const Task &) = delete;
-	Task & operator=(const Task &) = delete;
-	Task(Task &&) = delete;
-	Task & operator=(Task &&) = delete;
+	Task(internal::Node * node)
+	{
+		m_node = node;
+	};
+	~Task(){};
+	Task(const Task &) = default;
+	Task & operator=(const Task &) = default;
+	Task(Task &&) = default;
+	Task & operator=(Task &&) = default;
 
 	/**
 	 * @brief add a precedence link from this task to 
@@ -22,7 +25,12 @@ public:
 	 * @param t 
 	 * @return *this
 	 */
-	Task & precede(Task & t);
+	Task & precede(Task & t) {
+		m_node->addSuccessor(*t.m_node);
+		t.m_node->addDependent(*m_node);
+
+		return *this;
+	}
 
 	/**
 	 * @brief add a successor link from this task to t
@@ -30,7 +38,10 @@ public:
 	 * @param t 
 	 * @return *this
 	 */
-	Task & succceed(Task & t);
+	Task & succceed(Task & t) {
+		t.precede(*this);
+		return *this;
+	}
 
 	/**
 	 * @brief Set the underlying task
@@ -53,7 +64,6 @@ public:
 	bool isEmpty() const;
 	bool hasTask() const;
 private:
-	// internal::TaskGraph						&	m_graph;
-	std::shared_ptr<internal::TaskGraph::Node>	m_node;
+	internal::Node * m_node;
 };
 }
