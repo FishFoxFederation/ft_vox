@@ -74,11 +74,11 @@ void RenderThread::loop()
 	std::string current_frame = "Frame " + std::to_string(vk.current_frame);
 	ZoneText(current_frame.c_str(), current_frame.size());
 
-	//############################################################################################################
-	//					 																						 #
-	//							Do independent logic from the vulkan rendering here							#
-	//					 																						 #
-	//############################################################################################################
+	//###########################################################################################################
+	//					 																						#
+	//							Do independent logic from the vulkan rendering here								#
+	//					 																						#
+	//###########################################################################################################
 
 	{
 		ZoneScopedN("Prepare frame");
@@ -452,21 +452,21 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame],
+			vk.bindless_descriptor.set(),
 			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set
 		};
+
+		uint32_t dynamic_offset = vk.bindless_descriptor.getParamsOffset(vk.current_frame);
 
 		vkCmdBindDescriptorSets(
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.chunk_pipeline.layout,
 			0,
-			static_cast<uint32_t>(descriptor_sets.size()),
-			descriptor_sets.data(),
-			0,
-			nullptr
+			static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
+			1, &dynamic_offset
 		);
 
 		for (auto & chunk_mesh: chunk_meshes)

@@ -1,14 +1,18 @@
 #version 450
 
-#extension GL_EXT_debug_printf : enable
 #extension GL_EXT_scalar_block_layout : enable
 
 #include "common.glsl"
 
-layout(set = 0, binding = 0) uniform CameraMatrices
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_PARAMS_BINDING) uniform bindlessParams
+{
+	BindlessDescriptorParams bindless_params;
+};
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING) uniform CameraMatrices
 {
 	ViewProjMatrices cm;
-};
+} camera_matrices[BINDLESS_DESCRIPTOR_MAX_COUNT];
+
 layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
 {
 	ShadowMapLight shadow_map_light;
@@ -93,7 +97,7 @@ float compute_shadow_factor(
 	uint pcf_size
 )
 {
-	vec4 fragPosViewSpace = cm.view * world_space_pos;
+	vec4 fragPosViewSpace = camera_matrices[bindless_params.camera_ubo_index].cm.view * world_space_pos;
 	float depthValue = abs(fragPosViewSpace.z);
 
 	int layer = -1;

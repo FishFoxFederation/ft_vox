@@ -232,14 +232,20 @@ void VulkanAPI::createInstance()
 		create_info.enabledLayerCount = static_cast<uint32_t>(validation_layers.size());
 		create_info.ppEnabledLayerNames = validation_layers.data();
 
-		// Shader printf is a feature of the validation layers that needs to be enabled
-		// std::vector<VkValidationFeatureEnableEXT>  validation_feature_enables = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT };
 
-		// VkValidationFeaturesEXT validation_features = { VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT };
-		// validation_features.enabledValidationFeatureCount = static_cast<uint32_t>(validation_feature_enables.size());
-		// validation_features.pEnabledValidationFeatures = validation_feature_enables.data();
+		// TODO: check if these features are supported before enabling them
+		// note: gpu assisted features must not be set with the debug_printf feature
+		std::vector<VkValidationFeatureEnableEXT>  validation_feature_enables = {
+			VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT,
+			VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT,
+			// VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT
+		};
 
-		// debug_create_info.pNext = &validation_features;
+		VkValidationFeaturesEXT validation_features = { VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT };
+		validation_features.enabledValidationFeatureCount = static_cast<uint32_t>(validation_feature_enables.size());
+		validation_features.pEnabledValidationFeatures = validation_feature_enables.data();
+
+		debug_create_info.pNext = &validation_features;
 		create_info.pNext = &debug_create_info;
 	#else
 		create_info.enabledLayerCount = 0;
@@ -1436,7 +1442,17 @@ void VulkanAPI::createDescriptors()
 
 	}
 
-	bindless_descriptor = BindlessDescriptor(device, 1024);
+	{ // Bindless descriptor
+		bindless_descriptor = BindlessDescriptor(device, physical_device, max_frames_in_flight);
+
+		bindless_params.resize(max_frames_in_flight);
+		for (int i = 0; i < max_frames_in_flight; i++)
+		{
+			bindless_params[i].camera_ubo_index = bindless_descriptor.storeUniformBuffer(camera_ubo.buffers[i], 0, sizeof(ViewProjMatrices));
+
+			bindless_descriptor.setParams(bindless_params[i], i);
+		}
+	}
 }
 
 void VulkanAPI::createRenderPass()
@@ -1735,7 +1751,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout,
+			bindless_descriptor.layout(),
 			light_view_proj_descriptor.layout,
 			block_textures_descriptor.layout,
 			shadow_map_descriptor.layout
