@@ -15,6 +15,9 @@
 	using mat3 = glm::mat3;
 	using mat4 = glm::mat4;
 
+	// other types
+	using uint = uint32_t;
+
 #endif
 
 #define SHADOW_MAP_MAX_COUNT 8
@@ -60,6 +63,26 @@ struct LinePipelinePushConstant
 {
 	mat4 model;
 	vec4 color;
+};
+
+
+// for bindless descriptor
+
+#define BINDLESS_DESCRIPTOR_MAX_COUNT 1024
+
+#define BINDLESS_DESCRIPTOR_SET 0
+
+#define BINDLESS_PARAMS_BINDING 0
+#define BINDLESS_UNIFORM_BUFFER_BINDING 1
+#define BINDLESS_STORAGE_BUFFER_BINDING 2
+#define BINDLESS_COMBINED_IMAGE_SAMPLER_BINDING 3
+
+struct BindlessDescriptorParams
+{
+	uint camera_ubo_index;
+	uint pad0;
+	uint pad1;
+	uint pad2;
 };
 
 
