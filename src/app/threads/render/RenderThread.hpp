@@ -108,6 +108,8 @@ private:
 	std::array<ItemInfo::Type, 9> toolbar_items;
 	int toolbar_cursor_index = 0;
 
+	uint32_t bindless_param_dynamic_offset = 0;
+
 
 	// Should be the last member
 	std::jthread m_thread;

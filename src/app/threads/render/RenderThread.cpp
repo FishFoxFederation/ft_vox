@@ -187,6 +187,8 @@ void RenderThread::loop()
 			std::lock_guard lock(m_world_scene.toolbar_items_mutex);
 			toolbar_items = m_world_scene.toolbar_items;
 		}
+
+		bindless_param_dynamic_offset = vk.bindless_descriptor.getParamsOffset(vk.current_frame);
 	}
 
 	//###########################################################################################################
@@ -388,6 +390,7 @@ void RenderThread::shadowPass()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+		vk.bindless_descriptor.set(),
 		vk.light_view_proj_descriptor.sets[vk.current_frame],
 		vk.block_textures_descriptor.set
 	};
@@ -397,10 +400,8 @@ void RenderThread::shadowPass()
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.shadow_pipeline.layout,
 		0,
-		static_cast<uint32_t>(shadow_descriptor_sets.size()),
-		shadow_descriptor_sets.data(),
-		0,
-		nullptr
+		static_cast<uint32_t>(shadow_descriptor_sets.size()), shadow_descriptor_sets.data(),
+		1, &bindless_param_dynamic_offset
 	);
 
 	for (auto & chunk_mesh : chunk_meshes)
@@ -458,15 +459,13 @@ void RenderThread::lightingPass()
 			vk.shadow_map_descriptor.set
 		};
 
-		uint32_t dynamic_offset = vk.bindless_descriptor.getParamsOffset(vk.current_frame);
-
 		vkCmdBindDescriptorSets(
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.chunk_pipeline.layout,
 			0,
 			static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
-			1, &dynamic_offset
+			1, &bindless_param_dynamic_offset
 		);
 
 		for (auto & chunk_mesh: chunk_meshes)
@@ -491,7 +490,7 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> entity_descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame]
+			vk.bindless_descriptor.set()
 		};
 
 		vkCmdBindDescriptorSets(
@@ -499,10 +498,8 @@ void RenderThread::lightingPass()
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.entity_pipeline.layout,
 			0,
-			static_cast<uint32_t>(entity_descriptor_sets.size()),
-			entity_descriptor_sets.data(),
-			0,
-			nullptr
+			static_cast<uint32_t>(entity_descriptor_sets.size()), entity_descriptor_sets.data(),
+			1, &bindless_param_dynamic_offset
 		);
 
 		for (const auto & entity_mesh : entity_meshes)
@@ -556,7 +553,7 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> player_descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame],
+			vk.bindless_descriptor.set(),
 			vk.player_skin_image_descriptor.set
 		};
 
@@ -565,10 +562,8 @@ void RenderThread::lightingPass()
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.player_pipeline.layout,
 			0,
-			static_cast<uint32_t>(player_descriptor_sets.size()),
-			player_descriptor_sets.data(),
-			0,
-			nullptr
+			static_cast<uint32_t>(player_descriptor_sets.size()), player_descriptor_sets.data(),
+			1, &bindless_param_dynamic_offset
 		);
 
 		for (const auto & player : players)
@@ -680,7 +675,7 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> line_descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame]
+			vk.bindless_descriptor.set()
 		};
 
 		vkCmdBindDescriptorSets(
@@ -688,10 +683,8 @@ void RenderThread::lightingPass()
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.line_pipeline.layout,
 			0,
-			static_cast<uint32_t>(line_descriptor_sets.size()),
-			line_descriptor_sets.data(),
-			0,
-			nullptr
+			static_cast<uint32_t>(line_descriptor_sets.size()), line_descriptor_sets.data(),
+			1, &bindless_param_dynamic_offset
 		);
 
 		Mesh mesh;
@@ -745,7 +738,7 @@ void RenderThread::lightingPass()
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
 		// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		// 	vk.camera_descriptor.sets[vk.current_frame],
+		// 	vk.bindless_descriptor.set(),
 		// 	vk.cube_map_descriptor.set
 		// };
 
@@ -754,10 +747,8 @@ void RenderThread::lightingPass()
 		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
 		// 	vk.skybox_pipeline.layout,
 		// 	0,
-		// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
-		// 	skybox_descriptor_sets.data(),
-		// 	0,
-		// 	nullptr
+		// 	static_cast<uint32_t>(skybox_descriptor_sets.size()), skybox_descriptor_sets.data(),
+		// 	1, &bindless_param_dynamic_offset
 		// );
 
 		// ModelMatrice skybox_matrices = {};
@@ -784,7 +775,7 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.sun_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> sun_descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame],
+			vk.bindless_descriptor.set(),
 			vk.atmosphere_descriptor.sets[vk.current_frame]
 		};
 
@@ -793,10 +784,8 @@ void RenderThread::lightingPass()
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.sun_pipeline.layout,
 			0,
-			static_cast<uint32_t>(sun_descriptor_sets.size()),
-			sun_descriptor_sets.data(),
-			0,
-			nullptr
+			static_cast<uint32_t>(sun_descriptor_sets.size()), sun_descriptor_sets.data(),
+			1, &bindless_param_dynamic_offset
 		);
 
 		ModelMatrice sky_shader_data = {};
@@ -855,7 +844,7 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.camera_descriptor.sets[vk.current_frame],
+			vk.bindless_descriptor.set(),
 			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set,
@@ -867,10 +856,8 @@ void RenderThread::lightingPass()
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.water_pipeline.layout,
 			0,
-			static_cast<uint32_t>(descriptor_sets.size()),
-			descriptor_sets.data(),
-			0,
-			nullptr
+			static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
+			1, &bindless_param_dynamic_offset
 		);
 
 		for (auto & chunk_mesh: chunk_meshes)
@@ -913,6 +900,12 @@ void RenderThread::lightingPass()
 		VK_SUBPASS_CONTENTS_INLINE
 	);
 
+
+	const glm::vec2 toolbar_pos = {
+		static_cast<float>(vk.output_attachement.extent2D.width / 2 - (vk.toolbar_image.extent2D.width / 2)),
+		static_cast<float>(vk.output_attachement.extent2D.height - vk.toolbar_image.extent2D.height - 10)
+	};
+
 	{ // Draw hud
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.hud_pipeline.pipeline);
 
@@ -931,11 +924,6 @@ void RenderThread::lightingPass()
 			vk.drawHudImage(vk.crosshair_image_descriptor, viewport);
 		}
 
-		const glm::vec2 toolbar_pos = {
-			static_cast<float>(vk.output_attachement.extent2D.width / 2 - (vk.toolbar_image.extent2D.width / 2)),
-			static_cast<float>(vk.output_attachement.extent2D.height - vk.toolbar_image.extent2D.height - 10)
-		};
-
 		{ // Toolbar
 			VkExtent2D size = vk.toolbar_image.extent2D;
 			VkViewport viewport = {};
@@ -948,62 +936,6 @@ void RenderThread::lightingPass()
 
 			vk.drawHudImage(vk.toolbar_image_descriptor, viewport);
 		}
-
-
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.item_icon_pipeline.pipeline);
-
-		const std::array<ItemInfo::Type, 9> toolbar_items = {
-			ItemInfo::Type::GrassBlock,
-			ItemInfo::Type::DirtBlock,
-			ItemInfo::Type::StoneBlock,
-			ItemInfo::Type::WaterBlock,
-			ItemInfo::Type::GlassBlock,
-			ItemInfo::Type::LightBlock,
-			ItemInfo::Type::None,
-			ItemInfo::Type::None,
-			ItemInfo::Type::None
-		};
-		{ // Toolbar items
-			const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
-				vk.item_icon_descriptor.set
-			};
-
-			vkCmdBindDescriptorSets(
-				vk.draw_command_buffers[vk.current_frame],
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				vk.item_icon_pipeline.layout,
-				0,
-				static_cast<uint32_t>(toolbar_item_descriptor_sets.size()),
-				toolbar_item_descriptor_sets.data(),
-				0,
-				nullptr
-			);
-
-			for (size_t i = 0; i < 9; i++)
-			{
-				if (toolbar_items[i] == ItemInfo::Type::None)
-				{
-					continue;
-				}
-
-				const glm::vec2 toolbar_item_pos = {
-					toolbar_pos.x + (i * 64),
-					toolbar_pos.y
-				};
-
-				VkViewport viewport = {};
-				viewport.x = toolbar_item_pos.x + 3;
-				viewport.y = toolbar_item_pos.y + 3;
-				viewport.width = 64 - 6;
-				viewport.height = 64 - 6;
-				viewport.minDepth = 0.0f;
-				viewport.maxDepth = 1.0f;
-
-				vk.drawItemIcon(viewport, static_cast<uint32_t>(toolbar_items[i]));
-			}
-		}
-
-		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.hud_pipeline.pipeline);
 
 		const glm::vec2 toolbar_cursor_pos = {
 			toolbar_pos.x + (toolbar_cursor_index * vk.toolbar_cursor_image.extent2D.width),
@@ -1039,10 +971,52 @@ void RenderThread::lightingPass()
 		}
 	}
 
+	{ // Toolbar items
+		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.item_icon_pipeline.pipeline);
+
+		const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
+			vk.bindless_descriptor.set(),
+			vk.item_icon_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
+			vk.draw_command_buffers[vk.current_frame],
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.item_icon_pipeline.layout,
+			0,
+			static_cast<uint32_t>(toolbar_item_descriptor_sets.size()), toolbar_item_descriptor_sets.data(),
+			1, &bindless_param_dynamic_offset
+		);
+
+		for (size_t i = 0; i < 9; i++)
+		{
+			if (toolbar_items[i] == ItemInfo::Type::None)
+			{
+				continue;
+			}
+
+			const glm::vec2 toolbar_item_pos = {
+				toolbar_pos.x + (i * 64),
+				toolbar_pos.y
+			};
+
+			VkViewport viewport = {};
+			viewport.x = toolbar_item_pos.x + 3;
+			viewport.y = toolbar_item_pos.y + 3;
+			viewport.width = 64 - 6;
+			viewport.height = 64 - 6;
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
+
+			vk.drawItemIcon(viewport, static_cast<uint32_t>(toolbar_items[i]));
+		}
+	}
+
 	{ // Draw test image
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
 		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+		// 	vk.bindless_descriptor.set(),
 		// 	vk.test_image_descriptor.set
 		// };
 
@@ -1051,10 +1025,8 @@ void RenderThread::lightingPass()
 		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
 		// 	vk.test_image_pipeline.layout,
 		// 	0,
-		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-		// 	test_image_descriptor_sets.data(),
-		// 	0,
-		// 	nullptr
+		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()), test_image_descriptor_sets.data(),
+		// 	1, &bindless_param_dynamic_offset
 		// );
 
 		// vkCmdDraw(

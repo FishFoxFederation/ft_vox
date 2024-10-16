@@ -32,9 +32,7 @@ layout(location = 5) out float fragBlockLight;
 
 void main()
 {
-	const uint camera_ubo_index = bindless_params.camera_ubo_index;
-
-	const ViewProjMatrices cam = camera_matrices[camera_ubo_index].cm;
+	const ViewProjMatrices cam = camera_matrices[bindless_params.camera_ubo_index].cm;
 	gl_Position = cam.proj * cam.view * pc.model * vec4(positions, 1.0);
 
 	fragNormal = normal;

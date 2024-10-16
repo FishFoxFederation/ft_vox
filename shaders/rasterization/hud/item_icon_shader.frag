@@ -2,7 +2,7 @@
 
 #include "common.glsl"
 
-layout (set = 0, binding = 0) uniform sampler2DArray image;
+layout (set = 1, binding = 0) uniform sampler2DArray image;
 
 layout(push_constant) uniform PushConstants
 {
