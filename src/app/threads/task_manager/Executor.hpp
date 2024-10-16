@@ -26,6 +26,8 @@ public:
 	Executor & operator=(Executor &&) = delete;
 
 	std::future<void> run(internal::TaskGraph & graph);
+
+	void waitForAll();
 private:
 	struct runningGraph
 	{
@@ -42,6 +44,7 @@ private:
 
 	struct info
 	{
+		//maybe add a union and a type enum to enable other types of tasks to be queued
 		std::shared_ptr<runningGraph> graph;
 		internal::Node * node;
 	};
@@ -50,6 +53,7 @@ private:
 
 	std::unordered_set<std::shared_ptr<runningGraph>>	m_running_graphs;
 	std::mutex							m_running_graphs_mutex;
+	std::condition_variable				m_running_graphs_cond;
 
 	std::deque<info> m_work_queue;
 	std::mutex					m_queue_mutex;

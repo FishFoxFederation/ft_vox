@@ -1,7 +1,8 @@
 #include "tasks.hpp"
 #include <iostream>
 
-
+// compile with 
+// c++ main_test.cpp Executor.cpp --std=c++20 -I ./ -I ../pool -I internal/ -pthread -g3 
 int main()
 {
 	task::Executor executor(4);
@@ -9,12 +10,15 @@ int main()
 
 	task::Task A = graph.addNode([]() { std::cout << "Task 1" << std::endl; });
 	task::Task B = graph.addNode([]() { std::cout << "Task 2" << std::endl; });
-	task::Task C = graph.addNode([]() { std::cout << "Task 3" << std::endl; throw std::runtime_error("Task 3 failed"); });
+	task::Task C = graph.addNode([]() { std::cout << "Task 3" << std::endl; }); 
 
-	// A.precede(B);
-	// B.precede(C);
+	A.setName("A");
+	B.setName("B");
+	C.setName("C");
+
 	A.succceed(B);
 	B.succceed(C);
 
-	executor.run(graph).get();
+	executor.run(graph);
+	executor.waitForAll();
 };

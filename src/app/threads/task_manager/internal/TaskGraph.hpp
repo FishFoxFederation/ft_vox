@@ -37,7 +37,8 @@ public:
 	template <typename F>
 	Node * addNode(F && task)
 	{
-		return &m_nodes.emplace_back(*this, std::forward<F>(task));
+		auto & node = m_nodes.emplace_back(*this, std::forward<F>(task));
+		return &node;
 	};
 
 private:
@@ -70,6 +71,9 @@ public:
 	void removeSucessor(Node & node){
 		m_sucessors.erase(std::remove(m_sucessors.begin(), m_sucessors.end(), &node), m_sucessors.end());
 	}
+
+	void setName(const std::string & name) { m_name = name; }
+	std::string getName() const { return m_name; }
 private:
 	TaskGraph &				m_graph;
 	void * 					m_data;

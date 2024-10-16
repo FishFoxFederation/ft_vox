@@ -1,4 +1,5 @@
 #include "Executor.hpp"
+#include <iostream>
 
 namespace task
 {
@@ -24,6 +25,8 @@ Executor::Executor(unsigned const thread_count)
 
 Executor::~Executor()
 {
+	waitForAll();
+
 	m_done = true;
 	m_cond.notify_all();
 }
@@ -31,16 +34,27 @@ Executor::~Executor()
 std::future<void> Executor::run(internal::TaskGraph & graph)
 {
 	std::shared_ptr<runningGraph> running_graph = std::make_shared<runningGraph>(graph);
-
+	{
+		std::lock_guard<std::mutex> lock(m_running_graphs_mutex);
+		m_running_graphs.insert(running_graph);
+	}
 	{
 		std::lock_guard<std::mutex> lock(m_queue_mutex);
 		for (auto node : running_graph->runningNodes)
+		{
 			m_work_queue.push_back({running_graph, node});
+			m_cond.notify_one();
+		}
 	}
 
 	return running_graph->promise.get_future();
 };
 
+void Executor::waitForAll()
+{
+	std::unique_lock<std::mutex> lock(m_running_graphs_mutex);
+	m_running_graphs_cond.wait(lock, [&] {return m_running_graphs.empty() || m_done; });
+}
 
 void Executor::workerThread(const int & id)
 {
@@ -121,10 +135,18 @@ void Executor::workerEndGraph(std::shared_ptr<runningGraph> & current_graph, Nod
 	current_graph->runningNodes.erase(node);
 	if (current_graph->runningNodes.empty())
 	{
+		//set promise
 		if (current_graph->eptr == nullptr)
 			current_graph->promise.set_value();
 		else
 			current_graph->promise.set_exception(current_graph->eptr);
+		
+		//remove running graph
+		{
+			std::lock_guard<std::mutex> lock(m_running_graphs_mutex);
+			m_running_graphs.erase(current_graph);
+			m_running_graphs_cond.notify_all();
+		}
 	}
 }
 
