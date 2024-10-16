@@ -1776,7 +1776,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.enable_alpha_blending = true;
 		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout,
+			bindless_descriptor.layout(),
 			light_view_proj_descriptor.layout,
 			block_textures_descriptor.layout,
 			shadow_map_descriptor.layout,
@@ -1805,7 +1805,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(LinePipelinePushConstant) }
@@ -1824,7 +1824,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout,
+			bindless_descriptor.layout(),
 			cube_map_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
@@ -1845,7 +1845,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout,
+			bindless_descriptor.layout(),
 			atmosphere_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
@@ -1877,6 +1877,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.depth_bias_constant_factor = 0.005f;
 		pipeline_info.depth_bias_slope_factor = 0.1f;
 		pipeline_info.descriptor_set_layouts = {
+			bindless_descriptor.layout(),
 			light_view_proj_descriptor.layout,
 			block_textures_descriptor.layout
 		};
@@ -1897,6 +1898,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
+			bindless_descriptor.layout(),
 			test_image_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
@@ -1917,7 +1919,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(EntityMatrices) }
@@ -1937,7 +1939,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			camera_descriptor.layout,
+			bindless_descriptor.layout(),
 			player_skin_image_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
@@ -1955,6 +1957,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.frag_path = "shaders/rasterization/hud/hud_shader.frag.spv";
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.descriptor_set_layouts = {
+			bindless_descriptor.layout(),
 			crosshair_image_descriptor.layout
 		};
 		pipeline_info.render_pass = hud_render_pass;
@@ -1992,6 +1995,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.frag_path = "shaders/rasterization/hud/item_icon_shader.frag.spv";
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.descriptor_set_layouts = {
+			bindless_descriptor.layout(),
 			item_icon_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
@@ -2469,14 +2473,15 @@ void VulkanAPI::prerenderItemIconImages()
 
 	vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, prerender_item_icon_pipeline.pipeline);
 
-	std::vector<VkDescriptorSet> descriptor_sets = { block_textures_descriptor.set };
+	std::vector<VkDescriptorSet> descriptor_sets = {
+		block_textures_descriptor.set
+	};
 	vkCmdBindDescriptorSets(
 		command_buffer,
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		prerender_item_icon_pipeline.layout,
 		0,
-		static_cast<uint32_t>(descriptor_sets.size()),
-		descriptor_sets.data(),
+		static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
 		0,
 		nullptr
 	);
@@ -2649,15 +2654,19 @@ void VulkanAPI::drawHudImage(
 	const VkViewport & viewport
 )
 {
+	std::vector<VkDescriptorSet> descriptor_sets = {
+		bindless_descriptor.set(),
+		descriptor.set
+	};
+	uint32_t param_dynamic_offset = bindless_descriptor.getParamsOffset(current_frame);
+
 	vkCmdBindDescriptorSets(
 		draw_command_buffers[current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		hud_pipeline.layout,
 		0,
-		1,
-		descriptor.sets.data(),
-		0,
-		nullptr
+		static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
+		1, &param_dynamic_offset
 	);
 
 	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);
