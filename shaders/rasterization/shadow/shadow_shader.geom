@@ -5,7 +5,7 @@
 layout(triangles, invocations = SHADOW_MAP_MAX_COUNT) in;
 layout(triangle_strip, max_vertices = 3) out;
 
-layout (std140, binding = 0) uniform LightSpaceMatrices
+layout (std140, set = 1, binding = 0) uniform LightSpaceMatrices
 {
 	ShadowMapLight shadow_map_light;
 };
