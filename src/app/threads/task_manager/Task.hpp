@@ -52,8 +52,8 @@ public:
 	template<typename F>
 	void set_task(F && f);
 
-	void		setName(const std::string & name);
-	std::string	getName() const;
+	void		setName(const std::string & name) { m_node->setName(name);}
+	std::string	getName() const { return m_node->getName(); }
 
 	void *getData() const;
 	void setData(void * data);
