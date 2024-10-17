@@ -296,7 +296,7 @@ public:
 	);
 
 	void drawHudImage(
-		const Descriptor & descriptor,
+		const uint32_t layer,
 		const VkViewport & viewport
 	);
 	void drawItemIcon(
@@ -364,8 +364,8 @@ public:
 	Image shadow_map_depth_attachement;
 
 	Image crosshair_image;
-	Image toolbar_image;
-	Image toolbar_cursor_image;
+	Image hotbar_image;
+	Image hotbar_cursor_image;
 	Image player_skin_image;
 	Image item_icon_images;
 
@@ -375,21 +375,7 @@ public:
 	UBO light_mat_ubo;
 	UBO atmosphere_ubo;
 
-	Descriptor swapchain_image_descriptor;
-	Descriptor camera_descriptor;
-	Descriptor block_textures_descriptor;
-	Descriptor cube_map_descriptor;
-	Descriptor shadow_map_descriptor;
 	Descriptor water_renderpass_input_attachement_descriptor;
-	Descriptor test_image_descriptor;
-	Descriptor light_view_proj_descriptor;
-	Descriptor crosshair_image_descriptor;
-	Descriptor toolbar_image_descriptor;
-	Descriptor toolbar_cursor_image_descriptor;
-	Descriptor player_skin_image_descriptor;
-	Descriptor atmosphere_descriptor;
-	Descriptor debug_info_image_descriptor;
-	Descriptor item_icon_descriptor;
 
 	BindlessDescriptor bindless_descriptor;
 	std::vector<BindlessDescriptorParams> bindless_params;

@@ -105,8 +105,8 @@ private:
 
 	std::string debug_text;
 
-	std::array<ItemInfo::Type, 9> toolbar_items;
-	int toolbar_cursor_index = 0;
+	std::array<ItemInfo::Type, 9> hotbar_items;
+	int hotbar_cursor_index = 0;
 
 
 	// Should be the last member

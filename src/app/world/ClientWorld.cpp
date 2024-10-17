@@ -262,7 +262,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	/********
 	 * CHECKING IF NEIGHBOURS EXIST AND ARE AVAILABLE
 	********/
-	
+
 	//this is possible and thread safe to test if they are readable and then to modify their statuses
 	//only because we have the guarantee that not other task will try to write to them
 	//since task dispatching is done in order
@@ -327,7 +327,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 				water_mesh_id,
 				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 			});
-			
+
 			chunk->setMeshID(mesh_scene_id);
 		}
 
@@ -441,7 +441,7 @@ void ClientWorld::updateLights()
 	 *
 	 * If this comment is still here and the functions are different,
 	 * ask me why the fuck it is the case :)
-	 * 
+	 *
 	 * not anymore since the system for remeshing clientside has changed we need to gather a list of modified chunks
 	 * so the code is a bit different than serverside i think we can keep those separate for now
 	 */
@@ -540,8 +540,8 @@ void ClientWorld::otherUpdate()
 		std::shared_ptr<Player> player = m_players.at(m_my_player_id);
 		std::lock_guard player_lock(player->mutex);
 
-		std::lock_guard toolbar_lock(m_world_scene.toolbar_items_mutex);
-		m_world_scene.toolbar_items = player->toolbar_items;
+		std::lock_guard hotbar_lock(m_world_scene.hotbar_items_mutex);
+		m_world_scene.hotbar_items = player->hotbar_items;
 	}
 }
 
@@ -831,7 +831,7 @@ ClientWorld::PlayerUseResult ClientWorld::playerUse(
 		return {false, glm::vec3(0.0)};
 	player->startUse();
 
-	ItemInfo::Type item_type = player->toolbar_items.at(player->toolbar_cursor);
+	ItemInfo::Type item_type = player->hotbar_items.at(player->hotbar_cursor);
 
 	{ // update player attack animation
 		std::lock_guard lock(m_world_scene.m_player_mutex);
@@ -910,8 +910,8 @@ void ClientWorld::manageScroll(
 	std::shared_ptr<Player> player = m_players.at(m_my_player_id);
 	std::lock_guard lock(player->mutex);
 
-	player->toolbar_cursor = (player->toolbar_cursor - static_cast<int>(y_offset) + 9) % 9;
-	m_world_scene.toolbar_cursor_index = player->toolbar_cursor;
+	player->hotbar_cursor = (player->hotbar_cursor - static_cast<int>(y_offset) + 9) % 9;
+	m_world_scene.hotbar_cursor_index = player->hotbar_cursor;
 }
 
 void ClientWorld::updatePlayer(

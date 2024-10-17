@@ -1,8 +1,10 @@
 #version 450
 
-layout(set = 1, binding = 0) uniform AtmospherParams
+#include "common.glsl"
+
+struct AtmosphereParams
 {
-	vec3 sun_dir;
+	vec3 sun_direction;
 	float earth_radius;
 	float atmosphere_radius;
 	float player_height;
@@ -14,12 +16,22 @@ layout(set = 1, binding = 0) uniform AtmospherParams
 	float n_light_samples;
 	vec3 beta_rayleigh;
 	vec3 beta_mie;
-}ap;
+};
+
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_PARAMS_BINDING) uniform bindlessParams
+{
+	BindlessDescriptorParams bindless_params;
+};
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING) uniform AtmospherParamsDescriptor
+{
+	AtmosphereParams data;
+} atmosphere_params_descriptor[BINDLESS_DESCRIPTOR_MAX_COUNT];
 
 layout(location = 0) in vec3 rayDir;
 
 layout(location = 0) out vec4 outColor;
 
+AtmosphereParams ap = atmosphere_params_descriptor[bindless_params.atmosphere_param_index].data;
 
 // float earthRadius = 6371000.0;
 // float atmosphereRadius = 6420000.0;
@@ -76,7 +88,7 @@ vec3 computeSkyColor(vec3 origin, vec3 dir, float tmin, float tmax)
     float tCurrent = tmin;
     vec3 sumR = vec3(0), sumM = vec3(0);  // mie and rayleigh contribution
     float opticalDepthR = 0, opticalDepthM = 0;
-    float mu = dot(dir, ap.sun_dir);  // mu in the paper which is the cosine of the angle between the sun direction and the ray direction
+    float mu = dot(dir, ap.sun_direction);  // mu in the paper which is the cosine of the angle between the sun direction and the ray direction
     float phaseR = rayleighPhase(mu);
     float phaseM = miePhase(mu);
 
@@ -91,13 +103,13 @@ vec3 computeSkyColor(vec3 origin, vec3 dir, float tmin, float tmax)
         opticalDepthM += hm;
         // light optical depth
         float t0Light, t1Light;
-        raySphereIntersect(samplePosition, ap.sun_dir, ap.atmosphere_radius, t0Light, t1Light);
+        raySphereIntersect(samplePosition, ap.sun_direction, ap.atmosphere_radius, t0Light, t1Light);
         float segmentLengthLight = t1Light / ap.n_light_samples, tCurrentLight = 0;
         float opticalDepthLightR = 0, opticalDepthLightM = 0;
         int j;
         for (j = 0; j < ap.n_light_samples; ++j)
 		{
-            vec3 samplePositionLight = samplePosition + (tCurrentLight + segmentLengthLight * 0.5) * ap.sun_dir;
+            vec3 samplePositionLight = samplePosition + (tCurrentLight + segmentLengthLight * 0.5) * ap.sun_direction;
             float heightLight = length(samplePositionLight) - ap.earth_radius;
             if (heightLight < 0) break;
             opticalDepthLightR += exp(-heightLight / ap.h_rayleigh) * segmentLengthLight;
