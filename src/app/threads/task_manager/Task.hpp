@@ -52,7 +52,11 @@ public:
 	template<typename F>
 	void set_task(F && f);
 
-	void		Name(const std::string & name) { m_node->setName(name);}
+	Task &		Name(const std::string & name)
+	{
+		m_node->setName(name);
+		return *this;
+	}
 	std::string	getName() const { return m_node->getName(); }
 
 	void *getData() const;

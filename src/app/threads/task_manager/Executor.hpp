@@ -49,11 +49,12 @@ private:
 	{
 		struct Module
 		{
-			Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun)
-			: sucessors(successors), nodesToRun(nodesToRun) {};
+			Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun, Module * externalModule = nullptr)
+			: sucessors(successors), nodesToRun(nodesToRun), externalModule(externalModule) {};
 			std::vector<TaskNode*>	rootNodes;
 			std::vector<TaskNode*>  sucessors;
 			std::atomic_int 		nodesToRun;
+			Module *				externalModule; //some modules can be nested
 		};
 		runningGraph(TaskGraph & graph);
 		TaskGraph &	graph;
@@ -79,13 +80,15 @@ private:
 		info () : t(type::NONE) {}
 		info (info && other) = default;
 		info & operator=(info && other) = default;
-		info (TaskNode * node, runningGraph * graph, runningGraph::Module * module = nullptr)
+		info (TaskNode * node, runningGraph * graph, runningGraph::Module * module)
 		: data(NodeInfo{graph, node, module})
 		{
-			if (node->getType() == TaskNode::type::GRAPH)
-				t = type::GRAPH;
-			else
-				t = type::NODE;
+			t = type::NODE;
+		}
+		info (TaskNode * node, runningGraph * graph, runningGraph::Module * internalModule, runningGraph::Module * externalModule)
+		: data(GraphInfo{graph, node, internalModule})
+		{
+			t = type::GRAPH;
 		}
 		info (std::packaged_task<void()> task)
 		{
@@ -100,6 +103,12 @@ private:
 			GRAPH,
 			ASYNC
 		};
+		struct GraphInfo
+		{
+			runningGraph * graph;
+			TaskNode * node;
+			runningGraph::Module * internalModule;
+		};
 		struct NodeInfo
 		{
 			runningGraph * graph;
@@ -112,7 +121,7 @@ private:
 		};
 
 		type t;
-		std::variant<AsyncInfo, NodeInfo> data;
+		std::variant<AsyncInfo, NodeInfo, GraphInfo> data;
 	};
 
 	typedef uint64_t runningGraphId;
@@ -136,9 +145,10 @@ private:
 	void workerEndGraph(info::NodeInfo & node_info);
 	void workerExecNode(info::NodeInfo & node_info);
 	void workerExecAsync(info::AsyncInfo & async_info);
-	void workerExecGraphNode(info::NodeInfo & node_info);
+	void workerExecGraphNode(info::GraphInfo & graph_info);
 	void workerEndNode(info::NodeInfo & node_info);
 	void workerEndModule(info::NodeInfo & node_info);
 	void workerUpdateSuccessors(info::NodeInfo & node_info);
 };
+
 }

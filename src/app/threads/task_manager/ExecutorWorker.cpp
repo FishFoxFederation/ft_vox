@@ -1,4 +1,5 @@
 #include "Executor.hpp"
+#include <iostream>
 
 
 namespace task
@@ -27,7 +28,7 @@ void Executor::workerThread(const int & id)
 				workerExecAsync(std::get<info::AsyncInfo>(taskInfo.data));
 				break;
 			case info::type::GRAPH:
-				workerExecGraphNode(std::get<info::NodeInfo>(taskInfo.data));
+				workerExecGraphNode(std::get<info::GraphInfo>(taskInfo.data));
 				break;
 			case info::type::NONE:
 				break;
@@ -62,19 +63,21 @@ void Executor::workerExecAsync(info::AsyncInfo & async_info)
 	async_info.task();
 }
 
-void Executor::workerExecGraphNode(info::NodeInfo & node_info)
+void Executor::workerExecGraphNode(info::GraphInfo & node_info)
 {
-	//go into running graph and set all nodes as running
 	std::vector<TaskNode *> root_nodes;
-	auto [current_graph, node, module] = node_info;
+	auto [current_graph, node, current_module] = node_info;
+
+	//go into running graph and set all nodes as running
 	{
 		std::lock_guard<std::mutex> lock(current_graph->mutex);
 		if (current_graph->done)
 		{
-			workerEndGraph(node_info);
+			info::NodeInfo inf = {current_graph, node, current_module};
+			workerEndGraph(inf);
 			return;
 		}
-		for (auto current_node : module->rootNodes)
+		for (auto current_node : current_module->rootNodes)
 		{
 			current_graph->waitingNodes.erase(current_node);
 			current_graph->runningNodes.insert(current_node);
@@ -136,10 +139,14 @@ void Executor::workerUpdateSuccessors(info::NodeInfo & node_info)
 
 	for (auto child : node->m_sucessors)
 	{
+		// std::cout << "Node " << child->getName() << " has dependencies" << std::endl;
 		int dependencies = current_graph->nodeDependencies[child].fetch_sub(1) - 1;
 		// if children has no more dependencies, add to queue
+		if (dependencies < 0)
+			throw std::runtime_error("Dependency error");
 		if (dependencies == 0)
 		{
+			// std::cout << "Node " << child->getName() << " has no more dependencies" << std::endl;
 			{
 				std::lock_guard<std::mutex> lock(current_graph->mutex);
 				current_graph->waitingNodes.erase(child);
@@ -172,12 +179,25 @@ void Executor::workerEndNode(info::NodeInfo & node_info)
 
 void Executor::workerEndModule(info::NodeInfo & node_info)
 {
-
-	auto [current_graph, node, module] = node_info;
-
-	int nodes_left = module->nodesToRun.fetch_sub(1) - 1;
-	if (nodes_left == 0)
-		node->m_sucessors = module->sucessors;
+	auto current_graph = node_info.graph;
+	auto node = node_info.node;
+	auto module = node_info.module;
+	// std::cout << "Ending module from node " << node->getName() << std::endl;
+	std::function<void(runningGraph::Module *)> endModules = [&](runningGraph::Module * mod)
+	{
+		int nodes_left = mod->nodesToRun.fetch_sub(1) - 1;
+		if (nodes_left < 0)
+			throw std::runtime_error("Dependency error");
+		if (nodes_left == 0)
+		{
+			if (mod->sucessors.empty() && mod->externalModule != nullptr)
+				endModules(mod->externalModule);
+			else
+				node->m_sucessors = mod->sucessors;
+		}
+	};
+	
+	endModules(module);
 }
 
 }

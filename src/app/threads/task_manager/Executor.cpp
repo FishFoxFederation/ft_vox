@@ -74,19 +74,47 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 				case TaskNode::type::GRAPH:
 				{
 					auto & sub_graph = *node.getGraph();
-					module = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size());
-
-					visitModule(sub_graph, local_root, module);
-					[[fallthrough]];
+					// + 1 for nodes to run becaue the root node is not in the module
+					Module * mod = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size());
+					// if (module != nullptr)
+					// 	module->nodesToRun -= 1;
+					for (auto & sucessor : mod->sucessors)
+						std::cout << "successor: " << sucessor->getName() << std::endl;
+					for (auto & dependencies : node.m_dependents)
+						std::cout << "dependencies: " << dependencies->getName() << std::endl;
+					visitModule(sub_graph, local_root, mod);
+					nodeInfos.insert({&node, info(&node, this, mod, module)});
+					if (local_root)
+						runningNodes.insert(&node);
+					else if (module != nullptr
+						&&	node.m_dependents.empty())
+					{
+						std::cout << "adding root node to module" << std::endl;
+						module->rootNodes.push_back(&node);
+					}
+					else
+					{
+						std::cout << "adding node to waiting nodes" << std::endl;
+						waitingNodes.insert(&node);
+					}
+					break;
 				}
 				case TaskNode::type::NODE:
 				{
 					nodeInfos.insert({&node, info(&node, this, module)});
 
+					for (auto & sucessor : node.m_sucessors)
+						std::cout << "successor: " << sucessor->getName() << std::endl;
+					for (auto & dependencies : node.m_dependents)
+						std::cout << "dependencies: " << dependencies->getName() << std::endl;
 					if (local_root)
 						runningNodes.insert(&node);
-					else if (node.m_dependents.empty() && module != nullptr)
+					else if (module != nullptr
+						&&	node.m_dependents.empty())
+					{
+						std::cout << "adding root node to module" << std::endl;
 						module->rootNodes.push_back(&node);
+					}
 					else
 					{
 						std::cout << "adding node to waiting nodes" << std::endl;
