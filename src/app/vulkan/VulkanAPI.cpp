@@ -576,6 +576,7 @@ void VulkanAPI::createLogicalDevice()
 	device_features.wideLines = VK_TRUE;
 	device_features.shaderInt64 = VK_TRUE;
 	device_features.geometryShader = VK_TRUE;
+	device_features.drawIndirectFirstInstance = VK_TRUE;
 
 	VkPhysicalDeviceDynamicRenderingFeaturesKHR dynamic_rendering_features = {};
 	dynamic_rendering_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
@@ -1757,7 +1758,7 @@ void VulkanAPI::createPipelines()
 			shadow_map_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1783,7 +1784,7 @@ void VulkanAPI::createPipelines()
 			water_renderpass_input_attachement_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = water_render_pass;
 
@@ -1808,7 +1809,7 @@ void VulkanAPI::createPipelines()
 			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(LinePipelinePushConstant) }
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_LINE_WIDTH };
@@ -1828,7 +1829,7 @@ void VulkanAPI::createPipelines()
 			cube_map_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1849,7 +1850,7 @@ void VulkanAPI::createPipelines()
 			atmosphere_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
@@ -1882,7 +1883,7 @@ void VulkanAPI::createPipelines()
 			block_textures_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = shadow_render_pass;
 
@@ -1902,7 +1903,7 @@ void VulkanAPI::createPipelines()
 			test_image_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = hud_render_pass;
 
@@ -1922,7 +1923,7 @@ void VulkanAPI::createPipelines()
 			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(EntityMatrices) }
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1943,7 +1944,7 @@ void VulkanAPI::createPipelines()
 			player_skin_image_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1980,7 +1981,7 @@ void VulkanAPI::createPipelines()
 			block_textures_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, 0, sizeof(PreRenderItemIconPushConstant) }
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = prerender_item_icon_render_pass;
 		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
@@ -1999,7 +2000,7 @@ void VulkanAPI::createPipelines()
 			item_icon_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ItemIconPushConstant) }
+			{ VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ObjectData) }
 		};
 		pipeline_info.render_pass = hud_render_pass;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_VIEWPORT };
@@ -2505,19 +2506,19 @@ void VulkanAPI::prerenderItemIconImages()
 	);
 	glm::mat4 model = glm::mat4(1.0f);
 
-	PreRenderItemIconPushConstant push_constants = {};
-	push_constants.MVP = clip * proj * view * model;
+	ObjectData object_data = {};
+	object_data.matrix = clip * proj * view * model;
 
 	for (size_t i = 0; i < g_items_info.count(); i++)
 	{
-		push_constants.layer = i;
+		object_data.layer = i;
 
 		drawMesh(
 			command_buffer,
 			prerender_item_icon_pipeline,
 			g_items_info.get(i).mesh_id,
-			&push_constants,
-			sizeof(PreRenderItemIconPushConstant),
+			&object_data,
+			sizeof(ObjectData),
 			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT
 		);
 	}
@@ -2685,16 +2686,16 @@ void VulkanAPI::drawItemIcon(
 	const uint32_t layer
 )
 {
-	ItemIconPushConstant push_constants = {};
-	push_constants.layer = layer;
+	ObjectData object_data = {};
+	object_data.layer = layer;
 
 	vkCmdPushConstants(
 		draw_command_buffers[current_frame],
 		item_icon_pipeline.layout,
 		VK_SHADER_STAGE_FRAGMENT_BIT,
 		0,
-		sizeof(ItemIconPushConstant),
-		&push_constants
+		sizeof(ObjectData),
+		&object_data
 	);
 
 	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);

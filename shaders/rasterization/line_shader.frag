@@ -4,12 +4,12 @@
 
 layout(push_constant) uniform PushConstants
 {
-	LinePipelinePushConstant pc;
+	ObjectData obj_data;
 };
 
 layout(location = 0) out vec4 outColor;
 
 void main()
 {
-	outColor = pc.color;
+	outColor = obj_data.color;
 }

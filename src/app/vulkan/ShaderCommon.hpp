@@ -28,17 +28,6 @@ struct ViewProjMatrices
 	mat4 proj;
 };
 
-struct ModelMatrice
-{
-	mat4 model;
-};
-
-struct EntityMatrices
-{
-	mat4 model;
-	vec4 color;
-};
-
 struct ShadowMapLight
 {
 	mat4 view_proj[SHADOW_MAP_MAX_COUNT];
@@ -48,21 +37,11 @@ struct ShadowMapLight
 	float blend_distance;
 };
 
-struct PreRenderItemIconPushConstant
+struct ObjectData
 {
-	mat4 MVP;
-	int layer;
-};
-
-struct ItemIconPushConstant
-{
-	int layer;
-};
-
-struct LinePipelinePushConstant
-{
-	mat4 model;
+	mat4 matrix;
 	vec4 color;
+	int layer;
 };
 
 

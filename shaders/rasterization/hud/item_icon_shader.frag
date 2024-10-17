@@ -6,7 +6,7 @@ layout (set = 1, binding = 0) uniform sampler2DArray image;
 
 layout(push_constant) uniform PushConstants
 {
-	ItemIconPushConstant pc;
+	ObjectData obj_data;
 };
 
 layout (location = 0) in vec2 inUV;
@@ -15,5 +15,5 @@ layout (location = 0) out vec4 outColor;
 
 void main()
 {
-	outColor = texture(image, vec3(inUV, pc.layer));
+	outColor = texture(image, vec3(inUV, obj_data.layer));
 }
