@@ -30,6 +30,7 @@ public:
 
 	VkDescriptorSetLayout layout() const { return m_descriptor_set_layout; }
 	VkDescriptorSet set() const { return m_descriptor_set; }
+	VkPipelineLayout compatiblePipelineLayout() const { return m_compatible_pipeline_layout; }
 
 	uint32_t storeUniformBuffer(VkBuffer buffer, VkDeviceSize offset, VkDeviceSize range, uint32_t index = invalid_descriptor_index);
 	uint32_t storeStorageBuffer(VkBuffer buffer, VkDeviceSize offset, VkDeviceSize range, uint32_t index = invalid_descriptor_index);
@@ -54,6 +55,8 @@ private:
 
 	Buffer m_parameter_buffer;
 	VkDeviceSize m_parameter_object_size;
+
+	VkPipelineLayout m_compatible_pipeline_layout;
 
 	uint32_t padSizeToMinAlignment(uint32_t originalSize, uint32_t minAlignment)
 	{

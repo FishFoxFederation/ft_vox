@@ -10,7 +10,11 @@ BindlessDescriptor::BindlessDescriptor():
 	m_max_frames_in_flight(0),
 	m_descriptor_set_layout(VK_NULL_HANDLE),
 	m_descriptor_pool(VK_NULL_HANDLE),
-	m_descriptor_set(VK_NULL_HANDLE)
+	m_descriptor_set(VK_NULL_HANDLE),
+	m_free_descriptor_indices(4),
+	m_parameter_buffer(),
+	m_parameter_object_size(0),
+	m_compatible_pipeline_layout(VK_NULL_HANDLE)
 {
 }
 
@@ -128,6 +132,21 @@ BindlessDescriptor::BindlessDescriptor(
 	write.pBufferInfo = &buffer_info;
 
 	vkUpdateDescriptorSets(m_device, 1, &write, 0, nullptr);
+
+	// create compatible pipeline layout
+
+	VkPipelineLayoutCreateInfo pipeline_layout_info = {};
+	pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipeline_layout_info.setLayoutCount = 1;
+	pipeline_layout_info.pSetLayouts = &m_descriptor_set_layout;
+	VkPushConstantRange push_constant_range = { VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) };
+	pipeline_layout_info.pushConstantRangeCount = 1;
+	pipeline_layout_info.pPushConstantRanges = &push_constant_range;
+
+	VK_CHECK(
+		vkCreatePipelineLayout(m_device, &pipeline_layout_info, nullptr, &m_compatible_pipeline_layout),
+		"Failed to create bindless descriptor compatible pipeline layout"
+	);
 }
 
 BindlessDescriptor::~BindlessDescriptor()
@@ -143,12 +162,14 @@ BindlessDescriptor::BindlessDescriptor(BindlessDescriptor && other) noexcept:
 	m_descriptor_set(other.m_descriptor_set),
 	m_free_descriptor_indices(std::move(other.m_free_descriptor_indices)),
 	m_parameter_buffer(std::move(other.m_parameter_buffer)),
-	m_parameter_object_size(other.m_parameter_object_size)
+	m_parameter_object_size(other.m_parameter_object_size),
+	m_compatible_pipeline_layout(other.m_compatible_pipeline_layout)
 {
 	other.m_device = VK_NULL_HANDLE;
 	other.m_descriptor_set_layout = VK_NULL_HANDLE;
 	other.m_descriptor_pool = VK_NULL_HANDLE;
 	other.m_descriptor_set = VK_NULL_HANDLE;
+	other.m_compatible_pipeline_layout = VK_NULL_HANDLE;
 }
 
 BindlessDescriptor& BindlessDescriptor::operator=(BindlessDescriptor && other) noexcept
@@ -165,11 +186,13 @@ BindlessDescriptor& BindlessDescriptor::operator=(BindlessDescriptor && other) n
 		m_free_descriptor_indices = std::move(other.m_free_descriptor_indices);
 		m_parameter_buffer = std::move(other.m_parameter_buffer);
 		m_parameter_object_size = other.m_parameter_object_size;
+		m_compatible_pipeline_layout = other.m_compatible_pipeline_layout;
 
 		other.m_device = VK_NULL_HANDLE;
 		other.m_descriptor_set_layout = VK_NULL_HANDLE;
 		other.m_descriptor_pool = VK_NULL_HANDLE;
 		other.m_descriptor_set = VK_NULL_HANDLE;
+		other.m_compatible_pipeline_layout = VK_NULL_HANDLE;
 	}
 
 	return *this;
@@ -182,6 +205,7 @@ void BindlessDescriptor::clear()
 
 	m_parameter_buffer.clear();
 
+	vkDestroyPipelineLayout(m_device, m_compatible_pipeline_layout, nullptr);
 	vkDestroyDescriptorSetLayout(m_device, m_descriptor_set_layout, nullptr);
 	vkDestroyDescriptorPool(m_device, m_descriptor_pool, nullptr);
 
