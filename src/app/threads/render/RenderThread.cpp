@@ -187,8 +187,6 @@ void RenderThread::loop()
 			std::lock_guard lock(m_world_scene.toolbar_items_mutex);
 			toolbar_items = m_world_scene.toolbar_items;
 		}
-
-		bindless_param_dynamic_offset = vk.bindless_descriptor.getParamsOffset(vk.current_frame);
 	}
 
 	//###########################################################################################################
@@ -239,6 +237,18 @@ void RenderThread::loop()
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
 	vk.writeTextToImage(vk.debug_info_image, debug_text, 10, 10, 32);
+
+	// Bind the descriptor set for the bindless descriptor
+	VkDescriptorSet bindless_descriptor_sets = vk.bindless_descriptor.set();
+	uint32_t bindless_param_dynamic_offset = vk.bindless_descriptor.getParamsOffset(vk.current_frame);
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.bindless_descriptor.compatiblePipelineLayout(),
+		0,
+		1, &bindless_descriptor_sets,
+		1, &bindless_param_dynamic_offset
+	);
 
 	shadowPass();
 	lightingPass();
@@ -390,7 +400,6 @@ void RenderThread::shadowPass()
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-		vk.bindless_descriptor.set(),
 		vk.light_view_proj_descriptor.sets[vk.current_frame],
 		vk.block_textures_descriptor.set
 	};
@@ -399,9 +408,9 @@ void RenderThread::shadowPass()
 		vk.draw_command_buffers[vk.current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		vk.shadow_pipeline.layout,
-		0,
+		1,
 		static_cast<uint32_t>(shadow_descriptor_sets.size()), shadow_descriptor_sets.data(),
-		1, &bindless_param_dynamic_offset
+		0, nullptr
 	);
 
 	for (auto & chunk_mesh : chunk_meshes)
@@ -415,7 +424,7 @@ void RenderThread::shadowPass()
 			chunk_mesh.id,
 			&object_data,
 			sizeof(ObjectData),
-			VK_SHADER_STAGE_VERTEX_BIT
+			VK_SHADER_STAGE_ALL
 		);
 	}
 
@@ -447,13 +456,13 @@ void RenderThread::lightingPass()
 		VK_SUBPASS_CONTENTS_INLINE
 	);
 
+
 	{ // Draw the chunks
 		ZoneScopedN("Draw chunks");
 
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.bindless_descriptor.set(),
 			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set
@@ -463,9 +472,9 @@ void RenderThread::lightingPass()
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.chunk_pipeline.layout,
-			0,
+			1,
 			static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
+			0, nullptr
 		);
 
 		for (auto & chunk_mesh: chunk_meshes)
@@ -479,7 +488,7 @@ void RenderThread::lightingPass()
 				chunk_mesh.id,
 				&object_data,
 				sizeof(ObjectData),
-				VK_SHADER_STAGE_VERTEX_BIT
+				VK_SHADER_STAGE_ALL
 			);
 		}
 	}
@@ -488,19 +497,6 @@ void RenderThread::lightingPass()
 		ZoneScopedN("Draw entities");
 
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> entity_descriptor_sets = {
-			vk.bindless_descriptor.set()
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.entity_pipeline.layout,
-			0,
-			static_cast<uint32_t>(entity_descriptor_sets.size()), entity_descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
-		);
 
 		for (const auto & entity_mesh : entity_meshes)
 		{
@@ -514,7 +510,7 @@ void RenderThread::lightingPass()
 				entity_mesh.id,
 				&object_data,
 				sizeof(ObjectData),
-				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+				VK_SHADER_STAGE_ALL
 			);
 		}
 
@@ -530,7 +526,7 @@ void RenderThread::lightingPass()
 			vkCmdPushConstants(
 				vk.draw_command_buffers[vk.current_frame],
 				vk.entity_pipeline.layout,
-				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				VK_SHADER_STAGE_ALL,
 				0,
 				sizeof(ObjectData),
 				&object_data
@@ -553,7 +549,6 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> player_descriptor_sets = {
-			vk.bindless_descriptor.set(),
 			vk.player_skin_image_descriptor.set
 		};
 
@@ -561,9 +556,9 @@ void RenderThread::lightingPass()
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.player_pipeline.layout,
-			0,
+			1,
 			static_cast<uint32_t>(player_descriptor_sets.size()), player_descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
+			0, nullptr
 		);
 
 		for (const auto & player : players)
@@ -674,19 +669,6 @@ void RenderThread::lightingPass()
 	{
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
 
-		const std::vector<VkDescriptorSet> line_descriptor_sets = {
-			vk.bindless_descriptor.set()
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.line_pipeline.layout,
-			0,
-			static_cast<uint32_t>(line_descriptor_sets.size()), line_descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
-		);
-
 		Mesh mesh;
 		{
 			std::lock_guard lock(vk.mesh_map_mutex);
@@ -720,7 +702,7 @@ void RenderThread::lightingPass()
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.line_pipeline.layout,
-			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			VK_SHADER_STAGE_ALL,
 			0,
 			sizeof(ObjectData),
 			&object_data
@@ -739,7 +721,6 @@ void RenderThread::lightingPass()
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
 		// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		// 	vk.bindless_descriptor.set(),
 		// 	vk.cube_map_descriptor.set
 		// };
 
@@ -747,9 +728,9 @@ void RenderThread::lightingPass()
 		// 	vk.draw_command_buffers[vk.current_frame],
 		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
 		// 	vk.skybox_pipeline.layout,
-		// 	0,
+		// 	1,
 		// 	static_cast<uint32_t>(skybox_descriptor_sets.size()), skybox_descriptor_sets.data(),
-		// 	1, &bindless_param_dynamic_offset
+		// 	0, nullptr
 		// );
 
 		// ObjectData object_data = {};
@@ -757,7 +738,7 @@ void RenderThread::lightingPass()
 		// vkCmdPushConstants(
 		// 	vk.draw_command_buffers[vk.current_frame],
 		// 	vk.skybox_pipeline.layout,
-		// 	VK_SHADER_STAGE_VERTEX_BIT,
+		// 	VK_SHADER_STAGE_ALL,
 		// 	0,
 		// 	sizeof(ObjectData),
 		// 	&object_data
@@ -776,7 +757,6 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.sun_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> sun_descriptor_sets = {
-			vk.bindless_descriptor.set(),
 			vk.atmosphere_descriptor.sets[vk.current_frame]
 		};
 
@@ -784,9 +764,9 @@ void RenderThread::lightingPass()
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.sun_pipeline.layout,
-			0,
+			1,
 			static_cast<uint32_t>(sun_descriptor_sets.size()), sun_descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
+			0, nullptr
 		);
 
 		ObjectData object_data = {};
@@ -798,7 +778,7 @@ void RenderThread::lightingPass()
 			vk.icosphere_mesh_id,
 			&object_data,
 			sizeof(ObjectData),
-			VK_SHADER_STAGE_VERTEX_BIT
+			VK_SHADER_STAGE_ALL
 		);
 	}
 
@@ -845,7 +825,6 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.bindless_descriptor.set(),
 			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set,
 			vk.shadow_map_descriptor.set,
@@ -856,9 +835,9 @@ void RenderThread::lightingPass()
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.water_pipeline.layout,
-			0,
+			1,
 			static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
+			0, nullptr
 		);
 
 		for (auto & chunk_mesh: chunk_meshes)
@@ -877,7 +856,7 @@ void RenderThread::lightingPass()
 				chunk_mesh.water_id,
 				&object_data,
 				sizeof(ObjectData),
-				VK_SHADER_STAGE_VERTEX_BIT
+				VK_SHADER_STAGE_ALL
 			);
 		}
 	}
@@ -976,7 +955,6 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.item_icon_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
-			vk.bindless_descriptor.set(),
 			vk.item_icon_descriptor.set
 		};
 
@@ -984,9 +962,9 @@ void RenderThread::lightingPass()
 			vk.draw_command_buffers[vk.current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			vk.item_icon_pipeline.layout,
-			0,
+			1,
 			static_cast<uint32_t>(toolbar_item_descriptor_sets.size()), toolbar_item_descriptor_sets.data(),
-			1, &bindless_param_dynamic_offset
+			0, nullptr
 		);
 
 		for (size_t i = 0; i < 9; i++)
@@ -1017,7 +995,6 @@ void RenderThread::lightingPass()
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
 		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-		// 	vk.bindless_descriptor.set(),
 		// 	vk.test_image_descriptor.set
 		// };
 
@@ -1025,9 +1002,9 @@ void RenderThread::lightingPass()
 		// 	vk.draw_command_buffers[vk.current_frame],
 		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
 		// 	vk.test_image_pipeline.layout,
-		// 	0,
+		// 	1,
 		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()), test_image_descriptor_sets.data(),
-		// 	1, &bindless_param_dynamic_offset
+		// 	0, nullptr
 		// );
 
 		// vkCmdDraw(
@@ -1056,7 +1033,7 @@ void RenderThread::drawPlayerBodyPart(
 		mesh_id,
 		&object_data,
 		sizeof(ObjectData),
-		VK_SHADER_STAGE_VERTEX_BIT
+		VK_SHADER_STAGE_ALL
 	);
 }
 
