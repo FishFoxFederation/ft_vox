@@ -13,7 +13,7 @@ layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING)
 
 layout(push_constant) uniform PushConstants
 {
-	ModelMatrice pc;
+	ObjectData obj_data;
 };
 
 vec3 skyboxVertices[36] = vec3[36](
@@ -66,6 +66,6 @@ void main()
 {
 	texDir = vec3(skyboxVertices[gl_VertexIndex]);
 	const ViewProjMatrices cam = camera_matrices[bindless_params.camera_ubo_index].cm;
-	vec4 pos = cam.proj * cam.view * pc.model * vec4(skyboxVertices[gl_VertexIndex], 1.0);
+	vec4 pos = cam.proj * cam.view * obj_data.matrix * vec4(skyboxVertices[gl_VertexIndex], 1.0);
 	gl_Position = pos.xyww;
 }

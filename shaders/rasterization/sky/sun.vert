@@ -12,7 +12,7 @@ layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING)
 } camera_matrices[BINDLESS_DESCRIPTOR_MAX_COUNT];
 layout(push_constant) uniform PushConstants
 {
-	ModelMatrice pc;
+	ObjectData obj_data;
 };
 
 layout(location = 0) in vec3 position;
@@ -24,7 +24,7 @@ layout(location = 0) out vec3 rayDir;
 void main()
 {
 	const ViewProjMatrices cam = camera_matrices[bindless_params.camera_ubo_index].cm;
-	vec4 pos = cam.proj * cam.view * pc.model * vec4(position, 1.0);
+	vec4 pos = cam.proj * cam.view * obj_data.matrix * vec4(position, 1.0);
 	gl_Position = pos.xyww;
 
 	rayDir = normalize(position);

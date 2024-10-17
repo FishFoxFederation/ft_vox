@@ -7,7 +7,7 @@ layout(triangle_strip, max_vertices = 3) out;
 
 layout(push_constant) uniform PushConstants
 {
-	PreRenderItemIconPushConstant pc;
+	ObjectData obj_data;
 };
 
 layout(location = 0) in vec3 vert_normal[];
@@ -21,7 +21,7 @@ void main()
 	for (int i = 0; i < 3; ++i)
 	{
 		gl_Position = gl_in[i].gl_Position;
-		gl_Layer = pc.layer;
+		gl_Layer = obj_data.layer;
 
 		frag_normal = vert_normal[i];
 		frag_tex_coords = vert_tex_coords[i];

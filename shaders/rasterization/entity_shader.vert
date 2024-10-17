@@ -13,7 +13,7 @@ layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING)
 
 layout(push_constant) uniform PushConstants
 {
-	EntityMatrices pc;
+	ObjectData obj_data;
 };
 
 layout(location = 0) in vec3 positions;
@@ -24,7 +24,7 @@ layout(location = 0) out vec3 fragNormal;
 void main()
 {
 	const ViewProjMatrices cam = camera_matrices[bindless_params.camera_ubo_index].cm;
-	gl_Position = cam.proj * cam.view * pc.model * vec4(positions, 1.0);
+	gl_Position = cam.proj * cam.view * obj_data.matrix * vec4(positions, 1.0);
 
 	fragNormal = normal;
 }

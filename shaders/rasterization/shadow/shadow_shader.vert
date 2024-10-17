@@ -4,7 +4,7 @@
 
 layout(push_constant) uniform PushConstants
 {
-	ModelMatrice pc;
+	ObjectData obj_data;
 };
 
 layout(location = 0) in vec3 positions;
@@ -15,6 +15,6 @@ layout(location = 0) out vec3 frag_tex_coords;
 
 void main()
 {
-	gl_Position = pc.model * vec4(positions, 1.0);
+	gl_Position = obj_data.matrix * vec4(positions, 1.0);
 	frag_tex_coords = vec3(tex_coords, tex_layer);
 }
