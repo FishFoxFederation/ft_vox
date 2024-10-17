@@ -222,9 +222,10 @@ void VulkanAPI::createInstance()
 
 		// TODO: check if these features are supported before enabling them
 		// note: gpu assisted features must not be set with the debug_printf feature
+		// note: gpu assisted features greatly reduce performance (as validation layers do)
 		std::vector<VkValidationFeatureEnableEXT>  validation_feature_enables = {
-			VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT,
-			VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT,
+			// VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT,
+			// VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT,
 			// VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT
 		};
 
@@ -295,8 +296,10 @@ void VulkanAPI::loadVulkanFunctions()
 		throw std::runtime_error("Failed to load Vulkan function: " #name); \
 	}
 
-	VK_LOAD_FUNCTION(vkCreateDebugUtilsMessengerEXT)
-	VK_LOAD_FUNCTION(vkDestroyDebugUtilsMessengerEXT)
+	#ifndef NDEBUG
+		VK_LOAD_FUNCTION(vkCreateDebugUtilsMessengerEXT)
+		VK_LOAD_FUNCTION(vkDestroyDebugUtilsMessengerEXT)
+	#endif
 
 	VK_LOAD_FUNCTION(vkGetPhysicalDeviceCalibrateableTimeDomainsEXT)
 	VK_LOAD_FUNCTION(vkGetCalibratedTimestampsEXT)

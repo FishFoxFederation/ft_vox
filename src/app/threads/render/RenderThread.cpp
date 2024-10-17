@@ -43,16 +43,16 @@ void RenderThread::launch()
 
 		while (!m_thread.get_stop_token().stop_requested())
 		{
-			auto start_time = std::chrono::high_resolution_clock::now();
+			// auto start_time = std::chrono::high_resolution_clock::now();
 			loop();
-			auto end_time = std::chrono::high_resolution_clock::now();
+			// auto end_time = std::chrono::high_resolution_clock::now();
 
-			// i want 60fps so if not enough time passed wait a bit
-			std::chrono::nanoseconds frame_time = end_time - start_time;
-			if (frame_time < std::chrono::nanoseconds(16666666))
-			{
-				std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
-			}
+			// // i want 60fps so if not enough time passed wait a bit
+			// std::chrono::nanoseconds frame_time = end_time - start_time;
+			// if (frame_time < std::chrono::nanoseconds(16666666))
+			// {
+			// 	std::this_thread::sleep_for(std::chrono::nanoseconds(16666666) - frame_time);
+			// }
 		}
 	}
 	catch (const std::exception & e)
@@ -202,10 +202,13 @@ void RenderThread::loop()
 	{
 		ZoneScopedN("Wait for in_flight_fences");
 
+		const std::chrono::nanoseconds wait_time_start = std::chrono::steady_clock::now().time_since_epoch();
 		VK_CHECK(
 			vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
 			"Failed to wait for in flight fence"
 		);
+		const std::chrono::nanoseconds wait_time_end = std::chrono::steady_clock::now().time_since_epoch();
+		DebugGui::wait_for_fence_time_history.push((wait_time_end - wait_time_start).count() / 1e6);
 	}
 	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
 
