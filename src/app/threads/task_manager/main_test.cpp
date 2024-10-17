@@ -7,22 +7,24 @@ int main()
 {
 	task::Executor executor(4);
 	task::TaskGraph graph;
-	task::TaskGraph graph2;
+	task::TaskGraph sub_graph;
 
 	task::Task A = graph.emplace([]() { std::cout << "Task 1" << std::endl; });
 	task::Task B = graph.emplace([]() { std::cout << "Task 2" << std::endl; });
 	task::Task C = graph.emplace([]() { std::cout << "Task 3" << std::endl; }); 
-	task::Task D = graph2.emplace([]() { std::cout << "Task 4" << std::endl; });
+
+	task::Task D = sub_graph.emplace([]() { std::cout << "SUB GRAPH" << std::endl; });
+	task::Task sub = graph.emplace(sub_graph);
 
 	A.Name("A");
 	B.Name("B");
 	C.Name("C");
+	D.Name("D");
+	sub.Name("SUB");
 
-	A.succceed(B);
-	B.succceed(C);
-	// C.succceed(A); //this will throw a cycle error
+	B.succceed(A);
+	sub.succceed(A);
+	C.succceed(sub);
 
-
-	executor.run(graph);
-	executor.waitForAll();
+	executor.run(graph).get();
 };

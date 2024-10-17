@@ -14,24 +14,24 @@
 namespace task
 {
 
-class Node;
+class TaskNode;
 class Executor;
 class Task;
 class TaskGraph
 {
 public:
 
-	friend class Node;
+	friend class TaskNode;
 	friend class task::Executor;
+	// friend class task::Executor::runningGraph;
 	
-
 
 	TaskGraph(){};
 	~TaskGraph(){};
 	TaskGraph(const TaskGraph &) = delete;
 	TaskGraph & operator=(const TaskGraph &) = delete;
-	TaskGraph(TaskGraph &&) = delete;
-	TaskGraph & operator=(TaskGraph &&) = delete;
+	TaskGraph(TaskGraph &&) = default;
+	TaskGraph & operator=(TaskGraph &&) = default;
 
 	template <typename F>
 	Task emplace(F && task)
@@ -40,9 +40,14 @@ public:
 		return Task(&node);
 	};
 
-private:
-	std::list<Node>			m_nodes;
-};
+	Task emplace(TaskGraph & graph)
+	{
+		auto & node = m_nodes.emplace_back(*this, graph);
+		return Task(&node);
+	};
 
+private:
+	std::list<TaskNode>			m_nodes;
+};
 
 }

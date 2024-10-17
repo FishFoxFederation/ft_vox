@@ -32,17 +32,19 @@ Executor::~Executor()
 
 std::future<void> Executor::run(TaskGraph & graph)
 {
-	std::shared_ptr<runningGraph> running_graph = std::make_shared<runningGraph>(graph);
+	runningGraph *running_graph = new runningGraph(graph);
 	{
 		std::lock_guard<std::mutex> lock(m_running_graphs_mutex);
-		m_running_graphs.insert(running_graph);
+		m_running_graphs += 1;
 	}
 	{
 		std::lock_guard<std::mutex> lock(m_queue_mutex);
+		std::lock_guard<std::mutex> lock2(running_graph->mutex);
 		for (auto node : running_graph->runningNodes)
 		{
-			m_work_queue.push_back(info(node, running_graph));
+			m_work_queue.emplace_back(std::move(running_graph->nodeInfos.at(node)));
 			m_cond.notify_one();
+			// m_work_queue.push_back(info(node, running_graph));
 		}
 	}
 
@@ -52,21 +54,54 @@ std::future<void> Executor::run(TaskGraph & graph)
 void Executor::waitForAll()
 {
 	std::unique_lock<std::mutex> lock(m_running_graphs_mutex);
-	m_running_graphs_cond.wait(lock, [&] {return m_running_graphs.empty() || m_done; });
+	m_running_graphs_cond.wait(lock, [&] {return m_running_graphs == 0 || m_done; });
 }
 
 Executor::runningGraph::runningGraph(TaskGraph & graph)
 :graph(graph)
 {
 	done = false;
-	for (auto & node : graph.m_nodes)
+
+	std::function<void(TaskGraph &, bool, Module *)> visitModule = [&](TaskGraph & graph, bool root, Module * module = nullptr)
 	{
-		dependencies[&node] = node.m_dependents.size();
-		if (node.m_dependents.empty())
-			runningNodes.insert(&node);
-		else
-			waitingNodes.insert(&node);
-	}
+		for (auto & node : graph.m_nodes)
+		{
+			std::cout << "visiting node :" << node.getName() << std::endl;
+			nodeDependencies[&node] = node.m_dependents.size();
+			bool local_root = root && node.m_dependents.empty();
+			switch(node.getType())
+			{
+				case TaskNode::type::GRAPH:
+				{
+					auto & sub_graph = *node.getGraph();
+					module = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size());
+
+					visitModule(sub_graph, local_root, module);
+					[[fallthrough]];
+				}
+				case TaskNode::type::NODE:
+				{
+					nodeInfos.insert({&node, info(&node, this, module)});
+
+					if (local_root)
+						runningNodes.insert(&node);
+					else if (node.m_dependents.empty() && module != nullptr)
+						module->rootNodes.push_back(&node);
+					else
+					{
+						std::cout << "adding node to waiting nodes" << std::endl;
+						waitingNodes.insert(&node);
+					}
+					break;
+				}
+				default:
+					break;
+			}
+		}
+	};
+
+	visitModule(graph, true, nullptr);
+
 	//check for cycles in the graph
 	if (checkCycles())
 	{
@@ -83,8 +118,8 @@ bool Executor::runningGraph::checkCycles() const
 	if (runningNodes.empty() && !waitingNodes.empty())
 		return true;
 
-	std::unordered_set<Node *> visited;
-	std::function<bool(Node *)> visit = [&](Node * node) -> bool
+	std::unordered_set<TaskNode *> visited;
+	std::function<bool(TaskNode *)> visit = [&](TaskNode * node) -> bool
 	{
 		if (visited.find(node) != visited.end())
 			return true;
