@@ -67,6 +67,12 @@ void DebugGui::updateImGui()
 						auto lock = cpu_time_history.lock();
 						ImGui::PlotHistogram("Cpu time", cpu_time_history.data(), cpu_time_history.size(), 0, average.c_str(), 0.0f, 3000.0f, ImVec2(200, 80));
 					}
+
+					{
+						std::string average = "Average: " + std::to_string(wait_for_fence_time_history.average()) + " ms";
+						auto lock = wait_for_fence_time_history.lock();
+						ImGui::PlotHistogram("Fence wait time", wait_for_fence_time_history.data(), wait_for_fence_time_history.size(), 0, average.c_str(), 0.0f, 3000.0f, ImVec2(200, 80));
+					}
 				}
 				if (ImGui::CollapsingHeader("Update Thread"))
 				{
