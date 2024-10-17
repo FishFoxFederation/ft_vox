@@ -17,7 +17,8 @@ namespace task
 
 class Executor
 {
-	friend class Node;
+	friend class TaskNode;
+	friend class TaskGraph;
 public:
 	Executor(unsigned const thread_count = std::max(4u, std::thread::hardware_concurrency() - 2));
 	~Executor();
@@ -28,19 +29,47 @@ public:
 
 	std::future<void> run(TaskGraph & graph);
 
+	template <typename F>
+	std::future<void> run(F && f)
+	{
+		std::packaged_task<void()> task(std::forward<F>(f));
+		auto future = task.get_future();
+		{
+			std::lock_guard<std::mutex> lock(m_queue_mutex);
+			m_work_queue.emplace_back(std::move(task));
+		}
+		m_cond.notify_one();
+		return future;
+	}
+
 	void waitForAll();
 private:
+	struct info;
 	struct runningGraph
 	{
+		struct Module
+		{
+			Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun)
+			: sucessors(successors), nodesToRun(nodesToRun) {};
+			std::vector<TaskNode*>	rootNodes;
+			std::vector<TaskNode*>  sucessors;
+			std::atomic_int 		nodesToRun;
+		};
 		runningGraph(TaskGraph & graph);
 		TaskGraph &	graph;
 		std::exception_ptr      eptr = nullptr;
 		std::promise<void>		promise;
 		std::atomic_bool 		done = false;
 		std::mutex				mutex;
-		std::unordered_set<Node*> waitingNodes;
-		std::unordered_set<Node*> runningNodes;
-		std::unordered_map<Node*, std::atomic_int> dependencies;
+		std::atomic_int			graphDependencies;
+		std::unordered_set<TaskNode*> waitingNodes;
+		std::unordered_set<TaskNode*> runningNodes;
+		std::unordered_map<TaskNode*, std::atomic_int> nodeDependencies;
+		std::list<Module>			modules;
+		// nodeStatus				selfNodes;
+		// std::vector<nodeStatus> moduleNodes;
+
+		std::unordered_map<TaskNode *, info> nodeInfos;
 	private:
 		bool checkCycles() const;
 	};
@@ -48,10 +77,15 @@ private:
 	struct info
 	{
 		info () : t(type::NONE) {}
-		info (Node * node, std::shared_ptr<runningGraph> graph)
+		info (info && other) = default;
+		info & operator=(info && other) = default;
+		info (TaskNode * node, runningGraph * graph, runningGraph::Module * module = nullptr)
+		: data(NodeInfo{graph, node, module})
 		{
-			t = type::NODE;
-			data = NodeInfo{graph, node};
+			if (node->getType() == TaskNode::type::GRAPH)
+				t = type::GRAPH;
+			else
+				t = type::NODE;
 		}
 		info (std::packaged_task<void()> task)
 		{
@@ -63,12 +97,14 @@ private:
 		{
 			NONE,
 			NODE,
+			GRAPH,
 			ASYNC
 		};
 		struct NodeInfo
 		{
-			std::shared_ptr<runningGraph> graph;
-			Node * node;
+			runningGraph * graph;
+			TaskNode * node;
+			runningGraph::Module * module = nullptr;
 		};
 		struct AsyncInfo
 		{
@@ -76,12 +112,12 @@ private:
 		};
 
 		type t;
-		std::variant<NodeInfo, AsyncInfo> data;
+		std::variant<AsyncInfo, NodeInfo> data;
 	};
 
 	typedef uint64_t runningGraphId;
 
-	std::unordered_set<std::shared_ptr<runningGraph>>	m_running_graphs;
+	std::atomic_int 					m_running_graphs;
 	std::mutex							m_running_graphs_mutex;
 	std::condition_variable				m_running_graphs_cond;
 
@@ -93,7 +129,16 @@ private:
 	std::vector<std::thread>	m_threads;
 	JoinThreads					m_joiner;
 
+	/*****************************************\
+	 * WORKER THREADS
+	\*****************************************/
 	void workerThread(const int & id);
-	void workerEndGraph(std::shared_ptr<runningGraph> & current_graph, Node * node);
+	void workerEndGraph(info::NodeInfo & node_info);
+	void workerExecNode(info::NodeInfo & node_info);
+	void workerExecAsync(info::AsyncInfo & async_info);
+	void workerExecGraphNode(info::NodeInfo & node_info);
+	void workerEndNode(info::NodeInfo & node_info);
+	void workerEndModule(info::NodeInfo & node_info);
+	void workerUpdateSuccessors(info::NodeInfo & node_info);
 };
 }

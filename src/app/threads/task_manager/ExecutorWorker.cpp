@@ -4,6 +4,7 @@
 namespace task
 {
 
+
 void Executor::workerThread(const int & id)
 {
 	while (!m_done)
@@ -16,71 +17,29 @@ void Executor::workerThread(const int & id)
 			if (m_done) break;
 			taskInfo = std::move(m_work_queue.front());
 			m_work_queue.pop_front();
-		}
-
-		// execute it
-		//test that current graph is still running
+		}	
+		switch(taskInfo.t)
 		{
-			std::lock_guard<std::mutex> lock(current_graph->mutex);
-			if (current_graph->done)
-			{
-				workerEndGraph(current_graph, node);
-				continue;
-			}
-		}
-
-		//execute node
-
-		try {
-			node->m_task();
-		} catch (...) {
-		//if exception stop graph exec and set promise
-			{
-				std::lock_guard<std::mutex> lock(current_graph->mutex);
-				current_graph->eptr = std::current_exception();
-				current_graph->done = true;
-				workerEndGraph(current_graph, node);
-				continue;
-			}
-		}
-
-		{
-			//remove from running nodes
-			std::lock_guard<std::mutex> lock(current_graph->mutex);
-			if (node->m_sucessors.empty())
-			{
-				workerEndGraph(current_graph, node);
-				continue;
-			}
-			else
-				current_graph->runningNodes.erase(node);
-		}
-
-		//if node has children, set dependencies
-		for (auto child : node->m_sucessors)
-		{
-			int dependencies = current_graph->dependencies[child].fetch_sub(1) - 1;
-			// if children has no more dependencies, add to queue
-			if (dependencies == 0)
-			{
-				{
-					std::lock_guard<std::mutex> lock(current_graph->mutex);
-					current_graph->waitingNodes.erase(child);
-					current_graph->runningNodes.insert(child);
-				}
-				{
-					std::lock_guard<std::mutex> lock(m_queue_mutex);
-					m_work_queue.push_back({current_graph, child});
-					m_cond.notify_one();
-				}
-			}
+			case info::type::NODE:
+				workerExecNode(std::get<info::NodeInfo>(taskInfo.data));
+				break;
+			case info::type::ASYNC:
+				workerExecAsync(std::get<info::AsyncInfo>(taskInfo.data));
+				break;
+			case info::type::GRAPH:
+				workerExecGraphNode(std::get<info::NodeInfo>(taskInfo.data));
+				break;
+			case info::type::NONE:
+				break;
 		}
 	}
 }
 
-void Executor::workerEndGraph(std::shared_ptr<runningGraph> & current_graph, Node * node)
+void Executor::workerEndGraph(info::NodeInfo & node_info)
 {
+	auto [current_graph, node, is_module] = node_info;
 	current_graph->runningNodes.erase(node);
+
 	if (current_graph->runningNodes.empty())
 	{
 		//set promise
@@ -92,9 +51,133 @@ void Executor::workerEndGraph(std::shared_ptr<runningGraph> & current_graph, Nod
 		//remove running graph
 		{
 			std::lock_guard<std::mutex> lock(m_running_graphs_mutex);
-			m_running_graphs.erase(current_graph);
+			m_running_graphs -= 1;
 			m_running_graphs_cond.notify_all();
 		}
 	}
 }
+
+void Executor::workerExecAsync(info::AsyncInfo & async_info)
+{
+	async_info.task();
+}
+
+void Executor::workerExecGraphNode(info::NodeInfo & node_info)
+{
+	//go into running graph and set all nodes as running
+	std::vector<TaskNode *> root_nodes;
+	auto [current_graph, node, module] = node_info;
+	{
+		std::lock_guard<std::mutex> lock(current_graph->mutex);
+		if (current_graph->done)
+		{
+			workerEndGraph(node_info);
+			return;
+		}
+		for (auto current_node : module->rootNodes)
+		{
+			current_graph->waitingNodes.erase(current_node);
+			current_graph->runningNodes.insert(current_node);
+			root_nodes.push_back(current_node);
+		}
+	}
+	//exec all root nodes of the modules
+	{
+		std::lock_guard<std::mutex> lock(m_queue_mutex);
+		for (auto node : root_nodes)
+		{
+			m_work_queue.emplace_back(std::move(current_graph->nodeInfos.at(node)));
+			m_cond.notify_one();
+		}
+	}
+	{
+		std::lock_guard<std::mutex> lock(current_graph->mutex);
+		current_graph->runningNodes.erase(node);
+	}
+}
+
+void Executor::workerExecNode(info::NodeInfo & node_info)
+{
+	// execute it
+	//test that current graph is still running
+	auto [current_graph, node, is_module] = node_info;
+	{
+		std::lock_guard<std::mutex> lock(current_graph->mutex);
+		if (current_graph->done)
+		{
+			workerEndGraph(node_info);
+			return;
+		}
+	}
+
+	//execute node
+	try {
+		std::get<TaskNode::NodeData>(node->m_data).m_task();
+	} catch (...) {
+	//if exception stop graph exec and set promise
+		{
+			std::lock_guard<std::mutex> lock(current_graph->mutex);
+			current_graph->eptr = std::current_exception();
+			current_graph->done = true;
+			workerEndGraph(node_info);
+			return;
+		}
+	}
+
+	workerEndNode(node_info);
+
+	//if node has children, set dependencies
+	
+}
+
+void Executor::workerUpdateSuccessors(info::NodeInfo & node_info)
+{
+	auto [current_graph, node, module] = node_info;
+
+	for (auto child : node->m_sucessors)
+	{
+		int dependencies = current_graph->nodeDependencies[child].fetch_sub(1) - 1;
+		// if children has no more dependencies, add to queue
+		if (dependencies == 0)
+		{
+			{
+				std::lock_guard<std::mutex> lock(current_graph->mutex);
+				current_graph->waitingNodes.erase(child);
+				current_graph->runningNodes.insert(child);
+			}
+			{
+				std::lock_guard<std::mutex> lock(m_queue_mutex);
+				m_work_queue.push_back(std::move(current_graph->nodeInfos.at(child)));
+				m_cond.notify_one();
+			}
+		}
+	}
+}
+
+void Executor::workerEndNode(info::NodeInfo & node_info)
+{
+	auto [current_graph, node, module] = node_info;
+
+	if(module != NULL)
+		workerEndModule(node_info);
+
+	if (!node->m_sucessors.empty())
+		workerUpdateSuccessors(node_info);
+	
+	{
+		std::lock_guard<std::mutex> lock(current_graph->mutex);
+		workerEndGraph(node_info);
+	}
+}
+
+void Executor::workerEndModule(info::NodeInfo & node_info)
+{
+
+	auto [current_graph, node, module] = node_info;
+
+	int nodes_left = module->nodesToRun.fetch_sub(1) - 1;
+	if (nodes_left == 0)
+		node->m_sucessors = module->sucessors;
+}
+
 }

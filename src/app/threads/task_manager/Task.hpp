@@ -9,7 +9,7 @@ namespace task
 class Task
 {
 public:
-	Task(Node * node)
+	Task(TaskNode * node)
 	{
 		m_node = node;
 	};
@@ -64,6 +64,6 @@ public:
 	bool isEmpty() const;
 	bool hasTask() const;
 private:
-	Node * m_node;
+	TaskNode * m_node;
 };
 }
