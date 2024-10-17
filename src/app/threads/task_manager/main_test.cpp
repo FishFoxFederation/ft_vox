@@ -8,23 +8,36 @@ int main()
 	task::Executor executor(4);
 	task::TaskGraph graph;
 	task::TaskGraph sub_graph;
+	task::TaskGraph sub_graph2;
 
-	task::Task A = graph.emplace([]() { std::cout << "Task 1" << std::endl; });
-	task::Task B = graph.emplace([]() { std::cout << "Task 2" << std::endl; });
-	task::Task C = graph.emplace([]() { std::cout << "Task 3" << std::endl; }); 
+	task::Task A = graph.emplace([]() { std::cout << "A" << std::endl; });
+	task::Task B = graph.emplace([]() { std::cout << "B" << std::endl; });
+	task::Task C = graph.emplace([]() { std::cout << "C" << std::endl; }); 
+	task::Task D = graph.emplace([]() { std::cout << "D" << std::endl; });
 
-	task::Task D = sub_graph.emplace([]() { std::cout << "SUB GRAPH" << std::endl; });
-	task::Task sub = graph.emplace(sub_graph);
+	task::Task sub_task2	= sub_graph2.emplace([]() { std::cout << "SUB GRAPH 2" << std::endl; }).Name("SUB GRAPH 2 TASK");
+
+	task::Task submodule2 		= sub_graph.emplace(sub_graph2);
+	task::Task sub_task		= sub_graph.emplace([]() { std::cout << "SUB GRAPH" << std::endl; }).Name("SUB GRAPH TASK");
+
+	task::Task submodule = graph.emplace(sub_graph);
+
 
 	A.Name("A");
 	B.Name("B");
 	C.Name("C");
 	D.Name("D");
-	sub.Name("SUB");
+	submodule.Name("SUB");
+	submodule2.Name("SUB2");
 
-	B.succceed(A);
-	sub.succceed(A);
-	C.succceed(sub);
+	//first graph
+	A.precede(B);
+	B.precede(C);
+	C.precede(submodule);
+	submodule.precede(D);
+
+	//sub graph
+	submodule2.precede(sub_task);
 
 	executor.run(graph).get();
 };
