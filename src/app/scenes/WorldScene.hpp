@@ -123,9 +123,9 @@ public:
 	std::atomic<bool> show_debug_text = false;
 
 	// hud
-	std::array<ItemInfo::Type, 9> toolbar_items;
-	mutable std::mutex toolbar_items_mutex;
-	std::atomic<int> toolbar_cursor_index = 0;
+	std::array<ItemInfo::Type, 9> hotbar_items;
+	mutable std::mutex hotbar_items_mutex;
+	std::atomic<int> hotbar_cursor_index = 0;
 
 private:
 

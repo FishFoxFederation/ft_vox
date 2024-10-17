@@ -59,9 +59,17 @@ struct ObjectData
 struct BindlessDescriptorParams
 {
 	uint camera_ubo_index;
-	uint pad0;
-	uint pad1;
-	uint pad2;
+	uint block_texture_index;
+	uint skybox_cube_map_index;
+	uint shadow_map_index;
+	uint player_texture_index;
+	uint light_matrices_index;
+	uint atmosphere_param_index;
+	uint item_icon_texture_index;
+	uint crosshair_texture_index;
+	uint debug_info_texture_index;
+	uint hotbar_texture_index;
+	uint hotbar_cursor_texture_index;
 };
 
 
