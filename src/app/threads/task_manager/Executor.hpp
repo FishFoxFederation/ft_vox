@@ -16,7 +16,7 @@ namespace task
 
 class Executor
 {
-	friend class internal::Node;
+	friend class Node;
 public:
 	Executor(unsigned const thread_count = std::max(4u, std::thread::hardware_concurrency() - 2));
 	~Executor();
@@ -25,28 +25,30 @@ public:
 	Executor(Executor &&) = delete;
 	Executor & operator=(Executor &&) = delete;
 
-	std::future<void> run(internal::TaskGraph & graph);
+	std::future<void> run(TaskGraph & graph);
 
 	void waitForAll();
 private:
 	struct runningGraph
 	{
-		runningGraph(internal::TaskGraph & graph);
-		internal::TaskGraph &	graph;
+		runningGraph(TaskGraph & graph);
+		TaskGraph &	graph;
 		std::exception_ptr      eptr = nullptr;
 		std::promise<void>		promise;
 		std::atomic_bool 		done = false;
 		std::mutex				mutex;
-		std::unordered_set<internal::Node*> waitingNodes;
-		std::unordered_set<internal::Node*> runningNodes;
-		std::unordered_map<internal::Node*, std::atomic_int> dependencies;
+		std::unordered_set<Node*> waitingNodes;
+		std::unordered_set<Node*> runningNodes;
+		std::unordered_map<Node*, std::atomic_int> dependencies;
+	private:
+		bool checkCycles() const;
 	};
 
 	struct info
 	{
 		//maybe add a union and a type enum to enable other types of tasks to be queued
 		std::shared_ptr<runningGraph> graph;
-		internal::Node * node;
+		Node * node;
 	};
 
 	typedef uint64_t runningGraphId;
@@ -64,6 +66,6 @@ private:
 	JoinThreads					m_joiner;
 
 	void workerThread(const int & id);
-	void workerEndGraph(std::shared_ptr<runningGraph> & current_graph, internal::Node * node);
+	void workerEndGraph(std::shared_ptr<runningGraph> & current_graph, Node * node);
 };
 }

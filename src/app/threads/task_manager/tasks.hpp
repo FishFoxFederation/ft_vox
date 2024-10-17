@@ -24,4 +24,10 @@ class TaskNotFromSameGraphError : public BaseError
 public:
 	TaskNotFromSameGraphError() : BaseError("You tried to link tasks that are not from the same graph") {}
 };
+
+class CycleError : public BaseError
+{
+public:
+	CycleError() : BaseError("You tried to run a graph with a cycle in it") {}
+};
 } // namespace task
