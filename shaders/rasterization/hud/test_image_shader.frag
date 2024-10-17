@@ -1,6 +1,17 @@
 #version 450
 
-layout (set = 1, binding = 0) uniform sampler2DArray image;
+#include "common.glsl"
+
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_PARAMS_BINDING) uniform bindlessParams
+{
+	BindlessDescriptorParams bindless_params;
+};
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING) uniform CameraMatrices
+{
+	ViewProjMatrices cm;
+} camera_matrices[BINDLESS_DESCRIPTOR_MAX_COUNT];
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_COMBINED_IMAGE_SAMPLER_BINDING) uniform sampler2DArray sampler_2d_array[BINDLESS_DESCRIPTOR_MAX_COUNT];
+
 
 layout (location = 0) in vec2 inUV;
 
@@ -13,16 +24,5 @@ float depth_to_distance(float d, float n, float f)
 
 void main()
 {
-	int layer = 0;
-	vec2  fres = textureSize(image, 0).xy;
-	vec2 st = inUV*fres - 0.5;
-	vec2 i = floor(st);
-	vec2 w = fract(st);
-	float a = texture(image, vec3((i+vec2(-0.5,-0.5))/fres, layer)).r;
-	float b = texture(image, vec3((i+vec2(0.5, -0.5))/fres, layer)).r;
-	float c = texture(image, vec3((i+vec2(-0.5, 0.5))/fres, layer)).r;
-	float d = texture(image, vec3((i+vec2(0.5,  0.5))/fres, layer)).r;
-	float depth = mix(mix(a, b, w.x), mix(c, d, w.x), w.y);
-
-	outColor = vec4(vec3(depth), 1.0);
+	outColor = texture(sampler_2d_array[bindless_params.shadow_map_index], vec3(inUV, 0.0));
 }

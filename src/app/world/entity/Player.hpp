@@ -118,7 +118,7 @@ public:
 	uint64_t player_ticket_id = 0;
 
 
-	std::array<ItemInfo::Type, 9> toolbar_items = {
+	std::array<ItemInfo::Type, 9> hotbar_items = {
 		ItemInfo::Type::GrassBlock,
 		ItemInfo::Type::DirtBlock,
 		ItemInfo::Type::StoneBlock,
@@ -129,7 +129,7 @@ public:
 		ItemInfo::Type::LeavesBlock,
 		ItemInfo::Type::None
 	};
-	int toolbar_cursor = 0;
+	int hotbar_cursor = 0;
 
 private:
 

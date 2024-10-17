@@ -151,26 +151,13 @@ VulkanAPI::~VulkanAPI()
 		block_textures.clear();
 		skybox_cube_map.clear();
 		crosshair_image.clear();
-		toolbar_image.clear();
-		toolbar_cursor_image.clear();
+		hotbar_image.clear();
+		hotbar_cursor_image.clear();
 		player_skin_image.clear();
 		debug_info_image.clear();
 		item_icon_images.clear();
 
-		camera_descriptor.clear();
-		block_textures_descriptor.clear();
-		cube_map_descriptor.clear();
-		shadow_map_descriptor.clear();
 		water_renderpass_input_attachement_descriptor.clear();
-		test_image_descriptor.clear();
-		light_view_proj_descriptor.clear();
-		crosshair_image_descriptor.clear();
-		toolbar_image_descriptor.clear();
-		toolbar_cursor_image_descriptor.clear();
-		player_skin_image_descriptor.clear();
-		atmosphere_descriptor.clear();
-		debug_info_image_descriptor.clear();
-		item_icon_descriptor.clear();
 
 		bindless_descriptor.clear();
 
@@ -675,19 +662,17 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	setupImgui();
 	createImGuiTexture(100, 100);
 
-	shadow_map_descriptor.update(
-		device,
-		shadow_map_depth_attachement.view,
-		shadow_map_depth_attachement.sampler,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-	);
+	// update bindless descriptor
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		bindless_params[i].shadow_map_index = bindless_descriptor.storeCombinedImageSampler(
+			shadow_map_depth_attachement.view,
+			shadow_map_depth_attachement.sampler,
+			bindless_params[i].shadow_map_index
+		);
 
-	test_image_descriptor.update(
-		device,
-		shadow_map_depth_attachement.view,
-		shadow_map_depth_attachement.sampler,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-	);
+		bindless_descriptor.setParams(bindless_params[i], i);
+	}
 
 	{ // Update water subpass input attachement descriptor
 		VkDescriptorImageInfo color_image_info = {};
@@ -1055,8 +1040,8 @@ void VulkanAPI::createTextureImage()
 
 	{ // Hud images
 		createHudImages("assets/textures/hud/crosshair.png", crosshair_image);
-		createHudImages("assets/textures/hud/toolbar.png", toolbar_image);
-		createHudImages("assets/textures/hud/toolbar_cursor.png", toolbar_cursor_image);
+		createHudImages("assets/textures/hud/hotbar.png", hotbar_image);
+		createHudImages("assets/textures/hud/hotbar_cursor.png", hotbar_cursor_image);
 	}
 
 	{ // Debug info
@@ -1122,112 +1107,6 @@ void VulkanAPI::createHudDescriptors(
 
 void VulkanAPI::createDescriptors()
 {
-	{ // Camera descriptor
-		VkDescriptorSetLayoutBinding ubo_layout_binding = {};
-		ubo_layout_binding.binding = 0;
-		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR;
-		ubo_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { ubo_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		camera_descriptor = Descriptor(device, descriptor_info);
-
-		for (int i = 0; i < max_frames_in_flight; i++)
-		{
-			VkDescriptorBufferInfo buffer_info = {};
-			buffer_info.buffer = camera_ubo.buffers[i];
-			buffer_info.offset = 0;
-			buffer_info.range = sizeof(ViewProjMatrices);
-
-			VkWriteDescriptorSet descriptor_write = {};
-			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptor_write.dstSet = camera_descriptor.sets[i];
-			descriptor_write.dstBinding = 0;
-			descriptor_write.dstArrayElement = 0;
-			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptor_write.descriptorCount = 1;
-			descriptor_write.pBufferInfo = &buffer_info;
-
-			vkUpdateDescriptorSets(
-				device,
-				1,
-				&descriptor_write,
-				0, nullptr
-			);
-		}
-	}
-
-	{ // Block textures descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		block_textures_descriptor = Descriptor(device, descriptor_info);
-
-		block_textures_descriptor.update(
-			device,
-			block_textures.view,
-			block_textures.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
-	}
-
-	{ // Cube map descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		cube_map_descriptor = Descriptor(device, descriptor_info);
-
-		cube_map_descriptor.update(
-			device,
-			skybox_cube_map.view,
-			skybox_cube_map.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
-	}
-
-	{ // Shadow map descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		shadow_map_descriptor = Descriptor(device, descriptor_info);
-
-		shadow_map_descriptor.update(
-			device,
-			shadow_map_depth_attachement.view,
-			shadow_map_depth_attachement.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
-	}
-
 	{ // Water subpass input attachements descriptor
 		VkDescriptorSetLayoutBinding color_attachement_layout_binding = {};
 		color_attachement_layout_binding.binding = 0;
@@ -1287,162 +1166,6 @@ void VulkanAPI::createDescriptors()
 		);
 	}
 
-	{ // Test image descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		test_image_descriptor = Descriptor(device, descriptor_info);
-
-		test_image_descriptor.update(
-			device,
-			shadow_map_depth_attachement.view,
-			shadow_map_depth_attachement.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
-	}
-
-	{ // Hud image descriptor
-		createHudDescriptors(crosshair_image, crosshair_image_descriptor);
-		createHudDescriptors(debug_info_image, debug_info_image_descriptor);
-		createHudDescriptors(toolbar_image, toolbar_image_descriptor);
-		createHudDescriptors(toolbar_cursor_image, toolbar_cursor_image_descriptor);
-	}
-
-	{ // Player skin image descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		player_skin_image_descriptor = Descriptor(device, descriptor_info);
-
-		player_skin_image_descriptor.update(
-			device,
-			player_skin_image.view,
-			player_skin_image.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
-	}
-
-	{ // Sun matrices descriptor
-		VkDescriptorSetLayoutBinding ubo_layout_binding = {};
-		ubo_layout_binding.binding = 0;
-		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-		ubo_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { ubo_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		light_view_proj_descriptor = Descriptor(device, descriptor_info);
-
-		for (int i = 0; i < max_frames_in_flight; i++)
-		{
-			VkDescriptorBufferInfo buffer_info = {};
-			buffer_info.buffer = light_mat_ubo.buffers[i];
-			buffer_info.offset = 0;
-			buffer_info.range = sizeof(ShadowMapLight);
-
-			VkWriteDescriptorSet descriptor_write = {};
-			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptor_write.dstSet = light_view_proj_descriptor.sets[i];
-			descriptor_write.dstBinding = 0;
-			descriptor_write.dstArrayElement = 0;
-			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptor_write.descriptorCount = 1;
-			descriptor_write.pBufferInfo = &buffer_info;
-
-			vkUpdateDescriptorSets(
-				device,
-				1,
-				&descriptor_write,
-				0, nullptr
-			);
-		}
-	}
-
-	{ // Atmosphere descriptor
-		VkDescriptorSetLayoutBinding ubo_layout_binding = {};
-		ubo_layout_binding.binding = 0;
-		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-										| VK_SHADER_STAGE_MISS_BIT_KHR
-										| VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
-		ubo_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { ubo_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		atmosphere_descriptor = Descriptor(device, descriptor_info);
-
-		for (int i = 0; i < max_frames_in_flight; i++)
-		{
-			VkDescriptorBufferInfo buffer_info = {};
-			buffer_info.buffer = atmosphere_ubo.buffers[i];
-			buffer_info.offset = 0;
-			buffer_info.range = sizeof(AtmosphereParams);
-
-			VkWriteDescriptorSet descriptor_write = {};
-			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptor_write.dstSet = atmosphere_descriptor.sets[i];
-			descriptor_write.dstBinding = 0;
-			descriptor_write.dstArrayElement = 0;
-			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptor_write.descriptorCount = 1;
-			descriptor_write.pBufferInfo = &buffer_info;
-
-			vkUpdateDescriptorSets(
-				device,
-				1,
-				&descriptor_write,
-				0, nullptr
-			);
-		}
-	}
-
-	{ // Item icon descriptor
-		VkDescriptorSetLayoutBinding sampler_layout_binding = {};
-		sampler_layout_binding.binding = 0;
-		sampler_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		sampler_layout_binding.descriptorCount = 1;
-		sampler_layout_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-		sampler_layout_binding.pImmutableSamplers = nullptr;
-
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { sampler_layout_binding };
-		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-
-		item_icon_descriptor = Descriptor(device, descriptor_info);
-
-		item_icon_descriptor.update(
-			device,
-			item_icon_images.view,
-			item_icon_images.sampler,
-			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-		);
-
-	}
-
 	{ // Bindless descriptor
 		bindless_descriptor = BindlessDescriptor(device, physical_device, max_frames_in_flight);
 
@@ -1450,6 +1173,17 @@ void VulkanAPI::createDescriptors()
 		for (int i = 0; i < max_frames_in_flight; i++)
 		{
 			bindless_params[i].camera_ubo_index = bindless_descriptor.storeUniformBuffer(camera_ubo.buffers[i], 0, sizeof(ViewProjMatrices));
+			bindless_params[i].block_texture_index = bindless_descriptor.storeCombinedImageSampler(block_textures.view, block_textures.sampler);
+			bindless_params[i].skybox_cube_map_index = bindless_descriptor.storeCombinedImageSampler(skybox_cube_map.view, skybox_cube_map.sampler);
+			bindless_params[i].shadow_map_index = bindless_descriptor.storeCombinedImageSampler(shadow_map_depth_attachement.view, shadow_map_depth_attachement.sampler);
+			bindless_params[i].player_texture_index = bindless_descriptor.storeCombinedImageSampler(player_skin_image.view, player_skin_image.sampler);
+			bindless_params[i].light_matrices_index = bindless_descriptor.storeUniformBuffer(light_mat_ubo.buffers[i], 0, sizeof(ShadowMapLight));
+			bindless_params[i].atmosphere_param_index = bindless_descriptor.storeUniformBuffer(atmosphere_ubo.buffers[i], 0, sizeof(AtmosphereParams));
+			bindless_params[i].item_icon_texture_index = bindless_descriptor.storeCombinedImageSampler(item_icon_images.view, item_icon_images.sampler);
+			bindless_params[i].crosshair_texture_index = bindless_descriptor.storeCombinedImageSampler(crosshair_image.view, crosshair_image.sampler);
+			bindless_params[i].debug_info_texture_index = bindless_descriptor.storeCombinedImageSampler(debug_info_image.view, debug_info_image.sampler);
+			bindless_params[i].hotbar_texture_index = bindless_descriptor.storeCombinedImageSampler(hotbar_image.view, hotbar_image.sampler);
+			bindless_params[i].hotbar_cursor_texture_index = bindless_descriptor.storeCombinedImageSampler(hotbar_cursor_image.view, hotbar_cursor_image.sampler);
 
 			bindless_descriptor.setParams(bindless_params[i], i);
 		}
@@ -1752,10 +1486,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			light_view_proj_descriptor.layout,
-			block_textures_descriptor.layout,
-			shadow_map_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1778,9 +1509,6 @@ void VulkanAPI::createPipelines()
 		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.descriptor_set_layouts = {
 			bindless_descriptor.layout(),
-			light_view_proj_descriptor.layout,
-			block_textures_descriptor.layout,
-			shadow_map_descriptor.layout,
 			water_renderpass_input_attachement_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
@@ -1825,8 +1553,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			cube_map_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1846,8 +1573,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			atmosphere_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1878,9 +1604,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.depth_bias_constant_factor = 0.005f;
 		pipeline_info.depth_bias_slope_factor = 0.1f;
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			light_view_proj_descriptor.layout,
-			block_textures_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1899,8 +1623,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			test_image_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1940,8 +1663,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			player_skin_image_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1958,8 +1680,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.frag_path = "shaders/rasterization/hud/hud_shader.frag.spv";
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.descriptor_set_layouts = {
-			bindless_descriptor.layout(),
-			crosshair_image_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -1981,7 +1702,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.attribute_descriptions = ItemVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { item_icon_images.format };
 		pipeline_info.descriptor_set_layouts = {
-			block_textures_descriptor.layout
+			bindless_descriptor.layout()
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -2000,7 +1721,6 @@ void VulkanAPI::createPipelines()
 		pipeline_info.color_formats = { output_attachement.format };
 		pipeline_info.descriptor_set_layouts = {
 			bindless_descriptor.layout(),
-			item_icon_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
 			{ VK_SHADER_STAGE_ALL, 0, sizeof(ObjectData) }
@@ -2478,16 +2198,17 @@ void VulkanAPI::prerenderItemIconImages()
 	vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, prerender_item_icon_pipeline.pipeline);
 
 	std::vector<VkDescriptorSet> descriptor_sets = {
-		block_textures_descriptor.set
+		bindless_descriptor.set()
 	};
+	// here the bindless param dynamic offset doesn't matter because we are not in a frame
+	uint32_t dynamic_offset = 0;
 	vkCmdBindDescriptorSets(
 		command_buffer,
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		prerender_item_icon_pipeline.layout,
 		0,
 		static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
-		0,
-		nullptr
+		1, &dynamic_offset
 	);
 
 	// should probably fit the model bounding box or something like that
@@ -2654,17 +2375,20 @@ void VulkanAPI::drawMesh(
 }
 
 void VulkanAPI::drawHudImage(
-	const Descriptor & descriptor,
+	const uint32_t layer,
 	const VkViewport & viewport
 )
 {
-	vkCmdBindDescriptorSets(
+	ObjectData object_data = {};
+	object_data.layer = layer;
+
+	vkCmdPushConstants(
 		draw_command_buffers[current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		hud_pipeline.layout,
-		1,
-		1, &descriptor.set,
-		0, nullptr
+		VK_SHADER_STAGE_ALL,
+		0,
+		sizeof(ObjectData),
+		&object_data
 	);
 
 	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);

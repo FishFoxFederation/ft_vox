@@ -10,6 +10,7 @@ layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING)
 {
 	ViewProjMatrices cm;
 } camera_matrices[BINDLESS_DESCRIPTOR_MAX_COUNT];
+
 layout(push_constant) uniform PushConstants
 {
 	ObjectData obj_data;

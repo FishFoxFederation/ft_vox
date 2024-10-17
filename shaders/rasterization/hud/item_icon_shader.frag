@@ -2,7 +2,13 @@
 
 #include "common.glsl"
 
-layout (set = 1, binding = 0) uniform sampler2DArray image;
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_PARAMS_BINDING) uniform bindlessParams
+{
+	BindlessDescriptorParams bindless_params;
+};
+
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_COMBINED_IMAGE_SAMPLER_BINDING) uniform sampler2DArray sampler_2d_array[BINDLESS_DESCRIPTOR_MAX_COUNT];
+
 
 layout(push_constant) uniform PushConstants
 {
@@ -15,5 +21,5 @@ layout (location = 0) out vec4 outColor;
 
 void main()
 {
-	outColor = texture(image, vec3(inUV, obj_data.layer));
+	outColor = texture(sampler_2d_array[bindless_params.item_icon_texture_index], vec3(inUV, obj_data.layer));
 }

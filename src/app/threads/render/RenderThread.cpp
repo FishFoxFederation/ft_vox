@@ -182,10 +182,10 @@ void RenderThread::loop()
 			DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z
 		);
 
-		toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
+		hotbar_cursor_index = m_world_scene.hotbar_cursor_index.load();
 		{
-			std::lock_guard lock(m_world_scene.toolbar_items_mutex);
-			toolbar_items = m_world_scene.toolbar_items;
+			std::lock_guard lock(m_world_scene.hotbar_items_mutex);
+			hotbar_items = m_world_scene.hotbar_items;
 		}
 	}
 
@@ -229,7 +229,7 @@ void RenderThread::loop()
 
 	VK_CHECK(
 		vkBeginCommandBuffer(vk.draw_command_buffers[vk.current_frame], &begin_info),
-		"Failed to begin recording command buffer"
+		"Failed to begin draw command buffer"
 	);
 
 	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
@@ -257,7 +257,7 @@ void RenderThread::loop()
 
 	VK_CHECK(
 		vkEndCommandBuffer(vk.draw_command_buffers[vk.current_frame]),
-		"Failed to record command buffer"
+		"Failed to end draw command buffer"
 	);
 
 	VkSubmitInfo render_submit_info = {};
@@ -399,20 +399,6 @@ void RenderThread::shadowPass()
 	// Draw the chunks
 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
-	const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-		vk.light_view_proj_descriptor.sets[vk.current_frame],
-		vk.block_textures_descriptor.set
-	};
-
-	vkCmdBindDescriptorSets(
-		vk.draw_command_buffers[vk.current_frame],
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		vk.shadow_pipeline.layout,
-		1,
-		static_cast<uint32_t>(shadow_descriptor_sets.size()), shadow_descriptor_sets.data(),
-		0, nullptr
-	);
-
 	for (auto & chunk_mesh : chunk_meshes)
 	{
 		ObjectData object_data = {};
@@ -461,21 +447,6 @@ void RenderThread::lightingPass()
 		ZoneScopedN("Draw chunks");
 
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.light_view_proj_descriptor.sets[vk.current_frame],
-			vk.block_textures_descriptor.set,
-			vk.shadow_map_descriptor.set
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.chunk_pipeline.layout,
-			1,
-			static_cast<uint32_t>(descriptor_sets.size()), descriptor_sets.data(),
-			0, nullptr
-		);
 
 		for (auto & chunk_mesh: chunk_meshes)
 		{
@@ -547,19 +518,6 @@ void RenderThread::lightingPass()
 		ZoneScopedN("Draw players");
 
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> player_descriptor_sets = {
-			vk.player_skin_image_descriptor.set
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.player_pipeline.layout,
-			1,
-			static_cast<uint32_t>(player_descriptor_sets.size()), player_descriptor_sets.data(),
-			0, nullptr
-		);
 
 		for (const auto & player : players)
 		{
@@ -720,19 +678,6 @@ void RenderThread::lightingPass()
 	{ // Draw the skybox
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-		// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-		// 	vk.cube_map_descriptor.set
-		// };
-
-		// vkCmdBindDescriptorSets(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-		// 	vk.skybox_pipeline.layout,
-		// 	1,
-		// 	static_cast<uint32_t>(skybox_descriptor_sets.size()), skybox_descriptor_sets.data(),
-		// 	0, nullptr
-		// );
-
 		// ObjectData object_data = {};
 		// object_data.matrix = glm::translate(glm::dmat4(1.0f), camera.position);
 		// vkCmdPushConstants(
@@ -755,19 +700,6 @@ void RenderThread::lightingPass()
 
 	{ // Draw the sun
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.sun_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> sun_descriptor_sets = {
-			vk.atmosphere_descriptor.sets[vk.current_frame]
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.sun_pipeline.layout,
-			1,
-			static_cast<uint32_t>(sun_descriptor_sets.size()), sun_descriptor_sets.data(),
-			0, nullptr
-		);
 
 		ObjectData object_data = {};
 		object_data.matrix = glm::translate(glm::dmat4(1.0f), camera.position);
@@ -825,9 +757,6 @@ void RenderThread::lightingPass()
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> descriptor_sets = {
-			vk.light_view_proj_descriptor.sets[vk.current_frame],
-			vk.block_textures_descriptor.set,
-			vk.shadow_map_descriptor.set,
 			vk.water_renderpass_input_attachement_descriptor.set
 		};
 
@@ -881,9 +810,9 @@ void RenderThread::lightingPass()
 	);
 
 
-	const glm::vec2 toolbar_pos = {
-		static_cast<float>(vk.output_attachement.extent2D.width / 2 - (vk.toolbar_image.extent2D.width / 2)),
-		static_cast<float>(vk.output_attachement.extent2D.height - vk.toolbar_image.extent2D.height - 10)
+	const glm::vec2 hotbar_pos = {
+		static_cast<float>(vk.output_attachement.extent2D.width / 2 - (vk.hotbar_image.extent2D.width / 2)),
+		static_cast<float>(vk.output_attachement.extent2D.height - vk.hotbar_image.extent2D.height - 10)
 	};
 
 	{ // Draw hud
@@ -901,38 +830,38 @@ void RenderThread::lightingPass()
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
-			vk.drawHudImage(vk.crosshair_image_descriptor, viewport);
+			vk.drawHudImage(vk.bindless_params[0].crosshair_texture_index, viewport);
 		}
 
-		{ // Toolbar
-			VkExtent2D size = vk.toolbar_image.extent2D;
+		{ // Hotbar
+			VkExtent2D size = vk.hotbar_image.extent2D;
 			VkViewport viewport = {};
-			viewport.x = toolbar_pos.x;
-			viewport.y = toolbar_pos.y;
+			viewport.x = hotbar_pos.x;
+			viewport.y = hotbar_pos.y;
 			viewport.width = size.width;
 			viewport.height = size.height;
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
-			vk.drawHudImage(vk.toolbar_image_descriptor, viewport);
+			vk.drawHudImage(vk.bindless_params[0].hotbar_texture_index, viewport);
 		}
 
-		const glm::vec2 toolbar_cursor_pos = {
-			toolbar_pos.x + (toolbar_cursor_index * vk.toolbar_cursor_image.extent2D.width),
-			toolbar_pos.y
+		const glm::vec2 hotbar_cursor_pos = {
+			hotbar_pos.x + (hotbar_cursor_index * vk.hotbar_cursor_image.extent2D.width),
+			hotbar_pos.y
 		};
 
-		{ // Toolbar cursor
-			VkExtent2D size = vk.toolbar_cursor_image.extent2D;
+		{ // Hotbar cursor
+			VkExtent2D size = vk.hotbar_cursor_image.extent2D;
 			VkViewport viewport = {};
-			viewport.x = toolbar_cursor_pos.x;
-			viewport.y = toolbar_cursor_pos.y;
+			viewport.x = hotbar_cursor_pos.x;
+			viewport.y = hotbar_cursor_pos.y;
 			viewport.width = size.width;
 			viewport.height = size.height;
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
-			vk.drawHudImage(vk.toolbar_cursor_image_descriptor, viewport);
+			vk.drawHudImage(vk.bindless_params[0].hotbar_cursor_texture_index, viewport);
 		}
 
 		if (m_world_scene.show_debug_text) // Debug info
@@ -947,65 +876,39 @@ void RenderThread::lightingPass()
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
-			vk.drawHudImage(vk.debug_info_image_descriptor, viewport);
+			vk.drawHudImage(vk.bindless_params[0].debug_info_texture_index, viewport);
 		}
 	}
 
-	{ // Toolbar items
+	{ // Hotbar items
 		vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.item_icon_pipeline.pipeline);
-
-		const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
-			vk.item_icon_descriptor.set
-		};
-
-		vkCmdBindDescriptorSets(
-			vk.draw_command_buffers[vk.current_frame],
-			VK_PIPELINE_BIND_POINT_GRAPHICS,
-			vk.item_icon_pipeline.layout,
-			1,
-			static_cast<uint32_t>(toolbar_item_descriptor_sets.size()), toolbar_item_descriptor_sets.data(),
-			0, nullptr
-		);
 
 		for (size_t i = 0; i < 9; i++)
 		{
-			if (toolbar_items[i] == ItemInfo::Type::None)
+			if (hotbar_items[i] == ItemInfo::Type::None)
 			{
 				continue;
 			}
 
-			const glm::vec2 toolbar_item_pos = {
-				toolbar_pos.x + (i * 64),
-				toolbar_pos.y
+			const glm::vec2 hotbar_item_pos = {
+				hotbar_pos.x + (i * 64),
+				hotbar_pos.y
 			};
 
 			VkViewport viewport = {};
-			viewport.x = toolbar_item_pos.x + 3;
-			viewport.y = toolbar_item_pos.y + 3;
+			viewport.x = hotbar_item_pos.x + 3;
+			viewport.y = hotbar_item_pos.y + 3;
 			viewport.width = 64 - 6;
 			viewport.height = 64 - 6;
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
-			vk.drawItemIcon(viewport, static_cast<uint32_t>(toolbar_items[i]));
+			vk.drawItemIcon(viewport, static_cast<uint32_t>(hotbar_items[i]));
 		}
 	}
 
 	{ // Draw test image
 		// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
-
-		// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-		// 	vk.test_image_descriptor.set
-		// };
-
-		// vkCmdBindDescriptorSets(
-		// 	vk.draw_command_buffers[vk.current_frame],
-		// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-		// 	vk.test_image_pipeline.layout,
-		// 	1,
-		// 	static_cast<uint32_t>(test_image_descriptor_sets.size()), test_image_descriptor_sets.data(),
-		// 	0, nullptr
-		// );
 
 		// vkCmdDraw(
 		// 	vk.draw_command_buffers[vk.current_frame],

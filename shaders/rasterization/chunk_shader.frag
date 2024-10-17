@@ -8,17 +8,18 @@ layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_PARAMS_BINDING) uniform
 {
 	BindlessDescriptorParams bindless_params;
 };
+
 layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING) uniform CameraMatrices
 {
 	ViewProjMatrices cm;
 } camera_matrices[BINDLESS_DESCRIPTOR_MAX_COUNT];
 
-layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_UNIFORM_BUFFER_BINDING) uniform ShadowMapLightDescriptor
 {
-	ShadowMapLight shadow_map_light;
-};
-layout(set = 2, binding = 0) uniform sampler2DArray tex;
-layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
+	ShadowMapLight data;
+} shadow_map_light_descriptor[BINDLESS_DESCRIPTOR_MAX_COUNT];
+
+layout(set = BINDLESS_DESCRIPTOR_SET, binding = BINDLESS_COMBINED_IMAGE_SAMPLER_BINDING) uniform sampler2DArray sampler_2d_array[BINDLESS_DESCRIPTOR_MAX_COUNT];
 
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
@@ -31,6 +32,8 @@ layout(location = 0) out vec4 out_color;
 
 float sample_shadow_map(vec4 world_space_pos, sampler2DArray shadowMap, int layer)
 {
+	ShadowMapLight shadow_map_light = shadow_map_light_descriptor[bindless_params.light_matrices_index].data;
+
 	vec4 fragPosLightSpace = shadow_map_light.view_proj[layer] * world_space_pos;
 	// perform perspective divide
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -97,6 +100,8 @@ float compute_shadow_factor(
 	uint pcf_size
 )
 {
+	ShadowMapLight shadow_map_light = shadow_map_light_descriptor[bindless_params.light_matrices_index].data;
+
 	vec4 fragPosViewSpace = camera_matrices[bindless_params.camera_ubo_index].cm.view * world_space_pos;
 	float depthValue = abs(fragPosViewSpace.z);
 
@@ -149,8 +154,8 @@ void main()
 	float ao_factor = 1.0 - (frag_ao / 3.0 * max_ao);
 
 	float max_shadow = 0.7;
-	// float shadow_factor = 1.0 - compute_shadow_factor(frag_pos_world_space, shadow_map, 3) * max_shadow;
-	float shadow_factor = compute_shadow_factor(frag_pos_world_space, shadow_map, 3) * max_shadow;
+	// float shadow_factor = 1.0 - compute_shadow_factor(frag_pos_world_space, sampler_2d_array[bindless_params.shadow_map_index], 3) * max_shadow;
+	float shadow_factor = compute_shadow_factor(frag_pos_world_space, sampler_2d_array[bindless_params.shadow_map_index], 3) * max_shadow;
 
 	float sky_light = frag_sky_light / 15.0 - shadow_factor;
 	float block_light = frag_block_light / 15.0;
@@ -162,7 +167,7 @@ void main()
 	light = min_light + light * ao_factor * (1.0 - min_light);
 	// light = min_light + light * shadow_factor * (1.0 - min_light);
 
-	vec4 texture_color = texture(tex, frag_tex_coord);
+	vec4 texture_color = texture(sampler_2d_array[bindless_params.block_texture_index], frag_tex_coord);
 
 	if (texture_color.a < 0.01)
 	{
