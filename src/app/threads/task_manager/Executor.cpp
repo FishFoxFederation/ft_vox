@@ -4,7 +4,6 @@
 namespace task
 {
 
-using namespace internal;
 Executor::Executor(unsigned const thread_count)
 :m_joiner(m_threads)
 {
@@ -31,7 +30,7 @@ Executor::~Executor()
 	m_cond.notify_all();
 }
 
-std::future<void> Executor::run(internal::TaskGraph & graph)
+std::future<void> Executor::run(TaskGraph & graph)
 {
 	std::shared_ptr<runningGraph> running_graph = std::make_shared<runningGraph>(graph);
 	{
@@ -103,7 +102,10 @@ void Executor::workerThread(const int & id)
 			//remove from running nodes
 			std::lock_guard<std::mutex> lock(current_graph->mutex);
 			if (node->m_sucessors.empty())
+			{
 				workerEndGraph(current_graph, node);
+				continue;
+			}
 			else
 				current_graph->runningNodes.erase(node);
 		}
@@ -150,7 +152,7 @@ void Executor::workerEndGraph(std::shared_ptr<runningGraph> & current_graph, Nod
 	}
 }
 
-Executor::runningGraph::runningGraph(internal::TaskGraph & graph)
+Executor::runningGraph::runningGraph(TaskGraph & graph)
 :graph(graph)
 {
 	done = false;
@@ -162,6 +164,43 @@ Executor::runningGraph::runningGraph(internal::TaskGraph & graph)
 		else
 			waitingNodes.insert(&node);
 	}
+	//check for cycles in the graph
+	if (checkCycles())
+	{
+		done = true;
+		runningNodes.clear();
+		waitingNodes.clear();
+		throw CycleError();
+	}
+}
+
+bool Executor::runningGraph::checkCycles() const
+{
+	//if there is no root nodes but we have some nodes in the graph we have a cycle
+	if (runningNodes.empty() && !waitingNodes.empty())
+		return true;
+
+	std::unordered_set<Node *> visited;
+	std::function<bool(Node *)> visit = [&](Node * node) -> bool
+	{
+		if (visited.find(node) != visited.end())
+			return true;
+		visited.insert(node);
+		for (auto child : node->m_sucessors)
+		{
+			if (visit(child))
+				return true;
+		}
+		visited.erase(node);
+		return false;
+	};
+
+	for (auto node : runningNodes)
+	{
+		if (visit(node))
+			return true;
+	}
+	return false;
 }
 
 }

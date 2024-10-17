@@ -6,18 +6,22 @@
 int main()
 {
 	task::Executor executor(4);
-	task::internal::TaskGraph graph;
+	task::TaskGraph graph;
+	task::TaskGraph graph2;
 
-	task::Task A = graph.addNode([]() { std::cout << "Task 1" << std::endl; });
-	task::Task B = graph.addNode([]() { std::cout << "Task 2" << std::endl; });
-	task::Task C = graph.addNode([]() { std::cout << "Task 3" << std::endl; }); 
+	task::Task A = graph.emplace([]() { std::cout << "Task 1" << std::endl; });
+	task::Task B = graph.emplace([]() { std::cout << "Task 2" << std::endl; });
+	task::Task C = graph.emplace([]() { std::cout << "Task 3" << std::endl; }); 
+	task::Task D = graph2.emplace([]() { std::cout << "Task 4" << std::endl; });
 
-	A.setName("A");
-	B.setName("B");
-	C.setName("C");
+	A.Name("A");
+	B.Name("B");
+	C.Name("C");
 
 	A.succceed(B);
 	B.succceed(C);
+	// C.succceed(A); //this will throw a cycle error
+
 
 	executor.run(graph);
 	executor.waitForAll();

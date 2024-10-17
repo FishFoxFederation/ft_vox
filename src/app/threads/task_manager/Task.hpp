@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tasks.hpp"
-#include "TaskGraph.hpp"
+#include "Node.hpp"
 
 
 namespace task
@@ -9,7 +9,7 @@ namespace task
 class Task
 {
 public:
-	Task(internal::Node * node)
+	Task(Node * node)
 	{
 		m_node = node;
 	};
@@ -52,7 +52,7 @@ public:
 	template<typename F>
 	void set_task(F && f);
 
-	void		setName(const std::string & name) { m_node->setName(name);}
+	void		Name(const std::string & name) { m_node->setName(name);}
 	std::string	getName() const { return m_node->getName(); }
 
 	void *getData() const;
@@ -64,6 +64,6 @@ public:
 	bool isEmpty() const;
 	bool hasTask() const;
 private:
-	internal::Node * m_node;
+	Node * m_node;
 };
 }
