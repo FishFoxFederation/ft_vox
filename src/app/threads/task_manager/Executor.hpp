@@ -5,6 +5,7 @@
 #include <deque>
 #include <thread>
 #include <unordered_set>
+#include <variant>
 #include "JoinThreads.hpp"
 #include "tasks.hpp"
 #include "Future.hpp"
@@ -46,9 +47,36 @@ private:
 
 	struct info
 	{
+		info () : t(type::NONE) {}
+		info (Node * node, std::shared_ptr<runningGraph> graph)
+		{
+			t = type::NODE;
+			data = NodeInfo{graph, node};
+		}
+		info (std::packaged_task<void()> task)
+		{
+			t = type::ASYNC;
+			data = AsyncInfo{std::move(task)};
+		}
 		//maybe add a union and a type enum to enable other types of tasks to be queued
-		std::shared_ptr<runningGraph> graph;
-		Node * node;
+		enum class type : uint16_t
+		{
+			NONE,
+			NODE,
+			ASYNC
+		};
+		struct NodeInfo
+		{
+			std::shared_ptr<runningGraph> graph;
+			Node * node;
+		};
+		struct AsyncInfo
+		{
+			std::packaged_task<void()> task;
+		};
+
+		type t;
+		std::variant<NodeInfo, AsyncInfo> data;
 	};
 
 	typedef uint64_t runningGraphId;
