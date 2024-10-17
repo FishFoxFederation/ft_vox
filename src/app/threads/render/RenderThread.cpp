@@ -406,15 +406,15 @@ void RenderThread::shadowPass()
 
 	for (auto & chunk_mesh : chunk_meshes)
 	{
-		ModelMatrice model_matrice = {};
-		model_matrice.model = chunk_mesh.model;
+		ObjectData object_data = {};
+		object_data.matrix = chunk_mesh.model;
 
 		vk.drawMesh(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.shadow_pipeline,
 			chunk_mesh.id,
-			&model_matrice,
-			sizeof(ModelMatrice),
+			&object_data,
+			sizeof(ObjectData),
 			VK_SHADER_STAGE_VERTEX_BIT
 		);
 	}
@@ -470,15 +470,15 @@ void RenderThread::lightingPass()
 
 		for (auto & chunk_mesh: chunk_meshes)
 		{
-			ModelMatrice model_matrice = {};
-			model_matrice.model = chunk_mesh.model;
+			ObjectData object_data = {};
+			object_data.matrix = chunk_mesh.model;
 
 			vk.drawMesh(
 				vk.draw_command_buffers[vk.current_frame],
 				vk.chunk_pipeline,
 				chunk_mesh.id,
-				&model_matrice,
-				sizeof(ModelMatrice),
+				&object_data,
+				sizeof(ObjectData),
 				VK_SHADER_STAGE_VERTEX_BIT
 			);
 		}
@@ -504,16 +504,16 @@ void RenderThread::lightingPass()
 
 		for (const auto & entity_mesh : entity_meshes)
 		{
-			EntityMatrices entity_matrice = {};
-			entity_matrice.model = entity_mesh.model;
-			entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+			ObjectData object_data = {};
+			object_data.matrix = entity_mesh.model;
+			object_data.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 			vk.drawMesh(
 				vk.draw_command_buffers[vk.current_frame],
 				vk.entity_pipeline,
 				entity_mesh.id,
-				&entity_matrice,
-				sizeof(EntityMatrices),
+				&object_data,
+				sizeof(ObjectData),
 				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 			);
 		}
@@ -524,16 +524,16 @@ void RenderThread::lightingPass()
 			const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
 			const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
 
-			EntityMatrices block_matrice = {};
-			block_matrice.model = block_model;
-			block_matrice.color = data.color;
+			ObjectData object_data = {};
+			object_data.matrix = block_model;
+			object_data.color = data.color;
 			vkCmdPushConstants(
 				vk.draw_command_buffers[vk.current_frame],
 				vk.entity_pipeline.layout,
 				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
 				0,
-				sizeof(EntityMatrices),
-				&block_matrice
+				sizeof(ObjectData),
+				&object_data
 			);
 
 			vkCmdDrawIndexed(
@@ -712,17 +712,18 @@ void RenderThread::lightingPass()
 		const float scale_factor = 1.001f;
 		const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block.value() - glm::vec3((scale_factor - 1.0f) / 2.0f));
 		const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale_factor));
-		const LinePipelinePushConstant target_block_push_constant = {
-			target_block_model * target_block_scale,
-			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-		};
+
+		ObjectData object_data = {};
+		object_data.matrix = target_block_model * target_block_scale;
+		object_data.color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
 		vkCmdPushConstants(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.line_pipeline.layout,
 			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
 			0,
-			sizeof(LinePipelinePushConstant),
-			&target_block_push_constant
+			sizeof(ObjectData),
+			&object_data
 		);
 
 		vkCmdSetLineWidth(vk.draw_command_buffers[vk.current_frame], 2.0f);
@@ -751,15 +752,15 @@ void RenderThread::lightingPass()
 		// 	1, &bindless_param_dynamic_offset
 		// );
 
-		// ModelMatrice skybox_matrices = {};
-		// skybox_matrices.model = glm::translate(glm::dmat4(1.0f), camera.position);
+		// ObjectData object_data = {};
+		// object_data.matrix = glm::translate(glm::dmat4(1.0f), camera.position);
 		// vkCmdPushConstants(
 		// 	vk.draw_command_buffers[vk.current_frame],
 		// 	vk.skybox_pipeline.layout,
 		// 	VK_SHADER_STAGE_VERTEX_BIT,
 		// 	0,
-		// 	sizeof(ModelMatrice),
-		// 	&skybox_matrices
+		// 	sizeof(ObjectData),
+		// 	&object_data
 		// );
 
 		// vkCmdDraw(
@@ -788,15 +789,15 @@ void RenderThread::lightingPass()
 			1, &bindless_param_dynamic_offset
 		);
 
-		ModelMatrice sky_shader_data = {};
-		sky_shader_data.model = glm::translate(glm::dmat4(1.0f), camera.position);
+		ObjectData object_data = {};
+		object_data.matrix = glm::translate(glm::dmat4(1.0f), camera.position);
 
 		vk.drawMesh(
 			vk.draw_command_buffers[vk.current_frame],
 			vk.sun_pipeline,
 			vk.icosphere_mesh_id,
-			&sky_shader_data,
-			sizeof(ModelMatrice),
+			&object_data,
+			sizeof(ObjectData),
 			VK_SHADER_STAGE_VERTEX_BIT
 		);
 	}
@@ -867,15 +868,15 @@ void RenderThread::lightingPass()
 				continue;
 			}
 
-			ModelMatrice model_matrice = {};
-			model_matrice.model = chunk_mesh.model;
+			ObjectData object_data = {};
+			object_data.matrix = chunk_mesh.model;
 
 			vk.drawMesh(
 				vk.draw_command_buffers[vk.current_frame],
 				vk.water_pipeline,
 				chunk_mesh.water_id,
-				&model_matrice,
-				sizeof(ModelMatrice),
+				&object_data,
+				sizeof(ObjectData),
 				VK_SHADER_STAGE_VERTEX_BIT
 			);
 		}
@@ -1046,15 +1047,15 @@ void RenderThread::drawPlayerBodyPart(
 	const glm::mat4 & model
 )
 {
-	ModelMatrice player_matrice = {};
-	player_matrice.model = model;
+	ObjectData object_data = {};
+	object_data.matrix = model;
 
 	vk.drawMesh(
 		vk.draw_command_buffers[vk.current_frame],
 		vk.player_pipeline,
 		mesh_id,
-		&player_matrice,
-		sizeof(ModelMatrice),
+		&object_data,
+		sizeof(ObjectData),
 		VK_SHADER_STAGE_VERTEX_BIT
 	);
 }
