@@ -2,7 +2,7 @@
 #include <iostream>
 
 // compile with 
-// c++ main_test.cpp Executor.cpp --std=c++20 -I ./ -I ../pool -I internal/ -pthread -g3 
+// c++ main_test.cpp Executor.cpp ExecutorWorker.cpp -std=c++20 -pthread -I . -I ../pool/ -I ./internal -g3
 int main()
 {
 	task::Executor executor(4);
