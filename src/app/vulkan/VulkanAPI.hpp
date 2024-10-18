@@ -287,8 +287,8 @@ public:
 		const VkShaderStageFlags push_constants_stage
 	);
 
-	void writeTextToImage(
-		Image & image,
+	void writeTextToDebugImage(
+		VkCommandBuffer command_buffer,
 		const std::string & text,
 		const uint32_t x,
 		const uint32_t y,
@@ -370,6 +370,7 @@ public:
 	Image item_icon_images;
 
 	Image debug_info_image;
+	std::vector<Buffer> debug_info_buffers;
 
 	UBO camera_ubo;
 	UBO light_mat_ubo;
