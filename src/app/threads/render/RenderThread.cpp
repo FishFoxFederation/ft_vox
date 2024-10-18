@@ -84,10 +84,13 @@ void RenderThread::loop()
 		ZoneScopedN("Prepare frame");
 
 		updateTime();
+		DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
+
 		m_frame_count++;
-		if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
+		const std::chrono::nanoseconds elapsed_time = m_current_time - m_start_time_counting_fps;
+		if (elapsed_time >= std::chrono::seconds(1))
 		{
-			DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
+			DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(elapsed_time).count();
 			m_frame_count = 0;
 			m_start_time_counting_fps = m_current_time;
 		}
@@ -106,7 +109,6 @@ void RenderThread::loop()
 		players = m_world_scene.getPlayers();
 
 
-		DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
 		// const glm::dvec3 sun_offset = glm::dvec3(
 		// 	0.0f,
@@ -239,7 +241,7 @@ void RenderThread::loop()
 	memcpy(vk.light_mat_ubo.mapped_memory[vk.current_frame], &shadow_map_light, sizeof(shadow_map_light));
 	memcpy(vk.atmosphere_ubo.mapped_memory[vk.current_frame], &atmosphere_params, sizeof(atmosphere_params));
 
-	vk.writeTextToImage(vk.debug_info_image, debug_text, 10, 10, 32);
+	vk.writeTextToDebugImage(vk.draw_command_buffers[vk.current_frame], debug_text, 10, 10, 32);
 
 	// Bind the descriptor set for the bindless descriptor
 	VkDescriptorSet bindless_descriptor_sets = vk.bindless_descriptor.set();

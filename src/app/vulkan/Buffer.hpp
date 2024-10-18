@@ -36,6 +36,8 @@ public:
 
 	VkDeviceSize size() const { return m_size; }
 
+	void * mappedMemory();
+
 	VkBuffer buffer;
 	VkDeviceMemory memory;
 
@@ -44,4 +46,6 @@ private:
 	VkDevice m_device;
 
 	VkDeviceSize m_size;
+
+	void * m_mapped_memory;
 };
