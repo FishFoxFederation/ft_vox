@@ -30,4 +30,10 @@ class CycleError : public BaseError
 public:
 	CycleError() : BaseError("You tried to run a graph with a cycle in it") {}
 };
+
+class EmptyGraphError : public BaseError
+{
+public:
+	EmptyGraphError() : BaseError("You tried to run an empty graph") {}
+};
 } // namespace task
