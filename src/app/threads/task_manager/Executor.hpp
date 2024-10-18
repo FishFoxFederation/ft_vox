@@ -49,7 +49,7 @@ private:
 	{
 		struct Module
 		{
-			Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun, Module * externalModule = nullptr)
+			Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun, Module * externalModule)
 			: sucessors(successors), nodesToRun(nodesToRun), externalModule(externalModule) {};
 			std::vector<TaskNode*>	rootNodes;
 			std::vector<TaskNode*>  sucessors;
@@ -147,6 +147,7 @@ private:
 	void workerExecAsync(info::AsyncInfo & async_info);
 	void workerExecGraphNode(info::GraphInfo & graph_info);
 	void workerEndNode(info::NodeInfo & node_info);
+	void workerEndGraphNode(info::GraphInfo & node_info);
 	void workerEndModule(info::NodeInfo & node_info);
 	void workerUpdateSuccessors(info::NodeInfo & node_info);
 };

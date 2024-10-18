@@ -62,11 +62,10 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 {
 	done = false;
 
-	std::function<void(TaskGraph &, bool, Module *)> visitModule = [&](TaskGraph & graph, bool root, Module * module = nullptr)
+	std::function<void(TaskGraph &, bool, Module *)> visitModule = [&](TaskGraph & graph, bool root, Module * module)
 	{
 		for (auto & node : graph.m_nodes)
 		{
-			std::cout << "visiting node :" << node.getName() << std::endl;
 			nodeDependencies[&node] = node.m_dependents.size();
 			bool local_root = root && node.m_dependents.empty();
 			switch(node.getType())
@@ -75,51 +74,29 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 				{
 					auto & sub_graph = *node.getGraph();
 					// + 1 for nodes to run becaue the root node is not in the module
-					Module * mod = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size());
-					// if (module != nullptr)
-					// 	module->nodesToRun -= 1;
-					for (auto & sucessor : mod->sucessors)
-						std::cout << "successor: " << sucessor->getName() << std::endl;
-					for (auto & dependencies : node.m_dependents)
-						std::cout << "dependencies: " << dependencies->getName() << std::endl;
+					Module * mod = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size(), module);
 					visitModule(sub_graph, local_root, mod);
 					nodeInfos.insert({&node, info(&node, this, mod, module)});
 					if (local_root)
 						runningNodes.insert(&node);
 					else if (module != nullptr
 						&&	node.m_dependents.empty())
-					{
-						std::cout << "adding root node to module" << std::endl;
 						module->rootNodes.push_back(&node);
-					}
 					else
-					{
-						std::cout << "adding node to waiting nodes" << std::endl;
 						waitingNodes.insert(&node);
-					}
 					break;
 				}
 				case TaskNode::type::NODE:
 				{
 					nodeInfos.insert({&node, info(&node, this, module)});
 
-					for (auto & sucessor : node.m_sucessors)
-						std::cout << "successor: " << sucessor->getName() << std::endl;
-					for (auto & dependencies : node.m_dependents)
-						std::cout << "dependencies: " << dependencies->getName() << std::endl;
 					if (local_root)
 						runningNodes.insert(&node);
 					else if (module != nullptr
 						&&	node.m_dependents.empty())
-					{
-						std::cout << "adding root node to module" << std::endl;
 						module->rootNodes.push_back(&node);
-					}
 					else
-					{
-						std::cout << "adding node to waiting nodes" << std::endl;
 						waitingNodes.insert(&node);
-					}
 					break;
 				}
 				default:
