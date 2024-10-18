@@ -93,10 +93,10 @@ void Executor::workerExecGraphNode(info::GraphInfo & node_info)
 			m_cond.notify_one();
 		}
 	}
-	{
-		std::lock_guard<std::mutex> lock(current_graph->mutex);
-		current_graph->runningNodes.erase(node);
-	}
+
+	// workerEndGraphNode(node_info);
+	info::NodeInfo inf = {current_graph, node, current_module};
+	workerEndGraph(inf);
 }
 
 void Executor::workerExecNode(info::NodeInfo & node_info)
@@ -161,6 +161,19 @@ void Executor::workerUpdateSuccessors(info::NodeInfo & node_info)
 	}
 }
 
+void Executor::workerEndGraphNode(info::GraphInfo & node_info)
+{
+	auto [current_graph, node, module] = node_info;
+	info::NodeInfo inf = {current_graph, node, module};
+
+	workerEndModule(inf);
+
+	{
+		std::lock_guard<std::mutex> lock(current_graph->mutex);
+		workerEndGraph(inf);
+	}
+}
+
 void Executor::workerEndNode(info::NodeInfo & node_info)
 {
 	auto [current_graph, node, module] = node_info;
@@ -182,6 +195,7 @@ void Executor::workerEndModule(info::NodeInfo & node_info)
 	auto current_graph = node_info.graph;
 	auto node = node_info.node;
 	auto module = node_info.module;
+	node->m_sucessors.clear();
 	// std::cout << "Ending module from node " << node->getName() << std::endl;
 	std::function<void(runningGraph::Module *)> endModules = [&](runningGraph::Module * mod)
 	{
@@ -190,10 +204,9 @@ void Executor::workerEndModule(info::NodeInfo & node_info)
 			throw std::runtime_error("Dependency error");
 		if (nodes_left == 0)
 		{
-			if (mod->sucessors.empty() && mod->externalModule != nullptr)
+			if (mod->externalModule != nullptr)
 				endModules(mod->externalModule);
-			else
-				node->m_sucessors = mod->sucessors;
+			node->m_sucessors.insert(node->m_sucessors.end(), mod->sucessors.begin(), mod->sucessors.end());
 		}
 	};
 	
