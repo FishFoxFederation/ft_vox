@@ -73,6 +73,8 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 				case TaskNode::type::GRAPH:
 				{
 					auto & sub_graph = *node.getGraph();
+					if (sub_graph.m_nodes.empty())
+						throw EmptyGraphError();
 					// + 1 for nodes to run becaue the root node is not in the module
 					Module * mod = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size(), module);
 					visitModule(sub_graph, local_root, mod);

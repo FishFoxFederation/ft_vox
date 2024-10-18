@@ -21,7 +21,7 @@ int main()
 
 
 	task::Task sub_task		= sub_graph.emplace([]() { std::cout << "1" << std::endl; }).Name("1");
-	// task::Task sub_task2	= sub_graph2.emplace([]() { std::cout << "2" << std::endl; }).Name("2");
+	task::Task sub_task2	= sub_graph2.emplace([]() { std::cout << "2" << std::endl; }).Name("2");
 
 	A.Name("A");
 	B.Name("B");
