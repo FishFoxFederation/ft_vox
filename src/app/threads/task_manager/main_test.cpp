@@ -9,6 +9,7 @@ int main()
 	task::TaskGraph graph;
 	task::TaskGraph sub_graph;
 	task::TaskGraph sub_graph2;
+	task::TaskGraph sub_sub_graph;
 
 	task::Task A = graph.emplace([]() { std::cout << "A" << std::endl; });
 	task::Task B = graph.emplace([]() { std::cout << "B" << std::endl; });
@@ -16,12 +17,15 @@ int main()
 	task::Task D = graph.emplace([]() { std::cout << "D" << std::endl; });
 
 
+
 	task::Task submodule = graph.emplace(sub_graph);
 	task::Task submodule2 		= sub_graph.emplace(sub_graph2);
+	task::Task sub_sub_module   = sub_graph2.emplace(sub_sub_graph);
 
 
 	task::Task sub_task		= sub_graph.emplace([]() { std::cout << "1" << std::endl; }).Name("1");
 	task::Task sub_task2	= sub_graph2.emplace([]() { std::cout << "2" << std::endl; }).Name("2");
+	task::Task sub_sub_task	= sub_sub_graph.emplace([]() { std::cout << "3" << std::endl; }).Name("3");
 
 	A.Name("A");
 	B.Name("B");
@@ -38,6 +42,9 @@ int main()
 
 	//sub graph
 	submodule2.precede(sub_task);
+
+	// sub sub graph
+	sub_sub_module.precede(sub_task2);
 
 	executor.run(graph);
 	executor.waitForAll();

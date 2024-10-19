@@ -195,7 +195,7 @@ void Executor::workerEndModule(info::NodeInfo & node_info)
 	auto current_graph = node_info.graph;
 	auto node = node_info.node;
 	auto module = node_info.module;
-	node->m_sucessors.clear();
+	// node->m_sucessors.clear();
 	// std::cout << "Ending module from node " << node->getName() << std::endl;
 	std::function<void(runningGraph::Module *)> endModules = [&](runningGraph::Module * mod)
 	{

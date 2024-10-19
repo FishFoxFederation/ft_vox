@@ -72,7 +72,7 @@ private:
 
 		std::unordered_map<TaskNode *, info> nodeInfos;
 	private:
-		bool checkCycles() const;
+		bool checkCycles(const TaskGraph & graph) const;
 	};
 
 	struct info

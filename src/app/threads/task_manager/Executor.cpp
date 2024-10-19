@@ -64,6 +64,8 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 
 	std::function<void(TaskGraph &, bool, Module *)> visitModule = [&](TaskGraph & graph, bool root, Module * module)
 	{
+		if (checkCycles(graph))
+			throw CycleError();
 		for (auto & node : graph.m_nodes)
 		{
 			nodeDependencies[&node] = node.m_dependents.size();
@@ -74,7 +76,7 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 				{
 					auto & sub_graph = *node.getGraph();
 					if (sub_graph.m_nodes.empty())
-						throw EmptyGraphError();
+						throw EmptyModuleError(node.getName());
 					// + 1 for nodes to run becaue the root node is not in the module
 					Module * mod = &modules.emplace_back(node.getSucessors(), sub_graph.m_nodes.size(), module);
 					visitModule(sub_graph, local_root, mod);
@@ -106,27 +108,35 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 			}
 		}
 	};
+	if (graph.m_nodes.empty())
+		throw EmptyGraphError();
 
-	visitModule(graph, true, nullptr);
-
-	//check for cycles in the graph
-	if (checkCycles())
-	{
+	try {
+		visitModule(graph, true, nullptr);
+	} catch (CycleError & e) {
 		done = true;
 		runningNodes.clear();
 		waitingNodes.clear();
-		throw CycleError();
+		throw e;
 	}
 }
 
-bool Executor::runningGraph::checkCycles() const
+bool Executor::runningGraph::checkCycles(const TaskGraph & graph) const
 {
+	std::vector<const TaskNode *> rootNodes;
+
+	for (auto & node : graph.m_nodes)
+	{
+		if (node.m_dependents.empty())
+			rootNodes.push_back(&node);
+	}
+
 	//if there is no root nodes but we have some nodes in the graph we have a cycle
-	if (runningNodes.empty() && !waitingNodes.empty())
+	if (rootNodes.empty() && !graph.m_nodes.empty())
 		return true;
 
-	std::unordered_set<TaskNode *> visited;
-	std::function<bool(TaskNode *)> visit = [&](TaskNode * node) -> bool
+	std::unordered_set<const TaskNode *> visited;
+	std::function<bool(const TaskNode *)> visit = [&](const TaskNode * node) -> bool
 	{
 		if (visited.find(node) != visited.end())
 			return true;
@@ -140,7 +150,7 @@ bool Executor::runningGraph::checkCycles() const
 		return false;
 	};
 
-	for (auto node : runningNodes)
+	for (auto node : rootNodes)
 	{
 		if (visit(node))
 			return true;

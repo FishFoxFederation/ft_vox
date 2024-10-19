@@ -36,4 +36,11 @@ class EmptyGraphError : public BaseError
 public:
 	EmptyGraphError() : BaseError("You tried to run an empty graph") {}
 };
+
+class EmptyModuleError : public BaseError
+{
+public:
+	EmptyModuleError() : BaseError("You tried to run a graph containing an empty module/sub graph") {};
+	EmptyModuleError(const std::string & moduleName) : BaseError("You tried to run a graph containing an empty module/sub graph: " + moduleName) {}
+};
 } // namespace task
