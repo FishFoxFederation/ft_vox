@@ -388,20 +388,21 @@ void VulkanAPI::pickPhysicalDevice()
 
 	std::multimap<int, VkPhysicalDevice, std::greater<int>> candidates;
 
-	for (const auto & device : devices)
-	{
-		int score = ratePhysicalDevice(device);
-		candidates.insert(std::make_pair(score, device));
-	}
+	physical_device = devices[0];
+	// for (const auto & device : devices)
+	// {
+	// 	int score = ratePhysicalDevice(device);
+	// 	candidates.insert(std::make_pair(score, device));
+	// }
 
-	if (candidates.begin()->first > 0)
-	{
-		physical_device = candidates.begin()->second;
-	}
-	else
-	{
-		throw std::runtime_error("Failed to find a suitable GPU");
-	}
+	// if (candidates.begin()->first > 0)
+	// {
+	// 	physical_device = candidates.begin()->second;
+	// }
+	// else
+	// {
+	// 	throw std::runtime_error("Failed to find a suitable GPU");
+	// }
 
 	queue_family_indices = findQueueFamilies(physical_device);
 
