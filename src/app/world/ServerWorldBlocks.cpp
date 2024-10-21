@@ -150,7 +150,7 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
 	{
 		if (!old_chunks_in_range.contains(chunk_position))
 		{
-			std::shared_ptr<Chunk> chunk = getAndLoadChunk(chunk_position);
+			std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
 			data.chunks_to_load.push_back(chunk);
 		}
 	}
@@ -273,26 +273,35 @@ ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 	return chunks;
 }
 
-uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, Chunk::genLevel gen_level , Chunk::genLevel current_gen_level = Chunk::genLevel::EMPTY)
-{
-	ChunkMap chunksToGen;
-	WorldGenerator::genInfo info = m_world_generator.getGenInfo(gen_level, current_gen_level, chunkPos3D);
+// uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, Chunk::genLevel gen_level , Chunk::genLevel current_gen_level = Chunk::genLevel::EMPTY)
+// {
+// 	ChunkMap chunksToGen;
+// 	WorldGenerator::genInfo info = m_world_generator.getGenInfo(gen_level, current_gen_level, chunkPos3D);
 
-	chunksToGen = getChunkZone(info.zoneStart, info.zoneSize);
+// 	chunksToGen = getChunkZone(info.zoneStart, info.zoneSize);
 
-	return m_threadPool.submit([this, info, chunksToGen] () mutable
-	{
-		ZoneScopedN("Generate Chunk");
-		// m_world_generator.generateChunkColumn(chunkPos3D.x, chunkPos3D.z, chunk);
-		m_world_generator.generate(info, chunksToGen);
+// 	return m_threadPool.submit([this, info, chunksToGen] () mutable
+// 	{
+// 		ZoneScopedN("Generate Chunk");
+// 		// m_world_generator.generateChunkColumn(chunkPos3D.x, chunkPos3D.z, chunk);
+// 		m_world_generator.generate(info, chunksToGen);
 
-		for (auto & [chunk_position, chunk] : chunksToGen)
-			chunk->status.unlock();
-	});
-}
+// 		for (auto & [chunk_position, chunk] : chunksToGen)
+// 			chunk->status.unlock();
+// 	});
+// }
 
 void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 {
+	// ChunkGenList generated_chunks;
+	std::unordered_set<std::pair<glm::ivec3, Chunk::genLevel>> generated_chunks;
+	std::lock_guard lock(m_chunk_gen_data.m_chunk_gen_data_mutex);
+	m_chunk_gen_data.graph.clear();
+	m_chunk_gen_data.graph.emplace([](){});
+	m_chunk_gen_data.light_graph.clear();
+	m_chunk_gen_data.light_graph.emplace([](){});
+	m_chunk_gen_data.relief_graph.clear();
+	m_chunk_gen_data.relief_graph.emplace([](){});
 	while (!chunks_to_gen.empty())
 	{
 		auto [chunk_position, desired_gen_level] = *chunks_to_gen.begin();
@@ -303,42 +312,80 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 		Chunk::genLevel current_gen_level = chunk->getGenLevel();
 		chunk->status.unlock();
 
-		ChunkMap chunkZone;
 		// LOG_INFO("CHUNK: " << chunk_position.x << " " << chunk_position.z);
 		WorldGenerator::genInfo info = m_world_generator.getGenInfo(desired_gen_level, current_gen_level, chunk_position);
 
-		chunkZone = getChunkZone(info.zoneStart, info.zoneSize);
+		for(auto & zone : info.zones)
+		{
+			for (int x = 0; x < zone.size.x; x++)
+			{
+				for (int z = 0; z < zone.size.z; z++)
+				{
+					glm::ivec3 chunkPos3D = zone.start + glm::ivec3(x, 0, z);
+					if (generated_chunks.contains({chunkPos3D, zone.level}))
+						continue;
+					std::shared_ptr<Chunk> chunk = getChunkNoLock(chunkPos3D);
+					generated_chunks.insert({chunkPos3D, zone.level});
+					task::TaskGraph * graph = nullptr;
+					switch (zone.level)
+					{
+						case Chunk::genLevel::RELIEF:
+							zone.level = Chunk::genLevel::CAVE;
+							zone.oldLevel = Chunk::genLevel::EMPTY;
+							graph = &m_chunk_gen_data.relief_graph;
+							break;
+						case Chunk::genLevel::CAVE:
+							zone.oldLevel = Chunk::genLevel::EMPTY;
+							graph = &m_chunk_gen_data.relief_graph;
+							break;
+						case Chunk::genLevel::LIGHT:
+							zone.oldLevel = Chunk::genLevel::CAVE;
+							graph = &m_chunk_gen_data.light_graph;
+							break;
+						case Chunk::genLevel::EMPTY:
+							graph = nullptr;
+							break;
+					}
+
+					task::Task task = graph->emplace([this, zone, chunk] () mutable
+					{
+						ZoneScopedN("Generate Chunk");
+						// LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
+						ChunkMap chunkZone;
+						chunkZone.insert({chunk->getPosition(), chunk});
+						WorldGenerator::genInfo::zone local_zone = zone;
+						local_zone.size = glm::ivec3(1, 0, 1);
+						local_zone.start = chunk->getPosition();
+						m_world_generator.generate(local_zone, chunkZone);
+						// for (auto & [chunk_position, chunk] : chunkZone)
+						// 	chunk->status.unlock();
+					}).Name("generate chunk");
+				}
+			}
+		}
+
 		// LOG_INFO("CHUNK: " << chunk_position.x << " " << chunk_position.z);
 		// LOG_INFO("LEVEL :" << static_cast<int>(desired_gen_level) << " " << static_cast<int>(current_gen_level));
 		// LOG_INFO("ZONE SIZE: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
 		// LOG_INFO("ZONE START: " << info.zoneStart.x << " " << info.zoneStart.y << " " << info.zoneStart.z);
 
-		for (auto [position, chunk] : chunkZone)
-		{
-			auto iter = chunks_to_gen.find(position);
-			//if the chunk is in the gen list but is already in the current gen zone we remove it
-			if (iter != chunks_to_gen.end() && iter->second >= desired_gen_level)
-			{
-				// LOG_INFO("ERASE: " << position.x << " " << position.z);
-				chunks_to_gen.erase(iter);
-			}
-		}
+		// for (auto [position, chunk] : chunkZone)
+		// {
+		// 	auto iter = chunks_to_gen.find(position);
+		// 	//if the chunk is in the gen list but is already in the current gen zone we remove it
+		// 	if (iter != chunks_to_gen.end() && iter->second >= desired_gen_level)
+		// 	{
+		// 		// LOG_INFO("ERASE: " << position.x << " " << position.z);
+		// 		chunks_to_gen.erase(iter);
+		// 	}
+		// }
 
-		uint64_t future_id = m_threadPool.submit([this, info, chunkZone] () mutable
-		{
-			ZoneScopedN("Generate Chunk");
-			// LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
-			m_world_generator.generate(info, chunkZone);
-
-			for (auto & [chunk_position, chunk] : chunkZone)
-				chunk->status.unlock();
-		});
-
-		{
-			std::lock_guard lock(m_chunk_futures_ids_mutex);
-			m_chunk_futures_ids.push_back(future_id);
-		}
+		
 	}
+	task::Task relief_module = m_chunk_gen_data.graph.emplace(m_chunk_gen_data.relief_graph).Name("relief");
+	task::Task light_module = m_chunk_gen_data.graph.emplace(m_chunk_gen_data.light_graph).Name("light");
+	relief_module.precede(light_module);
+	m_chunk_gen_data.future = m_executor.run(m_chunk_gen_data.graph);
 }
 
 void ServerWorld::updateLights()

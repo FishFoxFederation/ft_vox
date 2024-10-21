@@ -25,10 +25,14 @@ public:
 	public:
 		struct genInfo
 		{
-			Chunk::genLevel oldLevel;
-			Chunk::genLevel level;
-			glm::ivec3 zoneSize;
-			glm::ivec3 zoneStart;
+			struct zone
+			{
+				Chunk::genLevel level;
+				Chunk::genLevel oldLevel;
+				glm::ivec3 size;
+				glm::ivec3 start;
+			};
+			std::vector<zone> zones;
 		};
 
 		/**
@@ -69,7 +73,7 @@ public:
 		 *
 		 * @warning the chunks MUST be locked before calling and unlocked after
 		 */
-		void 					generate(genInfo info, ChunkMap & chunkGenGrid);
+		void 					generate(genInfo::zone info, ChunkMap & chunkGenGrid);
 
 		std::shared_ptr<Chunk>	generateChunkColumn(const int & x, const int & z);
 		std::shared_ptr<Chunk>	generateChunk(const int & x, const int & y, const int & z);

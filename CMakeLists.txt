@@ -20,6 +20,7 @@ target_compile_options(${PROJECT_NAME}
 		-O3
 		-g3
 		# -fsanitize=address
+		# -fsanitize=thread
 		-Wall
 		-Wextra
 		-Werror
@@ -37,6 +38,7 @@ target_compile_options(${PROJECT_NAME}
 
 target_link_options(${PROJECT_NAME}
 	PRIVATE
+		# -fsanitize=thread
 		# -fsanitize=address
 )
 
@@ -210,6 +212,8 @@ target_sources(server
 		src/app/threads/pool/ThreadPoolAccessor.cpp
 		src/app/threads/block_update/ServerBlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
+		src/app/threads/task_manager/ExecutorWorker.cpp
+		src/app/threads/task_manager/Executor.cpp
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/vulkan/VulkanMemoryAllocator.cpp
 		src/app/vulkan/chunk_mesh.cpp
@@ -289,6 +293,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/render
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/task_manager
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin

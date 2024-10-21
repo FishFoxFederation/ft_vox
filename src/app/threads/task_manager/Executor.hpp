@@ -20,7 +20,7 @@ class Executor
 	friend class TaskNode;
 	friend class TaskGraph;
 public:
-	Executor(unsigned const thread_count = std::max(4u, std::thread::hardware_concurrency() - 2));
+	Executor(unsigned const thread_count = std::thread::hardware_concurrency() - 2);
 	~Executor();
 	Executor(const Executor &) = delete;
 	Executor & operator=(const Executor &) = delete;
@@ -44,35 +44,16 @@ public:
 
 	void waitForAll();
 private:
-	struct info;
-	struct runningGraph
+	struct runningGraph;
+	// struct Module;
+	struct Module
 	{
-		struct Module
-		{
-			Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun, Module * externalModule)
-			: sucessors(successors), nodesToRun(nodesToRun), externalModule(externalModule) {};
-			std::vector<TaskNode*>	rootNodes;
-			std::vector<TaskNode*>  sucessors;
-			std::atomic_int 		nodesToRun;
-			Module *				externalModule; //some modules can be nested
-		};
-		runningGraph(TaskGraph & graph);
-		TaskGraph &	graph;
-		std::exception_ptr      eptr = nullptr;
-		std::promise<void>		promise;
-		std::atomic_bool 		done = false;
-		std::mutex				mutex;
-		std::atomic_int			graphDependencies;
-		std::unordered_set<TaskNode*> waitingNodes;
-		std::unordered_set<TaskNode*> runningNodes;
-		std::unordered_map<TaskNode*, std::atomic_int> nodeDependencies;
-		std::list<Module>			modules;
-		// nodeStatus				selfNodes;
-		// std::vector<nodeStatus> moduleNodes;
-
-		std::unordered_map<TaskNode *, info> nodeInfos;
-	private:
-		bool checkCycles(const TaskGraph & graph) const;
+		Module(std::vector<TaskNode *> & successors, std::size_t nodesToRun, Module * externalModule)
+		: sucessors(successors), nodesToRun(nodesToRun), externalModule(externalModule) {};
+		std::vector<TaskNode*>	rootNodes;
+		std::vector<TaskNode*>  sucessors;
+		std::atomic_int 		nodesToRun;
+		Module *				externalModule; //some modules can be nested
 	};
 
 	struct info
@@ -80,12 +61,12 @@ private:
 		info () : t(type::NONE) {}
 		info (info && other) = default;
 		info & operator=(info && other) = default;
-		info (TaskNode * node, runningGraph * graph, runningGraph::Module * module)
+		info (TaskNode * node, runningGraph * graph, Module * module)
 		: data(NodeInfo{graph, node, module})
 		{
 			t = type::NODE;
 		}
-		info (TaskNode * node, runningGraph * graph, runningGraph::Module * internalModule, runningGraph::Module * externalModule)
+		info (TaskNode * node, runningGraph * graph, Module * internalModule, Module * externalModule)
 		: data(GraphInfo{graph, node, internalModule})
 		{
 			t = type::GRAPH;
@@ -107,13 +88,13 @@ private:
 		{
 			runningGraph * graph;
 			TaskNode * node;
-			runningGraph::Module * internalModule;
+			Module * internalModule;
 		};
 		struct NodeInfo
 		{
 			runningGraph * graph;
 			TaskNode * node;
-			runningGraph::Module * module = nullptr;
+			Module * module = nullptr;
 		};
 		struct AsyncInfo
 		{
@@ -123,6 +104,30 @@ private:
 		type t;
 		std::variant<AsyncInfo, NodeInfo, GraphInfo> data;
 	};
+
+	struct runningGraph
+	{
+		
+		runningGraph(TaskGraph & graph);
+		TaskGraph &	graph;
+		std::exception_ptr      eptr = nullptr;
+		std::promise<void>		promise;
+		std::atomic_bool 		done = false;
+		std::mutex				mutex;
+		std::atomic_int			graphDependencies;
+		std::unordered_set<TaskNode*> waitingNodes;
+		std::unordered_set<TaskNode*> runningNodes;
+		std::unordered_map<TaskNode*, std::atomic_int> nodeDependencies;
+		std::list<Module>			modules;
+		// nodeStatus				selfNodes;
+		// std::vector<nodeStatus> moduleNodes;
+
+		std::unordered_map<TaskNode *, info> nodeInfos;
+	private:
+		bool checkCycles(const TaskGraph & graph) const;
+	};
+
+	
 
 	typedef uint64_t runningGraphId;
 

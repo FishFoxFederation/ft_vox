@@ -38,13 +38,23 @@ public:
 	{
 		auto & node = m_nodes.emplace_back(*this, std::forward<F>(task));
 		return Task(&node);
-	};
+	}
 
 	Task emplace(TaskGraph & graph)
 	{
 		auto & node = m_nodes.emplace_back(*this, graph);
 		return Task(&node);
-	};
+	}
+	
+	void clear()
+	{
+		m_nodes.clear();
+	}
+
+	bool empty()
+	{
+		return m_nodes.empty();
+	}
 
 private:
 	std::list<TaskNode>			m_nodes;
