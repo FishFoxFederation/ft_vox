@@ -51,7 +51,6 @@ void Executor::workerEndGraph(info::NodeInfo & node_info)
 		
 		//remove running graph
 		{
-			std::lock_guard<std::mutex> lock(m_running_graphs_mutex);
 			m_running_graphs -= 1;
 			m_running_graphs_cond.notify_all();
 		}
@@ -96,7 +95,10 @@ void Executor::workerExecGraphNode(info::GraphInfo & node_info)
 
 	// workerEndGraphNode(node_info);
 	info::NodeInfo inf = {current_graph, node, current_module};
-	workerEndGraph(inf);
+	{
+		std::lock_guard<std::mutex> lock(current_graph->mutex);
+		workerEndGraph(inf);
+	}
 }
 
 void Executor::workerExecNode(info::NodeInfo & node_info)
@@ -192,12 +194,12 @@ void Executor::workerEndNode(info::NodeInfo & node_info)
 
 void Executor::workerEndModule(info::NodeInfo & node_info)
 {
-	auto current_graph = node_info.graph;
+	// auto current_graph = node_info.graph;
 	auto node = node_info.node;
 	auto module = node_info.module;
 	// node->m_sucessors.clear();
 	// std::cout << "Ending module from node " << node->getName() << std::endl;
-	std::function<void(runningGraph::Module *)> endModules = [&](runningGraph::Module * mod)
+	std::function<void(Module *)> endModules = [&](Module * mod)
 	{
 		int nodes_left = mod->nodesToRun.fetch_sub(1) - 1;
 		if (nodes_left < 0)

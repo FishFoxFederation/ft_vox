@@ -9,6 +9,10 @@
 #include "IncomingPacketList.hpp"
 #include "logger.hpp"
 #include <unordered_set>
+#include <set>
+#include "tasks.hpp"
+#include "Executor.hpp"
+#include "TaskGraph.hpp"
 
 class ServerWorld : public World
 {
@@ -156,6 +160,7 @@ private:
 	 * NETWORK
 	\*********************************/
 	Server & m_server;
+	task::Executor m_executor;
 	std::unordered_map<uint64_t, uint64_t> m_player_to_connection_id;
 	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
 	TracyLockableN(std::mutex, m_players_info_mutex, "PlayerInfoMutex");
@@ -257,8 +262,16 @@ private:
 	std::unordered_map<uint64_t, glm::dvec3>	m_last_tick_player_positions;
 	std::unordered_map<uint64_t, glm::dvec3>	m_current_tick_player_positions;
 
-	std::vector<uint64_t>						m_chunk_futures_ids;
-	TracyLockableN(std::mutex, m_chunk_futures_ids_mutex, "ChunkFuturesIds");
+	struct chunkGenData
+	{
+		task::TaskGraph graph;
+		task::TaskGraph light_graph;
+		task::TaskGraph relief_graph;
+		std::future<void> future;
+		TracyLockableN(std::mutex, m_chunk_gen_data_mutex, "ChunkFuturesIds");
+	};
+	// std::vector<std::future<void>>						m_chunk_futures;
+	chunkGenData m_chunk_gen_data;
 
 
 

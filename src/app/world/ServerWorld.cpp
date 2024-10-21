@@ -90,7 +90,8 @@ void ServerWorld::updatePlayerPositions()
 void ServerWorld::waitForChunkFutures()
 {
 	ZoneScopedN("Wait For Chunk Futures");
-	std::lock_guard lock(m_chunk_futures_ids_mutex);
-	m_threadPool.waitForTasks(m_chunk_futures_ids);
-	m_chunk_futures_ids.clear();
+	std::lock_guard lock(m_chunk_gen_data.m_chunk_gen_data_mutex);
+	m_chunk_gen_data.future.get();
+	// m_threadPool.waitForTasks(m_chunk_futures_ids);
+	// m_chunk_futures_ids.clear();
 }

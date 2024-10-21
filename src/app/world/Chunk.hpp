@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hashes.hpp"
 #include <array>
 #include <glm/vec3.hpp>
 #include <mutex>
@@ -26,7 +27,7 @@ class Chunk
 public:
 	typedef std::array<BlockInfo::Type, BLOCKS_PER_CHUNK> BlockArray;
 	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
-	enum class genLevel
+	enum class genLevel : uint16_t
 	{
 		LIGHT,
 		CAVE,
@@ -110,3 +111,24 @@ private:
 };
 
 typedef std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> ChunkMap;
+
+namespace std
+{
+	template<>
+	struct hash<Chunk::genLevel>
+	{
+		std::size_t operator()(const Chunk::genLevel & level) const
+		{
+			return std::hash<uint16_t>()(static_cast<uint16_t>(level));
+		}
+	};
+
+	template <>
+	struct hash<std::pair<glm::ivec3, Chunk::genLevel>>
+	{
+		std::size_t operator()(const std::pair<glm::ivec3, Chunk::genLevel> & pair) const
+		{
+			return std::hash<glm::ivec3>()(pair.first) ^ std::hash<Chunk::genLevel>()(pair.second);
+		}
+	};
+}

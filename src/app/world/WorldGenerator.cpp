@@ -14,7 +14,6 @@ Chunk::genLevel World::WorldGenerator::ticketToGenLevel(int ticket_level)
 		case TICKET_LEVEL_INACTIVE:
 			return LIGHT;
 		case TICKET_LEVEL_INACTIVE + 1:
-		case TICKET_LEVEL_INACTIVE + 2:
 			return CAVE;
 			// return RELIEF;
 		default:
@@ -26,26 +25,43 @@ World::WorldGenerator::genInfo World::WorldGenerator::getGenInfo(Chunk::genLevel
 {
 	genInfo info;
 
-	info.oldLevel = old_gen_level;
+	// info.oldLevel = old_gen_level;
 
 	switch (desired_gen_level)
 	{
 		case LIGHT:
 		{
-			info.level = LIGHT;
-			info.zoneSize = ZONE_SIZES[static_cast<int>(LIGHT)];
+			genInfo::zone zone;
+
+
+			zone.level = LIGHT;
+			zone.size = glm::ivec3(1, 0, 1);
+			zone.start = chunkPos3D;
+			info.zones.push_back(zone);
+
+			zone.level = CAVE;
+			zone.size = glm::ivec3(3, 0, 3);
+			zone.start = chunkPos3D - glm::ivec3(1, 0, 1);
+			info.zones.push_back(zone);
 			break;
 		}
 		case CAVE:
 		{
-			info.level = CAVE;
-			info.zoneSize = ZONE_SIZES[static_cast<int>(CAVE)];
+			genInfo::zone zone;
+			zone.level = CAVE;
+			zone.size = glm::ivec3(1, 0, 1);
+			zone.start = chunkPos3D;
+			info.zones.push_back(zone);
 			break;
 		}
 		case RELIEF:
 		{
-			info.level = RELIEF;
-			info.zoneSize = ZONE_SIZES[static_cast<int>(RELIEF)];
+			genInfo::zone zone;
+
+			zone.level = RELIEF;
+			zone.size = glm::ivec3(1, 0, 1);
+			zone.start = chunkPos3D;
+			info.zones.push_back(zone);
 			break;
 		}
 		case EMPTY:
@@ -67,22 +83,22 @@ World::WorldGenerator::genInfo World::WorldGenerator::getGenInfo(Chunk::genLevel
 	*/
 
 	//if the level difference is more than 1, then we need to change the zone size
-	if (static_cast<int>(info.oldLevel) - static_cast<int>(info.level) > 1)
-		info.zoneSize = ZONE_SIZES[static_cast<int>(info.oldLevel) - 1];
+	// if (static_cast<int>(info.oldLevel) - static_cast<int>(info.level) > 1)
+		// info.zoneSize = ZONE_SIZES[static_cast<int>(info.oldLevel) - 1];
 
-	info.zoneStart = chunkPos3D;
+	// info.start = chunkPos3D;
 	// LOG_INFO("CHUNKPOS: " << chunkPos3D.x << " " << chunkPos3D.z << " SIZE: " << info.zoneSize.x);
 	//get the start position of the zone the chunk is in
-	info.zoneStart.y = 0;
+	// info.start.y = 0;
 
-	if (info.zoneStart.x < 0 && info.zoneSize.x > 1)
-		info.zoneStart.x -= info.zoneSize.x;
-	info.zoneStart.x -= info.zoneStart.x % info.zoneSize.x;
-	if (info.zoneStart.z < 0 && info.zoneSize.z > 1)
-		info.zoneStart.z -= info.zoneSize.z;
-	info.zoneStart.z -= info.zoneStart.z % info.zoneSize.z;
+	// if (info.start.x < 0 && info.zoneSize.x > 1)
+	// 	info.start.x -= info.zoneSize.x;
+	// info.start.x -= info.start.x % info.zoneSize.x;
+	// if (info.start.z < 0 && info.zoneSize.z > 1)
+	// 	info.start.z -= info.zoneSize.z;
+	// info.start.z -= info.start.z % info.zoneSize.z;
 
-	// LOG_INFO("ZONE START: " << info.zoneStart.x << " " << info.zoneStart.z);
+	// LOG_INFO("ZONE START: " << info.start.x << " " << info.start.z);
 
 	return info;
 }
@@ -498,16 +514,17 @@ static void setBlockLight(
 	}
 }
 
-void World::WorldGenerator::generate(genInfo info, ChunkMap & chunkGenGrid)
+void World::WorldGenerator::generate(genInfo::zone info, ChunkMap & chunkGenGrid)
 {
 	if (info.level <= RELIEF && info.oldLevel > RELIEF)
 	{
-		for(int x = 0; x < info.zoneSize.x; x++)
+		for(int x = 0; x < info.size.x; x++)
 		{
-			for(int z = 0; z < info.zoneSize.z; z++)
+			for(int z = 0; z < info.size.z; z++)
 			{
-				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
+				glm::ivec3 chunkPos3D = info.start + glm::ivec3(x, 0, z);
 				std::shared_ptr<Chunk> chunk = chunkGenGrid.at(chunkPos3D);
+				std::lock_guard(chunk->status);
 				chunk->setGenLevel(RELIEF);
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
 				{
@@ -633,12 +650,13 @@ void World::WorldGenerator::generate(genInfo info, ChunkMap & chunkGenGrid)
 	}
 	if (info.level <= CAVE && info.oldLevel > CAVE)
 	{
-		for(int x = 0; x < info.zoneSize.x; x++)
+		for(int x = 0; x < info.size.x; x++)
 		{
-			for(int z = 0; z < info.zoneSize.z; z++)
+			for(int z = 0; z < info.size.z; z++)
 			{
-				glm::ivec3 chunkPos3D = info.zoneStart + glm::ivec3(x, 0, z);
+				glm::ivec3 chunkPos3D = info.start + glm::ivec3(x, 0, z);
 				std::shared_ptr<Chunk> chunk = chunkGenGrid.at(chunkPos3D);
+				std::lock_guard(chunk->status);
 				chunk->setGenLevel(CAVE);
 
 				for(int blockX = 0; blockX < CHUNK_X_SIZE; blockX++)
@@ -667,12 +685,13 @@ void World::WorldGenerator::generate(genInfo info, ChunkMap & chunkGenGrid)
 	}
 	if (info.level <= LIGHT && info.oldLevel > LIGHT)
 	{
-		for(int x = 0; x < info.zoneSize.x; x++)
+		for(int x = 0; x < info.size.x; x++)
 		{
-			for(int z = 0; z < info.zoneSize.z; z++)
+			for(int z = 0; z < info.size.z; z++)
 			{
-				glm::ivec3 chunk_pos_3D = info.zoneStart + glm::ivec3(x, 0, z);
+				glm::ivec3 chunk_pos_3D = info.start + glm::ivec3(x, 0, z);
 				std::shared_ptr<Chunk> chunk = chunkGenGrid.at(chunk_pos_3D);
+				std::lock_guard(chunk->status);
 				chunk->setGenLevel(LIGHT);
 
 				setSkyLight(chunkGenGrid, chunk_pos_3D);
