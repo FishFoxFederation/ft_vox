@@ -326,6 +326,8 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 						continue;
 					std::shared_ptr<Chunk> chunk = getChunkNoLock(chunkPos3D);
 					generated_chunks.insert({chunkPos3D, zone.level});
+					if (chunk->getGenLevel() <= zone.level)
+						continue;
 					task::TaskGraph * graph = nullptr;
 					switch (zone.level)
 					{
@@ -353,10 +355,12 @@ void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
 						// LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
 						ChunkMap chunkZone;
 						chunkZone.insert({chunk->getPosition(), chunk});
+						// chunk->status.lock();
 						WorldGenerator::genInfo::zone local_zone = zone;
 						local_zone.size = glm::ivec3(1, 0, 1);
 						local_zone.start = chunk->getPosition();
 						m_world_generator.generate(local_zone, chunkZone);
+						// chunk->status.unlock();
 						// for (auto & [chunk_position, chunk] : chunkZone)
 						// 	chunk->status.unlock();
 					}).Name("generate chunk");
