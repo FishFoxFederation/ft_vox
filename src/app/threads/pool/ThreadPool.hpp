@@ -12,8 +12,6 @@
 #include "tracy_globals.hpp"
 #include "JoinThreads.hpp"
 
-
-
 class ThreadPool
 {
 public:

@@ -5,6 +5,7 @@
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
 #include "ThreadPoolAccessor.hpp"
+#include "tasks.hpp"
 #include "Mob.hpp"
 #include "hashes.hpp"
 #include "Tracy.hpp"
@@ -15,6 +16,7 @@
 
 #include <unordered_map>
 #include <shared_mutex>
+#include <unordered_set>
 
 class World
 {
@@ -23,28 +25,29 @@ public:
 	{
 	using enum Chunk::genLevel;
 	public:
-		struct genInfo
-		{
-			struct zone
-			{
-				Chunk::genLevel level;
-				Chunk::genLevel oldLevel;
-				glm::ivec3 size;
-				glm::ivec3 start;
-			};
-			std::vector<zone> zones;
-		};
+		typedef std::unordered_set<glm::ivec3> ChunkGenList;
+		// struct genInfo
+		// {
+		// 	struct zone
+		// 	{
+		// 		Chunk::genLevel level;
+		// 		Chunk::genLevel oldLevel;
+		// 		glm::ivec3 size;
+		// 		glm::ivec3 start;
+		// 	};
+		// 	std::vector<zone> zones;
+		// };
 
 		/**
 		 * @warning the zone sizes must be in the same order as the genLevel enum
 		 * @warning the zone sizes must be multiples of the zone sizes of the previous gen level (ex 5x5 and 10x10)
 		 */
-		constexpr static std::array<glm::ivec3, 3> ZONE_SIZES = {
-			glm::ivec3(1, 0, 1),
-			glm::ivec3(1, 0, 1),
-			glm::ivec3(1, 0, 1)
-		};
-		constexpr static int MAX_TICKET_LEVEL = TICKET_LEVEL_INACTIVE + 2;
+		// constexpr static std::array<glm::ivec3, 3> ZONE_SIZES = {
+		// 	glm::ivec3(1, 0, 1),
+		// 	glm::ivec3(1, 0, 1),
+		// 	glm::ivec3(1, 0, 1)
+		// };
+		// constexpr static int MAX_TICKET_LEVEL = TICKET_LEVEL_INACTIVE + 2;
 
 		//gen level 0 if full chunkGeneration
 
@@ -61,9 +64,9 @@ public:
 		 * @param chunkPos3D
 		 * @return a genInfo struct
 		 */
-		static genInfo getGenInfo(Chunk::genLevel gen_level, Chunk::genLevel old_level, glm::ivec3 chunkPos3D);
+		// static genInfo getGenInfo(Chunk::genLevel gen_level, Chunk::genLevel old_level, glm::ivec3 chunkPos3D);
 
-		static Chunk::genLevel ticketToGenLevel(int ticket_level);
+		// static Chunk::genLevel ticketToGenLevel(int ticket_level);
 
 		/**
 		 * @brief will do a generation pass to the chunks
@@ -73,14 +76,16 @@ public:
 		 *
 		 * @warning the chunks MUST be locked before calling and unlocked after
 		 */
-		void 					generate(genInfo::zone info, ChunkMap & chunkGenGrid);
+		// void 					generate(genInfo::zone info, ChunkMap & chunkGenGrid);
 
-		std::shared_ptr<Chunk>	generateChunkColumn(const int & x, const int & z);
-		std::shared_ptr<Chunk>	generateChunk(const int & x, const int & y, const int & z);
-		std::shared_ptr<Chunk>	generateFullChunk(const int & x, const int & y, const int & z);
-		std::shared_ptr<Chunk>	generateChunkColumn(const int & x, const int & z, std::shared_ptr<Chunk> chunk);
-		std::shared_ptr<Chunk>	generateChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk);
-		std::shared_ptr<Chunk>	generateFullChunk(const int & x, const int & y, const int & z, std::shared_ptr<Chunk> chunk);
+		/**
+		 * @brief creates a task graph that when runned will generate every chunk in the list
+		 * 
+		 * @param chunks_to_gen 
+		 * @return task::TaskGraph&& 
+		 */
+		std::shared_ptr<task::TaskGraph>	getGenerationGraph(ChunkGenList & chunks_to_gen);
+
 
 		// double	m_avg = 0;
 		// int		m_called = 0;
@@ -88,6 +93,23 @@ public:
 		// float 	m_min = 1;
 	private:
 
+		struct genStruct
+		{
+			genStruct()
+			: graph(task::TaskGraph::create()), light_graph(task::TaskGraph::create()), relief_graph(task::TaskGraph::create())
+			{
+				auto light_task = graph->emplace(light_graph).Name("Light passes");
+				auto relief_task = graph->emplace(relief_graph).Name("Relief passes");
+				relief_task.succceed(light_task);
+				light_graph->emplace([]{}); // dummy task
+				relief_graph->emplace([]{}); // dummy task
+				graph->emplace([]{});
+			}
+			std::shared_ptr<task::TaskGraph> graph;
+			std::shared_ptr<task::TaskGraph> light_graph;
+			std::shared_ptr<task::TaskGraph> relief_graph;
+			std::unordered_set<std::pair<glm::ivec3, Chunk::genLevel>> generated_chunk;
+		};
 		/*
 		* PERLINS
 		*/
@@ -105,6 +127,14 @@ public:
 		BlockInfo::Type generateReliefBlock(glm::ivec3 position);
 
 		float	generateReliefValue(glm::ivec2 position);
+
+		void	lightPass(const glm::ivec3 & pos);
+		void	reliefPass(const glm::ivec3 & pos);
+
+		void	setupPass(genStruct & genData,const glm::ivec3 & chunk_pos, Chunk::genLevel gen_level);
+
+		void	addPassToGraph(genStruct & genData, glm::ivec3 chunk_pos, Chunk::genLevel gen_level);
+		
 	};
 
 	World();

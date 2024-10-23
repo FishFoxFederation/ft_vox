@@ -139,6 +139,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/render
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/task_manager
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin

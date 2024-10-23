@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <memory>
 
 namespace task
 {
@@ -17,16 +18,25 @@ namespace task
 class TaskNode;
 class Executor;
 class Task;
-class TaskGraph
+class TaskGraph : public std::enable_shared_from_this<TaskGraph>
 {
+private:
+	struct Private { explicit Private() = default;};
 public:
+	TaskGraph(Private){};
 
 	friend class TaskNode;
 	friend class task::Executor;
 	// friend class task::Executor::runningGraph;
 	
-
-	TaskGraph(){};
+	static std::shared_ptr<TaskGraph> create()
+	{
+		return std::make_shared<TaskGraph>(Private());
+	}
+	std::shared_ptr<TaskGraph> getPtr()
+	{
+		return shared_from_this();
+	}
 	~TaskGraph(){};
 	TaskGraph(const TaskGraph &) = delete;
 	TaskGraph & operator=(const TaskGraph &) = delete;
@@ -36,13 +46,13 @@ public:
 	template <typename F>
 	Task emplace(F && task)
 	{
-		auto & node = m_nodes.emplace_back(*this, std::forward<F>(task));
+		auto & node = m_nodes.emplace_back(shared_from_this(), std::forward<F>(task));
 		return Task(&node);
 	}
 
-	Task emplace(TaskGraph & graph)
+	Task emplace(std::shared_ptr<TaskGraph> graph)
 	{
-		auto & node = m_nodes.emplace_back(*this, graph);
+		auto & node = m_nodes.emplace_back(shared_from_this(), graph);
 		return Task(&node);
 	}
 	
