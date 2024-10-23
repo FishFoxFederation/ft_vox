@@ -117,6 +117,41 @@ BlocksInfo::BlocksInfo():
 			.hitbox = {{0, 0, 0}, {1, 1, 1}},
 			.emit_light = 15,
 			.absorb_light = 0
+		},
+		{
+			.id = BlockInfo::Type::Wood,
+			.texture = {
+				8, // wood_top
+				8, // wood_top
+				9, // wood
+				9, // wood
+				9, // wood
+				9  // wood
+			},
+			.properties = 
+				BLOCK_PROPERTY_SOLID
+				| BLOCK_PROPERTY_OPAQUE
+				| BLOCK_PROPERTY_CUBE,
+			.hitbox = {{0, 0, 0}, {1, 1, 1}},
+			.emit_light = 0,
+			.absorb_light = 15
+		},
+		{
+			.id = BlockInfo::Type::Leaves,
+			.texture = {
+				10, // oak_leaves
+				10, // oak_leaves
+				10, // oak_leaves
+				10, // oak_leaves
+				10, // oak_leaves
+				10  // oak_leaves
+			},
+			.properties =
+				BLOCK_PROPERTY_SOLID
+				| BLOCK_PROPERTY_CUBE,
+			.hitbox = {{0, 0, 0}, {1, 1, 1}},
+			.emit_light = 0,
+			.absorb_light = 0
 		}
 	})
 {

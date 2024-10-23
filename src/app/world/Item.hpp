@@ -18,7 +18,8 @@ public:
 		WaterBlock,
 		GlassBlock,
 		LightBlock,
-
+		WoodBlock,
+		LeavesBlock,
 		None
 
 	} const type = Type::None;
