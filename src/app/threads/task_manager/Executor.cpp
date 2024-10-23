@@ -30,7 +30,7 @@ Executor::~Executor()
 	m_cond.notify_all();
 }
 
-std::future<void> Executor::run(TaskGraph & graph)
+std::future<void> Executor::run(std::shared_ptr<TaskGraph> graph)
 {
 	runningGraph *running_graph = new runningGraph(graph);
 	{
@@ -57,7 +57,7 @@ void Executor::waitForAll()
 	m_running_graphs_cond.wait(lock, [&] {return m_running_graphs == 0 || m_done; });
 }
 
-Executor::runningGraph::runningGraph(TaskGraph & graph)
+Executor::runningGraph::runningGraph(std::shared_ptr<TaskGraph> graph)
 :graph(graph)
 {
 	done = false;
@@ -108,11 +108,10 @@ Executor::runningGraph::runningGraph(TaskGraph & graph)
 			}
 		}
 	};
-	if (graph.m_nodes.empty())
+	if (graph->m_nodes.empty())
 		throw EmptyGraphError();
-
 	try {
-		visitModule(graph, true, nullptr);
+		visitModule(*graph, true, nullptr);
 	} catch (CycleError & e) {
 		done = true;
 		runningNodes.clear();

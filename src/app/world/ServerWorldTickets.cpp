@@ -76,7 +76,7 @@ void ServerWorld::updateTickets()
 
 	if (changed)
 	{
-		ChunkGenList chunk_gen_list;
+		WorldGenerator::ChunkGenList chunk_gen_list;
 
 		floodFill(m_active_tickets, chunk_gen_list);
 		doChunkGens(chunk_gen_list);
@@ -93,7 +93,7 @@ void ServerWorld::clearChunksLoadLevel()
 	m_border_chunks.clear();
 }
 
-void ServerWorld::floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk_gen_list)
+void ServerWorld::floodFill(const TicketMultiMap & tickets, WorldGenerator::ChunkGenList & chunk_gen_list)
 {
 	// LOG_INFO("ENTERING FLOODFILL");
 	std::queue<Ticket> queue;
@@ -106,7 +106,7 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk
 	{
 		auto current = queue.front();
 		queue.pop();
-		if (current.level > WorldGenerator::MAX_TICKET_LEVEL)
+		if (current.level > TICKET_LEVEL_INACTIVE)
 			continue;
 
 		//visit the chunk
@@ -128,7 +128,7 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk
 	}
 }
 
-bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, ServerWorld::ChunkGenList & chunk_gen_list)
+bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, WorldGenerator::ChunkGenList & chunk_gen_list)
 {
 	std::shared_ptr<Chunk> chunk = getChunkNoLock(ticket.position);
 	if (chunk == nullptr)
@@ -141,25 +141,14 @@ bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, ServerW
 	const int current_ticket_level = chunk->getLoadLevel();
 	const Chunk::genLevel current_gen_level = chunk->getGenLevel();
 
-	if (current_ticket_level < ticket.level || ticket.level >= WorldGenerator::MAX_TICKET_LEVEL)
+	if (current_ticket_level < ticket.level)
 		return false;
 
 	//if the chunk is currently not at a high enough generation level
 	// we need to generate it
-	//since generation is never downgraded we check the highest level
-	Chunk::genLevel desired_gen_level = WorldGenerator::ticketToGenLevel(ticket.level);
-		
-	
-	if (
-		desired_gen_level != Chunk::genLevel::EMPTY &&
-		desired_gen_level < current_gen_level)
-	{
-		//add chunk to the list of chunks that need to be generated associated with its level
-		chunk_gen_list.insert({ticket.position, desired_gen_level});
+	if (current_gen_level != Chunk::genLevel::LIGHT)
+		chunk_gen_list.insert(ticket.position);
 
-		// std::lock_guard lock(m_chunk_futures_ids_mutex);
-		// m_chunk_futures_ids.push_back(asyncGenChunk(ticket.position, desired_gen_level, current_gen_level));
-	}
 
 	if (ticket.level <= TICKET_LEVEL_ENTITY_UPDATE)
 		m_entity_update_chunks.insert(ticket.position);

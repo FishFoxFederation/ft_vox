@@ -19,7 +19,11 @@ void Server::stop()
 void Server::runOnce(int timeout)
 {
 	auto [events_size, events] = m_poller.wait(timeout);
-
+	if (errno == EINTR)
+	{
+		errno = 0;
+		return;
+	}
 	/**********************************************
 	 * Handle new events
 	 * ********************************************/

@@ -42,18 +42,18 @@ void ServerWorld::addBlockUpdate(const BlockUpdateData & data)
 	m_block_updates.push(data);
 }
 
-std::shared_ptr<Chunk> ServerWorld::getAndLoadChunk(const glm::ivec3 & chunk_position)
-{
-	std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
+// std::shared_ptr<Chunk> ServerWorld::getAndLoadChunk(const glm::ivec3 & chunk_position)
+// {
+// 	std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
 
-	if (chunk == nullptr)
-	{
-		loadChunk(chunk_position);
-		chunk = getChunk(chunk_position);
-	}
+// 	if (chunk == nullptr)
+// 	{
+// 		loadChunk(chunk_position);
+// 		chunk = getChunk(chunk_position);
+// 	}
 
-	return chunk;
-}
+// 	return chunk;
+// }
 
 void ServerWorld::placeBlock(const glm::vec3 & position, BlockInfo::Type block)
 {
@@ -92,14 +92,14 @@ void ServerWorld::setBlock(const glm::vec3 & position, BlockInfo::Type block)
 	chunk->setBlock(block_chunk_position, block);
 }
 
-void ServerWorld::loadChunk(const glm::ivec3 & chunk_position)
-{
-	std::shared_ptr<Chunk> chunk = m_world_generator.generateChunkColumn(chunk_position.x, chunk_position.z);
-	{
-		std::lock_guard lock(m_chunks_mutex);
-		m_chunks.insert({chunk_position, std::move(chunk)});
-	}
-}
+// void ServerWorld::loadChunk(const glm::ivec3 & chunk_position)
+// {
+// 	std::shared_ptr<Chunk> chunk = m_world_generator.generateChunkColumn(chunk_position.x, chunk_position.z);
+// 	{
+// 		std::lock_guard lock(m_chunks_mutex);
+// 		m_chunks.insert({chunk_position, std::move(chunk)});
+// 	}
+// }
 
 ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
 	const glm::vec3 & old_player_position,
@@ -291,104 +291,9 @@ ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 // 	});
 // }
 
-void ServerWorld::doChunkGens(ChunkGenList & chunks_to_gen)
+void ServerWorld::doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen)
 {
-	// ChunkGenList generated_chunks;
-	std::unordered_set<std::pair<glm::ivec3, Chunk::genLevel>> generated_chunks;
-	std::lock_guard lock(m_chunk_gen_data.m_chunk_gen_data_mutex);
-	m_chunk_gen_data.graph.clear();
-	m_chunk_gen_data.graph.emplace([](){});
-	m_chunk_gen_data.light_graph.clear();
-	m_chunk_gen_data.light_graph.emplace([](){});
-	m_chunk_gen_data.relief_graph.clear();
-	m_chunk_gen_data.relief_graph.emplace([](){});
-	while (!chunks_to_gen.empty())
-	{
-		auto [chunk_position, desired_gen_level] = *chunks_to_gen.begin();
-		chunks_to_gen.erase(chunks_to_gen.begin());
-
-		std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
-		chunk->status.lock();
-		Chunk::genLevel current_gen_level = chunk->getGenLevel();
-		chunk->status.unlock();
-
-		// LOG_INFO("CHUNK: " << chunk_position.x << " " << chunk_position.z);
-		WorldGenerator::genInfo info = m_world_generator.getGenInfo(desired_gen_level, current_gen_level, chunk_position);
-
-		for(auto & zone : info.zones)
-		{
-			for (int x = 0; x < zone.size.x; x++)
-			{
-				for (int z = 0; z < zone.size.z; z++)
-				{
-					glm::ivec3 chunkPos3D = zone.start + glm::ivec3(x, 0, z);
-					if (generated_chunks.contains({chunkPos3D, zone.level}))
-						continue;
-					std::shared_ptr<Chunk> chunk = getChunkNoLock(chunkPos3D);
-					generated_chunks.insert({chunkPos3D, zone.level});
-					if (chunk->getGenLevel() <= zone.level)
-						continue;
-					task::TaskGraph * graph = nullptr;
-					switch (zone.level)
-					{
-						case Chunk::genLevel::RELIEF:
-							zone.level = Chunk::genLevel::CAVE;
-							zone.oldLevel = Chunk::genLevel::EMPTY;
-							graph = &m_chunk_gen_data.relief_graph;
-							break;
-						case Chunk::genLevel::CAVE:
-							zone.oldLevel = Chunk::genLevel::EMPTY;
-							graph = &m_chunk_gen_data.relief_graph;
-							break;
-						case Chunk::genLevel::LIGHT:
-							zone.oldLevel = Chunk::genLevel::CAVE;
-							graph = &m_chunk_gen_data.light_graph;
-							break;
-						case Chunk::genLevel::EMPTY:
-							graph = nullptr;
-							break;
-					}
-
-					task::Task task = graph->emplace([this, zone, chunk] () mutable
-					{
-						ZoneScopedN("Generate Chunk");
-						// LOG_INFO("Generating zone of size: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
-						ChunkMap chunkZone;
-						chunkZone.insert({chunk->getPosition(), chunk});
-						// chunk->status.lock();
-						WorldGenerator::genInfo::zone local_zone = zone;
-						local_zone.size = glm::ivec3(1, 0, 1);
-						local_zone.start = chunk->getPosition();
-						m_world_generator.generate(local_zone, chunkZone);
-						// chunk->status.unlock();
-						// for (auto & [chunk_position, chunk] : chunkZone)
-						// 	chunk->status.unlock();
-					}).Name("generate chunk");
-				}
-			}
-		}
-
-		// LOG_INFO("CHUNK: " << chunk_position.x << " " << chunk_position.z);
-		// LOG_INFO("LEVEL :" << static_cast<int>(desired_gen_level) << " " << static_cast<int>(current_gen_level));
-		// LOG_INFO("ZONE SIZE: " << info.zoneSize.x << " " << info.zoneSize.y << " " << info.zoneSize.z);
-		// LOG_INFO("ZONE START: " << info.zoneStart.x << " " << info.zoneStart.y << " " << info.zoneStart.z);
-
-		// for (auto [position, chunk] : chunkZone)
-		// {
-		// 	auto iter = chunks_to_gen.find(position);
-		// 	//if the chunk is in the gen list but is already in the current gen zone we remove it
-		// 	if (iter != chunks_to_gen.end() && iter->second >= desired_gen_level)
-		// 	{
-		// 		// LOG_INFO("ERASE: " << position.x << " " << position.z);
-		// 		chunks_to_gen.erase(iter);
-		// 	}
-		// }
-
-		
-	}
-	task::Task relief_module = m_chunk_gen_data.graph.emplace(m_chunk_gen_data.relief_graph).Name("relief");
-	task::Task light_module = m_chunk_gen_data.graph.emplace(m_chunk_gen_data.light_graph).Name("light");
-	relief_module.precede(light_module);
+	m_chunk_gen_data.graph = m_world_generator.getGenerationGraph(chunks_to_gen);
 	m_chunk_gen_data.future = m_executor.run(m_chunk_gen_data.graph);
 }
 

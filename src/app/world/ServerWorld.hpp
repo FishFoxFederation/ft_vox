@@ -31,7 +31,7 @@ public:
 		std::vector<glm::ivec3>				chunks_to_unload;
 	};
 
-	std::shared_ptr<Chunk>	getAndLoadChunk(const glm::ivec3 & chunk_position);
+	// std::shared_ptr<Chunk>	getAndLoadChunk(const glm::ivec3 & chunk_position);
 
 
 	void					update();
@@ -55,7 +55,7 @@ public:
 	};
 	void addBlockUpdate(const BlockUpdateData & data);
 	void updateBlocks();
-	void loadChunk(const glm::ivec3 & chunk_position);
+	// void loadChunk(const glm::ivec3 & chunk_position);
 
 	void placeBlock(const glm::vec3 & position, BlockInfo::Type block);
 	void setBlock(const glm::vec3 & position, BlockInfo::Type block);
@@ -155,7 +155,7 @@ public:
 
 
 private:
-	typedef std::unordered_map<glm::ivec3, Chunk::genLevel> ChunkGenList;
+	// typedef std::unordered_set<glm::ivec3> ChunkGenList;
 	/*********************************\
 	 * NETWORK
 	\*********************************/
@@ -207,7 +207,7 @@ private:
 	 *
 	 * @param tickets
 	 */
-	void			floodFill(const TicketMultiMap & tickets, ChunkGenList & chunk_gen_list);
+	void			floodFill(const TicketMultiMap & tickets, WorldGenerator::ChunkGenList & chunk_gen_list);
 
 	/** @brief util for floodfill */
 	void			clearChunksLoadLevel();
@@ -225,7 +225,7 @@ private:
 	 * @param ticket
 	 * @return true if the ticket was added, false otherwise
 	 */
-	bool			applyTicketToChunk(const Ticket & ticket, ChunkGenList & chunk_gen_list);
+	bool			applyTicketToChunk(const Ticket & ticket, WorldGenerator::ChunkGenList & chunk_gen_list);
 	/*********************************\
 	 * BLOCKS
 	\*********************************/
@@ -233,7 +233,7 @@ private:
 	mutable TracyLockableN(std::mutex, m_block_updates_mutex, "BlockUpdateQueue");
 
 
-	void 					doChunkGens(ChunkGenList & chunks_to_gen);
+	void 					doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen);
 
 	/**
 	 * @brief generate a chunk or a region of chunks asynchronously
@@ -264,9 +264,7 @@ private:
 
 	struct chunkGenData
 	{
-		task::TaskGraph graph;
-		task::TaskGraph light_graph;
-		task::TaskGraph relief_graph;
+		std::shared_ptr<task::TaskGraph> graph;
 		std::future<void> future;
 		TracyLockableN(std::mutex, m_chunk_gen_data_mutex, "ChunkFuturesIds");
 	};

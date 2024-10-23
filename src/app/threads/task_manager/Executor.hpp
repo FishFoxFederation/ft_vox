@@ -27,7 +27,7 @@ public:
 	Executor(Executor &&) = delete;
 	Executor & operator=(Executor &&) = delete;
 
-	std::future<void> run(TaskGraph & graph);
+	std::future<void> run(std::shared_ptr<TaskGraph> graph);
 
 	template <typename F>
 	std::future<void> run(F && f)
@@ -108,8 +108,8 @@ private:
 	struct runningGraph
 	{
 		
-		runningGraph(TaskGraph & graph);
-		TaskGraph &	graph;
+		runningGraph(std::shared_ptr<TaskGraph> graph);
+		std::shared_ptr<TaskGraph>	graph;
 		std::exception_ptr      eptr = nullptr;
 		std::promise<void>		promise;
 		std::atomic_bool 		done = false;

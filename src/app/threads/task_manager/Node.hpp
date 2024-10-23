@@ -25,12 +25,12 @@ public:
 		GRAPH
 	};
 	//node constructor
-	TaskNode(TaskGraph & graph, std::function<void()> task)
+	TaskNode(std::shared_ptr<TaskGraph> graph, std::function<void()> task)
 	: m_type(type::NODE), m_data(NodeData{task, NULL}){};
 
 	//graph constructor
-	TaskNode(TaskGraph & host_graph, TaskGraph & composed_graph)
-	: m_type(type::GRAPH), m_data(GraphData{&composed_graph}){};
+	TaskNode(std::shared_ptr<TaskGraph> host_graph, std::shared_ptr<TaskGraph> composed_graph)
+	: m_type(type::GRAPH), m_data(GraphData{composed_graph}){};
 
 	~TaskNode(){};
 	TaskNode(const TaskNode &) = delete;
@@ -55,7 +55,7 @@ public:
 	std::string getName() const { return m_name; }
 
 	type getType() const { return m_type; }
-	TaskGraph * getGraph() const { return std::get<GraphData>(m_data).graph; }
+	std::shared_ptr<TaskGraph> getGraph() const { return std::get<GraphData>(m_data).graph; }
 
 	std::vector<TaskNode *> & getDependents() { return m_dependents; }
 	std::vector<TaskNode *> & getSucessors() { return m_sucessors; }
@@ -69,7 +69,7 @@ private:
 
 	struct GraphData
 	{
-		TaskGraph * graph;
+		std::shared_ptr<TaskGraph> graph;
 	};
 	std::string							m_name;
 	std::vector<TaskNode *> 			m_dependents;
