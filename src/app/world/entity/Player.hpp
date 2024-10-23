@@ -125,8 +125,8 @@ public:
 		ItemInfo::Type::WaterBlock,
 		ItemInfo::Type::GlassBlock,
 		ItemInfo::Type::LightBlock,
-		ItemInfo::Type::None,
-		ItemInfo::Type::None,
+		ItemInfo::Type::WoodBlock,
+		ItemInfo::Type::LeavesBlock,
 		ItemInfo::Type::None
 	};
 	int toolbar_cursor = 0;

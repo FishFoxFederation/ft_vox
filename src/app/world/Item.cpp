@@ -27,6 +27,14 @@ ItemsInfo::ItemsInfo():
 		{
 			.type = ItemInfo::Type::LightBlock,
 			.block_id = BlockInfo::Type::Light
+		},
+		{
+			.type = ItemInfo::Type::WoodBlock,
+			.block_id = BlockInfo::Type::Wood
+		},
+		{
+			.type = ItemInfo::Type::LeavesBlock,
+			.block_id = BlockInfo::Type::Leaves
 		}
 	})
 {

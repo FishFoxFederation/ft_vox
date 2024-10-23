@@ -40,7 +40,8 @@ public:
 		Water,
 		Glass,
 		Light,
-
+		Wood,
+		Leaves,
 		None
 
 	} const id = Type::None;
@@ -61,6 +62,9 @@ public:
 		"assets/textures/block/water.png", // 5
 		"assets/textures/block/glass_clear.png", // 6
 		"assets/textures/block/light.png", // 7
+		"assets/textures/block/wood_top.png", // 8
+		"assets/textures/block/wood.png", // 9
+		"assets/textures/block/oak_leaves.png", // 10
 		// "assets/textures/block/debug/white.png",
 		// "assets/textures/block/debug/right.png",
 		// "assets/textures/block/debug/left.png",
