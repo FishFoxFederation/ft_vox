@@ -294,6 +294,7 @@ ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 void ServerWorld::doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen)
 {
 	m_chunk_gen_data.graph = m_world_generator.getGenerationGraph(chunks_to_gen);
+	LOG_INFO("Starting chunk gen");
 	m_chunk_gen_data.future = m_executor.run(m_chunk_gen_data.graph);
 }
 

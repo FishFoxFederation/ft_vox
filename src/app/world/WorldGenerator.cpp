@@ -587,14 +587,14 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 		if (chunk->getGenLevel() <= LIGHT)
 			return;
 		//to do lights we need to garantee that the current chunk has full formed relief chunks around it
-		// for(int x = -1; x <= 1; x++)
-		// {
-		// 	for(int z = -1; z <= 1; z++)
-		// 	{
-		// 		glm::ivec3 current_pos = chunk_pos + glm::ivec3(x, 0, z);
-		// 		setupPass(genData, current_pos, CAVE);
-		// 	}
-		// }
+		for(int x = -1; x <= 1; x++)
+		{
+			for(int z = -1; z <= 1; z++)
+			{
+				glm::ivec3 current_pos = chunk_pos + glm::ivec3(x, 0, z);
+				setupPass(genData, current_pos, CAVE);
+			}
+		}
 		setupPass(genData, chunk_pos, CAVE);
 
 		genData.light_graph->emplace([this, chunk_pos]{
@@ -629,7 +629,10 @@ void World::WorldGenerator::lightPass(const glm::ivec3 & chunkPos3D)
 {
 	ChunkMap chunkGrid;
 	std::shared_ptr<Chunk> current_chunk = m_world.getChunkNoLock(chunkPos3D);
-	current_chunk->setGenLevel(LIGHT);
+	{
+		std::lock_guard lock(current_chunk->status);
+		current_chunk->setGenLevel(LIGHT);
+	}
 	for (int x = -1; x <= 1; x++)
 	{
 		for (int z = -1; z <= 1; z++)
@@ -638,21 +641,24 @@ void World::WorldGenerator::lightPass(const glm::ivec3 & chunkPos3D)
 			std::shared_ptr<Chunk> chunk = m_world.getChunkNoLock(chunk_pos);
 			if (chunk == nullptr)
 				continue;
+			std::lock_guard lock(chunk->status);
+			if (chunk->getGenLevel() != CAVE && chunk->getGenLevel() != LIGHT)
+				throw std::runtime_error("chunk not generated :" + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.z));
 			chunkGrid.insert({chunk_pos, chunk});
 		}
 	}
 
-	// std::scoped_lock lock(
-	// 	chunkGrid.at(chunkPos3D)->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, -1})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, 1})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, -1})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 0})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 1})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, -1})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 0})->status,
-	// 	chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
-	// );
+	std::scoped_lock lock(
+		chunkGrid.at(chunkPos3D)->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, -1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, 1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, -1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 0})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, -1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 0})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
+	);
 
 	setSkyLight(chunkGrid, chunkPos3D);
 	setBlockLight(chunkGrid, chunkPos3D);
