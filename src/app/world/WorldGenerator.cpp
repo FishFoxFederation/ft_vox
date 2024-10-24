@@ -233,7 +233,7 @@ static void setSkyLight(
 {
 	std::shared_ptr<Chunk> start_chunk = chunks.at(chunk_pos);
 
-	std::queue<glm::ivec3> light_queue;
+	std::queue<glm::ivec3> light_source_queue;
 	for (int x = 0; x < CHUNK_X_SIZE; x++)
 	{
 		for (int z = 0; z < CHUNK_Z_SIZE; z++)
@@ -246,7 +246,7 @@ static void setSkyLight(
 				const int absorbed_light = g_blocks_info.get(block_id).absorb_light;
 				const int new_light = 15 - absorbed_light;
 				start_chunk->setSkyLight(block_chunk_pos, new_light);
-				light_queue.push(block_world_pos);
+				light_source_queue.push(block_world_pos);
 			}
 		}
 	}
@@ -260,14 +260,20 @@ static void setSkyLight(
 		glm::ivec3(0, 0, -1)
 	};
 
-	while (!light_queue.empty())
+	while (!light_source_queue.empty())
 	{
-		const glm::ivec3 current_block_world_pos = light_queue.front();
-		light_queue.pop();
+		if (light_source_queue.size() > BLOCKS_PER_CHUNK)
+		{
+			LOG_WARNING("WorldGenerator: setSkyLight: light_source_queue size > BLOCKS_PER_CHUNK (" << BLOCKS_PER_CHUNK << ")");
+			break;
+		}
+
+		const glm::ivec3 current_block_world_pos = light_source_queue.front();
+		light_source_queue.pop();
 
 		const glm::ivec3 chunk_pos = getChunkPos(current_block_world_pos);
 		const glm::ivec3 block_chunk_pos = getBlockChunkPos(current_block_world_pos);
-		std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
+		const std::shared_ptr<Chunk> chunk = chunks.at(chunk_pos);
 
 		// const BlockInfo::Type current_id = chunk->getBlock(block_chunk_pos);
 		const int current_light = chunk->getSkyLight(block_chunk_pos);
@@ -283,18 +289,19 @@ static void setSkyLight(
 
 			if (chunks.contains(neighbor_chunk_pos))
 			{
-				std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
+				const std::shared_ptr<Chunk> neighbor_chunk = chunks.at(neighbor_chunk_pos);
 				const BlockInfo::Type neighbor_id = neighbor_chunk->getBlock(neighbor_block_chunk_pos);
 				const int neighbor_light = neighbor_chunk->getSkyLight(neighbor_block_chunk_pos);
 
 				if (!g_blocks_info.hasProperty(neighbor_id, BLOCK_PROPERTY_OPAQUE))
 				{
 					const int absorbed_light = g_blocks_info.get(neighbor_id).absorb_light;
-					const int new_light = current_light - absorbed_light - (i == 3 ? 0 : 1); // -1 if not below
+					const int new_light = current_light - absorbed_light
+						- (i != 3 || current_light != 15) * 1; // i == 3 is when the current light spreads down
 					if (neighbor_light < new_light)
 					{
 						neighbor_chunk->setSkyLight(neighbor_block_chunk_pos, new_light);
-						light_queue.push(neighbor_world_pos);
+						light_source_queue.push(neighbor_world_pos);
 					}
 				}
 			}
@@ -309,7 +316,7 @@ static void setBlockLight(
 {
 	std::shared_ptr<Chunk> start_chunk = chunks.at(chunk_pos);
 
-	std::queue<glm::ivec3> light_queue;
+	std::queue<glm::ivec3> light_source_queue;
 	for (int x = 0; x < CHUNK_X_SIZE; x++)
 	{
 		for (int y = 0; y < CHUNK_Y_SIZE; y++)
@@ -323,7 +330,7 @@ static void setBlockLight(
 				{
 					const int emit_light = g_blocks_info.get(block_id).emit_light;
 					start_chunk->setBlockLight(block_chunk_pos, emit_light);
-					light_queue.push(block_world_pos);
+					light_source_queue.push(block_world_pos);
 				}
 			}
 		}
@@ -338,10 +345,10 @@ static void setBlockLight(
 		glm::ivec3(0, 0, -1)
 	};
 
-	while (!light_queue.empty())
+	while (!light_source_queue.empty())
 	{
-		const glm::ivec3 current_block_world_pos = light_queue.front();
-		light_queue.pop();
+		const glm::ivec3 current_block_world_pos = light_source_queue.front();
+		light_source_queue.pop();
 
 		const glm::ivec3 chunk_pos = getChunkPos(current_block_world_pos);
 		const glm::ivec3 block_chunk_pos = getBlockChunkPos(current_block_world_pos);
@@ -372,7 +379,7 @@ static void setBlockLight(
 					if (neighbor_light < new_light)
 					{
 						neighbor_chunk->setBlockLight(neighbor_block_chunk_pos, new_light);
-						light_queue.push(neighbor_world_pos);
+						light_source_queue.push(neighbor_world_pos);
 					}
 				}
 			}
@@ -414,7 +421,7 @@ static void setBlockLight(
 
 // 						reliefValue = (reliefValue + 1) / 2; // map from [-1, 1] to [0, 1]
 // 						reliefValue = pow(2, 10 * reliefValue - 10); // map from [0, 1] to [0, 1] with a slope
-						
+
 // 						float oceanReliefValue = (reliefValue * -60) + 60; // map from [0, 1] to [60, 0]
 // 						float landReliefValue = (reliefValue * (CHUNK_Y_SIZE - 80)) + 80; // map from [0, 1] to [80, CHUNK_Y_SIZE]
 
@@ -691,7 +698,7 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 
 			reliefValue = (reliefValue + 1) / 2; // map from [-1, 1] to [0, 1]
 			reliefValue = pow(2, 10 * reliefValue - 10); // map from [0, 1] to [0, 1] with a slope
-			
+
 			float oceanReliefValue = (reliefValue * -60) + 60; // map from [0, 1] to [60, 0]
 			float landReliefValue = (reliefValue * (CHUNK_Y_SIZE - 80)) + 80; // map from [0, 1] to [80, CHUNK_Y_SIZE]
 
