@@ -154,8 +154,10 @@ VulkanAPI::~VulkanAPI()
 		hotbar_image.clear();
 		hotbar_cursor_image.clear();
 		player_skin_image.clear();
-		debug_info_image.clear();
 		item_icon_images.clear();
+		debug_info_image.clear();
+
+		debug_info_buffers.clear();
 
 		water_renderpass_input_attachement_descriptor.clear();
 
