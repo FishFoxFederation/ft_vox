@@ -17,10 +17,25 @@ var annotated_dup =
     ] ],
     [ "std", "namespacestd.html", [
       [ "hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", "structstd_1_1hash_3_01BlockVertex_01_4" ],
+      [ "hash< Chunk::genLevel >", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4.html", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4" ],
       [ "hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec2_01_4" ],
       [ "hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec3_01_4" ],
       [ "hash< ObjVertex >", "structstd_1_1hash_3_01ObjVertex_01_4.html", "structstd_1_1hash_3_01ObjVertex_01_4" ],
-      [ "hash< ServerWorld::Ticket >", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4" ]
+      [ "hash< ServerWorld::Ticket >", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4" ],
+      [ "hash< std::pair< glm::ivec3, Chunk::genLevel > >", "structstd_1_1hash_3_01std_1_1pair_3_01glm_1_1ivec3_00_01Chunk_1_1genLevel_01_4_01_4.html", "structstd_1_1hash_3_01std_1_1pair_3_01glm_1_1ivec3_00_01Chunk_1_1genLevel_01_4_01_4" ]
+    ] ],
+    [ "task", "namespacetask.html", [
+      [ "BaseError", "classtask_1_1BaseError.html", "classtask_1_1BaseError" ],
+      [ "CycleError", "classtask_1_1CycleError.html", "classtask_1_1CycleError" ],
+      [ "EmptyGraphError", "classtask_1_1EmptyGraphError.html", "classtask_1_1EmptyGraphError" ],
+      [ "EmptyModuleError", "classtask_1_1EmptyModuleError.html", "classtask_1_1EmptyModuleError" ],
+      [ "Executor", "classtask_1_1Executor.html", "classtask_1_1Executor" ],
+      [ "Future", "classtask_1_1Future.html", "classtask_1_1Future" ],
+      [ "Graph", "classtask_1_1Graph.html", "classtask_1_1Graph" ],
+      [ "Task", "classtask_1_1Task.html", "classtask_1_1Task" ],
+      [ "TaskGraph", "classtask_1_1TaskGraph.html", "classtask_1_1TaskGraph" ],
+      [ "TaskNode", "classtask_1_1TaskNode.html", "classtask_1_1TaskNode" ],
+      [ "TaskNotFromSameGraphError", "classtask_1_1TaskNotFromSameGraphError.html", "classtask_1_1TaskNotFromSameGraphError" ]
     ] ],
     [ "Application", "classApplication.html", "classApplication" ],
     [ "AtmosphereParams", "structAtmosphereParams.html", "structAtmosphereParams" ],
@@ -103,6 +118,7 @@ var annotated_dup =
     [ "Socket", "classSocket.html", "classSocket" ],
     [ "Status", "classStatus.html", "classStatus" ],
     [ "Swapchain", "classSwapchain.html", "classSwapchain" ],
+    [ "test", "structtest.html", "structtest" ],
     [ "TextRenderer", "classTextRenderer.html", "classTextRenderer" ],
     [ "ThreadPool", "classThreadPool.html", "classThreadPool" ],
     [ "ThreadPoolAccessor", "classThreadPoolAccessor.html", "classThreadPoolAccessor" ],

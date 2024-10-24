@@ -8,6 +8,8 @@ var classBlockInfo =
       [ "Water", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a27634ff8002b12e75d98e07ccd005d18", null ],
       [ "Glass", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75aaae44179fda7ddcbf8916aff53846128", null ],
       [ "Light", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a9914a0ce04a7b7b6a8e39bec55064b82", null ],
+      [ "Wood", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a6e4dd7ce4ea3c1d4a90edb289e22da98", null ],
+      [ "Leaves", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a63ef76e0056281d3d3b501b7bbf98129", null ],
       [ "None", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a6adf97f83acf6453d4a6a4b1070f3754", null ]
     ] ],
     [ "absorb_light", "classBlockInfo.html#aca3c250106719ca64f1a11bceccaca3a", null ],

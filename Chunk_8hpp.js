@@ -1,6 +1,8 @@
 var Chunk_8hpp =
 [
     [ "Chunk", "classChunk.html", "classChunk" ],
+    [ "std::hash< Chunk::genLevel >", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4.html", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4" ],
+    [ "std::hash< std::pair< glm::ivec3, Chunk::genLevel > >", "structstd_1_1hash_3_01std_1_1pair_3_01glm_1_1ivec3_00_01Chunk_1_1genLevel_01_4_01_4.html", "structstd_1_1hash_3_01std_1_1pair_3_01glm_1_1ivec3_00_01Chunk_1_1genLevel_01_4_01_4" ],
     [ "BLOCKS_PER_CHUNK", "Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3", null ],
     [ "CHUNK_SIZE_IVEC3", "Chunk_8hpp.html#a6f076f66a2e2b8c32529115c9c1c0a74", null ],
     [ "CHUNK_SIZE_VEC3", "Chunk_8hpp.html#a61ce72c858dd50cfd4ac19d7e6c9a89c", null ],

@@ -17,5 +17,6 @@ var searchData=
   ['connectionpacket_14',['ConnectionPacket',['../classConnectionPacket.html',1,'']]],
   ['connectionsocket_15',['ConnectionSocket',['../classConnectionSocket.html',1,'']]],
   ['createinfo_16',['CreateInfo',['../structBuffer_1_1CreateInfo.html',1,'Buffer::CreateInfo'],['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
-  ['createmeshdata_17',['CreateMeshData',['../classCreateMeshData.html',1,'']]]
+  ['createmeshdata_17',['CreateMeshData',['../classCreateMeshData.html',1,'']]],
+  ['cycleerror_18',['CycleError',['../classtask_1_1CycleError.html',1,'task']]]
 ];

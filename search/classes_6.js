@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['geninfo_0',['genInfo',['../structWorld_1_1WorldGenerator_1_1genInfo.html',1,'World::WorldGenerator']]]
+  ['graph_0',['Graph',['../classtask_1_1Graph.html',1,'task']]],
+  ['graphinfo_1',['GraphInfo',['../structtask_1_1Executor_1_1info_1_1GraphInfo.html',1,'task::Executor::info']]]
 ];

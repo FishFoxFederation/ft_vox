@@ -1,13 +1,15 @@
 <map id="src/app/threads/pool/ThreadPool.hpp" name="src/app/threads/pool/ThreadPool.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="335,5,475,45"/>
+<area shape="rect" id="node1" title=" " alt="" coords="361,5,501,45"/>
 <area shape="rect" id="node2" href="$define_8hpp.html" title=" " alt="" coords="5,93,85,119"/>
-<area shape="rect" id="node3" title=" " alt="" coords="109,93,168,119"/>
-<area shape="rect" id="node4" title=" " alt="" coords="193,93,250,119"/>
-<area shape="rect" id="node5" title=" " alt="" coords="274,93,353,119"/>
-<area shape="rect" id="node6" title=" " alt="" coords="377,93,434,119"/>
-<area shape="rect" id="node7" title=" " alt="" coords="458,93,585,119"/>
-<area shape="rect" id="node8" title=" " alt="" coords="609,93,663,119"/>
-<area shape="rect" id="node9" title=" " alt="" coords="663,167,742,192"/>
-<area shape="rect" id="node10" href="$tracy__globals_8hpp.html" title=" " alt="" coords="739,93,861,119"/>
-<area shape="rect" id="node11" title=" " alt="" coords="766,167,834,192"/>
+<area shape="rect" id="node3" title=" " alt="" coords="348,167,407,192"/>
+<area shape="rect" id="node4" title=" " alt="" coords="161,93,218,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="242,93,321,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="345,93,402,119"/>
+<area shape="rect" id="node7" title=" " alt="" coords="426,93,553,119"/>
+<area shape="rect" id="node8" title=" " alt="" coords="577,93,631,119"/>
+<area shape="rect" id="node9" title=" " alt="" coords="771,167,850,192"/>
+<area shape="rect" id="node10" href="$tracy__globals_8hpp.html" title=" " alt="" coords="848,93,971,119"/>
+<area shape="rect" id="node12" href="$JoinThreads_8hpp.html" title=" " alt="" coords="656,93,773,119"/>
+<area shape="rect" id="node11" title=" " alt="" coords="875,167,943,192"/>
+<area shape="rect" id="node13" title=" " alt="" coords="685,167,744,192"/>
 </map>

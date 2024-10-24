@@ -2,11 +2,11 @@ var classChunk =
 [
     [ "BlockArray", "classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd", null ],
     [ "LightArray", "classChunk.html#a13d358ee7b03766f8e45ccec50aece7b", null ],
-    [ "genLevel", "classChunk.html#ada26dbdea430b4b05379f7124c0a9b40", [
-      [ "LIGHT", "classChunk.html#ada26dbdea430b4b05379f7124c0a9b40af8589806bbf66241917092b2a6e18c6f", null ],
-      [ "CAVE", "classChunk.html#ada26dbdea430b4b05379f7124c0a9b40a14db90e75f1308d303d0bceb0be66ac1", null ],
-      [ "RELIEF", "classChunk.html#ada26dbdea430b4b05379f7124c0a9b40a6ce749e5dda52baa62b8d952e315ccc6", null ],
-      [ "EMPTY", "classChunk.html#ada26dbdea430b4b05379f7124c0a9b40aba2b45bdc11e2a4a6e86aab2ac693cbb", null ]
+    [ "genLevel", "classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888", [
+      [ "LIGHT", "classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888af8589806bbf66241917092b2a6e18c6f", null ],
+      [ "CAVE", "classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888a14db90e75f1308d303d0bceb0be66ac1", null ],
+      [ "RELIEF", "classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888a6ce749e5dda52baa62b8d952e315ccc6", null ],
+      [ "EMPTY", "classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888aba2b45bdc11e2a4a6e86aab2ac693cbb", null ]
     ] ],
     [ "Chunk", "classChunk.html#a76523171d0b51437c6d1d24c5001fa6e", null ],
     [ "Chunk", "classChunk.html#a275d1f98ec1e1a86c0f0d84f2ae4e906", null ],

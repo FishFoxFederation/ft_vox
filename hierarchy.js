@@ -4,6 +4,7 @@ var hierarchy =
       [ "Event::PlayerMoving", "classEvent_1_1PlayerMoving.html", null ]
     ] ],
     [ "Application", "classApplication.html", null ],
+    [ "task::Executor::info::AsyncInfo", "structtask_1_1Executor_1_1info_1_1AsyncInfo.html", null ],
     [ "AtmosphereParams", "structAtmosphereParams.html", null ],
     [ "Atomic< T >", "classAtomic.html", null ],
     [ "Atomic< glm::vec3 >", "classAtomic.html", null ],
@@ -34,25 +35,41 @@ var hierarchy =
     [ "DebugGui", "classDebugGui.html", null ],
     [ "Descriptor", "classDescriptor.html", null ],
     [ "ECS", "classECS.html", null ],
+    [ "std::enable_shared_from_this", null, [
+      [ "task::TaskGraph", "classtask_1_1TaskGraph.html", null ]
+    ] ],
     [ "Sound::Engine", "classSound_1_1Engine.html", null ],
     [ "EntityMatrices", "structEntityMatrices.html", null ],
     [ "EntityVertex", "structEntityVertex.html", null ],
     [ "std::exception", null, [
       [ "Client::ServerDisconnected", "classClient_1_1ServerDisconnected.html", null ],
-      [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ]
+      [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ],
+      [ "task::BaseError", "classtask_1_1BaseError.html", [
+        [ "task::CycleError", "classtask_1_1CycleError.html", null ],
+        [ "task::EmptyGraphError", "classtask_1_1EmptyGraphError.html", null ],
+        [ "task::EmptyModuleError", "classtask_1_1EmptyModuleError.html", null ],
+        [ "task::TaskNotFromSameGraphError", "classtask_1_1TaskNotFromSameGraphError.html", null ]
+      ] ]
     ] ],
+    [ "task::Executor", "classtask_1_1Executor.html", null ],
     [ "Face", "structFace.html", null ],
     [ "Sound::FMTChunk", "structSound_1_1FMTChunk.html", null ],
-    [ "World::WorldGenerator::genInfo", "structWorld_1_1WorldGenerator_1_1genInfo.html", null ],
+    [ "std::future", null, [
+      [ "task::Future< T >", "classtask_1_1Future.html", null ]
+    ] ],
+    [ "task::Graph", "classtask_1_1Graph.html", null ],
+    [ "task::Executor::info::GraphInfo", "structtask_1_1Executor_1_1info_1_1GraphInfo.html", null ],
     [ "Event::HandlerWrapperInterface", "classEvent_1_1HandlerWrapperInterface.html", [
       [ "Event::HandlerWrapper< EventType >", "classEvent_1_1HandlerWrapper.html", null ]
     ] ],
     [ "ServerWorld::Ticket::hash", "structServerWorld_1_1Ticket_1_1hash.html", null ],
     [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
+    [ "std::hash< Chunk::genLevel >", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4.html", null ],
     [ "std::hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", null ],
     [ "std::hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", null ],
     [ "std::hash< ObjVertex >", "structstd_1_1hash_3_01ObjVertex_01_4.html", null ],
     [ "std::hash< ServerWorld::Ticket >", "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html", null ],
+    [ "std::hash< std::pair< glm::ivec3, Chunk::genLevel > >", "structstd_1_1hash_3_01std_1_1pair_3_01glm_1_1ivec3_00_01Chunk_1_1genLevel_01_4_01_4.html", null ],
     [ "History< T, N >", "classHistory.html", null ],
     [ "History< float, 100 >", "classHistory.html", null ],
     [ "History< float, 1000 >", "classHistory.html", null ],
@@ -97,6 +114,7 @@ var hierarchy =
     [ "ModelMatrice", "structModelMatrice.html", null ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
     [ "NetworkThread", "classNetworkThread.html", null ],
+    [ "task::Executor::info::NodeInfo", "structtask_1_1Executor_1_1info_1_1NodeInfo.html", null ],
     [ "ObjLoader", "classObjLoader.html", null ],
     [ "ObjVertex", "structObjVertex.html", null ],
     [ "std::ofstream", null, [
@@ -131,6 +149,9 @@ var hierarchy =
     [ "Status", "classStatus.html", null ],
     [ "Swapchain::SupportDetails", "structSwapchain_1_1SupportDetails.html", null ],
     [ "Swapchain", "classSwapchain.html", null ],
+    [ "task::Task", "classtask_1_1Task.html", null ],
+    [ "task::TaskNode", "classtask_1_1TaskNode.html", null ],
+    [ "test", "structtest.html", null ],
     [ "TextRenderer", "classTextRenderer.html", null ],
     [ "ThreadPool", "classThreadPool.html", null ],
     [ "ThreadPoolAccessor", "classThreadPoolAccessor.html", null ],

@@ -5,9 +5,9 @@ var searchData=
   ['far_5fplane_2',['far_plane',['../structCamera_1_1RenderInfo.html#affb1235a9187f360d9517a7faf67e67c',1,'Camera::RenderInfo']]],
   ['fbl_3',['fbl',['../classViewFrustum.html#a7f5d31eff3c9fd97a27b97e63297f9d3',1,'ViewFrustum']]],
   ['fbr_4',['fbr',['../classViewFrustum.html#a7c6e39d3b8e817165719fee619c3bb00',1,'ViewFrustum']]],
-  ['feet_5',['feet',['../classMob.html#a1dc160318c570d397e10988bf392db21',1,'Mob::feet()'],['../classPlayer.html#ad5a2f3c133a4a93dd19965007bba82de',1,'Player::feet()']]],
+  ['feet_5',['feet',['../classPlayer.html#ad5a2f3c133a4a93dd19965007bba82de',1,'Player::feet()'],['../classMob.html#a1dc160318c570d397e10988bf392db21',1,'Mob::feet()']]],
   ['file_5fpaths_6',['file_paths',['../structImage_1_1CreateInfo.html#a4167400ed26c6ee4c2d7b27934cbec72',1,'Image::CreateInfo']]],
-  ['fileoutput_7',['FileOutput',['../classFileOutput.html#aef715a0ce0036786c5160b1f7baefb0b',1,'FileOutput::FileOutput(const std::filesystem::path &amp;path)'],['../classFileOutput.html#abe25013e05ebc0e54af64b41619e9511',1,'FileOutput::FileOutput(FileOutput &amp;&amp;other)'],['../classFileOutput.html',1,'FileOutput']]],
+  ['fileoutput_7',['FileOutput',['../classFileOutput.html',1,'FileOutput'],['../classFileOutput.html#abe25013e05ebc0e54af64b41619e9511',1,'FileOutput::FileOutput(FileOutput &amp;&amp;other)'],['../classFileOutput.html#aef715a0ce0036786c5160b1f7baefb0b',1,'FileOutput::FileOutput(const std::filesystem::path &amp;path)']]],
   ['final_5flayout_8',['final_layout',['../structImage_1_1CreateInfo.html#a39839c20e413fecb24f6145f99e11347',1,'Image::CreateInfo']]],
   ['findmemorytype_9',['findMemoryType',['../namespacevk__helper.html#a504632a9a86fdd8b07015b5da6493e38',1,'vk_helper']]],
   ['first_5fperson_10',['FIRST_PERSON',['../classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8a25cddcf7d5a6ec236403ee4a5ad8c00f',1,'Player']]],
@@ -27,5 +27,7 @@ var searchData=
   ['ft_5fformat_24',['ft_format',['../ft__format_8hpp.html#a83507afa1d3c3630e0d0e3cebe1f4b7d',1,'ft_format.hpp']]],
   ['ft_5fformat_2ehpp_25',['ft_format.hpp',['../ft__format_8hpp.html',1,'']]],
   ['ftl_26',['ftl',['../classViewFrustum.html#a822af6081571bf7aa5a3d0dee7e5f9cc',1,'ViewFrustum']]],
-  ['ftr_27',['ftr',['../classViewFrustum.html#a47b13953698d344ee204c6f8157f8471',1,'ViewFrustum']]]
+  ['ftr_27',['ftr',['../classViewFrustum.html#a47b13953698d344ee204c6f8157f8471',1,'ViewFrustum']]],
+  ['future_28',['Future',['../classtask_1_1Future.html#a469e3dd420cbe6dc347edd1f89a2d68b',1,'task::Future::Future()'],['../classtask_1_1Future.html#a12338b5aa615758f8daa7de2163c2533',1,'task::Future::Future(const Future &amp;)=delete'],['../classtask_1_1Future.html#ad02b3c423e354b1d6303baf0fe9053b6',1,'task::Future::Future(Future &amp;&amp;)=default'],['../classtask_1_1Future.html',1,'task::Future&lt; T &gt;']]],
+  ['future_2ehpp_29',['Future.hpp',['../Future_8hpp.html',1,'']]]
 ];

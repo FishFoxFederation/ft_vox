@@ -109,18 +109,18 @@ $(document).ready(function(){initNavTree('threads.html',''); initResizable(); })
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md21">Main thread</a></li>
-<li class="level1"><a href="#autotoc_md22">Update Thread</a></li>
-<li class="level1"><a href="#autotoc_md23">Render Thread</a></li>
-<li class="level1"><a href="#autotoc_md24">Block Update Thread</a></li>
-<li class="level1"><a href="#autotoc_md25">Thread pool</a></li>
+<ul><li class="level1"><a href="#autotoc_md22">Main thread</a></li>
+<li class="level1"><a href="#autotoc_md23">Update Thread</a></li>
+<li class="level1"><a href="#autotoc_md24">Render Thread</a></li>
+<li class="level1"><a href="#autotoc_md25">Block Update Thread</a></li>
+<li class="level1"><a href="#autotoc_md26">Thread pool</a></li>
 </ul>
 </div>
 <div class="textblock"><p ><a class="anchor" id="md_docs_pages_thread"></a></p>
 <p >Our design is the fruit of a lot of discussions and headaches. <br  />
  It is based on 4 "control" threads + a thread pool for parallel tasking. <br  />
  All of the control threads inherit the AThreadWrapper class</p>
-<h1><a class="anchor" id="autotoc_md21"></a>
+<h1><a class="anchor" id="autotoc_md22"></a>
 Main thread</h1>
 <p ><b>This is the main execution thread.</b></p><ul>
 <li>Handle menus</li>
@@ -128,7 +128,7 @@ Main thread</h1>
 <li>Instanciates other threads when user wants to play</li>
 </ul>
 <p >It is not used for any "gameplay" whatsoever it only setups and instanciates other threads to do these tasks</p>
-<h1><a class="anchor" id="autotoc_md22"></a>
+<h1><a class="anchor" id="autotoc_md23"></a>
 Update Thread</h1>
 <p ><b>This is the "gameplay" thread it runs synced with the render thread.</b></p><ul>
 <li>Entity updates<ul>
@@ -145,13 +145,13 @@ Update Thread</h1>
 <li>GUIs update ( inventories, crafting tables etc... )</li>
 </ul>
 <p >During all these tasks this thread will modify the scenes classes for the render thread to use. \ The update threads interacts a lot with the <a class="el" href="classWorld.html">World</a> class that contains all the blocks chunks, entities and the player data.</p>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Render Thread</h1>
 <p ><b>This is the thread where the magic happens it runs synced with the update thread.</b></p><ul>
 <li>Reads the scene classes to render frames</li>
 </ul>
 <p >The render threads interacts with the renderAPI to render frames using the scenes classes as input</p>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Block Update Thread</h1>
 <p ><b>This is the thread where blocks are updated... duh. It is capped at 20 iterations per second</b></p><ul>
 <li>Performs block updates ( piston activation, water falling, trees growing )</li>
@@ -163,7 +163,7 @@ Block Update Thread</h1>
 <li>unloads chunks once the player gets too far</li>
 <li>calculates new meshes if a change occured in a chunk</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Thread pool</h1>
 <p ><b>For every calculations that can be done in parallel</b></p><ul>
 <li>AI pathfinding</li>

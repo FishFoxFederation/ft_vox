@@ -128,52 +128,53 @@ $(document).ready(function(){initNavTree('Item_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba2ab9cca6084f8f97f1cea26ffe5519ee">WaterBlock</a>,</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362bae1181c592b58c854544170da195ef749">GlassBlock</a>,</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362baa298bd451b145dd41effea6e7cb2f0c5">LightBlock</a>,</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754">None</a></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classItemInfo.html#af0b5870812676ce07c60450db4499cb7">   24</a></span>    } <span class="keyword">const</span> <a class="code hl_variable" href="classItemInfo.html#af0b5870812676ce07c60450db4499cb7">type</a> = <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754">Type::None</a>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classItemInfo.html#ac598cab290a76b77150ba8cd5039385d">   26</a></span>    <span class="keyword">const</span> <a class="code hl_enumeration" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> <a class="code hl_variable" href="classItemInfo.html#ac598cab290a76b77150ba8cd5039385d">block_id</a>;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab">   27</a></span>    uint64_t <a class="code hl_variable" href="classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab">mesh_id</a> = 0;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>};</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classItemsInfo.html">   33</a></span><span class="keyword">class </span><a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>{</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classItemsInfo.html#a88e23b95408a156e185bb489499de417">   38</a></span>    <span class="keyword">static</span> <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a> &amp; <a class="code hl_function" href="classItemsInfo.html#a88e23b95408a156e185bb489499de417">getInstance</a>()</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">static</span> <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a> instance;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordflow">return</span> instance;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classItemsInfo.html#ae0f78a41ae660141fe043c89de764c4f">   44</a></span>    <a class="code hl_class" href="classItemInfo.html">ItemInfo</a> &amp; <a class="code hl_function" href="classItemsInfo.html#ae0f78a41ae660141fe043c89de764c4f">get</a>(<span class="keyword">const</span> <a class="code hl_enumeration" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362b">ItemInfo::Type</a> type)</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    {</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">return</span> m_info[<span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(type)];</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    }</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classItemsInfo.html#ac07fb82734d03064216533f9ffaa7e97">   49</a></span>    <a class="code hl_class" href="classItemInfo.html">ItemInfo</a> &amp; <a class="code hl_function" href="classItemsInfo.html#ac07fb82734d03064216533f9ffaa7e97">get</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> index)</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordflow">return</span> m_info[index];</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classItemsInfo.html#acb3c535fcd9a1bb222ae1883b77d57d2">   54</a></span>    <span class="keywordtype">size_t</span> <a class="code hl_function" href="classItemsInfo.html#acb3c535fcd9a1bb222ae1883b77d57d2">count</a>()<span class="keyword"> const</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordflow">return</span> m_info.size();</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    }</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    std::vector&lt;ItemInfo&gt; m_info;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a>();</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>};</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">extern</span> <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a> &amp; <a class="code hl_variable" href="Item_8hpp.html#af8237ee189bd06ab055eaa323a8cd499">g_items_info</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362baea0928cb890a46d1bf1f5e1ab5247bf9">WoodBlock</a>,</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba81c24c60f9662f1c6eb66ef72dff033f">LeavesBlock</a>,</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754">None</a></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="classItemInfo.html#af0b5870812676ce07c60450db4499cb7">   25</a></span>    } <span class="keyword">const</span> <a class="code hl_variable" href="classItemInfo.html#af0b5870812676ce07c60450db4499cb7">type</a> = <a class="code hl_enumvalue" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754">Type::None</a>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classItemInfo.html#ac598cab290a76b77150ba8cd5039385d">   27</a></span>    <span class="keyword">const</span> <a class="code hl_enumeration" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> <a class="code hl_variable" href="classItemInfo.html#ac598cab290a76b77150ba8cd5039385d">block_id</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab">   28</a></span>    uint64_t <a class="code hl_variable" href="classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab">mesh_id</a> = 0;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>};</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classItemsInfo.html">   34</a></span><span class="keyword">class </span><a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classItemsInfo.html#a88e23b95408a156e185bb489499de417">   39</a></span>    <span class="keyword">static</span> <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a> &amp; <a class="code hl_function" href="classItemsInfo.html#a88e23b95408a156e185bb489499de417">getInstance</a>()</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keyword">static</span> <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a> instance;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">return</span> instance;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="classItemsInfo.html#ae0f78a41ae660141fe043c89de764c4f">   45</a></span>    <a class="code hl_class" href="classItemInfo.html">ItemInfo</a> &amp; <a class="code hl_function" href="classItemsInfo.html#ae0f78a41ae660141fe043c89de764c4f">get</a>(<span class="keyword">const</span> <a class="code hl_enumeration" href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362b">ItemInfo::Type</a> type)</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">return</span> m_info[<span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(type)];</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classItemsInfo.html#ac07fb82734d03064216533f9ffaa7e97">   50</a></span>    <a class="code hl_class" href="classItemInfo.html">ItemInfo</a> &amp; <a class="code hl_function" href="classItemsInfo.html#ac07fb82734d03064216533f9ffaa7e97">get</a>(<span class="keyword">const</span> <span class="keywordtype">size_t</span> index)</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">return</span> m_info[index];</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    }</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classItemsInfo.html#acb3c535fcd9a1bb222ae1883b77d57d2">   55</a></span>    <span class="keywordtype">size_t</span> <a class="code hl_function" href="classItemsInfo.html#acb3c535fcd9a1bb222ae1883b77d57d2">count</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordflow">return</span> m_info.size();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    std::vector&lt;ItemInfo&gt; m_info;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a>();</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>};</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keyword">extern</span> <a class="code hl_class" href="classItemsInfo.html">ItemsInfo</a> &amp; <a class="code hl_variable" href="Item_8hpp.html#af8237ee189bd06ab055eaa323a8cd499">g_items_info</a>;</div>
 <div class="ttc" id="aBlock_8hpp_html"><div class="ttname"><a href="Block_8hpp.html">Block.hpp</a></div></div>
 <div class="ttc" id="aItem_8hpp_html_af8237ee189bd06ab055eaa323a8cd499"><div class="ttname"><a href="Item_8hpp.html#af8237ee189bd06ab055eaa323a8cd499">g_items_info</a></div><div class="ttdeci">ItemsInfo &amp; g_items_info</div><div class="ttdef"><b>Definition:</b> Item.cpp:3</div></div>
 <div class="ttc" id="aclassBlockInfo_html_a45820c5fd9afbf3c099019879095db75"><div class="ttname"><a href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> Block.hpp:35</div></div>
@@ -184,16 +185,18 @@ $(document).ready(function(){initNavTree('Item_8hpp_source.html',''); initResiza
 <div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362ba3cbcd79e6f222546fb99ee953e9be064"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba3cbcd79e6f222546fb99ee953e9be064">ItemInfo::Type::StoneBlock</a></div><div class="ttdeci">@ StoneBlock</div></div>
 <div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362ba3f838d433c2e02c97194e9356c55b51a"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba3f838d433c2e02c97194e9356c55b51a">ItemInfo::Type::GrassBlock</a></div><div class="ttdeci">@ GrassBlock</div></div>
 <div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754">ItemInfo::Type::None</a></div><div class="ttdeci">@ None</div></div>
+<div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362ba81c24c60f9662f1c6eb66ef72dff033f"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba81c24c60f9662f1c6eb66ef72dff033f">ItemInfo::Type::LeavesBlock</a></div><div class="ttdeci">@ LeavesBlock</div></div>
 <div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362baa298bd451b145dd41effea6e7cb2f0c5"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362baa298bd451b145dd41effea6e7cb2f0c5">ItemInfo::Type::LightBlock</a></div><div class="ttdeci">@ LightBlock</div></div>
 <div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362bae1181c592b58c854544170da195ef749"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362bae1181c592b58c854544170da195ef749">ItemInfo::Type::GlassBlock</a></div><div class="ttdeci">@ GlassBlock</div></div>
-<div class="ttc" id="aclassItemInfo_html_ac598cab290a76b77150ba8cd5039385d"><div class="ttname"><a href="classItemInfo.html#ac598cab290a76b77150ba8cd5039385d">ItemInfo::block_id</a></div><div class="ttdeci">const BlockInfo::Type block_id</div><div class="ttdef"><b>Definition:</b> Item.hpp:26</div></div>
-<div class="ttc" id="aclassItemInfo_html_aea672179d3f49c9cb97d128538a6c1ab"><div class="ttname"><a href="classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab">ItemInfo::mesh_id</a></div><div class="ttdeci">uint64_t mesh_id</div><div class="ttdef"><b>Definition:</b> Item.hpp:27</div></div>
+<div class="ttc" id="aclassItemInfo_html_a9d898f32712d5daa690f863d6e59362baea0928cb890a46d1bf1f5e1ab5247bf9"><div class="ttname"><a href="classItemInfo.html#a9d898f32712d5daa690f863d6e59362baea0928cb890a46d1bf1f5e1ab5247bf9">ItemInfo::Type::WoodBlock</a></div><div class="ttdeci">@ WoodBlock</div></div>
+<div class="ttc" id="aclassItemInfo_html_ac598cab290a76b77150ba8cd5039385d"><div class="ttname"><a href="classItemInfo.html#ac598cab290a76b77150ba8cd5039385d">ItemInfo::block_id</a></div><div class="ttdeci">const BlockInfo::Type block_id</div><div class="ttdef"><b>Definition:</b> Item.hpp:27</div></div>
+<div class="ttc" id="aclassItemInfo_html_aea672179d3f49c9cb97d128538a6c1ab"><div class="ttname"><a href="classItemInfo.html#aea672179d3f49c9cb97d128538a6c1ab">ItemInfo::mesh_id</a></div><div class="ttdeci">uint64_t mesh_id</div><div class="ttdef"><b>Definition:</b> Item.hpp:28</div></div>
 <div class="ttc" id="aclassItemInfo_html_af0b5870812676ce07c60450db4499cb7"><div class="ttname"><a href="classItemInfo.html#af0b5870812676ce07c60450db4499cb7">ItemInfo::type</a></div><div class="ttdeci">enum ItemInfo::Type type</div></div>
-<div class="ttc" id="aclassItemsInfo_html"><div class="ttname"><a href="classItemsInfo.html">ItemsInfo</a></div><div class="ttdef"><b>Definition:</b> Item.hpp:34</div></div>
-<div class="ttc" id="aclassItemsInfo_html_a88e23b95408a156e185bb489499de417"><div class="ttname"><a href="classItemsInfo.html#a88e23b95408a156e185bb489499de417">ItemsInfo::getInstance</a></div><div class="ttdeci">static ItemsInfo &amp; getInstance()</div><div class="ttdef"><b>Definition:</b> Item.hpp:38</div></div>
-<div class="ttc" id="aclassItemsInfo_html_ac07fb82734d03064216533f9ffaa7e97"><div class="ttname"><a href="classItemsInfo.html#ac07fb82734d03064216533f9ffaa7e97">ItemsInfo::get</a></div><div class="ttdeci">ItemInfo &amp; get(const size_t index)</div><div class="ttdef"><b>Definition:</b> Item.hpp:49</div></div>
-<div class="ttc" id="aclassItemsInfo_html_acb3c535fcd9a1bb222ae1883b77d57d2"><div class="ttname"><a href="classItemsInfo.html#acb3c535fcd9a1bb222ae1883b77d57d2">ItemsInfo::count</a></div><div class="ttdeci">size_t count() const</div><div class="ttdef"><b>Definition:</b> Item.hpp:54</div></div>
-<div class="ttc" id="aclassItemsInfo_html_ae0f78a41ae660141fe043c89de764c4f"><div class="ttname"><a href="classItemsInfo.html#ae0f78a41ae660141fe043c89de764c4f">ItemsInfo::get</a></div><div class="ttdeci">ItemInfo &amp; get(const ItemInfo::Type type)</div><div class="ttdef"><b>Definition:</b> Item.hpp:44</div></div>
+<div class="ttc" id="aclassItemsInfo_html"><div class="ttname"><a href="classItemsInfo.html">ItemsInfo</a></div><div class="ttdef"><b>Definition:</b> Item.hpp:35</div></div>
+<div class="ttc" id="aclassItemsInfo_html_a88e23b95408a156e185bb489499de417"><div class="ttname"><a href="classItemsInfo.html#a88e23b95408a156e185bb489499de417">ItemsInfo::getInstance</a></div><div class="ttdeci">static ItemsInfo &amp; getInstance()</div><div class="ttdef"><b>Definition:</b> Item.hpp:39</div></div>
+<div class="ttc" id="aclassItemsInfo_html_ac07fb82734d03064216533f9ffaa7e97"><div class="ttname"><a href="classItemsInfo.html#ac07fb82734d03064216533f9ffaa7e97">ItemsInfo::get</a></div><div class="ttdeci">ItemInfo &amp; get(const size_t index)</div><div class="ttdef"><b>Definition:</b> Item.hpp:50</div></div>
+<div class="ttc" id="aclassItemsInfo_html_acb3c535fcd9a1bb222ae1883b77d57d2"><div class="ttname"><a href="classItemsInfo.html#acb3c535fcd9a1bb222ae1883b77d57d2">ItemsInfo::count</a></div><div class="ttdeci">size_t count() const</div><div class="ttdef"><b>Definition:</b> Item.hpp:55</div></div>
+<div class="ttc" id="aclassItemsInfo_html_ae0f78a41ae660141fe043c89de764c4f"><div class="ttname"><a href="classItemsInfo.html#ae0f78a41ae660141fe043c89de764c4f">ItemsInfo::get</a></div><div class="ttdeci">ItemInfo &amp; get(const ItemInfo::Type type)</div><div class="ttdef"><b>Definition:</b> Item.hpp:45</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

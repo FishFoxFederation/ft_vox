@@ -1,5 +1,6 @@
 var dir_e0870200418b25675e0ea23f406010ef =
 [
+    [ "JoinThreads.hpp", "JoinThreads_8hpp.html", "JoinThreads_8hpp" ],
     [ "ThreadPool.cpp", "ThreadPool_8cpp.html", null ],
     [ "ThreadPool.hpp", "ThreadPool_8hpp.html", "ThreadPool_8hpp" ],
     [ "ThreadPoolAccessor.cpp", "ThreadPoolAccessor_8cpp.html", null ],

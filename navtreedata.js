@@ -68,12 +68,13 @@ var NAVTREE =
       [ "Conclusion", "render_loop.html#conclusion", null ]
     ] ],
     [ "Style guide", "styleguide.html", null ],
+    [ "Task Dependency ( WIP )", "taskDep.html", null ],
     [ "Threads Architecture", "threads.html", [
-      [ "Main thread", "threads.html#autotoc_md21", null ],
-      [ "Update Thread", "threads.html#autotoc_md22", null ],
-      [ "Render Thread", "threads.html#autotoc_md23", null ],
-      [ "Block Update Thread", "threads.html#autotoc_md24", null ],
-      [ "Thread pool", "threads.html#autotoc_md25", null ]
+      [ "Main thread", "threads.html#autotoc_md22", null ],
+      [ "Update Thread", "threads.html#autotoc_md23", null ],
+      [ "Render Thread", "threads.html#autotoc_md24", null ],
+      [ "Block Update Thread", "threads.html#autotoc_md25", null ],
+      [ "Thread pool", "threads.html#autotoc_md26", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -114,14 +115,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AbstractEvent_8cpp.html",
-"VulkanAPI_8cpp.html#a6a6be32f4ddd153a7853299a85f579de",
-"classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285",
-"classIdList.html#a74c071b70b6ecca184fd950f8e7d8417",
-"classPlayerListPacket.html#a11abd639cf06c9f48ea25028f8900395",
-"classThreadPoolAccessor.html#a0d361df5a6b36ddf6d00c57654391003",
-"define_8hpp_source.html",
-"structFace.html#a7e3b473ba7cc78827cfe1004627f86aa",
-"tracy__globals_8hpp.html"
+"Task_8hpp.html",
+"classClientSocket.html#aff1c002d60ed3aaf1b4de070ca8157c0",
+"classIPacket.html#ab710cd5faf4a0420d6a27ae8763fe4cc",
+"classPlayer.html#af8c2ecab491983e5749611255927d15d",
+"classSwapchain.html#a04ba7da3842a1f7da16bb854dd89d65a",
+"classWorld_1_1WorldGenerator.html#a8e1838540faf6c83c89182f8e105ea2b",
+"functions_c.html",
+"structLinePipelinePushConstant.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

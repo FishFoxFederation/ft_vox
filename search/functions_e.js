@@ -18,6 +18,7 @@ var searchData=
   ['poller_15',['Poller',['../classPoller.html#adf6d69ebc50dec9403c330c173507fb6',1,'Poller::Poller()'],['../classPoller.html#accbb095f0ade22128cffc0bb2f8c5a3d',1,'Poller::Poller(const Poller &amp;other)=delete'],['../classPoller.html#aa49f9ce662fecb114d7ecbf6375d3bfe',1,'Poller::Poller(Poller &amp;&amp;other)']]],
   ['pop_16',['pop',['../classIncomingPacketList.html#a0c1dc2f48f19d9a41ab222bf2f2cc34a',1,'IncomingPacketList']]],
   ['poppacket_17',['popPacket',['../classClient.html#abee92871a623dd53e5fce8b74e1e9b07',1,'Client']]],
-  ['push_18',['push',['../classHistory.html#a9937f1512abab01e09ae808a866c7c64',1,'History::push()'],['../classIncomingPacketList.html#a56a9a024269090a5acb9d07a3abe2b8d',1,'IncomingPacketList::push()']]],
-  ['putpixel_19',['putPixel',['../structImGuiTexture.html#a29c8bb2dd69d795fcfc075325c0ab8b8',1,'ImGuiTexture']]]
+  ['precede_18',['precede',['../classtask_1_1Task.html#a7a9ee6510ad7985d0ee9c97f39ed4230',1,'task::Task']]],
+  ['push_19',['push',['../classHistory.html#a9937f1512abab01e09ae808a866c7c64',1,'History::push()'],['../classIncomingPacketList.html#a56a9a024269090a5acb9d07a3abe2b8d',1,'IncomingPacketList::push()']]],
+  ['putpixel_20',['putPixel',['../structImGuiTexture.html#a29c8bb2dd69d795fcfc075325c0ab8b8',1,'ImGuiTexture']]]
 ];

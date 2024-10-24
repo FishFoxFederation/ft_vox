@@ -1,0 +1,8 @@
+<map id="task::BaseError" name="task::BaseError">
+<area shape="rect" id="node1" title=" " alt="" coords="257,93,371,163"/>
+<area shape="rect" id="node3" href="$classtask_1_1CycleError.html" title=" " alt="" coords="5,218,121,273"/>
+<area shape="rect" id="node4" href="$classtask_1_1EmptyGraphError.html" title=" " alt="" coords="146,218,301,273"/>
+<area shape="rect" id="node5" href="$classtask_1_1EmptyModuleError.html" title=" " alt="" coords="325,211,487,280"/>
+<area shape="rect" id="node6" href="$classtask_1_1TaskNotFromSameGraphError.html" title=" " alt="" coords="512,211,735,280"/>
+<area shape="rect" id="node2" title=" " alt="" coords="261,5,367,45"/>
+</map>

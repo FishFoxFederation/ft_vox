@@ -7,6 +7,8 @@ var classItemInfo =
       [ "WaterBlock", "classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba2ab9cca6084f8f97f1cea26ffe5519ee", null ],
       [ "GlassBlock", "classItemInfo.html#a9d898f32712d5daa690f863d6e59362bae1181c592b58c854544170da195ef749", null ],
       [ "LightBlock", "classItemInfo.html#a9d898f32712d5daa690f863d6e59362baa298bd451b145dd41effea6e7cb2f0c5", null ],
+      [ "WoodBlock", "classItemInfo.html#a9d898f32712d5daa690f863d6e59362baea0928cb890a46d1bf1f5e1ab5247bf9", null ],
+      [ "LeavesBlock", "classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba81c24c60f9662f1c6eb66ef72dff033f", null ],
       [ "None", "classItemInfo.html#a9d898f32712d5daa690f863d6e59362ba6adf97f83acf6453d4a6a4b1070f3754", null ]
     ] ],
     [ "block_id", "classItemInfo.html#ac598cab290a76b77150ba8cd5039385d", null ],
