@@ -283,14 +283,6 @@ uint32_t BindlessDescriptor::storeCombinedImageSampler(VkImageView imageView, Vk
 
 void BindlessDescriptor::setParams(BindlessDescriptorParams params, uint32_t current_frame)
 {
-	// void *data;
-	// VK_CHECK(
-	// 	vkMapMemory(m_device, m_parameter_buffer.memory, getParamsOffset(current_frame), sizeof(BindlessDescriptorParams), 0, &data),
-	// 	"Failed to map bindless descriptor parameter buffer"
-	// );
-	// memcpy(data, &params, sizeof(BindlessDescriptorParams));
-	// vkUnmapMemory(m_device, m_parameter_buffer.memory);
-
 	memcpy(
 		static_cast<uint8_t*>(m_parameter_buffer.mappedMemory()) + getParamsOffset(current_frame),
 		&params,
