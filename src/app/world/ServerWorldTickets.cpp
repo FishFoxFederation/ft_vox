@@ -79,8 +79,12 @@ void ServerWorld::updateTickets()
 		WorldGenerator::ChunkGenList chunk_gen_list;
 
 		floodFill(m_active_tickets, chunk_gen_list);
-		doChunkGens(chunk_gen_list);
-		waitForChunkFutures();
+		if (!chunk_gen_list.empty())
+		{
+			doChunkGens(chunk_gen_list);
+			waitForChunkFutures();
+			LOG_INFO("Chunk gen finished");
+		}
 	}
 }
 

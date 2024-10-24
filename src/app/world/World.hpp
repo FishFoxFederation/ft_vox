@@ -98,9 +98,9 @@ public:
 			genStruct()
 			: graph(task::TaskGraph::create()), light_graph(task::TaskGraph::create()), relief_graph(task::TaskGraph::create())
 			{
-				auto light_task = graph->emplace(light_graph).Name("Light passes");
-				auto relief_task = graph->emplace(relief_graph).Name("Relief passes");
-				relief_task.succceed(light_task);
+				task::Task light_task = graph->emplace(light_graph).Name("Light passes");
+				task::Task relief_task = graph->emplace(relief_graph).Name("Relief passes");
+				relief_task.precede(light_task);
 				light_graph->emplace([]{}); // dummy task
 				relief_graph->emplace([]{}); // dummy task
 				graph->emplace([]{});
