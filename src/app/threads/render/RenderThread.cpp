@@ -181,6 +181,12 @@ void RenderThread::loop()
 			DebugGui::fps.load(),
 			DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z
 		);
+		debug_text += ft_format(
+			"C: %.2f; E: %.2f; H: %.2f\n",
+			DebugGui::continentalness.load(),
+			DebugGui::erosion.load(),
+			DebugGui::humidity.load()
+		);
 
 		toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
 		{

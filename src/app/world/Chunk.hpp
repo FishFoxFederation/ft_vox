@@ -25,8 +25,12 @@ glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos);
 class Chunk
 {
 public:
-	typedef std::array<BlockInfo::Type, BLOCKS_PER_CHUNK> BlockArray;
-	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
+	struct biomeInfo
+	{
+		float continentalness;
+		float erosion;
+		float humidity;
+	};
 	enum class genLevel : uint16_t
 	{
 		LIGHT,
@@ -34,10 +38,26 @@ public:
 		RELIEF,
 		EMPTY,
 	};
+	enum class e_biome : uint8_t
+	{
+		FOREST,
+		PLAIN,
+		MOUNTAIN,
+		OCEAN,
+		COAST,
+		NONE
+	};
+
+	typedef std::array<BlockInfo::Type, BLOCKS_PER_CHUNK> BlockArray;
+	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
+
+	// one biome info per 4 blocks
+	typedef std::array<biomeInfo, CHUNK_X_SIZE * CHUNK_Z_SIZE / 4> BiomeArray;
+
 
 	Chunk(glm::ivec3 position);
 	// Chunk(const glm::ivec3 & position, const BlockArray & blocks);
-	Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light);
+	Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light, const BiomeArray & biome);
 
 	Chunk(const Chunk & other) = delete;
 	Chunk(Chunk && other) = delete;
@@ -68,6 +88,15 @@ public:
 	uint8_t				getBlockLight(const glm::ivec3 & position) const;
 	void				setBlockLight(const int & x, const int & y, const int & z, uint8_t light);
 	void 				setBlockLight(const glm::ivec3 & position, uint8_t light);
+
+	BiomeArray &		getBiomes();
+	const BiomeArray &	getBiomes() const;
+	biomeInfo			getBiome(const int & x, const int & z) const;
+	biomeInfo			getBiome(const glm::ivec2 & position) const;
+	void				setBiome(const int & x, const int & z, const biomeInfo & biome);
+	void 				setBiome(const glm::ivec2 & position, const biomeInfo & biome);
+	static int          toBiomeIndex(const int & x, const int & z);
+	static int          toBiomeIndex(const glm::ivec2 & position);
 
 	const glm::ivec3 &	getPosition() const;
 	void 				setPosition(const glm::ivec3 & position);
@@ -105,6 +134,7 @@ private:
 	BlockArray	m_blocks;
 	// 4 left bits for block light, 4 right bits for sky light
 	LightArray	m_light;
+	BiomeArray	m_biomes;
 	int			load_level = TICKET_LEVEL_INACTIVE + 10;
 	int			highest_load_level = 0;
 	genLevel	m_gen_level = genLevel::EMPTY;

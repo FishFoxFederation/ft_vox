@@ -11,6 +11,7 @@ Chunk::Chunk(glm::ivec3 position)
 		m_blocks[i] = BlockInfo::Type::Air;
 
 	memset(m_light.data(), 0, BLOCKS_PER_CHUNK);
+	memset(m_biomes.data(), 0, m_biomes.size());
 }
 
 // Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks)
@@ -19,8 +20,15 @@ Chunk::Chunk(glm::ivec3 position)
 // 	memset(m_light.data(), 0, BLOCKS_PER_CHUNK);
 // }
 
-Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light)
-: position(position), m_mesh_id(0), m_blocks(blocks), m_light(light)
+Chunk::Chunk(const glm::ivec3 & position,
+	const BlockArray & blocks,
+	const LightArray & light,
+	const BiomeArray & biomes)
+:	position(position),
+	m_mesh_id(0),
+	m_blocks(blocks),
+	m_light(light),
+	m_biomes(biomes)
 {
 }
 
@@ -183,6 +191,45 @@ void Chunk::setBlockLight(const glm::ivec3 & position, uint8_t light)
 	setBlockLight(position.x, position.y, position.z, light);
 }
 
+Chunk::BiomeArray & Chunk::getBiomes()
+{
+	return m_biomes;
+}
+
+const Chunk::BiomeArray & Chunk::getBiomes() const
+{
+	return m_biomes;
+}
+
+Chunk::biomeInfo Chunk::getBiome(const int & x, const int & z) const
+{
+	return m_biomes[toBiomeIndex(x, z)];
+}
+
+Chunk::biomeInfo Chunk::getBiome(const glm::ivec2 & position) const
+{
+	return getBiome(position.x, position.y);
+}
+
+void Chunk::setBiome(const int & x, const int & z, const biomeInfo & biome)
+{
+	m_biomes[toBiomeIndex(x, z)] = biome;
+}
+
+void Chunk::setBiome(const glm::ivec2 & position, const biomeInfo & biome)
+{
+	setBiome(position.x, position.y, biome);
+}
+
+int Chunk::toBiomeIndex(const int & x, const int & z)
+{
+	return x / 2 + (z * CHUNK_X_SIZE) / 2;
+}
+
+int Chunk::toBiomeIndex(const glm::ivec2 & position)
+{
+	return toBiomeIndex(position.x, position.y);
+}
 
 const glm::ivec3 & Chunk::getPosition() const
 {
