@@ -6,7 +6,7 @@ ChunkPacket::ChunkPacket()
 }
 
 ChunkPacket::ChunkPacket(const Chunk & chunk)
-: m_chunk_data{chunk.getPosition(), chunk.getBlocks(), chunk.getLight()}
+: m_chunk_data(chunk.getPosition(), chunk.getBlocks(), chunk.getLight(), chunk.getBiomes())
 {
 }
 
@@ -89,5 +89,5 @@ std::shared_ptr<Chunk>	ChunkPacket::GetChunk() const
 
 void ChunkPacket::SetChunk(const Chunk & chunk)
 {
-	m_chunk_data = {chunk.getPosition(), chunk.getBlocks(), chunk.getLight(), chunk.getBiomes()};
+	m_chunk_data = ChunkData(chunk.getPosition(), chunk.getBlocks(), chunk.getLight(), chunk.getBiomes());
 }
