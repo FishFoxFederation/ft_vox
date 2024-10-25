@@ -117,9 +117,11 @@ public:
 	static inline std::atomic<int> looked_face_sky_light;
 	static inline std::atomic<int> looked_face_block_light;
 
-	static inline std::atomic<float> continentalness;
-	static inline std::atomic<float> erosion;
-	static inline std::atomic<float> humidity;
+	static inline std::atomic<float>	continentalness;
+	static inline std::atomic<float>	erosion;
+	static inline std::atomic<float>	humidity;
+	static inline std::atomic<bool>		isLand;
+	static inline std::atomic<bool> 	isOcean;
 
 	// Render Thread times
 	static inline History<float, 100> frame_time_history;
