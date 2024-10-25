@@ -367,6 +367,8 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 		DebugGui::continentalness = biome.continentalness;
 		DebugGui::erosion = biome.erosion;
 		DebugGui::humidity = biome.humidity;
+		DebugGui::isLand = biome.isLand;
+		DebugGui::isOcean = biome.isOcean;
 	}
 	// loadChunks(playerPosition);
 	// unloadChunks(playerPosition);
