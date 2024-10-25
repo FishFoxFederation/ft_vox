@@ -12,6 +12,7 @@ public:
 		glm::ivec3			chunk_pos;
 		Chunk::BlockArray	blocks;
 		Chunk::LightArray	light;
+		Chunk::BiomeArray	biomes;
 	};
 
 	ChunkPacket();
