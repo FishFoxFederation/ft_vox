@@ -223,7 +223,7 @@ void Chunk::setBiome(const glm::ivec2 & position, const biomeInfo & biome)
 
 int Chunk::toBiomeIndex(const int & x, const int & z)
 {
-	return x / 2 + (z * CHUNK_X_SIZE) / 2;
+	return x / 2 + (z / 2) * (CHUNK_Z_SIZE / 2);
 }
 
 int Chunk::toBiomeIndex(const glm::ivec2 & position)

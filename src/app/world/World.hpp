@@ -9,6 +9,7 @@
 #include "Mob.hpp"
 #include "hashes.hpp"
 #include "Tracy.hpp"
+#include "Structures.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -96,18 +97,26 @@ public:
 		struct genStruct
 		{
 			genStruct()
-			: graph(task::TaskGraph::create()), light_graph(task::TaskGraph::create()), relief_graph(task::TaskGraph::create())
+			:
+			graph(task::TaskGraph::create()),
+			light_graph(task::TaskGraph::create()),
+			relief_graph(task::TaskGraph::create()),
+			decorate_graph(task::TaskGraph::create())
 			{
 				task::Task light_task = graph->emplace(light_graph).Name("Light passes");
 				task::Task relief_task = graph->emplace(relief_graph).Name("Relief passes");
-				relief_task.precede(light_task);
+				task::Task decorate_task = graph->emplace(decorate_graph).Name("Decoration passes");
+				relief_task.precede(decorate_task);
+				decorate_task.precede(light_task);
 				light_graph->emplace([]{}); // dummy task
 				relief_graph->emplace([]{}); // dummy task
+				decorate_graph->emplace([]{}); // dummy task
 				graph->emplace([]{});
 			}
 			std::shared_ptr<task::TaskGraph> graph;
 			std::shared_ptr<task::TaskGraph> light_graph;
 			std::shared_ptr<task::TaskGraph> relief_graph;
+			std::shared_ptr<task::TaskGraph> decorate_graph;
 			std::unordered_set<std::pair<glm::ivec3, Chunk::genLevel>> generated_chunk;
 		};
 		/*
@@ -130,6 +139,7 @@ public:
 
 		void	lightPass(const glm::ivec3 & pos);
 		void	reliefPass(const glm::ivec3 & pos);
+		void 	decoratePass(const glm::ivec3 & pos);
 
 		void	setupPass(genStruct & genData,const glm::ivec3 & chunk_pos, Chunk::genLevel gen_level);
 

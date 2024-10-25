@@ -357,11 +357,12 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 	// std::lock_guard lock6(m_blocks_to_set_mutex);
 	std::lock_guard lock(m_loaded_chunks_mutex);
 	
-	const glm::ivec3 playerChunk3D = getChunkPos(playerPosition);
+	glm::ivec3 playerChunk3D = getChunkPos(playerPosition);
+	playerChunk3D.y = 0;
 	const std::shared_ptr<Chunk> playerChunk = getChunk(playerChunk3D);
 	if (playerChunk != nullptr)
 	{
-		Chunk::biomeInfo biome = playerChunk->getBiome(getBlockChunkPos(playerPosition));
+		Chunk::biomeInfo biome = playerChunk->getBiome(getBlockChunkPos(playerPosition).x, getBlockChunkPos(playerPosition).z);
 
 		DebugGui::continentalness = biome.continentalness;
 		DebugGui::erosion = biome.erosion;
