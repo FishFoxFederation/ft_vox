@@ -22,7 +22,7 @@ and you can run the client using this command
 `./build/ft_vox [ip] [port] [userid]`
 
 by default the ip is localhost and the port is 4245
-and you cna use any userid you want as long as there isnt another player on the server with the same userid otherwise the server will reject the connection
+and you can use any userid you want as long as there isn't another player on the server with the same userid otherwise the server will reject the connection
 
 # How to play
 
