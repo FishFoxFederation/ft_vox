@@ -9,6 +9,11 @@ class ChunkPacket : public IPacket
 public:
 	struct ChunkData
 	{
+		ChunkData() = default;
+		ChunkData(const glm::ivec3 & chunk_pos, const Chunk::BlockArray & blocks, const Chunk::LightArray & light, const Chunk::BiomeArray & biomes)
+		: chunk_pos(chunk_pos), blocks(blocks), light(light), biomes(biomes)
+		{
+		}
 		glm::ivec3			chunk_pos;
 		Chunk::BlockArray	blocks;
 		Chunk::LightArray	light;

@@ -27,6 +27,9 @@ class Chunk
 public:
 	struct biomeInfo
 	{
+		bool isLand;
+		bool isOcean;
+		bool isCoast;
 		float continentalness;
 		float erosion;
 		float humidity;
@@ -34,8 +37,8 @@ public:
 	enum class genLevel : uint16_t
 	{
 		LIGHT,
+		DECORATE,
 		CAVE,
-		RELIEF,
 		EMPTY,
 	};
 	enum class e_biome : uint8_t

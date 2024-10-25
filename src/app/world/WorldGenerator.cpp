@@ -1,3 +1,4 @@
+#define GLM_FORCE_XYZW_ONLY
 #include "WorldGenerator.hpp"
 #include "World.hpp"
 
@@ -599,13 +600,32 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 			for(int z = -1; z <= 1; z++)
 			{
 				glm::ivec3 current_pos = chunk_pos + glm::ivec3(x, 0, z);
-				setupPass(genData, current_pos, CAVE);
+				setupPass(genData, current_pos, DECORATE);
 			}
 		}
-		setupPass(genData, chunk_pos, CAVE);
 
 		genData.light_graph->emplace([this, chunk_pos]{
 			lightPass(chunk_pos);
+		});
+		break;
+	}
+	case DECORATE:
+	{
+		if (chunk->getGenLevel() <= DECORATE)
+			return;
+		
+		//to do decorations we need to garantee that the current chunk has full formed relief/cave chunks around it		
+		for(int x = -1; x <= 1; x++)
+		{
+			for(int z = -1; z <= 1; z++)
+			{
+				glm::ivec3 current_pos = chunk_pos + glm::ivec3(x, 0, z);
+				setupPass(genData, current_pos, CAVE);
+			}
+		}
+		
+		genData.decorate_graph->emplace([this, chunk_pos]{
+			decoratePass(chunk_pos);
 		});
 		break;
 	}
@@ -649,7 +669,7 @@ void World::WorldGenerator::lightPass(const glm::ivec3 & chunkPos3D)
 			if (chunk == nullptr)
 				continue;
 			std::lock_guard lock(chunk->status);
-			if (chunk->getGenLevel() != CAVE && chunk->getGenLevel() != LIGHT)
+			if (chunk->getGenLevel() != DECORATE && chunk->getGenLevel() != LIGHT)
 				throw std::runtime_error("chunk not generated :" + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.z));
 			chunkGrid.insert({chunk_pos, chunk});
 		}
@@ -680,11 +700,36 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 	{
 		for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 		{
+			//generate or find current biome values
+			float continentalness = 0.0f;
+			bool isLand = false;
+			bool isOcean = false;
+			bool isCoast = false;
+			Chunk::biomeInfo biome;
+			if (blockZ % 2 == 0 && blockX % 2 == 0)
+			{
+				continentalness = m_continentalness_perlin.noise(glm::vec2(
+					(blockX + chunkPos3D.x * CHUNK_X_SIZE) * 0.00090f,
+					(blockZ + chunkPos3D.z * CHUNK_Z_SIZE) * 0.00090f
+				));
+				isLand = continentalness > 0.2f;
+				isOcean = continentalness < 0.00f;
+				isCoast = !isLand && !isOcean;
+				biome.continentalness = continentalness;
+				biome.isLand = isLand;
+				biome.isOcean = isOcean;
+				biome.isCoast = isCoast;
+				chunk->setBiome(blockX, blockZ, biome);
+			}
+			else
+			{
+				biome = chunk->getBiome(blockX, blockZ);
+				continentalness = biome.continentalness;
+				isLand = biome.isLand;
+				isOcean = biome.isOcean;
+				isCoast = biome.isCoast;
+			}
 			// check the continentalness of the chunk
-			float continentalness = m_continentalness_perlin.noise(glm::vec2(
-				(blockX + chunkPos3D.x * CHUNK_X_SIZE) * 0.00090f,
-				(blockZ + chunkPos3D.z * CHUNK_Z_SIZE) * 0.00090f
-			));
 
 			// continentalness *= 4; // map from [-1, 1] to [-4, 4]
 
@@ -701,10 +746,6 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 
 			float oceanReliefValue = (reliefValue * -60) + 60; // map from [0, 1] to [60, 0]
 			float landReliefValue = (reliefValue * (CHUNK_Y_SIZE - 80)) + 80; // map from [0, 1] to [80, CHUNK_Y_SIZE]
-
-			bool isLand = continentalness > 0.2f;
-			bool isOcean = continentalness < 0.00f;
-			bool isCoast = !isLand && !isOcean;
 
 			if (isOcean)
 			{
@@ -793,6 +834,100 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 					&& generateCaveBlock(position) == BlockInfo::Type::Air)
 					to_set = BlockInfo::Type::Air;
 				chunk->setBlock(blockX, blockY, blockZ, to_set);
+			}
+		}
+	}
+}
+
+void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
+{
+	ChunkMap chunkGrid;
+	std::shared_ptr<Chunk> center_chunk = m_world.getChunkNoLock(chunkPos3D);
+	{
+		std::lock_guard lock(center_chunk->status);
+		center_chunk->setGenLevel(DECORATE);
+	}
+	for (int x = -1; x <= 1; x++)
+	{
+		for (int z = -1; z <= 1; z++)
+		{
+			glm::ivec3 chunk_pos = chunkPos3D + glm::ivec3(x, 0, z);
+			std::shared_ptr<Chunk> chunk = m_world.getChunkNoLock(chunk_pos);
+			if (chunk == nullptr)
+				continue;
+			std::lock_guard lock(chunk->status);
+			if (chunk->getGenLevel() != CAVE && chunk->getGenLevel() != DECORATE)
+				throw std::runtime_error("chunk not generated :" + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.z));
+			chunkGrid.insert({chunk_pos, chunk});
+		}
+	}
+
+	std::scoped_lock lock(
+		chunkGrid.at(chunkPos3D)->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, -1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, 1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, -1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 0})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, -1})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 0})->status,
+		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
+	);
+
+	//find the first non ocean column 
+	glm::ivec3 tree_start = {0, 0, 0};
+	bool found = false;
+	// for(int x = 0; x < CHUNK_X_SIZE; x++)
+	// {
+	// 	for(int z = 0; z < CHUNK_Z_SIZE; z++)
+	// 	{
+	// 		if (chunkGrid.at(chunkPos3D)->getBiome(x, z).isLand)
+	// 		{
+	// 			tree_start = {x, 0, z};
+	// 			found = true;
+	// 			break;
+	// 		}
+	// 	}
+	// 	if (found)
+	// 		break;
+	// }
+	if (center_chunk->getBiome(15, 15).isLand)
+	{
+		tree_start = {15, 0, 15};
+		found = true;
+	}
+
+	if (found == false)
+		return;
+
+	//find highest block in the column
+	int highest_block = CHUNK_Y_SIZE - 1;
+	while (highest_block >= 0 && center_chunk->getBlock(tree_start.x, highest_block, tree_start.y) == BlockInfo::Type::Air)
+		highest_block--;
+	tree_start = {tree_start.x, highest_block + 1, tree_start.y};
+	//place the tree
+
+	//convert the tree start to world position
+	tree_start += chunkPos3D * CHUNK_SIZE_IVEC3;
+
+	const StructureInfo & tree_info = g_structures_info.get(StructureInfo::Type::Tree);
+
+	for(int x = 0; x < tree_info.size.x; x++)
+	{
+		for(int z = 0; z < tree_info.size.z; z++)
+		{
+			for(int y = 0; y < tree_info.size.y; y++)
+			{
+				glm::ivec3 current_world_position = tree_start + glm::ivec3(x, y, z);
+
+				glm::ivec3 current_chunk_pos = getChunkPos(current_world_position);
+				current_chunk_pos.y = 0;
+				std::shared_ptr<Chunk> current_chunk = chunkGrid.at(current_chunk_pos);
+
+				glm::ivec3 current_chunk_position = getBlockChunkPos(current_world_position);
+				if (current_chunk == nullptr)
+					continue;
+				current_chunk->setBlock(current_chunk_position, tree_info.getBlock({x, y ,z}));
 			}
 		}
 	}

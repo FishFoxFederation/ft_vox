@@ -100,6 +100,14 @@ void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
 	(void)packet;
 	std::shared_ptr<Chunk> chunk = packet->GetChunk();
+	// for (int x = 0 ; x < CHUNK_X_SIZE ; x++)
+	// {
+	// 	if (chunk->getBiome(x, 0).continentalness != 0)
+	// 	{
+	// 		LOG_INFO("CONTINENTALNESS: " << chunk->getBiome(x, 0).continentalness);
+	// 		break;
+	// 	}
+	// }
 	// LOG_INFO("Received chunk pos " << chunk->getPosition().x << " " << chunk->getPosition().y << " " << chunk->getPosition().z);
 	m_world.addChunk(std::move(chunk));
 }
