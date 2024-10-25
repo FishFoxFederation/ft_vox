@@ -356,6 +356,13 @@ void ClientWorld::updateChunks(const glm::vec3 & playerPosition)
 	// std::lock_guard lock5(m_unload_set_mutex);
 	// std::lock_guard lock6(m_blocks_to_set_mutex);
 	std::lock_guard lock(m_loaded_chunks_mutex);
+	
+	const glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
+	const std::shared_ptr<Chunk> playerChunk = getChunk(playerChunk3D);
+	if (playerChunk != nullptr)
+	{
+		Chunk::biomeInfo biome = playerChunk->getBiome(Chunk::getPositionInChunk(playerPosition));
+	}
 	// loadChunks(playerPosition);
 	// unloadChunks(playerPosition);
 	doBlockSets();
