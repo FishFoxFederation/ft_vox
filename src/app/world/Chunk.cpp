@@ -11,7 +11,8 @@ Chunk::Chunk(glm::ivec3 position)
 		m_blocks[i] = BlockInfo::Type::Air;
 
 	memset(m_light.data(), 0, BLOCKS_PER_CHUNK);
-	memset(m_biomes.data(), 0, m_biomes.size());
+	for(auto & biome : m_biomes)
+		biome = biomeInfo();
 }
 
 // Chunk::Chunk(const glm::ivec3 & position, const BlockArray & blocks)
@@ -223,18 +224,15 @@ void Chunk::setBiome(const glm::ivec2 & position, const biomeInfo & biome)
 
 glm::ivec2 Chunk::toBiomeCoord(int index)
 {
-	int x = index % (CHUNK_X_SIZE / 2);
-	int z = (index - x) % (CHUNK_Z_SIZE / 2);
+	int x = index % (CHUNK_X_SIZE);
+	int z = (index - x) / (CHUNK_Z_SIZE);
 
 	return glm::ivec2(x, z);
 }
 
 int Chunk::toBiomeIndex(int x, int z)
 {
-	x /= 2;
-	z /= 2;
-
-	return x + z * (CHUNK_X_SIZE / 2);
+	return x + z * (CHUNK_Z_SIZE);
 }
 
 int Chunk::toBiomeIndex(const glm::ivec2 & position)
