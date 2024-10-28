@@ -701,34 +701,40 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 		for(int blockZ = 0; blockZ < CHUNK_Z_SIZE; blockZ++)
 		{
 			//generate or find current biome values
-			float continentalness = 0.0f;
+			float continentalness = 10000.0f;
 			bool isLand = false;
 			bool isOcean = false;
 			bool isCoast = false;
 			Chunk::biomeInfo biome;
-			if (blockZ % 2 == 0 && blockX % 2 == 0)
-			{
-				continentalness = m_continentalness_perlin.noise(glm::vec2(
-					(blockX + chunkPos3D.x * CHUNK_X_SIZE) * 0.00090f,
-					(blockZ + chunkPos3D.z * CHUNK_Z_SIZE) * 0.00090f
-				));
-				isLand = continentalness > 0.2f;
-				isOcean = continentalness < 0.00f;
-				isCoast = !isLand && !isOcean;
-				biome.continentalness = continentalness;
-				biome.isLand = isLand;
-				biome.isOcean = isOcean;
-				biome.isCoast = isCoast;
-				chunk->setBiome(blockX, blockZ, biome);
-			}
-			else
-			{
-				biome = chunk->getBiome(blockX, blockZ);
-				continentalness = biome.continentalness;
-				isLand = biome.isLand;
-				isOcean = biome.isOcean;
-				isCoast = biome.isCoast;
-			}
+			continentalness = m_continentalness_perlin.noise(glm::vec2(
+				(blockX + chunkPos3D.x * CHUNK_X_SIZE) * 0.00090f,
+				(blockZ + chunkPos3D.z * CHUNK_Z_SIZE) * 0.00090f
+			));
+			isLand = continentalness > 0.2f;
+			isOcean = continentalness < 0.00f;
+			isCoast = !isLand && !isOcean;
+			biome.continentalness = continentalness;
+			biome.isLand = isLand;
+			biome.isOcean = isOcean;
+			biome.isCoast = isCoast;
+			chunk->setBiome(blockX, blockZ, biome);
+			// if (blockZ % 2 == 0 && blockX % 2 == 0)
+			// {
+			// 	if (blockX + 1 < CHUNK_X_SIZE)
+			// 		chunk->setBiome(blockX + 1, blockZ, biome);
+			// 	if (blockZ + 1 < CHUNK_Z_SIZE)
+			// 		chunk->setBiome(blockX, blockZ + 1, biome);
+			// 	if (blockX + 1 < CHUNK_X_SIZE && blockZ + 1 < CHUNK_Z_SIZE)
+			// 		chunk->setBiome(blockX + 1, blockZ + 1, biome);
+			// }
+			// else
+			// {
+			// 	biome = chunk->getBiome(blockX, blockZ);
+			// 	continentalness = biome.continentalness;
+			// 	isLand = biome.isLand;
+			// 	isOcean = biome.isOcean;
+			// 	isCoast = biome.isCoast;
+			// }
 			// check the continentalness of the chunk
 
 			// continentalness *= 4; // map from [-1, 1] to [-4, 4]
@@ -751,17 +757,17 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 			{
 				reliefValue = oceanReliefValue;
 			}
-			else if (isCoast)
-			{
-				// reliefValue *= (CHUNK_Y_SIZE - 100); // map from [0, 1] to [0, CHUNK_Y_SIZE - 100]
-				// reliefValue += 100; // map from [0, CHUNK_Y_SIZE - 100] to [100, CHUNK_Y_SIZE]
-				reliefValue = std::lerp(oceanReliefValue, landReliefValue, mapRange(continentalness, 0.0f, 0.2f, 0.0f, 1.0f));
-			}
 			else if (isLand)
 			{
 				// reliefValue *= (CHUNK_Y_SIZE - 100); // map from [0, 1] to [0, CHUNK_Y_SIZE - 100]
 				// reliefValue += 100; // map from [0, CHUNK_Y_SIZE - 100] to [100, CHUNK_Y_SIZE]
 				reliefValue = landReliefValue;
+			}
+			else if (isCoast)
+			{
+				// reliefValue *= (CHUNK_Y_SIZE - 100); // map from [0, 1] to [0, CHUNK_Y_SIZE - 100]
+				// reliefValue += 100; // map from [0, CHUNK_Y_SIZE - 100] to [100, CHUNK_Y_SIZE]
+				reliefValue = std::lerp(oceanReliefValue, landReliefValue, mapRange(continentalness, 0.0f, 0.2f, 0.0f, 1.0f));
 			}
 			int highestBlock = 0;
 			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
@@ -887,20 +893,20 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 		{
 			glm::ivec2 chunk_pos = Chunk::toBiomeCoord(i);
 			tree_positions.insert(chunk_pos);
-			tree_positions.insert(chunk_pos + glm::ivec2(1, 0));
-			tree_positions.insert(chunk_pos + glm::ivec2(0, 1));
-			tree_positions.insert(chunk_pos + glm::ivec2(1, 1));
 		}
 	}
 
-	const StructureInfo & tree_info = g_structures_info.get(StructureInfo::Type::Tree);
+	std::srand(this->seed);
 
+	const StructureInfo & tree_info = g_structures_info.get(StructureInfo::Type::Tree);
 	while (!tree_positions.empty())
 	{
 		glm::ivec2 tree_pos = *tree_positions.begin();
 		tree_positions.erase(tree_pos);
 
 		//test if the tree can be placed
+		if (std::rand() % 15 != 0)
+			continue;
 
 
 		glm::ivec3 tree_start = glm::ivec3(
@@ -914,16 +920,13 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 		// if ((std::hash<glm::ivec2>{}(tree_start)) % 10 != 0)
 		// 	continue;
 
-		if (std::rand() % 10 != 0)
-			continue;
 
 		//erase neighbor positions from the list
-		for(int x = 1; x <= tree_info.size.x; x++)
+		for(int x = 0; x < tree_info.size.x; x++)
 		{
-			for(int z = 1; z <= tree_info.size.z; z++)
-				tree_positions.erase(tree_pos + glm::ivec2(x, z));
+			for(int z = 0; z < tree_info.size.z; z++)
+				tree_positions.erase(tree_pos + glm::ivec2(x - 1, z - 1));
 		}
-
 		//find highest block that isnt air
 		
 		//convert tree start to world pos

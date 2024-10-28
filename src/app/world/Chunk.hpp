@@ -27,12 +27,17 @@ class Chunk
 public:
 	struct biomeInfo
 	{
-		bool isLand;
-		bool isOcean;
-		bool isCoast;
-		float continentalness;
-		float erosion;
-		float humidity;
+		biomeInfo() = default;
+		biomeInfo(const biomeInfo & other) = default;
+		biomeInfo(biomeInfo && other) = default;
+		biomeInfo & operator=(const biomeInfo & other) = default;
+		biomeInfo & operator=(biomeInfo && other) = default;
+		bool isLand = false;
+		bool isOcean = false;
+		bool isCoast = false;
+		float continentalness = 0;
+		float erosion = 0;
+		float humidity = 0;
 	};
 	enum class genLevel : uint16_t
 	{
@@ -56,7 +61,7 @@ public:
 	typedef std::array<uint8_t, CHUNK_X_SIZE * CHUNK_Z_SIZE> HeightArray;
 
 	// one biome info per 4 blocks
-	typedef std::array<biomeInfo, CHUNK_X_SIZE * CHUNK_Z_SIZE / 4> BiomeArray;
+	typedef std::array<biomeInfo, CHUNK_X_SIZE * CHUNK_Z_SIZE> BiomeArray;
 
 
 	Chunk(glm::ivec3 position);
