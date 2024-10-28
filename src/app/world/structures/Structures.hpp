@@ -41,13 +41,13 @@ class StructuresInfo
 {
 public:
 
-	static StructuresInfo & getInstance()
+	static const StructuresInfo & getInstance()
 	{
 		static StructuresInfo instance;
 		return instance;
 	}
 
-	const StructureInfo & get(const StructureInfo::Type id)
+	const StructureInfo & get(const StructureInfo::Type id) const
 	{
 		return m_infos[static_cast<size_t>(id)];
 	}
@@ -59,4 +59,4 @@ private:
 	StructuresInfo();
 };
 
-extern StructuresInfo & g_structures_info;
+extern const StructuresInfo & g_structures_info;
