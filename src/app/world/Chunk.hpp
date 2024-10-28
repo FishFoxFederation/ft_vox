@@ -53,6 +53,7 @@ public:
 
 	typedef std::array<BlockInfo::Type, BLOCKS_PER_CHUNK> BlockArray;
 	typedef std::array<uint8_t, BLOCKS_PER_CHUNK> LightArray;
+	typedef std::array<uint8_t, CHUNK_X_SIZE * CHUNK_Z_SIZE> HeightArray;
 
 	// one biome info per 4 blocks
 	typedef std::array<biomeInfo, CHUNK_X_SIZE * CHUNK_Z_SIZE / 4> BiomeArray;
@@ -98,8 +99,19 @@ public:
 	biomeInfo			getBiome(const glm::ivec2 & position) const;
 	void				setBiome(const int & x, const int & z, const biomeInfo & biome);
 	void 				setBiome(const glm::ivec2 & position, const biomeInfo & biome);
-	static int          toBiomeIndex(const int & x, const int & z);
+	static int          toBiomeIndex(int x, int z);
 	static int          toBiomeIndex(const glm::ivec2 & position);
+	static glm::ivec2   toBiomeCoord(int index);
+
+	HeightArray &		getHeights();
+	const HeightArray &	getHeights() const;
+	uint8_t				getHeight(const int & x, const int & z) const;
+	uint8_t				getHeight(const glm::ivec2 & position) const;
+	void				setHeight(const int & x, const int & z, uint8_t height);
+	void 				setHeight(const glm::ivec2 & position, uint8_t height);
+	static int          toHeightIndex(const int & x, const int & z);
+	static int          toHeightIndex(const glm::ivec2 & position);
+
 
 	const glm::ivec3 &	getPosition() const;
 	void 				setPosition(const glm::ivec3 & position);
@@ -138,6 +150,7 @@ private:
 	// 4 left bits for block light, 4 right bits for sky light
 	LightArray	m_light;
 	BiomeArray	m_biomes;
+	HeightArray m_heights;
 	int			load_level = TICKET_LEVEL_INACTIVE + 10;
 	int			highest_load_level = 0;
 	genLevel	m_gen_level = genLevel::EMPTY;

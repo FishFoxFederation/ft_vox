@@ -1,6 +1,6 @@
 #include "Structures.hpp"
 
-StructuresInfo & g_structures_info = StructuresInfo::getInstance();
+const StructuresInfo & g_structures_info = StructuresInfo::getInstance();
 
 typedef BlockInfo::Type BT;
 
