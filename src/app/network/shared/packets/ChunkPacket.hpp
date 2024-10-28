@@ -2,6 +2,7 @@
 
 #include "IPacket.hpp"
 #include "Chunk.hpp"
+#include "RLE_TEST.hpp"
 
 
 class ChunkPacket : public IPacket
@@ -10,12 +11,12 @@ public:
 	struct ChunkData
 	{
 		ChunkData() = default;
-		ChunkData(const glm::ivec3 & chunk_pos, const Chunk::BlockArray & blocks, const Chunk::LightArray & light, const Chunk::BiomeArray & biomes)
-		: chunk_pos(chunk_pos), blocks(blocks), light(light), biomes(biomes)
+		ChunkData(const glm::ivec3 & chunk_pos, const Chunk::LightArray & light, const Chunk::BiomeArray & biomes)
+		: chunk_pos(chunk_pos), light(light), biomes(biomes)
 		{
 		}
 		glm::ivec3			chunk_pos;
-		Chunk::BlockArray	blocks;
+		// Chunk::BlockArray	blocks;
 		Chunk::LightArray	light;
 		Chunk::BiomeArray	biomes;
 	};
@@ -46,5 +47,6 @@ public:
 
 private:
 	ChunkData	m_chunk_data;
+	RLE_TEST<BlockInfo::Type, BLOCKS_PER_CHUNK> m_blocks;
 };
 
