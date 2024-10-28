@@ -221,14 +221,65 @@ void Chunk::setBiome(const glm::ivec2 & position, const biomeInfo & biome)
 	setBiome(position.x, position.y, biome);
 }
 
-int Chunk::toBiomeIndex(const int & x, const int & z)
+glm::ivec2 Chunk::toBiomeCoord(int index)
 {
-	return x / 2 + (z / 2) * (CHUNK_Z_SIZE / 2);
+	int x = index % (CHUNK_X_SIZE / 2);
+	int z = (index - x) % (CHUNK_Z_SIZE / 2);
+
+	return glm::ivec2(x, z);
+}
+
+int Chunk::toBiomeIndex(int x, int z)
+{
+	x /= 2;
+	z /= 2;
+
+	return x + z * (CHUNK_X_SIZE / 2);
 }
 
 int Chunk::toBiomeIndex(const glm::ivec2 & position)
 {
 	return toBiomeIndex(position.x, position.y);
+}
+
+Chunk::HeightArray & Chunk::getHeights()
+{
+	return m_heights;
+}
+
+const Chunk::HeightArray & Chunk::getHeights() const
+{
+	return m_heights;
+}
+
+uint8_t Chunk::getHeight(const int & x, const int & z) const
+{
+	return m_heights[toHeightIndex(x, z)];
+}
+
+uint8_t Chunk::getHeight(const glm::ivec2 & position) const
+{
+	return getHeight(position.x, position.y);
+}
+
+void Chunk::setHeight(const int & x, const int & z, uint8_t height)
+{
+	m_heights[toHeightIndex(x, z)] = height;
+}
+
+void Chunk::setHeight(const glm::ivec2 & position, uint8_t height)
+{
+	setHeight(position.x, position.y, height);
+}
+
+int Chunk::toHeightIndex(const int & x, const int & z)
+{
+	return x + z * CHUNK_X_SIZE;
+}
+
+int Chunk::toHeightIndex(const glm::ivec2 & position)
+{
+	return toHeightIndex(position.x, position.y);
 }
 
 const glm::ivec3 & Chunk::getPosition() const

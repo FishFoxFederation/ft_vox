@@ -763,7 +763,7 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 				// reliefValue += 100; // map from [0, CHUNK_Y_SIZE - 100] to [100, CHUNK_Y_SIZE]
 				reliefValue = landReliefValue;
 			}
-
+			int highestBlock = 0;
 			for(int blockY = 0; blockY < CHUNK_Y_SIZE; blockY++)
 			{
 
@@ -833,8 +833,11 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 					&& to_set != BlockInfo::Type::Water
 					&& generateCaveBlock(position) == BlockInfo::Type::Air)
 					to_set = BlockInfo::Type::Air;
+				if (to_set != BlockInfo::Type::Air && blockY > highestBlock)
+					highestBlock = blockY;
 				chunk->setBlock(blockX, blockY, blockZ, to_set);
 			}
+			chunk->setHeight(blockX, blockZ, highestBlock);
 		}
 	}
 }
@@ -874,60 +877,86 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
 	);
 
-	//find the first non ocean column 
-	glm::ivec3 tree_start = {0, 0, 0};
-	bool found = false;
-	// for(int x = 0; x < CHUNK_X_SIZE; x++)
-	// {
-	// 	for(int z = 0; z < CHUNK_Z_SIZE; z++)
-	// 	{
-	// 		if (chunkGrid.at(chunkPos3D)->getBiome(x, z).isLand)
-	// 		{
-	// 			tree_start = {x, 0, z};
-	// 			found = true;
-	// 			break;
-	// 		}
-	// 	}
-	// 	if (found)
-	// 		break;
-	// }
-	if (center_chunk->getBiome(15, 15).isLand)
+	std::unordered_set<glm::ivec2> tree_positions;
+	//iterate over every possible tree placement and add it to a list
+	const Chunk::BiomeArray & biomes = center_chunk->getBiomes();
+	for(size_t i = 0; i < biomes.size(); i++)
 	{
-		tree_start = {15, 0, 15};
-		found = true;
+		const Chunk::biomeInfo & biome = biomes[i];
+		if (biome.isLand)
+		{
+			glm::ivec2 chunk_pos = Chunk::toBiomeCoord(i);
+			tree_positions.insert(chunk_pos);
+			tree_positions.insert(chunk_pos + glm::ivec2(1, 0));
+			tree_positions.insert(chunk_pos + glm::ivec2(0, 1));
+			tree_positions.insert(chunk_pos + glm::ivec2(1, 1));
+		}
 	}
-
-	if (found == false)
-		return;
-
-	//find highest block in the column
-	int highest_block = CHUNK_Y_SIZE - 1;
-	while (highest_block >= 0 && center_chunk->getBlock(tree_start.x, highest_block, tree_start.y) == BlockInfo::Type::Air)
-		highest_block--;
-	tree_start = {tree_start.x, highest_block + 1, tree_start.y};
-	//place the tree
-
-	//convert the tree start to world position
-	tree_start += chunkPos3D * CHUNK_SIZE_IVEC3;
 
 	const StructureInfo & tree_info = g_structures_info.get(StructureInfo::Type::Tree);
 
-	for(int x = 0; x < tree_info.size.x; x++)
+	while (!tree_positions.empty())
 	{
-		for(int z = 0; z < tree_info.size.z; z++)
+		glm::ivec2 tree_pos = *tree_positions.begin();
+		tree_positions.erase(tree_pos);
+
+		//test if the tree can be placed
+
+
+		glm::ivec3 tree_start = glm::ivec3(
+			tree_pos.x,
+			center_chunk->getHeight(tree_pos),
+			tree_pos.y
+		);
+
+		tree_start += chunkPos3D * CHUNK_SIZE_IVEC3;
+
+		// if ((std::hash<glm::ivec2>{}(tree_start)) % 10 != 0)
+		// 	continue;
+
+		if (std::rand() % 10 != 0)
+			continue;
+
+		//erase neighbor positions from the list
+		for(int x = 1; x <= tree_info.size.x; x++)
 		{
-			for(int y = 0; y < tree_info.size.y; y++)
+			for(int z = 1; z <= tree_info.size.z; z++)
+				tree_positions.erase(tree_pos + glm::ivec2(x, z));
+		}
+
+		//find highest block that isnt air
+		
+		//convert tree start to world pos
+
+
+		placeStructure(chunkGrid, tree_start, tree_info);
+	}
+
+}
+
+void World::WorldGenerator::placeStructure(ChunkMap & chunkGrid, const glm::ivec3 & start_pos, const StructureInfo & structure)
+{
+	for(int x = 0; x < structure.size.x; x++)
+	{
+		for(int z = 0; z < structure.size.z; z++)
+		{
+			for(int y = 0; y < structure.size.y; y++)
 			{
-				glm::ivec3 current_world_position = tree_start + glm::ivec3(x, y, z);
+				glm::ivec3 current_world_position = start_pos + glm::ivec3(x, y, z);
+				if (current_world_position.y >= CHUNK_Y_SIZE)
+					break;
 
 				glm::ivec3 current_chunk_pos = getChunkPos(current_world_position);
 				current_chunk_pos.y = 0;
-				std::shared_ptr<Chunk> current_chunk = chunkGrid.at(current_chunk_pos);
+				std::shared_ptr<Chunk> current_chunk = nullptr;
+				auto it = chunkGrid.find(current_chunk_pos);
+				if (it == chunkGrid.end())
+					continue;
+				current_chunk = it->second;
 
 				glm::ivec3 current_chunk_position = getBlockChunkPos(current_world_position);
-				if (current_chunk == nullptr)
-					continue;
-				current_chunk->setBlock(current_chunk_position, tree_info.getBlock({x, y ,z}));
+				if (current_chunk->getBlock(current_chunk_position) == BlockInfo::Type::Air)
+					current_chunk->setBlock(current_chunk_position, structure.getBlock({x, y ,z}));
 			}
 		}
 	}

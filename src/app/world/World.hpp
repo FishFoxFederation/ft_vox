@@ -93,7 +93,7 @@ public:
 		// float	m_max = -1;
 		// float 	m_min = 1;
 	private:
-
+		uint64_t seed = 0;
 		struct genStruct
 		{
 			genStruct()
@@ -145,6 +145,7 @@ public:
 
 		void	addPassToGraph(genStruct & genData, glm::ivec3 chunk_pos, Chunk::genLevel gen_level);
 		
+		void	placeStructure(ChunkMap & chunkGrid, const glm::ivec3 & start_pos, const StructureInfo & structure);
 	};
 
 	World();
