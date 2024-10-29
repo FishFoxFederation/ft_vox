@@ -57,7 +57,6 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	prerenderItemIconImages();
 
 	setupImgui();
-	createImGuiTexture(100, 100);
 
 	setupTracy();
 
@@ -74,7 +73,7 @@ VulkanAPI::~VulkanAPI()
 
 	destroyTracy();
 
-	destroyImGuiTexture(imgui_texture);
+	destroyImGuiTextures();
 
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
@@ -641,12 +640,6 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 
 	vkDeviceWaitIdle(device);
 
-	destroyImGuiTexture(imgui_texture);
-
-	ImGui_ImplVulkan_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
@@ -661,8 +654,6 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	createDepthAttachement();
 	createPipelines();
 	createFramebuffers();
-	setupImgui();
-	createImGuiTexture(100, 100);
 
 	shadow_map_descriptor.update(
 		device,
@@ -2269,6 +2260,8 @@ void VulkanAPI::writeTextToImage(
 
 uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
 {
+	ImGuiTexture imgui_texture;
+
 	imgui_texture.extent = { width, height };
 	imgui_texture.format = VK_FORMAT_R8G8B8A8_SRGB;
 
@@ -2337,18 +2330,60 @@ uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t heig
 		"Failed to map memory for ImGui texture."
 	);
 
-	return 0;
+	const uint64_t id = next_imgui_texture_id++;
+	{
+		std::lock_guard lock(imgui_textures_mutex);
+		imgui_textures[id] = imgui_texture;
+	}
+
+	return id;
 }
 
-void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
+void VulkanAPI::destroyImGuiTextures()
 {
-	vkUnmapMemory(device, imgui_texture.memory);
-	ImGui_ImplVulkan_RemoveTexture(imgui_texture.descriptor_set);
-	vkDestroySampler(device, imgui_texture.sampler, nullptr);
-	vkDestroyImageView(device, imgui_texture.view, nullptr);
-	VulkanMemoryAllocator & vma = VulkanMemoryAllocator::getInstance();
-	vma.freeMemory(device, imgui_texture.memory, nullptr);
-	vkDestroyImage(device, imgui_texture.image, nullptr);
+	std::lock_guard lock(imgui_textures_mutex);
+	for (auto & [id, texture] : imgui_textures)
+	{
+		vkUnmapMemory(device, texture.memory);
+		ImGui_ImplVulkan_RemoveTexture(texture.descriptor_set);
+		vkDestroySampler(device, texture.sampler, nullptr);
+		vkDestroyImageView(device, texture.view, nullptr);
+		VulkanMemoryAllocator & vma = VulkanMemoryAllocator::getInstance();
+		vma.freeMemory(device, texture.memory, nullptr);
+		vkDestroyImage(device, texture.image, nullptr);
+	}
+}
+
+void VulkanAPI::ImGuiTexturePutPixel(
+	const uint64_t texture_id,
+	const uint32_t x,
+	const uint32_t y,
+	const uint8_t r,
+	const uint8_t g,
+	const uint8_t b,
+	const uint8_t a
+)
+{
+	std::lock_guard lock(imgui_textures_mutex);
+	ImGuiTexture & imgui_texture = imgui_textures.at(texture_id);
+	imgui_texture.putPixel(x, y, r, g, b, a);
+}
+
+void VulkanAPI::ImGuiTextureClear(const uint64_t texture_id)
+{
+	std::lock_guard lock(imgui_textures_mutex);
+	ImGuiTexture & imgui_texture = imgui_textures.at(texture_id);
+	imgui_texture.clear();
+}
+
+void VulkanAPI::ImGuiTextureDraw(const uint64_t texture_id)
+{
+	std::lock_guard lock(imgui_textures_mutex);
+	ImGuiTexture & imgui_texture = imgui_textures.at(texture_id);
+	ImGui::Image(
+		(ImTextureID)imgui_texture.descriptor_set,
+		ImVec2(imgui_texture.width(), imgui_texture.height())
+	);
 }
 
 

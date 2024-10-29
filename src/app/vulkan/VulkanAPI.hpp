@@ -304,6 +304,17 @@ public:
 	);
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
+	void ImGuiTexturePutPixel(
+		const uint64_t texture_id,
+		const uint32_t x,
+		const uint32_t y,
+		const uint8_t r,
+		const uint8_t g,
+		const uint8_t b,
+		const uint8_t a = 255
+	);
+	void ImGuiTextureClear(const uint64_t texture_id);
+	void ImGuiTextureDraw(const uint64_t texture_id);
 
 
 	GLFWwindow * window;
@@ -411,7 +422,9 @@ public:
 
 	// Dear ImGui resources
 	VkDescriptorPool imgui_descriptor_pool;
-	ImGuiTexture imgui_texture;
+	std::unordered_map<uint64_t, ImGuiTexture> imgui_textures;
+	uint64_t next_imgui_texture_id = 1;
+	TracyLockableN (std::mutex, imgui_textures_mutex, "Vulkan Imgui Texture Mutex");
 
 	// Meshes
 	std::unordered_map<uint64_t, Mesh> mesh_map;
@@ -529,7 +542,7 @@ private:
 	void destroyTextRenderer();
 
 	void setupImgui();
-	void destroyImGuiTexture(ImGuiTexture & imgui_texture);
+	void destroyImGuiTextures();
 
 	void setupTracy();
 	void destroyTracy();

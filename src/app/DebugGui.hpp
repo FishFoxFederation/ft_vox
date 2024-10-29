@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.hpp"
+#include "VulkanAPI.hpp"
 
 #include "imgui.h"
 
@@ -95,16 +96,22 @@ private:
 
 };
 
+class VulkanAPI;
+
 class DebugGui
 {
 
 public:
 
-	DebugGui();
+	DebugGui(
+		VulkanAPI & vk
+	);
 
 	~DebugGui();
 
 	void updateImGui();
+
+	VulkanAPI & vk;
 
 	static inline std::atomic<uint32_t> fps = 0;
 	static inline std::atomic<uint32_t> ups = 0;
@@ -158,4 +165,6 @@ public:
 	static inline std::atomic<float> g = 0.95f;
 	static inline std::atomic<int> n_samples = 8.0f;
 	static inline std::atomic<int> n_light_samples = 4.0f;
+
+	static inline std::atomic<uint64_t> imgui_texture_id = 0;
 };

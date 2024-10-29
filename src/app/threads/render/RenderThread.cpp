@@ -13,14 +13,14 @@
 
 RenderThread::RenderThread(
 	const Settings & settings,
-	VulkanAPI & vulkanAPI,
-	const WorldScene & worldScene,
+	VulkanAPI & vulkan_api,
+	const WorldScene & world_scene,
 	std::chrono::nanoseconds start_time
 ):
 	m_settings(settings),
-	vk(vulkanAPI),
-	m_world_scene(worldScene),
-	m_debug_gui(),
+	vk(vulkan_api),
+	m_world_scene(world_scene),
+	m_debug_gui(vulkan_api),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
 	m_frame_count(0),
@@ -1210,17 +1210,23 @@ void RenderThread::drawDebugGui()
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 	);
 
-	vk.setImageLayout(
-		vk.imgui_command_buffers[vk.current_frame],
-		vk.imgui_texture.image,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-	);
+	{
+		std::lock_guard lock(vk.imgui_textures_mutex);
+		for (auto & [id, texture]: vk.imgui_textures)
+		{
+			vk.setImageLayout(
+				vk.imgui_command_buffers[vk.current_frame],
+				texture.image,
+				VK_IMAGE_LAYOUT_GENERAL,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+				0,
+				0,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			);
+		}
+	}
 
 	VkRenderingAttachmentInfo imgui_color_attachment = {};
 	imgui_color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
@@ -1264,17 +1270,23 @@ void RenderThread::drawDebugGui()
 		VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
 	);
 
-	vk.setImageLayout(
-		vk.imgui_command_buffers[vk.current_frame],
-		vk.imgui_texture.image,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-		VK_IMAGE_LAYOUT_GENERAL,
-		{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
-		0,
-		0,
-		VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-	);
+	{
+		std::lock_guard lock(vk.imgui_textures_mutex);
+		for (auto & [id, texture]: vk.imgui_textures)
+		{
+			vk.setImageLayout(
+				vk.imgui_command_buffers[vk.current_frame],
+				texture.image,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				VK_IMAGE_LAYOUT_GENERAL,
+				{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
+				0,
+				0,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			);
+		}
+	}
 
 	VK_CHECK(
 		vkEndCommandBuffer(vk.imgui_command_buffers[vk.current_frame]),
