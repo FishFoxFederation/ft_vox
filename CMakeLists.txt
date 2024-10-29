@@ -34,6 +34,8 @@ target_compile_options(${PROJECT_NAME}
 		-Wno-unused-result
 		-Wno-c11-extensions
 		-Wno-maybe-uninitialized
+		-Wno-unused-function
+		-Wno-unused-variable
 )
 
 target_link_options(${PROJECT_NAME}
@@ -186,7 +188,9 @@ target_compile_options(server
 		-Wno-empty-body
 		-Wno-unused-result
 		-Wno-c11-extensions
-		# -Wno-maybe-uninitialized
+		-Wno-maybe-uninitialized
+		-Wno-unused-function
+		-Wno-unused-variable
 )
 
 target_link_options(server

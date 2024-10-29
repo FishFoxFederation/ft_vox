@@ -16,8 +16,34 @@
 	ImGui::SliderFloat(#name " z", &name ## _z, min_z, max_z); \
 	name = glm::vec3(name ## _x, name ## _y, name ## _z);
 
-DebugGui::DebugGui()
+DebugGui::DebugGui(
+	VulkanAPI & vk
+): vk(vk)
 {
+	// Tuto pour Augustus:
+
+	// Créer une texture de 100x100
+	imgui_texture_id = vk.createImGuiTexture(100, 100);
+	// imgui_texture_id est declaré dans DebugGui.hpp, rajoute d'autres id si tu veux plus de textures
+
+	// Clear la texture
+	vk.ImGuiTextureClear(imgui_texture_id);
+
+	// Dessiner des pixels rouges sur la texture
+	for (int x = 0; x < 100; x++)
+	{
+		for (int y = 0; y < 100; y++)
+		{
+			vk.ImGuiTexturePutPixel(imgui_texture_id, x, y, 255, 0, 0);
+		}
+	}
+
+	// Draw la texture dans la fenêtre ImGui (voir ligne 136)
+	// vk.ImGuiTextureDraw(imgui_texture_id);
+
+	// Normalement toutes ces fontions sont thread safe (mais j'avoue j'ai pas testé)
+
+	// Fin du tuto pour Augustus
 }
 
 DebugGui::~DebugGui()
@@ -101,6 +127,13 @@ void DebugGui::updateImGui()
 					// auto lock = send_history.lock();
 					// ImGui::PlotHistogram("Send usage", send_history.data(), send_history.size());
 				}
+
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Textures for Augustus"))
+			{
+				vk.ImGuiTextureDraw(imgui_texture_id);
 
 				ImGui::EndTabItem();
 			}
