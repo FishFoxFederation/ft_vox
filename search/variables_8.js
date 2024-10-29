@@ -1,7 +1,7 @@
 var searchData=
 [
   ['icosphere_5fmesh_5fid_0',['icosphere_mesh_id',['../classVulkanAPI.html#aebc102cf15cf5e7bd6bf392aecf09266',1,'VulkanAPI']]],
-  ['id_1',['id',['../structPlayerListPacket_1_1PlayerInfo.html#a708b260d422703e08d2d4aa30d979c09',1,'PlayerListPacket::PlayerInfo::id()'],['../classBlockInfo.html#aa23ed20c525b47f06e453e7910af42c4',1,'BlockInfo::id()'],['../structSound_1_1DataChunk.html#aa94c2ee8454ae0e0224b1b83d6aab6de',1,'Sound::DataChunk::id()'],['../structSound_1_1FMTChunk.html#a21f72e59300db1a36b5e2f1a7c3dffff',1,'Sound::FMTChunk::id()'],['../structSound_1_1RIFFChunk.html#a7d9c9403ac33859aeea424c3ec222086',1,'Sound::RIFFChunk::id()'],['../structWorldScene_1_1MeshRenderData.html#a95cf5e88754f36c61ed53a352da3c4cf',1,'WorldScene::MeshRenderData::id()'],['../structWorldScene_1_1ChunkMeshRenderData.html#ab249b99d3cb08e1478112bda8851b321',1,'WorldScene::ChunkMeshRenderData::id()']]],
+  ['id_1',['id',['../structPlayerListPacket_1_1PlayerInfo.html#a708b260d422703e08d2d4aa30d979c09',1,'PlayerListPacket::PlayerInfo::id()'],['../classStructureInfo.html#ade445acc95456dadafc7cf87d18220f5',1,'StructureInfo::id()'],['../classBlockInfo.html#aa23ed20c525b47f06e453e7910af42c4',1,'BlockInfo::id()'],['../structSound_1_1DataChunk.html#aa94c2ee8454ae0e0224b1b83d6aab6de',1,'Sound::DataChunk::id()'],['../structSound_1_1FMTChunk.html#a21f72e59300db1a36b5e2f1a7c3dffff',1,'Sound::FMTChunk::id()'],['../structSound_1_1RIFFChunk.html#a7d9c9403ac33859aeea424c3ec222086',1,'Sound::RIFFChunk::id()'],['../structWorldScene_1_1MeshRenderData.html#a95cf5e88754f36c61ed53a352da3c4cf',1,'WorldScene::MeshRenderData::id()'],['../structWorldScene_1_1ChunkMeshRenderData.html#ab249b99d3cb08e1478112bda8851b321',1,'WorldScene::ChunkMeshRenderData::id()']]],
   ['image_2',['image',['../classImage.html#af56e0fca4971d34559f7ba57a1d0c430',1,'Image::image()'],['../structImGuiTexture.html#acd7b27173b3b666e98f78dc8e285a238',1,'ImGuiTexture::image()']]],
   ['image_5favailable_5fsemaphores_3',['image_available_semaphores',['../classVulkanAPI.html#aded6afbe797d9e490d44f56c818baa90',1,'VulkanAPI']]],
   ['image_5fformat_4',['image_format',['../classSwapchain.html#a7c4aa937c305d9518d5f6fe80e1d0010',1,'Swapchain']]],
@@ -22,7 +22,10 @@ var searchData=
   ['invalid_5fmesh_5fid_19',['invalid_mesh_id',['../classVulkanAPI.html#ae886d1569f905d7a860e3d8dc874b9fb',1,'VulkanAPI']]],
   ['is_5fcube_5fmap_20',['is_cube_map',['../structImage_1_1CreateInfo.html#af953d7c96232acf9e4ec8f998e4933d7',1,'Image::CreateInfo']]],
   ['is_5fused_21',['is_used',['../structMesh.html#a8ea5a0edf71dfc56e666db22e049a161',1,'Mesh']]],
-  ['item_5ficon_5fdescriptor_22',['item_icon_descriptor',['../classVulkanAPI.html#a37ddfbc9e639cd88150b7ac0330aebea',1,'VulkanAPI']]],
-  ['item_5ficon_5fimages_23',['item_icon_images',['../classVulkanAPI.html#ac12b982260d8e50f1d0570621f32e5cb',1,'VulkanAPI']]],
-  ['item_5ficon_5fpipeline_24',['item_icon_pipeline',['../classVulkanAPI.html#a699def9d574bc4218da7b1aa4c9968d8',1,'VulkanAPI']]]
+  ['iscoast_22',['isCoast',['../structChunk_1_1biomeInfo.html#a7e325d794438dde999cd17065f1202d6',1,'Chunk::biomeInfo']]],
+  ['island_23',['isLand',['../classDebugGui.html#a3f28138ef963a30ea0e7de5dab5585d9',1,'DebugGui::isLand()'],['../structChunk_1_1biomeInfo.html#afabd52e8a64c40613615e55f9db7fc57',1,'Chunk::biomeInfo::isLand()']]],
+  ['isocean_24',['isOcean',['../classDebugGui.html#a46332e4f23c897182b58979454d59735',1,'DebugGui::isOcean()'],['../structChunk_1_1biomeInfo.html#af2fb05cc0de31fe22c1194fa524a76f4',1,'Chunk::biomeInfo::isOcean()']]],
+  ['item_5ficon_5fdescriptor_25',['item_icon_descriptor',['../classVulkanAPI.html#a37ddfbc9e639cd88150b7ac0330aebea',1,'VulkanAPI']]],
+  ['item_5ficon_5fimages_26',['item_icon_images',['../classVulkanAPI.html#ac12b982260d8e50f1d0570621f32e5cb',1,'VulkanAPI']]],
+  ['item_5ficon_5fpipeline_27',['item_icon_pipeline',['../classVulkanAPI.html#a699def9d574bc4218da7b1aa4c9968d8',1,'VulkanAPI']]]
 ];

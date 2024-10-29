@@ -11,6 +11,8 @@ var searchData=
   ['singletimecommand_8',['SingleTimeCommand',['../classSingleTimeCommand.html',1,'']]],
   ['socket_9',['Socket',['../classSocket.html',1,'']]],
   ['status_10',['Status',['../classStatus.html',1,'']]],
-  ['supportdetails_11',['SupportDetails',['../structSwapchain_1_1SupportDetails.html',1,'Swapchain']]],
-  ['swapchain_12',['Swapchain',['../classSwapchain.html',1,'']]]
+  ['structureinfo_11',['StructureInfo',['../classStructureInfo.html',1,'']]],
+  ['structuresinfo_12',['StructuresInfo',['../classStructuresInfo.html',1,'']]],
+  ['supportdetails_13',['SupportDetails',['../structSwapchain_1_1SupportDetails.html',1,'Swapchain']]],
+  ['swapchain_14',['Swapchain',['../classSwapchain.html',1,'']]]
 ];

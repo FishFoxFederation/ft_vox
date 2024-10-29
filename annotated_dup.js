@@ -117,6 +117,8 @@ var annotated_dup =
     [ "SingleTimeCommand", "classSingleTimeCommand.html", "classSingleTimeCommand" ],
     [ "Socket", "classSocket.html", "classSocket" ],
     [ "Status", "classStatus.html", "classStatus" ],
+    [ "StructureInfo", "classStructureInfo.html", "classStructureInfo" ],
+    [ "StructuresInfo", "classStructuresInfo.html", "classStructuresInfo" ],
     [ "Swapchain", "classSwapchain.html", "classSwapchain" ],
     [ "test", "structtest.html", "structtest" ],
     [ "TextRenderer", "classTextRenderer.html", "classTextRenderer" ],

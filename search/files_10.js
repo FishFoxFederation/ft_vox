@@ -25,8 +25,10 @@ var searchData=
   ['soundlist_2ehpp_22',['SoundList.hpp',['../SoundList_8hpp.html',1,'']]],
   ['status_2ecpp_23',['Status.cpp',['../Status_8cpp.html',1,'']]],
   ['status_2ehpp_24',['Status.hpp',['../Status_8hpp.html',1,'']]],
-  ['style_5fguide_2emd_25',['style_guide.md',['../style__guide_8md.html',1,'']]],
-  ['subgraph_2ehpp_26',['SubGraph.hpp',['../SubGraph_8hpp.html',1,'']]],
-  ['swapchain_2ecpp_27',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
-  ['swapchain_2ehpp_28',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
+  ['structures_2ecpp_25',['Structures.cpp',['../Structures_8cpp.html',1,'']]],
+  ['structures_2ehpp_26',['Structures.hpp',['../Structures_8hpp.html',1,'']]],
+  ['style_5fguide_2emd_27',['style_guide.md',['../style__guide_8md.html',1,'']]],
+  ['subgraph_2ehpp_28',['SubGraph.hpp',['../SubGraph_8hpp.html',1,'']]],
+  ['swapchain_2ecpp_29',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
+  ['swapchain_2ehpp_30',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
 ];

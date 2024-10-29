@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['level_0',['Level',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8f',1,'Logger']]]
+  ['keystate_0',['KeyState',['../classInput.html#a0be44bf062481fd4b60c21607a2ee50a',1,'Input']]]
 ];

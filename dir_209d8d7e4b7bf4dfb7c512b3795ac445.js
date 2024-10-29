@@ -1,6 +1,8 @@
 var dir_209d8d7e4b7bf4dfb7c512b3795ac445 =
 [
     [ "entity", "dir_e3a9557ac17630dcabd48e2e12c89d76.html", "dir_e3a9557ac17630dcabd48e2e12c89d76" ],
+    [ "structures", "dir_a3b6d955885a89ccb319d577f74778db.html", "dir_a3b6d955885a89ccb319d577f74778db" ],
+    [ "Biome.hpp", "Biome_8hpp.html", null ],
     [ "Block.cpp", "Block_8cpp.html", "Block_8cpp" ],
     [ "Block.hpp", "Block_8hpp.html", "Block_8hpp" ],
     [ "Chunk.cpp", "Chunk_8cpp.html", "Chunk_8cpp" ],
@@ -18,6 +20,6 @@ var dir_209d8d7e4b7bf4dfb7c512b3795ac445 =
     [ "ServerWorldTickets.cpp", "ServerWorldTickets_8cpp.html", null ],
     [ "World.cpp", "World_8cpp.html", null ],
     [ "World.hpp", "World_8hpp.html", "World_8hpp" ],
-    [ "WorldGenerator.cpp", "WorldGenerator_8cpp.html", null ],
+    [ "WorldGenerator.cpp", "WorldGenerator_8cpp.html", "WorldGenerator_8cpp" ],
     [ "WorldGenerator.hpp", "WorldGenerator_8hpp.html", null ]
 ];

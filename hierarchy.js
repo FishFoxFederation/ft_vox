@@ -9,6 +9,7 @@ var hierarchy =
     [ "Atomic< T >", "classAtomic.html", null ],
     [ "Atomic< glm::vec3 >", "classAtomic.html", null ],
     [ "PlayerModel::AttackAnimation", "classPlayerModel_1_1AttackAnimation.html", null ],
+    [ "Chunk::biomeInfo", "structChunk_1_1biomeInfo.html", null ],
     [ "BlockInfo", "classBlockInfo.html", null ],
     [ "BlocksInfo", "classBlocksInfo.html", null ],
     [ "ServerWorld::BlockUpdateData", "structServerWorld_1_1BlockUpdateData.html", null ],
@@ -147,6 +148,8 @@ var hierarchy =
       [ "ServerSocket", "classServerSocket.html", null ]
     ] ],
     [ "Status", "classStatus.html", null ],
+    [ "StructureInfo", "classStructureInfo.html", null ],
+    [ "StructuresInfo", "classStructuresInfo.html", null ],
     [ "Swapchain::SupportDetails", "structSwapchain_1_1SupportDetails.html", null ],
     [ "Swapchain", "classSwapchain.html", null ],
     [ "task::Task", "classtask_1_1Task.html", null ],

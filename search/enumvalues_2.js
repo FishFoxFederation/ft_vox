@@ -5,7 +5,8 @@ var searchData=
   ['chunk_2',['CHUNK',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ac8e8e43935c45683be5302fa7329182a',1,'IPacket']]],
   ['chunk_5frequest_3',['CHUNK_REQUEST',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a3d9c91ce3c1f8480bbc2f2044602436c',1,'IPacket']]],
   ['chunk_5funload_4',['CHUNK_UNLOAD',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a2611071c97c8fcbf9552751c77bffdfa',1,'IPacket']]],
-  ['connection_5',['CONNECTION',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569af877da16e0c12743466e4059018d0d98',1,'IPacket']]],
-  ['creative_6',['CREATIVE',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452',1,'Player']]],
-  ['critical_7',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]]
+  ['coast_5',['COAST',['../classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e',1,'Chunk']]],
+  ['connection_6',['CONNECTION',['../classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569af877da16e0c12743466e4059018d0d98',1,'IPacket']]],
+  ['creative_7',['CREATIVE',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292da7c4ce9f5ea267332b6998e2f0315c452',1,'Player']]],
+  ['critical_8',['CRITICAL',['../classLogger.html#ad766a24576ea8b27ad9d5649cef46d8fa4157b31e8897f6aaf720fe5e869638b9',1,'Logger']]]
 ];

@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classChunk.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
@@ -121,30 +122,50 @@ Collaboration diagram for Chunk:</div>
 <div class="dyncontent">
 <div class="center"><img src="classChunk__coll__graph.png" border="0" usemap="#aChunk_coll__map" alt="Collaboration graph"/></div>
 <map name="aChunk_coll__map" id="aChunk_coll__map">
-<area shape="rect" title=" " alt="" coords="5,269,160,529"/>
+<area shape="rect" title=" " alt="" coords="5,269,160,603"/>
 <area shape="rect" href="classStatus.html" title=" " alt="" coords="17,5,149,207"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a341d9a9b7a2a5dcc1f81eb3b616cf888"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888">genLevel</a> : uint16_t { <a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888af8589806bbf66241917092b2a6e18c6f">LIGHT</a>
+, <a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888a89ef60e0923f1cdaf625fa71e3ebbde7">DECORATE</a>
 , <a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888a14db90e75f1308d303d0bceb0be66ac1">CAVE</a>
-, <a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888a6ce749e5dda52baa62b8d952e315ccc6">RELIEF</a>
 , <a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888aba2b45bdc11e2a4a6e86aab2ac693cbb">EMPTY</a>
  }</td></tr>
 <tr class="separator:a341d9a9b7a2a5dcc1f81eb3b616cf888"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe2d3dbcc9b48d61e1aafdd5100425ee"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425ee">e_biome</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea1868c2177fdc84d496f7784a23729d3b">FOREST</a>
+, <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eeaf62eb0bf5e5c72e80983fbbac1cb70e5">PLAIN</a>
+, <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea9d1480267288b8146bb0756b67ddcbbe">MOUNTAIN</a>
+, <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4">OCEAN</a>
+, <br />
+&#160;&#160;<a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e">COAST</a>
+, <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693">NONE</a>
+<br />
+ }</td></tr>
+<tr class="separator:abe2d3dbcc9b48d61e1aafdd5100425ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba2fc7065a2a8d20d1f8dedae21063cd"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a></td></tr>
 <tr class="separator:aba2fc7065a2a8d20d1f8dedae21063cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13d358ee7b03766f8e45ccec50aece7b"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; uint8_t, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a></td></tr>
 <tr class="separator:a13d358ee7b03766f8e45ccec50aece7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d991952a7e67b97ce3190972ed96f36"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; uint8_t, <a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a> *<a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a2d991952a7e67b97ce3190972ed96f36">HeightArray</a></td></tr>
+<tr class="separator:a2d991952a7e67b97ce3190972ed96f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f34cf41af120c15bb92a56a5f8b6ae"><td class="memItemLeft" align="right" valign="top">typedef std::array&lt; <a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a>, <a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a> *<a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">BiomeArray</a></td></tr>
+<tr class="separator:a44f34cf41af120c15bb92a56a5f8b6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a76523171d0b51437c6d1d24c5001fa6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a76523171d0b51437c6d1d24c5001fa6e">Chunk</a> (glm::ivec3 position)</td></tr>
 <tr class="separator:a76523171d0b51437c6d1d24c5001fa6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a275d1f98ec1e1a86c0f0d84f2ae4e906"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a275d1f98ec1e1a86c0f0d84f2ae4e906">Chunk</a> (const glm::ivec3 &amp;position, const <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a> &amp;blocks, const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;light)</td></tr>
-<tr class="separator:a275d1f98ec1e1a86c0f0d84f2ae4e906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a401462dcbb75bf138880747dd406eb59"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a401462dcbb75bf138880747dd406eb59">Chunk</a> (const glm::ivec3 &amp;position, const <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">BlockArray</a> &amp;blocks, const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;light, const <a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">BiomeArray</a> &amp;biome)</td></tr>
+<tr class="separator:a401462dcbb75bf138880747dd406eb59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bdeedf9cffec565e91294437efdf7b1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a1bdeedf9cffec565e91294437efdf7b1">Chunk</a> (const <a class="el" href="classChunk.html">Chunk</a> &amp;other)=delete</td></tr>
 <tr class="separator:a1bdeedf9cffec565e91294437efdf7b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2ae208cfa7b7dd4924b62f2c5088c02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa2ae208cfa7b7dd4924b62f2c5088c02">Chunk</a> (<a class="el" href="classChunk.html">Chunk</a> &amp;&amp;other)=delete</td></tr>
@@ -195,6 +216,30 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0425eb44ac897edad86279fef2e20106"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f8750b7a142851fa3f4248797d851c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a7f8750b7a142851fa3f4248797d851c1">setBlockLight</a> (const glm::ivec3 &amp;position, uint8_t light)</td></tr>
 <tr class="separator:a7f8750b7a142851fa3f4248797d851c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a633e4c29038dc1621c53ec554391847a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">BiomeArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a633e4c29038dc1621c53ec554391847a">getBiomes</a> ()</td></tr>
+<tr class="separator:a633e4c29038dc1621c53ec554391847a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cbdd1ef0b322538dbacc92db2d39c1d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">BiomeArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a8cbdd1ef0b322538dbacc92db2d39c1d">getBiomes</a> () const</td></tr>
+<tr class="separator:a8cbdd1ef0b322538dbacc92db2d39c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a920e386543115ac681ef292a16c168b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a920e386543115ac681ef292a16c168b9">getBiome</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>) const</td></tr>
+<tr class="separator:a920e386543115ac681ef292a16c168b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe9f0dcca9368666d73dce784a8933e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#abe9f0dcca9368666d73dce784a8933e8">getBiome</a> (const glm::ivec2 &amp;position) const</td></tr>
+<tr class="separator:abe9f0dcca9368666d73dce784a8933e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63ec69c4eeeb64c2b37f033d83417d62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a63ec69c4eeeb64c2b37f033d83417d62">setBiome</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>, const <a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a> &amp;biome)</td></tr>
+<tr class="separator:a63ec69c4eeeb64c2b37f033d83417d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4af6c18021146ff5598f432f6b0e880b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a4af6c18021146ff5598f432f6b0e880b">setBiome</a> (const glm::ivec2 &amp;position, const <a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a> &amp;biome)</td></tr>
+<tr class="separator:a4af6c18021146ff5598f432f6b0e880b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f42a85d7a2e67b679095ab196fc857a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#a2d991952a7e67b97ce3190972ed96f36">HeightArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a3f42a85d7a2e67b679095ab196fc857a">getHeights</a> ()</td></tr>
+<tr class="separator:a3f42a85d7a2e67b679095ab196fc857a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad13bda356b5a71c44cc40348b8bf1766"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classChunk.html#a2d991952a7e67b97ce3190972ed96f36">HeightArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ad13bda356b5a71c44cc40348b8bf1766">getHeights</a> () const</td></tr>
+<tr class="separator:ad13bda356b5a71c44cc40348b8bf1766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a673c09a03d3b0a804a74d33720fe9943"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a673c09a03d3b0a804a74d33720fe9943">getHeight</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>) const</td></tr>
+<tr class="separator:a673c09a03d3b0a804a74d33720fe9943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac50fcd06fbe1828098edb4f362e26573"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ac50fcd06fbe1828098edb4f362e26573">getHeight</a> (const glm::ivec2 &amp;position) const</td></tr>
+<tr class="separator:ac50fcd06fbe1828098edb4f362e26573"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e88c41fe7ed31935b6421818e255007"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a9e88c41fe7ed31935b6421818e255007">setHeight</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>, uint8_t height)</td></tr>
+<tr class="separator:a9e88c41fe7ed31935b6421818e255007"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf45e2331474e25e86cad2e6f773f51d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#acf45e2331474e25e86cad2e6f773f51d">setHeight</a> (const glm::ivec2 &amp;position, uint8_t height)</td></tr>
+<tr class="separator:acf45e2331474e25e86cad2e6f773f51d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7a2ed68597190050622a38dc45b4665"><td class="memItemLeft" align="right" valign="top">const glm::ivec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ac7a2ed68597190050622a38dc45b4665">getPosition</a> () const</td></tr>
 <tr class="separator:ac7a2ed68597190050622a38dc45b4665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3800a303f64292a8b73e16ed44d3ed8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa3800a303f64292a8b73e16ed44d3ed8">setPosition</a> (const glm::ivec3 &amp;position)</td></tr>
@@ -226,6 +271,16 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ad3dbd7872ba91148c053e8f2b5951904"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ad3dbd7872ba91148c053e8f2b5951904">toBiomeIndex</a> (int <a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, int <a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>)</td></tr>
+<tr class="separator:ad3dbd7872ba91148c053e8f2b5951904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5e438c8e38c6b8d3c33e567f52d582d"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aa5e438c8e38c6b8d3c33e567f52d582d">toBiomeIndex</a> (const glm::ivec2 &amp;position)</td></tr>
+<tr class="separator:aa5e438c8e38c6b8d3c33e567f52d582d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ffa7803fda9e99aaad3b7afe6357f53"><td class="memItemLeft" align="right" valign="top">static glm::ivec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a0ffa7803fda9e99aaad3b7afe6357f53">toBiomeCoord</a> (int index)</td></tr>
+<tr class="separator:a0ffa7803fda9e99aaad3b7afe6357f53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeee994ae760a83c4a999632dffb55cd4"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#aeee994ae760a83c4a999632dffb55cd4">toHeightIndex</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>)</td></tr>
+<tr class="separator:aeee994ae760a83c4a999632dffb55cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79d63021eb272d8ed18fe96a669c3954"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a79d63021eb272d8ed18fe96a669c3954">toHeightIndex</a> (const glm::ivec2 &amp;position)</td></tr>
+<tr class="separator:a79d63021eb272d8ed18fe96a669c3954"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c67283dce20bb8ece67cb85e6eb4dd7"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a3c67283dce20bb8ece67cb85e6eb4dd7">toIndex</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#a13e0fddb7e57040210637ee07fbba9ab">y</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>)</td></tr>
 <tr class="separator:a3c67283dce20bb8ece67cb85e6eb4dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17db6bae975e96ac6ee8ad02f8978a6e"><td class="memItemLeft" align="right" valign="top">static glm::ivec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a17db6bae975e96ac6ee8ad02f8978a6e">toCoord</a> (const int &amp;index)</td></tr>
@@ -241,6 +296,20 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a057de54f4cc465177fa249fad8c304df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a44f34cf41af120c15bb92a56a5f8b6ae" name="a44f34cf41af120c15bb92a56a5f8b6ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f34cf41af120c15bb92a56a5f8b6ae">&#9670;&#160;</a></span>BiomeArray</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::array&lt;<a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a>, <a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a> * <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a>&gt; <a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">Chunk::BiomeArray</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aba2fc7065a2a8d20d1f8dedae21063cd" name="aba2fc7065a2a8d20d1f8dedae21063cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba2fc7065a2a8d20d1f8dedae21063cd">&#9670;&#160;</a></span>BlockArray</h2>
 
@@ -249,6 +318,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">typedef std::array&lt;<a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a43f266fc7456ae5714f5a528b80b3ba3">BLOCKS_PER_CHUNK</a>&gt; <a class="el" href="classChunk.html#aba2fc7065a2a8d20d1f8dedae21063cd">Chunk::BlockArray</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d991952a7e67b97ce3190972ed96f36" name="a2d991952a7e67b97ce3190972ed96f36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d991952a7e67b97ce3190972ed96f36">&#9670;&#160;</a></span>HeightArray</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::array&lt;uint8_t, <a class="el" href="Chunk_8hpp.html#a78f1b70acf986005160e8bb23fb610a5">CHUNK_X_SIZE</a> * <a class="el" href="Chunk_8hpp.html#a84cf7bf9436462576770ca3359cc2100">CHUNK_Z_SIZE</a>&gt; <a class="el" href="classChunk.html#a2d991952a7e67b97ce3190972ed96f36">Chunk::HeightArray</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -270,6 +353,36 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="abe2d3dbcc9b48d61e1aafdd5100425ee" name="abe2d3dbcc9b48d61e1aafdd5100425ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe2d3dbcc9b48d61e1aafdd5100425ee">&#9670;&#160;</a></span>e_biome</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425ee">Chunk::e_biome</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea1868c2177fdc84d496f7784a23729d3b" name="abe2d3dbcc9b48d61e1aafdd5100425eea1868c2177fdc84d496f7784a23729d3b"></a>FOREST&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eeaf62eb0bf5e5c72e80983fbbac1cb70e5" name="abe2d3dbcc9b48d61e1aafdd5100425eeaf62eb0bf5e5c72e80983fbbac1cb70e5"></a>PLAIN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea9d1480267288b8146bb0756b67ddcbbe" name="abe2d3dbcc9b48d61e1aafdd5100425eea9d1480267288b8146bb0756b67ddcbbe"></a>MOUNTAIN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4" name="abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4"></a>OCEAN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e" name="abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e"></a>COAST&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693" name="abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="a341d9a9b7a2a5dcc1f81eb3b616cf888" name="a341d9a9b7a2a5dcc1f81eb3b616cf888"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a341d9a9b7a2a5dcc1f81eb3b616cf888">&#9670;&#160;</a></span>genLevel</h2>
 
@@ -291,8 +404,8 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a341d9a9b7a2a5dcc1f81eb3b616cf888af8589806bbf66241917092b2a6e18c6f" name="a341d9a9b7a2a5dcc1f81eb3b616cf888af8589806bbf66241917092b2a6e18c6f"></a>LIGHT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a341d9a9b7a2a5dcc1f81eb3b616cf888a89ef60e0923f1cdaf625fa71e3ebbde7" name="a341d9a9b7a2a5dcc1f81eb3b616cf888a89ef60e0923f1cdaf625fa71e3ebbde7"></a>DECORATE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a341d9a9b7a2a5dcc1f81eb3b616cf888a14db90e75f1308d303d0bceb0be66ac1" name="a341d9a9b7a2a5dcc1f81eb3b616cf888a14db90e75f1308d303d0bceb0be66ac1"></a>CAVE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a341d9a9b7a2a5dcc1f81eb3b616cf888a6ce749e5dda52baa62b8d952e315ccc6" name="a341d9a9b7a2a5dcc1f81eb3b616cf888a6ce749e5dda52baa62b8d952e315ccc6"></a>RELIEF&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a341d9a9b7a2a5dcc1f81eb3b616cf888aba2b45bdc11e2a4a6e86aab2ac693cbb" name="a341d9a9b7a2a5dcc1f81eb3b616cf888aba2b45bdc11e2a4a6e86aab2ac693cbb"></a>EMPTY&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
@@ -317,8 +430,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a275d1f98ec1e1a86c0f0d84f2ae4e906" name="a275d1f98ec1e1a86c0f0d84f2ae4e906"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a275d1f98ec1e1a86c0f0d84f2ae4e906">&#9670;&#160;</a></span>Chunk() <span class="overload">[2/4]</span></h2>
+<a id="a401462dcbb75bf138880747dd406eb59" name="a401462dcbb75bf138880747dd406eb59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a401462dcbb75bf138880747dd406eb59">&#9670;&#160;</a></span>Chunk() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,7 +452,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;&#160;</td>
-          <td class="paramname"><em>light</em>&#160;</td>
+          <td class="paramname"><em>light</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">BiomeArray</a> &amp;&#160;</td>
+          <td class="paramname"><em>biome</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -421,6 +540,86 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="abe9f0dcca9368666d73dce784a8933e8" name="abe9f0dcca9368666d73dce784a8933e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe9f0dcca9368666d73dce784a8933e8">&#9670;&#160;</a></span>getBiome() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structChunk_1_1biomeInfo.html">Chunk::biomeInfo</a> Chunk::getBiome </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a920e386543115ac681ef292a16c168b9" name="a920e386543115ac681ef292a16c168b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a920e386543115ac681ef292a16c168b9">&#9670;&#160;</a></span>getBiome() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structChunk_1_1biomeInfo.html">Chunk::biomeInfo</a> Chunk::getBiome </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a633e4c29038dc1621c53ec554391847a" name="a633e4c29038dc1621c53ec554391847a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a633e4c29038dc1621c53ec554391847a">&#9670;&#160;</a></span>getBiomes() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">Chunk::BiomeArray</a> &amp; Chunk::getBiomes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8cbdd1ef0b322538dbacc92db2d39c1d" name="a8cbdd1ef0b322538dbacc92db2d39c1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cbdd1ef0b322538dbacc92db2d39c1d">&#9670;&#160;</a></span>getBiomes() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classChunk.html#a44f34cf41af120c15bb92a56a5f8b6ae">Chunk::BiomeArray</a> &amp; Chunk::getBiomes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0ec4e65f8f34d3e781ee75aeaf475601" name="a0ec4e65f8f34d3e781ee75aeaf475601"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ec4e65f8f34d3e781ee75aeaf475601">&#9670;&#160;</a></span>getBlock() <span class="overload">[1/2]</span></h2>
 
@@ -567,6 +766,86 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888">Chunk::genLevel</a> Chunk::getGenLevel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac50fcd06fbe1828098edb4f362e26573" name="ac50fcd06fbe1828098edb4f362e26573"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac50fcd06fbe1828098edb4f362e26573">&#9670;&#160;</a></span>getHeight() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Chunk::getHeight </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a673c09a03d3b0a804a74d33720fe9943" name="a673c09a03d3b0a804a74d33720fe9943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a673c09a03d3b0a804a74d33720fe9943">&#9670;&#160;</a></span>getHeight() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Chunk::getHeight </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3f42a85d7a2e67b679095ab196fc857a" name="a3f42a85d7a2e67b679095ab196fc857a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f42a85d7a2e67b679095ab196fc857a">&#9670;&#160;</a></span>getHeights() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classChunk.html#a2d991952a7e67b97ce3190972ed96f36">Chunk::HeightArray</a> &amp; Chunk::getHeights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad13bda356b5a71c44cc40348b8bf1766" name="ad13bda356b5a71c44cc40348b8bf1766"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad13bda356b5a71c44cc40348b8bf1766">&#9670;&#160;</a></span>getHeights() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classChunk.html#a2d991952a7e67b97ce3190972ed96f36">Chunk::HeightArray</a> &amp; Chunk::getHeights </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -851,6 +1130,68 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4af6c18021146ff5598f432f6b0e880b" name="a4af6c18021146ff5598f432f6b0e880b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4af6c18021146ff5598f432f6b0e880b">&#9670;&#160;</a></span>setBiome() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setBiome </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>biome</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a63ec69c4eeeb64c2b37f033d83417d62" name="a63ec69c4eeeb64c2b37f033d83417d62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63ec69c4eeeb64c2b37f033d83417d62">&#9670;&#160;</a></span>setBiome() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setBiome </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structChunk_1_1biomeInfo.html">biomeInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>biome</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a49e6f8ac762b5194ad3e15653310a967" name="a49e6f8ac762b5194ad3e15653310a967"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a49e6f8ac762b5194ad3e15653310a967">&#9670;&#160;</a></span>setBlock() <span class="overload">[1/2]</span></h2>
 
@@ -999,6 +1340,68 @@ Public Attributes</h2></td></tr>
           <td class="paramtype">const <a class="el" href="classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888">genLevel</a> &amp;&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf45e2331474e25e86cad2e6f773f51d" name="acf45e2331474e25e86cad2e6f773f51d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf45e2331474e25e86cad2e6f773f51d">&#9670;&#160;</a></span>setHeight() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setHeight </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9e88c41fe7ed31935b6421818e255007" name="a9e88c41fe7ed31935b6421818e255007"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e88c41fe7ed31935b6421818e255007">&#9670;&#160;</a></span>setHeight() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setHeight </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1213,6 +1616,94 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0ffa7803fda9e99aaad3b7afe6357f53" name="a0ffa7803fda9e99aaad3b7afe6357f53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ffa7803fda9e99aaad3b7afe6357f53">&#9670;&#160;</a></span>toBiomeCoord()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::ivec2 Chunk::toBiomeCoord </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5e438c8e38c6b8d3c33e567f52d582d" name="aa5e438c8e38c6b8d3c33e567f52d582d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5e438c8e38c6b8d3c33e567f52d582d">&#9670;&#160;</a></span>toBiomeIndex() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Chunk::toBiomeIndex </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad3dbd7872ba91148c053e8f2b5951904" name="ad3dbd7872ba91148c053e8f2b5951904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3dbd7872ba91148c053e8f2b5951904">&#9670;&#160;</a></span>toBiomeIndex() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Chunk::toBiomeIndex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a17db6bae975e96ac6ee8ad02f8978a6e" name="a17db6bae975e96ac6ee8ad02f8978a6e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17db6bae975e96ac6ee8ad02f8978a6e">&#9670;&#160;</a></span>toCoord()</h2>
 
@@ -1228,6 +1719,68 @@ Public Attributes</h2></td></tr>
           <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79d63021eb272d8ed18fe96a669c3954" name="a79d63021eb272d8ed18fe96a669c3954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79d63021eb272d8ed18fe96a669c3954">&#9670;&#160;</a></span>toHeightIndex() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Chunk::toHeightIndex </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>position</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeee994ae760a83c4a999632dffb55cd4" name="aeee994ae760a83c4a999632dffb55cd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeee994ae760a83c4a999632dffb55cd4">&#9670;&#160;</a></span>toHeightIndex() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Chunk::toHeightIndex </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
