@@ -23,6 +23,7 @@ public:
 		CHUNK,
 		CHUNK_REQUEST,
 		CHUNK_UNLOAD,
+		CHUNK_LIST,
 		ENUM_MAX,
 	};
 	const static inline uint32_t STATIC_HEADER_SIZE = sizeof(Type);

@@ -82,7 +82,9 @@ void ServerWorld::updatePlayerPositions()
 	for (auto & [player_id, current_pos] : m_current_tick_player_positions)
 	{
 		ChunkLoadUnloadData data = updateChunkObservations(player_id);
-		sendChunkLoadUnloadData(data, player_id);
+		m_executor.run([this, data, player_id] {
+			sendChunkLoadUnloadData(data, player_id);
+		});
 		m_last_tick_player_positions.at(player_id) = m_current_tick_player_positions.at(player_id);
 	}
 }

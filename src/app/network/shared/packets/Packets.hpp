@@ -10,6 +10,7 @@
 #include "ChunkPacket.hpp"
 #include "ChunkRequestPacket.hpp"
 #include "ChunkUnloadPacket.hpp"
+#include "ChunkListPacket.hpp"
 
 
 /**

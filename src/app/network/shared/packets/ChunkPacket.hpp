@@ -8,6 +8,7 @@
 class ChunkPacket : public IPacket
 {
 public:
+	typedef RLE_TEST<BlockInfo::Type, BLOCKS_PER_CHUNK> BlockRLE;
 	struct ChunkData
 	{
 		ChunkData() = default;
@@ -47,6 +48,6 @@ public:
 
 private:
 	ChunkData	m_chunk_data;
-	RLE_TEST<BlockInfo::Type, BLOCKS_PER_CHUNK> m_blocks;
+	BlockRLE	m_blocks;
 };
 

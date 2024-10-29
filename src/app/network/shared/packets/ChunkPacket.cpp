@@ -15,12 +15,12 @@ ChunkPacket::~ChunkPacket()
 }
 
 ChunkPacket::ChunkPacket(ChunkPacket & other)
-: IPacket(other), m_chunk_data(other.m_chunk_data)
+: IPacket(other), m_chunk_data(other.m_chunk_data), m_blocks(other.m_blocks)
 {
 }
 
 ChunkPacket::ChunkPacket(ChunkPacket && other)
-: IPacket(std::move(other)), m_chunk_data(other.m_chunk_data)
+: IPacket(std::move(other)), m_chunk_data(other.m_chunk_data), m_blocks(std::move(other.m_blocks))
 {
 }
 
@@ -29,6 +29,7 @@ ChunkPacket & ChunkPacket::operator=(ChunkPacket & other)
 	if (this != &other)
 	{
 		m_chunk_data = other.m_chunk_data;
+		m_blocks = other.m_blocks;
 		::IPacket::operator=(other);
 	}
 	return *this;
@@ -39,6 +40,7 @@ ChunkPacket & ChunkPacket::operator=(ChunkPacket && other)
 	if (this != &other)
 	{
 		m_chunk_data = std::move(other.m_chunk_data);
+		m_blocks = std::move(other.m_blocks);
 		::IPacket::operator=(std::move(other));
 	}
 	return *this;
