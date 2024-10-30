@@ -1,5 +1,11 @@
 var NAVTREEINDEX8 =
 {
+"structChunk_1_1biomeInfo.html#a86bbccfd7827dc43eba6530cdea7dc44":[11,0,14,0,4],
+"structChunk_1_1biomeInfo.html#aae8c12b8a170cbb9971ed4bfc8145a5f":[11,0,14,0,6],
+"structChunk_1_1biomeInfo.html#abae58c6a7163a3f63bb8493ddea46ee0":[11,0,14,0,2],
+"structChunk_1_1biomeInfo.html#ac75e279eff15afd75a0424f1a420b4b2":[11,0,14,0,0],
+"structChunk_1_1biomeInfo.html#ac790c2dae94705c895e98083ba3e2d8d":[11,0,14,0,3],
+"structChunk_1_1biomeInfo.html#ae74e03fe740fe7dff234aae4d235b5eb":[11,0,14,0,7],
 "structChunk_1_1biomeInfo.html#af2fb05cc0de31fe22c1194fa524a76f4":[11,0,14,0,10],
 "structChunk_1_1biomeInfo.html#afabd52e8a64c40613615e55f9db7fc57":[11,0,14,0,9],
 "structClientWorld_1_1PlayerUseResult.html":[11,0,21,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX8 =
 "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html":[11,0,2,5],
 "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html#a55bf5d359c3332118e7c731cd45fead6":[10,0,2,5,0],
 "structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html#a55bf5d359c3332118e7c731cd45fead6":[11,0,2,5,0],
-"structstd_1_1hash_3_01glm_1_1ivec2_01_4.html":[10,0,2,2],
-"structstd_1_1hash_3_01glm_1_1ivec2_01_4.html":[11,0,2,2],
-"structstd_1_1hash_3_01glm_1_1ivec2_01_4.html#ae93387e1f22c21bed43f436ad55ff636":[10,0,2,2,0],
-"structstd_1_1hash_3_01glm_1_1ivec2_01_4.html#ae93387e1f22c21bed43f436ad55ff636":[11,0,2,2,0],
-"structstd_1_1hash_3_01glm_1_1ivec3_01_4.html":[10,0,2,3],
-"structstd_1_1hash_3_01glm_1_1ivec3_01_4.html":[11,0,2,3],
-"structstd_1_1hash_3_01glm_1_1ivec3_01_4.html#a187a5fbc7efe3606ad846868715addd3":[10,0,2,3,0]
+"structstd_1_1hash_3_01glm_1_1ivec2_01_4.html":[10,0,2,2]
 };

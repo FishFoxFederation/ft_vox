@@ -117,13 +117,13 @@ var NAVTREEINDEX =
 "AbstractEvent_8cpp.html",
 "Structures_8hpp.html#adf0198d15c1dc59c0809acee856b920f",
 "classChunkUnloadPacket.html#acb3f1014455818c9a6298b246c104a60",
-"classHitBox.html",
-"classPlayer.html#a60c19c665bddaa431f7c61aba55d3d41",
-"classSound_1_1Data.html#af774ce5cd6690b807abd6f7467f08ad9",
-"classWorld.html#a456108e02a2cf121c20b3436d293614a",
-"dir_16a327e0eea9858bdb366df3e314b663.html",
-"structChunk_1_1biomeInfo.html#af2fb05cc0de31fe22c1194fa524a76f4",
-"structstd_1_1hash_3_01glm_1_1ivec3_01_4.html#a187a5fbc7efe3606ad846868715addd3"
+"classHistory.html#affeb2a1835f63948681fb91286042ca3",
+"classPlayer.html#a5f7fb772781161391c078b9a0070d1a4",
+"classSound_1_1Data.html#ae8201c296e07d85b30aa493d75006dbc",
+"classWindow.html#ae779be3a5327f62c5e86a3e3d8a37289",
+"define_8hpp.html#a614217d263be1fb1a5f76e2ff7be19a2",
+"structChunk_1_1biomeInfo.html#a86bbccfd7827dc43eba6530cdea7dc44",
+"structstd_1_1hash_3_01glm_1_1ivec2_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

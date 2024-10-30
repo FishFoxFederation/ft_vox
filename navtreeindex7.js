@@ -1,5 +1,11 @@
 var NAVTREEINDEX7 =
 {
+"define_8hpp.html#a614217d263be1fb1a5f76e2ff7be19a2":[12,0,1,3,2],
+"define_8hpp.html#aa6692cbfe5c70cfe5e6e334b61140c1a":[12,0,1,3,4],
+"define_8hpp.html#ad8a262037cbfb38d1512f0073eeb7a66":[12,0,1,3,0],
+"define_8hpp.html#ae73053051efbb45c3a39751f5ce9fb36":[12,0,1,3,3],
+"define_8hpp.html#af32eedba9e693fc5d6c462fed75836f0":[12,0,1,3,1],
+"define_8hpp_source.html":[12,0,1,3],
 "dir_16a327e0eea9858bdb366df3e314b663.html":[12,0,1,0,1,2],
 "dir_1b354531801d9b9737ada4dc927e50fd.html":[12,0,1,0,5,4],
 "dir_209d8d7e4b7bf4dfb7c512b3795ac445.html":[12,0,1,0,8],
@@ -243,11 +249,5 @@ var NAVTREEINDEX7 =
 "structChunk_1_1biomeInfo.html":[11,0,14,0],
 "structChunk_1_1biomeInfo.html#a5303b9be913c05fd2879580e2b8ab9d2":[11,0,14,0,5],
 "structChunk_1_1biomeInfo.html#a58233ea5f35600ff5768a82632e85abb":[11,0,14,0,1],
-"structChunk_1_1biomeInfo.html#a7e325d794438dde999cd17065f1202d6":[11,0,14,0,8],
-"structChunk_1_1biomeInfo.html#a86bbccfd7827dc43eba6530cdea7dc44":[11,0,14,0,4],
-"structChunk_1_1biomeInfo.html#aae8c12b8a170cbb9971ed4bfc8145a5f":[11,0,14,0,6],
-"structChunk_1_1biomeInfo.html#abae58c6a7163a3f63bb8493ddea46ee0":[11,0,14,0,2],
-"structChunk_1_1biomeInfo.html#ac75e279eff15afd75a0424f1a420b4b2":[11,0,14,0,0],
-"structChunk_1_1biomeInfo.html#ac790c2dae94705c895e98083ba3e2d8d":[11,0,14,0,3],
-"structChunk_1_1biomeInfo.html#ae74e03fe740fe7dff234aae4d235b5eb":[11,0,14,0,7]
+"structChunk_1_1biomeInfo.html#a7e325d794438dde999cd17065f1202d6":[11,0,14,0,8]
 };
