@@ -192,10 +192,13 @@ void RenderThread::loop()
 		draw_chunk_count = 0;
 
 		debug_text += ft_format(
-			"C: %.2f; E: %.2f; H: %.2f\n",
+			"C: %.2f; E: %.2f; H: %.2f; T: %.2f; PV %.2f; W %.2f\n ",
 			DebugGui::continentalness.load(),
 			DebugGui::erosion.load(),
-			DebugGui::humidity.load()
+			DebugGui::humidity.load(),
+			DebugGui::temperature.load(),
+			DebugGui::PV.load(),
+			DebugGui::weirdness.load()
 		);
 
 		switch(DebugGui::biome.load())
@@ -1143,17 +1146,18 @@ void RenderThread::lightingPass()
 					vk.drawHudImage(vk.toolbar_cursor_image_descriptor, viewport);
 				}
 
-				if (m_world_scene.show_debug_text) // Debug info
-				{
-					float size = 512.0f;
+		if (m_world_scene.show_debug_text) // Debug info
+		{
+			float width = 2048.0f;
+			float height = 512.0f;
 
-					VkViewport viewport = {};
-					viewport.x = 0;
-					viewport.y = 0;
-					viewport.width = size;
-					viewport.height = size;
-					viewport.minDepth = 0.0f;
-					viewport.maxDepth = 1.0f;
+			VkViewport viewport = {};
+			viewport.x = 0;
+			viewport.y = 0;
+			viewport.width = vk.debug_info_image.extent2D.width;
+			viewport.height = vk.debug_info_image.extent2D.height;
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
 
 					vk.drawHudImage(vk.debug_info_image_descriptor, viewport);
 				}
