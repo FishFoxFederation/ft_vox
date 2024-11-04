@@ -141,7 +141,6 @@ bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, WorldGe
 		insertChunkNoLock(ticket.position, chunk);
 	}
 	std::lock_guard lock(chunk->status);
-	sizeof(Chunk);
 	const int current_ticket_level = chunk->getLoadLevel();
 	const Chunk::genLevel current_gen_level = chunk->getGenLevel();
 
