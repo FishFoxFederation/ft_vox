@@ -7,14 +7,24 @@
 #include <cmath>
 #include <queue>
 
+#define WATER_HEIGHT 80.0f
+
+static inline float smoothstep(const float & t)
+{
+	// 6t^5 - 15t^4 + 10t^3
+	//https://www.geogebra.org/solver/fr/results/6t%5E5%20-%2015t%5E4%20%2B%2010t%5E3?from=google
+	//s curve function to smooth the interpolation
+	return t * t * t * ( t * ( t * 6.0f - 15.0f ) + 10.0f );
+}
+
 World::WorldGenerator::WorldGenerator(World & world)
 : m_relief_perlin(1, 7, 1, 0.35, 2),
   m_cave_perlin(1, 4, 1, 0.5, 2),
   m_continentalness_perlin(10, 6, 0.001, 0.5, 2),
-  m_erosion_perlin(5, 2, 0.005, 0.5, 2),
+  m_erosion_perlin(5, 2, 0.003, 0.5, 2),
   m_weirdness_perlin(42, 2, 0.004, 0.5, 1.5),
-  m_temperature_perlin(7, 1, 0.005, 0.5, 2),
-  m_humidity_perlin(17, 1, 0.005, 0.5, 2),
+  m_temperature_perlin(7, 4, 0.003, 0.5, 2),
+  m_humidity_perlin(17, 4, 0.003, 0.5, 2),
   m_world(world)
 {
 	// for(size_t i = 0; i + 1 < ZONE_SIZES.size(); i++)
@@ -583,7 +593,6 @@ void World::WorldGenerator::newReliefPass(const glm::ivec3 & chunkPos3D)
 			int level_weirdness = weirdnessLevel(weirdness);
 			int level_PV = PVLevel(PV);
 
-			BiomeType biome = getBiomeType(level_continent, level_erosion, level_humidity, level_temperature, level_weirdness, level_PV);
 
 			//we want continentalness to determine base height
 			//the more erosion the flatter the terrain
@@ -591,7 +600,8 @@ void World::WorldGenerator::newReliefPass(const glm::ivec3 & chunkPos3D)
 			// negative PV means negative height bias
 			//and erosion as well as PV to determine the height bias
 			float heightBias = calculateHeightBias(erosion, PV);
-			int baseHeight = calculateBaseHeight(relief, continentalness, PV, erosion, biome);
+			int baseHeight = calculateBaseHeight(relief, continentalness, PV, erosion);
+			BiomeType biome = getBiomeType(level_continent, level_erosion, level_humidity, level_temperature, level_weirdness, level_PV, baseHeight);
 
 			std::array<BlockType, CHUNK_Y_SIZE> blocks = getBlockColumn(baseHeight, biome);
 			chunk->setBlockColumn(blockX, blockZ, blocks);
@@ -603,6 +613,7 @@ void World::WorldGenerator::newReliefPass(const glm::ivec3 & chunkPos3D)
 			biome_info.temperature = temperature;
 			biome_info.humidity = humidity;
 			biome_info.PV = PV;
+			chunk->setHeight(blockX, blockZ, baseHeight);
 			chunk->setBiome(blockX, blockZ, biome_info);
 			// Chunk::biomeInfo biome_info{
 			// 	false,
@@ -655,17 +666,15 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
 	);
 
-	std::unordered_set<glm::ivec2> tree_positions;
+	std::unordered_map<glm::ivec2, BiomeType> tree_positions;
 	//iterate over every possible tree placement and add it to a list
 	const Chunk::BiomeArray & biomes = center_chunk->getBiomes();
 	for(size_t i = 0; i < biomes.size(); i++)
 	{
 		const Chunk::biomeInfo & biome = biomes[i];
-		if (biome.isLand)
-		{
-			glm::ivec2 chunk_pos = Chunk::toBiomeCoord(i);
-			tree_positions.insert(chunk_pos);
-		}
+		glm::ivec2 chunk_pos = Chunk::toBiomeCoord(i);
+		if (biome.biome == BiomeType::FOREST || biome.biome == BiomeType::PLAIN)
+			tree_positions.insert({chunk_pos, biome.biome});
 	}
 
 	std::srand(this->seed);
@@ -673,11 +682,16 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 	const StructureInfo & tree_info = g_structures_info.get(StructureInfo::Type::Tree);
 	while (!tree_positions.empty())
 	{
-		glm::ivec2 tree_pos = *tree_positions.begin();
+		auto [tree_pos, biome] = *tree_positions.begin();
 		tree_positions.erase(tree_pos);
 
+		int frequency = 0;
+		if (biome == BiomeType::FOREST)
+			frequency = FOREST_TREE_FREQUENCY;
+		else if (biome == BiomeType::PLAIN)
+			frequency = PLAIN_TREE_FREQUENCY;
 		//test if the tree can be placed
-		if (std::rand() % 15 != 0)
+		if (std::rand() % frequency != 0)
 			continue;
 
 
@@ -686,7 +700,8 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 			center_chunk->getHeight(tree_pos),
 			tree_pos.y
 		);
-
+		if (center_chunk->getBlock(tree_start - glm::ivec3{0, 1, 0}) != BlockInfo::Type::Grass)
+			continue;
 		tree_start += chunkPos3D * CHUNK_SIZE_IVEC3;
 
 		// if ((std::hash<glm::ivec2>{}(tree_start)) % 10 != 0)
@@ -762,32 +777,46 @@ float World::WorldGenerator::calculateHeightBias(const float & erosion, const fl
 	return ret;
 }
 
-float World::WorldGenerator::calculateBaseHeight(const float & relief, const float & continentalness, const float & pv, const float & erosion, BiomeType biome) 
+float World::WorldGenerator::calculateBaseHeight(const float & relief, const float & continentalness, const float & pv, const float & erosion)
 {
 	float temp_relief = relief;
 	float ret = 0.0f;
 	temp_relief = (temp_relief + 1) / 2; // map from [-1, 1] to [0, 1]
-	float oceanRelief = mapRange(temp_relief, 0.0f, 1.0f, 40.0f, 60.0f);
-	float riverRelief = mapRange(temp_relief, 0.0f, 1.0f, 70.0f, 80.0f);
+	float oceanRelief = mapRange(temp_relief, 1.0f, 0.0f, 40.0f, 60.0f);
+	float riverRelief = mapRange(temp_relief, 0.0f, 1.0f, 70.0f, WATER_HEIGHT);
 	
-	float flatLandRelief = mapRange(temp_relief, 0.0f, 1.0f, 80.0f, 100.0f);
+	float flatLandRelief = mapRange(temp_relief, 0.0f, 1.0f, WATER_HEIGHT, 100.0f);
 	temp_relief = pow(2, 7 * temp_relief - 7); // map from [0, 1] to [0, 1] with a slope
-	float mountainRelief = mapRange(temp_relief, 0.0f, 1.0f, 80.0f, 300.0f);
+	// temp_relief = 0.01388f * pow(72.085f, temp_relief);
+	float mountainNoise = std::abs(relief);
+	float landRelief = flatLandRelief;
 
-	float landRelief = std::lerp(flatLandRelief, mountainRelief, mapRange(pv, -1.0f, 1.0f, 0.0f, 1.0f));
+	//use erosion to make mountain less tall
+	float mountainRelief = mapRange(mountainNoise, 0.0f, 1.0f, 100.0f, 300.0f);
+	// float landRelief = std::lerp(flatLandRelief, mountainRelief, mapRange(erosion, -1.0f, 1.0f, 1.0f, 0.0f));
 	//lerp between ocean and land with heavy favoring of ocean
 
+	//vary river threshold based on continentalness
+	float riverThreshold = 0.0f;
+	float coastThreshold = -0.2f;
+	float continentalnessRemap = mapRange(continentalness, -0.2f, 1.0f, 0.0f, 1.0f);
+	float invertedContinentalness = 1 - continentalnessRemap;
+	float erosionRemap = mapRange(erosion, -1.0f, 1.0f, 0.0f, 1.0f);
+
+	glm::ivec2(current_world_pos.x, current_world_pos.z);//the higher the continentalness the less large the rivers, and the lower the erosion the less large the rivers
+	if (continentalness > coastThreshold)
+		riverThreshold = std::lerp(-0.8f, -0.4f, (invertedContinentalness * 3 + erosionRemap) / 4);
 	//create smooth transition between mountains and land and rivers
-	if (pv < -0.8f)
-		landRelief = std::lerp(riverRelief, landRelief, mapRange(pv, -1.0f, -0.8f, 0.0f, 1.0f));
-	else if (pv < -0.6f)
+	if (pv < riverThreshold)
+		landRelief = std::lerp(riverRelief, landRelief, smoothstep(mapRange(pv, -1.0f, riverThreshold, 0.0f, 1.0f)));
+	else if (pv < -0.4f)
 		landRelief = landRelief;
 	else if (pv < 0.2f)
 		landRelief = landRelief;
-	// else if (pv <= 0.7f)
-		// landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.2f, 0.7f, 0.0f, 1.0f));
+	else if (pv <= 0.7f)
+		landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.2f, 0.7f, 0.0f, 1.0f));
 	else
-		landRelief = landRelief;
+		landRelief = mountainRelief;
 		// landRelief = mountainRelief;
 		// landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.7f, 1.0f, 0.0f, 1.0f));
 	// else
@@ -861,21 +890,22 @@ BiomeType World::WorldGenerator::getBiomeType(
 	const int & humidity,
 	const int & temperature,
 	const int & weirdness,
-	const int & PV)
+	const int & PV,
+	const int & elevation)
 {
 	if (continentalness == 0)
 		return BiomeType::OCEAN;
 	else {
-		if (PV == 0)
-			return BiomeType::RIVER;
-		if (PV == 4 && erosion < 3)
+		// if (PV == 0)
+		// 	return BiomeType::RIVER;
+		if (erosion < 3 && PV > 1 && elevation > 120)
 			return BiomeType::MOUNTAIN;
 		if (continentalness == 1)
 		{
 			return BiomeType::COAST;
 		} else //inland biomes
 		{
-			if (temperature >= 3)
+			if (temperature >= 3 && humidity < 1)
 				return BiomeType::DESERT;
 			if (humidity > 1)
 				return BiomeType::FOREST;
@@ -887,106 +917,126 @@ BiomeType World::WorldGenerator::getBiomeType(
 std::array<BlockType, CHUNK_Y_SIZE> World::WorldGenerator::getBlockColumn(int baseHeight, BiomeType biome)
 {
 	std::array<BlockType, CHUNK_Y_SIZE> blocks;
-	// switch(biome)
-	// {
-	// case BiomeType::OCEAN:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 	{
-	// 		if (i < baseHeight)
-	// 			blocks[i] = BlockType::Stone;
-	// 		else if (i < 80)
-	// 			blocks[i] = BlockType::Water;
-	// 		else
-	// 			blocks[i] = BlockType::Air;
-	// 	}
-	// 	break;
-	// }
-	// case BiomeType::RIVER:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 	{
-	// 		if (i < baseHeight)
-	// 			blocks[i] = BlockType::Stone;
-	// 		else if (i < 80)
-	// 			blocks[i] = BlockType::Water;
-	// 		else
-	// 			blocks[i] = BlockType::Air;
-	// 	}
-	// 	break;
-	// }
-	// case BiomeType::MOUNTAIN:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 	{
-	// 		if (i < baseHeight)
-	// 			blocks[i] = BlockType::Stone;
-	// 		else
-	// 			blocks[i] = BlockType::Air;
-	// 	}
-	// 	break;
-	// }
-	// case BiomeType::COAST:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 	{
-	// 		if (i < baseHeight - 5)
-	// 			blocks[i] = BlockType::Stone;
-	// 		else if (i < baseHeight)
-	// 			blocks[i] = BlockType::Sand;
-	// 		else if (i < 80 - 5)
-	// 			blocks[i] = BlockType::Water;
-	// 		else
-	// 			blocks[i] = BlockType::Air;
-	// 	}
-	// 	break;
-	// }
-	// case BiomeType::DESERT:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 	{
-	// 		if (i < baseHeight - 5)
-	// 			blocks[i] = BlockType::Stone;
-	// 		else if (i < baseHeight)
-	// 			blocks[i] = BlockType::Sand;
-	// 		else
-	// 			blocks[i] = BlockType::Air;
-	// 	}
-	// 	break;
-	// }
-	// case BiomeType::PLAIN:
-	// 	[[fallthrough]];
-	// case BiomeType::FOREST:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 	{
-	// 		if (i < baseHeight - 5)
-	// 			blocks[i] = BlockType::Stone;
-	// 		else if (i < baseHeight - 1)
-	// 			blocks[i] = BlockType::Dirt;
-	// 		else if (i < baseHeight)
-	// 			blocks[i] = BlockType::Grass;
-	// 		else
-	// 			blocks[i] = BlockType::Air;
-	// 	}
-	// 	break;
-	// }
-	// case BiomeType::NONE:
-	// {
-	// 	for(int i = 0; i < CHUNK_Y_SIZE; i++)
-	// 		blocks[i] = BlockType::Air;
-	// 	break;
-	// }
-	// }
-	for(int i = 0; i < CHUNK_Y_SIZE; i++)
+	switch(biome)
 	{
-		if (i < baseHeight)
-			blocks[i] = BlockType::Stone;
-		else if (i < 80)
-			blocks[i] = BlockType::Water;
-		else
-			blocks[i] = BlockType::Air;
+	case BiomeType::OCEAN:
+	{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+		{
+			if (i <= baseHeight)
+				blocks[i] = BlockType::Stone;
+			else if (i < WATER_HEIGHT)
+				blocks[i] = BlockType::Water;
+			else
+				blocks[i] = BlockType::Air;
+		}
+		break;
 	}
+	case BiomeType::RIVER:
+	{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+		{
+			if (i < baseHeight - 5)
+				blocks[i] = BlockType::Stone;
+			else if (i <= baseHeight)
+				blocks[i] = BlockType::Sand;
+			else if (i < WATER_HEIGHT)
+				blocks[i] = BlockType::Water;
+			else
+				blocks[i] = BlockType::Air;
+		}
+		break;
+	}
+	case BiomeType::MOUNTAIN:
+	{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+		{
+			if (i <= baseHeight)
+				blocks[i] = BlockType::Stone;
+			else
+				blocks[i] = BlockType::Air;
+		}
+		break;
+	}
+	case BiomeType::COAST:
+	{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+		{
+			if (i < baseHeight - 5)
+				blocks[i] = BlockType::Stone;
+			else if (i <= baseHeight)
+				blocks[i] = BlockType::Sand;
+			else if (i < WATER_HEIGHT)
+				blocks[i] = BlockType::Water;
+			else
+				blocks[i] = BlockType::Air;
+		}
+		break;
+	}
+	case BiomeType::DESERT:
+	{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+		{
+			if (i < baseHeight - 5)
+				blocks[i] = BlockType::Stone;
+			else if (i <= baseHeight)
+				blocks[i] = BlockType::Sand;
+			else if (i < WATER_HEIGHT)
+				blocks[i] = BlockType::Water;
+			else
+				blocks[i] = BlockType::Air;
+		}
+		break;
+	}
+	case BiomeType::PLAIN:
+		[[fallthrough]];
+	case BiomeType::FOREST:
+	{
+		if (baseHeight < WATER_HEIGHT)
+		{
+			for(int i = 0; i < CHUNK_Y_SIZE; i++)
+			{
+				if (i < baseHeight - 5)
+					blocks[i] = BlockType::Stone;
+				else if (i <= baseHeight)
+					blocks[i] = BlockType::Dirt;
+				else if (i < WATER_HEIGHT)
+					blocks[i] = BlockType::Water;
+				else
+					blocks[i] = BlockType::Air;
+			}
+			break;
+		} else{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+		{
+			if (i < baseHeight - 5)
+				blocks[i] = BlockType::Stone;
+			else if (i < baseHeight - 1)
+				blocks[i] = BlockType::Dirt;
+			else if (i <= baseHeight)
+				blocks[i] = BlockType::Grass;
+			else
+				blocks[i] = BlockType::Air;
+		}
+		}
+		break;
+	}
+	case BiomeType::NONE:
+	{
+		for(int i = 0; i < CHUNK_Y_SIZE; i++)
+			blocks[i] = BlockType::Air;
+		break;
+	}
+	}
+	// for(int i = 0; i < CHUNK_Y_SIZE; i++)
+	// {
+	// 	if (i < baseHeight)
+	// 		blocks[i] = BlockType::Stone;
+	// 	else if (i < WATER_HEIGHT)
+	// 		blocks[i] = BlockType::Water;
+	// 	else
+	// 		blocks[i] = BlockType::Air;
+	// }
 	return blocks;
 }
 
@@ -998,6 +1048,7 @@ void World::WorldGenerator::drawNoises(VulkanAPI & vk)
 		{
 			glm::vec2 current_world_pos = glm::vec2(x,z) * 5.0f;
 			//generate values
+			float relief = generateReliefValue(current_world_pos);
 			float continentalness = m_continentalness_perlin.noise(current_world_pos);
 			float erosion = m_erosion_perlin.noise(current_world_pos);
 			float weirdness = m_weirdness_perlin.noise(current_world_pos);
@@ -1012,7 +1063,8 @@ void World::WorldGenerator::drawNoises(VulkanAPI & vk)
 			int level_weirdness = weirdnessLevel(weirdness);
 			int level_PV = PVLevel(PV);
 
-			BiomeType biome = getBiomeType(level_continent, level_erosion, level_humidity, level_temperature, level_weirdness, level_PV);
+			int baseHeight = calculateBaseHeight(relief, continentalness, PV, erosion);
+			BiomeType biome = getBiomeType(level_continent, level_erosion, level_humidity, level_temperature, level_weirdness, level_PV, baseHeight);
 
 			uint8_t rgb_continent = mapRange(continentalness, -1.0f, 1.0f, 0.0f, 255.0f);
 			uint8_t rgb_erosion = mapRange(erosion, -1.0f, 1.0f, 0.0f, 255.0f);

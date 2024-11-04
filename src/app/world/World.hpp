@@ -97,6 +97,8 @@ public:
 		// float	m_max = -1;
 		// float 	m_min = 1;
 	private:
+		constexpr static int FOREST_TREE_FREQUENCY = 12;
+		constexpr static int PLAIN_TREE_FREQUENCY = 120;
 		uint64_t seed = 0;
 		struct genStruct
 		{
@@ -150,8 +152,7 @@ public:
 			const float & relief,
 			const float & continentalness,
 			const float & pv,
-			const float & erosion,
-			BiomeType biome);
+			const float & erosion);
 		int		temperatureLevel(const float & temperature);
 		int		humidityLevel(const float & humidity);
 		int		continentalnessLevel(const float & continentalness);
@@ -165,7 +166,8 @@ public:
 			const int & humidity,
 			const int & temperature,
 			const int & weirdness,
-			const int & PV);
+			const int & PV,
+			const int & relief);
 		std::array<BlockType, CHUNK_Y_SIZE> getBlockColumn(int baseHeight, BiomeType biome);
 
 
