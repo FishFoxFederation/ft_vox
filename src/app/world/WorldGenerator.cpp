@@ -788,7 +788,8 @@ float World::WorldGenerator::calculateBaseHeight(const float & relief, const flo
 	float flatLandRelief = mapRange(temp_relief, 0.0f, 1.0f, WATER_HEIGHT, 100.0f);
 	temp_relief = pow(2, 7 * temp_relief - 7); // map from [0, 1] to [0, 1] with a slope
 	// temp_relief = 0.01388f * pow(72.085f, temp_relief);
-	float mountainNoise = std::abs(relief);
+	float mountainNoise = temp_relief;
+	// mountainNoise = pow(2, 7 * mountainNoise - 7);
 	float landRelief = flatLandRelief;
 
 	//use erosion to make mountain less tall
@@ -802,21 +803,21 @@ float World::WorldGenerator::calculateBaseHeight(const float & relief, const flo
 	float continentalnessRemap = mapRange(continentalness, -0.2f, 1.0f, 0.0f, 1.0f);
 	float invertedContinentalness = 1 - continentalnessRemap;
 	float erosionRemap = mapRange(erosion, -1.0f, 1.0f, 0.0f, 1.0f);
+	float invertedErosion = 1 - erosionRemap;
 
-	glm::ivec2(current_world_pos.x, current_world_pos.z);//the higher the continentalness the less large the rivers, and the lower the erosion the less large the rivers
+	mountainRelief = std::lerp(flatLandRelief, mountainRelief, erosionRemap);
+
+	//the higher the continentalness the less large the rivers, and the lower the erosion the less large the rivers
 	if (continentalness > coastThreshold)
 		riverThreshold = std::lerp(-0.8f, -0.4f, (invertedContinentalness * 3 + erosionRemap) / 4);
 	//create smooth transition between mountains and land and rivers
 	if (pv < riverThreshold)
 		landRelief = std::lerp(riverRelief, landRelief, smoothstep(mapRange(pv, -1.0f, riverThreshold, 0.0f, 1.0f)));
-	else if (pv < -0.4f)
+	else if (pv > riverThreshold && pv < 0.0f)
 		landRelief = landRelief;
-	else if (pv < 0.2f)
-		landRelief = landRelief;
-	else if (pv <= 0.7f)
-		landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.2f, 0.7f, 0.0f, 1.0f));
 	else
-		landRelief = mountainRelief;
+		landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.0f, 1.0f, 0.0f, 1.0f));
+	
 		// landRelief = mountainRelief;
 		// landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.7f, 1.0f, 0.0f, 1.0f));
 	// else
