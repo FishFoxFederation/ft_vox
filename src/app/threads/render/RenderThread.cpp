@@ -101,12 +101,8 @@ void RenderThread::loop()
 		camera_matrices.view = camera.view;
 		camera_matrices.proj = clip * camera.projection;
 
-		// if (m_world_scene.update_fc_matrices)
-		// {
-			camera_matrices_fc.view = camera.view;
-			camera_matrices_fc.proj = camera.projection;
-		// 	m_world_scene.update_fc_matrices = false;
-		// }
+		camera_matrices_fc.view = camera.view;
+		camera_matrices_fc.proj = camera.projection;
 
 
 		chunk_meshes = m_world_scene.chunk_mesh_list.values();
@@ -160,14 +156,15 @@ void RenderThread::loop()
 
 
 		std::vector<float> frustum_split = { 0.0f, 0.01f, 0.05f, 0.1f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f };
+		// std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.6f, 1.0f };
 		std::vector<float> far_plane_distances;
 		if (frustum_split.size() != vk.shadow_maps_count + 1)
 		{
-			LOG_ERROR("frustume_split.size() != vk.shadow_maps_count + 1");
+			LOG_ERROR("frustum_split.size() != vk.shadow_maps_count + 1");
 		}
 		shadow_map_light.light_dir = glm::normalize(sun_position - camera.position);
 		shadow_map_light.blend_distance = 5.0f;
-		std::vector<glm::mat4> light_view_proj_matrices = getCSMLightViewProjMatrices(
+		light_view_proj_matrices = getCSMLightViewProjMatrices(
 			shadow_map_light.light_dir,
 			frustum_split,
 			shadow_map_light.blend_distance,
@@ -554,7 +551,7 @@ void RenderThread::lightingPass()
 
 				for (auto & chunk_mesh: chunk_meshes)
 				{
-					if (!isInsideFrustum(chunk_mesh.model, CHUNK_SIZE_VEC3))
+					if (!isInsideFrustum_planes(camera.projection * camera.view, chunk_mesh.model, CHUNK_SIZE_VEC3))
 					{
 						continue;
 					}
@@ -1406,13 +1403,8 @@ void RenderThread::drawDebugGui()
 	);
 }
 
-bool RenderThread::isInsideFrustum(const glm::mat4 & model, const glm::vec3 & size) const
+bool RenderThread::isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const
 {
-	if (!m_world_scene.enable_frustum_culling)
-	{
-		return true;
-	}
-
 	const std::vector<glm::vec4> corners = {
 		glm::vec4(0,      0,      0,      1),
 		glm::vec4(size.x, 0,      0,      1),
@@ -1463,4 +1455,122 @@ bool RenderThread::isInsideFrustum(const glm::mat4 & model, const glm::vec3 & si
 	// }
 
 	// return inside;
+}
+
+static std::array<glm::vec4, 6> getFrustumPlnes(const glm::mat4 & VP)
+{
+	std::array<glm::vec4, 6> planes;
+
+	// Left clipping plane
+	planes[0] = glm::vec4(
+		VP[0][3] + VP[0][0],
+		VP[1][3] + VP[1][0],
+		VP[2][3] + VP[2][0],
+		VP[3][3] + VP[3][0]
+	);
+	// Right clipping plane
+	planes[1] = glm::vec4(
+		VP[0][3] - VP[0][0],
+		VP[1][3] - VP[1][0],
+		VP[2][3] - VP[2][0],
+		VP[3][3] - VP[3][0]
+	);
+	// Bottom clipping plane
+	planes[2] = glm::vec4(
+		VP[0][3] + VP[0][1],
+		VP[1][3] + VP[1][1],
+		VP[2][3] + VP[2][1],
+		VP[3][3] + VP[3][1]
+	);
+	// Top clipping plane
+	planes[3] = glm::vec4(
+		VP[0][3] - VP[0][1],
+		VP[1][3] - VP[1][1],
+		VP[2][3] - VP[2][1],
+		VP[3][3] - VP[3][1]
+	);
+	// Near clipping plane
+	planes[4] = glm::vec4(
+		VP[0][3] + VP[0][2],
+		VP[1][3] + VP[1][2],
+		VP[2][3] + VP[2][2],
+		VP[3][3] + VP[3][2]
+	);
+	// Far clipping plane
+	planes[5] = glm::vec4(
+		VP[0][3] - VP[0][2],
+		VP[1][3] - VP[1][2],
+		VP[2][3] - VP[2][2],
+		VP[3][3] - VP[3][2]
+	);
+
+	for (auto & plane : planes)
+	{
+		const float length = glm::length(glm::vec3(plane));
+		plane /= length;
+	}
+
+	return planes;
+}
+
+bool RenderThread::isInsideFrustum_planes(
+	const glm::mat4 & view_proj,
+	const glm::mat4 & model,
+	const glm::vec3 & size
+) const
+{
+	// https://iquilezles.org/articles/frustumcorrect/
+	// https://www.cse.chalmers.se/~uffe/vfc_bbox.pdf
+	// https://www.braynzarsoft.net/viewtutorial/q16390-34-aabb-cpu-side-frustum-culling
+
+	const std::vector<glm::vec4> aabb_corners = {
+		model * glm::vec4(0,      0,      0,      1),
+		model * glm::vec4(size.x, 0,      0,      1),
+		model * glm::vec4(0,      size.y, 0,      1),
+		model * glm::vec4(size.x, size.y, 0,      1),
+		model * glm::vec4(0,      0,      size.z, 1),
+		model * glm::vec4(size.x, 0,      size.z, 1),
+		model * glm::vec4(0,      size.y, size.z, 1),
+		model * glm::vec4(size.x, size.y, size.z, 1)
+	};
+
+	const auto frustum_planes = getFrustumPlnes(view_proj);
+
+	// check box outside/inside of frustum
+	for (const auto & plane : frustum_planes)
+	{
+		int outside = 0;
+		outside += glm::dot(plane, aabb_corners[0]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[1]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[2]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[3]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[4]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[5]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[6]) < 0.0f ? 1 : 0;
+		outside += glm::dot(plane, aabb_corners[7]) < 0.0f ? 1 : 0;
+		if (outside == 8) return false;
+	}
+
+	// const glm::mat4 inv_proj_view = glm::inverse(view_proj);
+	// const std::vector<glm::vec4> frustum_corners = {
+	// 	inv_proj_view * glm::vec4(-1, -1, -1, 1),
+	// 	inv_proj_view * glm::vec4( 1, -1, -1, 1),
+	// 	inv_proj_view * glm::vec4(-1,  1, -1, 1),
+	// 	inv_proj_view * glm::vec4( 1,  1, -1, 1),
+	// 	inv_proj_view * glm::vec4(-1, -1,  1, 1),
+	// 	inv_proj_view * glm::vec4( 1, -1,  1, 1),
+	// 	inv_proj_view * glm::vec4(-1,  1,  1, 1),
+	// 	inv_proj_view * glm::vec4( 1,  1,  1, 1)
+	// };
+
+	// check frustum outside/inside box
+	// int out;
+	// out = 0; for (const auto & corner : frustum_corners) out += corner.x > aabb_corners[7].x ? 1 : 0; if (out == 8) return false;
+	// out = 0; for (const auto & corner : frustum_corners) out += corner.x < aabb_corners[0].x ? 1 : 0; if (out == 8) return false;
+	// out = 0; for (const auto & corner : frustum_corners) out += corner.y > aabb_corners[7].y ? 1 : 0; if (out == 8) return false;
+	// out = 0; for (const auto & corner : frustum_corners) out += corner.y < aabb_corners[0].y ? 1 : 0; if (out == 8) return false;
+	// out = 0; for (const auto & corner : frustum_corners) out += corner.z > aabb_corners[7].z ? 1 : 0; if (out == 8) return false;
+	// out = 0; for (const auto & corner : frustum_corners) out += corner.z < aabb_corners[0].z ? 1 : 0; if (out == 8) return false;
+
+	return true;
 }

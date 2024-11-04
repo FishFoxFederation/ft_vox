@@ -12,7 +12,7 @@
 #include "CreateMeshData.hpp"
 #include "List.hpp"
 #include "TextRenderer.hpp"
-#include "ShaderCommun.hpp"
+#include "ShaderCommon.hpp"
 #include "Buffer.hpp"
 
 #include "Tracy.hpp"
@@ -365,8 +365,7 @@ public:
 	int current_frame = 0;
 	uint32_t current_image_index = 0;
 
-	// if you modify this, you need to modify the shader and ShadowMapLight struct
-	const uint shadow_maps_count = 8;
+	const uint shadow_maps_count = SHADOW_MAP_MAX_COUNT;
 	const uint shadow_map_size = 4096;
 
 	Image output_attachement;
