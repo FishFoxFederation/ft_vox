@@ -113,8 +113,9 @@ void Chunk::setBlock(const glm::ivec3 & position, BlockInfo::Type block)
 
 void Chunk::setBlockColumn(const int & x, const int & z, const std::array<BlockType, CHUNK_Y_SIZE> & column)
 {
-	for (int y = 0; y < CHUNK_Y_SIZE; y++)
-		setBlock(x, y, z, column[y]);
+	//
+	size_t index = toIndex(x, 0, z);
+	std::memcpy(&m_blocks[index], column.data(), CHUNK_Y_SIZE * sizeof(BlockType));
 }
 
 void Chunk::setBlockColumn(const glm::ivec2 & pos, const std::array<BlockType, CHUNK_Y_SIZE> & column)
@@ -349,13 +350,13 @@ void Chunk::setGenLevel(const genLevel & level)
 
 int Chunk::toIndex(const int & x, const int & y, const int & z)
 {
-	return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
+	return y + x * CHUNK_Y_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
 }
 
 glm::ivec3	Chunk::toCoord(const int & index)
 {
-	int x = index % CHUNK_X_SIZE;
-	int y = (index - x) % CHUNK_Y_SIZE;
+	int y = index % CHUNK_Y_SIZE;
+	int x = (index - y) % CHUNK_X_SIZE;
 	int z = (index - x - y) % CHUNK_Z_SIZE;
 	return glm::ivec3(x, y, z);
 }
