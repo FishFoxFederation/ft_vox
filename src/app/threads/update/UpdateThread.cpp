@@ -66,8 +66,6 @@ void UpdateThread::init()
 	tracy::SetThreadName(str_update_thread);
 	auto packet = std::make_shared<ConnectionPacket>(m_world.m_my_player_id, m_world.getPlayerPosition(m_world.m_my_player_id));
 	m_client.sendPacket(packet);
-
-	// m_world.createMob();
 }
 
 void UpdateThread::loop()
@@ -239,12 +237,6 @@ void UpdateThread::readInput()
 	double scroll_x, scroll_y;
 	m_window.input().getScroll(scroll_x, scroll_y);
 	m_world.manageScroll(scroll_x, scroll_y);
-
-	const Input::KeyState v_key_status = m_window.input().getKeyState(GLFW_KEY_V);
-	if (v_key_status == Input::KeyState::PRESSED)
-	{
-		m_world_scene.enable_frustum_culling = !m_world_scene.enable_frustum_culling;
-	}
 }
 
 void UpdateThread::movePlayer()

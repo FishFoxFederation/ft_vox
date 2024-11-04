@@ -26,7 +26,9 @@ void Player::moveDirection(double x_offset, double y_offset)
 
 Camera Player::camera() const
 {
-	return Camera(transform.position + cameraPosition(), pitch, yaw);
+	// constexpr double render_distance = SERVER_LOAD_DISTANCE * CHUNK_X_SIZE;
+	// const double far_plane = glm::sqrt(2 * (render_distance * render_distance));
+	return Camera(transform.position + cameraPosition(), pitch, yaw, 1000);
 }
 
 glm::dvec3 Player::direction() const

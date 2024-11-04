@@ -102,6 +102,7 @@ private:
 
 	AtmosphereParams atmosphere_params = {};
 
+	std::vector<glm::mat4> light_view_proj_matrices;
 	ShadowMapLight shadow_map_light = {};
 
 	std::string debug_text;
@@ -149,6 +150,11 @@ private:
 		std::vector<float> & far_plane_distances
 	);
 
-	bool isInsideFrustum(const glm::mat4 & model, const glm::vec3 & size) const;
+	bool isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const;
+	bool isInsideFrustum_planes(
+		const glm::mat4 & view_proj,
+		const glm::mat4 & model,
+		const glm::vec3 & size
+	) const;
 
 };

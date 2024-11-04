@@ -64,7 +64,8 @@ public:
 	Camera(
 		const glm::dvec3 & position,
 		double pitch,
-		double yaw
+		double yaw,
+		double far_plane
 	):
 		position(position),
 		pitch(pitch),
@@ -72,7 +73,7 @@ public:
 		up(0.0f, 1.0f, 0.0f),
 		fov(80.0f),
 		near_plane(0.01f),
-		far_plane(1000.0f)
+		far_plane(far_plane)
 	{
 	}
 
@@ -119,13 +120,13 @@ public:
 
 private:
 
-	glm::dvec3 position{ 0.0f, 0.0f, 0.0f };
-	double pitch{ 0.0f };
-	double yaw{ 0.0f };
-	glm::dvec3 up{ 0.0f, 1.0f, 0.0f };
-	double fov{ 80.0f };
-	double near_plane{ 0.01f };
-	double far_plane{ 1000.0f };
+	glm::dvec3 position;
+	double pitch;
+	double yaw;
+	glm::dvec3 up;
+	double fov;
+	double near_plane;
+	double far_plane;
 
 	mutable TracyLockableN(std::mutex, m_mutex, "Camera Mutex");
 
@@ -136,6 +137,4 @@ private:
 	glm::mat4 getProjectionMatrix(double aspect_ratio) const;
 
 	ViewFrustum getViewFrustum(double aspect_ratio) const;
-
-
 };
