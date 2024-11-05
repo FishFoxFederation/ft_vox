@@ -243,6 +243,8 @@ void UpdateThread::movePlayer()
 {
 	auto static last_time = std::chrono::steady_clock::now();
 	auto now = std::chrono::steady_clock::now();
+	auto delta_time_second = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_time).count() / 1000.0;
+	if (delta_time_second > 0.2) delta_time_second = 0.2;
 	glm::dvec2 look = glm::dvec2(m_mouse_x - m_last_mouse_x, m_mouse_y - m_last_mouse_y) * m_settings.mouseSensitivity();
 	m_last_mouse_x = m_mouse_x;
 	m_last_mouse_y = m_mouse_y;
@@ -266,7 +268,7 @@ void UpdateThread::movePlayer()
 		m_move_right,
 		m_jump,
 		m_sneak,
-		static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(now - last_time).count() / 1000.0)
+		delta_time_second
 	);
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
