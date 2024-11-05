@@ -16,7 +16,6 @@ var annotated_dup =
       [ "RIFFChunk", "structSound_1_1RIFFChunk.html", "structSound_1_1RIFFChunk" ]
     ] ],
     [ "std", "namespacestd.html", [
-      [ "hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", "structstd_1_1hash_3_01BlockVertex_01_4" ],
       [ "hash< Chunk::genLevel >", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4.html", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4" ],
       [ "hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec2_01_4" ],
       [ "hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", "structstd_1_1hash_3_01glm_1_1ivec3_01_4" ],
@@ -68,6 +67,7 @@ var annotated_dup =
     [ "EntityVertex", "structEntityVertex.html", "structEntityVertex" ],
     [ "Face", "structFace.html", "structFace" ],
     [ "FileOutput", "classFileOutput.html", "classFileOutput" ],
+    [ "FrustumPoints", "structFrustumPoints.html", "structFrustumPoints" ],
     [ "History", "classHistory.html", "classHistory" ],
     [ "HitBox", "classHitBox.html", "classHitBox" ],
     [ "IdGenerator", "classIdGenerator.html", "classIdGenerator" ],

@@ -55,6 +55,7 @@ var hierarchy =
     [ "task::Executor", "classtask_1_1Executor.html", null ],
     [ "Face", "structFace.html", null ],
     [ "Sound::FMTChunk", "structSound_1_1FMTChunk.html", null ],
+    [ "FrustumPoints", "structFrustumPoints.html", null ],
     [ "std::future", null, [
       [ "task::Future< T >", "classtask_1_1Future.html", null ]
     ] ],
@@ -64,7 +65,6 @@ var hierarchy =
       [ "Event::HandlerWrapper< EventType >", "classEvent_1_1HandlerWrapper.html", null ]
     ] ],
     [ "ServerWorld::Ticket::hash", "structServerWorld_1_1Ticket_1_1hash.html", null ],
-    [ "std::hash< BlockVertex >", "structstd_1_1hash_3_01BlockVertex_01_4.html", null ],
     [ "std::hash< Chunk::genLevel >", "structstd_1_1hash_3_01Chunk_1_1genLevel_01_4.html", null ],
     [ "std::hash< glm::ivec2 >", "structstd_1_1hash_3_01glm_1_1ivec2_01_4.html", null ],
     [ "std::hash< glm::ivec3 >", "structstd_1_1hash_3_01glm_1_1ivec3_01_4.html", null ],

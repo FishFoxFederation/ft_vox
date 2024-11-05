@@ -12,7 +12,7 @@ var dir_b1761ed663595ed5d6faaeadad515f12 =
     [ "item_mesh.cpp", "item__mesh_8cpp.html", null ],
     [ "ObjLoader.hpp", "ObjLoader_8hpp.html", "ObjLoader_8hpp" ],
     [ "Pipeline.hpp", "Pipeline_8hpp.html", "Pipeline_8hpp" ],
-    [ "ShaderCommun.hpp", "ShaderCommun_8hpp.html", "ShaderCommun_8hpp" ],
+    [ "ShaderCommon.hpp", "ShaderCommon_8hpp.html", "ShaderCommon_8hpp" ],
     [ "Swapchain.cpp", "Swapchain_8cpp.html", null ],
     [ "Swapchain.hpp", "Swapchain_8hpp.html", "Swapchain_8hpp" ],
     [ "TextRenderer.cpp", "TextRenderer_8cpp.html", null ],

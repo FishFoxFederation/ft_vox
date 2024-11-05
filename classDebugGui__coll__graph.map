@@ -1,5 +1,5 @@
 <map id="DebugGui" name="DebugGui">
-<area shape="rect" id="node1" title=" " alt="" coords="777,1047,949,1292"/>
+<area shape="rect" id="node1" title=" " alt="" coords="777,1061,949,1307"/>
 <area shape="rect" id="node2" href="$classVulkanAPI.html" title=" " alt="" coords="435,548,605,911"/>
 <area shape="rect" id="node3" href="$classTextRenderer.html" title=" " alt="" coords="5,108,131,221"/>
 <area shape="rect" id="node4" href="$structQueueFamilyIndices.html" title=" " alt="" coords="155,115,299,214"/>

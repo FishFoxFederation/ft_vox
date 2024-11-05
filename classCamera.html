@@ -137,8 +137,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae23af4d7cab430c77d537621cdd16b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcb96efefa7af58e3ee6534b15d4979b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#adcb96efefa7af58e3ee6534b15d4979b">~Camera</a> ()=default</td></tr>
 <tr class="separator:adcb96efefa7af58e3ee6534b15d4979b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62e3ea1cb4be917bacbd727112a640d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a62e3ea1cb4be917bacbd727112a640d7">Camera</a> (const glm::dvec3 &amp;position, double pitch, double yaw)</td></tr>
-<tr class="separator:a62e3ea1cb4be917bacbd727112a640d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a34a47fb2d1d7d44b476de819238b56"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a0a34a47fb2d1d7d44b476de819238b56">Camera</a> (const glm::dvec3 &amp;position, double pitch, double yaw, double far_plane)</td></tr>
+<tr class="separator:a0a34a47fb2d1d7d44b476de819238b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaf486dfc7066a7977553289b0593533"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#adaf486dfc7066a7977553289b0593533">Camera</a> (const <a class="el" href="classCamera.html">Camera</a> &amp;camera)=delete</td></tr>
 <tr class="separator:adaf486dfc7066a7977553289b0593533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32e204de0e052949fab567a981cbec12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCamera.html">Camera</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCamera.html#a32e204de0e052949fab567a981cbec12">operator=</a> (<a class="el" href="classCamera.html">Camera</a> &amp;camera)=delete</td></tr>
@@ -203,8 +203,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a62e3ea1cb4be917bacbd727112a640d7" name="a62e3ea1cb4be917bacbd727112a640d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62e3ea1cb4be917bacbd727112a640d7">&#9670;&#160;</a></span>Camera() <span class="overload">[2/4]</span></h2>
+<a id="a0a34a47fb2d1d7d44b476de819238b56" name="a0a34a47fb2d1d7d44b476de819238b56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a34a47fb2d1d7d44b476de819238b56">&#9670;&#160;</a></span>Camera() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,7 +228,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>yaw</em>&#160;</td>
+          <td class="paramname"><em>yaw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>far_plane</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
