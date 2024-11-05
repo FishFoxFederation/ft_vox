@@ -32,6 +32,7 @@ IPacket::~IPacket()
 
 void IPacket::ExtractMessage(Connection & connection)
 {
+	ZoneScoped;
 	m_connection_id = connection.getConnectionId();
 	Deserialize(connection.getReadBuffer().data());
 	connection.reduceReadBuffer(Size());

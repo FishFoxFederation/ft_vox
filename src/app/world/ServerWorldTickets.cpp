@@ -91,7 +91,7 @@ void ServerWorld::updateTickets()
 void ServerWorld::clearChunksLoadLevel()
 {
 	for (auto & [position, chunk] : m_chunks)
-		chunk->setLoadLevel(TICKET_LEVEL_INACTIVE);
+		chunk->setLoadLevel(TICKET_LEVEL_INACTIVE + 1);
 	m_block_update_chunks.clear();
 	m_entity_update_chunks.clear();
 	m_border_chunks.clear();
@@ -103,13 +103,16 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets, WorldGenerator::Chun
 	std::queue<Ticket> queue;
 	for (auto & [id, ticket] : tickets)
 	{
-		// LOG_INFO("Adding ticket to floodfill: " << ticket.position.x << " " << ticket.position.y << " " << ticket.position.z << " level: " << ticket.level);
 		queue.push(ticket);
 	}
+	std::unordered_set<Ticket> visited;
 	while (!queue.empty())
 	{
 		auto current = queue.front();
 		queue.pop();
+		if(visited.contains(current))
+			continue;
+		visited.insert(current);
 		if (current.level > TICKET_LEVEL_INACTIVE)
 			continue;
 
@@ -144,7 +147,7 @@ bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, WorldGe
 	const int current_ticket_level = chunk->getLoadLevel();
 	const Chunk::genLevel current_gen_level = chunk->getGenLevel();
 
-	if (current_ticket_level < ticket.level)
+	if (current_ticket_level <= ticket.level)
 		return false;
 
 	//if the chunk is currently not at a high enough generation level

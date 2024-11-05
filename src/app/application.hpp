@@ -44,5 +44,5 @@ private:
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
 	BlockUpdateThread	m_block_update_thread;
-	// NetworkThread		m_network_thread;
+	NetworkThread		m_network_thread;
 };

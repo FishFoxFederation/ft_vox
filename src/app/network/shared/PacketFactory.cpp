@@ -74,6 +74,7 @@ PacketFactory::packetInfo PacketFactory::getPacketInfo(const uint8_t * buffer, c
 
 std::pair<bool, std::shared_ptr<IPacket>> PacketFactory::extractPacket(Connection & connection)
 {
+	ZoneScoped;
 	PacketFactory::packetInfo packetRet;
 	{
 		const std::vector<uint8_t> & buffer = connection.getReadBufferRef();

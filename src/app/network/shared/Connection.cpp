@@ -50,6 +50,7 @@ void Connection::reduceReadBuffer(size_t size)
 
 ssize_t Connection::recv()
 {
+	ZoneScoped;
 	char buffer[1024];
 	ssize_t total_size = 0;
 	while (1)
@@ -82,7 +83,8 @@ ssize_t Connection::sendQueue()
 	if (m_write_buffer.empty())
 		return 0;
 	// LOG_INFO("Sending data");
-	ssize_t size = ::send(m_socket->getFd(), m_write_buffer.data(), m_write_buffer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+	ssize_t size = 0;
+	size = ::send(m_socket->getFd(), m_write_buffer.data(), m_write_buffer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (size == -1)
 	{
 		if (errno != EAGAIN && errno != EWOULDBLOCK)
@@ -100,6 +102,11 @@ void Connection::queueAndSendMessage(const std::vector<uint8_t> & msg)
 {
 	m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
 	sendQueue();
+}
+
+void Connection::queueMessage(const std::vector<uint8_t> & msg)
+{
+	m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
 }
 
 const Socket & Connection::getSocket() const
@@ -122,12 +129,12 @@ bool Connection::dataToSend() const
 	return !m_write_buffer.empty();
 }
 
-void Connection::lock()
+std::mutex & Connection::WriteLock() const
 {
-	m_mutex.lock();
+	return m_write_mutex;
 }
 
-void Connection::unlock()
+std::mutex & Connection::ReadLock() const
 {
-	m_mutex.unlock();
+	return m_read_mutex;
 }
