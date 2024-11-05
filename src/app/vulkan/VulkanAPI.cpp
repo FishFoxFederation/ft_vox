@@ -1862,12 +1862,7 @@ void VulkanAPI::createPipelines()
 		pipeline_info.frag_path = "shaders/rasterization/shadow/shadow_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
 		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions = BlockVertex::getAttributeDescriptions();
-		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions_2 = {
-			attribute_descriptions[0],
-			attribute_descriptions[2],
-			attribute_descriptions[3]
-		};
-		pipeline_info.attribute_descriptions = attribute_descriptions_2;
+		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
 		pipeline_info.depth_bias_enable = VK_TRUE;

@@ -459,7 +459,7 @@ void CreateMeshData::createFace(
 
 					saved_offset -= pos;
 
-					if (normal.x + normal.y + normal.z < 0)
+					if (normal_signe < 0)
 					{
 						saved_offset += normal;
 					}
@@ -469,14 +469,14 @@ void CreateMeshData::createFace(
 
 					for (int i = 0; i < 4; i++)
 					{
-						vertices.push_back({
+						vertices.push_back(BlockVertex(
 							pos + offsets[i] * saved_offset,
-							normal,
+							face,
 							tex_coord_factor[i] * tex_coord,
 							data.texture,
 							data.ao[i],
 							data.light[i]
-						});
+						));
 					}
 
 					if (data.ao[0] + data.ao[3] > data.ao[1] + data.ao[2]) // if the first triangle has more ambient occlusion than the second triangle
@@ -634,7 +634,7 @@ void CreateMeshData::createFaceWater(
 
 					saved_offset -= pos;
 
-					if (normal.x + normal.y + normal.z < 0)
+					if (normal_signe < 0)
 					{
 						saved_offset += normal;
 					}
@@ -643,14 +643,21 @@ void CreateMeshData::createFaceWater(
 					// tex_coord = {1.0f, 1.0f};
 
 					glm::vec3 vertex_pos = pos;
-					if (face == BLOCK_FACE_TOP)
-					{
-						vertex_pos.y -= 0.1f;
-					}
+					// if (face == BLOCK_FACE_TOP)
+					// {
+					// 	vertex_pos.y -= 0.1f;
+					// }
 
 					for (int i = 0; i < 4; i++)
 					{
-						water_vertices.push_back({vertex_pos + glm::vec3(offsets[i] * saved_offset), normal, tex_coord_factor[i] * tex_coord, data.texture, data.ao[i]});
+						water_vertices.push_back(BlockVertex(
+							vertex_pos + glm::vec3(offsets[i] * saved_offset),
+							face,
+							tex_coord_factor[i] * tex_coord,
+							data.texture,
+							data.ao[i],
+							data.light[i]
+						));
 					}
 
 					if (data.ao[0] + data.ao[3] > data.ao[1] + data.ao[2]) // if the first triangle has more ambient occlusion than the second triangle
