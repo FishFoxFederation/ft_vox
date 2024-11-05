@@ -169,6 +169,7 @@ public:
 			const int & PV,
 			const int & relief);
 		std::array<BlockType, CHUNK_Y_SIZE> getBlockColumn(int baseHeight, BiomeType biome);
+		void carve(std::array<BlockType, CHUNK_Y_SIZE> & blocks, glm::ivec3 pos);
 
 
 
