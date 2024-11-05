@@ -64,7 +64,6 @@ void Server::runOnce(int timeout)
 				currentClient = it->second;
 			}
 			try {
-				std::lock_guard lock(*currentClient);
 				if (current_event & EPOLLIN)
 					read_data(*currentClient, currentClient->getConnectionId());
 				if (current_event & EPOLLOUT)
@@ -114,6 +113,7 @@ uint64_t Server::get_new_id()
 int Server::read_data(Connection & connection, uint64_t id)
 {
 	ssize_t ret;
+	std::lock_guard lock(connection.ReadLock());
 	try {
 
 		ret = connection.recv();
@@ -140,6 +140,7 @@ int Server::read_data(Connection & connection, uint64_t id)
 int Server::send_data(Connection & connection, uint64_t id)
 {
 	ssize_t ret;
+	std::lock_guard lock(connection.WriteLock());
 	try
 	{
 		if( !connection.dataToSend() )
@@ -170,11 +171,13 @@ void Server::send(std::shared_ptr<IPacket> packet)
 		currentClient = it->second;
 	}
 
-	std::lock_guard lock(*currentClient);
 	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
-	currentClient->queueAndSendMessage(buffer);
+	{
+		std::lock_guard lock(currentClient->WriteLock());
+		currentClient->queueAndSendMessage(buffer);
+	}
 }
 
 void Server::sendAll(std::shared_ptr<IPacket> packet)
@@ -184,7 +187,7 @@ void Server::sendAll(std::shared_ptr<IPacket> packet)
 	packet->Serialize(buffer.data());
 	for (auto & [id, connection] : m_connections)
 	{
-		std::lock_guard lock(*connection);
+		std::lock_guard lock(connection->WriteLock());
 		connection->queueAndSendMessage(buffer);
 	}
 }
@@ -198,7 +201,7 @@ void Server::sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id)
 	{
 		if (current_id != id)
 		{
-			std::lock_guard lock2(*connection);
+			std::lock_guard lock(connection->WriteLock());
 			connection->queueAndSendMessage(buffer);
 		}
 	}
@@ -215,7 +218,6 @@ void Server::disconnect(uint64_t id)
 		return;
 	}
 	currentClient = it->second;
-	std::lock_guard lock2(*currentClient);
 	m_poller.remove(currentClient->getSocket());
 	m_connections.erase(it);
 }

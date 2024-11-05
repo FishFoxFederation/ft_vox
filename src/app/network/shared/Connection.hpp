@@ -22,13 +22,16 @@ public:
 	Connection& operator=(Connection&& other);
 
 	void					queueAndSendMessage(const std::vector<uint8_t> & msg);
+	void 					queueMessage(const std::vector<uint8_t> & msg);
 
 	std::vector<uint8_t>			getReadBuffer() const;
 	const std::vector<uint8_t> &	getReadBufferRef() const;
 	const std::vector<uint8_t> &	getWriteBufferRef() const;
 	// std::mutex & 			getReadBufferMutex();
-	void					lock();
-	void					unlock();
+	// void					lock();
+	// void					unlock();
+	std::mutex & 			ReadLock() const;
+	std::mutex & 			WriteLock() const;
 	void					reduceReadBuffer(size_t size);
 	bool					dataToSend() const;
 	ssize_t 				recv();
@@ -43,6 +46,8 @@ private:
 	std::shared_ptr<Socket>	m_socket;
 	std::vector<uint8_t>	m_read_buffer;
 	mutable TracyLockableN (std::mutex, m_mutex, "Connection Mutex");
+	mutable TracyLockableN (std::mutex, m_write_mutex, "Write Mutex");
+	mutable TracyLockableN (std::mutex, m_read_mutex, "Read Mutex");
 	std::vector<uint8_t>	m_write_buffer;
 	uint64_t				m_connection_id;
 };

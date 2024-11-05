@@ -24,6 +24,7 @@ public:
 	void runOnce(const int & timeout = -1);
 	void run();
 	void sendPacket(std::shared_ptr<IPacket> packet);
+	void sendPacketNoWait(std::shared_ptr<IPacket> packet);
 
 	class ServerDisconnected : public std::exception
 	{
@@ -47,7 +48,9 @@ private:
 	Connection				m_connection;
 	IncomingPacketList		m_incoming_packets;
 	PacketFactory &			m_packet_factory = PacketFactory::GetInstance();
+	IncomingPacketList      m_outgoing_packets;
 
 	int		read_data();
 	int		send_data();
+	void	empty_outgoing_packets();
 };

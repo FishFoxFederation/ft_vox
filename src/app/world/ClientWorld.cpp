@@ -41,15 +41,16 @@ void ClientWorld::addChunk(std::shared_ptr<Chunk> chunk)
 {
 	glm::ivec3 chunk_position = chunk->getPosition();
 	{
-		std::lock_guard lock(m_chunks_mutex);
 		std::lock_guard lock2(m_loaded_chunks_mutex);
 		std::lock_guard lock3(m_chunks_to_mesh_mutex);
+		std::lock_guard lock(m_chunks_mutex);
 		LockMark(m_chunks_mutex);
 		LockMark(m_loaded_chunks_mutex);
+		LockMark(m_chunks_to_mesh_mutex);
 
-		m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
 		m_loaded_chunks.insert(glm::ivec2(chunk_position.x, chunk_position.z));
 		m_chunks_to_mesh.insert(glm::ivec2(chunk_position.x, chunk_position.z));
+		m_chunks.insert(std::make_pair(chunk_position, std::move(chunk)));
 	}
 
 	//set all neighbors as not visible to force a mesh update

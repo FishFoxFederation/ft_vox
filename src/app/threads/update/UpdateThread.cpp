@@ -65,13 +65,13 @@ void UpdateThread::init()
 	LOG_INFO("UpdateThread launched :" << gettid());
 	tracy::SetThreadName(str_update_thread);
 	auto packet = std::make_shared<ConnectionPacket>(m_world.m_my_player_id, m_world.getPlayerPosition(m_world.m_my_player_id));
-	m_client.sendPacket(packet);
+	m_client.sendPacketNoWait(packet);
 }
 
 void UpdateThread::loop()
 {
 	ZoneScoped;
-	m_client.runOnce(1);
+	// m_client.runOnce(1);
 	updateTime();
 	readInput();
 	//only move player every 20 ms
@@ -171,7 +171,7 @@ void UpdateThread::readInput()
 	if (ret.first)
 	{
 		auto packet = std::make_shared<BlockActionPacket>(BlockInfo::Type::Air, ret.second, BlockActionPacket::Action::PLACE);
-		m_client.sendPacket(packet);
+		m_client.sendPacketNoWait(packet);
 	}
 	ClientWorld::PlayerUseResult player_use = m_world.playerUse(m_world.m_my_player_id, m_use);
 	if (player_use.hit && player_use.used_item != ItemInfo::Type::None)
@@ -181,7 +181,7 @@ void UpdateThread::readInput()
 			player_use.block_position,
 			BlockActionPacket::Action::PLACE
 		);
-		m_client.sendPacket(packet);
+		m_client.sendPacketNoWait(packet);
 	}
 
 	const Input::KeyState gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
