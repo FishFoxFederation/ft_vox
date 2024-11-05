@@ -7,6 +7,7 @@ var classWorld =
     [ "World", "classWorld.html#a9319f9fe52db6162be2269479d76100d", null ],
     [ "getChunk", "classWorld.html#a77cd7a90b8768b6e34f0f4937b96cda4", null ],
     [ "getChunkNoLock", "classWorld.html#a024d70e06aa8f5a8c0dc8025898bfc7d", null ],
+    [ "getWorldGenerator", "classWorld.html#a0e141dfb5d7dc75ed83fa20338faf153", null ],
     [ "insertChunk", "classWorld.html#acfd5f2a2c19381826debe4d0b5ac3c50", null ],
     [ "insertChunkNoLock", "classWorld.html#a500a24a178550859843850732f9e8f55", null ],
     [ "operator=", "classWorld.html#af69b86b3ac37a2168715401267d104ab", null ],

@@ -147,6 +147,8 @@ Public Types</h2></td></tr>
 , <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4">OCEAN</a>
 , <br />
 &#160;&#160;<a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e">COAST</a>
+, <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea36cf8b91b77de9ed87ccf5e3d76962b9">DESERT</a>
+, <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea43c62e2950a775361e99a30ce031d098">RIVER</a>
 , <a class="el" href="classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693">NONE</a>
 <br />
  }</td></tr>
@@ -188,6 +190,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a96d2be9024e95b3caa684b3396dac6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49e6f8ac762b5194ad3e15653310a967"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a49e6f8ac762b5194ad3e15653310a967">setBlock</a> (const glm::ivec3 &amp;position, <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> block)</td></tr>
 <tr class="separator:a49e6f8ac762b5194ad3e15653310a967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0b230a6aa68e0d50c5eacfd3b9d43ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#ac0b230a6aa68e0d50c5eacfd3b9d43ad">setBlockColumn</a> (const int &amp;<a class="el" href="classChunk.html#a05ae613668297fefa3e36540bdb80ea1">x</a>, const int &amp;<a class="el" href="classChunk.html#af9a64f5fc4f80c5ee2fe347bdc257d1c">z</a>, const std::array&lt; <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a> &gt; &amp;column)</td></tr>
+<tr class="separator:ac0b230a6aa68e0d50c5eacfd3b9d43ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ce99a357e0065e1aaa84264e3512512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a7ce99a357e0065e1aaa84264e3512512">setBlockColumn</a> (const glm::ivec2 &amp;pos, const std::array&lt; <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a> &gt; &amp;column)</td></tr>
+<tr class="separator:a7ce99a357e0065e1aaa84264e3512512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a55525abd3504e35a9c14cf563f4462"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a0a55525abd3504e35a9c14cf563f4462">getLight</a> ()</td></tr>
 <tr class="separator:a0a55525abd3504e35a9c14cf563f4462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44c2d43e835c8f0efd86a81597f49d7e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classChunk.html#a13d358ee7b03766f8e45ccec50aece7b">LightArray</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunk.html#a44c2d43e835c8f0efd86a81597f49d7e">getLight</a> () const</td></tr>
@@ -378,6 +384,8 @@ Public Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea9d1480267288b8146bb0756b67ddcbbe" name="abe2d3dbcc9b48d61e1aafdd5100425eea9d1480267288b8146bb0756b67ddcbbe"></a>MOUNTAIN&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4" name="abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4"></a>OCEAN&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e" name="abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e"></a>COAST&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea36cf8b91b77de9ed87ccf5e3d76962b9" name="abe2d3dbcc9b48d61e1aafdd5100425eea36cf8b91b77de9ed87ccf5e3d76962b9"></a>DESERT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eea43c62e2950a775361e99a30ce031d098" name="abe2d3dbcc9b48d61e1aafdd5100425eea43c62e2950a775361e99a30ce031d098"></a>RIVER&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693" name="abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
@@ -1249,6 +1257,68 @@ Public Attributes</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>&#160;</td>
           <td class="paramname"><em>block</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ce99a357e0065e1aaa84264e3512512" name="a7ce99a357e0065e1aaa84264e3512512"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ce99a357e0065e1aaa84264e3512512">&#9670;&#160;</a></span>setBlockColumn() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setBlockColumn </td>
+          <td>(</td>
+          <td class="paramtype">const glm::ivec2 &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>column</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0b230a6aa68e0d50c5eacfd3b9d43ad" name="ac0b230a6aa68e0d50c5eacfd3b9d43ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0b230a6aa68e0d50c5eacfd3b9d43ad">&#9670;&#160;</a></span>setBlockColumn() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Chunk::setBlockColumn </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a>, <a class="el" href="Chunk_8hpp.html#a953c741ba256712c6f72ae2c30518a20">CHUNK_Y_SIZE</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>column</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

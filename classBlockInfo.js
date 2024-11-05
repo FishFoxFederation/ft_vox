@@ -5,6 +5,7 @@ var classBlockInfo =
       [ "Grass", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75aaac9a63596f76a62bb9f61a5dd7c0d25", null ],
       [ "Dirt", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a7cf334b79a84091f27dfc019b4b79229", null ],
       [ "Stone", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a2ff4ab1d379832d3edee28194fb4e7b2", null ],
+      [ "Sand", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75acec7ca178e2f7b1ae3a4600868c57aca", null ],
       [ "Water", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a27634ff8002b12e75d98e07ccd005d18", null ],
       [ "Glass", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75aaae44179fda7ddcbf8916aff53846128", null ],
       [ "Light", "classBlockInfo.html#a45820c5fd9afbf3c099019879095db75a9914a0ce04a7b7b6a8e39bec55064b82", null ],

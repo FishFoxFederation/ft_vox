@@ -15,7 +15,7 @@ var Block_8hpp =
     [ "BLOCK_PROPERTY_OPAQUE", "Block_8hpp.html#ad41d59e68570f498ab983461b86d0e03", null ],
     [ "BLOCK_PROPERTY_SOLID", "Block_8hpp.html#ac85a130bf23dd2f3be1d006fcb89e190", null ],
     [ "BlockProperties", "Block_8hpp.html#a0af7951ff19b7d7d986e482a89a8024c", null ],
-    [ "BlockType", "Block_8hpp.html#aa38934da64b62c122965f1699b71e2cb", null ],
+    [ "BlockType", "Block_8hpp.html#a071ad73c3c21541218143843b0d17fc9", null ],
     [ "TextureID", "Block_8hpp.html#a89c717f0912ef81a8573e40d87a93519", null ],
     [ "g_blocks_info", "Block_8hpp.html#a4444a80e08217e1267cd9cd5816cd523", null ]
 ];

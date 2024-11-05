@@ -31,12 +31,14 @@ var searchData=
   ['history_3c_20size_5ft_2c_20100_20_3e_28',['History&lt; size_t, 100 &gt;',['../classHistory.html',1,'']]],
   ['hit_29',['hit',['../structClientWorld_1_1PlayerUseResult.html#adf7842724d6b6b37b3c243b873e3a789',1,'ClientWorld::PlayerUseResult::hit()'],['../structRayCastOnBlockResult.html#af41c76ea3f31a96aed257117fd225555',1,'RayCastOnBlockResult::hit()']]],
   ['hit_5fposition_30',['hit_position',['../structRayCastOnBlockResult.html#a1b2c364f714039f75448327f8761323e',1,'RayCastOnBlockResult']]],
-  ['hitbox_31',['HitBox',['../classHitBox.html',1,'HitBox'],['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)']]],
+  ['hitbox_31',['HitBox',['../classHitBox.html',1,'']]],
   ['hitbox_32',['hitbox',['../classPlayer.html#aa47053be56466d5290fb346782946529',1,'Player::hitbox()'],['../classMob.html#a0c11b0314eced9673f0ce74792361b4c',1,'Mob::hitbox()'],['../classBlockInfo.html#a0c34c1c87f2c8d529a9db983725c18c4',1,'BlockInfo::hitbox()']]],
-  ['hitbox_2ecpp_33',['HitBox.cpp',['../HitBox_8cpp.html',1,'']]],
-  ['hitbox_2ehpp_34',['HitBox.hpp',['../HitBox_8hpp.html',1,'']]],
-  ['hud_5fframebuffers_35',['hud_framebuffers',['../classVulkanAPI.html#a27cf544260c51fd169353b10c6607233',1,'VulkanAPI']]],
-  ['hud_5fpipeline_36',['hud_pipeline',['../classVulkanAPI.html#a96888336776595c476b4f5922008638c',1,'VulkanAPI']]],
-  ['hud_5frender_5fpass_37',['hud_render_pass',['../classVulkanAPI.html#a08cef78415d715935de317f9e69df12e',1,'VulkanAPI']]],
-  ['humidity_38',['humidity',['../classDebugGui.html#a34ca1283e473bb3ba49ce1658f3a6939',1,'DebugGui::humidity()'],['../structChunk_1_1biomeInfo.html#ae74e03fe740fe7dff234aae4d235b5eb',1,'Chunk::biomeInfo::humidity()']]]
+  ['hitbox_33',['HitBox',['../classHitBox.html#a7ece785c82fb3816997e75aa872d965f',1,'HitBox::HitBox(HitBox &amp;&amp;other)=default'],['../classHitBox.html#aabe3d8faa7ac4453230418c607d951c2',1,'HitBox::HitBox(const HitBox &amp;other)=default'],['../classHitBox.html#a9c0b6b2699aef1677a6d288a425ca7d0',1,'HitBox::HitBox(const glm::dvec3 &amp;position, const glm::dvec3 &amp;size)']]],
+  ['hitbox_2ecpp_34',['HitBox.cpp',['../HitBox_8cpp.html',1,'']]],
+  ['hitbox_2ehpp_35',['HitBox.hpp',['../HitBox_8hpp.html',1,'']]],
+  ['hud_5fframebuffers_36',['hud_framebuffers',['../classVulkanAPI.html#a27cf544260c51fd169353b10c6607233',1,'VulkanAPI']]],
+  ['hud_5fpipeline_37',['hud_pipeline',['../classVulkanAPI.html#a96888336776595c476b4f5922008638c',1,'VulkanAPI']]],
+  ['hud_5frender_5fpass_38',['hud_render_pass',['../classVulkanAPI.html#a08cef78415d715935de317f9e69df12e',1,'VulkanAPI']]],
+  ['humidity_39',['humidity',['../classDebugGui.html#a34ca1283e473bb3ba49ce1658f3a6939',1,'DebugGui::humidity()'],['../structChunk_1_1biomeInfo.html#ae74e03fe740fe7dff234aae4d235b5eb',1,'Chunk::biomeInfo::humidity()']]],
+  ['humidity_5ftexture_5fid_40',['humidity_texture_id',['../classDebugGui.html#a3dc4d38bc2fc520a8893480eaf687d39',1,'DebugGui']]]
 ];

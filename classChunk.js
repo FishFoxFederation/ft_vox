@@ -11,6 +11,8 @@ var classChunk =
       [ "MOUNTAIN", "classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea9d1480267288b8146bb0756b67ddcbbe", null ],
       [ "OCEAN", "classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eead9a814d4bccfb06b84fe4d4ba6bce6f4", null ],
       [ "COAST", "classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea35f405fc169f9245d654f3b46653cd0e", null ],
+      [ "DESERT", "classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea36cf8b91b77de9ed87ccf5e3d76962b9", null ],
+      [ "RIVER", "classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eea43c62e2950a775361e99a30ce031d098", null ],
       [ "NONE", "classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693", null ]
     ] ],
     [ "genLevel", "classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888", [
@@ -56,6 +58,8 @@ var classChunk =
     [ "setBiome", "classChunk.html#a63ec69c4eeeb64c2b37f033d83417d62", null ],
     [ "setBlock", "classChunk.html#a49e6f8ac762b5194ad3e15653310a967", null ],
     [ "setBlock", "classChunk.html#a96d2be9024e95b3caa684b3396dac6d0", null ],
+    [ "setBlockColumn", "classChunk.html#a7ce99a357e0065e1aaa84264e3512512", null ],
+    [ "setBlockColumn", "classChunk.html#ac0b230a6aa68e0d50c5eacfd3b9d43ad", null ],
     [ "setBlockLight", "classChunk.html#a7f8750b7a142851fa3f4248797d851c1", null ],
     [ "setBlockLight", "classChunk.html#a0425eb44ac897edad86279fef2e20106", null ],
     [ "setGenLevel", "classChunk.html#a64d6d1200c9f45e364868c113cc3c219", null ],

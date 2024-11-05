@@ -115,15 +115,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AbstractEvent_8cpp.html",
-"Structures_8cpp.html#ab7b8e747bcfcb9d29b764da5d243f9af",
-"classChunkUnloadPacket.html#a34325f896c3056502433a8f542bed4dd",
-"classFileOutput.html#aef715a0ce0036786c5160b1f7baefb0b",
-"classPlayer.html#a51abadfb0aa236bcb754b23a60288bb5",
-"classSound_1_1Data.html#ab93594992e8338592155b5f1a2bc168a",
-"classVulkanMemoryAllocator.html#ab8d3db71c669fb28d4575524da62ded3",
-"classtask_1_1TaskNotFromSameGraphError.html",
-"structChunkPacket_1_1ChunkData.html#a746ed0c00773e50ab4ffe997af875e7a",
-"structstd_1_1hash_3_01ServerWorld_1_1Ticket_01_4.html"
+"Structures_8cpp.html#a7433091805f166e77d7ad9b6e1b7b9af",
+"classChunkUnloadPacket.html",
+"classEvent_1_1PlayerMoving.html#ac91180ec7398c71386b2c1a944e12804",
+"classPlayer.html#a333e44206106f4585180041030d3cd00",
+"classSound_1_1Data.html#a33e909534b7c044a86cf870a9196727a",
+"classVulkanAPI.html#af620c1c039315ba3962c5ca935530fbb",
+"classtask_1_1TaskNode.html#ad6fdea1aff52ddbc83a555b99b8f2a6f",
+"structCamera_1_1RenderInfo.html#ad0e2589582cffd6bd4d44af640898faa",
+"structWorldScene_1_1PlayerRenderData.html#a2822321a94b3d939be488100e78f2e9e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
