@@ -22,6 +22,8 @@ void Client::run()
 
 void Client::runOnce(const int & timeout)
 {
+	ZoneScoped;
+	empty_outgoing_packets();
 	auto [events_size, events] = m_poller.wait(timeout);
 
 	for (size_t i = 0; i < events_size; i++)
@@ -38,7 +40,9 @@ void Client::runOnce(const int & timeout)
 
 int Client::read_data()
 {
+	ZoneScoped;
 	ssize_t size;
+	std::lock_guard lock(m_connection.ReadLock());
 	try {
 		size = m_connection.recv();
 		if (size == 0)
@@ -61,7 +65,9 @@ int Client::read_data()
 
 int Client::send_data()
 {
+	ZoneScoped;
 	ssize_t size;
+	std::lock_guard lock(m_connection.WriteLock());
 	try {
 		if( !m_connection.dataToSend() )
 			return 0;
@@ -79,10 +85,20 @@ int Client::send_data()
 
 void Client::sendPacket(std::shared_ptr<IPacket> packet)
 {
+	ZoneScoped;
 	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
-	m_connection.queueAndSendMessage(buffer);
+	{
+		std::lock_guard lock(m_connection.WriteLock());
+		m_connection.queueAndSendMessage(buffer);
+	}
+}
+
+void Client::sendPacketNoWait(std::shared_ptr<IPacket> packet)
+{
+	ZoneScoped;
+	m_outgoing_packets.push(packet);
 }
 
 std::shared_ptr<IPacket> Client::popPacket()
@@ -93,4 +109,11 @@ std::shared_ptr<IPacket> Client::popPacket()
 size_t Client::getQueueSize() const
 {
 	return m_incoming_packets.size();
+}
+
+void Client::empty_outgoing_packets()
+{
+	std::vector<uint8_t> buffer;
+	while(m_outgoing_packets.size() != 0)
+		sendPacket(m_outgoing_packets.pop());
 }

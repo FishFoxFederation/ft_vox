@@ -16,8 +16,8 @@ Application::Application(const int & player_id, const std::string & ip_address, 
 	m_world(m_world_scene, m_vulkan_api, m_sound_engine, m_event_manager, player_id),
 	m_render_thread(m_settings, m_vulkan_api, m_world_scene, m_start_time),
 	m_update_thread(m_client, m_settings, m_window, m_world_scene, m_world, m_vulkan_api, m_sound_engine, m_event_manager, m_start_time),
-	m_block_update_thread(m_world_scene, m_world)
-	// m_network_thread(m_client)
+	m_block_update_thread(m_world_scene, m_world),
+	m_network_thread(m_client)
 {
 	LOG_INFO("Application::Application()");
 }
