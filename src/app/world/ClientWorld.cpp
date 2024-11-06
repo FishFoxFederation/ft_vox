@@ -73,102 +73,6 @@ void ClientWorld::removeChunk(const glm::ivec3 & chunkPosition)
 	unloadChunk(chunkPosition);
 }
 
-// void ClientWorld::loadChunks(const glm::vec3 & playerPosition)
-// {
-// 	ZoneScoped;
-// 	glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
-// 	glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
-// 	//here coords are in 2D because we are working with chunk columns
-// 	//when we need specific 3D coords we always use 0 Y
-// 	for(int x = -LOAD_DISTANCE; x < LOAD_DISTANCE; x++)
-// 	{
-// 		for(int z = -LOAD_DISTANCE; z < LOAD_DISTANCE; z++)
-// 		{
-// 			//transform the relative position to the real position
-// 			glm::ivec2 chunkPos2D = glm::ivec2(x, z) + playerChunk2D;
-// 			glm::ivec3 chunkPos3D = glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y);
-// 			std::shared_ptr<Chunk> chunk = getChunk(chunkPos3D);
-// 			if(chunk == nullptr)
-// 			{
-// 				chunk = std::make_shared<Chunk>(chunkPos3D);
-// 				chunk->status.lock();
-// 				insertChunk(chunkPos3D, chunk);
-// 				// std::shared_ptr<Chunk> chunk_local = localGetChunk(chunkPos3D);
-// 				// if (chunk_local == nullptr)
-// 				// {
-// 				// 	LOG_CRITICAL("insert Chunk local is null");
-// 				// 	chunk_local->setMeshed(false);
-// 				// }
-
-// 				m_threadPool.submit([this, chunkPos2D, chunk] () mutable
-// 				{
-// 					ZoneScopedN("Chunk Loading");
-// 					/**************************************************************
-// 					 * CHUNK LOADING FUNCTION
-// 					 **************************************************************/
-// 					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-// 					chunk = m_world_generator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
-// 					// LOG_DEBUG("Chunk unlocked: " << chunkPos2D.x << " " << chunkPos2D.y);
-// 					{
-// 						std::lock_guard lock(m_loaded_chunks_mutex);
-// 						m_loaded_chunks.insert(chunkPos2D);
-// 						// LOG_DEBUG("Chunk inserted into loaded chunks: " << chunkPos2D.x << " " << chunkPos2D.y);
-// 					}
-// 					chunk->status.unlock();
-
-// 					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-// 					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
-// 				});
-// 			}
-// 		}
-// 	}
-// }
-
-// void ClientWorld::loadChunks(const std::vector<glm::vec3> & playerPositions)
-// {
-// 	for (auto playerPosition : playerPositions)
-// 		loadChunks(playerPosition);
-// }
-
-// void ClientWorld::unloadChunks(const std::vector<glm::vec3> & playerPositions)
-// {
-// 	ZoneScoped;
-// 	std::vector<glm::ivec2> playerChunks2D;
-// 	for (auto playerPosition : playerPositions)
-// 	{
-// 		glm::ivec3 playerChunk3D = glm::ivec3(playerPosition) / CHUNK_SIZE_IVEC3;
-// 		glm::ivec2 playerChunk2D = glm::ivec2(playerChunk3D.x, playerChunk3D.z);
-// 		playerChunks2D.push_back(playerChunk2D);
-// 	}
-// 	std::vector<glm::ivec2> chunks_to_unload;
-// 	for (auto & chunkPos2D : m_loaded_chunks)
-// 	{
-// 		bool to_unload = true;
-// 		for (auto & playerChunk2D : playerChunks2D)
-// 		{
-// 			//distance between the chunk and the player (in 2D space
-// 			float distanceX = std::abs(chunkPos2D.x - playerChunk2D.x);
-// 			float distanceZ = std::abs(chunkPos2D.y - playerChunk2D.y);
-// 			if (distanceX <= LOAD_DISTANCE && distanceZ <= LOAD_DISTANCE)
-// 			{
-// 				to_unload = false;
-// 				break;
-// 			}
-// 		}
-
-// 		if (to_unload)
-// 			chunks_to_unload.push_back(chunkPos2D);
-// 	}
-
-// 	for (auto & chunkPos2D : chunks_to_unload)
-// 		unloadChunk(glm::ivec3(chunkPos2D.x, 0, chunkPos2D.y));
-// }
-
-// void ClientWorld::unloadChunks(const glm::vec3 & playerPosition)
-// {
-// 	unloadChunks(std::vector<glm::vec3>{playerPosition});
-// }
-
 void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 {
 	ZoneScoped;
@@ -229,7 +133,7 @@ void ClientWorld::meshChunks(const glm::vec3 & playerPosition)
 		float distanceX = std::abs(chunkPos2D.x - playerChunk2D.x);
 		float distanceZ = std::abs(chunkPos2D.y - playerChunk2D.y);
 
-		if (distanceX < RENDER_DISTANCE && distanceZ < RENDER_DISTANCE)
+		if (distanceX < m_render_distance && distanceZ < m_render_distance)
 		{
 			bool unavailable_neighbours = false;
 			for(int x = -1; x < 2; x++)
@@ -1311,4 +1215,24 @@ std::shared_ptr<Chunk> ClientWorld::localGetChunk(const glm::ivec3 & chunk_posit
 		return it->second;
 	}
 	return nullptr;
+}
+
+void ClientWorld::setRenderDistance(const int & render_distance)
+{
+	m_render_distance = render_distance;
+}
+
+int ClientWorld::getRenderDistance() const
+{
+	return m_render_distance;
+}
+
+void ClientWorld::setServerLoadDistance(const int & server_load_distance)
+{
+	m_server_load_distance = server_load_distance;
+}
+
+int ClientWorld::getServerLoadDistance() const
+{
+	return m_server_load_distance;
 }

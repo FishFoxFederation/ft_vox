@@ -49,6 +49,11 @@ public:
 	void updateEntities();
 	void updateBlock(glm::dvec3 position);
 
+	int		getRenderDistance() const;
+	void	setRenderDistance(const int & render_distance);
+	int		getServerLoadDistance() const;
+	void	setServerLoadDistance(const int & server_load_distance);
+	
 	std::pair<glm::dvec3, glm::dvec3> calculatePlayerMovement(
 		const uint64_t player_id,
 		const int8_t forward,
@@ -127,6 +132,9 @@ private:
 	VulkanAPI &								m_vulkan_api;
 	Sound::Engine &							m_sound_engine;
 	Event::Manager &						m_event_manager;
+
+	int										m_render_distance = 16;
+	int										m_server_load_distance = 0;
 
 	/*************************************
 	 *  CHUNKS AND MAP

@@ -115,6 +115,7 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/packets/ChunkUnloadPacket.cpp
 		src/app/network/shared/packets/PlayerMovePacket.cpp
 		src/app/network/shared/packets/ConnectionPacket.cpp
+		src/app/network/shared/packets/LoadDistancePacket.cpp
 		src/app/sound/SoundEngine.cpp
 		src/app/sound/AudioData.cpp
 		src/app/event/AbstractEvent.cpp
@@ -274,6 +275,7 @@ target_sources(server
 		src/app/network/shared/packets/ChunkUnloadPacket.cpp
 		src/app/network/shared/packets/PlayerMovePacket.cpp
 		src/app/network/shared/packets/ConnectionPacket.cpp
+		src/app/network/shared/packets/LoadDistancePacket.cpp
 		src/app/sound/SoundEngine.cpp
 		src/app/sound/AudioData.cpp
 		src/app/event/AbstractEvent.cpp
