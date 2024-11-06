@@ -145,7 +145,7 @@ void ServerWorld::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> p
 {
 	uint64_t connection_id = packet->GetConnectionId();
 	int load_distance = packet->GetDistance();
-	setPlayerTicketLevel(load_distance);
+	setPlayerTicketLevel(TICKET_LEVEL_INACTIVE - load_distance);
 }
 
 void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id)

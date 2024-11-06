@@ -82,13 +82,21 @@ void ServerWorld::savePlayerPositions()
 
 void ServerWorld::updatePlayerPositions()
 {
+	static int old_load_distance = getLoadDistance();
+
+	if (old_load_distance != getLoadDistance())
+		LOG_INFO("Load distance changed");
+
 	std::lock_guard lock(m_players_mutex);
 	for (auto & [player_id, current_pos] : m_current_tick_player_positions)
 	{
-		ChunkLoadUnloadData data = updateChunkObservations(player_id);
+		if (old_load_distance != getLoadDistance())
+			LOG_INFO("IN LOOP Load distance changed");
+		ChunkLoadUnloadData data = updateChunkObservations(player_id, old_load_distance);
 		sendChunkLoadUnloadData(data, player_id);
 		m_last_tick_player_positions.at(player_id) = m_current_tick_player_positions.at(player_id);
 	}
+	old_load_distance = getLoadDistance();
 }
 
 void ServerWorld::waitForChunkFutures()

@@ -122,5 +122,12 @@ void ClientPacketHandler::handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPac
 
 void ClientPacketHandler::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet)
 {
+	static bool first = true;
+	LOG_INFO("SERVER Load distance: " << packet->GetDistance());
 	m_world.setServerLoadDistance(packet->GetDistance());
+	if (first)
+	{
+		m_world.setRenderDistance(packet->GetDistance());
+		first = false;
+	}
 }

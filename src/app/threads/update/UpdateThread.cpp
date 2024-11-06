@@ -165,12 +165,13 @@ void UpdateThread::readInput()
 	if (enter_key_status == Input::KeyState::PRESSED)
 	{
 		int render_distance = 0;
-		std::cin >> render_distance;
-
+		std::cin >> render_distance; std::cin.ignore();
+		LOG_INFO("Setting render distance to " << render_distance);
 		if (render_distance > m_world.getRenderDistance())
 		{
 			if (render_distance > m_world.getServerLoadDistance())
 			{
+				LOG_INFO("Setting server load distance to " << render_distance);
 				auto packet = std::make_shared<LoadDistancePacket>(render_distance);
 				m_client.sendPacket(packet);
 			}

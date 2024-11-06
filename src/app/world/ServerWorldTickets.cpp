@@ -40,6 +40,7 @@ uint64_t ServerWorld::changeTicket(const uint64_t & old_ticket_id, const ServerW
 
 void ServerWorld::setPlayerTicketLevel(const int & level)
 {
+	LOG_INFO("Setting player ticket level: " << level);
 	if (level > TICKET_LEVEL_BORDER)
 	{
 		LOG_WARNING("ServerWorld::setPlayerTicketLevel: Player ticket level too high, function call ignored");
@@ -105,6 +106,7 @@ void ServerWorld::updateTickets()
 		if (!chunk_gen_list.empty())
 		{
 			doChunkGens(chunk_gen_list);
+			LOG_INFO("chunks to gen :" << chunk_gen_list.size());
 			waitForChunkFutures();
 			LOG_INFO("Chunk gen finished");
 		}
