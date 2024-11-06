@@ -30,6 +30,12 @@ struct ModelMatrice
 	mat4 model;
 };
 
+struct ShadowPassPushConstant
+{
+	mat4 model;
+	int layer;
+};
+
 struct EntityMatrices
 {
 	mat4 model;

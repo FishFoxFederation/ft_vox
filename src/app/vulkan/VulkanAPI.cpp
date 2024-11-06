@@ -15,7 +15,8 @@
 #include <map>
 
 VulkanAPI::VulkanAPI(GLFWwindow * window):
-	window(window)
+	window(window),
+	shadow_map_size(4096)
 {
 	ZoneScoped;
 
@@ -32,6 +33,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	createColorAttachement();
 	createDepthAttachement();
+	createShadowMapRessources();
 	createUniformBuffers();
 	createTextureArray(BlockInfo::texture_names, 64);
 	createCubeMap({
@@ -105,14 +107,7 @@ VulkanAPI::~VulkanAPI()
 		vkDestroyBuffer(device, atmosphere_ubo.buffers[i], nullptr);
 	}
 
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
-	}
-	vkDestroyFramebuffer(device, prerender_item_icon_framebuffer, nullptr);
+	destroyFramebuffers();
 
 	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 	vkDestroyRenderPass(device, shadow_render_pass, nullptr);
@@ -142,6 +137,8 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyCommandPool(device, command_pool, nullptr);
 	vkFreeCommandBuffers(device, transfer_command_pool, 1, &transfer_command_buffers);
 	vkDestroyCommandPool(device, transfer_command_pool, nullptr);
+
+	destroyShadowMapRessources();
 
 	// Bad design, but better than nothing until I find a better solution
 	{
@@ -646,18 +643,13 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 
 	vkDeviceWaitIdle(device);
 
-	for (int i = 0; i < max_frames_in_flight; i++)
-	{
-		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
-		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
-	}
-	vkDestroyFramebuffer(device, prerender_item_icon_framebuffer, nullptr);
+	destroyFramebuffers();
+	destroyShadowMapRessources();
 
 	createSwapChain(window);
 	createColorAttachement();
 	createDepthAttachement();
+	createShadowMapRessources();
 	createPipelines();
 	createFramebuffers();
 
@@ -929,9 +921,23 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.create_view = true;
 
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
+}
 
+void VulkanAPI::createShadowMapRessources()
+{
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
+	Image::CreateInfo depth_attachement_info = {};
 	depth_attachement_info.extent = { shadow_map_size, shadow_map_size };
+	depth_attachement_info.aspect_mask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	depth_attachement_info.format = findSupportedFormat(
+		{VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
+		VK_IMAGE_TILING_OPTIMAL,
+		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+	);
+	depth_attachement_info.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+	depth_attachement_info.final_layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	depth_attachement_info.create_view = true;
 	depth_attachement_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	depth_attachement_info.create_sampler = true;
 	depth_attachement_info.sampler_address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
@@ -940,6 +946,35 @@ void VulkanAPI::createDepthAttachement()
 	depth_attachement_info.array_layers = shadow_maps_count;
 
 	shadow_map_depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
+
+	shadow_map_views.resize(shadow_maps_count);
+	for (size_t i = 0; i < shadow_maps_count; i++)
+	{
+		VkImageViewCreateInfo view_info = {};
+		view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+		view_info.image = shadow_map_depth_attachement.image;
+		view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		view_info.format = depth_attachement_info.format;
+		view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+		view_info.subresourceRange.baseMipLevel = 0;
+		view_info.subresourceRange.levelCount = 1;
+		view_info.subresourceRange.baseArrayLayer = static_cast<uint32_t>(i);
+		view_info.subresourceRange.layerCount = 1;
+
+		VK_CHECK(
+			vkCreateImageView(device, &view_info, nullptr, &shadow_map_views[i]),
+			"Failed to create image view"
+		);
+	}
+}
+
+void VulkanAPI::destroyShadowMapRessources()
+{
+	for (size_t i = 0; i < shadow_maps_count; i++)
+	{
+		vkDestroyImageView(device, shadow_map_views[i], nullptr);
+	}
+	shadow_map_depth_attachement.clear();
 }
 
 void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count)
@@ -968,8 +1003,8 @@ void VulkanAPI::createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t cou
 void VulkanAPI::createUniformBuffers()
 {
 	createUBO(camera_ubo, sizeof(ViewProjMatrices), max_frames_in_flight);
-	createUBO(light_mat_ubo, sizeof(ShadowMapLight), max_frames_in_flight);
 	createUBO(atmosphere_ubo, sizeof(AtmosphereParams), max_frames_in_flight);
+	createUBO(light_mat_ubo, sizeof(ShadowMapLight) * shadow_maps_count, max_frames_in_flight);
 }
 
 void VulkanAPI::createTextureArray(const std::vector<std::string> & file_paths, uint32_t size)
@@ -1347,42 +1382,42 @@ void VulkanAPI::createDescriptors()
 	}
 
 	{ // Sun matrices descriptor
-		VkDescriptorSetLayoutBinding ubo_layout_binding = {};
-		ubo_layout_binding.binding = 0;
-		ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		ubo_layout_binding.descriptorCount = 1;
-		ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
-		ubo_layout_binding.pImmutableSamplers = nullptr;
+			VkDescriptorSetLayoutBinding ubo_layout_binding = {};
+			ubo_layout_binding.binding = 0;
+			ubo_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			ubo_layout_binding.descriptorCount = 1;
+			ubo_layout_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+			ubo_layout_binding.pImmutableSamplers = nullptr;
 
-		Descriptor::CreateInfo descriptor_info = {};
-		descriptor_info.bindings = { ubo_layout_binding };
+			Descriptor::CreateInfo descriptor_info = {};
+			descriptor_info.bindings = { ubo_layout_binding };
 		descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
 		descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
 
 		light_view_proj_descriptor = Descriptor(device, descriptor_info);
 
 		for (int i = 0; i < max_frames_in_flight; i++)
-		{
-			VkDescriptorBufferInfo buffer_info = {};
+			{
+				VkDescriptorBufferInfo buffer_info = {};
 			buffer_info.buffer = light_mat_ubo.buffers[i];
 			buffer_info.offset = 0;
-			buffer_info.range = sizeof(ShadowMapLight);
+				buffer_info.range = sizeof(ShadowMapLight);
 
-			VkWriteDescriptorSet descriptor_write = {};
-			descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+				VkWriteDescriptorSet descriptor_write = {};
+				descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 			descriptor_write.dstSet = light_view_proj_descriptor.sets[i];
-			descriptor_write.dstBinding = 0;
-			descriptor_write.dstArrayElement = 0;
-			descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptor_write.descriptorCount = 1;
-			descriptor_write.pBufferInfo = &buffer_info;
+				descriptor_write.dstBinding = 0;
+				descriptor_write.dstArrayElement = 0;
+				descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+				descriptor_write.descriptorCount = 1;
+				descriptor_write.pBufferInfo = &buffer_info;
 
-			vkUpdateDescriptorSets(
-				device,
-				1,
-				&descriptor_write,
-				0, nullptr
-			);
+				vkUpdateDescriptorSets(
+					device,
+					1,
+					&descriptor_write,
+					0, nullptr
+				);
 		}
 	}
 
@@ -1861,7 +1896,6 @@ void VulkanAPI::createPipelines()
 		pipeline_info.geom_path = "shaders/rasterization/shadow/shadow_shader.geom.spv";
 		pipeline_info.frag_path = "shaders/rasterization/shadow/shadow_shader.frag.spv";
 		pipeline_info.binding_description = BlockVertex::getBindingDescription();
-		const std::vector<VkVertexInputAttributeDescription> attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
@@ -1873,7 +1907,7 @@ void VulkanAPI::createPipelines()
 			block_textures_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, 0, sizeof(ShadowPassPushConstant) }
 		};
 		pipeline_info.render_pass = shadow_render_pass;
 
@@ -2000,7 +2034,7 @@ void VulkanAPI::createPipelines()
 void VulkanAPI::createFramebuffers()
 {
 	lighting_framebuffers.resize(max_frames_in_flight);
-	shadow_framebuffers.resize(max_frames_in_flight);
+	shadow_framebuffers.resize(max_frames_in_flight * shadow_maps_count);
 	water_framebuffers.resize(max_frames_in_flight);
 	hud_framebuffers.resize(max_frames_in_flight);
 
@@ -2029,23 +2063,26 @@ void VulkanAPI::createFramebuffers()
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
-		std::vector<VkImageView> attachments = {
-			shadow_map_depth_attachement.view
-		};
+		for (size_t j = 0; j < shadow_maps_count; j++)
+		{
+			std::vector<VkImageView> attachments = {
+				shadow_map_views[j]
+			};
 
-		VkFramebufferCreateInfo framebuffer_info = {};
-		framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		framebuffer_info.renderPass = shadow_render_pass;
-		framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
-		framebuffer_info.pAttachments = attachments.data();
-		framebuffer_info.width = shadow_map_depth_attachement.extent2D.width;
-		framebuffer_info.height = shadow_map_depth_attachement.extent2D.height;
-		framebuffer_info.layers = shadow_maps_count;
+			VkFramebufferCreateInfo framebuffer_info = {};
+			framebuffer_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+			framebuffer_info.renderPass = shadow_render_pass;
+			framebuffer_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+			framebuffer_info.pAttachments = attachments.data();
+			framebuffer_info.width = shadow_map_depth_attachement.extent2D.width;
+			framebuffer_info.height = shadow_map_depth_attachement.extent2D.height;
+			framebuffer_info.layers = 1;
 
-		VK_CHECK(
-			vkCreateFramebuffer(device, &framebuffer_info, nullptr, &shadow_framebuffers[i]),
-			"Failed to create framebuffer"
-		);
+			VK_CHECK(
+				vkCreateFramebuffer(device, &framebuffer_info, nullptr, &shadow_framebuffers[i * shadow_maps_count + j]),
+				"Failed to create framebuffer"
+			);
+		}
 	}
 
 	for (int i = 0; i < max_frames_in_flight; i++)
@@ -2111,6 +2148,21 @@ void VulkanAPI::createFramebuffers()
 			"Failed to create framebuffer"
 		);
 	}
+}
+
+void VulkanAPI::destroyFramebuffers()
+{
+	for (int i = 0; i < max_frames_in_flight; i++)
+	{
+		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
+		vkDestroyFramebuffer(device, hud_framebuffers[i], nullptr);
+	}
+	for (size_t i = 0; i < shadow_framebuffers.size(); i++)
+	{
+		vkDestroyFramebuffer(device, shadow_framebuffers[i], nullptr);
+	}
+	vkDestroyFramebuffer(device, prerender_item_icon_framebuffer, nullptr);
 }
 
 void VulkanAPI::createMeshes()
