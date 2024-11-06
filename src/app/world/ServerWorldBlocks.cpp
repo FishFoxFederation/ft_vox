@@ -118,24 +118,24 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
 	std::unordered_set<glm::ivec3> new_chunks_in_range;
 
 
-	for(int x = -SERVER_LOAD_DISTANCE; x <= SERVER_LOAD_DISTANCE; x++)
+	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
 	{
-		for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
+		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 		{
 			glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
 			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(old_player_chunk_position.x, old_player_chunk_position.z));
-			if (distance < SERVER_LOAD_DISTANCE)
+			if (distance < getLoadDistance())
 				old_chunks_in_range.insert(chunk_position);
 		}
 	}
 
-	for(int x = -SERVER_LOAD_DISTANCE; x <= SERVER_LOAD_DISTANCE; x++)
+	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
 	{
-		for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
+		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 		{
 			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
 			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(new_player_chunk_position.x, new_player_chunk_position.z));
-			if (distance < SERVER_LOAD_DISTANCE)
+			if (distance < getLoadDistance())
 				new_chunks_in_range.insert(chunk_position);
 		}
 	}
@@ -180,9 +180,9 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 	//fill old_chunks_in_range
 	if(!first_time)
 	{
-		for(int x = -SERVER_LOAD_DISTANCE; x <= SERVER_LOAD_DISTANCE; x++)
+		for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
 		{
-			for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
+			for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 			{
 				glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
 				old_chunks_in_range.insert(chunk_position);
@@ -191,9 +191,9 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 	}
 
 	//fill new_chunks_in_range
-	for(int x = -SERVER_LOAD_DISTANCE; x <= SERVER_LOAD_DISTANCE; x++)
+	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
 	{
-		for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
+		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 		{
 			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
 			new_chunks_in_range.insert(chunk_position);
@@ -237,9 +237,9 @@ void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
 	glm::ivec3 player_chunk_position = getChunkPosition(player->transform.position);
 	player_chunk_position.y = 0;
 	std::shared_ptr<Chunk> chunk = nullptr;
-	for(int x = -SERVER_LOAD_DISTANCE; x <= SERVER_LOAD_DISTANCE; x++)
+	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
 	{
-		for(int z = -SERVER_LOAD_DISTANCE; z <= SERVER_LOAD_DISTANCE; z++)
+		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 		{
 			glm::ivec3 chunk_position = player_chunk_position + glm::ivec3(x, 0, z);
 			chunk = getChunk(chunk_position);

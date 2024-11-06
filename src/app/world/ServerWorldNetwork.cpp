@@ -51,10 +51,18 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 		for(auto & [player_id, player] : m_players)
 			players.push_back({player_id, player->transform.position});
 	}
-	auto packet_to_send = std::make_shared<PlayerListPacket>(players);
-	packet_to_send->SetConnectionId(CurrentConnectionId);
-	m_server.send(packet_to_send);
+	{
+		auto packet_to_send = std::make_shared<PlayerListPacket>(players);
+		packet_to_send->SetConnectionId(CurrentConnectionId);
+		m_server.send(packet_to_send);
+	}
 
+	//inform player of current load distance
+	{
+		auto packet_to_send	= std::make_shared<LoadDistancePacket>(getLoadDistance());
+		packet_to_send->SetConnectionId(CurrentConnectionId);
+		m_server.send(packet_to_send);
+	}
 	//create new player
 	std::shared_ptr<Player> player = std::make_shared<Player>();
 	player->connection_id = CurrentConnectionId;
@@ -65,7 +73,7 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 		m_players.insert({CurrentPlayerId, player});
 	}
 	//create player ticket
-	Ticket ticket{ PLAYER_TICKET_LEVEL, CurrentPlayerChunkPosition };
+	Ticket ticket{ Ticket::Type::PLAYER, m_player_ticket_level, CurrentPlayerChunkPosition };
 
 	//add ticket
 	player->player_ticket_id = addTicket(ticket);
@@ -133,6 +141,13 @@ void ServerWorld::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packe
 	player->transform.position	= new_position;
 }
 
+void ServerWorld::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet)
+{
+	uint64_t connection_id = packet->GetConnectionId();
+	int load_distance = packet->GetDistance();
+	setPlayerTicketLevel(load_distance);
+}
+
 void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id)
 {
 	uint64_t connection_id = 0;
@@ -154,3 +169,4 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 		m_server.send(packet_to_send);
 	}
 }
+

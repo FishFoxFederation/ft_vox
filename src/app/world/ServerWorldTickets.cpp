@@ -38,6 +38,19 @@ uint64_t ServerWorld::changeTicket(const uint64_t & old_ticket_id, const ServerW
 	return new_ticket.hash();
 }
 
+void ServerWorld::setPlayerTicketLevel(const int & level)
+{
+	if (level > TICKET_LEVEL_BORDER)
+	{
+		LOG_WARNING("ServerWorld::setPlayerTicketLevel: Player ticket level too high, function call ignored");
+		return;
+	}
+	m_ticked_updates.player_ticket_level = level;
+}
+/*******************************************\
+ * PRIVATE
+\*******************************************/
+
 void ServerWorld::updateTickets()
 {
 	ZoneScopedN("Update Tickets");
@@ -45,6 +58,16 @@ void ServerWorld::updateTickets()
 	std::lock_guard lock2(m_tickets_mutex);
 	bool changed = false;
 
+	//if load distance changed we need to update all player tickets
+	if (m_ticked_updates.player_ticket_level_changed)
+	{
+		for (auto & [hash, ticket] : m_active_tickets)
+		{
+			if (ticket.type == Ticket::Type::PLAYER)
+				ticket.level = m_player_ticket_level;
+		}
+		changed = true;
+	}
 
 	//very important to add first and remove last
 	//otherwise we might not remove a ticket that was added then removed in the same tick
@@ -129,7 +152,7 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets, WorldGenerator::Chun
 					continue;
 				glm::ivec3 new_position = current.position + glm::ivec3(x, 0, z);
 
-				queue.push(Ticket{current.level + 1, new_position});
+				queue.push(Ticket{Ticket::Type::OTHER, current.level + 1, new_position});
 			}
 		}
 	}

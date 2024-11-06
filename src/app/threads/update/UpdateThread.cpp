@@ -161,6 +161,23 @@ void UpdateThread::readInput()
 		m_sound_engine.playSound(SoundName::PING);
 	}
 
+	const Input::KeyState enter_key_status = m_window.input().getKeyState(GLFW_KEY_ENTER);
+	if (enter_key_status == Input::KeyState::PRESSED)
+	{
+		int render_distance = 0;
+		std::cin >> render_distance;
+
+		if (render_distance > m_world.getRenderDistance())
+		{
+			if (render_distance > m_world.getServerLoadDistance())
+			{
+				auto packet = std::make_shared<LoadDistancePacket>(render_distance);
+				m_client.sendPacket(packet);
+			}
+			m_world.setRenderDistance(render_distance);
+		}
+	}
+
 	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
 	if (f3_key_status == Input::KeyState::PRESSED)
 	{

@@ -15,7 +15,7 @@ public:
 		CONNECTION,
 		PLAYER_CONNECTED,
 		PLAYER_MOVE,
-		ENTITY_MOVE,
+		// ENTITY_MOVE,
 		DISCONNECT,
 		BLOCK_ACTION,
 		PING,
@@ -23,7 +23,9 @@ public:
 		CHUNK,
 		CHUNK_REQUEST,
 		CHUNK_UNLOAD,
+		LOAD_DISTANCE,
 		ENUM_MAX,
+		ENUM_MIN = 0
 	};
 	const static inline uint32_t STATIC_HEADER_SIZE = sizeof(Type);
 	const static inline uint32_t DYNAMIC_HEADER_SIZE = sizeof(Type) + sizeof(size_t);

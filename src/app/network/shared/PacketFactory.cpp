@@ -12,6 +12,19 @@ PacketFactory::PacketFactory()
 	m_packets.insert(std::make_pair(IPacket::Type::CHUNK, std::make_shared<ChunkPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::CHUNK_REQUEST, std::make_shared<ChunkRequestPacket>()));
 	m_packets.insert(std::make_pair(IPacket::Type::CHUNK_UNLOAD, std::make_shared<ChunkUnloadPacket>()));
+	m_packets.insert(std::make_pair(IPacket::Type::LOAD_DISTANCE, std::make_shared<LoadDistancePacket>()));
+
+
+	IPacket::Type type = IPacket::Type::ENUM_MIN;
+	while (type != IPacket::Type::ENUM_MAX)
+	{
+		if (!m_packets.contains(type))
+		{
+			LOG_ERROR("PacketFactory::PacketFactory: " << "Missing packet type: " << static_cast<int>(type));
+			throw std::runtime_error("PacketFactory::PacketFactory: Missing packet type");
+		}
+		type = static_cast<IPacket::Type>(static_cast<uint32_t>(type) + 1);
+	}
 }
 
 PacketFactory::~PacketFactory()
