@@ -101,64 +101,64 @@ void ServerWorld::setBlock(const glm::vec3 & position, BlockInfo::Type block)
 // 	}
 // }
 
-ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
-	const glm::vec3 & old_player_position,
-	const glm::vec3 & new_player_position)
-{
-	ChunkLoadUnloadData data;
+// ServerWorld::ChunkLoadUnloadData ServerWorld::getChunksToUnload(
+// 	const glm::vec3 & old_player_position,
+// 	const glm::vec3 & new_player_position)
+// {
+// 	ChunkLoadUnloadData data;
 
-	glm::ivec3 new_player_chunk_position = getChunkPosition(new_player_position);
-	glm::ivec3 old_player_chunk_position = getChunkPosition(old_player_position);
+// 	glm::ivec3 new_player_chunk_position = getChunkPosition(new_player_position);
+// 	glm::ivec3 old_player_chunk_position = getChunkPosition(old_player_position);
 
-	new_player_chunk_position.y = 0;
-	old_player_chunk_position.y = 0;
-	// glm::ivec3 chunk_direction = new_player_chunk_position - old_player_chunk_position;
+// 	new_player_chunk_position.y = 0;
+// 	old_player_chunk_position.y = 0;
+// 	// glm::ivec3 chunk_direction = new_player_chunk_position - old_player_chunk_position;
 
-	std::unordered_set<glm::ivec3> old_chunks_in_range;
-	std::unordered_set<glm::ivec3> new_chunks_in_range;
+// 	std::unordered_set<glm::ivec3> old_chunks_in_range;
+// 	std::unordered_set<glm::ivec3> new_chunks_in_range;
 
 
-	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
-	{
-		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
-		{
-			glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
-			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(old_player_chunk_position.x, old_player_chunk_position.z));
-			if (distance < getLoadDistance())
-				old_chunks_in_range.insert(chunk_position);
-		}
-	}
+// 	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
+// 	{
+// 		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
+// 		{
+// 			glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
+// 			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(old_player_chunk_position.x, old_player_chunk_position.z));
+// 			if (distance < getLoadDistance())
+// 				old_chunks_in_range.insert(chunk_position);
+// 		}
+// 	}
 
-	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
-	{
-		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
-		{
-			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
-			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(new_player_chunk_position.x, new_player_chunk_position.z));
-			if (distance < getLoadDistance())
-				new_chunks_in_range.insert(chunk_position);
-		}
-	}
+// 	for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
+// 	{
+// 		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
+// 		{
+// 			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
+// 			float distance = glm::distance(glm::vec2(chunk_position.x, chunk_position.z), glm::vec2(new_player_chunk_position.x, new_player_chunk_position.z));
+// 			if (distance < getLoadDistance())
+// 				new_chunks_in_range.insert(chunk_position);
+// 		}
+// 	}
 
-	for (auto chunk_position : old_chunks_in_range)
-	{
-		if (!new_chunks_in_range.contains(chunk_position))
-			data.chunks_to_unload.push_back(chunk_position);
-	}
+// 	for (auto chunk_position : old_chunks_in_range)
+// 	{
+// 		if (!new_chunks_in_range.contains(chunk_position))
+// 			data.chunks_to_unload.push_back(chunk_position);
+// 	}
 
-	for (auto chunk_position : new_chunks_in_range)
-	{
-		if (!old_chunks_in_range.contains(chunk_position))
-		{
-			std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
-			data.chunks_to_load.push_back(chunk);
-		}
-	}
+// 	for (auto chunk_position : new_chunks_in_range)
+// 	{
+// 		if (!old_chunks_in_range.contains(chunk_position))
+// 		{
+// 			std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
+// 			data.chunks_to_load.push_back(chunk);
+// 		}
+// 	}
 
-	return data;
-}
+// 	return data;
+// }
 
-ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t player_id)
+ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t player_id, const int & old_load_distance)
 {
 	ChunkLoadUnloadData data;
 
@@ -170,19 +170,18 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 
 	new_player_chunk_position.y = 0;
 	old_player_chunk_position.y = 0;
-	if (!first_time && new_player_chunk_position == old_player_chunk_position)
+	if (!first_time && new_player_chunk_position == old_player_chunk_position && old_load_distance == getLoadDistance())
 		return data;
 
 	std::unordered_set<glm::ivec3> old_chunks_in_range;
 	std::unordered_set<glm::ivec3> new_chunks_in_range;
 
-
 	//fill old_chunks_in_range
 	if(!first_time)
 	{
-		for(int x = -getLoadDistance(); x <= getLoadDistance(); x++)
+		for(int x = -old_load_distance; x <= old_load_distance; x++)
 		{
-			for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
+			for(int z = -old_load_distance; z <= old_load_distance; z++)
 			{
 				glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
 				old_chunks_in_range.insert(chunk_position);
