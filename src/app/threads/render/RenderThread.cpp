@@ -80,160 +80,7 @@ void RenderThread::loop()
 	//																											#
 	//###########################################################################################################
 
-	{
-		ZoneScopedN("Prepare frame");
-
-		updateTime();
-		m_frame_count++;
-		if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
-		{
-			DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
-			m_frame_count = 0;
-			m_start_time_counting_fps = m_current_time;
-		}
-
-		glfwGetFramebufferSize(vk.window, &window_width, &window_height);
-
-		aspect_ratio = static_cast<double>(window_width) / static_cast<double>(window_height);
-
-		camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
-
-		camera_matrices.view = camera.view;
-		camera_matrices.proj = clip * camera.projection;
-
-		camera_matrices_fc.view = camera.view;
-		camera_matrices_fc.proj = camera.projection;
-
-
-		chunk_meshes = m_world_scene.chunk_mesh_list.values();
-		entity_meshes = m_world_scene.entity_mesh_list.values();
-		players = m_world_scene.getPlayers();
-
-
-		DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
-
-		// const glm::dvec3 sun_offset = glm::dvec3(
-		// 	0.0f,
-		// 	100.0 * glm::cos(glm::radians(20.0) * m_current_time.count() / 1e9),
-		// 	100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
-		// );
-		const glm::dvec3 sun_offset = glm::dvec3(
-			10.0f,
-			100.0 * glm::cos(glm::radians(DebugGui::sun_theta.load())),
-			100.0 * glm::sin(glm::radians(DebugGui::sun_theta.load()))
-		);
-		sun_position = camera.position + sun_offset;
-		const float sun_size = 50.0f;
-		const float sun_near = 10.0f;
-		const float sun_far = 1000.0f;
-
-		sun = camera_matrices;
-		sun.view = glm::lookAt(
-			sun_position,
-			camera.position,
-			glm::dvec3(0.0f, 1.0f, 0.0f)
-		);
-		sun.proj = clip * glm::ortho(
-			-sun_size, sun_size,
-			-sun_size, sun_size,
-			sun_near, sun_far
-		);
-
-		target_block = m_world_scene.targetBlock();
-		debug_blocks = m_world_scene.debugBlocks();
-
-		atmosphere_params.sun_direction = glm::normalize(sun_position - camera.position);
-		atmosphere_params.earth_radius = DebugGui::earth_radius;
-		atmosphere_params.atmosphere_radius = DebugGui::atmosphere_radius;
-		atmosphere_params.beta_rayleigh = DebugGui::beta_rayleigh;
-		atmosphere_params.beta_mie = DebugGui::beta_mie;
-		atmosphere_params.sun_intensity = DebugGui::sun_intensity;
-		atmosphere_params.h_rayleigh = DebugGui::h_rayleigh;
-		atmosphere_params.h_mie = DebugGui::h_mie;
-		atmosphere_params.g = DebugGui::g;
-		atmosphere_params.n_samples = DebugGui::n_samples;
-		atmosphere_params.n_light_samples = DebugGui::n_light_samples;
-
-
-		std::vector<float> frustum_split = { 0.0f, 0.01f, 0.05f, 0.1f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f };
-		// std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.6f, 1.0f };
-		std::vector<float> far_plane_distances;
-		if (frustum_split.size() != vk.shadow_maps_count + 1)
-		{
-			LOG_ERROR("frustum_split.size() != vk.shadow_maps_count + 1");
-		}
-		shadow_map_light.light_dir = glm::normalize(sun_position - camera.position);
-		shadow_map_light.blend_distance = 5.0f;
-		light_view_proj_matrices = getCSMLightViewProjMatrices(
-			shadow_map_light.light_dir,
-			frustum_split,
-			shadow_map_light.blend_distance,
-			camera.view,
-			camera.fov,
-			aspect_ratio,
-			camera.near_plane,
-			camera.far_plane,
-			far_plane_distances
-		);
-		for (size_t i = 0; i < vk.shadow_maps_count; i++)
-		{
-			shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
-			shadow_map_light.plane_distances[i].x = far_plane_distances[i];
-		}
-
-		debug_text = ft_format(
-			"fps: %d\n"
-			"xyz: %.2f %.2f %.2f\n"
-			"Chunk count: %d\n",
-			DebugGui::fps.load(),
-			DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z,
-			draw_chunk_count
-		);
-		draw_chunk_count = 0;
-
-		debug_text += ft_format(
-			"C: %.2f; E: %.2f; H: %.2f; T: %.2f; PV %.2f; W %.2f\n ",
-			DebugGui::continentalness.load(),
-			DebugGui::erosion.load(),
-			DebugGui::humidity.load(),
-			DebugGui::temperature.load(),
-			DebugGui::PV.load(),
-			DebugGui::weirdness.load()
-		);
-
-		switch(DebugGui::biome.load())
-		{
-		case 0:
-			debug_text += "Forest";
-			break;
-		case 1:
-			debug_text += "Plain";
-			break;
-		case 2:
-			debug_text += "Mountain";
-			break;
-		case 3:
-			debug_text += "Ocean";
-			break;
-		case 4:
-			debug_text += "Coast";
-			break;
-		case 5:
-			debug_text += "Desert";
-			break;
-		case 6:
-			debug_text += "River";
-			break;
-		};
-
-
-		toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
-		{
-			std::lock_guard lock(m_world_scene.toolbar_items_mutex);
-			toolbar_items = m_world_scene.toolbar_items;
-		}
-
-	}
+	prepareFrame();
 
 	//###########################################################################################################
 	//																											#
@@ -413,6 +260,118 @@ void RenderThread::loop()
 	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
 }
 
+void RenderThread::prepareFrame()
+{
+	ZoneScoped;
+
+	updateTime();
+	m_frame_count++;
+	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
+	{
+		DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
+		m_frame_count = 0;
+		m_start_time_counting_fps = m_current_time;
+	}
+
+	glfwGetFramebufferSize(vk.window, &window_width, &window_height);
+
+	aspect_ratio = static_cast<double>(window_width) / static_cast<double>(window_height);
+
+	camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
+
+	camera_matrices.view = camera.view;
+	camera_matrices.proj = clip * camera.projection;
+
+	camera_matrices_fc.view = camera.view;
+	camera_matrices_fc.proj = camera.projection;
+
+
+	chunk_meshes = m_world_scene.chunk_mesh_list.values();
+	entity_meshes = m_world_scene.entity_mesh_list.values();
+	players = m_world_scene.getPlayers();
+
+
+	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
+
+	// const glm::dvec3 sun_offset = glm::dvec3(
+	// 	0.0f,
+	// 	100.0 * glm::cos(glm::radians(20.0) * m_current_time.count() / 1e9),
+	// 	100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
+	// );
+	const glm::dvec3 sun_offset = glm::dvec3(
+		10.0f,
+		100.0 * glm::cos(glm::radians(DebugGui::sun_theta.load())),
+		100.0 * glm::sin(glm::radians(DebugGui::sun_theta.load()))
+	);
+	sun_position = camera.position + sun_offset;
+	const float sun_size = 50.0f;
+	const float sun_near = 10.0f;
+	const float sun_far = 1000.0f;
+
+	sun = camera_matrices;
+	sun.view = glm::lookAt(
+		sun_position,
+		camera.position,
+		glm::dvec3(0.0f, 1.0f, 0.0f)
+	);
+	sun.proj = clip * glm::ortho(
+		-sun_size, sun_size,
+		-sun_size, sun_size,
+		sun_near, sun_far
+	);
+
+	target_block = m_world_scene.targetBlock();
+	debug_blocks = m_world_scene.debugBlocks();
+
+	atmosphere_params.sun_direction = glm::normalize(sun_position - camera.position);
+	atmosphere_params.earth_radius = DebugGui::earth_radius;
+	atmosphere_params.atmosphere_radius = DebugGui::atmosphere_radius;
+	atmosphere_params.beta_rayleigh = DebugGui::beta_rayleigh;
+	atmosphere_params.beta_mie = DebugGui::beta_mie;
+	atmosphere_params.sun_intensity = DebugGui::sun_intensity;
+	atmosphere_params.h_rayleigh = DebugGui::h_rayleigh;
+	atmosphere_params.h_mie = DebugGui::h_mie;
+	atmosphere_params.g = DebugGui::g;
+	atmosphere_params.n_samples = DebugGui::n_samples;
+	atmosphere_params.n_light_samples = DebugGui::n_light_samples;
+
+
+	std::vector<float> frustum_split = { 0.0f, 0.01f, 0.05f, 0.1f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f };
+	// std::vector<float> frustum_split = { 0.0f, 0.1f, 0.2f, 0.6f, 1.0f };
+	std::vector<float> far_plane_distances;
+	if (frustum_split.size() != vk.shadow_maps_count + 1)
+	{
+		LOG_ERROR("frustum_split.size() != vk.shadow_maps_count + 1");
+	}
+	shadow_map_light.light_dir = glm::normalize(sun_position - camera.position);
+	shadow_map_light.blend_distance = 5.0f;
+	light_view_proj_matrices = getCSMLightViewProjMatrices(
+		shadow_map_light.light_dir,
+		frustum_split,
+		shadow_map_light.blend_distance,
+		camera.view,
+		camera.fov,
+		aspect_ratio,
+		camera.near_plane,
+		camera.far_plane,
+		far_plane_distances
+	);
+	for (size_t i = 0; i < vk.shadow_maps_count; i++)
+	{
+		shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
+		shadow_map_light.plane_distances[i].x = far_plane_distances[i];
+	}
+
+	toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
+	{
+		std::lock_guard lock(m_world_scene.toolbar_items_mutex);
+		toolbar_items = m_world_scene.toolbar_items;
+	}
+
+	updateVisibleChunks();
+	updateDebugText();
+}
+
 void RenderThread::updateTime()
 {
 	ZoneScoped;
@@ -420,6 +379,69 @@ void RenderThread::updateTime()
 	m_current_time = std::chrono::steady_clock::now().time_since_epoch();
 	m_delta_time = m_current_time - m_last_frame_time;
 	m_last_frame_time = m_current_time;
+}
+
+void RenderThread::updateDebugText()
+{
+	debug_text = ft_format(
+		"fps: %d\n"
+		"xyz: %.2f %.2f %.2f\n"
+		"Chunk count: %d\n",
+		DebugGui::fps.load(),
+		DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z,
+		visible_chunks.size()
+	);
+
+	debug_text += ft_format(
+		"C: %.2f; E: %.2f; H: %.2f; T: %.2f; PV %.2f; W %.2f\n ",
+		DebugGui::continentalness.load(),
+		DebugGui::erosion.load(),
+		DebugGui::humidity.load(),
+		DebugGui::temperature.load(),
+		DebugGui::PV.load(),
+		DebugGui::weirdness.load()
+	);
+
+	switch(DebugGui::biome.load())
+	{
+	case 0:
+		debug_text += "Forest\n";
+		break;
+	case 1:
+		debug_text += "Plain\n";
+		break;
+	case 2:
+		debug_text += "Mountain\n";
+		break;
+	case 3:
+		debug_text += "Ocean\n";
+		break;
+	case 4:
+		debug_text += "Coast\n";
+		break;
+	case 5:
+		debug_text += "Desert\n";
+		break;
+	case 6:
+		debug_text += "River\n";
+		break;
+	};
+}
+
+void RenderThread::updateVisibleChunks()
+{
+	ZoneScoped;
+
+	visible_chunks.clear();
+	for (auto & chunk_mesh: chunk_meshes)
+	{
+		if (!isInsideFrustum_planes(camera.projection * camera.view, chunk_mesh.model, CHUNK_SIZE_VEC3))
+		{
+			continue;
+		}
+
+		visible_chunks.push_back(chunk_mesh);
+	}
 }
 
 void RenderThread::shadowPass()
@@ -442,63 +464,88 @@ void RenderThread::shadowPass()
 	{
 		TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Shadow pass");
 
-		VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
-		shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
-		shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame];
-		shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
-		shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
-		std::vector<VkClearValue> shadow_clear_values = {
-			{ 1.0f, 0 }
-		};
-		shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
-		shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
+		vkCmdBindPipeline(vk.draw_shadow_pass_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
-		vkCmdBeginRenderPass(
+		const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+			vk.light_view_proj_descriptor.sets[vk.current_frame],
+			vk.block_textures_descriptor.set
+		};
+
+		vkCmdBindDescriptorSets(
 			vk.draw_shadow_pass_command_buffers[vk.current_frame],
-			&shadow_render_pass_begin_info,
-			VK_SUBPASS_CONTENTS_INLINE
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			vk.shadow_pipeline.layout,
+			0,
+			static_cast<uint32_t>(shadow_descriptor_sets.size()),
+			shadow_descriptor_sets.data(),
+			0,
+			nullptr
 		);
 
-		{ // Draw the chunks
-			ZoneScopedN("Draw chunks");
-			TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Draw chunks");
+		debug_text += "Chunk count shadow pass: ";
 
-			vkCmdBindPipeline(vk.draw_shadow_pass_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
+		for (size_t shadow_map_index = 0; shadow_map_index < vk.shadow_maps_count; shadow_map_index++)
+		{
+			TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Shadow sub pass");
 
-			const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-				vk.light_view_proj_descriptor.sets[vk.current_frame],
-				vk.block_textures_descriptor.set
+			VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
+			shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+			shadow_render_pass_begin_info.renderPass = vk.shadow_render_pass;
+			shadow_render_pass_begin_info.framebuffer = vk.shadow_framebuffers[vk.current_frame * vk.shadow_maps_count + shadow_map_index];
+			shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
+			shadow_render_pass_begin_info.renderArea.extent = vk.shadow_map_depth_attachement.extent2D;
+			std::vector<VkClearValue> shadow_clear_values = {
+				{ 1.0f, 0 }
 			};
+			shadow_render_pass_begin_info.clearValueCount = static_cast<uint32_t>(shadow_clear_values.size());
+			shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
 
-			vkCmdBindDescriptorSets(
+			vkCmdBeginRenderPass(
 				vk.draw_shadow_pass_command_buffers[vk.current_frame],
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				vk.shadow_pipeline.layout,
-				0,
-				static_cast<uint32_t>(shadow_descriptor_sets.size()),
-				shadow_descriptor_sets.data(),
-				0,
-				nullptr
+				&shadow_render_pass_begin_info,
+				VK_SUBPASS_CONTENTS_INLINE
 			);
 
-			for (auto & chunk_mesh : chunk_meshes)
-			{
-				ModelMatrice model_matrice = {};
-				model_matrice.model = chunk_mesh.model;
+			vkCmdPushConstants(
+				vk.draw_shadow_pass_command_buffers[vk.current_frame],
+				vk.shadow_pipeline.layout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT,
+				offsetof(ShadowPassPushConstant, layer),
+				sizeof(ShadowPassPushConstant::layer),
+				&shadow_map_index
+			);
 
-				vk.drawMesh(
-					vk.draw_shadow_pass_command_buffers[vk.current_frame],
-					vk.shadow_pipeline,
-					chunk_mesh.id,
-					&model_matrice,
-					sizeof(ModelMatrice),
-					VK_SHADER_STAGE_VERTEX_BIT
-				);
+			{ // Draw the chunks
+				ZoneScopedN("Draw chunks");
+				TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Draw chunks");
+
+				int draw_chunk_count = 0;
+				for (auto & chunk_mesh : chunk_meshes)
+				{
+					if (!isInsideFrustum_planes(light_view_proj_matrices[shadow_map_index], chunk_mesh.model, CHUNK_SIZE_VEC3))
+					{
+						continue;
+					}
+					draw_chunk_count++;
+
+					ModelMatrice model_matrice = {};
+					model_matrice.model = chunk_mesh.model;
+
+					vk.drawMesh(
+						vk.draw_shadow_pass_command_buffers[vk.current_frame],
+						vk.shadow_pipeline,
+						chunk_mesh.id,
+						&model_matrice,
+						sizeof(ShadowPassPushConstant::model),
+						VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT
+					);
+				}
+				debug_text += std::to_string(draw_chunk_count) + " ";
 			}
-		}
 
-		vkCmdEndRenderPass(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
+			vkCmdEndRenderPass(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
+		}
+		debug_text += "\n";
 	}
 
 	VK_CHECK(
@@ -573,14 +620,8 @@ void RenderThread::lightingPass()
 					nullptr
 				);
 
-				for (auto & chunk_mesh: chunk_meshes)
+				for (auto & chunk_mesh: visible_chunks)
 				{
-					if (!isInsideFrustum_planes(camera.projection * camera.view, chunk_mesh.model, CHUNK_SIZE_VEC3))
-					{
-						continue;
-					}
-					draw_chunk_count++;
-
 					ModelMatrice model_matrice = {};
 					model_matrice.model = chunk_mesh.model;
 
@@ -1019,6 +1060,7 @@ void RenderThread::lightingPass()
 		vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 
 
+		// write the debug text on the texture only if the debug text is enabled
 		if (m_world_scene.show_debug_text)
 		{
 			ZoneScopedN("Write debug text");
@@ -1146,18 +1188,18 @@ void RenderThread::lightingPass()
 					vk.drawHudImage(vk.toolbar_cursor_image_descriptor, viewport);
 				}
 
-		if (m_world_scene.show_debug_text) // Debug info
-		{
-			float width = 2048.0f;
-			float height = 512.0f;
+				if (m_world_scene.show_debug_text) // Debug info
+				{
+					float width = 2048.0f;
+					float height = 512.0f;
 
-			VkViewport viewport = {};
-			viewport.x = 0;
-			viewport.y = 0;
-			viewport.width = vk.debug_info_image.extent2D.width;
-			viewport.height = vk.debug_info_image.extent2D.height;
-			viewport.minDepth = 0.0f;
-			viewport.maxDepth = 1.0f;
+					VkViewport viewport = {};
+					viewport.x = 0;
+					viewport.y = 0;
+					viewport.width = vk.debug_info_image.extent2D.width;
+					viewport.height = vk.debug_info_image.extent2D.height;
+					viewport.minDepth = 0.0f;
+					viewport.maxDepth = 1.0f;
 
 					vk.drawHudImage(vk.debug_info_image_descriptor, viewport);
 				}

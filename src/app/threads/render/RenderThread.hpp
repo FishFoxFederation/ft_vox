@@ -94,6 +94,8 @@ private:
 	std::vector<WorldScene::MeshRenderData> entity_meshes;
 	std::vector<WorldScene::PlayerRenderData> players;
 
+	std::vector<WorldScene::ChunkMeshRenderData> visible_chunks;
+
 	ViewProjMatrices sun = {};
 	glm::dvec3 sun_position;
 
@@ -106,7 +108,6 @@ private:
 	ShadowMapLight shadow_map_light = {};
 
 	std::string debug_text;
-	int draw_chunk_count = 0;
 
 	std::array<ItemInfo::Type, 9> toolbar_items;
 	int toolbar_cursor_index = 0;
@@ -124,7 +125,10 @@ private:
 	void init();
 	void loop();
 
+	void prepareFrame();
 	void updateTime();
+	void updateDebugText();
+	void updateVisibleChunks();
 
 	void shadowPass();
 	void lightingPass();

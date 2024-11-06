@@ -4,7 +4,7 @@
 
 layout(push_constant) uniform PushConstants
 {
-	ModelMatrice pc;
+	ShadowPassPushConstant pc;
 };
 
 layout(location = 0) in u64vec2 vertexData;

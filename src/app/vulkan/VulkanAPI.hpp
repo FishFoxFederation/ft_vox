@@ -366,7 +366,7 @@ public:
 	uint32_t current_image_index = 0;
 
 	const uint shadow_maps_count = SHADOW_MAP_MAX_COUNT;
-	const uint shadow_map_size = 4096;
+	const uint shadow_map_size;
 
 	Image output_attachement;
 	Image color_attachement;
@@ -383,6 +383,8 @@ public:
 
 	Image debug_info_image;
 	std::vector<Buffer> debug_info_buffers;
+
+	std::vector<VkImageView> shadow_map_views;
 
 	UBO camera_ubo;
 	UBO light_mat_ubo;
@@ -518,6 +520,9 @@ private:
 	void createColorAttachement();
 	void createDepthAttachement();
 
+	void createShadowMapRessources();
+	void destroyShadowMapRessources();
+
 	void createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count);
 	void createUniformBuffers();
 	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
@@ -537,6 +542,7 @@ private:
 	void createRenderPass();
 	void createPipelines();
 	void createFramebuffers();
+	void destroyFramebuffers();
 
 	void createMeshes();
 	void createItemMeshes();
