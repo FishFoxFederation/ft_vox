@@ -164,7 +164,7 @@ private:
 	LightArray	m_light;
 	BiomeArray	m_biomes;
 	HeightArray m_heights;
-	int			load_level = TICKET_LEVEL_INACTIVE + 10;
+	int			load_level = std::numeric_limits<int>::max();
 	int			highest_load_level = 0;
 	genLevel	m_gen_level = genLevel::EMPTY;
 };

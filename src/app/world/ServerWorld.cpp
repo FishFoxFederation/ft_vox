@@ -4,7 +4,7 @@ ServerWorld::ServerWorld(Server & server)
 :	World(),
 	m_server(server)
 {
-	addTicket({SPAWN_TICKET_LEVEL, glm::ivec3(0, 0, 0)});
+	addTicket({Ticket::Type::OTHER, SPAWN_TICKET_LEVEL, glm::ivec3(0, 0, 0)});
 	// std::shared_ptr<Chunk> chunk;
 
 	// std::lock_guard lock(m_chunks_mutex);
@@ -35,6 +35,10 @@ void ServerWorld::update()
 
 		// LOG_INFO("BU size: " << m_block_update_chunks.size());
 	}
+
+	//update all values that need to be updated
+	updateTickedValues();
+
 	savePlayerPositions();
 	// MAIN BLOCK UPDATE FUNCTION
 
@@ -69,7 +73,7 @@ void ServerWorld::savePlayerPositions()
 			//change ticket if player changed chunk
 			if (last_chunk != current_chunk)
 			{
-				Ticket next_ticket{ PLAYER_TICKET_LEVEL, current_chunk };
+				Ticket next_ticket{ Ticket::Type::PLAYER, m_player_ticket_level, current_chunk };
 				player->player_ticket_id = changeTicket(player->player_ticket_id, next_ticket);
 			}
 		}
@@ -95,4 +99,17 @@ void ServerWorld::waitForChunkFutures()
 	m_chunk_gen_data.future.get();
 	// m_threadPool.waitForTasks(m_chunk_futures_ids);
 	// m_chunk_futures_ids.clear();
+}
+
+void ServerWorld::updateTickedValues()
+{
+	auto & updates = m_ticked_updates;
+	updates.player_ticket_level_changed =
+		updates.player_ticket_level != m_player_ticket_level;
+	m_player_ticket_level = m_ticked_updates.player_ticket_level;
+}
+
+int ServerWorld::getLoadDistance() const
+{
+	return TICKET_LEVEL_INACTIVE - m_player_ticket_level;
 }

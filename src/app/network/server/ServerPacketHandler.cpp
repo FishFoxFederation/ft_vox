@@ -49,6 +49,11 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 			m_server.send(packet);
 			break;
 		}
+		case IPacket::Type::LOAD_DISTANCE:
+		{
+			m_world.handleLoadDistancePacket(std::dynamic_pointer_cast<LoadDistancePacket>(packet));
+			break;
+		}
 		default:
 		{
 			LOG_INFO("Unknown packet type: " << static_cast<int>(packet->GetType()));
@@ -166,7 +171,6 @@ void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestP
 	// glm::ivec3 chunk_pos = packet->GetChunkPos();
 	// // glm::ivec3 player_chunk_pos = player_position / CHUNK_SIZE_VEC3;
 
-	// // if (glm::distance(chunk_pos, player_chunk_pos) > SERVER_LOAD_DISTANCE)
 	// // {
 	// // 	LOG_INFO("Chunk request out of range: " << chunk_pos.x << " " << chunk_pos.y << " " << chunk_pos.z);
 	// // 	return;

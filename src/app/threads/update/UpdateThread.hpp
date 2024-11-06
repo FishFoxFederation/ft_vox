@@ -48,7 +48,6 @@ private:
 	Sound::Engine & m_sound_engine;
 	Event::Manager & m_event_manager;
 
-
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;
 	std::chrono::nanoseconds m_last_frame_time;

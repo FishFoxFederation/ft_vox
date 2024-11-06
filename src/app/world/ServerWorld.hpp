@@ -69,10 +69,17 @@ public:
 	/*********************************\
 	 * TICKET MANAGER
 	\*********************************/
+	void setPlayerTicketLevel(const int & level);
 
+	int getLoadDistance() const;
 	struct Ticket
 	{
 		bool operator==(const Ticket & other) const = default;
+		enum class Type
+		{
+			PLAYER,
+			OTHER
+		} type = Type::OTHER;
 		int level;
 		glm::ivec3 position;
 		struct hash
@@ -151,6 +158,7 @@ public:
 	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
 	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
+	void handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet);
 	void sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id);
 
 
@@ -175,6 +183,18 @@ private:
 	// std::vector<Ticket> m_active_tickets;
 	// std::vector<Ticket> m_tickets_to_add;
 	// std::vector<Ticket> m_tickets_to_remove;
+
+	constexpr static int TICKET_LEVEL_ENTITY_UPDATE = 31;
+	constexpr static int TICKET_LEVEL_BLOCK_UPDATE = 32;
+	constexpr static int TICKET_LEVEL_BORDER = 33;
+	constexpr static int TICKET_LEVEL_INACTIVE = 34;
+
+	constexpr static int SPAWN_TICKET_LEVEL = 30;
+	constexpr static int DEFAULT_PLAYER_TICKET_LEVEL = 26;
+	int m_player_ticket_level = DEFAULT_PLAYER_TICKET_LEVEL;
+
+
+
 	TicketMultiMap						m_active_tickets;
 	TicketMultiMap						m_tickets_to_add;
 	std::unordered_multiset<uint64_t>	m_tickets_to_remove;
@@ -188,6 +208,7 @@ private:
 	/*************************\
 	 * METHODS
 	\*************************/
+
 	/**
 	 * @brief will go through every load ticket to add and to remove and update the chunks load levels accordingly,
 	 *
@@ -275,9 +296,25 @@ private:
 
 	ChunkMap getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize);
 
+
+
+
 	void savePlayerPositions();
 	void updatePlayerPositions();
 	void waitForChunkFutures();
+
+	struct tickedUpdates
+	{
+		int player_ticket_level = DEFAULT_PLAYER_TICKET_LEVEL;
+		bool player_ticket_level_changed = false;
+	} m_ticked_updates;
+
+
+	/**
+	 * @brief some values cannot be updated whenever we want, they need to be updated at the beginning 
+	 * of the tick, this function will update those values using the tickedUpdates struct
+	 */
+	void updateTickedValues();
 };
 
 

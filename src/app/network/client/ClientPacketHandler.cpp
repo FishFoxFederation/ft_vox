@@ -44,6 +44,9 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 	case IPacket::Type::CHUNK_UNLOAD:
 		handleChunkUnloadPacket(std::dynamic_pointer_cast<ChunkUnloadPacket>(packet));
 		break;
+	case IPacket::Type::LOAD_DISTANCE:
+		handleLoadDistancePacket(std::dynamic_pointer_cast<LoadDistancePacket>(packet));
+		break;
 	default:
 		break;
 	}
@@ -115,4 +118,9 @@ void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 void ClientPacketHandler::handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet)
 {
 	m_world.removeChunk(packet->GetChunkPosition());
+}
+
+void ClientPacketHandler::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet)
+{
+	m_world.setServerLoadDistance(packet->GetDistance());
 }
