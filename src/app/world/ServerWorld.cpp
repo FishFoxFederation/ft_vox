@@ -82,6 +82,7 @@ void ServerWorld::savePlayerPositions()
 
 void ServerWorld::updatePlayerPositions()
 {
+	ZoneScoped;
 	static int old_load_distance = getLoadDistance();
 
 	if (old_load_distance != getLoadDistance())

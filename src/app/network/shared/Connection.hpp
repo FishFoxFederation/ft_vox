@@ -30,8 +30,8 @@ public:
 	// std::mutex & 			getReadBufferMutex();
 	// void					lock();
 	// void					unlock();
-	std::mutex & 			ReadLock() const;
-	std::mutex & 			WriteLock() const;
+	LockableBase (std::mutex) & ReadLock() const;
+	LockableBase (std::mutex) & WriteLock() const;
 	void					reduceReadBuffer(size_t size);
 	bool					dataToSend() const;
 	ssize_t 				recv();

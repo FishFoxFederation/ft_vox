@@ -46,6 +46,7 @@ ChunkPacket & ChunkPacket::operator=(ChunkPacket && other)
 
 void ChunkPacket::Serialize(uint8_t * buffer) const
 {
+	ZoneScoped;
 	auto type = GetType();
 	std::memcpy(buffer, &type, sizeof(type));
 	buffer += sizeof(type);
@@ -56,6 +57,7 @@ void ChunkPacket::Serialize(uint8_t * buffer) const
 
 void ChunkPacket::Deserialize(const uint8_t * buffer)
 {
+	ZoneScoped;
 	buffer += sizeof(IPacket::STATIC_HEADER_SIZE);
 
 	std::memcpy(&m_chunk_data, buffer, sizeof(m_chunk_data));
@@ -84,10 +86,12 @@ std::shared_ptr<IPacket> ChunkPacket::Clone() const
 
 std::shared_ptr<Chunk>	ChunkPacket::GetChunk() const
 {
+	ZoneScoped;
 	return std::make_shared<Chunk>(m_chunk_data.chunk_pos, m_chunk_data.blocks, m_chunk_data.light, m_chunk_data.biomes);
 }
 
 void ChunkPacket::SetChunk(const Chunk & chunk)
 {
+	ZoneScoped;
 	m_chunk_data = ChunkData(chunk.getPosition(), chunk.getBlocks(), chunk.getLight(), chunk.getBiomes());
 }
