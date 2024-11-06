@@ -11,6 +11,7 @@ ServerPacketHandler::~ServerPacketHandler()
 
 void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 {
+	ZoneScoped;
 	if (!m_connection_to_player_id.contains(packet->GetConnectionId()) && packet->GetType() != IPacket::Type::CONNECTION)
 	{
 		LOG_INFO("Packet connection id does not match connection id");

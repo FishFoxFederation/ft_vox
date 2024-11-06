@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(TRACY_ENABLE "" ON)
-add_subdirectory(external/tracy)
+add_subdirectory(external/tracy-experimental)
 add_subdirectory(external/freetype/freetype-2.13.3)
 add_subdirectory(external/portaudio EXCLUDE_FROM_ALL)
 
@@ -129,7 +129,7 @@ target_sources(${PROJECT_NAME}
 		external/imgui/backends/imgui_impl_glfw.cpp
 		external/imgui/backends/imgui_impl_vulkan.cpp
 
-		external/tracy/public/TracyClient.cpp
+		external/tracy-experimental/public/TracyClient.cpp
 )
 
 # include directories (equivalent to -I)
@@ -164,7 +164,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
-		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
+		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy-experimental/public/tracy
 		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
 		${CMAKE_CURRENT_SOURCE_DIR}/external/portaudio/include
 )
@@ -289,7 +289,7 @@ target_sources(server
 		external/imgui/backends/imgui_impl_glfw.cpp
 		external/imgui/backends/imgui_impl_vulkan.cpp
 
-		external/tracy/public/TracyClient.cpp
+		external/tracy-experimental/public/TracyClient.cpp
 )
 
 # include directories (equivalent to -I)
@@ -324,14 +324,14 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
-		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
+		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy-experimental/public/tracy
 		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
 		${CMAKE_CURRENT_SOURCE_DIR}/external/portaudio/include
 )
 
 target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype portaudio_static)
 
-# add_executable(test_perlin)
+# add_executable(test_perlin, EXCLUDE_FROM_ALL)
 
 # target_sources(test_perlin
 # 	PRIVATE
@@ -387,7 +387,7 @@ target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy:
 # 		external/imgui/backends/imgui_impl_glfw.cpp
 # 		external/imgui/backends/imgui_impl_vulkan.cpp
 
-# 		external/tracy/public/TracyClient.cpp
+# 		external/tracy-experimental/public/TracyClient.cpp
 # )
 
 # target_compile_options(test_perlin
@@ -444,7 +444,7 @@ target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy:
 # 		${CMAKE_CURRENT_SOURCE_DIR}/external/stb
 # 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 # 		${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
-# 		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy/public/tracy
+# 		${CMAKE_CURRENT_SOURCE_DIR}/external/tracy-experimental/public/tracy
 # 		${CMAKE_CURRENT_SOURCE_DIR}/external/freetype/freetype-2.13.3/include
 # 		${CMAKE_CURRENT_SOURCE_DIR}/external/portaudio/include
 # )

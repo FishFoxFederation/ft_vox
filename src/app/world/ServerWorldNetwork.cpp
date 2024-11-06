@@ -150,6 +150,7 @@ void ServerWorld::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> p
 
 void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id)
 {
+	ZoneScoped;
 	uint64_t connection_id = 0;
 
 	connection_id = m_player_to_connection_id.at(player_id);
