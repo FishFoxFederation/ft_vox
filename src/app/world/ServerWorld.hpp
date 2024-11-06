@@ -60,10 +60,10 @@ public:
 	void placeBlock(const glm::vec3 & position, BlockInfo::Type block);
 	void setBlock(const glm::vec3 & position, BlockInfo::Type block);
 
-	ChunkLoadUnloadData			getChunksToUnload(
-		const glm::vec3 & old_player_position,
-		const glm::vec3 & new_player_position
-	);
+	// ChunkLoadUnloadData			getChunksToUnload(
+	// 	const glm::vec3 & old_player_position,
+	// 	const glm::vec3 & new_player_position
+	// );
 
 
 	/*********************************\
@@ -274,7 +274,7 @@ private:
 	void    				updateLights();
 
 
-	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id);
+	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id, const int & old_load_distance);
 	void 					removeChunkObservations(std::shared_ptr<Player> player);
 
 	/*********************************\
