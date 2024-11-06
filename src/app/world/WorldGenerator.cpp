@@ -132,6 +132,7 @@ static void setSkyLight(
 	const glm::ivec3 & chunk_pos
 )
 {
+	ZoneScoped;
 	std::shared_ptr<Chunk> start_chunk = chunks.at(chunk_pos);
 
 	std::queue<glm::ivec3> light_source_queue;
@@ -215,6 +216,7 @@ static void setBlockLight(
 	const glm::ivec3 & chunk_pos
 )
 {
+	ZoneScoped;
 	std::shared_ptr<Chunk> start_chunk = chunks.at(chunk_pos);
 
 	std::queue<glm::ivec3> light_source_queue;
@@ -368,6 +370,7 @@ std::shared_ptr<task::TaskGraph> World::WorldGenerator::getGenerationGraph(Chunk
 
 void World::WorldGenerator::lightPass(const glm::ivec3 & chunkPos3D)
 {
+	ZoneNamedN (zoneLock, "lightPassLock", true);
 	ChunkMap chunkGrid;
 	std::shared_ptr<Chunk> current_chunk = m_world.getChunkNoLock(chunkPos3D);
 	{
@@ -401,8 +404,11 @@ void World::WorldGenerator::lightPass(const glm::ivec3 & chunkPos3D)
 		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
 	);
 
+	{
+		ZoneNamedN (zoneAfterLock, "lightPass", true);
 	setSkyLight(chunkGrid, chunkPos3D);
 	setBlockLight(chunkGrid, chunkPos3D);
+	}
 }
 
 void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
@@ -564,6 +570,7 @@ void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)
 
 void World::WorldGenerator::newReliefPass(const glm::ivec3 & chunkPos3D)
 {
+	ZoneScopedN("reliefPass");
 	std::shared_ptr<Chunk> chunk = m_world.getChunkNoLock(chunkPos3D);
 	std::lock_guard(chunk->status);
 	chunk->setGenLevel(CAVE);
@@ -634,6 +641,7 @@ void World::WorldGenerator::newReliefPass(const glm::ivec3 & chunkPos3D)
 
 void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 {
+	ZoneNamedN (zoneLock, "decoratePassLock", true);
 	ChunkMap chunkGrid;
 	std::shared_ptr<Chunk> center_chunk = m_world.getChunkNoLock(chunkPos3D);
 	{
@@ -667,6 +675,8 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
 	);
 
+	{
+		ZoneNamedN (zone, "decoratePass", true);
 	std::unordered_map<glm::ivec2, Chunk::biomeInfo> tree_positions;
 	//iterate over every possible tree placement and add it to a list
 	const Chunk::BiomeArray & biomes = center_chunk->getBiomes();
@@ -723,7 +733,7 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 
 		placeStructure(chunkGrid, tree_start, tree_info);
 	}
-
+	}
 }
 
 void World::WorldGenerator::placeStructure(ChunkMap & chunkGrid, const glm::ivec3 & start_pos, const StructureInfo & structure)

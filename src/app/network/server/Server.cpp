@@ -18,6 +18,7 @@ void Server::stop()
 
 void Server::runOnce(int timeout)
 {
+	ZoneScoped;
 	auto [events_size, events] = m_poller.wait(timeout);
 	if (errno == EINTR)
 	{
@@ -112,6 +113,7 @@ uint64_t Server::get_new_id()
 
 int Server::read_data(Connection & connection, uint64_t id)
 {
+	ZoneScoped;
 	ssize_t ret;
 	std::lock_guard lock(connection.ReadLock());
 	try {
@@ -139,6 +141,7 @@ int Server::read_data(Connection & connection, uint64_t id)
 
 int Server::send_data(Connection & connection, uint64_t id)
 {
+	ZoneScoped;
 	ssize_t ret;
 	std::lock_guard lock(connection.WriteLock());
 	try
@@ -158,7 +161,7 @@ int Server::send_data(Connection & connection, uint64_t id)
 
 void Server::send(std::shared_ptr<IPacket> packet)
 {
-	
+	ZoneScoped;
 	std::shared_ptr<Connection> currentClient;
 	{
 		std::lock_guard lock(m_connections_mutex);

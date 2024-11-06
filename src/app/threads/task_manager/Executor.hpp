@@ -11,6 +11,8 @@
 #include "Future.hpp"
 #include "Graph.hpp"
 #include "TaskGraph.hpp"
+#include "Tracy.hpp"
+#include "tracy_globals.hpp"
 
 namespace task
 {

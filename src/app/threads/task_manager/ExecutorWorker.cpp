@@ -8,6 +8,7 @@ namespace task
 
 void Executor::workerThread(const int & id)
 {
+	tracy::SetThreadName(str_worker_thread[id]);
 	while (!m_done)
 	{
 		// wait for a new node

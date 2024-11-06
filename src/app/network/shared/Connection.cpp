@@ -80,6 +80,7 @@ ssize_t Connection::recv()
 
 ssize_t Connection::sendQueue()
 {
+	ZoneScoped;
 	if (m_write_buffer.empty())
 		return 0;
 	// LOG_INFO("Sending data");
@@ -100,12 +101,14 @@ ssize_t Connection::sendQueue()
 
 void Connection::queueAndSendMessage(const std::vector<uint8_t> & msg)
 {
+	ZoneScoped;
 	m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
 	sendQueue();
 }
 
 void Connection::queueMessage(const std::vector<uint8_t> & msg)
 {
+	ZoneScoped;
 	m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
 }
 
@@ -129,12 +132,12 @@ bool Connection::dataToSend() const
 	return !m_write_buffer.empty();
 }
 
-std::mutex & Connection::WriteLock() const
+LockableBase (std::mutex) & Connection::WriteLock() const
 {
 	return m_write_mutex;
 }
 
-std::mutex & Connection::ReadLock() const
+LockableBase (std::mutex) & Connection::ReadLock() const
 {
 	return m_read_mutex;
 }
