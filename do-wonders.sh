@@ -25,7 +25,7 @@ then
 
 	# build tracy-profiler
 	cd $TRACY_PROFILER_DIR
-	cmake -B build
+	cmake -B build -D LEGACY
 	cmake --build build
 	mv build/tracy-profiler $ROOT_DIR/tracy
 fi
