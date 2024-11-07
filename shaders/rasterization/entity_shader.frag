@@ -4,7 +4,7 @@
 
 layout(push_constant) uniform PushConstants
 {
-	EntityMatrices pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in vec3 fragNorm;

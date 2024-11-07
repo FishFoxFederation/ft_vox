@@ -15,7 +15,7 @@ layout (std140, binding = 0) uniform LightSpaceMatrices
 
 layout(push_constant) uniform PushConstants
 {
-	ShadowPassPushConstant pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in vec3 vert_tex_coords[];

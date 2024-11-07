@@ -19,27 +19,17 @@
 
 #define SHADOW_MAP_MAX_COUNT 8
 
+struct GlobalPushConstant
+{
+	mat4 matrice;
+	vec4 color;
+	int layer;
+};
+
 struct ViewProjMatrices
 {
 	mat4 view;
 	mat4 proj;
-};
-
-struct ModelMatrice
-{
-	mat4 model;
-};
-
-struct ShadowPassPushConstant
-{
-	mat4 model;
-	int layer;
-};
-
-struct EntityMatrices
-{
-	mat4 model;
-	vec4 color;
 };
 
 struct ShadowMapLight
@@ -50,24 +40,6 @@ struct ShadowMapLight
 	vec3 light_dir;
 	float blend_distance;
 };
-
-struct PreRenderItemIconPushConstant
-{
-	mat4 MVP;
-	int layer;
-};
-
-struct ItemIconPushConstant
-{
-	int layer;
-};
-
-struct LinePipelinePushConstant
-{
-	mat4 model;
-	vec4 color;
-};
-
 
 
 #endif // SHADER_COMMUN_HPP

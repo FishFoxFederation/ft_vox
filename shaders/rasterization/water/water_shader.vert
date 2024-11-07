@@ -9,7 +9,7 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 
 layout(push_constant) uniform PushConstants
 {
-	ModelMatrice pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in u64vec2 vertexData;
@@ -23,10 +23,10 @@ void main()
 	vec3 positions; vec3 normal; vec2 texCoords; uint texLayer; uint ao; uint light;
 	extractBlockVertexData(vertexData, positions, normal, texCoords, texLayer, ao, light);
 
-	gl_Position = cm.proj * cm.view * pc.model * vec4(positions, 1.0);
+	gl_Position = cm.proj * cm.view * pc.matrice * vec4(positions, 1.0);
 
 	fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);
 
-	fragPosWorldSpace = pc.model * vec4(positions, 1.0);
+	fragPosWorldSpace = pc.matrice * vec4(positions, 1.0);
 }

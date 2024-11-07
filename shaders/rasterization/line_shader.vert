@@ -9,12 +9,12 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 
 layout(push_constant) uniform PushConstants
 {
-	LinePipelinePushConstant pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in vec3 positions;
 
 void main()
 {
-    gl_Position = cm.proj * cm.view * pc.model * vec4(positions, 1.0);
+    gl_Position = cm.proj * cm.view * pc.matrice * vec4(positions, 1.0);
 }

@@ -9,7 +9,7 @@ layout(set = 0, binding = 0) uniform CameraMatrices
 
 layout(push_constant) uniform PushConstants
 {
-	ModelMatrice pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in vec3 position;
@@ -20,7 +20,7 @@ layout(location = 0) out vec3 rayDir;
 
 void main()
 {
-	vec4 pos = cm.proj * cm.view * pc.model * vec4(position, 1.0);
+	vec4 pos = cm.proj * cm.view * pc.matrice * vec4(position, 1.0);
 	gl_Position = pos.xyww;
 
 	rayDir = normalize(position);
