@@ -148,13 +148,12 @@ void UpdateThread::readInput()
 	if (use_key_status == Input::KeyState::PRESSED) m_use = 1;
 	else if (use_key_status == Input::KeyState::RELEASED) m_use = 0;
 
-
 	const Input::KeyState ping_key_status = m_window.input().getKeyState(GLFW_KEY_P);
 	if (ping_key_status == Input::KeyState::PRESSED)
 	{
 		uint64_t id = std::rand();
 
-		auto packet = std::make_shared<PingPacket>(id);
+		auto packet = std::make_shared<PingPacket>(id, 1);
 		m_client.m_pings[id] = std::chrono::high_resolution_clock::now();
 		m_client.sendPacket(packet);
 

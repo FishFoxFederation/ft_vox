@@ -188,6 +188,13 @@ void Server::empty_outgoing_packets()
 	}
 }
 
+void Server::ping(uint64_t id)
+{
+	auto packet = std::make_shared<PingPacket>(id, 1);
+	m_pings[id] = std::chrono::high_resolution_clock::now();
+	send({packet, 0, id});
+}
+
 void Server::send(const Server::sendInfo & info)
 {
 	if (info.flag & NOWAIT)

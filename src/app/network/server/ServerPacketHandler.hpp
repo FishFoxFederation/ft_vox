@@ -24,6 +24,7 @@ public:
 private:
 	Server &	m_server;
 	ServerWorld & m_world;
+	
 	std::unordered_map<uint64_t, uint64_t> m_player_to_connection_id;
 	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
 
@@ -33,7 +34,7 @@ private:
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
 	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
 	void handleChunkRequestPacket(std::shared_ptr<ChunkRequestPacket> packet);
-
+	void handlePingPacket(std::shared_ptr<PingPacket> packet);
 
 	void mirrorPacket(std::shared_ptr<IPacket> packet);
 	void relayPacket(std::shared_ptr<IPacket> packet);

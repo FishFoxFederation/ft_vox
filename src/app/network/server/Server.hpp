@@ -46,6 +46,7 @@ public:
 		uint64_t id = 0;
 	};
 	void send(const sendInfo & info);
+	void ping(uint64_t id);
 
 	void disconnect(uint64_t id);
 
@@ -64,6 +65,7 @@ public:
 		uint64_t m_id;
 	};
 
+	std::unordered_map<uint64_t, std::chrono::time_point<std::chrono::high_resolution_clock>> m_pings;
 private:
 
 	std::atomic<bool>							m_running;

@@ -87,11 +87,19 @@ void ClientPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPac
 
 void ClientPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
 {
-	auto now = std::chrono::high_resolution_clock::now();
-	auto duration = now - m_client.m_pings[packet->GetId()];
+	if (packet->GetCounter() == 0)
+	{
+		auto now = std::chrono::high_resolution_clock::now();
+		auto duration = now - m_client.m_pings[packet->GetId()];
 
-	LOG_INFO("Ping: " << packet->GetId() << " " << duration.count() / 1e6 << "ms");
-	m_client.m_pings.erase(packet->GetId());
+		LOG_INFO("Ping: " << packet->GetId() << " " << duration.count() / 1e6 << "ms");
+		m_client.m_pings.erase(packet->GetId());
+	}
+	else
+	{
+		packet->SetCounter(packet->GetCounter() - 1);
+		m_client.sendPacket(packet);
+	}
 }
 
 void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet)
