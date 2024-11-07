@@ -12,6 +12,7 @@
 class Connection
 {
 public:
+	constexpr static size_t READ_BUFFER_SIZE_MAX = 1024 * 1024 * 4; //  4 MB
 	Connection(std::shared_ptr<Socket> socket);
 	~Connection();
 
@@ -24,15 +25,17 @@ public:
 	void					queueAndSendMessage(const std::vector<uint8_t> & msg);
 	void 					queueMessage(const std::vector<uint8_t> & msg);
 
-	std::vector<uint8_t>			getReadBuffer() const;
-	const std::vector<uint8_t> &	getReadBufferRef() const;
+	const uint8_t *			getReadBufferPtr() const;
+	size_t 					getReadBufferSize() const;
+	void 					reduceReadBuffer(size_t size);
+	void 					clearReadBuffer();
+
 	const std::vector<uint8_t> &	getWriteBufferRef() const;
 	// std::mutex & 			getReadBufferMutex();
 	// void					lock();
 	// void					unlock();
 	LockableBase (std::mutex) & ReadLock() const;
 	LockableBase (std::mutex) & WriteLock() const;
-	void					reduceReadBuffer(size_t size);
 	bool					dataToSend() const;
 	ssize_t 				recv();
 	ssize_t					sendQueue();
@@ -44,6 +47,7 @@ public:
 private:
 
 	std::shared_ptr<Socket>	m_socket;
+	size_t 					m_read_offset = 0;
 	std::vector<uint8_t>	m_read_buffer;
 	mutable TracyLockableN (std::mutex, m_mutex, "Connection Mutex");
 	mutable TracyLockableN (std::mutex, m_write_mutex, "Write Mutex");

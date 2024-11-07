@@ -54,7 +54,10 @@ int Client::read_data()
 			m_incoming_packets.push(ret.second);
 			ret = m_packet_factory.extractPacket(m_connection);
 		}
-		DebugGui::recv_buffer_size = m_connection.getReadBufferRef().size();
+		//only clearing here becasue optimization based on offsets
+		//( see the Connection::reduceReadBuffer function )
+		m_connection.clearReadBuffer();
+		DebugGui::recv_buffer_size = m_connection.getReadBufferSize();
 	}
 	catch (const std::runtime_error & e)
 	{

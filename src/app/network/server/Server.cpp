@@ -133,6 +133,7 @@ int Server::read_data(Connection & connection, uint64_t id)
 			m_incoming_packets.push(ret.second);
 			ret = m_packet_factory.extractPacket(connection);
 		}
+		connection.clearReadBuffer();
 	}
 	catch (const std::runtime_error & e)
 	{

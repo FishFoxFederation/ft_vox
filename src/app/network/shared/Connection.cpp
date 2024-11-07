@@ -28,14 +28,15 @@ Connection& Connection::operator=(Connection&& other)
 	return *this;
 }
 
-std::vector<uint8_t> Connection::getReadBuffer() const
+const uint8_t * Connection::getReadBufferPtr() const
 {
-	return m_read_buffer;
+
+	return m_read_buffer.data() + m_read_offset;
 }
 
-const std::vector<uint8_t> & Connection::getReadBufferRef() const
+size_t			Connection::getReadBufferSize() const
 {
-	return m_read_buffer;
+	return m_read_buffer.size() - m_read_offset;
 }
 
 const std::vector<uint8_t> & Connection::getWriteBufferRef() const
@@ -46,16 +47,28 @@ const std::vector<uint8_t> & Connection::getWriteBufferRef() const
 void Connection::reduceReadBuffer(size_t size)
 {
 	ZoneScoped;
-	m_read_buffer.erase(m_read_buffer.begin(), m_read_buffer.begin() + size);
+	m_read_offset += size;
+}
+
+void Connection::clearReadBuffer()
+{
+	ZoneScoped;
+	if (m_read_offset >= m_read_buffer.size())
+		m_read_buffer.clear();
+	else
+		m_read_buffer.erase(m_read_buffer.begin(), m_read_buffer.begin() + m_read_offset);
+	m_read_offset = 0;
 }
 
 ssize_t Connection::recv()
 {
 	ZoneScoped;
-	char buffer[1024];
+	constexpr size_t bufferSize = 1 << 16;
+	static char buffer[bufferSize];
 	ssize_t total_size = 0;
-	while (1)
+	while (m_read_buffer.size() < READ_BUFFER_SIZE_MAX)
 	{
+		ZoneScopedN("ReceiveDataLoop");
 		ssize_t size = ::recv(m_socket->getFd(), buffer, sizeof(buffer), MSG_DONTWAIT);
 		if (size == -1)
 		{
@@ -72,6 +85,7 @@ ssize_t Connection::recv()
 		}
 		else
 		{
+			ZoneScopedN("InsertData");
 			m_read_buffer.insert(m_read_buffer.end(), buffer, buffer + size);
 		}
 		total_size += size;
