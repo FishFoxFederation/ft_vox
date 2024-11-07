@@ -106,7 +106,6 @@ void ServerWorld::updateTickets()
 		if (!chunk_gen_list.empty())
 		{
 			doChunkGens(chunk_gen_list);
-			LOG_INFO("chunks to gen :" << chunk_gen_list.size());
 			waitForChunkFutures();
 			LOG_INFO("Chunk gen finished");
 		}
