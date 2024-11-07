@@ -30,9 +30,9 @@ then
 	mv build/tracy-profiler $ROOT_DIR/tracy
 fi
 
-cd $ROOT_DIR/tracy
 # launch multicapture
-tracy-multicapture -o output -M -f &
+cd $ROOT_DIR/tracy
+./tracy-multicapture -o output -M -f &
 
 PID_MULTICAPTURE=$!
 
