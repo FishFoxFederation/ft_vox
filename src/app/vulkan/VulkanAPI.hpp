@@ -405,6 +405,7 @@ public:
 	Descriptor atmosphere_descriptor;
 	Descriptor debug_info_image_descriptor;
 	Descriptor item_icon_descriptor;
+	Descriptor global_descriptor;
 
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
@@ -538,6 +539,8 @@ private:
 		Descriptor & descriptor
 	);
 	void createDescriptors();
+	void createGlobalDescriptor();
+	void updateGlobalDescriptor();
 
 	void createRenderPass();
 	void createPipelines();

@@ -1,6 +1,6 @@
 #version 450
 
-layout(set = 1, binding = 0) uniform sampler2DArray block_textures;
+layout(set = 2, binding = 0) uniform sampler2DArray block_textures;
 
 layout(location = 0) in vec3 frag_tex_coords;
 
