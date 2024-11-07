@@ -47,7 +47,7 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		}
 		case IPacket::Type::PING:
 		{
-			m_server.send({packet, Server::flags::NOWAIT, packet->GetConnectionId()});
+			handlePingPacket(std::dynamic_pointer_cast<PingPacket>(packet));
 			break;
 		}
 		case IPacket::Type::LOAD_DISTANCE:
@@ -183,6 +183,24 @@ void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestP
 	// m_server.send(packet_to_send);
 }
 
+void ServerPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
+{
+	ZoneScoped;
+	if (packet->GetCounter() == 0)
+	{
+		auto now = std::chrono::high_resolution_clock::now();
+		auto duration = now - m_server.m_pings[packet->GetId()];
+
+		LOG_INFO("Ping: " << packet->GetId() << " " << duration.count() / 1e6 << "ms");
+		m_server.m_pings.erase(packet->GetId());
+	}
+	else
+	{
+		packet->SetCounter(packet->GetCounter() - 1);
+		m_server.ping(packet->GetId());
+	}
+}
+
 void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)
 {
 	ZoneScoped;
@@ -194,3 +212,4 @@ void ServerPacketHandler::relayPacket(std::shared_ptr<IPacket> packet)
 	ZoneScoped;
 	m_server.send({packet, Server::flags::ALLEXCEPT, packet->GetConnectionId()});
 }
+

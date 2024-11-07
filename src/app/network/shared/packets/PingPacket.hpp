@@ -7,7 +7,7 @@ class PingPacket : public IPacket
 {
 public:
 	PingPacket();
-	PingPacket(uint64_t id);
+	PingPacket(uint64_t id, uint8_t counter);
 	PingPacket(const PingPacket&);
 	PingPacket& operator=(const PingPacket&);
 	PingPacket(PingPacket&&);
@@ -24,6 +24,9 @@ public:
 	uint64_t GetId() const;
 	void SetId(uint64_t id);
 
+	uint8_t GetCounter() const;
+	void SetCounter(uint8_t counter);
 private:
 	uint64_t m_id;
+	uint8_t  m_counter;
 };

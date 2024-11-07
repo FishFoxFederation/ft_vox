@@ -1,28 +1,29 @@
 #include "PingPacket.hpp"
 
 PingPacket::PingPacket()
-	: m_id(4242)
+	: m_id(4242), m_counter(0)
 {
 }
 
-PingPacket::PingPacket(uint64_t id)
-	: m_id(id)
+PingPacket::PingPacket(uint64_t id, uint8_t counter)
+	: m_id(id), m_counter(counter)
 {
 }
 
 PingPacket::PingPacket(const PingPacket & other)
-	: IPacket(other), m_id(other.m_id)
+	: IPacket(other), m_id(other.m_id), m_counter(other.m_counter)
 {
 }
 
 PingPacket & PingPacket::operator=(const PingPacket & other)
 {
 	m_id = other.m_id;
+	m_counter = other.m_counter;
 	return *this;
 }
 
 PingPacket::PingPacket(PingPacket && other)
-	: m_id(other.m_id)
+	: m_id(other.m_id), m_counter(other.m_counter)
 {
 }
 
@@ -32,6 +33,7 @@ PingPacket & PingPacket::operator=(PingPacket && other)
 	{
 		IPacket::operator=(other);
 		m_id = other.m_id;
+		m_counter = other.m_counter;
 	}
 	return *this;
 }
@@ -47,6 +49,10 @@ void PingPacket::Serialize(uint8_t * buffer) const
 	buffer += sizeof(uint32_t);
 
 	memcpy(buffer, &m_id, sizeof(m_id));
+	buffer += sizeof(m_id);
+
+	memcpy(buffer, &m_counter, sizeof(m_counter));
+	buffer += sizeof(m_counter);
 }
 
 void PingPacket::Deserialize(const uint8_t * buffer)
@@ -54,11 +60,15 @@ void PingPacket::Deserialize(const uint8_t * buffer)
 	buffer += sizeof(uint32_t);
 
 	memcpy(&m_id, buffer, sizeof(m_id));
+	buffer += sizeof(m_id);
+
+	memcpy(&m_counter, buffer, sizeof(m_counter));
+	buffer+= sizeof(m_counter);
 }
 
 uint32_t PingPacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_id);
+	return sizeof(IPacket::Type) + sizeof(m_id) + sizeof(m_counter);
 }
 
 bool PingPacket::HasDynamicSize() const
@@ -84,4 +94,14 @@ uint64_t PingPacket::GetId() const
 void PingPacket::SetId(uint64_t id)
 {
 	m_id = id;
+}
+
+uint8_t PingPacket::GetCounter() const
+{
+	return m_counter;
+}
+
+void PingPacket::SetCounter(uint8_t counter)
+{
+	m_counter = counter;
 }
