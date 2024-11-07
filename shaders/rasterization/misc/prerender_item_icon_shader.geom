@@ -7,7 +7,7 @@ layout(triangle_strip, max_vertices = 3) out;
 
 layout(push_constant) uniform PushConstants
 {
-	PreRenderItemIconPushConstant pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in vec3 vert_normal[];

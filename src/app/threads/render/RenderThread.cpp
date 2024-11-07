@@ -516,9 +516,9 @@ void RenderThread::shadowPass()
 			vkCmdPushConstants(
 				vk.draw_shadow_pass_command_buffers[vk.current_frame],
 				vk.shadow_pipeline.layout,
-				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT,
-				offsetof(ShadowPassPushConstant, layer),
-				sizeof(ShadowPassPushConstant::layer),
+				VK_SHADER_STAGE_ALL,
+				offsetof(GlobalPushConstant, layer),
+				sizeof(GlobalPushConstant::layer),
 				&shadow_map_index
 			);
 
@@ -528,16 +528,16 @@ void RenderThread::shadowPass()
 
 				for (auto & chunk_mesh : shadow_visible_chunks[shadow_map_index])
 				{
-					ModelMatrice model_matrice = {};
-					model_matrice.model = chunk_mesh.model;
+					GlobalPushConstant model_matrice = {};
+					model_matrice.matrice = chunk_mesh.model;
 
 					vk.drawMesh(
 						vk.draw_shadow_pass_command_buffers[vk.current_frame],
 						vk.shadow_pipeline,
 						chunk_mesh.id,
 						&model_matrice,
-						sizeof(ShadowPassPushConstant::model),
-						VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT
+						sizeof(GlobalPushConstant::matrice),
+						VK_SHADER_STAGE_ALL
 					);
 				}
 			}
@@ -620,16 +620,16 @@ void RenderThread::lightingPass()
 
 				for (auto & chunk_mesh: visible_chunks)
 				{
-					ModelMatrice model_matrice = {};
-					model_matrice.model = chunk_mesh.model;
+					GlobalPushConstant model_matrice = {};
+					model_matrice.matrice = chunk_mesh.model;
 
 					vk.drawMesh(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.chunk_pipeline,
 						chunk_mesh.id,
 						&model_matrice,
-						sizeof(ModelMatrice),
-						VK_SHADER_STAGE_VERTEX_BIT
+						sizeof(GlobalPushConstant),
+						VK_SHADER_STAGE_ALL
 					);
 				}
 			}
@@ -657,8 +657,8 @@ void RenderThread::lightingPass()
 
 				for (const auto & entity_mesh : entity_meshes)
 				{
-					EntityMatrices entity_matrice = {};
-					entity_matrice.model = entity_mesh.model;
+					GlobalPushConstant entity_matrice = {};
+					entity_matrice.matrice = entity_mesh.model;
 					entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 					vk.drawMesh(
@@ -666,8 +666,8 @@ void RenderThread::lightingPass()
 						vk.entity_pipeline,
 						entity_mesh.id,
 						&entity_matrice,
-						sizeof(EntityMatrices),
-						VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+						sizeof(GlobalPushConstant),
+						VK_SHADER_STAGE_ALL
 					);
 				}
 
@@ -677,15 +677,15 @@ void RenderThread::lightingPass()
 					const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
 					const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
 
-					EntityMatrices block_matrice = {};
-					block_matrice.model = block_model;
+					GlobalPushConstant block_matrice = {};
+					block_matrice.matrice = block_model;
 					block_matrice.color = data.color;
 					vkCmdPushConstants(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.entity_pipeline.layout,
-						VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+						VK_SHADER_STAGE_ALL,
 						0,
-						sizeof(EntityMatrices),
+						sizeof(GlobalPushConstant),
 						&block_matrice
 					);
 
@@ -870,16 +870,16 @@ void RenderThread::lightingPass()
 				const float scale_factor = 1.001f;
 				const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block.value() - glm::vec3((scale_factor - 1.0f) / 2.0f));
 				const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale_factor));
-				const LinePipelinePushConstant target_block_push_constant = {
+				const GlobalPushConstant target_block_push_constant = {
 					target_block_model * target_block_scale,
 					glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 				};
 				vkCmdPushConstants(
 					vk.draw_command_buffers[vk.current_frame],
 					vk.line_pipeline.layout,
-					VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+					VK_SHADER_STAGE_ALL,
 					0,
-					sizeof(LinePipelinePushConstant),
+					sizeof(GlobalPushConstant),
 					&target_block_push_constant
 				);
 
@@ -911,14 +911,14 @@ void RenderThread::lightingPass()
 				// 	nullptr
 				// );
 
-				// ModelMatrice skybox_matrices = {};
-				// skybox_matrices.model = glm::translate(glm::dmat4(1.0f), camera.position);
+				// GlobalPushConstant skybox_matrices = {};
+				// skybox_matrices.matrice = glm::translate(glm::dmat4(1.0f), camera.position);
 				// vkCmdPushConstants(
 				// 	vk.draw_command_buffers[vk.current_frame],
 				// 	vk.skybox_pipeline.layout,
-				// 	VK_SHADER_STAGE_VERTEX_BIT,
+				// 	VK_SHADER_STAGE_ALL,
 				// 	0,
-				// 	sizeof(ModelMatrice),
+				// 	sizeof(GlobalPushConstant),
 				// 	&skybox_matrices
 				// );
 
@@ -953,16 +953,16 @@ void RenderThread::lightingPass()
 					nullptr
 				);
 
-				ModelMatrice sky_shader_data = {};
-				sky_shader_data.model = glm::translate(glm::dmat4(1.0f), camera.position);
+				GlobalPushConstant sky_shader_data = {};
+				sky_shader_data.matrice = glm::translate(glm::dmat4(1.0f), camera.position);
 
 				vk.drawMesh(
 					vk.draw_command_buffers[vk.current_frame],
 					vk.sun_pipeline,
 					vk.icosphere_mesh_id,
 					&sky_shader_data,
-					sizeof(ModelMatrice),
-					VK_SHADER_STAGE_VERTEX_BIT
+					sizeof(GlobalPushConstant),
+					VK_SHADER_STAGE_ALL
 				);
 			}
 		}
@@ -1041,16 +1041,16 @@ void RenderThread::lightingPass()
 						continue;
 					}
 
-					ModelMatrice model_matrice = {};
-					model_matrice.model = chunk_mesh.model;
+					GlobalPushConstant model_matrice = {};
+					model_matrice.matrice = chunk_mesh.model;
 
 					vk.drawMesh(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.water_pipeline,
 						chunk_mesh.water_id,
 						&model_matrice,
-						sizeof(ModelMatrice),
-						VK_SHADER_STAGE_VERTEX_BIT
+						sizeof(GlobalPushConstant),
+						VK_SHADER_STAGE_ALL
 					);
 				}
 			}
@@ -1246,16 +1246,16 @@ void RenderThread::drawPlayerBodyPart(
 	const glm::mat4 & model
 )
 {
-	ModelMatrice player_matrice = {};
-	player_matrice.model = model;
+	GlobalPushConstant player_matrice = {};
+	player_matrice.matrice = model;
 
 	vk.drawMesh(
 		vk.draw_command_buffers[vk.current_frame],
 		vk.player_pipeline,
 		mesh_id,
 		&player_matrice,
-		sizeof(ModelMatrice),
-		VK_SHADER_STAGE_VERTEX_BIT
+		sizeof(GlobalPushConstant),
+		VK_SHADER_STAGE_ALL
 	);
 }
 

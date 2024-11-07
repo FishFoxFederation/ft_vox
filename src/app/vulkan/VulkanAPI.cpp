@@ -1789,7 +1789,7 @@ void VulkanAPI::createPipelines()
 			shadow_map_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1815,7 +1815,7 @@ void VulkanAPI::createPipelines()
 			water_renderpass_input_attachement_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = water_render_pass;
 
@@ -1840,7 +1840,7 @@ void VulkanAPI::createPipelines()
 			camera_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(LinePipelinePushConstant) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_LINE_WIDTH };
@@ -1860,7 +1860,7 @@ void VulkanAPI::createPipelines()
 			cube_map_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1881,7 +1881,7 @@ void VulkanAPI::createPipelines()
 			atmosphere_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
@@ -1907,7 +1907,7 @@ void VulkanAPI::createPipelines()
 			block_textures_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, 0, sizeof(ShadowPassPushConstant) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = shadow_render_pass;
 
@@ -1926,7 +1926,7 @@ void VulkanAPI::createPipelines()
 			test_image_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = hud_render_pass;
 
@@ -1946,7 +1946,7 @@ void VulkanAPI::createPipelines()
 			camera_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(EntityMatrices) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -1967,7 +1967,7 @@ void VulkanAPI::createPipelines()
 			player_skin_image_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(ModelMatrice) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = lighting_render_pass;
 
@@ -2003,7 +2003,7 @@ void VulkanAPI::createPipelines()
 			block_textures_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT, 0, sizeof(PreRenderItemIconPushConstant) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = prerender_item_icon_render_pass;
 		pipeline_info.front_face = VK_FRONT_FACE_CLOCKWISE;
@@ -2021,7 +2021,7 @@ void VulkanAPI::createPipelines()
 			item_icon_descriptor.layout
 		};
 		pipeline_info.push_constant_ranges = {
-			{ VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ItemIconPushConstant) }
+			{ VK_SHADER_STAGE_ALL, 0, sizeof(GlobalPushConstant) }
 		};
 		pipeline_info.render_pass = hud_render_pass;
 		pipeline_info.dynamic_states = { VK_DYNAMIC_STATE_VIEWPORT };
@@ -2602,8 +2602,8 @@ void VulkanAPI::prerenderItemIconImages()
 	);
 	glm::mat4 model = glm::mat4(1.0f);
 
-	PreRenderItemIconPushConstant push_constants = {};
-	push_constants.MVP = clip * proj * view * model;
+	GlobalPushConstant push_constants = {};
+	push_constants.matrice = clip * proj * view * model;
 
 	for (size_t i = 0; i < g_items_info.count(); i++)
 	{
@@ -2614,8 +2614,8 @@ void VulkanAPI::prerenderItemIconImages()
 			prerender_item_icon_pipeline,
 			g_items_info.get(i).mesh_id,
 			&push_constants,
-			sizeof(PreRenderItemIconPushConstant),
-			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT
+			sizeof(GlobalPushConstant),
+			VK_SHADER_STAGE_ALL
 		);
 	}
 
@@ -2778,15 +2778,15 @@ void VulkanAPI::drawItemIcon(
 	const uint32_t layer
 )
 {
-	ItemIconPushConstant push_constants = {};
+	GlobalPushConstant push_constants = {};
 	push_constants.layer = layer;
 
 	vkCmdPushConstants(
 		draw_command_buffers[current_frame],
 		item_icon_pipeline.layout,
-		VK_SHADER_STAGE_FRAGMENT_BIT,
+		VK_SHADER_STAGE_ALL,
 		0,
-		sizeof(ItemIconPushConstant),
+		sizeof(GlobalPushConstant),
 		&push_constants
 	);
 

@@ -4,7 +4,7 @@
 
 layout(push_constant) uniform PushConstants
 {
-	PreRenderItemIconPushConstant pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) in vec3 positions;
@@ -17,7 +17,7 @@ layout(location = 1) out vec3 fragTexCoords;
 
 void main()
 {
-	gl_Position = pc.MVP * vec4(positions, 1.0);
+	gl_Position = pc.matrice * vec4(positions, 1.0);
 
 	fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);

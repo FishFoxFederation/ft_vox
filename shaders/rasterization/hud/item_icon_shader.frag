@@ -6,7 +6,7 @@ layout (set = 0, binding = 0) uniform sampler2DArray image;
 
 layout(push_constant) uniform PushConstants
 {
-	ItemIconPushConstant pc;
+	GlobalPushConstant pc;
 };
 
 layout (location = 0) in vec2 inUV;

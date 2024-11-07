@@ -4,7 +4,7 @@
 
 layout(push_constant) uniform PushConstants
 {
-	LinePipelinePushConstant pc;
+	GlobalPushConstant pc;
 };
 
 layout(location = 0) out vec4 outColor;
