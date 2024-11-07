@@ -476,6 +476,7 @@ void RenderThread::shadowPass()
 		vkCmdBindPipeline(vk.draw_shadow_pass_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
+			vk.global_descriptor.sets[vk.current_frame],
 			vk.light_view_proj_descriptor.sets[vk.current_frame],
 			vk.block_textures_descriptor.set
 		};
@@ -601,9 +602,8 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
 				const std::vector<VkDescriptorSet> descriptor_sets = {
-					vk.camera_descriptor.sets[vk.current_frame],
+					vk.global_descriptor.sets[vk.current_frame],
 					vk.light_view_proj_descriptor.sets[vk.current_frame],
-					vk.block_textures_descriptor.set,
 					vk.shadow_map_descriptor.set
 				};
 
@@ -641,7 +641,7 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
 
 				const std::vector<VkDescriptorSet> entity_descriptor_sets = {
-					vk.camera_descriptor.sets[vk.current_frame]
+					vk.global_descriptor.sets[vk.current_frame]
 				};
 
 				vkCmdBindDescriptorSets(
@@ -707,7 +707,7 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
 
 				const std::vector<VkDescriptorSet> player_descriptor_sets = {
-					vk.camera_descriptor.sets[vk.current_frame],
+					vk.global_descriptor.sets[vk.current_frame],
 					vk.player_skin_image_descriptor.set
 				};
 
@@ -831,7 +831,7 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
 
 				const std::vector<VkDescriptorSet> line_descriptor_sets = {
-					vk.camera_descriptor.sets[vk.current_frame]
+					vk.global_descriptor.sets[vk.current_frame]
 				};
 
 				vkCmdBindDescriptorSets(
@@ -896,7 +896,7 @@ void RenderThread::lightingPass()
 				// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
 				// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-				// 	vk.camera_descriptor.sets[vk.current_frame],
+				// 	vk.global_descriptor.sets[vk.current_frame],
 				// 	vk.cube_map_descriptor.set
 				// };
 
@@ -938,7 +938,7 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.sun_pipeline.pipeline);
 
 				const std::vector<VkDescriptorSet> sun_descriptor_sets = {
-					vk.camera_descriptor.sets[vk.current_frame],
+					vk.global_descriptor.sets[vk.current_frame],
 					vk.atmosphere_descriptor.sets[vk.current_frame]
 				};
 
@@ -1016,7 +1016,7 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
 				const std::vector<VkDescriptorSet> descriptor_sets = {
-					vk.camera_descriptor.sets[vk.current_frame],
+					vk.global_descriptor.sets[vk.current_frame],
 					vk.light_view_proj_descriptor.sets[vk.current_frame],
 					vk.block_textures_descriptor.set,
 					vk.shadow_map_descriptor.set,
@@ -1128,6 +1128,7 @@ void RenderThread::lightingPass()
 
 				{ // Toolbar items
 					const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
+						vk.global_descriptor.sets[vk.current_frame],
 						vk.item_icon_descriptor.set
 					};
 
@@ -1203,32 +1204,33 @@ void RenderThread::lightingPass()
 				}
 			}
 
-			{ // Draw test image
-				// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
+			// { // Draw test image
+			// 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
 
-				// const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-				// 	vk.test_image_descriptor.set
-				// };
+			// 	const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
+			// 		vk.global_descriptor.sets[vk.current_frame],
+			// 		vk.test_image_descriptor.set
+			// 	};
 
-				// vkCmdBindDescriptorSets(
-				// 	vk.draw_command_buffers[vk.current_frame],
-				// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-				// 	vk.test_image_pipeline.layout,
-				// 	0,
-				// 	static_cast<uint32_t>(test_image_descriptor_sets.size()),
-				// 	test_image_descriptor_sets.data(),
-				// 	0,
-				// 	nullptr
-				// );
+			// 	vkCmdBindDescriptorSets(
+			// 		vk.draw_command_buffers[vk.current_frame],
+			// 		VK_PIPELINE_BIND_POINT_GRAPHICS,
+			// 		vk.test_image_pipeline.layout,
+			// 		0,
+			// 		static_cast<uint32_t>(test_image_descriptor_sets.size()),
+			// 		test_image_descriptor_sets.data(),
+			// 		0,
+			// 		nullptr
+			// 	);
 
-				// vkCmdDraw(
-				// 	vk.draw_command_buffers[vk.current_frame],
-				// 	6,
-				// 	1,
-				// 	0,
-				// 	0
-				// );
-			}
+			// 	vkCmdDraw(
+			// 		vk.draw_command_buffers[vk.current_frame],
+			// 		6,
+			// 		1,
+			// 		0,
+			// 		0
+			// 	);
+			// }
 		}
 		vkCmdEndRenderPass(vk.draw_command_buffers[vk.current_frame]);
 	}

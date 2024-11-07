@@ -5,16 +5,22 @@
 
 #include "common.glsl"
 
-layout(set = 0, binding = 0) uniform CameraMatrices
+layout(set = 0, binding = CAMERA_MATRICES_BINDING) uniform CameraMatrices
 {
 	ViewProjMatrices cm;
 };
-layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
+layout(set = 0, binding = BLOCK_TEXTURES_BINDING) uniform sampler2DArray tex;
+layout(set = 0, binding = SHADOW_MAP_BINDING) uniform sampler2DArray shadow_map;
+layout(set = 0, binding = SUN_MATRICES_BINDING) uniform LightSpaceMatrices
 {
 	ShadowMapLight shadow_map_light;
 };
-layout(set = 2, binding = 0) uniform sampler2DArray tex;
-layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
+
+// layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
+// {
+// 	ShadowMapLight shadow_map_light;
+// };
+// layout(set = 2, binding = 0) uniform sampler2DArray shadow_map;
 
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
