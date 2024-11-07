@@ -36,7 +36,9 @@ void IPacket::ExtractMessage(Connection & connection)
 	m_connection_id = connection.getConnectionId();
 	{
 		ZoneScopedN("DeserializeOuter");
-		Deserialize(connection.getReadBuffer().data());
+		const uint8_t *ptr = connection.getReadBufferPtr();
+	
+		Deserialize(ptr);
 	}
 	connection.reduceReadBuffer(Size());
 }
