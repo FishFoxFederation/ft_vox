@@ -23,6 +23,7 @@ void Client::run()
 void Client::runOnce(const int & timeout)
 {
 	ZoneScoped;
+	LOG_INFO("Client::runOnce()");
 	empty_outgoing_packets();
 	auto [events_size, events] = m_poller.wait(timeout);
 
@@ -41,6 +42,7 @@ void Client::runOnce(const int & timeout)
 int Client::read_data()
 {
 	ZoneScoped;
+	LOG_INFO("Reading data");
 	ssize_t size;
 	std::lock_guard lock(m_connection.ReadLock());
 	try {
@@ -66,6 +68,7 @@ int Client::read_data()
 int Client::send_data()
 {
 	ZoneScoped;
+	LOG_INFO("Sending data");
 	ssize_t size;
 	std::lock_guard lock(m_connection.WriteLock());
 	try {
@@ -86,7 +89,7 @@ int Client::send_data()
 void Client::sendPacket(std::shared_ptr<IPacket> packet)
 {
 	ZoneScoped;
-	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
+	LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
 	std::vector<uint8_t> buffer(packet->Size());
 	packet->Serialize(buffer.data());
 	{

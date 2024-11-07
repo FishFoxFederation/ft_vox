@@ -21,11 +21,11 @@ public:
 	UpdateThread(
 		Client & client,
 		const Settings & settings,
-		Window & window,
+		// Window & window,
 		WorldScene & world_scene,
 		ClientWorld & world,
 		VulkanAPI & vulkan_api,
-		Sound::Engine & sound_engine,
+		// Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
 		std::chrono::nanoseconds start_time
 	);
@@ -39,13 +39,13 @@ public:
 private:
 
 	const Settings & m_settings;
-	Window & m_window;
+	// Window & m_window;
 	WorldScene & m_world_scene;
 	ClientWorld & m_world;
 	VulkanAPI & m_vulkan_api;
 	Client & m_client;
 	ClientPacketHandler m_packet_handler;
-	Sound::Engine & m_sound_engine;
+	// Sound::Engine & m_sound_engine;
 	Event::Manager & m_event_manager;
 
 	std::chrono::nanoseconds m_start_time;

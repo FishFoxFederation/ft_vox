@@ -36,13 +36,13 @@ private:
 	Client				m_client;
 	Settings			m_settings;
 	WorldScene			m_world_scene;
-	Window				m_window;
+	// Window				m_window;
 	VulkanAPI			m_vulkan_api;
 	Event::Manager		m_event_manager;
-	Sound::Engine		m_sound_engine;
+	// Sound::Engine		m_sound_engine;
 	ClientWorld			m_world;
-	RenderThread		m_render_thread;
+	// RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
-	BlockUpdateThread	m_block_update_thread;
-	NetworkThread		m_network_thread;
+	// BlockUpdateThread	m_block_update_thread;
+	// NetworkThread		m_network_thread;
 };

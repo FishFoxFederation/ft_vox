@@ -18,7 +18,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	window(window)
 {
 	ZoneScoped;
-
+	return;
 	createInstance();
 	loadVulkanFunctions();
 	setupDebugMessenger();
@@ -66,6 +66,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 VulkanAPI::~VulkanAPI()
 {
 	ZoneScoped;
+	return;
 
 	vkDeviceWaitIdle(device);
 

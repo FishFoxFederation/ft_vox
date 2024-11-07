@@ -4,7 +4,7 @@
 ClientWorld::ClientWorld(
 	WorldScene & world_scene,
 	VulkanAPI & vulkan_api,
-	Sound::Engine & sound_engine,
+	// Sound::Engine & sound_engine,
 	Event::Manager & event_manager,
 	uint64_t my_player_id
 )
@@ -12,7 +12,7 @@ ClientWorld::ClientWorld(
 	World(),
 	m_world_scene(world_scene),
 	m_vulkan_api(vulkan_api),
-	m_sound_engine(sound_engine),
+	// m_sound_engine(sound_engine),
 	m_event_manager(event_manager)
 {
 	m_my_player_id = my_player_id;
@@ -107,8 +107,9 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 		{
 			WorldScene::ChunkMeshRenderData old_mesh_data = m_world_scene.chunk_mesh_list.get(mesh_scene_id);
 			m_world_scene.chunk_mesh_list.erase(mesh_scene_id);
-			m_vulkan_api.destroyMesh(old_mesh_data.id);
-			m_vulkan_api.destroyMesh(old_mesh_data.water_id);
+			(void)old_mesh_data;
+			// m_vulkan_api.destroyMesh(old_mesh_data.id);
+			// m_vulkan_api.destroyMesh(old_mesh_data.water_id);
 		}
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
@@ -208,20 +209,22 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 		mesh_data.create(); //CPU intensive task to create the mesh
 		//storing mesh in the GPU
-		uint64_t mesh_id = m_vulkan_api.storeMesh(
-			mesh_data.vertices.data(),
-			mesh_data.vertices.size(),
-			sizeof(BlockVertex),
-			mesh_data.indices.data(),
-			mesh_data.indices.size()
-		);
-		uint64_t water_mesh_id = m_vulkan_api.storeMesh(
-			mesh_data.water_vertices.data(),
-			mesh_data.water_vertices.size(),
-			sizeof(BlockVertex),
-			mesh_data.water_indices.data(),
-			mesh_data.water_indices.size()
-		);
+		// uint64_t mesh_id = m_vulkan_api.storeMesh(
+		// 	mesh_data.vertices.data(),
+		// 	mesh_data.vertices.size(),
+		// 	sizeof(BlockVertex),
+		// 	mesh_data.indices.data(),
+		// 	mesh_data.indices.size()
+		// );
+		// uint64_t water_mesh_id = m_vulkan_api.storeMesh(
+		// 	mesh_data.water_vertices.data(),
+		// 	mesh_data.water_vertices.size(),
+		// 	sizeof(BlockVertex),
+		// 	mesh_data.water_indices.data(),
+		// 	mesh_data.water_indices.size()
+		// );
+		uint64_t mesh_id = 0;
+		uint64_t water_mesh_id = 0;
 
 
 		//adding mesh id to the scene so it is rendered
@@ -242,8 +245,9 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		{
 			WorldScene::ChunkMeshRenderData old_mesh_data = m_world_scene.chunk_mesh_list.get(old_mesh_scene_id);
 			m_world_scene.chunk_mesh_list.erase(old_mesh_scene_id);
-			m_vulkan_api.destroyMesh(old_mesh_data.id);
-			m_vulkan_api.destroyMesh(old_mesh_data.water_id);
+			(void)old_mesh_data;
+			// m_vulkan_api.destroyMesh(old_mesh_data.id);
+			// m_vulkan_api.destroyMesh(old_mesh_data.water_id);
 		}
 
 		mesh_data.unlock();
@@ -450,7 +454,7 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 		player_id == m_my_player_id &&
 		std::chrono::steady_clock::now() - last_footstep > std::chrono::milliseconds(400))
 	{
-		m_sound_engine.playSound(SoundName::GRASS1);
+		// m_sound_engine.playSound(SoundName::GRASS1);
 		last_footstep = std::chrono::steady_clock::now();
 	}
 }
@@ -858,17 +862,17 @@ void ClientWorld::createMob()
 
 	{
 		// auto world_scene_lock = m_world_scene.entity_mesh_list.lock();
-		m_world_scene.entity_mesh_list.insert(
-			mob_id,
-			{
-				m_vulkan_api.cube_mesh_id,
-				Transform(
-					mob->transform.position + mob->hitbox.position,
-					glm::vec3(0.0f),
-					mob->hitbox.size
-				).model()
-			}
-		);
+		// m_world_scene.entity_mesh_list.insert(
+		// 	mob_id,
+		// 	{
+		// 		m_vulkan_api.cube_mesh_id,
+		// 		Transform(
+		// 			mob->transform.position + mob->hitbox.position,
+		// 			glm::vec3(0.0f),
+		// 			mob->hitbox.size
+		// 		).model()
+		// 	}
+		// );
 	}
 }
 

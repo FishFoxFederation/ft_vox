@@ -54,14 +54,14 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 	{
 		auto packet_to_send = std::make_shared<PlayerListPacket>(players);
 		packet_to_send->SetConnectionId(CurrentConnectionId);
-		m_server.send({packet_to_send, 0, CurrentConnectionId});
+		m_server.send({packet_to_send, Server::flags::NOWAIT, CurrentConnectionId});
 	}
 
 	//inform player of current load distance
 	{
 		auto packet_to_send	= std::make_shared<LoadDistancePacket>(getLoadDistance());
 		packet_to_send->SetConnectionId(CurrentConnectionId);
-		m_server.send({packet_to_send, 0, CurrentConnectionId});
+		m_server.send({packet_to_send, Server::flags::NOWAIT, CurrentConnectionId});
 	}
 	//create new player
 	std::shared_ptr<Player> player = std::make_shared<Player>();

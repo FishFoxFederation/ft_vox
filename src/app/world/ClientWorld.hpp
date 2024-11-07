@@ -34,7 +34,7 @@ public:
 	ClientWorld(
 		WorldScene & world_scene,
 		VulkanAPI & vulkan_api,
-		Sound::Engine & sound_engine,
+		// Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
 		uint64_t my_player_id = 0
 	);
@@ -130,7 +130,7 @@ private:
 
 	WorldScene &							m_world_scene;
 	VulkanAPI &								m_vulkan_api;
-	Sound::Engine &							m_sound_engine;
+	// Sound::Engine &							m_sound_engine;
 	Event::Manager &						m_event_manager;
 
 	int										m_render_distance = 16;

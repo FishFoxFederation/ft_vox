@@ -103,6 +103,7 @@ void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacke
 void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
 	(void)packet;
+	LOG_INFO("Received chunk packet");
 	std::shared_ptr<Chunk> chunk = nullptr;
 	{
 		ZoneScopedN(str_chunk_alloc);
