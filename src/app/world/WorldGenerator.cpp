@@ -377,38 +377,38 @@ void World::WorldGenerator::lightPass(const glm::ivec3 & chunkPos3D)
 		std::lock_guard lock(current_chunk->status);
 		current_chunk->setGenLevel(LIGHT);
 	}
-	for (int x = -1; x <= 1; x++)
-	{
-		for (int z = -1; z <= 1; z++)
-		{
-			glm::ivec3 chunk_pos = chunkPos3D + glm::ivec3(x, 0, z);
-			std::shared_ptr<Chunk> chunk = m_world.getChunkNoLock(chunk_pos);
-			if (chunk == nullptr)
-				continue;
-			std::lock_guard lock(chunk->status);
-			if (chunk->getGenLevel() != DECORATE && chunk->getGenLevel() != LIGHT)
-				throw std::runtime_error("chunk not generated :" + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.z));
-			chunkGrid.insert({chunk_pos, chunk});
-		}
-	}
+	// for (int x = -1; x <= 1; x++)
+	// {
+	// 	for (int z = -1; z <= 1; z++)
+	// 	{
+	// 		glm::ivec3 chunk_pos = chunkPos3D + glm::ivec3(x, 0, z);
+	// 		std::shared_ptr<Chunk> chunk = m_world.getChunkNoLock(chunk_pos);
+	// 		if (chunk == nullptr)
+	// 			continue;
+	// 		std::lock_guard lock(chunk->status);
+	// 		if (chunk->getGenLevel() != DECORATE && chunk->getGenLevel() != LIGHT)
+	// 			throw std::runtime_error("chunk not generated :" + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.z));
+	// 		chunkGrid.insert({chunk_pos, chunk});
+	// 	}
+	// }
 
-	std::scoped_lock lock(
-		chunkGrid.at(chunkPos3D)->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, -1})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, 1})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, -1})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 0})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 1})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, -1})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 0})->status,
-		chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
-	);
+	// std::scoped_lock lock(
+	// 	chunkGrid.at(chunkPos3D)->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, -1})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{0, 0, 1})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, -1})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 0})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{1, 0, 1})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, -1})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 0})->status,
+	// 	chunkGrid.at(chunkPos3D + glm::ivec3{-1, 0, 1})->status
+	// );
 
-	{
-		ZoneNamedN (zoneAfterLock, "lightPass", true);
-	setSkyLight(chunkGrid, chunkPos3D);
-	setBlockLight(chunkGrid, chunkPos3D);
-	}
+	// {
+	// 	ZoneNamedN (zoneAfterLock, "lightPass", true);
+	// setSkyLight(chunkGrid, chunkPos3D);
+	// setBlockLight(chunkGrid, chunkPos3D);
+	// }
 }
 
 void World::WorldGenerator::reliefPass(const glm::ivec3 & chunkPos3D)

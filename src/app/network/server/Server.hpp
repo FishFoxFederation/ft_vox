@@ -11,6 +11,7 @@
 #include "Poller.hpp"
 #include "PacketFactory.hpp"
 #include "IncomingPacketList.hpp"
+#include "ThreadSafeQueue.hpp"
 
 class Server
 {
@@ -31,10 +32,20 @@ public:
 	void runOnce(int timeout_ms);
 
 	void stop();
-
-	void send(std::shared_ptr<IPacket> packet);
-	void sendAll(std::shared_ptr<IPacket> packet);
-	void sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id);
+	
+	enum flags : uint8_t
+	{
+		ALL = 1,
+		ALLEXCEPT = 1 << 1,
+		NOWAIT = 1 << 2,
+	};
+	struct sendInfo
+	{
+		std::shared_ptr<IPacket> packet;
+		uint8_t flag;
+		uint64_t id = 0;
+	};
+	void send(const sendInfo & info);
 
 	void disconnect(uint64_t id);
 
@@ -60,6 +71,7 @@ private:
 	ServerSocket								m_server_socket;
 	PacketFactory							&	m_packet_factory;
 	IncomingPacketList							m_incoming_packets;
+	ThreadSafeQueue<sendInfo>					m_outgoing_packets;
 	std::unordered_map<uint64_t, std::shared_ptr<Connection>>	m_connections;
 	std::mutex									m_connections_mutex;
 
@@ -70,4 +82,10 @@ private:
 
 	int		read_data(Connection & connection, uint64_t id);
 	int		send_data(Connection & connection, uint64_t id);
+	void	empty_outgoing_packets();
+
+	void sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id);
+	void sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & except_id);
+	void sendAll(std::shared_ptr<IPacket> packet);
+
 };

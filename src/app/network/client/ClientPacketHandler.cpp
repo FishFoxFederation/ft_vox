@@ -1,4 +1,5 @@
 #include "ClientPacketHandler.hpp"
+#include "tracy_globals.hpp"
 
 ClientPacketHandler::ClientPacketHandler(
 	Client & client,
@@ -102,7 +103,11 @@ void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacke
 void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
 	(void)packet;
-	std::shared_ptr<Chunk> chunk = packet->GetChunk();
+	std::shared_ptr<Chunk> chunk = nullptr;
+	{
+		ZoneScopedN(str_chunk_alloc);
+		chunk = packet->GetChunk();
+	}
 	// for (int x = 0 ; x < CHUNK_X_SIZE ; x++)
 	// {
 	// 	if (chunk->getBiome(x, 0).continentalness != 0)
