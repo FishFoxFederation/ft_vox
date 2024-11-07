@@ -95,6 +95,7 @@ private:
 	std::vector<WorldScene::PlayerRenderData> players;
 
 	std::vector<WorldScene::ChunkMeshRenderData> visible_chunks;
+	std::vector<std::vector<WorldScene::ChunkMeshRenderData>> shadow_visible_chunks;
 
 	ViewProjMatrices sun = {};
 	glm::dvec3 sun_position;

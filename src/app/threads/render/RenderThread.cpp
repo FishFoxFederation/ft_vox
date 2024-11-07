@@ -66,6 +66,8 @@ void RenderThread::init()
 {
 	LOG_INFO("RenderThread launched :" << gettid());
 	tracy::SetThreadName(str_render_thread);
+
+	shadow_visible_chunks.resize(vk.shadow_maps_count);
 }
 
 void RenderThread::loop()
@@ -392,6 +394,13 @@ void RenderThread::updateDebugText()
 		visible_chunks.size()
 	);
 
+	debug_text += "Shadow chunk count:";
+	for (size_t i = 0; i < shadow_visible_chunks.size(); i++)
+	{
+		debug_text += ft_format(" %d", shadow_visible_chunks[i].size());
+	}
+	debug_text += "\n";
+
 	debug_text += ft_format(
 		"C: %.2f; E: %.2f; H: %.2f; T: %.2f; PV %.2f; W %.2f\n ",
 		DebugGui::continentalness.load(),
@@ -404,27 +413,13 @@ void RenderThread::updateDebugText()
 
 	switch(DebugGui::biome.load())
 	{
-	case 0:
-		debug_text += "Forest\n";
-		break;
-	case 1:
-		debug_text += "Plain\n";
-		break;
-	case 2:
-		debug_text += "Mountain\n";
-		break;
-	case 3:
-		debug_text += "Ocean\n";
-		break;
-	case 4:
-		debug_text += "Coast\n";
-		break;
-	case 5:
-		debug_text += "Desert\n";
-		break;
-	case 6:
-		debug_text += "River\n";
-		break;
+		case 0: debug_text += "Forest\n"; break;
+		case 1: debug_text += "Plain\n"; break;
+		case 2: debug_text += "Mountain\n"; break;
+		case 3: debug_text += "Ocean\n"; break;
+		case 4: debug_text += "Coast\n"; break;
+		case 5: debug_text += "Desert\n"; break;
+		case 6: debug_text += "River\n"; break;
 	};
 }
 
@@ -441,6 +436,20 @@ void RenderThread::updateVisibleChunks()
 		}
 
 		visible_chunks.push_back(chunk_mesh);
+	}
+
+	for (size_t i = 0; i < vk.shadow_maps_count; i++)
+	{
+		shadow_visible_chunks[i].clear();
+		for (auto & chunk_mesh: chunk_meshes)
+		{
+			if (!isInsideFrustum_planes(light_view_proj_matrices[i], chunk_mesh.model, CHUNK_SIZE_VEC3))
+			{
+				continue;
+			}
+
+			shadow_visible_chunks[i].push_back(chunk_mesh);
+		}
 	}
 }
 
@@ -482,8 +491,6 @@ void RenderThread::shadowPass()
 			nullptr
 		);
 
-		debug_text += "Chunk count shadow pass: ";
-
 		for (size_t shadow_map_index = 0; shadow_map_index < vk.shadow_maps_count; shadow_map_index++)
 		{
 			TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Shadow sub pass");
@@ -519,15 +526,8 @@ void RenderThread::shadowPass()
 				ZoneScopedN("Draw chunks");
 				TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Draw chunks");
 
-				int draw_chunk_count = 0;
-				for (auto & chunk_mesh : chunk_meshes)
+				for (auto & chunk_mesh : shadow_visible_chunks[shadow_map_index])
 				{
-					if (!isInsideFrustum_planes(light_view_proj_matrices[shadow_map_index], chunk_mesh.model, CHUNK_SIZE_VEC3))
-					{
-						continue;
-					}
-					draw_chunk_count++;
-
 					ModelMatrice model_matrice = {};
 					model_matrice.model = chunk_mesh.model;
 
@@ -540,12 +540,10 @@ void RenderThread::shadowPass()
 						VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT
 					);
 				}
-				debug_text += std::to_string(draw_chunk_count) + " ";
 			}
 
 			vkCmdEndRenderPass(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
 		}
-		debug_text += "\n";
 	}
 
 	VK_CHECK(
