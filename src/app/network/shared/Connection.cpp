@@ -120,6 +120,7 @@ const Socket & Connection::getSocket() const
 
 const uint64_t & Connection::getConnectionId() const
 {
+	ZoneScoped;
 	return m_connection_id;
 }
 

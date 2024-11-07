@@ -43,6 +43,7 @@ PacketFactory::~PacketFactory()
 
 PacketFactory::packetInfo PacketFactory::getPacketInfo(const uint8_t * buffer, const size_t & size) const
 {
+	ZoneScoped;
 	packetInfo retInfo = {false, IPacket::Type::ENUM_MAX, 0};
 
 	// Check if the buffer is big enough to contain the packet type
@@ -97,7 +98,11 @@ std::pair<bool, std::shared_ptr<IPacket>> PacketFactory::extractPacket(Connectio
 	std::pair<bool, std::shared_ptr<IPacket>> ret = std::make_pair(false, nullptr);
 	if (packetRet.complete)
 	{
-		auto packet = m_packets.at(packetRet.type)->Clone();
+		std::shared_ptr<IPacket> packet = nullptr;
+		{
+			ZoneNamedN(packetCloneZone, "Packet Clone", true);
+			packet = m_packets.at(packetRet.type)->Clone();
+		}
 		packet->ExtractMessage(connection);
 		ret.first = true;
 		ret.second = packet;
