@@ -152,7 +152,9 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 {
 	ZoneScoped;
 	uint64_t connection_id = 0;
-
+	{
+		ZoneScopedN("sendchunksLoad");
+		ZoneValue(data.chunks_to_load.size());
 	connection_id = m_player_to_connection_id.at(player_id);
 	for(auto chunk : data.chunks_to_load)
 	{
@@ -161,13 +163,17 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 		packet_to_send->SetConnectionId(connection_id);
 		m_server.send(packet_to_send);
 	}
-
+	}
+	{
+		ZoneScopedN("sendchunksUnload");
+		ZoneValue(data.chunks_to_unload.size());
 	for(auto chunk_position : data.chunks_to_unload)
 	{
 		//send chunk unload to player
 		auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk_position);
 		packet_to_send->SetConnectionId(connection_id);
 		m_server.send(packet_to_send);
+	}
 	}
 }
 
