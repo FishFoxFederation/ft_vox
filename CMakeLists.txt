@@ -331,7 +331,7 @@ target_include_directories(server
 
 target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy::TracyClient freetype portaudio_static)
 
-# add_executable(test_perlin, EXCLUDE_FROM_ALL)
+# add_executable(test_perlin)
 
 # target_sources(test_perlin
 # 	PRIVATE
