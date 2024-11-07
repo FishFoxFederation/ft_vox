@@ -54,14 +54,14 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 	{
 		auto packet_to_send = std::make_shared<PlayerListPacket>(players);
 		packet_to_send->SetConnectionId(CurrentConnectionId);
-		m_server.send(packet_to_send);
+		m_server.send({packet_to_send, 0, CurrentConnectionId});
 	}
 
 	//inform player of current load distance
 	{
 		auto packet_to_send	= std::make_shared<LoadDistancePacket>(getLoadDistance());
 		packet_to_send->SetConnectionId(CurrentConnectionId);
-		m_server.send(packet_to_send);
+		m_server.send({packet_to_send, 0, CurrentConnectionId});
 	}
 	//create new player
 	std::shared_ptr<Player> player = std::make_shared<Player>();
@@ -160,8 +160,7 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 	{
 		//send chunk to player
 		auto packet_to_send = std::make_shared<ChunkPacket>(*chunk);
-		packet_to_send->SetConnectionId(connection_id);
-		m_server.send(packet_to_send);
+		m_server.send({packet_to_send, Server::flags::NOWAIT, connection_id});
 	}
 	}
 	{
@@ -172,7 +171,7 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 		//send chunk unload to player
 		auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk_position);
 		packet_to_send->SetConnectionId(connection_id);
-		m_server.send(packet_to_send);
+		m_server.send({packet_to_send, Server::flags::NOWAIT, connection_id});
 	}
 	}
 }

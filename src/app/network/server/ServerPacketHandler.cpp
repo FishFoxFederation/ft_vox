@@ -47,7 +47,7 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 		}
 		case IPacket::Type::PING:
 		{
-			m_server.send(packet);
+			m_server.send({packet, Server::flags::NOWAIT, packet->GetConnectionId()});
 			break;
 		}
 		case IPacket::Type::LOAD_DISTANCE:
@@ -76,7 +76,7 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	//send new player to all other players
 	std::shared_ptr<IPacket> packet_to_send = std::make_shared<ConnectionPacket>(*packet);
 	packet_to_send->SetConnectionId(CurrentConnectionId);
-	m_server.sendAllExcept(packet_to_send, packet->GetConnectionId());
+	m_server.send({packet_to_send, Server::flags::ALLEXCEPT, packet->GetConnectionId()});
 
 
 	//send all other players to new player
@@ -111,7 +111,7 @@ void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacke
 
 	auto packet_to_send = std::make_shared<DisconnectPacket>(player_id);
 	packet_to_send->SetConnectionId(connection_id);
-	m_server.sendAll(packet_to_send);
+	m_server.send({packet_to_send, Server::flags::ALL, connection_id});
 
 	m_world.handleDisconnectPacket(packet);
 }
@@ -125,7 +125,7 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 	//send move to everyone	
 	auto packet_to_send = std::make_shared<PlayerMovePacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
-	m_server.sendAll(packet_to_send);
+	m_server.send({packet_to_send, Server::flags::ALL, packet->GetConnectionId()});
 
 	//transfer packet to world
 	m_world.handlePlayerMovePacket(packet);
@@ -159,7 +159,7 @@ void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPac
 	auto packet_to_send = std::make_shared<BlockActionPacket>(*packet);
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_world.setBlock(packet->GetPosition(), packet->GetBlockID());
-	m_server.sendAll(packet_to_send);
+	m_server.send({packet_to_send, Server::flags::ALL, packet->GetConnectionId()});
 }
 
 void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestPacket> packet)
@@ -186,11 +186,11 @@ void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestP
 void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)
 {
 	ZoneScoped;
-	m_server.sendAll(packet);
+	m_server.send({packet, Server::flags::ALL, packet->GetConnectionId()});
 }
 
 void ServerPacketHandler::relayPacket(std::shared_ptr<IPacket> packet)
 {
 	ZoneScoped;
-	m_server.sendAllExcept(packet, packet->GetConnectionId());
+	m_server.send({packet, Server::flags::ALLEXCEPT, packet->GetConnectionId()});
 }

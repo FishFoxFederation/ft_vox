@@ -19,6 +19,8 @@ void Server::stop()
 void Server::runOnce(int timeout)
 {
 	ZoneScoped;
+
+	empty_outgoing_packets();
 	auto [events_size, events] = m_poller.wait(timeout);
 	if (errno == EINTR)
 	{
@@ -159,28 +161,45 @@ int Server::send_data(Connection & connection, uint64_t id)
 	return ret;
 }
 
-void Server::send(std::shared_ptr<IPacket> packet)
+void Server::disconnect(uint64_t id)
+{
+	std::lock_guard lock(m_connections_mutex);
+	auto it = m_connections.find(id);
+	std::shared_ptr<Connection> currentClient;
+	if (it == m_connections.end())
+	{
+		LOG_ERROR("Server: Disconnect: Client not found");
+		return;
+	}
+	currentClient = it->second;
+	m_poller.remove(currentClient->getSocket());
+	m_connections.erase(it);
+}
+
+void Server::empty_outgoing_packets()
 {
 	ZoneScoped;
-	std::shared_ptr<Connection> currentClient;
+	while(m_outgoing_packets.size() != 0)
 	{
-		std::lock_guard lock(m_connections_mutex);
-		auto it = m_connections.find(packet->GetConnectionId());
-		if (it == m_connections.end())
-		{
-			// LOG_ERROR("Server: Send: Client not found");
-			return;
-		}
-		currentClient = it->second;
+		auto info = m_outgoing_packets.pop();
+		info.flag &= ~NOWAIT;
+		send(info);
 	}
+}
 
-	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
-	std::vector<uint8_t> buffer(packet->Size());
-	packet->Serialize(buffer.data());
+void Server::send(const Server::sendInfo & info)
+{
+	if (info.flag & NOWAIT)
 	{
-		std::lock_guard lock(currentClient->WriteLock());
-		currentClient->queueAndSendMessage(buffer);
+		m_outgoing_packets.push(info);
+		return;
 	}
+	if (info.flag & ALLEXCEPT)
+		sendAllExcept(info.packet, info.id);
+	else if (info.flag & ALL)
+		sendAll(info.packet);
+	else
+		sendPacket(info.packet, info.id);
 }
 
 void Server::sendAll(std::shared_ptr<IPacket> packet)
@@ -210,17 +229,27 @@ void Server::sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & id)
 	}
 }
 
-void Server::disconnect(uint64_t id)
+void Server::sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id)
 {
-	std::lock_guard lock(m_connections_mutex);
-	auto it = m_connections.find(id);
+	ZoneScoped;
+	packet->SetConnectionId(id);
 	std::shared_ptr<Connection> currentClient;
-	if (it == m_connections.end())
 	{
-		LOG_ERROR("Server: Disconnect: Client not found");
-		return;
+		std::lock_guard lock(m_connections_mutex);
+		auto it = m_connections.find(packet->GetConnectionId());
+		if (it == m_connections.end())
+		{
+			// LOG_ERROR("Server: Send: Client not found");
+			return;
+		}
+		currentClient = it->second;
 	}
-	currentClient = it->second;
-	m_poller.remove(currentClient->getSocket());
-	m_connections.erase(it);
+
+	// LOG_INFO("Sending packet :" + std::to_string((uint32_t)packet->GetType()));
+	std::vector<uint8_t> buffer(packet->Size());
+	packet->Serialize(buffer.data());
+	{
+		std::lock_guard lock(currentClient->WriteLock());
+		currentClient->queueAndSendMessage(buffer);
+	}
 }

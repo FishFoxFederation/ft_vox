@@ -86,7 +86,6 @@ std::shared_ptr<IPacket> ChunkPacket::Clone() const
 
 std::shared_ptr<Chunk>	ChunkPacket::GetChunk() const
 {
-	ZoneScoped;
 	return std::make_shared<Chunk>(m_chunk_data.chunk_pos, m_chunk_data.blocks, m_chunk_data.light, m_chunk_data.biomes);
 }
 

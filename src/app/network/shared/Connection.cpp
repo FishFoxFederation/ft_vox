@@ -45,6 +45,7 @@ const std::vector<uint8_t> & Connection::getWriteBufferRef() const
 
 void Connection::reduceReadBuffer(size_t size)
 {
+	ZoneScoped;
 	m_read_buffer.erase(m_read_buffer.begin(), m_read_buffer.begin() + size);
 }
 

@@ -190,7 +190,7 @@ private:
 	constexpr static int TICKET_LEVEL_INACTIVE = 34;
 
 	constexpr static int SPAWN_TICKET_LEVEL = 30;
-	constexpr static int DEFAULT_PLAYER_TICKET_LEVEL = 26;
+	constexpr static int DEFAULT_PLAYER_TICKET_LEVEL = 28;
 	int m_player_ticket_level = DEFAULT_PLAYER_TICKET_LEVEL;
 
 
