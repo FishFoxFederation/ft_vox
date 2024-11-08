@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['float_5fslider_0',['FLOAT_SLIDER',['../DebugGui_8cpp.html#a83afe3d775af78fb1849b9c0989aa890',1,'DebugGui.cpp']]]
+  ['events_5fsize_0',['EVENTS_SIZE',['../Poller_8hpp.html#ab5af3ee93be02830c41bf778131474a2',1,'Poller.hpp']]]
 ];

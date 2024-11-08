@@ -169,27 +169,125 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlobalPushConstant.html">GlobalPushConstant</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structViewProjMatrices.html">ViewProjMatrices</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structModelMatrice.html">ModelMatrice</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEntityMatrices.html">EntityMatrices</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structShadowMapLight.html">ShadowMapLight</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structPreRenderItemIconPushConstant.html">PreRenderItemIconPushConstant</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structItemIconPushConstant.html">ItemIconPushConstant</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structLinePipelinePushConstant.html">LinePipelinePushConstant</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a25e71ed1f4801c4a36132ade5e97cf57"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a25e71ed1f4801c4a36132ade5e97cf57">SHADOW_MAP_MAX_COUNT</a>&#160;&#160;&#160;8</td></tr>
 <tr class="separator:a25e71ed1f4801c4a36132ade5e97cf57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a402fcdfad84b0f66ec21ae951f848f5d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a402fcdfad84b0f66ec21ae951f848f5d">CAMERA_MATRICES_BINDING</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a402fcdfad84b0f66ec21ae951f848f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1affefcf29c3eec87074c3008d9ef578"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a1affefcf29c3eec87074c3008d9ef578">BLOCK_TEXTURES_BINDING</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a1affefcf29c3eec87074c3008d9ef578"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a78abeb7be999b3c6445526d442765e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a5a78abeb7be999b3c6445526d442765e">SKYBOX_CUBE_MAP_BINDING</a>&#160;&#160;&#160;2</td></tr>
+<tr class="separator:a5a78abeb7be999b3c6445526d442765e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80f5399c837fc586d14df9878f628063"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a80f5399c837fc586d14df9878f628063">SHADOW_MAP_BINDING</a>&#160;&#160;&#160;3</td></tr>
+<tr class="separator:a80f5399c837fc586d14df9878f628063"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a166912b0cc8e5d7314251d2171191"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a07a166912b0cc8e5d7314251d2171191">WATER_RENDERPASS_INPUT_COLOR_ATTACH_BINDING</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:a07a166912b0cc8e5d7314251d2171191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10c77ce0cb11b07e33fc30de96308862"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a10c77ce0cb11b07e33fc30de96308862">WATER_RENDERPASS_INPUT_DEPTH_ATTACH_BINDING</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:a10c77ce0cb11b07e33fc30de96308862"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae979ee6a28e7f44cecd7fbca1765bd84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#ae979ee6a28e7f44cecd7fbca1765bd84">TEST_IMAGE_BINDING</a>&#160;&#160;&#160;6</td></tr>
+<tr class="separator:ae979ee6a28e7f44cecd7fbca1765bd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a403e46033e90d8f0e19ead844c9e1b12"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a403e46033e90d8f0e19ead844c9e1b12">PLAYER_SKIN_BINDING</a>&#160;&#160;&#160;7</td></tr>
+<tr class="separator:a403e46033e90d8f0e19ead844c9e1b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f0214446c2711cc677c17ad99e95eb7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a4f0214446c2711cc677c17ad99e95eb7">SUN_MATRICES_BINDING</a>&#160;&#160;&#160;8</td></tr>
+<tr class="separator:a4f0214446c2711cc677c17ad99e95eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b7ba2acb2f74486a0f320fe52de9ec5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#a9b7ba2acb2f74486a0f320fe52de9ec5">ATMOSPHERE_PARAM_BINDING</a>&#160;&#160;&#160;9</td></tr>
+<tr class="separator:a9b7ba2acb2f74486a0f320fe52de9ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2ffeb7c9ccf24d74cc8d02269908324"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ShaderCommon_8hpp.html#ac2ffeb7c9ccf24d74cc8d02269908324">ITEM_ICON_TEXTURE_BINDING</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:ac2ffeb7c9ccf24d74cc8d02269908324"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a9b7ba2acb2f74486a0f320fe52de9ec5" name="a9b7ba2acb2f74486a0f320fe52de9ec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b7ba2acb2f74486a0f320fe52de9ec5">&#9670;&#160;</a></span>ATMOSPHERE_PARAM_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ATMOSPHERE_PARAM_BINDING&#160;&#160;&#160;9</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1affefcf29c3eec87074c3008d9ef578" name="a1affefcf29c3eec87074c3008d9ef578"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1affefcf29c3eec87074c3008d9ef578">&#9670;&#160;</a></span>BLOCK_TEXTURES_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BLOCK_TEXTURES_BINDING&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a402fcdfad84b0f66ec21ae951f848f5d" name="a402fcdfad84b0f66ec21ae951f848f5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a402fcdfad84b0f66ec21ae951f848f5d">&#9670;&#160;</a></span>CAMERA_MATRICES_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CAMERA_MATRICES_BINDING&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2ffeb7c9ccf24d74cc8d02269908324" name="ac2ffeb7c9ccf24d74cc8d02269908324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2ffeb7c9ccf24d74cc8d02269908324">&#9670;&#160;</a></span>ITEM_ICON_TEXTURE_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ITEM_ICON_TEXTURE_BINDING&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a403e46033e90d8f0e19ead844c9e1b12" name="a403e46033e90d8f0e19ead844c9e1b12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a403e46033e90d8f0e19ead844c9e1b12">&#9670;&#160;</a></span>PLAYER_SKIN_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PLAYER_SKIN_BINDING&#160;&#160;&#160;7</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a80f5399c837fc586d14df9878f628063" name="a80f5399c837fc586d14df9878f628063"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80f5399c837fc586d14df9878f628063">&#9670;&#160;</a></span>SHADOW_MAP_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SHADOW_MAP_BINDING&#160;&#160;&#160;3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a25e71ed1f4801c4a36132ade5e97cf57" name="a25e71ed1f4801c4a36132ade5e97cf57"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a25e71ed1f4801c4a36132ade5e97cf57">&#9670;&#160;</a></span>SHADOW_MAP_MAX_COUNT</h2>
 
@@ -198,6 +296,76 @@ Macros</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define SHADOW_MAP_MAX_COUNT&#160;&#160;&#160;8</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5a78abeb7be999b3c6445526d442765e" name="a5a78abeb7be999b3c6445526d442765e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a78abeb7be999b3c6445526d442765e">&#9670;&#160;</a></span>SKYBOX_CUBE_MAP_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SKYBOX_CUBE_MAP_BINDING&#160;&#160;&#160;2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f0214446c2711cc677c17ad99e95eb7" name="a4f0214446c2711cc677c17ad99e95eb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f0214446c2711cc677c17ad99e95eb7">&#9670;&#160;</a></span>SUN_MATRICES_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SUN_MATRICES_BINDING&#160;&#160;&#160;8</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae979ee6a28e7f44cecd7fbca1765bd84" name="ae979ee6a28e7f44cecd7fbca1765bd84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae979ee6a28e7f44cecd7fbca1765bd84">&#9670;&#160;</a></span>TEST_IMAGE_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TEST_IMAGE_BINDING&#160;&#160;&#160;6</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a07a166912b0cc8e5d7314251d2171191" name="a07a166912b0cc8e5d7314251d2171191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07a166912b0cc8e5d7314251d2171191">&#9670;&#160;</a></span>WATER_RENDERPASS_INPUT_COLOR_ATTACH_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WATER_RENDERPASS_INPUT_COLOR_ATTACH_BINDING&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a10c77ce0cb11b07e33fc30de96308862" name="a10c77ce0cb11b07e33fc30de96308862"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10c77ce0cb11b07e33fc30de96308862">&#9670;&#160;</a></span>WATER_RENDERPASS_INPUT_DEPTH_ATTACH_BINDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WATER_RENDERPASS_INPUT_DEPTH_ATTACH_BINDING&#160;&#160;&#160;5</td>
         </tr>
       </table>
 </div><div class="memdoc">

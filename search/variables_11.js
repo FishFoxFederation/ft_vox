@@ -14,8 +14,8 @@ var searchData=
   ['sets_11',['sets',['../classDescriptor.html#a8f4272b858634993e363c43adcc1024b',1,'Descriptor']]],
   ['shadow_5fframebuffers_12',['shadow_framebuffers',['../classVulkanAPI.html#a8ba9123ec127e5b6314df01374b0135b',1,'VulkanAPI']]],
   ['shadow_5fmap_5fdepth_5fattachement_13',['shadow_map_depth_attachement',['../classVulkanAPI.html#a0f5fb5cf3d8332510c2e756a7fe3ef36',1,'VulkanAPI']]],
-  ['shadow_5fmap_5fdescriptor_14',['shadow_map_descriptor',['../classVulkanAPI.html#aeec288c213c1e8aa4de860a8e16f7c44',1,'VulkanAPI']]],
-  ['shadow_5fmap_5fsize_15',['shadow_map_size',['../classVulkanAPI.html#a6b642d35d8f0f618726f5865ab85c43d',1,'VulkanAPI']]],
+  ['shadow_5fmap_5fsize_14',['shadow_map_size',['../classVulkanAPI.html#a6b642d35d8f0f618726f5865ab85c43d',1,'VulkanAPI']]],
+  ['shadow_5fmap_5fviews_15',['shadow_map_views',['../classVulkanAPI.html#a0fba61a127c559f891c31974ddb4927b',1,'VulkanAPI']]],
   ['shadow_5fmaps_5fcount_16',['shadow_maps_count',['../classVulkanAPI.html#a3817cefb46cf1cc3fab6dcccd862e52a',1,'VulkanAPI']]],
   ['shadow_5fpass_5ffinished_5fsemaphores_17',['shadow_pass_finished_semaphores',['../classVulkanAPI.html#ac41e405eb04698678e32c6380f2af93a',1,'VulkanAPI']]],
   ['shadow_5fpipeline_18',['shadow_pipeline',['../classVulkanAPI.html#a34f25aa629476800fbf6acb0e6400d0f',1,'VulkanAPI']]],
@@ -34,12 +34,12 @@ var searchData=
   ['sprinting_31',['sprinting',['../classPlayer.html#a5f126c4eb73164722430f85dd2e4f1d4',1,'Player']]],
   ['static_5fheader_5fsize_32',['STATIC_HEADER_SIZE',['../classIPacket.html#a1124b6fa7f800acce3f8ab751f53c24e',1,'IPacket']]],
   ['status_33',['status',['../classChunk.html#a46d6db3de4d66e2ba1e7fcfcdcf58918',1,'Chunk']]],
-  ['str_5fblock_5fupdate_5fthread_34',['str_block_update_thread',['../tracy__globals_8hpp.html#a476c540d89d442fa24a2f1e9325cdba9',1,'str_block_update_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8cpp.html#a476c540d89d442fa24a2f1e9325cdba9',1,'str_block_update_thread():&#160;tracy_globals.cpp']]],
+  ['str_5fblock_5fupdate_5fthread_34',['str_block_update_thread',['../tracy__globals_8cpp.html#a476c540d89d442fa24a2f1e9325cdba9',1,'str_block_update_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8hpp.html#a476c540d89d442fa24a2f1e9325cdba9',1,'str_block_update_thread():&#160;tracy_globals.cpp']]],
   ['str_5fmain_5fthread_35',['str_main_thread',['../tracy__globals_8hpp.html#a3bb732a180b8a1c84118472ff9e2c111',1,'str_main_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8cpp.html#a3bb732a180b8a1c84118472ff9e2c111',1,'str_main_thread():&#160;tracy_globals.cpp']]],
   ['str_5fnetwork_5fthread_36',['str_network_thread',['../tracy__globals_8hpp.html#a7642c091b45b4b490f4fc490abd91486',1,'str_network_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8cpp.html#a7642c091b45b4b490f4fc490abd91486',1,'str_network_thread():&#160;tracy_globals.cpp']]],
   ['str_5frender_5fthread_37',['str_render_thread',['../tracy__globals_8hpp.html#a8e16bdf07075cd8395584764f837dc49',1,'str_render_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8cpp.html#a8e16bdf07075cd8395584764f837dc49',1,'str_render_thread():&#160;tracy_globals.cpp']]],
   ['str_5fthread_5fpool_38',['str_thread_pool',['../tracy__globals_8hpp.html#a3e1975859a5a4da5a9bdbc6610002973',1,'str_thread_pool():&#160;tracy_globals.cpp'],['../tracy__globals_8cpp.html#a3e1975859a5a4da5a9bdbc6610002973',1,'str_thread_pool():&#160;tracy_globals.cpp']]],
-  ['str_5fupdate_5fthread_39',['str_update_thread',['../tracy__globals_8hpp.html#ad4a40e17ef9003f521930d6b27831a4e',1,'str_update_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8cpp.html#ad4a40e17ef9003f521930d6b27831a4e',1,'str_update_thread():&#160;tracy_globals.cpp']]],
+  ['str_5fupdate_5fthread_39',['str_update_thread',['../tracy__globals_8cpp.html#ad4a40e17ef9003f521930d6b27831a4e',1,'str_update_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8hpp.html#ad4a40e17ef9003f521930d6b27831a4e',1,'str_update_thread():&#160;tracy_globals.cpp']]],
   ['str_5fworker_5fthread_40',['str_worker_thread',['../tracy__globals_8cpp.html#acf761211ae8b8de45ce13c621a669c40',1,'str_worker_thread():&#160;tracy_globals.cpp'],['../tracy__globals_8hpp.html#acf761211ae8b8de45ce13c621a669c40',1,'str_worker_thread():&#160;tracy_globals.cpp']]],
   ['sub_5fgraph_41',['sub_graph',['../structtest.html#a1559e6d35e11515aba30955d26cef028',1,'test']]],
   ['sub_5fgraph2_42',['sub_graph2',['../structtest.html#a4de6453bf9faa85d0150d51fcce1a629',1,'test']]],
@@ -51,6 +51,5 @@ var searchData=
   ['surface_48',['surface',['../classVulkanAPI.html#afe362f2320ed6115d2eb627efed9d530',1,'VulkanAPI']]],
   ['surface_5fformat_49',['surface_format',['../structSwapchain_1_1CreateInfo.html#a5667c3f28b3bf53704c006fad40f034c',1,'Swapchain::CreateInfo']]],
   ['swapchain_50',['swapchain',['../classVulkanAPI.html#a6605ae5a44cb5327a1633051b00cbd3f',1,'VulkanAPI::swapchain()'],['../classSwapchain.html#a751b92128dbbe0cc199b8207a8123796',1,'Swapchain::swapchain()']]],
-  ['swapchain_5fimage_5fdescriptor_51',['swapchain_image_descriptor',['../classVulkanAPI.html#a88b67526d9756417c724582c2f5edb4c',1,'VulkanAPI']]],
-  ['swimming_52',['swimming',['../classPlayer.html#a1ce76a62694de65a9f47e2b6ebda3725',1,'Player']]]
+  ['swimming_51',['swimming',['../classPlayer.html#a1ce76a62694de65a9f47e2b6ebda3725',1,'Player']]]
 ];

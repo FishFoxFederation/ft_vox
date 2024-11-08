@@ -8,6 +8,7 @@ var VulkanAPI_8hpp =
     [ "UBO", "structUBO.html", "structUBO" ],
     [ "AtmosphereParams", "structAtmosphereParams.html", "structAtmosphereParams" ],
     [ "ImGuiTexture", "structImGuiTexture.html", "structImGuiTexture" ],
+    [ "GlobalDescriptorWrite", "structGlobalDescriptorWrite.html", "structGlobalDescriptorWrite" ],
     [ "VulkanAPI", "classVulkanAPI.html", "classVulkanAPI" ],
     [ "GLFW_INCLUDE_VULKAN", "VulkanAPI_8hpp.html#ab91f325a54d3e35fe831a86d6382c2a9", null ]
 ];

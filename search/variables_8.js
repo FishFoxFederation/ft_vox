@@ -5,10 +5,10 @@ var searchData=
   ['image_2',['image',['../classImage.html#af56e0fca4971d34559f7ba57a1d0c430',1,'Image::image()'],['../structImGuiTexture.html#acd7b27173b3b666e98f78dc8e285a238',1,'ImGuiTexture::image()']]],
   ['image_5favailable_5fsemaphores_3',['image_available_semaphores',['../classVulkanAPI.html#aded6afbe797d9e490d44f56c818baa90',1,'VulkanAPI']]],
   ['image_5fformat_4',['image_format',['../classSwapchain.html#a7c4aa937c305d9518d5f6fe80e1d0010',1,'Swapchain']]],
-  ['image_5fviews_5',['image_views',['../classSwapchain.html#aaf57d6467d5284ae684df623035f5a71',1,'Swapchain']]],
-  ['images_6',['images',['../classSwapchain.html#a2de9a7d190a3e6ecb055a995a086ae98',1,'Swapchain']]],
-  ['imgui_5fcommand_5fbuffers_7',['imgui_command_buffers',['../classVulkanAPI.html#a2f31e9409e38aa1027e3cfd68c002b76',1,'VulkanAPI']]],
-  ['imgui_5fctx_8',['imgui_ctx',['../classVulkanAPI.html#a5221f4ce2ac3f40f5032fba050f6182b',1,'VulkanAPI']]],
+  ['image_5finfo_5',['image_info',['../structGlobalDescriptorWrite.html#a6db55649af1bd6635b552eabfd761a34',1,'GlobalDescriptorWrite']]],
+  ['image_5fviews_6',['image_views',['../classSwapchain.html#aaf57d6467d5284ae684df623035f5a71',1,'Swapchain']]],
+  ['images_7',['images',['../classSwapchain.html#a2de9a7d190a3e6ecb055a995a086ae98',1,'Swapchain']]],
+  ['imgui_5fcommand_5fbuffers_8',['imgui_command_buffers',['../classVulkanAPI.html#a2f31e9409e38aa1027e3cfd68c002b76',1,'VulkanAPI']]],
   ['imgui_5fdescriptor_5fpool_9',['imgui_descriptor_pool',['../classVulkanAPI.html#a940a7401cf07be24321fb4135242ed02',1,'VulkanAPI']]],
   ['imgui_5frender_5ffinished_5fsemaphores_10',['imgui_render_finished_semaphores',['../classVulkanAPI.html#a760a68bd1116cac8ed2756832cea2020',1,'VulkanAPI']]],
   ['imgui_5ftexture_5fid_11',['imgui_texture_id',['../classDebugGui.html#afe1e7987fa48f602d466ca01524e9e69',1,'DebugGui']]],
@@ -27,7 +27,6 @@ var searchData=
   ['iscoast_24',['isCoast',['../structChunk_1_1biomeInfo.html#a7e325d794438dde999cd17065f1202d6',1,'Chunk::biomeInfo']]],
   ['island_25',['isLand',['../classDebugGui.html#a3f28138ef963a30ea0e7de5dab5585d9',1,'DebugGui::isLand()'],['../structChunk_1_1biomeInfo.html#afabd52e8a64c40613615e55f9db7fc57',1,'Chunk::biomeInfo::isLand()']]],
   ['isocean_26',['isOcean',['../classDebugGui.html#a46332e4f23c897182b58979454d59735',1,'DebugGui::isOcean()'],['../structChunk_1_1biomeInfo.html#af2fb05cc0de31fe22c1194fa524a76f4',1,'Chunk::biomeInfo::isOcean()']]],
-  ['item_5ficon_5fdescriptor_27',['item_icon_descriptor',['../classVulkanAPI.html#a37ddfbc9e639cd88150b7ac0330aebea',1,'VulkanAPI']]],
-  ['item_5ficon_5fimages_28',['item_icon_images',['../classVulkanAPI.html#ac12b982260d8e50f1d0570621f32e5cb',1,'VulkanAPI']]],
-  ['item_5ficon_5fpipeline_29',['item_icon_pipeline',['../classVulkanAPI.html#a699def9d574bc4218da7b1aa4c9968d8',1,'VulkanAPI']]]
+  ['item_5ficon_5fimages_27',['item_icon_images',['../classVulkanAPI.html#ac12b982260d8e50f1d0570621f32e5cb',1,'VulkanAPI']]],
+  ['item_5ficon_5fpipeline_28',['item_icon_pipeline',['../classVulkanAPI.html#a699def9d574bc4218da7b1aa4c9968d8',1,'VulkanAPI']]]
 ];

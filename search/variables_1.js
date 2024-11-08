@@ -14,9 +14,9 @@ var searchData=
   ['block_5fid_11',['block_id',['../classItemInfo.html#ac598cab290a76b77150ba8cd5039385d',1,'ItemInfo']]],
   ['block_5fposition_12',['block_position',['../structClientWorld_1_1PlayerUseResult.html#a5efbb11196f61e9ac5f16f69f6a58324',1,'ClientWorld::PlayerUseResult::block_position()'],['../structRayCastOnBlockResult.html#a7d702a31621fb666c4035c6d52869590',1,'RayCastOnBlockResult::block_position()']]],
   ['block_5ftextures_13',['block_textures',['../classVulkanAPI.html#a887ed6c1ccefd7ec65a67f8f7f117d11',1,'VulkanAPI']]],
-  ['block_5ftextures_5fdescriptor_14',['block_textures_descriptor',['../classVulkanAPI.html#ae308bfb7f1637a8d8a0490a2faf798f2',1,'VulkanAPI']]],
-  ['blocks_15',['blocks',['../structChunkPacket_1_1ChunkData.html#a746ed0c00773e50ab4ffe997af875e7a',1,'ChunkPacket::ChunkData']]],
-  ['buffer_16',['buffer',['../classBuffer.html#a015e29c64a6e92f0bac28584cd4f4418',1,'Buffer::buffer()'],['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh::buffer()']]],
+  ['blocks_14',['blocks',['../structChunkPacket_1_1ChunkData.html#a746ed0c00773e50ab4ffe997af875e7a',1,'ChunkPacket::ChunkData']]],
+  ['buffer_15',['buffer',['../classBuffer.html#a015e29c64a6e92f0bac28584cd4f4418',1,'Buffer::buffer()'],['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh::buffer()']]],
+  ['buffer_5finfo_16',['buffer_info',['../structGlobalDescriptorWrite.html#ae53d0db311f37aeda282e9761edfeb4d',1,'GlobalDescriptorWrite']]],
   ['buffer_5fmemory_17',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]],
   ['buffers_18',['buffers',['../structUBO.html#a2f85577121899349bac6b1dc660ec6f1',1,'UBO']]],
   ['byte_5frate_19',['byte_rate',['../structSound_1_1FMTChunk.html#af09685a94fb2f6175cce7a0e967975b1',1,'Sound::FMTChunk::byte_rate()'],['../classSound_1_1Data.html#a33e909534b7c044a86cf870a9196727a',1,'Sound::Data::byte_rate()']]]

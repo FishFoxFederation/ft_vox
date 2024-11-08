@@ -12,8 +12,7 @@ var searchData=
   ['input_9',['Input',['../classInput.html',1,'']]],
   ['instance_10',['Instance',['../structSound_1_1Instance.html',1,'Sound']]],
   ['ipacket_11',['IPacket',['../classIPacket.html',1,'']]],
-  ['itemiconpushconstant_12',['ItemIconPushConstant',['../structItemIconPushConstant.html',1,'']]],
-  ['iteminfo_13',['ItemInfo',['../classItemInfo.html',1,'']]],
-  ['itemsinfo_14',['ItemsInfo',['../classItemsInfo.html',1,'']]],
-  ['itemvertex_15',['ItemVertex',['../structItemVertex.html',1,'']]]
+  ['iteminfo_12',['ItemInfo',['../classItemInfo.html',1,'']]],
+  ['itemsinfo_13',['ItemsInfo',['../classItemsInfo.html',1,'']]],
+  ['itemvertex_14',['ItemVertex',['../structItemVertex.html',1,'']]]
 ];

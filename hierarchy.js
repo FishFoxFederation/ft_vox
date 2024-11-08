@@ -40,7 +40,6 @@ var hierarchy =
       [ "task::TaskGraph", "classtask_1_1TaskGraph.html", null ]
     ] ],
     [ "Sound::Engine", "classSound_1_1Engine.html", null ],
-    [ "EntityMatrices", "structEntityMatrices.html", null ],
     [ "EntityVertex", "structEntityVertex.html", null ],
     [ "std::exception", null, [
       [ "Client::ServerDisconnected", "classClient_1_1ServerDisconnected.html", null ],
@@ -59,6 +58,8 @@ var hierarchy =
     [ "std::future", null, [
       [ "task::Future< T >", "classtask_1_1Future.html", null ]
     ] ],
+    [ "GlobalDescriptorWrite", "structGlobalDescriptorWrite.html", null ],
+    [ "GlobalPushConstant", "structGlobalPushConstant.html", null ],
     [ "task::Graph", "classtask_1_1Graph.html", null ],
     [ "task::Executor::info::GraphInfo", "structtask_1_1Executor_1_1info_1_1GraphInfo.html", null ],
     [ "Event::HandlerWrapperInterface", "classEvent_1_1HandlerWrapperInterface.html", [
@@ -99,12 +100,10 @@ var hierarchy =
     [ "IServerToClientPacket", null, [
       [ "EntityMovePacket", "classEntityMovePacket.html", null ]
     ] ],
-    [ "ItemIconPushConstant", "structItemIconPushConstant.html", null ],
     [ "ItemInfo", "classItemInfo.html", null ],
     [ "ItemsInfo", "classItemsInfo.html", null ],
     [ "ItemVertex", "structItemVertex.html", null ],
     [ "JoinThreads", "classJoinThreads.html", null ],
-    [ "LinePipelinePushConstant", "structLinePipelinePushConstant.html", null ],
     [ "LineVertex", "structLineVertex.html", null ],
     [ "Logger", "classLogger.html", null ],
     [ "Event::Manager", "classEvent_1_1Manager.html", null ],
@@ -112,7 +111,6 @@ var hierarchy =
     [ "Mesh", "structMesh.html", null ],
     [ "WorldScene::MeshRenderData", "structWorldScene_1_1MeshRenderData.html", null ],
     [ "Mob", "classMob.html", null ],
-    [ "ModelMatrice", "structModelMatrice.html", null ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
     [ "NetworkThread", "classNetworkThread.html", null ],
     [ "task::Executor::info::NodeInfo", "structtask_1_1Executor_1_1info_1_1NodeInfo.html", null ],
@@ -130,7 +128,6 @@ var hierarchy =
     [ "WorldScene::PlayerRenderData", "structWorldScene_1_1PlayerRenderData.html", null ],
     [ "ClientWorld::PlayerUseResult", "structClientWorld_1_1PlayerUseResult.html", null ],
     [ "Poller", "classPoller.html", null ],
-    [ "PreRenderItemIconPushConstant", "structPreRenderItemIconPushConstant.html", null ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", null ],
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],

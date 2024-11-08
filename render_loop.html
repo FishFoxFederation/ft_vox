@@ -243,14 +243,14 @@ Draw the chunks</h3>
 <div class="line">        VK_INDEX_TYPE_UINT32</div>
 <div class="line">    );</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_struct" href="structModelMatrice.html">ModelMatrice</a> model_matrice = {};</div>
-<div class="line">    model_matrice.<a class="code hl_variable" href="structModelMatrice.html#a13a189374fd6050fc659133ec5f8c537">model</a> = chunk_mesh.transform.model();</div>
+<div class="line">    ModelMatrice model_matrice = {};</div>
+<div class="line">    model_matrice.model = chunk_mesh.transform.model();</div>
 <div class="line">    vkCmdPushConstants(</div>
 <div class="line">        vk.render_command_buffers[vk.current_frame],</div>
 <div class="line">        vk.pipeline_layout,</div>
 <div class="line">        VK_SHADER_STAGE_VERTEX_BIT,</div>
 <div class="line">        0,</div>
-<div class="line">        <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structModelMatrice.html">ModelMatrice</a>),</div>
+<div class="line">        <span class="keyword">sizeof</span>(ModelMatrice),</div>
 <div class="line">        &amp;model_matrice</div>
 <div class="line">    );</div>
 <div class="line"> </div>
@@ -260,8 +260,6 @@ Draw the chunks</h3>
 <div class="line">        1, 0, 0, 0</div>
 <div class="line">    );</div>
 <div class="line">}</div>
-<div class="ttc" id="astructModelMatrice_html"><div class="ttname"><a href="structModelMatrice.html">ModelMatrice</a></div><div class="ttdef"><b>Definition:</b> ShaderCommon.hpp:29</div></div>
-<div class="ttc" id="astructModelMatrice_html_a13a189374fd6050fc659133ec5f8c537"><div class="ttname"><a href="structModelMatrice.html#a13a189374fd6050fc659133ec5f8c537">ModelMatrice::model</a></div><div class="ttdeci">mat4 model</div><div class="ttdef"><b>Definition:</b> ShaderCommon.hpp:30</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="draw_the_skybox"></a>
 Draw the skybox</h3>
 <p >For the skybox we use a cube map texture that is rendered using a separate pipeline. The skybox is drawn last so that we can use the depth buffer that was created when drawing the chunks to only draw the skybox where necessary. As the skybox is always drawn around the camera, the model matrix is set to the camera position. Finally, the skybox is a simple cube so the vertices are hardcoded in the vertex shader.</p>
@@ -289,14 +287,14 @@ Draw the skybox</h3>
 <div class="line">    <span class="keyword">nullptr</span></div>
 <div class="line">);</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_struct" href="structModelMatrice.html">ModelMatrice</a> camera_model_matrice = {};</div>
-<div class="line">camera_model_matrice.<a class="code hl_variable" href="structModelMatrice.html#a13a189374fd6050fc659133ec5f8c537">model</a> = glm::translate(glm::dmat4(1.0f), camera.position);</div>
+<div class="line">ModelMatrice camera_model_matrice = {};</div>
+<div class="line">camera_model_matrice.model = glm::translate(glm::dmat4(1.0f), camera.position);</div>
 <div class="line">vkCmdPushConstants(</div>
 <div class="line">    vk.render_command_buffers[vk.current_frame],</div>
 <div class="line">    vk.skybox_pipeline_layout,</div>
 <div class="line">    VK_SHADER_STAGE_VERTEX_BIT,</div>
 <div class="line">    0,</div>
-<div class="line">    <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structModelMatrice.html">ModelMatrice</a>),</div>
+<div class="line">    <span class="keyword">sizeof</span>(ModelMatrice),</div>
 <div class="line">    &amp;camera_model_matrice</div>
 <div class="line">);</div>
 <div class="line"> </div>
