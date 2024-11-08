@@ -2,7 +2,6 @@
 
 #include "define.hpp"
 #include "ClientWorld.hpp"
-#include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
 #include "ThreadPool.hpp"
 #include "DebugGui.hpp"
@@ -24,7 +23,6 @@ class BlockUpdateThread
 public:
 
 	BlockUpdateThread(
-		WorldScene & worldScene,
 		ClientWorld & world
 	);
 	~BlockUpdateThread();
@@ -35,7 +33,6 @@ public:
 
 private:
 
-	WorldScene	&	m_worldScene;
 	ClientWorld		&	m_world;
 
 	std::jthread m_thread;

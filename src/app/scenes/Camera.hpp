@@ -93,14 +93,17 @@ public:
 
 	Camera & operator=(Camera && camera)
 	{
-		std::lock_guard lock(m_mutex);
-		position = camera.position;
-		pitch = camera.pitch;
-		yaw = camera.yaw;
-		up = camera.up;
-		fov = camera.fov;
-		near_plane = camera.near_plane;
-		far_plane = camera.far_plane;
+		if (this != &camera)
+		{
+			std::lock_guard lock(m_mutex);
+			position = camera.position;
+			pitch = camera.pitch;
+			yaw = camera.yaw;
+			up = camera.up;
+			fov = camera.fov;
+			near_plane = camera.near_plane;
+			far_plane = camera.far_plane;
+		}
 		return *this;
 	}
 

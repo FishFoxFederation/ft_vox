@@ -59,7 +59,6 @@ target_sources(${PROJECT_NAME}
 		src/app/DebugGui.cpp
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
-		src/app/scenes/WorldScene.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/render/CascadedShadowMapping.cpp
@@ -213,7 +212,6 @@ target_sources(server
 		src/app/DebugGui.cpp
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
-		src/app/scenes/WorldScene.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/render/CascadedShadowMapping.cpp
@@ -345,7 +343,6 @@ target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy:
 # 		src/app/DebugGui.cpp
 # 		src/app/Settings.cpp
 # 		src/app/scenes/Camera.cpp
-# 		src/app/scenes/WorldScene.cpp
 # 		src/app/threads/Status.cpp
 # 		src/app/threads/render/RenderThread.cpp
 # 		src/app/threads/render/CascadedShadowMapping.cpp

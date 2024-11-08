@@ -14,6 +14,10 @@
 #include "TextRenderer.hpp"
 #include "ShaderCommon.hpp"
 #include "Buffer.hpp"
+#include "Transform.hpp"
+#include "Camera.hpp"
+#include "Model.hpp"
+#include "Item.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -239,6 +243,31 @@ struct GlobalDescriptorWrite
 	VkDescriptorBufferInfo buffer_info = {};
 };
 
+struct ChunkMeshRenderData
+{
+	uint64_t id;
+	uint64_t water_id;
+	glm::dmat4 model;
+};
+
+struct MeshRenderData
+{
+	uint64_t id;
+	glm::dmat4 model;
+};
+
+struct PlayerRenderData
+{
+	glm::dvec3 position;
+	double yaw = 0;
+	double pitch = 0;
+
+	PlayerModel::WalkAnimation walk_animation;
+	PlayerModel::AttackAnimation attack_animation;
+
+	bool visible = true;
+};
+
 class VulkanAPI
 {
 
@@ -460,6 +489,33 @@ public:
 
 	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
 	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
+
+
+	// Draw data
+	Camera camera;
+
+	std::atomic<bool> show_debug_text = false;
+
+	// MeshList chunk_mesh_list;
+	IdList<uint64_t, ChunkMeshRenderData> chunk_mesh_list;
+	IdList<uint64_t, MeshRenderData> entity_mesh_list;
+
+	std::map<uint64_t, PlayerRenderData> m_players;
+	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
+
+	// hud
+	std::array<ItemInfo::Type, 9> toolbar_items;
+	mutable std::mutex toolbar_items_mutex;
+	std::atomic<int> toolbar_cursor_index = 0;
+
+	// position of the block the camera is looking at
+	std::optional<glm::vec3> m_target_block;
+	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
+
+	void setTargetBlock(const std::optional<glm::vec3> & target_block);
+	std::optional<glm::vec3> targetBlock() const;
+
+	std::vector<PlayerRenderData> getPlayers() const;
 
 
 private:

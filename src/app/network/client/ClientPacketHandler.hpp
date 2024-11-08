@@ -4,7 +4,6 @@
 #include "Packets.hpp"
 #include "Client.hpp"
 #include "ClientWorld.hpp"
-#include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
 
 class ClientPacketHandler

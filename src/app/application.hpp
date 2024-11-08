@@ -5,7 +5,6 @@
 #include "Settings.hpp"
 #include "ClientWorld.hpp"
 #include "RenderThread.hpp"
-#include "WorldScene.hpp"
 #include "UpdateThread.hpp"
 #include "VulkanAPI.hpp"
 #include "BlockUpdateThread.hpp"
@@ -35,7 +34,6 @@ private:
 
 	Client				m_client;
 	Settings			m_settings;
-	WorldScene			m_world_scene;
 	Window				m_window;
 	VulkanAPI			m_vulkan_api;
 	Event::Manager		m_event_manager;

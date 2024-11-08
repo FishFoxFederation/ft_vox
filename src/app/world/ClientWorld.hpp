@@ -5,7 +5,6 @@
 
 #include "List.hpp"
 #include "Player.hpp"
-#include "WorldScene.hpp"
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
 #include "CreateMeshData.hpp"
@@ -32,7 +31,6 @@ public:
 	};
 
 	ClientWorld(
-		WorldScene & world_scene,
 		VulkanAPI & vulkan_api,
 		Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
@@ -128,7 +126,6 @@ public:
 	uint64_t m_my_player_id;
 private:
 
-	WorldScene &							m_world_scene;
 	VulkanAPI &								m_vulkan_api;
 	Sound::Engine &							m_sound_engine;
 	Event::Manager &						m_event_manager;
