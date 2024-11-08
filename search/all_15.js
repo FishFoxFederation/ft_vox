@@ -16,7 +16,7 @@ var searchData=
   ['viewfrustum_13',['ViewFrustum',['../classViewFrustum.html#a83f7e9dfeac35c1f67b085d9887a103b',1,'ViewFrustum::ViewFrustum()'],['../classViewFrustum.html',1,'ViewFrustum']]],
   ['viewmode_14',['ViewMode',['../classPlayer.html#aa770f15c63b567db9bea9ed9e88fd2c8',1,'Player']]],
   ['viewprojmatrices_15',['ViewProjMatrices',['../structViewProjMatrices.html',1,'']]],
-  ['visible_16',['visible',['../structWorldScene_1_1PlayerRenderData.html#aaed03cb5d89530a035968a016cd1a0cc',1,'WorldScene::PlayerRenderData']]],
+  ['visible_16',['visible',['../structPlayerRenderData.html#a1564eb09ff213dcaccf47493404c4492',1,'PlayerRenderData']]],
   ['vk_17',['vk',['../classDebugGui.html#acb17471dbe71302178bf73af556e9684',1,'DebugGui']]],
   ['vk_5fcheck_18',['VK_CHECK',['../vk__define_8hpp.html#a8186c9a5b158ad95a5eab216d66b2a4b',1,'vk_define.hpp']]],
   ['vk_5fdefine_2ehpp_19',['vk_define.hpp',['../vk__define_8hpp.html',1,'']]],

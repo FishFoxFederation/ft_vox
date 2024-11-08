@@ -20,7 +20,7 @@ var hierarchy =
     [ "Chunk", "classChunk.html", null ],
     [ "ChunkPacket::ChunkData", "structChunkPacket_1_1ChunkData.html", null ],
     [ "ServerWorld::ChunkLoadUnloadData", "structServerWorld_1_1ChunkLoadUnloadData.html", null ],
-    [ "WorldScene::ChunkMeshRenderData", "structWorldScene_1_1ChunkMeshRenderData.html", null ],
+    [ "ChunkMeshRenderData", "structChunkMeshRenderData.html", null ],
     [ "Client", "classClient.html", null ],
     [ "ClientPacketHandler", "classClientPacketHandler.html", null ],
     [ "Connection", "classConnection.html", null ],
@@ -32,7 +32,6 @@ var hierarchy =
     [ "CreateMeshData", "classCreateMeshData.html", null ],
     [ "Sound::Data", "classSound_1_1Data.html", null ],
     [ "Sound::DataChunk", "structSound_1_1DataChunk.html", null ],
-    [ "WorldScene::DebugBlock", "structWorldScene_1_1DebugBlock.html", null ],
     [ "DebugGui", "classDebugGui.html", null ],
     [ "Descriptor", "classDescriptor.html", null ],
     [ "ECS", "classECS.html", null ],
@@ -109,7 +108,7 @@ var hierarchy =
     [ "Event::Manager", "classEvent_1_1Manager.html", null ],
     [ "Mat4", "classMat4.html", null ],
     [ "Mesh", "structMesh.html", null ],
-    [ "WorldScene::MeshRenderData", "structWorldScene_1_1MeshRenderData.html", null ],
+    [ "MeshRenderData", "structMeshRenderData.html", null ],
     [ "Mob", "classMob.html", null ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", null ],
     [ "NetworkThread", "classNetworkThread.html", null ],
@@ -125,7 +124,7 @@ var hierarchy =
     [ "Player", "classPlayer.html", null ],
     [ "PlayerListPacket::PlayerInfo", "structPlayerListPacket_1_1PlayerInfo.html", null ],
     [ "PlayerModel", "classPlayerModel.html", null ],
-    [ "WorldScene::PlayerRenderData", "structWorldScene_1_1PlayerRenderData.html", null ],
+    [ "PlayerRenderData", "structPlayerRenderData.html", null ],
     [ "ClientWorld::PlayerUseResult", "structClientWorld_1_1PlayerUseResult.html", null ],
     [ "Poller", "classPoller.html", null ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", null ],
@@ -164,8 +163,8 @@ var hierarchy =
     [ "Transform", "classTransform.html", null ],
     [ "UBO", "structUBO.html", null ],
     [ "std::unordered_map", null, [
-      [ "IdList< uint64_t, WorldScene::ChunkMeshRenderData >", "classIdList.html", null ],
-      [ "IdList< uint64_t, WorldScene::MeshRenderData >", "classIdList.html", null ],
+      [ "IdList< uint64_t, ChunkMeshRenderData >", "classIdList.html", null ],
+      [ "IdList< uint64_t, MeshRenderData >", "classIdList.html", null ],
       [ "IdList< Key, Value, container, IdGen >", "classIdList.html", null ]
     ] ],
     [ "UpdateThread", "classUpdateThread.html", null ],
@@ -180,6 +179,5 @@ var hierarchy =
       [ "ClientWorld", "classClientWorld.html", null ],
       [ "ServerWorld", "classServerWorld.html", null ]
     ] ],
-    [ "World::WorldGenerator", "classWorld_1_1WorldGenerator.html", null ],
-    [ "WorldScene", "classWorldScene.html", null ]
+    [ "World::WorldGenerator", "classWorld_1_1WorldGenerator.html", null ]
 ];

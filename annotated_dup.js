@@ -47,6 +47,7 @@ var annotated_dup =
     [ "Buffer", "classBuffer.html", "classBuffer" ],
     [ "Camera", "classCamera.html", "classCamera" ],
     [ "Chunk", "classChunk.html", "classChunk" ],
+    [ "ChunkMeshRenderData", "structChunkMeshRenderData.html", "structChunkMeshRenderData" ],
     [ "ChunkPacket", "classChunkPacket.html", "classChunkPacket" ],
     [ "ChunkRequestPacket", "classChunkRequestPacket.html", "classChunkRequestPacket" ],
     [ "ChunkUnloadPacket", "classChunkUnloadPacket.html", "classChunkUnloadPacket" ],
@@ -86,6 +87,7 @@ var annotated_dup =
     [ "Logger", "classLogger.html", "classLogger" ],
     [ "Mat4", "classMat4.html", "classMat4" ],
     [ "Mesh", "structMesh.html", "structMesh" ],
+    [ "MeshRenderData", "structMeshRenderData.html", "structMeshRenderData" ],
     [ "Mob", "classMob.html", "classMob" ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", "structModelMatrix__push__constant" ],
     [ "NetworkThread", "classNetworkThread.html", "classNetworkThread" ],
@@ -100,6 +102,7 @@ var annotated_dup =
     [ "PlayerListPacket", "classPlayerListPacket.html", "classPlayerListPacket" ],
     [ "PlayerModel", "classPlayerModel.html", "classPlayerModel" ],
     [ "PlayerMovePacket", "classPlayerMovePacket.html", "classPlayerMovePacket" ],
+    [ "PlayerRenderData", "structPlayerRenderData.html", "structPlayerRenderData" ],
     [ "Poller", "classPoller.html", "classPoller" ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", "structQueueFamilyIndices" ],
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", "structRayCastOnBlockResult" ],
@@ -131,6 +134,5 @@ var annotated_dup =
     [ "VulkanAPI", "classVulkanAPI.html", "classVulkanAPI" ],
     [ "VulkanMemoryAllocator", "classVulkanMemoryAllocator.html", "classVulkanMemoryAllocator" ],
     [ "Window", "classWindow.html", "classWindow" ],
-    [ "World", "classWorld.html", "classWorld" ],
-    [ "WorldScene", "classWorldScene.html", "classWorldScene" ]
+    [ "World", "classWorld.html", "classWorld" ]
 ];

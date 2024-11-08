@@ -4,7 +4,7 @@ var searchData=
   ['chunk_1',['Chunk',['../classChunk.html',1,'']]],
   ['chunkdata_2',['ChunkData',['../structChunkPacket_1_1ChunkData.html',1,'ChunkPacket']]],
   ['chunkloadunloaddata_3',['ChunkLoadUnloadData',['../structServerWorld_1_1ChunkLoadUnloadData.html',1,'ServerWorld']]],
-  ['chunkmeshrenderdata_4',['ChunkMeshRenderData',['../structWorldScene_1_1ChunkMeshRenderData.html',1,'WorldScene']]],
+  ['chunkmeshrenderdata_4',['ChunkMeshRenderData',['../structChunkMeshRenderData.html',1,'']]],
   ['chunkpacket_5',['ChunkPacket',['../classChunkPacket.html',1,'']]],
   ['chunkrequestpacket_6',['ChunkRequestPacket',['../classChunkRequestPacket.html',1,'']]],
   ['chunkunloadpacket_7',['ChunkUnloadPacket',['../classChunkUnloadPacket.html',1,'']]],

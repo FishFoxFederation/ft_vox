@@ -12,7 +12,7 @@ var searchData=
   ['removesucessor_9',['removeSucessor',['../classtask_1_1TaskNode.html#aafa238bb649b5a3a88b13125e599cd40',1,'task::TaskNode']]],
   ['removeticket_10',['removeTicket',['../classServerWorld.html#a011796df74c5e6f16bfa7e4d78b93e95',1,'ServerWorld']]],
   ['rendertext_11',['renderText',['../classTextRenderer.html#aa5a3c6768f76827cdb8cc151cb560dda',1,'TextRenderer']]],
-  ['renderthread_12',['RenderThread',['../classRenderThread.html#af5e1f5dbf6f05039dadfde54b65d7477',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, const WorldScene &amp;worldScene, std::chrono::nanoseconds start_time)'],['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread(RenderThread &amp;&amp;renderer)=delete'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete']]],
+  ['renderthread_12',['RenderThread',['../classRenderThread.html#ab10cf7a69745e49aa13fe2dd526d28a9',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, std::chrono::nanoseconds start_time)'],['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread(RenderThread &amp;&amp;renderer)=delete'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete']]],
   ['reset_13',['reset',['../classtask_1_1Task.html#aaba6a2dd4e25c26a6533404b052cfc62',1,'task::Task']]],
   ['resettask_14',['resetTask',['../classtask_1_1Task.html#a5e75edeba4eb26a7ccf0d6333aa172fa',1,'task::Task']]],
   ['rotate_15',['rotate',['../classMat4.html#a3ef488276ad5977343c5a6d7a2202c71',1,'Mat4']]],

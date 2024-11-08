@@ -40,7 +40,7 @@ var searchData=
   ['atmosphereparams_37',['AtmosphereParams',['../structAtmosphereParams.html',1,'']]],
   ['atomic_38',['Atomic',['../classAtomic.html',1,'Atomic&lt; T &gt;'],['../classAtomic.html#a755ced2f84542e2736e9735e4d3bc7b1',1,'Atomic::Atomic(T value)'],['../classAtomic.html#a3282eeb8d5ca9d377bb193858409f3d3',1,'Atomic::Atomic()=default']]],
   ['atomic_3c_20glm_3a_3avec3_20_3e_39',['Atomic&lt; glm::vec3 &gt;',['../classAtomic.html',1,'']]],
-  ['attack_5fanimation_40',['attack_animation',['../structWorldScene_1_1PlayerRenderData.html#a117e3c0a1934877c0379e6660e19115a',1,'WorldScene::PlayerRenderData']]],
+  ['attack_5fanimation_40',['attack_animation',['../structPlayerRenderData.html#af527a7e6ca2d6039cca7694a074870c2',1,'PlayerRenderData']]],
   ['attackanimation_41',['AttackAnimation',['../classPlayerModel_1_1AttackAnimation.html#a39fb6e44a47cf4500d8ad24715544c03',1,'PlayerModel::AttackAnimation::AttackAnimation()'],['../classPlayerModel_1_1AttackAnimation.html',1,'PlayerModel::AttackAnimation']]],
   ['attribute_5fdescriptions_42',['attribute_descriptions',['../structPipeline_1_1CreateInfo.html#a1cdc58779c520317193b8e4275aa0b8f',1,'Pipeline::CreateInfo']]],
   ['audio_5fdata_43',['audio_data',['../structSound_1_1Instance.html#a17d2fb73f664f4c7c940b0499a260083',1,'Sound::Instance']]],

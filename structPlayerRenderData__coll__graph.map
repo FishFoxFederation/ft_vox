@@ -1,0 +1,5 @@
+<map id="PlayerRenderData" name="PlayerRenderData">
+<area shape="rect" id="node1" title=" " alt="" coords="145,255,275,353"/>
+<area shape="rect" id="node2" href="$classPlayerModel_1_1WalkAnimation.html" title=" " alt="" coords="5,20,196,177"/>
+<area shape="rect" id="node3" href="$classPlayerModel_1_1AttackAnimation.html" title=" " alt="" coords="220,5,419,192"/>
+</map>

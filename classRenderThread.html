@@ -128,9 +128,9 @@ Collaboration diagram for RenderThread:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af5e1f5dbf6f05039dadfde54b65d7477"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderThread.html#af5e1f5dbf6f05039dadfde54b65d7477">RenderThread</a> (const <a class="el" href="classSettings.html">Settings</a> &amp;settings, <a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkanAPI, const <a class="el" href="classWorldScene.html">WorldScene</a> &amp;worldScene, std::chrono::nanoseconds start_time)</td></tr>
-<tr class="memdesc:af5e1f5dbf6f05039dadfde54b65d7477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classRenderThread.html" title="A wrapper for the thread that handles rendering.">RenderThread</a> object.  <a href="classRenderThread.html#af5e1f5dbf6f05039dadfde54b65d7477">More...</a><br /></td></tr>
-<tr class="separator:af5e1f5dbf6f05039dadfde54b65d7477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab10cf7a69745e49aa13fe2dd526d28a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderThread.html#ab10cf7a69745e49aa13fe2dd526d28a9">RenderThread</a> (const <a class="el" href="classSettings.html">Settings</a> &amp;settings, <a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkanAPI, std::chrono::nanoseconds start_time)</td></tr>
+<tr class="memdesc:ab10cf7a69745e49aa13fe2dd526d28a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classRenderThread.html" title="A wrapper for the thread that handles rendering.">RenderThread</a> object.  <a href="classRenderThread.html#ab10cf7a69745e49aa13fe2dd526d28a9">More...</a><br /></td></tr>
+<tr class="separator:ab10cf7a69745e49aa13fe2dd526d28a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9a968ad63349a9eb1109d615406afd4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4">~RenderThread</a> ()</td></tr>
 <tr class="memdesc:ac9a968ad63349a9eb1109d615406afd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="classRenderThread.html" title="A wrapper for the thread that handles rendering.">RenderThread</a> object.  <a href="classRenderThread.html#ac9a968ad63349a9eb1109d615406afd4">More...</a><br /></td></tr>
 <tr class="separator:ac9a968ad63349a9eb1109d615406afd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,8 +147,8 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p >A wrapper for the thread that handles rendering. </p>
 <p >This thread will run at max framerate possible Interacts with the vk::RenderAPI to draw the Scene Every function called from this class MUST be thread safe </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af5e1f5dbf6f05039dadfde54b65d7477" name="af5e1f5dbf6f05039dadfde54b65d7477"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5e1f5dbf6f05039dadfde54b65d7477">&#9670;&#160;</a></span>RenderThread() <span class="overload">[1/3]</span></h2>
+<a id="ab10cf7a69745e49aa13fe2dd526d28a9" name="ab10cf7a69745e49aa13fe2dd526d28a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab10cf7a69745e49aa13fe2dd526d28a9">&#9670;&#160;</a></span>RenderThread() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,12 +164,6 @@ Public Member Functions</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;&#160;</td>
           <td class="paramname"><em>vulkanAPI</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classWorldScene.html">WorldScene</a> &amp;&#160;</td>
-          <td class="paramname"><em>worldScene</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

@@ -10,7 +10,7 @@ var searchData=
   ['view_5ffrustum_7',['view_frustum',['../structCamera_1_1RenderInfo.html#ae916554eb253bd990d63e5b8ea35ce58',1,'Camera::RenderInfo']]],
   ['view_5fmode_8',['view_mode',['../classPlayer.html#aac46fc99a79a19b208a7057f7814225d',1,'Player']]],
   ['view_5fproj_9',['view_proj',['../structShadowMapLight.html#a9a99b58f2f8fafb0425e20bd8f910e16',1,'ShadowMapLight']]],
-  ['visible_10',['visible',['../structWorldScene_1_1PlayerRenderData.html#aaed03cb5d89530a035968a016cd1a0cc',1,'WorldScene::PlayerRenderData']]],
+  ['visible_10',['visible',['../structPlayerRenderData.html#a1564eb09ff213dcaccf47493404c4492',1,'PlayerRenderData']]],
   ['vk_11',['vk',['../classDebugGui.html#acb17471dbe71302178bf73af556e9684',1,'DebugGui']]],
   ['vkcreatedebugutilsmessengerext_12',['vkCreateDebugUtilsMessengerEXT',['../classVulkanAPI.html#a10d5fc72a9fcb937cc8b62d57fca2be7',1,'VulkanAPI']]],
   ['vkdestroydebugutilsmessengerext_13',['vkDestroyDebugUtilsMessengerEXT',['../classVulkanAPI.html#a07f1d7b9dca69d5d33666b605ee66436',1,'VulkanAPI']]],

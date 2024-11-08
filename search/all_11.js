@@ -23,7 +23,7 @@ var searchData=
   ['rendered_5ftriangles_20',['rendered_triangles',['../classDebugGui.html#adaf81c06685c6ec69beaf6270e399a13',1,'DebugGui']]],
   ['renderinfo_21',['RenderInfo',['../structCamera_1_1RenderInfo.html',1,'Camera']]],
   ['rendertext_22',['renderText',['../classTextRenderer.html#aa5a3c6768f76827cdb8cc151cb560dda',1,'TextRenderer']]],
-  ['renderthread_23',['RenderThread',['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread()'],['../classRenderThread.html',1,'RenderThread'],['../classRenderThread.html#af5e1f5dbf6f05039dadfde54b65d7477',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, const WorldScene &amp;worldScene, std::chrono::nanoseconds start_time)'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete']]],
+  ['renderthread_23',['RenderThread',['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread()'],['../classRenderThread.html',1,'RenderThread'],['../classRenderThread.html#ab10cf7a69745e49aa13fe2dd526d28a9',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, std::chrono::nanoseconds start_time)'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete']]],
   ['renderthread_2ecpp_24',['RenderThread.cpp',['../RenderThread_8cpp.html',1,'']]],
   ['renderthread_2ehpp_25',['RenderThread.hpp',['../RenderThread_8hpp.html',1,'']]],
   ['repeated_26',['REPEATED',['../classInput.html#a0be44bf062481fd4b60c21607a2ee50aa5f7fd05d6eee2cf377a64ae7f4adcd6b',1,'Input']]],
