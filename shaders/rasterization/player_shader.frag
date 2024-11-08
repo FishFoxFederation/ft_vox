@@ -1,6 +1,8 @@
 #version 450
 
-layout (set = 1, binding = 0) uniform sampler2D image;
+#include "common.glsl"
+
+layout (set = 0, binding = PLAYER_SKIN_BINDING) uniform sampler2D image;
 
 layout (location = 0) in vec2 inUV;
 

@@ -211,22 +211,26 @@ void RenderThread::loop()
 	//					 																						#
 	//###########################################################################################################
 
-	const std::vector<VkSubmitInfo> submit_infos = {
-		shadow_pass_submit_info,
-		render_submit_info,
-		copy_submit_info,
-		imgui_submit_info
-	};
+	{
+		ZoneScopedN("Submit to queue");
 
-	VK_CHECK(
-		vkQueueSubmit(
-			vk.graphics_queue,
-			static_cast<uint32_t>(submit_infos.size()),
-			submit_infos.data(),
-			vk.in_flight_fences[vk.current_frame]
-		),
-		"Failed to submit all command buffers"
-	);
+		const std::vector<VkSubmitInfo> submit_infos = {
+			shadow_pass_submit_info,
+			render_submit_info,
+			copy_submit_info,
+			imgui_submit_info
+		};
+
+		VK_CHECK(
+			vkQueueSubmit(
+				vk.graphics_queue,
+				static_cast<uint32_t>(submit_infos.size()),
+				submit_infos.data(),
+				vk.in_flight_fences[vk.current_frame]
+			),
+			"Failed to submit all command buffers"
+		);
+	}
 
 	//###########################################################################################################
 	//					 																						#
@@ -234,23 +238,27 @@ void RenderThread::loop()
 	//					 																						#
 	//###########################################################################################################
 
-	VkPresentInfoKHR present_info = {};
-	present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-	present_info.waitSemaphoreCount = 1;
-	present_info.pWaitSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
-	present_info.swapchainCount = 1;
-	present_info.pSwapchains = &vk.swapchain.swapchain;
-	present_info.pImageIndices = &vk.current_image_index;
-
-	VkResult result = vkQueuePresentKHR(vk.present_queue, &present_info);
-
-	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
 	{
-		vk.recreateSwapChain(vk.window);
-	}
-	else if (result != VK_SUCCESS)
-	{
-		throw std::runtime_error("Failed to present swap chain image");
+		ZoneScopedN("Present the swap chain image");
+
+		VkPresentInfoKHR present_info = {};
+		present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+		present_info.waitSemaphoreCount = 1;
+		present_info.pWaitSemaphores = &vk.imgui_render_finished_semaphores[vk.current_frame];
+		present_info.swapchainCount = 1;
+		present_info.pSwapchains = &vk.swapchain.swapchain;
+		present_info.pImageIndices = &vk.current_image_index;
+
+		VkResult result = vkQueuePresentKHR(vk.present_queue, &present_info);
+
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+		{
+			vk.recreateSwapChain(vk.window);
+		}
+		else if (result != VK_SUCCESS)
+		{
+			throw std::runtime_error("Failed to present swap chain image");
+		}
 	}
 
 	FrameMark;
@@ -476,9 +484,7 @@ void RenderThread::shadowPass()
 		vkCmdBindPipeline(vk.draw_shadow_pass_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.shadow_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-			vk.global_descriptor.sets[vk.current_frame],
-			vk.light_view_proj_descriptor.sets[vk.current_frame],
-			vk.block_textures_descriptor.set
+			vk.global_descriptor.sets[vk.current_frame]
 		};
 
 		vkCmdBindDescriptorSets(
@@ -570,6 +576,21 @@ void RenderThread::lightingPass()
 		"Failed to begin recording command buffer"
 	);
 
+	const std::vector<VkDescriptorSet> descriptor_sets = {
+		vk.global_descriptor.sets[vk.current_frame]
+	};
+
+	vkCmdBindDescriptorSets(
+		vk.draw_command_buffers[vk.current_frame],
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		vk.chunk_pipeline.layout,
+		0,
+		static_cast<uint32_t>(descriptor_sets.size()),
+		descriptor_sets.data(),
+		0,
+		nullptr
+	);
+
 	{
 		TracyVkZone(vk.draw_ctx, vk.draw_command_buffers[vk.current_frame], "Lighting pass");
 
@@ -601,23 +622,6 @@ void RenderThread::lightingPass()
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
-				const std::vector<VkDescriptorSet> descriptor_sets = {
-					vk.global_descriptor.sets[vk.current_frame],
-					vk.light_view_proj_descriptor.sets[vk.current_frame],
-					vk.shadow_map_descriptor.set
-				};
-
-				vkCmdBindDescriptorSets(
-					vk.draw_command_buffers[vk.current_frame],
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					vk.chunk_pipeline.layout,
-					0,
-					static_cast<uint32_t>(descriptor_sets.size()),
-					descriptor_sets.data(),
-					0,
-					nullptr
-				);
-
 				for (auto & chunk_mesh: visible_chunks)
 				{
 					GlobalPushConstant model_matrice = {};
@@ -639,21 +643,6 @@ void RenderThread::lightingPass()
 				TracyVkZone(vk.draw_ctx, vk.draw_command_buffers[vk.current_frame], "Draw entities");
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.entity_pipeline.pipeline);
-
-				const std::vector<VkDescriptorSet> entity_descriptor_sets = {
-					vk.global_descriptor.sets[vk.current_frame]
-				};
-
-				vkCmdBindDescriptorSets(
-					vk.draw_command_buffers[vk.current_frame],
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					vk.entity_pipeline.layout,
-					0,
-					static_cast<uint32_t>(entity_descriptor_sets.size()),
-					entity_descriptor_sets.data(),
-					0,
-					nullptr
-				);
 
 				for (const auto & entity_mesh : entity_meshes)
 				{
@@ -705,22 +694,6 @@ void RenderThread::lightingPass()
 				TracyVkZone(vk.draw_ctx, vk.draw_command_buffers[vk.current_frame], "Draw players");
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.player_pipeline.pipeline);
-
-				const std::vector<VkDescriptorSet> player_descriptor_sets = {
-					vk.global_descriptor.sets[vk.current_frame],
-					vk.player_skin_image_descriptor.set
-				};
-
-				vkCmdBindDescriptorSets(
-					vk.draw_command_buffers[vk.current_frame],
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					vk.player_pipeline.layout,
-					0,
-					static_cast<uint32_t>(player_descriptor_sets.size()),
-					player_descriptor_sets.data(),
-					0,
-					nullptr
-				);
 
 				for (const auto & player : players)
 				{
@@ -830,21 +803,6 @@ void RenderThread::lightingPass()
 			{
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.line_pipeline.pipeline);
 
-				const std::vector<VkDescriptorSet> line_descriptor_sets = {
-					vk.global_descriptor.sets[vk.current_frame]
-				};
-
-				vkCmdBindDescriptorSets(
-					vk.draw_command_buffers[vk.current_frame],
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					vk.line_pipeline.layout,
-					0,
-					static_cast<uint32_t>(line_descriptor_sets.size()),
-					line_descriptor_sets.data(),
-					0,
-					nullptr
-				);
-
 				Mesh mesh;
 				{
 					std::lock_guard lock(vk.mesh_map_mutex);
@@ -895,22 +853,6 @@ void RenderThread::lightingPass()
 			{ // Draw the skybox
 				// vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.skybox_pipeline.pipeline);
 
-				// const std::array<VkDescriptorSet, 2> skybox_descriptor_sets = {
-				// 	vk.global_descriptor.sets[vk.current_frame],
-				// 	vk.cube_map_descriptor.set
-				// };
-
-				// vkCmdBindDescriptorSets(
-				// 	vk.draw_command_buffers[vk.current_frame],
-				// 	VK_PIPELINE_BIND_POINT_GRAPHICS,
-				// 	vk.skybox_pipeline.layout,
-				// 	0,
-				// 	static_cast<uint32_t>(skybox_descriptor_sets.size()),
-				// 	skybox_descriptor_sets.data(),
-				// 	0,
-				// 	nullptr
-				// );
-
 				// GlobalPushConstant skybox_matrices = {};
 				// skybox_matrices.matrice = glm::translate(glm::dmat4(1.0f), camera.position);
 				// vkCmdPushConstants(
@@ -936,22 +878,6 @@ void RenderThread::lightingPass()
 				TracyVkZone(vk.draw_ctx, vk.draw_command_buffers[vk.current_frame], "Draw sun");
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.sun_pipeline.pipeline);
-
-				const std::vector<VkDescriptorSet> sun_descriptor_sets = {
-					vk.global_descriptor.sets[vk.current_frame],
-					vk.atmosphere_descriptor.sets[vk.current_frame]
-				};
-
-				vkCmdBindDescriptorSets(
-					vk.draw_command_buffers[vk.current_frame],
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					vk.sun_pipeline.layout,
-					0,
-					static_cast<uint32_t>(sun_descriptor_sets.size()),
-					sun_descriptor_sets.data(),
-					0,
-					nullptr
-				);
 
 				GlobalPushConstant sky_shader_data = {};
 				sky_shader_data.matrice = glm::translate(glm::dmat4(1.0f), camera.position);
@@ -1014,25 +940,6 @@ void RenderThread::lightingPass()
 				TracyVkZone(vk.draw_ctx, vk.draw_command_buffers[vk.current_frame], "Draw water");
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
-
-				const std::vector<VkDescriptorSet> descriptor_sets = {
-					vk.global_descriptor.sets[vk.current_frame],
-					vk.light_view_proj_descriptor.sets[vk.current_frame],
-					vk.block_textures_descriptor.set,
-					vk.shadow_map_descriptor.set,
-					vk.water_renderpass_input_attachement_descriptor.set
-				};
-
-				vkCmdBindDescriptorSets(
-					vk.draw_command_buffers[vk.current_frame],
-					VK_PIPELINE_BIND_POINT_GRAPHICS,
-					vk.water_pipeline.layout,
-					0,
-					static_cast<uint32_t>(descriptor_sets.size()),
-					descriptor_sets.data(),
-					0,
-					nullptr
-				);
 
 				for (auto & chunk_mesh: chunk_meshes)
 				{
@@ -1127,22 +1034,6 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.item_icon_pipeline.pipeline);
 
 				{ // Toolbar items
-					const std::vector<VkDescriptorSet> toolbar_item_descriptor_sets = {
-						vk.global_descriptor.sets[vk.current_frame],
-						vk.item_icon_descriptor.set
-					};
-
-					vkCmdBindDescriptorSets(
-						vk.draw_command_buffers[vk.current_frame],
-						VK_PIPELINE_BIND_POINT_GRAPHICS,
-						vk.item_icon_pipeline.layout,
-						0,
-						static_cast<uint32_t>(toolbar_item_descriptor_sets.size()),
-						toolbar_item_descriptor_sets.data(),
-						0,
-						nullptr
-					);
-
 					for (size_t i = 0; i < 9; i++)
 					{
 						if (toolbar_items[i] == ItemInfo::Type::None)
@@ -1206,23 +1097,6 @@ void RenderThread::lightingPass()
 
 			// { // Draw test image
 			// 	vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.test_image_pipeline.pipeline);
-
-			// 	const std::vector<VkDescriptorSet> test_image_descriptor_sets = {
-			// 		vk.global_descriptor.sets[vk.current_frame],
-			// 		vk.test_image_descriptor.set
-			// 	};
-
-			// 	vkCmdBindDescriptorSets(
-			// 		vk.draw_command_buffers[vk.current_frame],
-			// 		VK_PIPELINE_BIND_POINT_GRAPHICS,
-			// 		vk.test_image_pipeline.layout,
-			// 		0,
-			// 		static_cast<uint32_t>(test_image_descriptor_sets.size()),
-			// 		test_image_descriptor_sets.data(),
-			// 		0,
-			// 		nullptr
-			// 	);
-
 			// 	vkCmdDraw(
 			// 		vk.draw_command_buffers[vk.current_frame],
 			// 		6,
@@ -1301,7 +1175,7 @@ void RenderThread::copyToSwapchain()
 	);
 
 	{ // Scope for Tracy
-		TracyVkZone(vk.copy_to_swapchain_ctx, vk.copy_command_buffers[vk.current_frame], "Copy to swapchain");
+		TracyVkZone(vk.draw_ctx, vk.copy_command_buffers[vk.current_frame], "Copy to swapchain");
 
 		vk.setImageLayout(
 			vk.copy_command_buffers[vk.current_frame],
@@ -1349,8 +1223,6 @@ void RenderThread::copyToSwapchain()
 		);
 	}
 
-	TracyVkCollect(vk.copy_to_swapchain_ctx, vk.copy_command_buffers[vk.current_frame]);
-
 	VK_CHECK(
 		vkEndCommandBuffer(vk.copy_command_buffers[vk.current_frame]),
 		"Failed to record copy command buffer"
@@ -1372,7 +1244,7 @@ void RenderThread::drawDebugGui()
 	);
 
 	{ // Scope for Tracy
-		TracyVkZone(vk.imgui_ctx, vk.imgui_command_buffers[vk.current_frame], "Draw debug gui");
+		TracyVkZone(vk.draw_ctx, vk.imgui_command_buffers[vk.current_frame], "Draw debug gui");
 
 		{
 			std::lock_guard lock(vk.imgui_textures_mutex);

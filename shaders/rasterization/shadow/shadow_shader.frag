@@ -1,6 +1,8 @@
 #version 450
 
-layout(set = 2, binding = 0) uniform sampler2DArray block_textures;
+#include "common.glsl"
+
+layout(set = 0, binding = BLOCK_TEXTURES_BINDING) uniform sampler2DArray block_textures;
 
 layout(location = 0) in vec3 frag_tex_coords;
 

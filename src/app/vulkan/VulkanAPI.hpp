@@ -229,6 +229,16 @@ struct ImGuiTexture
 	}
 };
 
+struct GlobalDescriptorWrite
+{
+	uint32_t dst_binding = 0;
+    uint32_t dst_array_element = 0;
+    uint32_t descriptor_count = 1;
+	VkDescriptorType descriptor_type = VK_DESCRIPTOR_TYPE_MAX_ENUM;
+	VkDescriptorImageInfo image_info = {};
+	VkDescriptorBufferInfo buffer_info = {};
+};
+
 class VulkanAPI
 {
 
@@ -390,21 +400,10 @@ public:
 	UBO light_mat_ubo;
 	UBO atmosphere_ubo;
 
-	Descriptor swapchain_image_descriptor;
-	Descriptor camera_descriptor;
-	Descriptor block_textures_descriptor;
-	Descriptor cube_map_descriptor;
-	Descriptor shadow_map_descriptor;
-	Descriptor water_renderpass_input_attachement_descriptor;
-	Descriptor test_image_descriptor;
-	Descriptor light_view_proj_descriptor;
 	Descriptor crosshair_image_descriptor;
 	Descriptor toolbar_image_descriptor;
 	Descriptor toolbar_cursor_image_descriptor;
-	Descriptor player_skin_image_descriptor;
-	Descriptor atmosphere_descriptor;
 	Descriptor debug_info_image_descriptor;
-	Descriptor item_icon_descriptor;
 	Descriptor global_descriptor;
 
 	VkRenderPass lighting_render_pass;
@@ -454,8 +453,6 @@ public:
 
 
 	TracyVkCtx draw_ctx;
-	TracyVkCtx copy_to_swapchain_ctx;
-	TracyVkCtx imgui_ctx;
 
 	// function pointers
 	PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;

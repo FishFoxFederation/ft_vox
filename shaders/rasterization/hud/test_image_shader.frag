@@ -1,6 +1,8 @@
 #version 450
 
-layout (set = 1, binding = 0) uniform sampler2DArray image;
+#include "common.glsl"
+
+layout (set = 0, binding = TEST_IMAGE_BINDING) uniform sampler2DArray image;
 
 layout (location = 0) in vec2 inUV;
 

@@ -4,20 +4,20 @@
 
 #include "common.glsl"
 
-layout(set = 0, binding = 0) uniform CameraMatrices
+layout(set = 0, binding = CAMERA_MATRICES_BINDING) uniform CameraMatrices
 {
 	mat4 view;
 	mat4 projection;
 }cm;
-layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
+layout(set = 0, binding = SUN_MATRICES_BINDING, scalar) uniform LightSpaceMatrices
 {
 	ShadowMapLight shadow_map_light;
 };
-layout(set = 2, binding = 0) uniform sampler2DArray tex;
-layout(set = 3, binding = 0) uniform sampler2DArray shadow_map;
+layout(set = 0, binding = BLOCK_TEXTURES_BINDING) uniform sampler2DArray tex;
+layout(set = 0, binding = SHADOW_MAP_BINDING) uniform sampler2DArray shadow_map;
 
-layout(input_attachment_index = 0, set = 4, binding = 0) uniform subpassInput color;
-layout(input_attachment_index = 1, set = 4, binding = 1) uniform subpassInput depth;
+layout(input_attachment_index = 0, set = 0, binding = WATER_RENDERPASS_INPUT_COLOR_ATTACH_BINDING) uniform subpassInput color;
+layout(input_attachment_index = 1, set = 0, binding = WATER_RENDERPASS_INPUT_DEPTH_ATTACH_BINDING) uniform subpassInput depth;
 
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;

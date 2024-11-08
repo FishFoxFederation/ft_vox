@@ -1,6 +1,8 @@
 #version 450
 
-layout(set = 1, binding = 0) uniform AtmospherParams
+#include "common.glsl"
+
+layout(set = 0, binding = ATMOSPHERE_PARAM_BINDING) uniform AtmospherParams
 {
 	vec3 sun_dir;
 	float earth_radius;
