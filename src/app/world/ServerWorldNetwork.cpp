@@ -174,7 +174,7 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 		m_server.send({packet_to_send, Server::flags::NOWAIT, connection_id});
 	}
 	}
-	if (data.chunks_to_load.size() > 0)
-		m_server.ping(connection_id);
+	// if (data.chunks_to_load.size() > 0)
+	// 	m_server.ping(connection_id);
 }
 

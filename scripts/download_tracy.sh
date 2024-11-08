@@ -13,5 +13,5 @@ then
 	echo "cloning 'https://github.com/Arpafaucon/tracy.git' in external/tracy"
 
 	mkdir -p external/tracy-experimental
-	git clone https://github.com/Arpafaucon/tracy.git external/tracy-experimental
+	git clone https://github.com/Arpafaucon/tracy.git external/tracy-experimental --branch multicapture-merge
 fi
