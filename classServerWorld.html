@@ -174,8 +174,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a73098b5afa011220a051a827843506a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158c0e26aed57aff784fad6d20a72a20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a158c0e26aed57aff784fad6d20a72a20">setBlock</a> (const glm::vec3 &amp;position, <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> block)</td></tr>
 <tr class="separator:a158c0e26aed57aff784fad6d20a72a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd97b8fca06c1d7e9a6ae80c82407432"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ChunkLoadUnloadData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#afd97b8fca06c1d7e9a6ae80c82407432">getChunksToUnload</a> (const glm::vec3 &amp;old_player_position, const glm::vec3 &amp;new_player_position)</td></tr>
-<tr class="separator:afd97b8fca06c1d7e9a6ae80c82407432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa84a0f03237c246092ece32797e80ec0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#aa84a0f03237c246092ece32797e80ec0">setPlayerTicketLevel</a> (const int &amp;level)</td></tr>
+<tr class="separator:aa84a0f03237c246092ece32797e80ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1148bfb757f5882683e97eb5fec92d11"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a1148bfb757f5882683e97eb5fec92d11">getLoadDistance</a> () const</td></tr>
+<tr class="separator:a1148bfb757f5882683e97eb5fec92d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ebb95bb7fa6a543052907b8b304608"><td class="memItemLeft" align="right" valign="top">const std::unordered_set&lt; glm::ivec3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#ae1ebb95bb7fa6a543052907b8b304608">getBlockUpdateChunks</a> () const</td></tr>
 <tr class="memdesc:ae1ebb95bb7fa6a543052907b8b304608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of Chunks that need to get a block update tick.  <a href="classServerWorld.html#ae1ebb95bb7fa6a543052907b8b304608">More...</a><br /></td></tr>
 <tr class="separator:ae1ebb95bb7fa6a543052907b8b304608"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,6 +206,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1d3a4eb759fe90206dfadfe74d875da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36083fb7cf6cbe067f746e3b0bdb6f59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a36083fb7cf6cbe067f746e3b0bdb6f59">handleDisconnectPacket</a> (std::shared_ptr&lt; <a class="el" href="classDisconnectPacket.html">DisconnectPacket</a> &gt; packet)</td></tr>
 <tr class="separator:a36083fb7cf6cbe067f746e3b0bdb6f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c14c1c9ed9597b94583bad20f53f32f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a8c14c1c9ed9597b94583bad20f53f32f">handleLoadDistancePacket</a> (std::shared_ptr&lt; <a class="el" href="classLoadDistancePacket.html">LoadDistancePacket</a> &gt; packet)</td></tr>
+<tr class="separator:a8c14c1c9ed9597b94583bad20f53f32f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53e41cd4cc868b9c4fef6eb7600d10e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a53e41cd4cc868b9c4fef6eb7600d10e7">sendChunkLoadUnloadData</a> (const <a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ChunkLoadUnloadData</a> &amp;data, uint64_t player_id)</td></tr>
 <tr class="separator:a53e41cd4cc868b9c4fef6eb7600d10e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
@@ -479,34 +483,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="afd97b8fca06c1d7e9a6ae80c82407432" name="afd97b8fca06c1d7e9a6ae80c82407432"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd97b8fca06c1d7e9a6ae80c82407432">&#9670;&#160;</a></span>getChunksToUnload()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ServerWorld::ChunkLoadUnloadData</a> ServerWorld::getChunksToUnload </td>
-          <td>(</td>
-          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
-          <td class="paramname"><em>old_player_position</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
-          <td class="paramname"><em>new_player_position</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a1c7e95561e5b1048cb407c4a0e16e70b" name="a1c7e95561e5b1048cb407c4a0e16e70b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1c7e95561e5b1048cb407c4a0e16e70b">&#9670;&#160;</a></span>getEntityUpdateChunks()</h2>
 
@@ -524,6 +500,23 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Get the list of Chunks that need to get an entity update tick. </p>
 <dl class="section return"><dt>Returns</dt><dd>const std::unordered_set&lt;glm::ivec3&gt;&amp; </dd></dl>
+
+</div>
+</div>
+<a id="a1148bfb757f5882683e97eb5fec92d11" name="a1148bfb757f5882683e97eb5fec92d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1148bfb757f5882683e97eb5fec92d11">&#9670;&#160;</a></span>getLoadDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ServerWorld::getLoadDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -593,6 +586,24 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void ServerWorld::handleDisconnectPacket </td>
           <td>(</td>
           <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classDisconnectPacket.html">DisconnectPacket</a> &gt;&#160;</td>
+          <td class="paramname"><em>packet</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c14c1c9ed9597b94583bad20f53f32f" name="a8c14c1c9ed9597b94583bad20f53f32f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c14c1c9ed9597b94583bad20f53f32f">&#9670;&#160;</a></span>handleLoadDistancePacket()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ServerWorld::handleLoadDistancePacket </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classLoadDistancePacket.html">LoadDistancePacket</a> &gt;&#160;</td>
           <td class="paramname"><em>packet</em></td><td>)</td>
           <td></td>
         </tr>
@@ -793,6 +804,24 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa84a0f03237c246092ece32797e80ec0" name="aa84a0f03237c246092ece32797e80ec0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa84a0f03237c246092ece32797e80ec0">&#9670;&#160;</a></span>setPlayerTicketLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ServerWorld::setPlayerTicketLevel </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -120,8 +120,8 @@ Inheritance diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__inherit__graph.png" border="0" usemap="#aClientWorld_inherit__map" alt="Inheritance graph"/></div>
 <map name="aClientWorld_inherit__map" id="aClientWorld_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,445,196,661"/>
-<area shape="rect" href="classWorld.html" title=" " alt="" coords="13,5,189,397"/>
+<area shape="rect" title=" " alt="" coords="18,445,169,661"/>
+<area shape="rect" href="classWorld.html" title=" " alt="" coords="5,5,181,397"/>
 </map>
 </div>
 <div class="dynheader">
@@ -129,7 +129,7 @@ Collaboration diagram for ClientWorld:</div>
 <div class="dyncontent">
 <div class="center"><img src="classClientWorld__coll__graph.png" border="0" usemap="#aClientWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aClientWorld_coll__map" id="aClientWorld_coll__map">
-<area shape="rect" title=" " alt="" coords="88,681,279,897"/>
+<area shape="rect" title=" " alt="" coords="108,681,259,897"/>
 <area shape="rect" href="classWorld.html" title=" " alt="" coords="95,269,271,632"/>
 <area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,5,175,207"/>
 <area shape="rect" href="classWorld_1_1WorldGenerator.html" title=" " alt="" coords="199,57,357,155"/>
@@ -159,6 +159,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a51cba826d6ee2909fd71070af6451c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33c674a4aad2e0f04a26813940a77d45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">updateBlock</a> (glm::dvec3 position)</td></tr>
 <tr class="separator:a33c674a4aad2e0f04a26813940a77d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdb5146055c2fd61c42d50b8c8de842f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#acdb5146055c2fd61c42d50b8c8de842f">getRenderDistance</a> () const</td></tr>
+<tr class="separator:acdb5146055c2fd61c42d50b8c8de842f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fb383fddc73e6dfae28fd9ec30a9b88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a2fb383fddc73e6dfae28fd9ec30a9b88">setRenderDistance</a> (const int &amp;render_distance)</td></tr>
+<tr class="separator:a2fb383fddc73e6dfae28fd9ec30a9b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a694d468c814f15436ef73cbb1e98812d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a694d468c814f15436ef73cbb1e98812d">getServerLoadDistance</a> () const</td></tr>
+<tr class="separator:a694d468c814f15436ef73cbb1e98812d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31afbfb7599134bc3ff7b22bc334aa50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a31afbfb7599134bc3ff7b22bc334aa50">setServerLoadDistance</a> (const int &amp;server_load_distance)</td></tr>
+<tr class="separator:a31afbfb7599134bc3ff7b22bc334aa50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a311ae115a5f778d3dbe6ba1ac40a145b"><td class="memItemLeft" align="right" valign="top">std::pair&lt; glm::dvec3, glm::dvec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b">calculatePlayerMovement</a> (const uint64_t player_id, const int8_t forward, const int8_t backward, const int8_t left, const int8_t right, const int8_t up, const int8_t down, const double delta_time_second)</td></tr>
 <tr class="separator:a311ae115a5f778d3dbe6ba1ac40a145b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fc5217d0b6d449d3ec9f1bb08fead5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d">updatePlayerCamera</a> (const uint64_t player_id, const double x_offset, const double y_offset)</td></tr>
@@ -634,6 +642,40 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="acdb5146055c2fd61c42d50b8c8de842f" name="acdb5146055c2fd61c42d50b8c8de842f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdb5146055c2fd61c42d50b8c8de842f">&#9670;&#160;</a></span>getRenderDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ClientWorld::getRenderDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a694d468c814f15436ef73cbb1e98812d" name="a694d468c814f15436ef73cbb1e98812d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a694d468c814f15436ef73cbb1e98812d">&#9670;&#160;</a></span>getServerLoadDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ClientWorld::getServerLoadDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0795485822cc9d84e6061ca726e0ecc8" name="a0795485822cc9d84e6061ca726e0ecc8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0795485822cc9d84e6061ca726e0ecc8">&#9670;&#160;</a></span>localGetChunk()</h2>
 
@@ -862,6 +904,42 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2fb383fddc73e6dfae28fd9ec30a9b88" name="a2fb383fddc73e6dfae28fd9ec30a9b88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fb383fddc73e6dfae28fd9ec30a9b88">&#9670;&#160;</a></span>setRenderDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::setRenderDistance </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>render_distance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a31afbfb7599134bc3ff7b22bc334aa50" name="a31afbfb7599134bc3ff7b22bc334aa50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31afbfb7599134bc3ff7b22bc334aa50">&#9670;&#160;</a></span>setServerLoadDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::setServerLoadDistance </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>server_load_distance</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

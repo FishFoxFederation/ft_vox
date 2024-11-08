@@ -12,12 +12,13 @@ var classServerWorld =
     [ "addTicket", "classServerWorld.html#a57b09255108fe8e16e112fbc9d1b05fa", null ],
     [ "changeTicket", "classServerWorld.html#aeb795975e6d2fa4ee76a05ecdadf4615", null ],
     [ "getBlockUpdateChunks", "classServerWorld.html#ae1ebb95bb7fa6a543052907b8b304608", null ],
-    [ "getChunksToUnload", "classServerWorld.html#afd97b8fca06c1d7e9a6ae80c82407432", null ],
     [ "getEntityUpdateChunks", "classServerWorld.html#a1c7e95561e5b1048cb407c4a0e16e70b", null ],
+    [ "getLoadDistance", "classServerWorld.html#a1148bfb757f5882683e97eb5fec92d11", null ],
     [ "getTickets", "classServerWorld.html#a79557166e9e4448e9e467acaee42f998", null ],
     [ "handleBlockActionPacket", "classServerWorld.html#a9f3bc5012e66eaf51c7601c2cc2b0de3", null ],
     [ "handleConnectionPacket", "classServerWorld.html#a4765ff7c1e674ab67b51e9b24b7b1afd", null ],
     [ "handleDisconnectPacket", "classServerWorld.html#a36083fb7cf6cbe067f746e3b0bdb6f59", null ],
+    [ "handleLoadDistancePacket", "classServerWorld.html#a8c14c1c9ed9597b94583bad20f53f32f", null ],
     [ "handlePacket", "classServerWorld.html#a47301946b8c5bc0957ee6cc853cb2cc7", null ],
     [ "handlePlayerMovePacket", "classServerWorld.html#a1d3a4eb759fe90206dfadfe74d875da8", null ],
     [ "operator=", "classServerWorld.html#a1f64a72ff8360e15fe31bada5e991933", null ],
@@ -26,6 +27,7 @@ var classServerWorld =
     [ "removeTicket", "classServerWorld.html#a011796df74c5e6f16bfa7e4d78b93e95", null ],
     [ "sendChunkLoadUnloadData", "classServerWorld.html#a53e41cd4cc868b9c4fef6eb7600d10e7", null ],
     [ "setBlock", "classServerWorld.html#a158c0e26aed57aff784fad6d20a72a20", null ],
+    [ "setPlayerTicketLevel", "classServerWorld.html#aa84a0f03237c246092ece32797e80ec0", null ],
     [ "update", "classServerWorld.html#a3c1b24daa5bca947dc841ad7edec54be", null ],
     [ "updateBlocks", "classServerWorld.html#a7f8de8a9ac580e3ba3f8a44ae0bcedef", null ]
 ];

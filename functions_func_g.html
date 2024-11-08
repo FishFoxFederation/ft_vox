@@ -131,14 +131,15 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>GetChunkPos()&#160;:&#160;<a class="el" href="classChunkRequestPacket.html#a9f2bc12e14b242adb4b3dfa8a04b5b7f">ChunkRequestPacket</a></li>
 <li>GetChunkPosition()&#160;:&#160;<a class="el" href="classChunkUnloadPacket.html#a34325f896c3056502433a8f542bed4dd">ChunkUnloadPacket</a></li>
 <li>getChunkPosition()&#160;:&#160;<a class="el" href="classWorld.html#ae27a9fda577f8532ab2c2e2a84a212e6">World</a></li>
-<li>getChunksToUnload()&#160;:&#160;<a class="el" href="classServerWorld.html#afd97b8fca06c1d7e9a6ae80c82407432">ServerWorld</a></li>
 <li>getComponent()&#160;:&#160;<a class="el" href="classECS.html#a0964edee0e30fc151733125821a1fbca">ECS</a></li>
 <li>getConnectionId()&#160;:&#160;<a class="el" href="classConnection.html#a8393cac931d8bf5668c28d5bee53f76c">Connection</a></li>
 <li>GetConnectionId()&#160;:&#160;<a class="el" href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">IPacket</a></li>
+<li>GetCounter()&#160;:&#160;<a class="el" href="classPingPacket.html#a1676a18f8161c9f86378f67f7a7e3675">PingPacket</a></li>
 <li>getCursorPos()&#160;:&#160;<a class="el" href="classInput.html#af27940a5ccc50e41923999fc859033cb">Input</a></li>
 <li>getData()&#160;:&#160;<a class="el" href="classtask_1_1Task.html#abc047f9484c1e583db6599b7372f8a7d">task::Task</a></li>
 <li>getDependents()&#160;:&#160;<a class="el" href="classtask_1_1TaskNode.html#a5b06a7699e1547361c6bb7248150bde8">task::TaskNode</a></li>
 <li>GetDisplacement()&#160;:&#160;<a class="el" href="classPlayerMovePacket.html#a998da70e34a6b8a87ae6fd2323b5440e">PlayerMovePacket</a></li>
+<li>GetDistance()&#160;:&#160;<a class="el" href="classLoadDistancePacket.html#a4be6c9df718a41624dd50c4d81762412">LoadDistancePacket</a></li>
 <li>getEntityUpdateChunks()&#160;:&#160;<a class="el" href="classServerWorld.html#a1c7e95561e5b1048cb407c4a0e16e70b">ServerWorld</a></li>
 <li>getFd()&#160;:&#160;<a class="el" href="classSocket.html#a14bd3f2524a429026584c6fb51b9742e">Socket</a></li>
 <li>getGenerationGraph()&#160;:&#160;<a class="el" href="classWorld_1_1WorldGenerator.html#ab04fa0e1936eb6a1ee86e3f5cc5ba054">World::WorldGenerator</a></li>
@@ -154,6 +155,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getInstance()&#160;:&#160;<a class="el" href="classStructuresInfo.html#a513a25da4e20853026d10d4746c80f25">StructuresInfo</a>, <a class="el" href="classVulkanMemoryAllocator.html#a31fdffe4690d7847613c34abe1a858e5">VulkanMemoryAllocator</a></li>
 <li>getKeyState()&#160;:&#160;<a class="el" href="classInput.html#a271f9ae0888e9d9e594a678d54438a39">Input</a></li>
 <li>getLight()&#160;:&#160;<a class="el" href="classChunk.html#a0a55525abd3504e35a9c14cf563f4462">Chunk</a>, <a class="el" href="classCreateMeshData.html#a243fcf1684cbfb850715d89c2a5ca444">CreateMeshData</a></li>
+<li>getLoadDistance()&#160;:&#160;<a class="el" href="classServerWorld.html#a1148bfb757f5882683e97eb5fec92d11">ServerWorld</a></li>
 <li>getLoadLevel()&#160;:&#160;<a class="el" href="classChunk.html#ae44723155b8a00e6c523d27ebd3f5e7d">Chunk</a></li>
 <li>getMaxTextureCoord()&#160;:&#160;<a class="el" href="structBlockVertex.html#a7728af94a4ab4f8578678ffe34a36283">BlockVertex</a></li>
 <li>getMeshID()&#160;:&#160;<a class="el" href="classChunk.html#a97ceff83c5b32cf8e7fa3134d27b48b6">Chunk</a></li>
@@ -169,10 +171,12 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>GetPosition()&#160;:&#160;<a class="el" href="classConnectionPacket.html#adbdbabc4c20cf29d5e6442c3b3c0327d">ConnectionPacket</a>, <a class="el" href="classPlayerMovePacket.html#a8798a51590215505aa426980c8dbfced">PlayerMovePacket</a></li>
 <li>getPtr()&#160;:&#160;<a class="el" href="classtask_1_1TaskGraph.html#aa49bd4d13184313f94fc93f70a1c09dc">task::TaskGraph</a></li>
 <li>getQueueSize()&#160;:&#160;<a class="el" href="classClient.html#a60dbe62e5dd63b3308318f5aa952daa7">Client</a></li>
-<li>getReadBuffer()&#160;:&#160;<a class="el" href="classConnection.html#ac24346a1f9185b6aeda7668c690e5d71">Connection</a></li>
-<li>getReadBufferRef()&#160;:&#160;<a class="el" href="classConnection.html#aedd7d14aa69f9f4af5fddfc2b12ab261">Connection</a></li>
+<li>getReadBufferPtr()&#160;:&#160;<a class="el" href="classConnection.html#a0907cb8fe5e51d3b19c38bfc1c52c099">Connection</a></li>
+<li>getReadBufferSize()&#160;:&#160;<a class="el" href="classConnection.html#a7f3fdc850f73cfa9f6b931743dc6f89a">Connection</a></li>
+<li>getRenderDistance()&#160;:&#160;<a class="el" href="classClientWorld.html#acdb5146055c2fd61c42d50b8c8de842f">ClientWorld</a></li>
 <li>getRenderInfo()&#160;:&#160;<a class="el" href="classCamera.html#a9c5e4a4daa624e59727d920dcc5a10ec">Camera</a></li>
 <li>getScroll()&#160;:&#160;<a class="el" href="classInput.html#af25d84c4040545af992719baa33177ac">Input</a></li>
+<li>getServerLoadDistance()&#160;:&#160;<a class="el" href="classClientWorld.html#a694d468c814f15436ef73cbb1e98812d">ClientWorld</a></li>
 <li>getSkyLight()&#160;:&#160;<a class="el" href="classChunk.html#a1a65698ce69cf3742c282d93fc43aa99">Chunk</a></li>
 <li>getSocket()&#160;:&#160;<a class="el" href="classConnection.html#a92489024a0261f7d97cc0d1d0a58f414">Connection</a></li>
 <li>getStaticType()&#160;:&#160;<a class="el" href="classEvent_1_1AbstractEvent.html#ae720ca3d12635fd0d879e193fadeb0ce">Event::AbstractEvent</a>, <a class="el" href="classEvent_1_1PlayerMoving.html#a82b3a64eb1c73ac9acac76e4f91161f8">Event::PlayerMoving</a></li>
@@ -181,7 +185,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getTransformedMovement()&#160;:&#160;<a class="el" href="classPlayer.html#afa7dd1bda58f8f5ba21087b099ddbd2f">Player</a></li>
 <li>GetType()&#160;:&#160;<a class="el" href="classBlockActionPacket.html#aa00414b878a3c85ef70b97bed6ac6d95">BlockActionPacket</a>, <a class="el" href="classChunkPacket.html#a5aa5b0852cdd1476b5a1ec9b412c763d">ChunkPacket</a>, <a class="el" href="classChunkRequestPacket.html#aa6b7a11c4a993a746e20c753e90ca42f">ChunkRequestPacket</a>, <a class="el" href="classChunkUnloadPacket.html#ae55b466486fed70c4721035fab347230">ChunkUnloadPacket</a>, <a class="el" href="classConnectionPacket.html#ad58ff94b4e9a6fb89816fdd6c95cb744">ConnectionPacket</a>, <a class="el" href="classDisconnectPacket.html#a008bbcca630d9d0cdfa6be851ad68047">DisconnectPacket</a></li>
 <li>getType()&#160;:&#160;<a class="el" href="classEvent_1_1AbstractEvent.html#ac986e67d201796d1d8171e7869db387a">Event::AbstractEvent</a>, <a class="el" href="classEvent_1_1HandlerWrapperInterface.html#a5831f9e644c9172c6d27aa4d33d33562">Event::HandlerWrapperInterface</a>, <a class="el" href="classEvent_1_1PlayerMoving.html#abafddb0ce5fdd743e058f385d1ad2c6f">Event::PlayerMoving</a></li>
-<li>GetType()&#160;:&#160;<a class="el" href="classIPacket.html#ab710cd5faf4a0420d6a27ae8763fe4cc">IPacket</a>, <a class="el" href="classPingPacket.html#a66830ec578950d75949284ee74434af6">PingPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a8757dcd601110c17612336199b07baa2">PlayerConnectedPacket</a>, <a class="el" href="classPlayerListPacket.html#acd9f34154d5326987d7dd37aa9338b54">PlayerListPacket</a>, <a class="el" href="classPlayerMovePacket.html#a1c9c2b7777dc999c84505127e188c454">PlayerMovePacket</a></li>
+<li>GetType()&#160;:&#160;<a class="el" href="classIPacket.html#ab710cd5faf4a0420d6a27ae8763fe4cc">IPacket</a>, <a class="el" href="classLoadDistancePacket.html#a29bfd0173deb830647a9ae30f8005d34">LoadDistancePacket</a>, <a class="el" href="classPingPacket.html#a66830ec578950d75949284ee74434af6">PingPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#a8757dcd601110c17612336199b07baa2">PlayerConnectedPacket</a>, <a class="el" href="classPlayerListPacket.html#acd9f34154d5326987d7dd37aa9338b54">PlayerListPacket</a>, <a class="el" href="classPlayerMovePacket.html#a1c9c2b7777dc999c84505127e188c454">PlayerMovePacket</a></li>
 <li>getType()&#160;:&#160;<a class="el" href="classtask_1_1TaskNode.html#adc34fad9ded45dc8f3f4e2037d444864">task::TaskNode</a></li>
 <li>getWorldGenerator()&#160;:&#160;<a class="el" href="classWorld.html#a0e141dfb5d7dc75ed83fa20338faf153">World</a></li>
 <li>getWriteBufferRef()&#160;:&#160;<a class="el" href="classConnection.html#aa43ad289d39da6243a80b1559b02aa29">Connection</a></li>

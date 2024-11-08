@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gamemode_0',['GameMode',['../classPlayer.html#a72e63c4dee307c57567fe40a08bb292d',1,'Player']]],
-  ['genlevel_1',['genLevel',['../classChunk.html#a341d9a9b7a2a5dcc1f81eb3b616cf888',1,'Chunk']]]
+  ['flags_0',['flags',['../classServer.html#a57c92587c3b65e90f775b4c69af83b1d',1,'Server']]]
 ];

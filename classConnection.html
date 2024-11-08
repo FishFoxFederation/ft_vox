@@ -107,6 +107,7 @@ $(document).ready(function(){initNavTree('classConnection.html',''); initResizab
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classConnection-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Connection Class Reference</div></div>
 </div><!--header-->
@@ -118,7 +119,7 @@ Collaboration diagram for Connection:</div>
 <div class="dyncontent">
 <div class="center"><img src="classConnection__coll__graph.png" border="0" usemap="#aConnection_coll__map" alt="Collaboration graph"/></div>
 <map name="aConnection_coll__map" id="aConnection_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,188,207"/>
+<area shape="rect" title=" " alt="" coords="5,5,208,221"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -138,18 +139,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae5ead9e849f40522afef135788286dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea680ae8edb22fcfbeccff145fc593f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aea680ae8edb22fcfbeccff145fc593f5">queueAndSendMessage</a> (const std::vector&lt; uint8_t &gt; &amp;msg)</td></tr>
 <tr class="separator:aea680ae8edb22fcfbeccff145fc593f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac24346a1f9185b6aeda7668c690e5d71"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ac24346a1f9185b6aeda7668c690e5d71">getReadBuffer</a> () const</td></tr>
-<tr class="separator:ac24346a1f9185b6aeda7668c690e5d71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedd7d14aa69f9f4af5fddfc2b12ab261"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aedd7d14aa69f9f4af5fddfc2b12ab261">getReadBufferRef</a> () const</td></tr>
-<tr class="separator:aedd7d14aa69f9f4af5fddfc2b12ab261"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa43ad289d39da6243a80b1559b02aa29"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aa43ad289d39da6243a80b1559b02aa29">getWriteBufferRef</a> () const</td></tr>
-<tr class="separator:aa43ad289d39da6243a80b1559b02aa29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb4517f74dbba5ee3f2745d988009f6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aeb4517f74dbba5ee3f2745d988009f6e">lock</a> ()</td></tr>
-<tr class="separator:aeb4517f74dbba5ee3f2745d988009f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e678398a769b0925021f0e6edd88d48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a9e678398a769b0925021f0e6edd88d48">unlock</a> ()</td></tr>
-<tr class="separator:a9e678398a769b0925021f0e6edd88d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d2dffcef44550fc1039c4cb3e457360"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a3d2dffcef44550fc1039c4cb3e457360">queueMessage</a> (const std::vector&lt; uint8_t &gt; &amp;msg)</td></tr>
+<tr class="separator:a3d2dffcef44550fc1039c4cb3e457360"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0907cb8fe5e51d3b19c38bfc1c52c099"><td class="memItemLeft" align="right" valign="top">const uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a0907cb8fe5e51d3b19c38bfc1c52c099">getReadBufferPtr</a> () const</td></tr>
+<tr class="separator:a0907cb8fe5e51d3b19c38bfc1c52c099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f3fdc850f73cfa9f6b931743dc6f89a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a7f3fdc850f73cfa9f6b931743dc6f89a">getReadBufferSize</a> () const</td></tr>
+<tr class="separator:a7f3fdc850f73cfa9f6b931743dc6f89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a879b3872793ee5810b73ee09cde15309"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a879b3872793ee5810b73ee09cde15309">reduceReadBuffer</a> (size_t size)</td></tr>
 <tr class="separator:a879b3872793ee5810b73ee09cde15309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac20fcb6958a56591c9b3d06ef82e7ca8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ac20fcb6958a56591c9b3d06ef82e7ca8">clearReadBuffer</a> ()</td></tr>
+<tr class="separator:ac20fcb6958a56591c9b3d06ef82e7ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa43ad289d39da6243a80b1559b02aa29"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aa43ad289d39da6243a80b1559b02aa29">getWriteBufferRef</a> () const</td></tr>
+<tr class="separator:aa43ad289d39da6243a80b1559b02aa29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49b7e93b716bb833e2aee6d0b083f595"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a49b7e93b716bb833e2aee6d0b083f595">LockableBase</a> (std::mutex) &amp;ReadLock() const</td></tr>
+<tr class="separator:a49b7e93b716bb833e2aee6d0b083f595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64ffb4ea12100a9683ad89f9858e1de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ab64ffb4ea12100a9683ad89f9858e1de">LockableBase</a> (std::mutex) &amp;WriteLock() const</td></tr>
+<tr class="separator:ab64ffb4ea12100a9683ad89f9858e1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a426e5dbbc9c94e010c53fdc84564251f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a426e5dbbc9c94e010c53fdc84564251f">dataToSend</a> () const</td></tr>
 <tr class="separator:a426e5dbbc9c94e010c53fdc84564251f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd2aa3673cb4a57a2746e1b96571f69"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a8bd2aa3673cb4a57a2746e1b96571f69">recv</a> ()</td></tr>
@@ -162,6 +167,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8393cac931d8bf5668c28d5bee53f76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8002482b250ffba85becd2e0c41552a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#af8002482b250ffba85becd2e0c41552a">setConnectionId</a> (const uint64_t &amp;connection_id)</td></tr>
 <tr class="separator:af8002482b250ffba85becd2e0c41552a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:ae56a6fecbec2b330d7fd1e78019252b7"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ae56a6fecbec2b330d7fd1e78019252b7">READ_BUFFER_SIZE_MAX</a> = 1024 * 1024 * 4</td></tr>
+<tr class="separator:ae56a6fecbec2b330d7fd1e78019252b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acd6914f5b43271d312ad32a23bb52f66" name="acd6914f5b43271d312ad32a23bb52f66"></a>
@@ -244,6 +254,23 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac20fcb6958a56591c9b3d06ef82e7ca8" name="ac20fcb6958a56591c9b3d06ef82e7ca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac20fcb6958a56591c9b3d06ef82e7ca8">&#9670;&#160;</a></span>clearReadBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Connection::clearReadBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a426e5dbbc9c94e010c53fdc84564251f" name="a426e5dbbc9c94e010c53fdc84564251f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a426e5dbbc9c94e010c53fdc84564251f">&#9670;&#160;</a></span>dataToSend()</h2>
 
@@ -278,14 +305,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac24346a1f9185b6aeda7668c690e5d71" name="ac24346a1f9185b6aeda7668c690e5d71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac24346a1f9185b6aeda7668c690e5d71">&#9670;&#160;</a></span>getReadBuffer()</h2>
+<a id="a0907cb8fe5e51d3b19c38bfc1c52c099" name="a0907cb8fe5e51d3b19c38bfc1c52c099"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0907cb8fe5e51d3b19c38bfc1c52c099">&#9670;&#160;</a></span>getReadBufferPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; uint8_t &gt; Connection::getReadBuffer </td>
+          <td class="memname">const uint8_t * Connection::getReadBufferPtr </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -295,14 +322,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aedd7d14aa69f9f4af5fddfc2b12ab261" name="aedd7d14aa69f9f4af5fddfc2b12ab261"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedd7d14aa69f9f4af5fddfc2b12ab261">&#9670;&#160;</a></span>getReadBufferRef()</h2>
+<a id="a7f3fdc850f73cfa9f6b931743dc6f89a" name="a7f3fdc850f73cfa9f6b931743dc6f89a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f3fdc850f73cfa9f6b931743dc6f89a">&#9670;&#160;</a></span>getReadBufferSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const std::vector&lt; uint8_t &gt; &amp; Connection::getReadBufferRef </td>
+          <td class="memname">size_t Connection::getReadBufferSize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -346,17 +373,36 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aeb4517f74dbba5ee3f2745d988009f6e" name="aeb4517f74dbba5ee3f2745d988009f6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb4517f74dbba5ee3f2745d988009f6e">&#9670;&#160;</a></span>lock()</h2>
+<a id="a49b7e93b716bb833e2aee6d0b083f595" name="a49b7e93b716bb833e2aee6d0b083f595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49b7e93b716bb833e2aee6d0b083f595">&#9670;&#160;</a></span>LockableBase() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Connection::lock </td>
+          <td class="memname">Connection::LockableBase </td>
           <td>(</td>
+          <td class="paramtype">std::mutex&#160;</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const &amp;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab64ffb4ea12100a9683ad89f9858e1de" name="ab64ffb4ea12100a9683ad89f9858e1de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab64ffb4ea12100a9683ad89f9858e1de">&#9670;&#160;</a></span>LockableBase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Connection::LockableBase </td>
+          <td>(</td>
+          <td class="paramtype">std::mutex&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const &amp;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -415,6 +461,24 @@ Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void Connection::queueAndSendMessage </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3d2dffcef44550fc1039c4cb3e457360" name="a3d2dffcef44550fc1039c4cb3e457360"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d2dffcef44550fc1039c4cb3e457360">&#9670;&#160;</a></span>queueMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Connection::queueMessage </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; uint8_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>msg</em></td><td>)</td>
@@ -495,19 +559,25 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9e678398a769b0925021f0e6edd88d48" name="a9e678398a769b0925021f0e6edd88d48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e678398a769b0925021f0e6edd88d48">&#9670;&#160;</a></span>unlock()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae56a6fecbec2b330d7fd1e78019252b7" name="ae56a6fecbec2b330d7fd1e78019252b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae56a6fecbec2b330d7fd1e78019252b7">&#9670;&#160;</a></span>READ_BUFFER_SIZE_MAX</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Connection::unlock </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="memname">constexpr size_t Connection::READ_BUFFER_SIZE_MAX = 1024 * 1024 * 4</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

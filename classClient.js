@@ -12,5 +12,6 @@ var classClient =
     [ "run", "classClient.html#ae0bc335d720265d4d6e8a72cf7a2a9aa", null ],
     [ "runOnce", "classClient.html#af888552c0bffe55dad7dfb0b8cd25d8a", null ],
     [ "sendPacket", "classClient.html#a3ab0ece7e17a254489b2f9d3c6460dee", null ],
+    [ "sendPacketNoWait", "classClient.html#aca18fe3d6df92463d75fed08462de1f2", null ],
     [ "m_pings", "classClient.html#a6ac49c33d688d99c42ed0f78e1efe79c", null ]
 ];

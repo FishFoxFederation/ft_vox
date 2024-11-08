@@ -12,5 +12,6 @@ var dir_16a327e0eea9858bdb366df3e314b663 =
     [ "Poller.cpp", "Poller_8cpp.html", null ],
     [ "Poller.hpp", "Poller_8hpp.html", "Poller_8hpp" ],
     [ "Socket.cpp", "Socket_8cpp.html", null ],
-    [ "Socket.hpp", "Socket_8hpp.html", "Socket_8hpp" ]
+    [ "Socket.hpp", "Socket_8hpp.html", "Socket_8hpp" ],
+    [ "ThreadSafeQueue.hpp", "ThreadSafeQueue_8hpp.html", "ThreadSafeQueue_8hpp" ]
 ];

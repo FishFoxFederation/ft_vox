@@ -8,7 +8,10 @@ var searchData=
   ['textrenderer_5',['TextRenderer',['../classTextRenderer.html',1,'']]],
   ['threadpool_6',['ThreadPool',['../classThreadPool.html',1,'']]],
   ['threadpoolaccessor_7',['ThreadPoolAccessor',['../classThreadPoolAccessor.html',1,'']]],
-  ['ticket_8',['Ticket',['../structServerWorld_1_1Ticket.html',1,'ServerWorld']]],
-  ['timer_9',['Timer',['../classTimer.html',1,'']]],
-  ['transform_10',['Transform',['../classTransform.html',1,'']]]
+  ['threadsafequeue_8',['ThreadSafeQueue',['../classThreadSafeQueue.html',1,'']]],
+  ['threadsafequeue_3c_20server_3a_3asendinfo_20_3e_9',['ThreadSafeQueue&lt; Server::sendInfo &gt;',['../classThreadSafeQueue.html',1,'']]],
+  ['threadsafequeue_3c_20std_3a_3ashared_5fptr_3c_20ipacket_20_3e_20_3e_10',['ThreadSafeQueue&lt; std::shared_ptr&lt; IPacket &gt; &gt;',['../classThreadSafeQueue.html',1,'']]],
+  ['ticket_11',['Ticket',['../structServerWorld_1_1Ticket.html',1,'ServerWorld']]],
+  ['timer_12',['Timer',['../classTimer.html',1,'']]],
+  ['transform_13',['Transform',['../classTransform.html',1,'']]]
 ];

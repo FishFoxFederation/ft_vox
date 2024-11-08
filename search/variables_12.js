@@ -28,5 +28,5 @@ var searchData=
   ['transfer_5ffamily_25',['transfer_family',['../structQueueFamilyIndices.html#a44f40b1ee7642edba5edcf8c7da9a8f7',1,'QueueFamilyIndices']]],
   ['transfer_5fqueue_26',['transfer_queue',['../classVulkanAPI.html#a0517937337ae0b3ad6e147526be0d960',1,'VulkanAPI']]],
   ['transform_27',['transform',['../classMob.html#ae5fea291d4689996bdf6a86b06396c44',1,'Mob::transform()'],['../classPlayer.html#a2bbab5a2f0739cb231d161e9ed479b9d',1,'Player::transform()']]],
-  ['type_28',['type',['../classItemInfo.html#af0b5870812676ce07c60450db4499cb7',1,'ItemInfo::type()'],['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData::type()']]]
+  ['type_28',['type',['../classItemInfo.html#af0b5870812676ce07c60450db4499cb7',1,'ItemInfo::type()'],['../structServerWorld_1_1BlockUpdateData.html#ac035700044b85e25bfa751935ae00af1',1,'ServerWorld::BlockUpdateData::type()'],['../structServerWorld_1_1Ticket.html#a0e813749bf298a2f51a456a7f57e3cfc',1,'ServerWorld::Ticket::type()']]]
 ];

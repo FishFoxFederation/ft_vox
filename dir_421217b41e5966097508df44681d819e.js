@@ -17,6 +17,8 @@ var dir_421217b41e5966097508df44681d819e =
     [ "IPacket.cpp", "IPacket_8cpp.html", null ],
     [ "IPacket.hpp", "IPacket_8hpp.html", "IPacket_8hpp" ],
     [ "IPositionPacket.hpp", "IPositionPacket_8hpp.html", null ],
+    [ "LoadDistancePacket.cpp", "LoadDistancePacket_8cpp.html", null ],
+    [ "LoadDistancePacket.hpp", "LoadDistancePacket_8hpp.html", "LoadDistancePacket_8hpp" ],
     [ "Packets.hpp", "Packets_8hpp.html", null ],
     [ "PingPacket.cpp", "PingPacket_8cpp.html", null ],
     [ "PingPacket.hpp", "PingPacket_8hpp.html", "PingPacket_8hpp" ],

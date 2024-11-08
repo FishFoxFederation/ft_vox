@@ -115,15 +115,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AbstractEvent_8cpp.html",
-"SoundList_8hpp.html#aa20b534785857c1eee21622419d48262",
-"classChunkRequestPacket.html#a6f910e9e6ff2154d16d4d7780d611ef1",
-"classEvent_1_1PlayerMoving.html#a098353c7b89dd61acaf4c52e44b9756f",
-"classPlayer.html",
-"classSocket.html#aa43db7ebf14af61c781da7583c40e33d",
-"classVulkanAPI.html#af0fc9d116584aa25c04587c6ac9b43cc",
-"classtask_1_1TaskNode.html#ad6fdea1aff52ddbc83a555b99b8f2a6f",
-"structCamera_1_1RenderInfo.html#ad0e2589582cffd6bd4d44af640898faa",
-"structWorldScene_1_1PlayerRenderData.html#aaed03cb5d89530a035968a016cd1a0cc"
+"SoundEngine_8hpp.html#a322712fb645499cfb59e010757a6ee96",
+"classChunkPacket.html#ae71acc57c0e68214521071521c1aa6de",
+"classEvent_1_1Manager.html",
+"classPingPacket.html#a49cd0a5c95666f2b170e822e93acd275",
+"classServer_1_1ClientDisconnected.html#af57dccf0be97d5b19a0c1daf6163d9db",
+"classVulkanAPI.html#a940a7401cf07be24321fb4135242ed02",
+"classtask_1_1TaskNode.html",
+"namespacevk__helper.html#a71c0f42868e6edd14e06b352890f5acc",
+"structSound_1_1Instance.html#a3061aea8b34cb0bfdcc5064007995418"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

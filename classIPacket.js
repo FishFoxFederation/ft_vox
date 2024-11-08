@@ -4,7 +4,6 @@ var classIPacket =
       [ "CONNECTION", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569af877da16e0c12743466e4059018d0d98", null ],
       [ "PLAYER_CONNECTED", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ab087a51a9b768da05c3038997aafcfb0", null ],
       [ "PLAYER_MOVE", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a09615e47f229c3d2725c924d0af4a0ce", null ],
-      [ "ENTITY_MOVE", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a0300ccc0483b1d5e763bb84e013ba702", null ],
       [ "DISCONNECT", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569add7cd0eb57db08d4f98abc48e5593462", null ],
       [ "BLOCK_ACTION", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a41d0a6500f70645f081e8c2c0d675cae", null ],
       [ "PING", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ae07ff41a486c27c095a15898dcca34d1", null ],
@@ -12,7 +11,9 @@ var classIPacket =
       [ "CHUNK", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569ac8e8e43935c45683be5302fa7329182a", null ],
       [ "CHUNK_REQUEST", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a3d9c91ce3c1f8480bbc2f2044602436c", null ],
       [ "CHUNK_UNLOAD", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a2611071c97c8fcbf9552751c77bffdfa", null ],
-      [ "ENUM_MAX", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d", null ]
+      [ "LOAD_DISTANCE", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569abfcf8e49487aa8235464acb16fc19cd7", null ],
+      [ "ENUM_MAX", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a57bf742db8608b05d1f2d2b38332c38d", null ],
+      [ "ENUM_MIN", "classIPacket.html#a45e74ba6b0b68c66035a48c641a6a569a3ec3ed48a474467a9d62ec8827227c11", null ]
     ] ],
     [ "~IPacket", "classIPacket.html#ac1213f746277104a05b1dfa86ca505bb", null ],
     [ "IPacket", "classIPacket.html#aebd08dc223b5854f99c1dbadf3bc132e", null ],

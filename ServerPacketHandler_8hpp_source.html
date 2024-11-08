@@ -134,20 +134,21 @@ $(document).ready(function(){initNavTree('ServerPacketHandler_8hpp_source.html',
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <a class="code hl_class" href="classServer.html">Server</a> &amp;    m_server;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <a class="code hl_class" href="classServerWorld.html">ServerWorld</a> &amp; m_world;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    std::unordered_map&lt;uint64_t, uint64_t&gt; m_player_to_connection_id;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    std::unordered_map&lt;uint64_t, uint64_t&gt; m_connection_to_player_id;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    std::unordered_map&lt;uint64_t, uint64_t&gt; m_player_to_connection_id;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    std::unordered_map&lt;uint64_t, uint64_t&gt; m_connection_to_player_id;</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">void</span> handleConnectionPacket(std::shared_ptr&lt;ConnectionPacket&gt; packet);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> handlePlayerMovePacket(std::shared_ptr&lt;PlayerMovePacket&gt; packet);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> handleDisconnectPacket(std::shared_ptr&lt;DisconnectPacket&gt; packet);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> handleBlockActionPacket(std::shared_ptr&lt;BlockActionPacket&gt; packet);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">void</span> handleChunkRequestPacket(std::shared_ptr&lt;ChunkRequestPacket&gt; packet);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">void</span> mirrorPacket(std::shared_ptr&lt;IPacket&gt; packet);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">void</span> relayPacket(std::shared_ptr&lt;IPacket&gt; packet);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> handleConnectionPacket(std::shared_ptr&lt;ConnectionPacket&gt; packet);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> handlePlayerMovePacket(std::shared_ptr&lt;PlayerMovePacket&gt; packet);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> handleDisconnectPacket(std::shared_ptr&lt;DisconnectPacket&gt; packet);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">void</span> handleBlockActionPacket(std::shared_ptr&lt;BlockActionPacket&gt; packet);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">void</span> handleChunkRequestPacket(std::shared_ptr&lt;ChunkRequestPacket&gt; packet);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">void</span> handlePingPacket(std::shared_ptr&lt;PingPacket&gt; packet);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">void</span> mirrorPacket(std::shared_ptr&lt;IPacket&gt; packet);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> relayPacket(std::shared_ptr&lt;IPacket&gt; packet);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>};</div>
 <div class="ttc" id="aPackets_8hpp_html"><div class="ttname"><a href="Packets_8hpp.html">Packets.hpp</a></div></div>
 <div class="ttc" id="aServerWorld_8hpp_html"><div class="ttname"><a href="ServerWorld_8hpp.html">ServerWorld.hpp</a></div></div>
 <div class="ttc" id="aServer_8hpp_html"><div class="ttname"><a href="Server_8hpp.html">Server.hpp</a></div></div>
@@ -159,7 +160,7 @@ $(document).ready(function(){initNavTree('ServerPacketHandler_8hpp_source.html',
 <div class="ttc" id="aclassServerPacketHandler_html_ab5179fc9117fa19666cf0eb17a07a602"><div class="ttname"><a href="classServerPacketHandler.html#ab5179fc9117fa19666cf0eb17a07a602">ServerPacketHandler::ServerPacketHandler</a></div><div class="ttdeci">ServerPacketHandler(const ServerPacketHandler &amp;other)=delete</div></div>
 <div class="ttc" id="aclassServerPacketHandler_html_ab902abf233e99846e9ddfb9b18b2df8e"><div class="ttname"><a href="classServerPacketHandler.html#ab902abf233e99846e9ddfb9b18b2df8e">ServerPacketHandler::operator=</a></div><div class="ttdeci">ServerPacketHandler &amp; operator=(ServerPacketHandler &amp;&amp;other)=delete</div></div>
 <div class="ttc" id="aclassServerWorld_html"><div class="ttname"><a href="classServerWorld.html">ServerWorld</a></div><div class="ttdef"><b>Definition:</b> ServerWorld.hpp:18</div></div>
-<div class="ttc" id="aclassServer_html"><div class="ttname"><a href="classServer.html">Server</a></div><div class="ttdef"><b>Definition:</b> Server.hpp:16</div></div>
+<div class="ttc" id="aclassServer_html"><div class="ttname"><a href="classServer.html">Server</a></div><div class="ttdef"><b>Definition:</b> Server.hpp:17</div></div>
 <div class="ttc" id="aserver__define_8hpp_html"><div class="ttname"><a href="server__define_8hpp.html">server_define.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
