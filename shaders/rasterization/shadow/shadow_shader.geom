@@ -8,7 +8,7 @@
 layout(triangles, invocations = 1) in;
 layout(triangle_strip, max_vertices = 3) out;
 
-layout (std140, set = 1, binding = 0) uniform LightSpaceMatrices
+layout (std140, set = 0, binding = SUN_MATRICES_BINDING) uniform LightSpaceMatrices
 {
 	ShadowMapLight shadow_map_light;
 };

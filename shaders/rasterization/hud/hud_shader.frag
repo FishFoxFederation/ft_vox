@@ -1,5 +1,7 @@
 #version 450
 
+#include "common.glsl"
+
 layout (set = 1, binding = 0) uniform sampler2D image;
 
 layout (location = 0) in vec2 inUV;

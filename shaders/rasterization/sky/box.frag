@@ -1,6 +1,8 @@
 #version 450
 
-layout(set = 1, binding = 0) uniform samplerCube cubeMapTexture;
+#include "common.glsl"
+
+layout(set = 0, binding = SKYBOX_CUBE_MAP_BINDING) uniform samplerCube cubeMapTexture;
 
 layout(location = 0) in vec3 texDir;
 

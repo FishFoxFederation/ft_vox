@@ -2,7 +2,7 @@
 
 #include "common.glsl"
 
-layout(set = 0, binding = 0) uniform CameraMatrices
+layout(set = 0, binding = CAMERA_MATRICES_BINDING) uniform CameraMatrices
 {
 	ViewProjMatrices cm;
 };
