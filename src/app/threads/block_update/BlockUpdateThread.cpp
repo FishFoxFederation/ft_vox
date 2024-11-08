@@ -3,14 +3,11 @@
 #include <unistd.h>
 
 BlockUpdateThread::BlockUpdateThread(
-	WorldScene & worldScene,
 	ClientWorld & world
 ):
-	m_worldScene(worldScene),
 	m_world(world),
 	m_thread(&BlockUpdateThread::launch, this)
 {
-	(void)m_worldScene;
 }
 
 BlockUpdateThread::~BlockUpdateThread()

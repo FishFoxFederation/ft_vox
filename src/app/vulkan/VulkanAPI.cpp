@@ -2506,6 +2506,36 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 }
 
 
+void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
+{
+	std::lock_guard lock(m_target_block_mutex);
+	m_target_block = target_block;
+}
+
+std::optional<glm::vec3> VulkanAPI::targetBlock() const
+{
+	std::lock_guard lock(m_target_block_mutex);
+	return m_target_block;
+}
+
+std::vector<PlayerRenderData> VulkanAPI::getPlayers() const
+{
+	std::lock_guard lock(m_player_mutex);
+	std::vector<PlayerRenderData> players;
+	std::transform(
+		m_players.begin(),
+		m_players.end(),
+		std::back_inserter(players),
+		[](const auto & player)
+		{
+			return PlayerRenderData{player.second};
+		}
+	);
+	return players;
+}
+
+
+
 void VulkanAPI::drawMesh(
 	VkCommandBuffer command_buffer,
 	const Pipeline & pipeline,

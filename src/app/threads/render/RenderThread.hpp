@@ -1,7 +1,6 @@
 #pragma once
 
 #include "define.hpp"
-#include "WorldScene.hpp"
 #include "Settings.hpp"
 #include "VulkanAPI.hpp"
 #include "Chunk.hpp"
@@ -38,7 +37,6 @@ public:
 	RenderThread(
 		const Settings & settings,
 		VulkanAPI & vulkanAPI,
-		const WorldScene & worldScene,
 		std::chrono::nanoseconds start_time
 	);
 
@@ -56,7 +54,6 @@ private:
 
 	const Settings & m_settings;
 	VulkanAPI & vk;
-	const WorldScene & m_world_scene;
 
 	DebugGui m_debug_gui;
 
@@ -90,18 +87,17 @@ private:
 	ViewProjMatrices camera_matrices = {};
 	ViewProjMatrices camera_matrices_fc = {};
 
-	std::vector<WorldScene::ChunkMeshRenderData> chunk_meshes;
-	std::vector<WorldScene::MeshRenderData> entity_meshes;
-	std::vector<WorldScene::PlayerRenderData> players;
+	std::vector<ChunkMeshRenderData> chunk_meshes;
+	std::vector<MeshRenderData> entity_meshes;
+	std::vector<PlayerRenderData> players;
 
-	std::vector<WorldScene::ChunkMeshRenderData> visible_chunks;
-	std::vector<std::vector<WorldScene::ChunkMeshRenderData>> shadow_visible_chunks;
+	std::vector<ChunkMeshRenderData> visible_chunks;
+	std::vector<std::vector<ChunkMeshRenderData>> shadow_visible_chunks;
 
 	ViewProjMatrices sun = {};
 	glm::dvec3 sun_position;
 
 	std::optional<glm::vec3> target_block;
-	std::vector<WorldScene::DebugBlock> debug_blocks;
 
 	AtmosphereParams atmosphere_params = {};
 

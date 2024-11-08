@@ -14,12 +14,10 @@
 RenderThread::RenderThread(
 	const Settings & settings,
 	VulkanAPI & vulkan_api,
-	const WorldScene & world_scene,
 	std::chrono::nanoseconds start_time
 ):
 	m_settings(settings),
 	vk(vulkan_api),
-	m_world_scene(world_scene),
 	m_debug_gui(vulkan_api),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
@@ -287,7 +285,7 @@ void RenderThread::prepareFrame()
 
 	aspect_ratio = static_cast<double>(window_width) / static_cast<double>(window_height);
 
-	camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
+	camera = vk.camera.getRenderInfo(aspect_ratio);
 
 	camera_matrices.view = camera.view;
 	camera_matrices.proj = clip * camera.projection;
@@ -296,9 +294,9 @@ void RenderThread::prepareFrame()
 	camera_matrices_fc.proj = camera.projection;
 
 
-	chunk_meshes = m_world_scene.chunk_mesh_list.values();
-	entity_meshes = m_world_scene.entity_mesh_list.values();
-	players = m_world_scene.getPlayers();
+	chunk_meshes = vk.chunk_mesh_list.values();
+	entity_meshes = vk.entity_mesh_list.values();
+	players = vk.getPlayers();
 
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
@@ -330,8 +328,7 @@ void RenderThread::prepareFrame()
 		sun_near, sun_far
 	);
 
-	target_block = m_world_scene.targetBlock();
-	debug_blocks = m_world_scene.debugBlocks();
+	target_block = vk.targetBlock();
 
 	atmosphere_params.sun_direction = glm::normalize(sun_position - camera.position);
 	atmosphere_params.earth_radius = DebugGui::earth_radius;
@@ -372,10 +369,10 @@ void RenderThread::prepareFrame()
 		shadow_map_light.plane_distances[i].x = far_plane_distances[i];
 	}
 
-	toolbar_cursor_index = m_world_scene.toolbar_cursor_index.load();
+	toolbar_cursor_index = vk.toolbar_cursor_index.load();
 	{
-		std::lock_guard lock(m_world_scene.toolbar_items_mutex);
-		toolbar_items = m_world_scene.toolbar_items;
+		std::lock_guard lock(vk.toolbar_items_mutex);
+		toolbar_items = vk.toolbar_items;
 	}
 
 	updateVisibleChunks();
@@ -659,34 +656,6 @@ void RenderThread::lightingPass()
 						VK_SHADER_STAGE_ALL
 					);
 				}
-
-				for (auto & data: debug_blocks)
-				{
-					const glm::vec3 size = glm::vec3(data.size);
-					const glm::mat4 block_scale = glm::scale(glm::mat4(1.0f), size);
-					const glm::mat4 block_model = glm::translate(glm::mat4(1.0f), data.position - size / 2.0f) * block_scale;
-
-					GlobalPushConstant block_matrice = {};
-					block_matrice.matrice = block_model;
-					block_matrice.color = data.color;
-					vkCmdPushConstants(
-						vk.draw_command_buffers[vk.current_frame],
-						vk.entity_pipeline.layout,
-						VK_SHADER_STAGE_ALL,
-						0,
-						sizeof(GlobalPushConstant),
-						&block_matrice
-					);
-
-					vkCmdDrawIndexed(
-						vk.draw_command_buffers[vk.current_frame],
-						36,
-						1,
-						0,
-						0,
-						0
-					);
-				}
 			}
 
 			{ // Draw the players
@@ -966,7 +935,7 @@ void RenderThread::lightingPass()
 
 
 		// write the debug text on the texture only if the debug text is enabled
-		if (m_world_scene.show_debug_text)
+		if (vk.show_debug_text)
 		{
 			ZoneScopedN("Write debug text");
 			TracyVkZone(vk.draw_ctx, vk.draw_command_buffers[vk.current_frame], "Write debug text");
@@ -1078,7 +1047,7 @@ void RenderThread::lightingPass()
 					vk.drawHudImage(vk.toolbar_cursor_image_descriptor, viewport);
 				}
 
-				if (m_world_scene.show_debug_text) // Debug info
+				if (vk.show_debug_text) // Debug info
 				{
 					float width = 2048.0f;
 					float height = 512.0f;

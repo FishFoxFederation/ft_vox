@@ -10,7 +10,6 @@ UpdateThread::UpdateThread(
 	Client & client,
 	const Settings & settings,
 	Window & window,
-	WorldScene & world_scene,
 	ClientWorld & world,
 	VulkanAPI & vulkan_api,
 	Sound::Engine & sound_engine,
@@ -19,7 +18,6 @@ UpdateThread::UpdateThread(
 ):
 	m_settings(settings),
 	m_window(window),
-	m_world_scene(world_scene),
 	m_world(world),
 	m_vulkan_api(vulkan_api),
 	m_client(client),
@@ -32,7 +30,6 @@ UpdateThread::UpdateThread(
 	m_start_time_counting_ups(start_time),
 	m_thread(&UpdateThread::launch, this)
 {
-	(void)m_vulkan_api;
 	(void)m_start_time;
 }
 
@@ -87,8 +84,8 @@ void UpdateThread::loop()
 	m_world.updateMobs(m_delta_time.count() / 1e9);
 
 	{ // Update walk animation
-		std::lock_guard lock(m_world_scene.m_player_mutex);
-		for (auto & [id, player] : m_world_scene.m_players)
+		std::lock_guard lock(m_vulkan_api.m_player_mutex);
+		for (auto & [id, player] : m_vulkan_api.m_players)
 		{
 			player.walk_animation.update();
 			player.attack_animation.update();
@@ -181,7 +178,7 @@ void UpdateThread::readInput()
 	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
 	if (f3_key_status == Input::KeyState::PRESSED)
 	{
-		m_world_scene.show_debug_text = !m_world_scene.show_debug_text;
+		m_vulkan_api.show_debug_text = !m_vulkan_api.show_debug_text;
 	}
 
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
@@ -302,7 +299,7 @@ void UpdateThread::movePlayer()
 		look.y
 	);
 
-	m_world_scene.camera() = m_world.getCamera(m_world.m_my_player_id);
+	m_vulkan_api.camera = m_world.getCamera(m_world.m_my_player_id);
 	last_time = now;
 }
 

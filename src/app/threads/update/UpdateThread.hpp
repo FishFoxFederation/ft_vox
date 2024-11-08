@@ -2,9 +2,7 @@
 
 #include "define.hpp"
 #include "window.hpp"
-#include "WorldScene.hpp"
 #include "Settings.hpp"
-#include "ClientWorld.hpp"
 #include "VulkanAPI.hpp"
 #include "Client.hpp"
 #include "ClientPacketHandler.hpp"
@@ -22,7 +20,6 @@ public:
 		Client & client,
 		const Settings & settings,
 		Window & window,
-		WorldScene & world_scene,
 		ClientWorld & world,
 		VulkanAPI & vulkan_api,
 		Sound::Engine & sound_engine,
@@ -40,7 +37,6 @@ private:
 
 	const Settings & m_settings;
 	Window & m_window;
-	WorldScene & m_world_scene;
 	ClientWorld & m_world;
 	VulkanAPI & m_vulkan_api;
 	Client & m_client;
