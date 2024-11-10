@@ -10,10 +10,13 @@ Connection::~Connection()
 }
 
 Connection::Connection(Connection&& other)
-: m_socket(std::move(other.m_socket)), m_connection_id(other.m_connection_id)
+:
+	m_socket(std::move(other.m_socket)),
+	m_connection_id(other.m_connection_id),
+	m_read_offset(other.m_read_offset),
+	m_read_buffer(std::move(other.m_read_buffer)),
+	m_write_buffer(std::move(other.m_write_buffer))
 {
-	m_read_buffer = std::move(other.m_read_buffer);
-	m_write_buffer = std::move(other.m_write_buffer);
 }
 
 Connection& Connection::operator=(Connection&& other)
@@ -22,6 +25,7 @@ Connection& Connection::operator=(Connection&& other)
 	{
 		m_socket = std::move(other.m_socket);
 		m_connection_id = other.m_connection_id;
+		m_read_offset = other.m_read_offset;
 		m_read_buffer = std::move(other.m_read_buffer);
 		m_write_buffer = std::move(other.m_write_buffer);
 	}
@@ -117,7 +121,7 @@ ssize_t Connection::sendQueue()
 void Connection::queueAndSendMessage(const std::vector<uint8_t> & msg)
 {
 	ZoneScoped;
-	m_write_buffer.insert(m_write_buffer.end(), msg.begin(), msg.end());
+	queueMessage(msg);
 	sendQueue();
 }
 
