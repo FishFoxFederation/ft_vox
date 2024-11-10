@@ -31,16 +31,12 @@ PacketFactory::~PacketFactory()
 {
 }
 
-// ssize_t PacketFactory::getSize(IPacket::Type id) const
-// {
-// 	auto it = m_packets.find(id);
-// 	if (it != m_packets.end())
-// 	{
-// 		return it->second->Size();
-// 	}
-// 	return -1;
-// }
-
+/**
+ * @details This private method is used to read a connection buffer and extract information about a potential packet,
+ * it will see if it can read the packet type,
+ * then if the packet has a dynamic size ( meaning the size is not fixed so it can vary between packets of the same type )
+ * it will read the size of the packet that has been encoded in the buffer right after the packet type
+ */
 PacketFactory::packetInfo PacketFactory::getPacketInfo(const uint8_t * buffer, const size_t & size) const
 {
 	ZoneScoped;
@@ -86,6 +82,11 @@ PacketFactory::packetInfo PacketFactory::getPacketInfo(const uint8_t * buffer, c
 	return retInfo;
 }
 
+/**
+ * @details calls getPacketInfo to get information about a potential packet in the connection's buffer
+ * if the packet is complete, instanciates a new packet of the correct type and extracts the message from the connection
+ * all buffer manipulation is done in connection and IPacket classes
+ */
 std::pair<bool, std::shared_ptr<IPacket>> PacketFactory::extractPacket(Connection & connection)
 {
 	ZoneScoped;
@@ -94,11 +95,7 @@ std::pair<bool, std::shared_ptr<IPacket>> PacketFactory::extractPacket(Connectio
 	std::pair<bool, std::shared_ptr<IPacket>> ret = std::make_pair(false, nullptr);
 	if (packetRet.complete)
 	{
-		std::shared_ptr<IPacket> packet = nullptr;
-		{
-			ZoneNamedN(packetCloneZone, "Packet Clone", true);
-			packet = m_packets.at(packetRet.type)->Clone();
-		}
+		std::shared_ptr<IPacket> packet = m_packets.at(packetRet.type)->Clone();
 		packet->ExtractMessage(connection);
 		ret.first = true;
 		ret.second = packet;
