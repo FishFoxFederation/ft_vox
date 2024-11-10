@@ -34,11 +34,21 @@ void IPacket::ExtractMessage(Connection & connection)
 {
 	ZoneScoped;
 	m_connection_id = connection.getConnectionId();
-	{
-		ZoneScopedN("DeserializeOuter");
-		const uint8_t *ptr = connection.getReadBufferPtr();
-	
-		Deserialize(ptr);
-	}
+	Deserialize(connection.getReadBufferPtr());
 	connection.reduceReadBuffer(Size());
+}
+
+size_t IPacket::SerializeHeader(uint8_t * buffer) const
+{
+	auto type = GetType();
+	memcpy(buffer, &type, sizeof(type));
+	buffer += sizeof(type);
+
+	if (HasDynamicSize())
+	{
+		auto size = Size();
+		memcpy(buffer, &size, sizeof(size));
+		return DYNAMIC_HEADER_SIZE;
+	}
+	return STATIC_HEADER_SIZE;
 }
