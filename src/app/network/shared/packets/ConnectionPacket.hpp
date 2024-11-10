@@ -25,9 +25,9 @@ public:
 
 	std::shared_ptr<IPacket> Clone() const override;
 
-	/*******************************
+	/*****************************\
 	 * ATTRIBUTES
-	 * *****************************/
+	\*****************************/
 
 	uint32_t	GetPlayerId() const;
 	glm::vec3	GetPosition() const;

@@ -15,16 +15,16 @@ PingPacket::PingPacket(const PingPacket & other)
 {
 }
 
+PingPacket::PingPacket(PingPacket && other)
+	: m_id(other.m_id), m_counter(other.m_counter)
+{
+}
+
 PingPacket & PingPacket::operator=(const PingPacket & other)
 {
 	m_id = other.m_id;
 	m_counter = other.m_counter;
 	return *this;
-}
-
-PingPacket::PingPacket(PingPacket && other)
-	: m_id(other.m_id), m_counter(other.m_counter)
-{
 }
 
 PingPacket & PingPacket::operator=(PingPacket && other)
@@ -44,10 +44,11 @@ PingPacket::~PingPacket()
 
 void PingPacket::Serialize(uint8_t * buffer) const
 {
-	uint32_t type = static_cast<uint32_t>(GetType());
-	memcpy(buffer, &type, sizeof(uint32_t));
-	buffer += sizeof(uint32_t);
+	// HEADER
+	buffer += SerializeHeader(buffer);
 
+
+	// BODY
 	memcpy(buffer, &m_id, sizeof(m_id));
 	buffer += sizeof(m_id);
 
@@ -57,7 +58,8 @@ void PingPacket::Serialize(uint8_t * buffer) const
 
 void PingPacket::Deserialize(const uint8_t * buffer)
 {
-	buffer += sizeof(uint32_t);
+	//skip over the header
+	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	memcpy(&m_id, buffer, sizeof(m_id));
 	buffer += sizeof(m_id);
@@ -68,7 +70,7 @@ void PingPacket::Deserialize(const uint8_t * buffer)
 
 uint32_t PingPacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_id) + sizeof(m_counter);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_id) + sizeof(m_counter);
 }
 
 bool PingPacket::HasDynamicSize() const

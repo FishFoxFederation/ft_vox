@@ -14,6 +14,11 @@ LoadDistancePacket::LoadDistancePacket(const LoadDistancePacket & other)
 {
 }
 
+LoadDistancePacket::LoadDistancePacket(LoadDistancePacket && other)
+: IPacket(other), m_distance(other.m_distance)
+{
+}
+
 LoadDistancePacket & LoadDistancePacket::operator=(const LoadDistancePacket & other)
 {
 	if (this != &other)
@@ -22,11 +27,6 @@ LoadDistancePacket & LoadDistancePacket::operator=(const LoadDistancePacket & ot
 		::IPacket::operator=(other);
 	}
 	return *this;
-}
-
-LoadDistancePacket::LoadDistancePacket(LoadDistancePacket && other)
-: IPacket(other), m_distance(other.m_distance)
-{
 }
 
 LoadDistancePacket & LoadDistancePacket::operator=(LoadDistancePacket && other)
@@ -45,21 +45,19 @@ LoadDistancePacket::~LoadDistancePacket()
 
 void LoadDistancePacket::Serialize(uint8_t * buffer) const
 {
-	// Write the packet Type
-	uint32_t type = static_cast<uint32_t>(GetType());
-	memcpy(buffer, &type, sizeof(uint32_t));
-	buffer += sizeof(uint32_t);
+	// HEADER
+	buffer += SerializeHeader(buffer);
 
 
-	//Write the distance
+	// BODY
 	memcpy(buffer, &m_distance, sizeof(m_distance));
 	buffer += sizeof(m_distance);
 }
 
 void LoadDistancePacket::Deserialize(const uint8_t * buffer)
 {
-	//go over the packet type
-	buffer += sizeof(uint32_t);
+	//skip over the header
+	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	//read the distance
 	memcpy(&m_distance, buffer, sizeof(m_distance));
@@ -68,7 +66,7 @@ void LoadDistancePacket::Deserialize(const uint8_t * buffer)
 
 uint32_t LoadDistancePacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_distance);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_distance);
 }
 
 bool LoadDistancePacket::HasDynamicSize() const

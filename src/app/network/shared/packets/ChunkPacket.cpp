@@ -47,10 +47,11 @@ ChunkPacket & ChunkPacket::operator=(ChunkPacket && other)
 void ChunkPacket::Serialize(uint8_t * buffer) const
 {
 	ZoneScoped;
-	auto type = GetType();
-	std::memcpy(buffer, &type, sizeof(type));
-	buffer += sizeof(type);
+	// HEADER
+	buffer += SerializeHeader(buffer);
 
+
+	// BODY
 	std::memcpy(buffer, &m_chunk_data, sizeof(m_chunk_data));
 	buffer += sizeof(m_chunk_data);
 }
@@ -58,6 +59,7 @@ void ChunkPacket::Serialize(uint8_t * buffer) const
 void ChunkPacket::Deserialize(const uint8_t * buffer)
 {
 	ZoneScoped;
+	// skip over the header
 	buffer += sizeof(IPacket::STATIC_HEADER_SIZE);
 
 	std::memcpy(&m_chunk_data, buffer, sizeof(m_chunk_data));
