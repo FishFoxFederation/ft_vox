@@ -10,8 +10,8 @@
 #include "Connection.hpp"
 #include "Poller.hpp"
 #include "PacketFactory.hpp"
-#include "IncomingPacketList.hpp"
 #include "ThreadSafeQueue.hpp"
+#include "ThreadSafePacketQueue.hpp"
 
 class Server
 {
@@ -50,7 +50,7 @@ public:
 
 	void disconnect(uint64_t id);
 
-	IncomingPacketList & get_incoming_packets() { return m_incoming_packets; }
+	ThreadSafePacketQueue & get_incoming_packets() { return m_incoming_packets; }
 
 	class ClientDisconnected : public std::exception
 	{
@@ -72,7 +72,7 @@ private:
 	Poller										m_poller;
 	ServerSocket								m_server_socket;
 	PacketFactory							&	m_packet_factory;
-	IncomingPacketList							m_incoming_packets;
+	ThreadSafePacketQueue						m_incoming_packets;
 	ThreadSafeQueue<sendInfo>					m_outgoing_packets;
 	std::unordered_map<uint64_t, std::shared_ptr<Connection>>	m_connections;
 	std::mutex									m_connections_mutex;

@@ -7,8 +7,8 @@
 #include "Poller.hpp"
 #include "ClientSocket.hpp"
 #include "Connection.hpp"
-#include "IncomingPacketList.hpp"
 #include "PacketFactory.hpp"
+#include "ThreadSafePacketQueue.hpp"
 
 class Client
 {
@@ -42,13 +42,13 @@ public:
 	std::unordered_map<uint64_t, std::chrono::time_point<std::chrono::high_resolution_clock>> m_pings;
 private:
 	
-	bool					m_running;
-	Poller					m_poller;
-	std::shared_ptr<Socket>	m_client_socket;
-	Connection				m_connection;
-	IncomingPacketList		m_incoming_packets;
-	PacketFactory &			m_packet_factory = PacketFactory::GetInstance();
-	IncomingPacketList      m_outgoing_packets;
+	bool											m_running;
+	Poller											m_poller;
+	std::shared_ptr<Socket>							m_client_socket;
+	Connection										m_connection;
+	ThreadSafePacketQueue							m_incoming_packets;
+	PacketFactory &									m_packet_factory = PacketFactory::GetInstance();
+	ThreadSafePacketQueue							m_outgoing_packets;
 
 	int		read_data();
 	int		send_data();
