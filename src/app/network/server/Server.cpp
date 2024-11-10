@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 Server::Server(int port)
-: m_running(true), m_server_socket(port), m_packet_factory(PacketFactory::GetInstance()), m_ids_counter(1)
+: m_server_socket(port), m_packet_factory(PacketFactory::GetInstance()), m_ids_counter(1)
 {
 	m_poller.add(0, m_server_socket);
 	LOG_INFO("Server started on port " + std::to_string(port));
@@ -9,11 +9,6 @@ Server::Server(int port)
 
 Server::~Server()
 {
-}
-
-void Server::stop()
-{
-	m_running = false;
 }
 
 void Server::runOnce(int timeout)
@@ -89,14 +84,6 @@ void Server::runOnce(int timeout)
 	}
 }
 
-void Server::run()
-{
-	while(m_running)
-	{
-		runOnce(1000);
-	}
-}
-
 uint64_t Server::get_new_id()
 {
 	// id generator extremely advanced code do not touch
@@ -123,8 +110,6 @@ int Server::read_data(Connection & connection, uint64_t id)
 		ret = connection.recv();
 		if (ret == 0)
 			throw ClientDisconnected(id);
-		//insert code for detecting new packets
-		// and packet handling as well as dispatching tasks
 		auto ret = m_packet_factory.extractPacket(connection);
 		while (ret.first)
 		{
