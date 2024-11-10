@@ -10,6 +10,9 @@
 
 class Poller;
 
+/**
+ * @brief a RAII wrapper for a socket.
+ */
 class Socket
 {
 public:
