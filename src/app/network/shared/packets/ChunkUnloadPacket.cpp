@@ -46,16 +46,17 @@ ChunkUnloadPacket & ChunkUnloadPacket::operator=(ChunkUnloadPacket && other)
 
 void ChunkUnloadPacket::Serialize(uint8_t * buffer) const
 {
-	auto type = GetType();
-	std::memcpy(buffer, &type, sizeof(type));
-	buffer += sizeof(type);
+	//HEADER
+	buffer += SerializeHeader(buffer);
 
+	//BODY
 	std::memcpy(buffer, &m_chunk_pos, sizeof(m_chunk_pos));
 	buffer += sizeof(m_chunk_pos);
 }
 
 void ChunkUnloadPacket::Deserialize(const uint8_t * buffer)
 {
+	//skip over the packet header
 	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	std::memcpy(&m_chunk_pos, buffer, sizeof(m_chunk_pos));

@@ -45,11 +45,11 @@ ConnectionPacket::~ConnectionPacket()
 
 void ConnectionPacket::Serialize(uint8_t * buffer) const
 {
+	// HEADER
+	buffer += SerializeHeader(buffer);
 
-	uint32_t type = static_cast<uint32_t>(GetType());
-	memcpy(buffer, &type, sizeof(uint32_t));
-	buffer += sizeof(uint32_t);
 
+	// BODY
 	memcpy(buffer, &m_player_id, sizeof(m_player_id));
 	buffer += sizeof(m_player_id);
 
@@ -59,7 +59,8 @@ void ConnectionPacket::Serialize(uint8_t * buffer) const
 
 void ConnectionPacket::Deserialize(const uint8_t * buffer)
 {
-	buffer += sizeof(uint32_t);
+	// Skip over the header
+	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	memcpy(&m_player_id, buffer, sizeof(m_player_id));
 	buffer += sizeof(m_player_id);
@@ -70,7 +71,7 @@ void ConnectionPacket::Deserialize(const uint8_t * buffer)
 
 uint32_t ConnectionPacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_player_id) + sizeof(m_position);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_player_id) + sizeof(m_position);
 }
 
 bool ConnectionPacket::HasDynamicSize() const

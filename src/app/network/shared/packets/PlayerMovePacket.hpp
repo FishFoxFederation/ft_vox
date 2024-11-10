@@ -28,7 +28,7 @@ public:
 	**ATTRIBUTES
 	*******************************/
 
-	uint64_t		GetPlayerId() const;
+	uint64_t	GetPlayerId() const;
 	glm::dvec3	GetPosition() const;
 	glm::dvec3	GetDisplacement() const;
 
@@ -36,7 +36,7 @@ public:
 	void		SetPosition(glm::dvec3 position);
 	void		SetDisplacement(glm::dvec3 displacement);
 private:
-	uint64_t		m_player_id;
+	uint64_t	m_player_id;
 	glm::dvec3	m_position;
 	glm::dvec3	m_displacement;
 };

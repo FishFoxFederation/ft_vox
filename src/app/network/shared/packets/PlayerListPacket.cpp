@@ -45,13 +45,7 @@ PlayerListPacket & PlayerListPacket::operator=(PlayerListPacket && other)
 
 void PlayerListPacket::Serialize(uint8_t * buffer) const
 {
-	auto type = GetType();
-	std::memcpy(buffer, &type, sizeof(type));
-	buffer += sizeof(type);
-
-	size_t size = Size();
-	std::memcpy(buffer, &size, sizeof(size));
-	buffer += sizeof(size);
+	buffer += SerializeHeader(buffer);
 
 	for (const auto & player : m_players)
 	{
@@ -65,8 +59,10 @@ void PlayerListPacket::Serialize(uint8_t * buffer) const
 
 void PlayerListPacket::Deserialize(const uint8_t * buffer)
 {
+	//skip over the type
 	buffer += sizeof(IPacket::Type);
 
+	//extract the size from the header
 	size_t size;
 	std::memcpy(&size, buffer, sizeof(size));
 	buffer += sizeof(size);

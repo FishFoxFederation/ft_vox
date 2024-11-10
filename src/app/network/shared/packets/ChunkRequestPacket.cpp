@@ -33,15 +33,16 @@ ChunkRequestPacket & ChunkRequestPacket::operator=(ChunkRequestPacket && other)
 
 void ChunkRequestPacket::Serialize(uint8_t * buffer) const
 {
-	auto type = GetType();
-	memcpy(buffer, &type, sizeof(IPacket::Type));
-	buffer += sizeof(IPacket::Type);
+	//HEADER
+	buffer += SerializeHeader(buffer);
 
+	//BODY
 	memcpy(buffer, &m_chunk_pos, sizeof(glm::ivec3));
 }
 
 void ChunkRequestPacket::Deserialize(const uint8_t * buffer)
 {
+	//skip over the packet header
 	buffer += sizeof(IPacket::STATIC_HEADER_SIZE);
 	
 	memcpy(&m_chunk_pos, buffer, sizeof(glm::ivec3));

@@ -18,6 +18,17 @@ PlayerConnectedPacket::PlayerConnectedPacket(PlayerConnectedPacket&& other)
 	m_player_id = other.m_player_id;
 }
 
+PlayerConnectedPacket::PlayerConnectedPacket(const PlayerConnectedPacket& other)
+{
+	m_player_id = other.m_player_id;
+}
+
+PlayerConnectedPacket& PlayerConnectedPacket::operator=(const PlayerConnectedPacket& other)
+{
+	m_player_id = other.m_player_id;
+	return *this;
+}
+
 PlayerConnectedPacket& PlayerConnectedPacket::operator=(PlayerConnectedPacket&& other)
 {
 	m_player_id = other.m_player_id;
@@ -26,24 +37,24 @@ PlayerConnectedPacket& PlayerConnectedPacket::operator=(PlayerConnectedPacket&& 
 
 void PlayerConnectedPacket::Serialize(uint8_t * buffer) const
 {
-	uint32_t type = static_cast<uint32_t>(GetType());
-	memcpy(buffer, &type, sizeof(uint32_t));
-	buffer += sizeof(uint32_t);
+	// HEADER
+	buffer += SerializeHeader(buffer);
 
+	// DATA
 	memcpy(buffer, &m_player_id, sizeof(m_player_id));
 }
 
 void PlayerConnectedPacket::Deserialize(const uint8_t * buffer)
 {
-	//skipping type
-	buffer += sizeof(uint32_t);
+	//skipping the header
+	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	memcpy(&m_player_id, buffer, sizeof(m_player_id));
 }
 
 uint32_t PlayerConnectedPacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_player_id);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_player_id);
 }
 
 bool PlayerConnectedPacket::HasDynamicSize() const

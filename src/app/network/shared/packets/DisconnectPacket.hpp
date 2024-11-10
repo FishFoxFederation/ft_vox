@@ -10,8 +10,7 @@ public:
 	~DisconnectPacket();
 
 	DisconnectPacket(const DisconnectPacket& other);
-	DisconnectPacket& operator=(const DisconnectPacket& other) = delete;
-
+	DisconnectPacket& operator=(const DisconnectPacket& other);
 	DisconnectPacket(DisconnectPacket&& other);
 	DisconnectPacket& operator=(DisconnectPacket&& other);
 

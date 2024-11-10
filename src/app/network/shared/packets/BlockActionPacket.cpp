@@ -49,10 +49,10 @@ BlockActionPacket::~BlockActionPacket()
 
 void BlockActionPacket::Serialize(uint8_t * buffer) const
 {
-	uint32_t type = static_cast<uint32_t>(GetType());
-	memcpy(buffer, &type, sizeof(uint32_t));
-	buffer += sizeof(uint32_t);
+	//HEADER
+	buffer += SerializeHeader(buffer);
 
+	// BODY
 	memcpy(buffer, &m_block_id, sizeof(m_block_id));
 	buffer += sizeof(m_block_id);
 
@@ -65,7 +65,8 @@ void BlockActionPacket::Serialize(uint8_t * buffer) const
 
 void BlockActionPacket::Deserialize(const uint8_t * buffer)
 {
-	buffer += sizeof(uint32_t);
+	//skip over the header
+	buffer += sizeof(IPacket::STATIC_HEADER_SIZE);
 
 	memcpy(&m_block_id, buffer, sizeof(m_block_id));
 	buffer += sizeof(m_block_id);
@@ -79,7 +80,7 @@ void BlockActionPacket::Deserialize(const uint8_t * buffer)
 
 uint32_t BlockActionPacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_block_id) + sizeof(m_position) + sizeof(m_action);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_block_id) + sizeof(m_position) + sizeof(m_action);
 }
 
 bool BlockActionPacket::HasDynamicSize() const

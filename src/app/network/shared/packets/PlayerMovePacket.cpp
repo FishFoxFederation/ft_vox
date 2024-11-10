@@ -50,24 +50,20 @@ PlayerMovePacket::~PlayerMovePacket()
 
 void PlayerMovePacket::Serialize(uint8_t * buffer) const
 {
-	uint32_t type = static_cast<uint32_t>(GetType());
-	memcpy(buffer, &type, sizeof(uint32_t));
-	buffer += sizeof(uint32_t);
+	//HEADER
+	buffer += SerializeHeader(buffer);
 
-	buffer[0] = m_player_id;
-	buffer += sizeof(m_player_id);
-
+	// BODY
 	memcpy(buffer, &m_position, sizeof(glm::dvec3));
 	buffer += sizeof(glm::dvec3);
 
 	memcpy(buffer, &m_displacement, sizeof(glm::dvec3));
-
-	// LOG_INFO("SERIALIZE: id: " << (int)m_player_id << "\n position: " << m_position.x << " " << m_position.y << " " << m_position.z << "\n displacement: " << m_displacement.x << " " << m_displacement.y << " " << m_displacement.z);
 }
 
 void PlayerMovePacket::Deserialize(const uint8_t * buffer)
 {
-	buffer += sizeof(uint32_t);
+	//skip over the header
+	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	memcpy(&m_player_id, buffer, sizeof(m_player_id));
 	buffer += sizeof(m_player_id);
@@ -77,13 +73,10 @@ void PlayerMovePacket::Deserialize(const uint8_t * buffer)
 
 	memcpy(&m_displacement, buffer, sizeof(glm::dvec3));
 	buffer += sizeof(glm::dvec3);
-
-	// LOG_INFO("DESERIALIZE: id: " << (int)m_player_id << "\n position: " << m_position.x << " " << m_position.y << " " << m_position.z << "\n displacement: " << m_displacement.x << " " << m_displacement.y << " " << m_displacement.z);
 }
 
 uint32_t PlayerMovePacket::Size() const
 {
-	// packet type + id + position + displacement
 	return IPacket::STATIC_HEADER_SIZE + sizeof(m_player_id) + sizeof(glm::dvec3) * 2;
 }
 

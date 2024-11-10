@@ -9,8 +9,8 @@ public:
 	PlayerConnectedPacket(const uint32_t & id);
 	virtual ~PlayerConnectedPacket();
 
-	PlayerConnectedPacket(const PlayerConnectedPacket& other) = delete;
-	PlayerConnectedPacket& operator=(const PlayerConnectedPacket& other) = delete;
+	PlayerConnectedPacket(const PlayerConnectedPacket& other);
+	PlayerConnectedPacket& operator=(const PlayerConnectedPacket& other);
 
 	PlayerConnectedPacket(PlayerConnectedPacket&& other);
 	PlayerConnectedPacket& operator=(PlayerConnectedPacket&& other);

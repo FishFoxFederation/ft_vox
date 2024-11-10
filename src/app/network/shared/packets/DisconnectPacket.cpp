@@ -31,30 +31,41 @@ DisconnectPacket & DisconnectPacket::operator=(DisconnectPacket && other)
 	return *this;
 }
 
+DisconnectPacket & DisconnectPacket::operator=(const DisconnectPacket & other)
+{
+	if (this != &other)
+	{
+		m_player_id = other.m_player_id;
+		::IPacket::operator=(other);
+	}
+	return *this;
+}
+
 DisconnectPacket::~DisconnectPacket()
 {
 }
 
 void DisconnectPacket::Serialize(uint8_t * buffer) const
 {
-	auto type = GetType();
-	std::memcpy(buffer, &type, sizeof(type));
-	buffer += sizeof(type);
+	// HEADER
+	buffer += SerializeHeader(buffer);
 
+	// BODY
 	std::memcpy(buffer, &m_player_id, sizeof(m_player_id));
 	buffer += sizeof(m_player_id);
 }
 
 void DisconnectPacket::Deserialize(const uint8_t * buffer)
 {
-	buffer += sizeof(IPacket::Type);
+	// skip the header
+	buffer += IPacket::STATIC_HEADER_SIZE;
 
 	std::memcpy(&m_player_id, buffer, sizeof(m_player_id));
 }
 
 uint32_t DisconnectPacket::Size() const
 {
-	return sizeof(IPacket::Type) + sizeof(m_player_id);
+	return IPacket::STATIC_HEADER_SIZE + sizeof(m_player_id);
 }
 
 bool DisconnectPacket::HasDynamicSize() const
