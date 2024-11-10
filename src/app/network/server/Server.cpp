@@ -16,6 +16,7 @@ void Server::runOnce(int timeout)
 	ZoneScoped;
 
 	empty_outgoing_packets();
+	empty_old_pings();
 	auto [events_size, events] = m_poller.wait(timeout);
 	if (errno == EINTR)
 	{
@@ -245,4 +246,25 @@ void Server::sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id)
 		std::lock_guard lock(currentClient->WriteLock());
 		currentClient->queueAndSendMessage(buffer);
 	}
+}
+
+void Server::empty_old_pings()
+{
+	static auto last = std::chrono::high_resolution_clock::now();
+
+	auto now = std::chrono::high_resolution_clock::now();
+
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last).count() < PING_TIMEOUT_MS)
+		return;
+	last = now;
+	auto it = m_pings.begin();
+
+	while (it != m_pings.end())
+	{
+		if (now - it->second > std::chrono::milliseconds(PING_TIMEOUT_MS))
+			it = m_pings.erase(it);
+		else
+			it++;
+	}
+
 }
