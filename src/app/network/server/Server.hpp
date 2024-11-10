@@ -31,6 +31,7 @@
 class Server
 {
 public:
+	static constexpr int PING_TIMEOUT_MS = 5000;
 	Server (int port);
 	~Server();
 
@@ -110,7 +111,12 @@ public:
 		uint64_t m_id;
 	};
 
+	/**
+	 * @brief map used to store the time a ping was sent to a client
+	 * 
+	 */
 	std::unordered_map<uint64_t, std::chrono::time_point<std::chrono::high_resolution_clock>> m_pings;
+
 private:
 
 	Poller										m_poller;
@@ -128,6 +134,7 @@ private:
 	int		read_data(Connection & connection, uint64_t id);
 	int		send_data(Connection & connection, uint64_t id);
 	void	empty_outgoing_packets();
+	void 	empty_old_pings();
 
 	void sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id);
 	void sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & except_id);
