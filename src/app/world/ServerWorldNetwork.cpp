@@ -2,6 +2,13 @@
 
 void ServerWorld::handlePacket(std::shared_ptr<IPacket> packet)
 {
+	ZoneScoped;
+	if (!m_connection_to_player_id.contains(packet->GetConnectionId()) && packet->GetType() != IPacket::Type::CONNECTION)
+	{
+		LOG_INFO("Packet connection id does not match connection id");
+		m_server.disconnect(packet->GetConnectionId());
+		return;
+	}
 	switch(packet->GetType())
 	{
 		case IPacket::Type::CONNECTION:
@@ -24,6 +31,16 @@ void ServerWorld::handlePacket(std::shared_ptr<IPacket> packet)
 			handleBlockActionPacket(std::dynamic_pointer_cast<BlockActionPacket>(packet));
 			break;
 		}
+		case IPacket::Type::PING:
+		{
+			handlePingPacket(std::dynamic_pointer_cast<PingPacket>(packet));
+			break;
+		}
+		case IPacket::Type::LOAD_DISTANCE:
+		{
+			handleLoadDistancePacket(std::dynamic_pointer_cast<LoadDistancePacket>(packet));
+			break;
+		}
 		default:
 		{
 			LOG_INFO("World: Unknown packet type: " << static_cast<int>(packet->GetType()));
@@ -41,6 +58,8 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 	glm::vec3 CurrentPlayerChunkPosition = getChunkPosition(CurrentPlayerPosition);
 
 	std::lock_guard lock(m_players_info_mutex);
+
+	//add new player to transposition maps
 	m_player_to_connection_id.insert({CurrentPlayerId, CurrentConnectionId});
 	m_connection_to_player_id.insert({CurrentConnectionId, CurrentPlayerId});
 
@@ -55,6 +74,13 @@ void ServerWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packe
 		auto packet_to_send = std::make_shared<PlayerListPacket>(players);
 		packet_to_send->SetConnectionId(CurrentConnectionId);
 		m_server.send({packet_to_send, 0, CurrentConnectionId});
+	}
+
+	//send new player to all other players
+	{
+		auto packet_to_send = std::make_shared<ConnectionPacket>(*packet);
+		packet_to_send->SetConnectionId(CurrentConnectionId);
+		m_server.send({packet_to_send, Server::flags::ALLEXCEPT, CurrentConnectionId});
 	}
 
 	//inform player of current load distance
@@ -94,6 +120,16 @@ void ServerWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packe
 		m_current_tick_player_positions.erase(player_id);
 	}
 
+	//inform server of disconnect
+	m_server.disconnect(connection_id);
+
+	//send disconnect to all players
+	{
+		auto packet_to_send = std::make_shared<DisconnectPacket>(player_id);
+		m_server.send({packet_to_send, Server::flags::ALL, 0});
+	}
+
+	//erase player from player map
 	std::shared_ptr<Player> player;
 	{
 		std::lock_guard lock(m_players_mutex);
@@ -101,16 +137,13 @@ void ServerWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packe
 		m_players.erase(player_id);
 	}
 
-	//remove player ticket
-	std::lock_guard lock(player->mutex);
-	removeTicket(player->player_ticket_id);
-
-	//remove player observations
-	removeChunkObservations(player);
 	{
-		// std::lock_guard lock(m_tickets_mutex);
-		// for(auto it : m_active_tickets)
-			// LOG_INFO ("Active ticket: " << it.position.x << " " << it.position.z << " level: " << it.level);
+		//remove player ticket
+		std::lock_guard lock(player->mutex);
+		removeTicket(player->player_ticket_id);
+
+		//remove player observations
+		removeChunkObservations(player);
 	}
 }
 
@@ -123,6 +156,8 @@ void ServerWorld::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> pac
 	if (packet->GetAction() == BlockActionPacket::Action::PLACE)
 		data.type = BlockUpdateData::Type::PLACE;
 	addBlockUpdate(data);
+	//no need to relay placket to players
+	//the block updpate will be sent to players when the update threads handles its
 }
 
 void ServerWorld::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
@@ -133,12 +168,36 @@ void ServerWorld::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packe
 		std::lock_guard lock(m_players_mutex);
 		player = m_players.at(player_id);
 	}
-	std::lock_guard lock(player->mutex);
-	// glm::dvec3 current_position = player->transform.position;
-	glm::dvec3 new_position		= packet->GetPosition() + packet->GetDisplacement();
 
-	//apply movement
-	player->transform.position	= new_position;
+	//send packet to all players
+	auto packet_to_send = std::make_shared<PlayerMovePacket>(*packet);
+	m_server.send({packet_to_send, Server::flags::ALL, 0});
+
+	{
+		std::lock_guard lock(player->mutex);
+		// glm::dvec3 current_position = player->transform.position;
+		glm::dvec3 new_position		= packet->GetPosition() + packet->GetDisplacement();
+
+		//apply movement
+		player->transform.position	= new_position;
+	}
+}
+
+void ServerWorld::handlePingPacket(std::shared_ptr<PingPacket> packet)
+{
+	if (packet->GetCounter() == 0)
+	{
+		auto now = std::chrono::high_resolution_clock::now();
+		auto duration = now - m_server.m_pings[packet->GetId()];
+
+		LOG_INFO("Ping: " << packet->GetId() << " " << duration.count() / 1e6 << "ms");
+		m_server.m_pings.erase(packet->GetId());
+	}
+	else
+	{
+		packet->SetCounter(packet->GetCounter() - 1);
+		m_server.send({packet, 0, packet->GetConnectionId()});
+	}
 }
 
 void ServerWorld::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet)
