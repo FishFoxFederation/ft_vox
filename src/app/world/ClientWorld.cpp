@@ -5,13 +5,15 @@ ClientWorld::ClientWorld(
 	VulkanAPI & vulkan_api,
 	Sound::Engine & sound_engine,
 	Event::Manager & event_manager,
+	Client & client,
 	uint64_t my_player_id
 )
 :
 	World(),
 	m_vulkan_api(vulkan_api),
 	m_sound_engine(sound_engine),
-	m_event_manager(event_manager)
+	m_event_manager(event_manager),
+	m_client(client)
 {
 	m_my_player_id = my_player_id;
 	addPlayer(m_my_player_id, glm::dvec3(0.0, 150.0, 0.0));

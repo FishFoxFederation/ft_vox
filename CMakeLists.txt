@@ -85,6 +85,7 @@ target_sources(${PROJECT_NAME}
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
+		src/app/world/ClientWorldNetwork.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
 		src/app/world/Block.cpp
@@ -93,7 +94,7 @@ target_sources(${PROJECT_NAME}
 		src/app/world/CreateMeshData.cpp
 		src/app/network/client/Client.cpp
 		src/app/network/client/ClientSocket.cpp
-		src/app/network/client/ClientPacketHandler.cpp
+		# src/app/network/client/ClientPacketHandler.cpp
 		src/app/network/server/Server.cpp
 		src/app/network/server/ServerSocket.cpp
 		src/app/network/shared/Connection.cpp
@@ -239,6 +240,7 @@ target_sources(server
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
+		src/app/world/ClientWorldNetwork.cpp
 		src/app/world/ServerWorldTickets.cpp
 		src/app/world/ServerWorldNetwork.cpp
 		src/app/world/ServerWorldBlocks.cpp
@@ -251,7 +253,7 @@ target_sources(server
 		src/app/world/CreateMeshData.cpp
 		src/app/network/client/Client.cpp
 		src/app/network/client/ClientSocket.cpp
-		src/app/network/client/ClientPacketHandler.cpp
+		# src/app/network/client/ClientPacketHandler.cpp
 		src/app/network/server/Server.cpp
 		src/app/network/server/ServerSocket.cpp
 		src/app/network/shared/Connection.cpp

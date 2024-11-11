@@ -4,8 +4,9 @@
 #include "window.hpp"
 #include "Settings.hpp"
 #include "VulkanAPI.hpp"
+#include "ClientWorld.hpp"
 #include "Client.hpp"
-#include "ClientPacketHandler.hpp"
+// #include "ClientPacketHandler.hpp"
 #include "SoundEngine.hpp"
 #include "EventManager.hpp"
 #include <chrono>
@@ -40,7 +41,7 @@ private:
 	ClientWorld & m_world;
 	VulkanAPI & m_vulkan_api;
 	Client & m_client;
-	ClientPacketHandler m_packet_handler;
+	// ClientPacketHandler m_packet_handler;
 	Sound::Engine & m_sound_engine;
 	Event::Manager & m_event_manager;
 
