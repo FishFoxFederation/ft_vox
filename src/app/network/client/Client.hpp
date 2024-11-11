@@ -72,7 +72,7 @@ private:
 	PacketFactory &									m_packet_factory = PacketFactory::GetInstance();
 	ThreadSafePacketQueue							m_outgoing_packets;
 
-	int		read_data();
-	int		send_data();
-	void	empty_outgoing_packets();
+	int		readData();
+	int		sendData();
+	void	emptyOutgoingPackets();
 };

@@ -15,8 +15,8 @@ void Server::runOnce(int timeout)
 {
 	ZoneScoped;
 
-	empty_outgoing_packets();
-	empty_old_pings();
+	emptyOutgoingPackets();
+	emptyOldPings();
 	auto [events_size, events] = m_poller.wait(timeout);
 	if (errno == EINTR)
 	{
@@ -64,9 +64,9 @@ void Server::runOnce(int timeout)
 			}
 			try {
 				if (current_event & EPOLLIN)
-					read_data(*currentClient, currentClient->getConnectionId());
+					readData(*currentClient, currentClient->getConnectionId());
 				if (current_event & EPOLLOUT)
-					send_data(*currentClient, currentClient->getConnectionId());
+					sendData(*currentClient, currentClient->getConnectionId());
 				if (current_event & EPOLLERR || current_event & EPOLLHUP)
 				{
 					LOG_INFO("EPOLLERR or EPOLLHUP");
@@ -101,7 +101,7 @@ uint64_t Server::get_new_id()
 	return m_ids_counter++;
 }
 
-int Server::read_data(Connection & connection, uint64_t id)
+int Server::readData(Connection & connection, uint64_t id)
 {
 	ZoneScoped;
 	ssize_t ret;
@@ -128,7 +128,7 @@ int Server::read_data(Connection & connection, uint64_t id)
 	return 0;
 }
 
-int Server::send_data(Connection & connection, uint64_t id)
+int Server::sendData(Connection & connection, uint64_t id)
 {
 	ZoneScoped;
 	ssize_t ret;
@@ -163,7 +163,7 @@ void Server::disconnect(uint64_t id)
 	m_connections.erase(it);
 }
 
-void Server::empty_outgoing_packets()
+void Server::emptyOutgoingPackets()
 {
 	ZoneScoped;
 	while(m_outgoing_packets.size() != 0)
@@ -248,7 +248,7 @@ void Server::sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id)
 	}
 }
 
-void Server::empty_old_pings()
+void Server::emptyOldPings()
 {
 	static auto last = std::chrono::high_resolution_clock::now();
 

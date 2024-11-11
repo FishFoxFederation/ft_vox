@@ -15,7 +15,7 @@ Client::~Client()
 void Client::runOnce(const int & timeout)
 {
 	ZoneScoped;
-	empty_outgoing_packets();
+	emptyOutgoingPackets();
 	auto [events_size, events] = m_poller.wait(timeout);
 
 	// if the poller was interrupted by a signal
@@ -32,15 +32,15 @@ void Client::runOnce(const int & timeout)
 	{
 		auto current_event = events[i].events;
 		if (current_event & EPOLLIN)
-			read_data();
+			readData();
 		if (current_event & EPOLLOUT)
-			send_data();
+			sendData();
 		if (current_event & EPOLLERR || current_event & EPOLLHUP)
 			throw ServerDisconnected();
 	}
 }
 
-int Client::read_data()
+int Client::readData()
 {
 	ZoneScoped;
 	ssize_t size;
@@ -68,7 +68,7 @@ int Client::read_data()
 	return 0;
 }
 
-int Client::send_data()
+int Client::sendData()
 {
 	ZoneScoped;
 	ssize_t size;
@@ -116,7 +116,7 @@ size_t Client::getQueueSize() const
 	return m_incoming_packets.size();
 }
 
-void Client::empty_outgoing_packets()
+void Client::emptyOutgoingPackets()
 {
 	std::vector<uint8_t> buffer;
 	while(m_outgoing_packets.size() != 0)

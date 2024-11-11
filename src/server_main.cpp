@@ -33,7 +33,7 @@ int main()
 	// std::thread server_thread([&server](){
 	// 	server.run();
 	// });
-	ThreadSafePacketQueue & incoming_packets = server.get_incoming_packets();
+	ThreadSafePacketQueue & incoming_packets = server.getIncomingPackets();
 	uint64_t last_time = 0;
 	uint64_t last_time_count = 0;
 	(void)last_time_count;
