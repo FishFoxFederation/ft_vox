@@ -14,24 +14,32 @@ PlayerConnectedPacket::~PlayerConnectedPacket()
 }
 
 PlayerConnectedPacket::PlayerConnectedPacket(PlayerConnectedPacket&& other)
+: IPacket(std::move(other)), m_player_id(other.m_player_id)
 {
-	m_player_id = other.m_player_id;
 }
 
 PlayerConnectedPacket::PlayerConnectedPacket(const PlayerConnectedPacket& other)
+: IPacket(other), m_player_id(other.m_player_id)
 {
-	m_player_id = other.m_player_id;
 }
 
 PlayerConnectedPacket& PlayerConnectedPacket::operator=(const PlayerConnectedPacket& other)
 {
-	m_player_id = other.m_player_id;
+	if (this != &other)
+	{
+		IPacket::operator=(other);
+		m_player_id = other.m_player_id;
+	}
 	return *this;
 }
 
 PlayerConnectedPacket& PlayerConnectedPacket::operator=(PlayerConnectedPacket&& other)
 {
-	m_player_id = other.m_player_id;
+	if (this != &other)
+	{
+		IPacket::operator=(std::move(other));
+		m_player_id = other.m_player_id;
+	}
 	return *this;
 }
 
