@@ -31,7 +31,7 @@ struct HandleArgs;
  * this add some obligations to the implementation and manipulation of the packet
  * 
  * 1. The Size() Method is no longer valid to call on an empty instance of the packet,
- *  it will only be called by a sender that wnats to know the size he has to reserve in his send buffer
+ *  it will only be called by a sender that wants to know the size he has to reserve in his send buffer
  * 2. The HasDynamicSize() method will return true
  * 3. The Serialize() method will have to write the size of the packet in the buffer
  * 4. The Deserialize() method will have to read the size of the packet from the buffer
