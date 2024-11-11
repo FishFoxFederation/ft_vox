@@ -1,20 +1,6 @@
-#include "ClientPacketHandler.hpp"
-#include "tracy_globals.hpp"
+#include "ClientWorld.hpp"
 
-ClientPacketHandler::ClientPacketHandler(
-	Client & client,
-	ClientWorld & world)
-:	m_client(client),
-	m_world(world)
-{
-	(void)m_client;
-}
-
-ClientPacketHandler::~ClientPacketHandler()
-{
-}
-
-void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
+void ClientWorld::handlePacket(std::shared_ptr<IPacket> packet)
 {
 	switch (packet->GetType())
 	{
@@ -50,30 +36,30 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 	}
 }
 
-void ClientPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet)
+void ClientWorld::handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet)
 {
 	LOG_INFO("Player connected: " << packet->GetPlayerId());
-	m_world.addPlayer(packet->GetPlayerId(), packet->GetPosition());
+	addPlayer(packet->GetPlayerId(), packet->GetPosition());
 }
 
-void ClientPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
+void ClientWorld::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
-	m_world.updatePlayerPosition(packet->GetPlayerId(), packet->GetPosition() + packet->GetDisplacement());
+	updatePlayerPosition(packet->GetPlayerId(), packet->GetPosition() + packet->GetDisplacement());
 }
 
-void ClientPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet)
+void ClientWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet)
 {
 	LOG_INFO("Player disconnected: " << packet->GetPlayerId());
-	m_world.removePlayer(packet->GetPlayerId());
+	removePlayer(packet->GetPlayerId());
 }
 
-void ClientPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)
+void ClientWorld::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)
 {
 	LOG_INFO("Block action: " << packet->GetPosition().x << " " << packet->GetPosition().y << " " << packet->GetPosition().z << " ");
-	m_world.modifyBlock(packet->GetPosition(), packet->GetBlockID());
+	modifyBlock(packet->GetPosition(), packet->GetBlockID());
 }
 
-void ClientPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
+void ClientWorld::handlePingPacket(std::shared_ptr<PingPacket> packet)
 {
 	if (packet->GetCounter() == 0)
 	{
@@ -90,30 +76,30 @@ void ClientPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
 	}
 }
 
-void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet)
+void ClientWorld::handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet)
 {
 	for (auto player : packet->GetPlayers())
-		m_world.addPlayer(player.id, player.position);
+		addPlayer(player.id, player.position);
 }
 
-void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
+void ClientWorld::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
-	m_world.addChunk(std::move(packet->GetChunk()));
+	addChunk(std::move(packet->GetChunk()));
 }
 
-void ClientPacketHandler::handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet)
+void ClientWorld::handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet)
 {
-	m_world.removeChunk(packet->GetChunkPosition());
+	removeChunk(packet->GetChunkPosition());
 }
 
-void ClientPacketHandler::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet)
+void ClientWorld::handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet)
 {
 	static bool first = true;
 	LOG_INFO("SERVER Load distance: " << packet->GetDistance());
-	m_world.setServerLoadDistance(packet->GetDistance());
+	setServerLoadDistance(packet->GetDistance());
 	if (first)
 	{
-		m_world.setRenderDistance(packet->GetDistance());
+		setRenderDistance(packet->GetDistance());
 		first = false;
 	}
 }

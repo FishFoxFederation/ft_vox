@@ -21,7 +21,7 @@ UpdateThread::UpdateThread(
 	m_world(world),
 	m_vulkan_api(vulkan_api),
 	m_client(client),
-	m_packet_handler(client, world),
+	// m_packet_handler(client, world),
 	m_sound_engine(sound_engine),
 	m_event_manager(event_manager),
 	m_start_time(start_time),
@@ -310,6 +310,6 @@ void UpdateThread::handlePackets()
 	while (i < 10 && m_client.getQueueSize())
 	{
 		auto packet = m_client.popPacket();
-		m_packet_handler.handlePacket(packet);
+		m_world.handlePacket(packet);
 	}
 }

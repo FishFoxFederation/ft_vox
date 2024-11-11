@@ -14,6 +14,9 @@
 #include "SoundEngine.hpp"
 #include "EventManager.hpp"
 
+#include "Packets.hpp"
+#include "Client.hpp"
+
 #include <unordered_map>
 #include <shared_mutex>
 #include <list>
@@ -34,6 +37,7 @@ public:
 		VulkanAPI & vulkan_api,
 		Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
+		Client & client,
 		uint64_t my_player_id = 0
 	);
 	~ClientWorld();
@@ -123,12 +127,18 @@ public:
 
 	void 	otherUpdate();
 
+	/*****************\
+	 * NETWORK
+	\*****************/
+	void handlePacket(std::shared_ptr<IPacket> packet);
+
 	uint64_t m_my_player_id;
 private:
 
 	VulkanAPI &								m_vulkan_api;
 	Sound::Engine &							m_sound_engine;
 	Event::Manager &						m_event_manager;
+	Client &								m_client;
 
 	int										m_render_distance = 16;
 	int										m_server_load_distance = 0;
@@ -247,5 +257,18 @@ private:
 		const glm::vec3 & direction,
 		const double max_distance
 	);
+
+	/*************************************
+	 *  NETWORK
+	 *************************************/
+	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
+	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
+	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
+	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
+	void handlePingPacket(std::shared_ptr<PingPacket> packet);
+	void handlePlayerListPacket(std::shared_ptr<PlayerListPacket> packet);
+	void handleChunkPacket(std::shared_ptr<ChunkPacket> packet);
+	void handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet);
+	void handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet);
 
 };
