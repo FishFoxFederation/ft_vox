@@ -160,7 +160,7 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 	{
 		//send chunk to player
 		auto packet_to_send = std::make_shared<ChunkPacket>(*chunk);
-		m_server.send({packet_to_send, Server::flags::NOWAIT, connection_id});
+		m_server.send({packet_to_send, Server::flags::ASYNC, connection_id});
 	}
 	}
 	{
@@ -171,7 +171,7 @@ void ServerWorld::sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint
 		//send chunk unload to player
 		auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk_position);
 		packet_to_send->SetConnectionId(connection_id);
-		m_server.send({packet_to_send, Server::flags::NOWAIT, connection_id});
+		m_server.send({packet_to_send, Server::flags::ASYNC, connection_id});
 	}
 	}
 	// if (data.chunks_to_load.size() > 0)

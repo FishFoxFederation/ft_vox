@@ -69,7 +69,7 @@ void ServerWorld::placeBlock(const glm::vec3 & position, BlockInfo::Type block)
 		std::lock_guard lock(chunk->status);
 		chunk->setBlock(block_chunk_position, block);
 		for (auto id : chunk->observing_player_ids)
-			m_server.send({packet, Server::flags::NOWAIT, id});
+			m_server.send({packet, Server::flags::ASYNC, id});
 	}
 	{ // Add the world position of the block to the light update queue
 		std::lock_guard light_lock(m_block_light_update_mutex);
