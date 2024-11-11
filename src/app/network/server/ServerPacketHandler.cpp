@@ -40,11 +40,6 @@ void ServerPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 			m_world.handleBlockActionPacket(std::dynamic_pointer_cast<BlockActionPacket>(packet));
 			break;
 		}
-		case IPacket::Type::CHUNK_REQUEST:
-		{
-			handleChunkRequestPacket(std::dynamic_pointer_cast<ChunkRequestPacket>(packet));
-			break;
-		}
 		case IPacket::Type::PING:
 		{
 			handlePingPacket(std::dynamic_pointer_cast<PingPacket>(packet));
@@ -79,15 +74,6 @@ void ServerPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	m_server.send({packet_to_send, Server::flags::ALLEXCEPT, packet->GetConnectionId()});
 
 
-	//send all other players to new player
-	// std::vector<PlayerListPacket::PlayerInfo> players;
-	// for(auto player : m_player_positions)
-	// 	players.push_back(PlayerListPacket::PlayerInfo{player.first, player.second});
-	// packet_to_send = std::make_shared<PlayerListPacket>(players);
-	// packet_to_send->SetConnectionId(CurrentConnectionId);
-	// m_server.send(packet_to_send);
-
-
 	//notify world of new player
 	m_world.handleConnectionPacket(packet);
 
@@ -119,8 +105,6 @@ void ServerPacketHandler::handleDisconnectPacket(std::shared_ptr<DisconnectPacke
 void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
 	ZoneScoped;
-	// LOG_INFO("Player move: " << packet->GetId());
-
 
 	//send move to everyone	
 	auto packet_to_send = std::make_shared<PlayerMovePacket>(*packet);
@@ -130,27 +114,6 @@ void ServerPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacke
 	//transfer packet to world
 	m_world.handlePlayerMovePacket(packet);
 
-	//for now ignore if player goes above or under the world
-	// old_chunk.y = 0;
-	// new_chunk.y = 0;
-	// if (old_chunk != new_chunk)
-	// {
-	// 	LOG_INFO("Player moved to new chunk: " << new_chunk.x << " " << new_chunk.y << " " << new_chunk.z);
-	// 	auto chunk_data = m_world.getChunksToUnload(old_position, new_position);
-	// 	for (auto chunk : chunk_data.chunks_to_load)
-	// 	{
-	// 		auto packet_to_send = std::make_shared<ChunkPacket>(*chunk);
-	// 		packet_to_send->SetConnectionId(packet->GetConnectionId());
-	// 		m_server.send(packet_to_send);
-	// 	}
-
-	// 	for (auto chunk : chunk_data.chunks_to_unload)
-	// 	{
-	// 		auto packet_to_send = std::make_shared<ChunkUnloadPacket>(chunk);
-	// 		packet_to_send->SetConnectionId(packet->GetConnectionId());
-	// 		m_server.send(packet_to_send);
-	// 	}
-	// }
 }
 
 void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet)
@@ -160,27 +123,6 @@ void ServerPacketHandler::handleBlockActionPacket(std::shared_ptr<BlockActionPac
 	packet_to_send->SetConnectionId(packet->GetConnectionId());
 	m_world.setBlock(packet->GetPosition(), packet->GetBlockID());
 	m_server.send({packet_to_send, Server::flags::ALL, packet->GetConnectionId()});
-}
-
-void ServerPacketHandler::handleChunkRequestPacket(std::shared_ptr<ChunkRequestPacket> packet)
-{
-	(void)packet;
-	// auto current_connection_id = packet->GetConnectionId();
-	// // auto current_player_id = m_connection_to_player_id.at(current_connection_id);
-	// // glm::vec3 player_position = m_player_positions.at(current_player_id);
-
-	// glm::ivec3 chunk_pos = packet->GetChunkPos();
-	// // glm::ivec3 player_chunk_pos = player_position / CHUNK_SIZE_VEC3;
-
-	// // {
-	// // 	LOG_INFO("Chunk request out of range: " << chunk_pos.x << " " << chunk_pos.y << " " << chunk_pos.z);
-	// // 	return;
-	// // }
-
-	// Chunk & chunk = m_world.getAndLoadChunk(chunk_pos);
-	// auto packet_to_send = std::make_shared<ChunkPacket>(chunk);
-	// packet_to_send->SetConnectionId(current_connection_id);
-	// m_server.send(packet_to_send);
 }
 
 void ServerPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
@@ -200,16 +142,3 @@ void ServerPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
 		m_server.ping(packet->GetId());
 	}
 }
-
-void ServerPacketHandler::mirrorPacket(std::shared_ptr<IPacket> packet)
-{
-	ZoneScoped;
-	m_server.send({packet, Server::flags::ALL, packet->GetConnectionId()});
-}
-
-void ServerPacketHandler::relayPacket(std::shared_ptr<IPacket> packet)
-{
-	ZoneScoped;
-	m_server.send({packet, Server::flags::ALLEXCEPT, packet->GetConnectionId()});
-}
-
