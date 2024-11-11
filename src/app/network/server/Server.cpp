@@ -234,7 +234,7 @@ void Server::sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id)
 		auto it = m_connections.find(packet->GetConnectionId());
 		if (it == m_connections.end())
 		{
-			// LOG_ERROR("Server: Send: Client not found");
+			LOG_ERROR("Server: Send: Client not found");
 			return;
 		}
 		currentClient = it->second;
