@@ -1,7 +1,6 @@
 #include "Client.hpp"
 
 Client::Client(const std::string& ip, int port) :
-	m_running(true),
 	m_poller(),
 	m_client_socket(std::make_shared<ClientSocket>(ip.c_str(), port)),
 	m_connection(m_client_socket)
@@ -11,13 +10,6 @@ Client::Client(const std::string& ip, int port) :
 
 Client::~Client()
 {
-	m_running = false;
-}
-
-void Client::run()
-{
-	while (m_running)
-		runOnce();
 }
 
 void Client::runOnce(const int & timeout)
@@ -26,6 +18,16 @@ void Client::runOnce(const int & timeout)
 	empty_outgoing_packets();
 	auto [events_size, events] = m_poller.wait(timeout);
 
+	// if the poller was interrupted by a signal
+	// just return and let the caller handle it
+	if (errno == EINTR)
+	{
+		errno = 0;
+		return;
+	}
+	/**********************************************
+	 * Handle new events
+	 * ********************************************/
 	for (size_t i = 0; i < events_size; i++)
 	{
 		auto current_event = events[i].events;
