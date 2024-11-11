@@ -96,7 +96,7 @@ public:
 	 * 
 	 * @return ThreadSafePacketQueue& 
 	 */
-	ThreadSafePacketQueue & get_incoming_packets() { return m_incoming_packets; }
+	ThreadSafePacketQueue & getIncomingPackets() { return m_incoming_packets; }
 
 	class ClientDisconnected : public std::exception
 	{
@@ -131,10 +131,10 @@ private:
 
 	uint64_t get_new_id();
 
-	int		read_data(Connection & connection, uint64_t id);
-	int		send_data(Connection & connection, uint64_t id);
-	void	empty_outgoing_packets();
-	void 	empty_old_pings();
+	int		readData(Connection & connection, uint64_t id);
+	int		sendData(Connection & connection, uint64_t id);
+	void	emptyOutgoingPackets();
+	void 	emptyOldPings();
 
 	void sendPacket(std::shared_ptr<IPacket> packet, const uint64_t & id);
 	void sendAllExcept(std::shared_ptr<IPacket> packet, const uint64_t & except_id);
