@@ -8,12 +8,10 @@
 
 #include "ConnectionSocket.hpp"
 
-#define MAX_BACKLOG 10
-
 class ServerSocket : public Socket
 {
 public:
-
+	static constexpr int MAX_BACKLOG = 10;
 	ServerSocket(int port);
 	virtual ~ServerSocket();
 
