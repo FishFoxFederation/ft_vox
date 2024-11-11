@@ -19,12 +19,11 @@ public:
 
 	void handlePacket(std::shared_ptr<IPacket> packet);
 private:
-	Client &	m_client;
+	Client &			m_client;
 	ClientWorld &		m_world;
 
 	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
 	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
-	void handlePlayerConnectedPacket(std::shared_ptr<PlayerConnectedPacket> packet);
 	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
 	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
 	void handlePingPacket(std::shared_ptr<PingPacket> packet);

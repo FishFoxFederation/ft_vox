@@ -21,9 +21,6 @@ void ClientPacketHandler::handlePacket(std::shared_ptr<IPacket> packet)
 	case IPacket::Type::CONNECTION:
 		handleConnectionPacket(std::dynamic_pointer_cast<ConnectionPacket>(packet));
 		break;
-	// case IPacket::Type::PLAYER_CONNECTED:
-	// 	handlePlayerConnectedPacket(std::dynamic_pointer_cast<PlayerConnectedPacket>(packet));
-	// 	break;
 	case IPacket::Type::PLAYER_MOVE:
 		handlePlayerMovePacket(std::dynamic_pointer_cast<PlayerMovePacket>(packet));
 		break;
@@ -59,17 +56,8 @@ void ClientPacketHandler::handleConnectionPacket(std::shared_ptr<ConnectionPacke
 	m_world.addPlayer(packet->GetPlayerId(), packet->GetPosition());
 }
 
-void ClientPacketHandler::handlePlayerConnectedPacket(std::shared_ptr<PlayerConnectedPacket> packet)
-{
-	(void)packet;
-	// LOG_INFO("Player connected: " << packet->GetId());
-	// m_world.addPlayer(packet->GetId());
-}
-
 void ClientPacketHandler::handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet)
 {
-	// glm::vec3 new_pos = packet->GetPosition() + packet->GetDisplacement();
-	// LOG_DEBUG("RECEIVED POS: " << new_pos.x << " " << new_pos.y << " " << new_pos.z);
 	m_world.updatePlayerPosition(packet->GetPlayerId(), packet->GetPosition() + packet->GetDisplacement());
 }
 
@@ -110,22 +98,7 @@ void ClientPacketHandler::handlePlayerListPacket(std::shared_ptr<PlayerListPacke
 
 void ClientPacketHandler::handleChunkPacket(std::shared_ptr<ChunkPacket> packet)
 {
-	(void)packet;
-	std::shared_ptr<Chunk> chunk = nullptr;
-	{
-		ZoneScopedN(str_chunk_alloc);
-		chunk = packet->GetChunk();
-	}
-	// for (int x = 0 ; x < CHUNK_X_SIZE ; x++)
-	// {
-	// 	if (chunk->getBiome(x, 0).continentalness != 0)
-	// 	{
-	// 		LOG_INFO("CONTINENTALNESS: " << chunk->getBiome(x, 0).continentalness);
-	// 		break;
-	// 	}
-	// }
-	// LOG_INFO("Received chunk pos " << chunk->getPosition().x << " " << chunk->getPosition().y << " " << chunk->getPosition().z);
-	m_world.addChunk(std::move(chunk));
+	m_world.addChunk(std::move(packet->GetChunk()));
 }
 
 void ClientPacketHandler::handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet)
