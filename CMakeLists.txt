@@ -102,7 +102,6 @@ target_sources(${PROJECT_NAME}
 		src/app/network/shared/ConnectionSocket.cpp
 		src/app/network/shared/ConnectionSocket.cpp
 		src/app/network/shared/PacketFactory.cpp
-		src/app/network/shared/IncomingPacketList.cpp
 		src/app/network/shared/packets/IPacket.cpp
 		src/app/network/shared/packets/PingPacket.cpp
 		src/app/network/shared/packets/DisconnectPacket.cpp
@@ -261,7 +260,6 @@ target_sources(server
 		src/app/network/shared/Socket.cpp
 		src/app/network/shared/ConnectionSocket.cpp
 		src/app/network/shared/PacketFactory.cpp
-		src/app/network/shared/IncomingPacketList.cpp
 		src/app/network/shared/packets/PingPacket.cpp
 		src/app/network/shared/packets/BlockActionPacket.cpp
 		src/app/network/shared/packets/IPacket.cpp
