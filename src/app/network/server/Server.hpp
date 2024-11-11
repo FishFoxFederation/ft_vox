@@ -21,12 +21,13 @@
  * It is fully threadsafe and can be run in a separate thread.
  * This is where packets are received and sent and where new connections are accepted.
  * 
- * About the sendInfo struct and the NOWAIT flag:
+ * About the sendInfo struct and the ASYNC flag:
  *  if the server is running on another thread this flag can be usefull.
  *  when this flag is set the send function will only queue the packet to be sent.
  *  All of the serialization and the syscalls will be done in the server thread.
  *  If the packet being sent isnt highly delay sensitive this flag should be used.
  * It wont change anything regarding performances if the server is running on the same thread as the sending thread.
+ * 
  */
 class Server
 {
@@ -46,7 +47,7 @@ public:
 	{
 		ALL = 1,
 		ALLEXCEPT = 1 << 1,
-		NOWAIT = 1 << 2,
+		ASYNC = 1 << 2,
 	};
 
 	/**
