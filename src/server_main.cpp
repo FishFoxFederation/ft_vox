@@ -1,7 +1,6 @@
 #include "Connection.hpp"
 #include "server/Server.hpp"
 #include "PacketFactory.hpp"
-#include "ServerPacketHandler.hpp"
 #include "ServerWorld.hpp"
 #include <iostream>
 #include <string>
@@ -29,7 +28,7 @@ int main()
 	Server server(4245);
 	ServerWorld world(server);
 	ServerBlockUpdateThread block_update_thread(world);
-	ServerPacketHandler packet_handler(server, world);
+	// ServerPacketHandler packet_handler(server, world);
 	// std::thread server_thread([&server](){
 	// 	server.run();
 	// });
@@ -60,7 +59,7 @@ int main()
 				continue;
 			}
 
-			packet_handler.handlePacket(packet);
+			world.handlePacket(packet);
 		}
 		auto end = std::chrono::high_resolution_clock::now();
 		if (last_time > 1e9)

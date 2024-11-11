@@ -153,12 +153,6 @@ public:
 	 * NETWORK
 	\***********************************/
 	void handlePacket(std::shared_ptr<IPacket> packet);
-	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
-	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
-	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
-	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
-	void handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet);
-	void sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id);
 
 
 private:
@@ -172,6 +166,13 @@ private:
 	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
 	TracyLockableN(std::mutex, m_players_info_mutex, "PlayerInfoMutex");
 
+	void handleBlockActionPacket(std::shared_ptr<BlockActionPacket> packet);
+	void handleConnectionPacket(std::shared_ptr<ConnectionPacket> packet);
+	void handlePlayerMovePacket(std::shared_ptr<PlayerMovePacket> packet);
+	void handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packet);
+	void handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet);
+	void handlePingPacket(std::shared_ptr<PingPacket> packet);
+	void sendChunkLoadUnloadData(const ChunkLoadUnloadData & data, uint64_t player_id);
 
 	/*********************************\
 	 * TICKET MANAGER

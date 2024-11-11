@@ -254,7 +254,6 @@ target_sources(server
 		src/app/network/client/ClientPacketHandler.cpp
 		src/app/network/server/Server.cpp
 		src/app/network/server/ServerSocket.cpp
-		src/app/network/server/ServerPacketHandler.cpp
 		src/app/network/shared/Connection.cpp
 		src/app/network/shared/Poller.cpp
 		src/app/network/shared/Socket.cpp
