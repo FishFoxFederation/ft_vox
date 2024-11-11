@@ -86,7 +86,7 @@ void ClientPacketHandler::handlePingPacket(std::shared_ptr<PingPacket> packet)
 	else
 	{
 		packet->SetCounter(packet->GetCounter() - 1);
-		m_client.sendPacket(packet);
+		m_client.send({packet, 0});
 	}
 }
 

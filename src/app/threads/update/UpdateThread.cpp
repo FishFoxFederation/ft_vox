@@ -62,7 +62,7 @@ void UpdateThread::init()
 	LOG_INFO("UpdateThread launched :" << gettid());
 	tracy::SetThreadName(str_update_thread);
 	auto packet = std::make_shared<ConnectionPacket>(m_world.m_my_player_id, m_world.getPlayerPosition(m_world.m_my_player_id));
-	m_client.sendPacketNoWait(packet);
+	m_client.send({packet, Client::ASYNC});
 }
 
 void UpdateThread::loop()
@@ -152,7 +152,7 @@ void UpdateThread::readInput()
 
 		auto packet = std::make_shared<PingPacket>(id, 1);
 		m_client.m_pings[id] = std::chrono::high_resolution_clock::now();
-		m_client.sendPacket(packet);
+		m_client.send({packet, 0});
 
 		m_sound_engine.playSound(SoundName::PING);
 	}
@@ -169,7 +169,7 @@ void UpdateThread::readInput()
 			{
 				LOG_INFO("Setting server load distance to " << render_distance);
 				auto packet = std::make_shared<LoadDistancePacket>(render_distance);
-				m_client.sendPacket(packet);
+				m_client.send({packet, 0});
 			}
 			m_world.setRenderDistance(render_distance);
 		}
@@ -185,7 +185,7 @@ void UpdateThread::readInput()
 	if (ret.first)
 	{
 		auto packet = std::make_shared<BlockActionPacket>(BlockInfo::Type::Air, ret.second, BlockActionPacket::Action::PLACE);
-		m_client.sendPacketNoWait(packet);
+		m_client.send({packet, Client::ASYNC});
 	}
 	ClientWorld::PlayerUseResult player_use = m_world.playerUse(m_world.m_my_player_id, m_use);
 	if (player_use.hit && player_use.used_item != ItemInfo::Type::None)
@@ -195,7 +195,7 @@ void UpdateThread::readInput()
 			player_use.block_position,
 			BlockActionPacket::Action::PLACE
 		);
-		m_client.sendPacketNoWait(packet);
+		m_client.send({packet, Client::ASYNC});
 	}
 
 	const Input::KeyState gamemode_0 = m_window.input().getKeyState(GLFW_KEY_0);
@@ -290,7 +290,7 @@ void UpdateThread::movePlayer()
 	{
 		// glm::vec3 new_position = position + displacement;
 		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
-		m_client.sendPacket(packet);
+		m_client.send({packet, 0});
 	}
 
 	m_world.updatePlayerCamera(

@@ -88,6 +88,14 @@ int Client::sendData()
 	return 0;
 }
 
+void Client::send(const sendInfo & info)
+{
+	if (info.flags & flags::ASYNC)
+		m_outgoing_packets.push(info.packet);
+	else
+		sendPacket(info.packet);
+}
+
 void Client::sendPacket(std::shared_ptr<IPacket> packet)
 {
 	ZoneScoped;
@@ -98,12 +106,6 @@ void Client::sendPacket(std::shared_ptr<IPacket> packet)
 		std::lock_guard lock(m_connection.WriteLock());
 		m_connection.queueAndSendMessage(buffer);
 	}
-}
-
-void Client::sendPacketNoWait(std::shared_ptr<IPacket> packet)
-{
-	ZoneScoped;
-	m_outgoing_packets.push(packet);
 }
 
 std::shared_ptr<IPacket> Client::popPacket()
