@@ -54,6 +54,9 @@ void PlayerMovePacket::Serialize(uint8_t * buffer) const
 	buffer += SerializeHeader(buffer);
 
 	// BODY
+	memcpy(buffer, &m_player_id, sizeof(m_player_id));
+	buffer += sizeof(m_player_id);
+
 	memcpy(buffer, &m_position, sizeof(glm::dvec3));
 	buffer += sizeof(glm::dvec3);
 
