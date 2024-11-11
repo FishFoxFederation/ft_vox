@@ -1,4 +1,4 @@
 <map id="PlayerConnectedPacket" name="PlayerConnectedPacket">
-<area shape="rect" id="node1" title=" " alt="" coords="7,357,194,617"/>
-<area shape="rect" id="node2" href="$classIPacket.html" title=" " alt="" coords="5,5,196,309"/>
+<area shape="rect" id="node1" title=" " alt="" coords="7,372,194,632"/>
+<area shape="rect" id="node2" href="$classIPacket.html" title="an abstract class that servers as a base for all network packets" alt="" coords="5,5,196,324"/>
 </map>

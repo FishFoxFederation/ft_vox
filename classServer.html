@@ -110,10 +110,14 @@ $(document).ready(function(){initNavTree('classServer.html',''); initResizable()
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classServer-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Server Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>The server side interface with the network module.  
+ <a href="classServer.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Server_8hpp_source.html">Server.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -121,7 +125,7 @@ Collaboration diagram for Server:</div>
 <div class="dyncontent">
 <div class="center"><img src="classServer__coll__graph.png" border="0" usemap="#aServer_coll__map" alt="Collaboration graph"/></div>
 <map name="aServer_coll__map" id="aServer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,176,251"/>
+<area shape="rect" title="The server side interface with the network module." alt="" coords="5,5,165,236"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -130,13 +134,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer_1_1ClientDisconnected.html">ClientDisconnected</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structServer_1_1sendInfo.html">sendInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">arg struct used to send a packet  <a href="structServer_1_1sendInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a57c92587c3b65e90f775b4c69af83b1d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a57c92587c3b65e90f775b4c69af83b1d">flags</a> : uint8_t { <a class="el" href="classServer.html#a57c92587c3b65e90f775b4c69af83b1daeec1b7c1b992f83cdd2b7ed0d7675cbf">ALL</a> = 1
 , <a class="el" href="classServer.html#a57c92587c3b65e90f775b4c69af83b1da5483e248c52f5b45c5cdbd08eca0516f">ALLEXCEPT</a> = 1 &lt;&lt; 1
-, <a class="el" href="classServer.html#a57c92587c3b65e90f775b4c69af83b1da78ff0a8f5a8698f33b897e089c0d6a85">NOWAIT</a> = 1 &lt;&lt; 2
+, <a class="el" href="classServer.html#a57c92587c3b65e90f775b4c69af83b1da37c381d4816f764eb7201924cd8668d7">ASYNC</a> = 1 &lt;&lt; 2
  }</td></tr>
 <tr class="separator:a57c92587c3b65e90f775b4c69af83b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -154,28 +159,37 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a75912e5c72969c3e7afcf62c25594505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f16fc38789727d57762556799083eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classServer.html">Server</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a72f16fc38789727d57762556799083eb">operator=</a> (<a class="el" href="classServer.html">Server</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:a72f16fc38789727d57762556799083eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb27d30b40a94326e3fd629d3b30b7d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#abb27d30b40a94326e3fd629d3b30b7d5">run</a> ()</td></tr>
-<tr class="memdesc:abb27d30b40a94326e3fd629d3b30b7d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">start the server and blocks until the server is stopped you might wanna run this in a separate thread  <a href="classServer.html#abb27d30b40a94326e3fd629d3b30b7d5">More...</a><br /></td></tr>
-<tr class="separator:abb27d30b40a94326e3fd629d3b30b7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada8fbd5cf5ba8aca9acc32138558ccaf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ada8fbd5cf5ba8aca9acc32138558ccaf">runOnce</a> (int timeout_ms)</td></tr>
 <tr class="separator:ada8fbd5cf5ba8aca9acc32138558ccaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07c45a7e101a3926d8f9685c3c5d14e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a07c45a7e101a3926d8f9685c3c5d14e4">stop</a> ()</td></tr>
-<tr class="separator:a07c45a7e101a3926d8f9685c3c5d14e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0172e7b9ab49f759cf7a1034fe4ac671"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a0172e7b9ab49f759cf7a1034fe4ac671">send</a> (const <a class="el" href="structServer_1_1sendInfo.html">sendInfo</a> &amp;info)</td></tr>
 <tr class="separator:a0172e7b9ab49f759cf7a1034fe4ac671"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca36775ae381d5b9bdeca590ba2c444"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#acca36775ae381d5b9bdeca590ba2c444">ping</a> (uint64_t id)</td></tr>
+<tr class="memdesc:acca36775ae381d5b9bdeca590ba2c444"><td class="mdescLeft">&#160;</td><td class="mdescRight">send a ping packet to a client  <a href="classServer.html#acca36775ae381d5b9bdeca590ba2c444">More...</a><br /></td></tr>
 <tr class="separator:acca36775ae381d5b9bdeca590ba2c444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2384ffdcf012e494a472ff9b57845f3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a2384ffdcf012e494a472ff9b57845f3b">disconnect</a> (uint64_t id)</td></tr>
+<tr class="memdesc:a2384ffdcf012e494a472ff9b57845f3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">disconnect a client  <a href="classServer.html#a2384ffdcf012e494a472ff9b57845f3b">More...</a><br /></td></tr>
 <tr class="separator:a2384ffdcf012e494a472ff9b57845f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa05ae3a43bbbfec9a99e3a59e5d4b393"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IncomingPacketList_8hpp.html#a1b25624630cbce062a5247cd9998b86a">IncomingPacketList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#aa05ae3a43bbbfec9a99e3a59e5d4b393">get_incoming_packets</a> ()</td></tr>
-<tr class="separator:aa05ae3a43bbbfec9a99e3a59e5d4b393"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a606be628fafe1e64599e665017d360cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="ThreadSafePacketQueue_8hpp.html#ac00e6cd2218ecd8d93f35e5251481da0">ThreadSafePacketQueue</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a606be628fafe1e64599e665017d360cc">getIncomingPackets</a> ()</td></tr>
+<tr class="memdesc:a606be628fafe1e64599e665017d360cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a ref to the list of packet that have been received.  <a href="classServer.html#a606be628fafe1e64599e665017d360cc">More...</a><br /></td></tr>
+<tr class="separator:a606be628fafe1e64599e665017d360cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a0fc87edb35c6ed654170d33a59b37508"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint64_t, std::chrono::time_point&lt; std::chrono::high_resolution_clock &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a0fc87edb35c6ed654170d33a59b37508">m_pings</a></td></tr>
+<tr class="memdesc:a0fc87edb35c6ed654170d33a59b37508"><td class="mdescLeft">&#160;</td><td class="mdescRight">map used to store the time a ping was sent to a client  <a href="classServer.html#a0fc87edb35c6ed654170d33a59b37508">More...</a><br /></td></tr>
 <tr class="separator:a0fc87edb35c6ed654170d33a59b37508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a4223a65eb8a95e556d96e276bd255656"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a4223a65eb8a95e556d96e276bd255656">PING_TIMEOUT_MS</a> = 5000</td></tr>
+<tr class="separator:a4223a65eb8a95e556d96e276bd255656"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >The server side interface with the network module. </p>
+<p >This class is responsible for managing the connections and the packets to send and receive.</p>
+<p >It is fully threadsafe and can be run in a separate thread. This is where packets are received and sent and where new connections are accepted.</p>
+<p >About the <a class="el" href="structServer_1_1sendInfo.html" title="arg struct used to send a packet">sendInfo</a> struct and the ASYNC flag: if the server is running on another thread this flag can be usefull. when this flag is set the send function will only queue the packet to be sent. All of the serialization and the syscalls will be done in the server thread. If the packet being sent isnt highly delay sensitive this flag should be used. It wont change anything regarding performances if the server is running on the same thread as the sending thread. </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a57c92587c3b65e90f775b4c69af83b1d" name="a57c92587c3b65e90f775b4c69af83b1d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57c92587c3b65e90f775b4c69af83b1d">&#9670;&#160;</a></span>flags</h2>
 
@@ -190,7 +204,7 @@ Public Attributes</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a57c92587c3b65e90f775b4c69af83b1daeec1b7c1b992f83cdd2b7ed0d7675cbf" name="a57c92587c3b65e90f775b4c69af83b1daeec1b7c1b992f83cdd2b7ed0d7675cbf"></a>ALL&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a57c92587c3b65e90f775b4c69af83b1da5483e248c52f5b45c5cdbd08eca0516f" name="a57c92587c3b65e90f775b4c69af83b1da5483e248c52f5b45c5cdbd08eca0516f"></a>ALLEXCEPT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a57c92587c3b65e90f775b4c69af83b1da78ff0a8f5a8698f33b897e089c0d6a85" name="a57c92587c3b65e90f775b4c69af83b1da78ff0a8f5a8698f33b897e089c0d6a85"></a>NOWAIT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a57c92587c3b65e90f775b4c69af83b1da37c381d4816f764eb7201924cd8668d7" name="a57c92587c3b65e90f775b4c69af83b1da37c381d4816f764eb7201924cd8668d7"></a>ASYNC&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -300,10 +314,18 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>disconnect a client </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="aa05ae3a43bbbfec9a99e3a59e5d4b393" name="aa05ae3a43bbbfec9a99e3a59e5d4b393"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa05ae3a43bbbfec9a99e3a59e5d4b393">&#9670;&#160;</a></span>get_incoming_packets()</h2>
+<a id="a606be628fafe1e64599e665017d360cc" name="a606be628fafe1e64599e665017d360cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a606be628fafe1e64599e665017d360cc">&#9670;&#160;</a></span>getIncomingPackets()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -312,7 +334,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IncomingPacketList_8hpp.html#a1b25624630cbce062a5247cd9998b86a">IncomingPacketList</a> &amp; Server::get_incoming_packets </td>
+          <td class="memname"><a class="el" href="ThreadSafePacketQueue_8hpp.html#ac00e6cd2218ecd8d93f35e5251481da0">ThreadSafePacketQueue</a> &amp; Server::getIncomingPackets </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -324,6 +346,9 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get a ref to the list of packet that have been received. </p>
+<dl class="section return"><dt>Returns</dt><dd>ThreadSafePacketQueue&amp; </dd></dl>
 
 </div>
 </div>
@@ -395,24 +420,13 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="abb27d30b40a94326e3fd629d3b30b7d5" name="abb27d30b40a94326e3fd629d3b30b7d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb27d30b40a94326e3fd629d3b30b7d5">&#9670;&#160;</a></span>run()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Server::run </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>start the server and blocks until the server is stopped you might wanna run this in a separate thread </p>
+<p>send a ping packet to a client </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -452,23 +466,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a07c45a7e101a3926d8f9685c3c5d14e4" name="a07c45a7e101a3926d8f9685c3c5d14e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07c45a7e101a3926d8f9685c3c5d14e4">&#9670;&#160;</a></span>stop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Server::stop </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a0fc87edb35c6ed654170d33a59b37508" name="a0fc87edb35c6ed654170d33a59b37508"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0fc87edb35c6ed654170d33a59b37508">&#9670;&#160;</a></span>m_pings</h2>
@@ -480,6 +477,30 @@ Public Attributes</h2></td></tr>
           <td class="memname">std::unordered_map&lt;uint64_t, std::chrono::time_point&lt;std::chrono::high_resolution_clock&gt; &gt; Server::m_pings</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+<p>map used to store the time a ping was sent to a client </p>
+
+</div>
+</div>
+<a id="a4223a65eb8a95e556d96e276bd255656" name="a4223a65eb8a95e556d96e276bd255656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4223a65eb8a95e556d96e276bd255656">&#9670;&#160;</a></span>PING_TIMEOUT_MS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int Server::PING_TIMEOUT_MS = 5000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

@@ -116,24 +116,27 @@ $(document).ready(function(){initNavTree('classIPacket.html',''); initResizable(
 </div><!--header-->
 <div class="contents">
 
+<p>an abstract class that servers as a base for all network packets  
+ <a href="classIPacket.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="IPacket_8hpp_source.html">IPacket.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for IPacket:</div>
 <div class="dyncontent">
 <div class="center"><img src="classIPacket__inherit__graph.png" border="0" usemap="#aIPacket_inherit__map" alt="Inheritance graph"/></div>
 <map name="aIPacket_inherit__map" id="aIPacket_inherit__map">
-<area shape="rect" title=" " alt="" coords="903,5,1093,309"/>
-<area shape="rect" href="classBlockActionPacket.html" title=" " alt="" coords="5,387,164,588"/>
-<area shape="rect" href="classChunkPacket.html" title=" " alt="" coords="188,357,328,617"/>
-<area shape="rect" href="classChunkRequestPacket.html" title=" " alt="" coords="352,365,527,610"/>
-<area shape="rect" href="classChunkUnloadPacket.html" title=" " alt="" coords="551,357,717,617"/>
-<area shape="rect" href="classConnectionPacket.html" title=" " alt="" coords="742,387,897,588"/>
-<area shape="rect" href="classDisconnectPacket.html" title=" " alt="" coords="921,357,1075,617"/>
-<area shape="rect" href="classLoadDistancePacket.html" title=" " alt="" coords="1100,357,1269,617"/>
-<area shape="rect" href="classPingPacket.html" title=" " alt="" coords="1294,387,1409,588"/>
-<area shape="rect" href="classPlayerConnectedPacket.html" title=" " alt="" coords="1433,357,1619,617"/>
-<area shape="rect" href="classPlayerListPacket.html" title=" " alt="" coords="1643,357,1790,617"/>
-<area shape="rect" href="classPlayerMovePacket.html" title=" " alt="" coords="1814,387,1971,588"/>
+<area shape="rect" title="an abstract class that servers as a base for all network packets" alt="" coords="903,5,1093,324"/>
+<area shape="rect" href="classBlockActionPacket.html" title=" " alt="" coords="5,401,164,603"/>
+<area shape="rect" href="classChunkPacket.html" title=" " alt="" coords="188,372,328,632"/>
+<area shape="rect" href="classChunkRequestPacket.html" title=" " alt="" coords="352,379,527,625"/>
+<area shape="rect" href="classChunkUnloadPacket.html" title=" " alt="" coords="551,372,717,632"/>
+<area shape="rect" href="classConnectionPacket.html" title=" " alt="" coords="742,401,897,603"/>
+<area shape="rect" href="classDisconnectPacket.html" title=" " alt="" coords="921,372,1075,632"/>
+<area shape="rect" href="classLoadDistancePacket.html" title=" " alt="" coords="1100,372,1269,632"/>
+<area shape="rect" href="classPingPacket.html" title=" " alt="" coords="1294,401,1409,603"/>
+<area shape="rect" href="classPlayerConnectedPacket.html" title=" " alt="" coords="1433,372,1619,632"/>
+<area shape="rect" href="classPlayerListPacket.html" title=" " alt="" coords="1643,372,1790,632"/>
+<area shape="rect" href="classPlayerMovePacket.html" title=" " alt="" coords="1814,401,1971,603"/>
 </map>
 </div>
 <div class="dynheader">
@@ -141,7 +144,7 @@ Collaboration diagram for IPacket:</div>
 <div class="dyncontent">
 <div class="center"><img src="classIPacket__coll__graph.png" border="0" usemap="#aIPacket_coll__map" alt="Collaboration graph"/></div>
 <map name="aIPacket_coll__map" id="aIPacket_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,196,309"/>
+<area shape="rect" title="an abstract class that servers as a base for all network packets" alt="" coords="5,5,196,324"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -181,13 +184,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4369f658f6d1ac11ba4a6101931df110"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIPacket.html">IPacket</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a4369f658f6d1ac11ba4a6101931df110">operator=</a> (<a class="el" href="classIPacket.html">IPacket</a> &amp;&amp;)</td></tr>
 <tr class="separator:a4369f658f6d1ac11ba4a6101931df110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd943f08afc066b5d92aa9a5e9edce78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78">Serialize</a> (uint8_t *buffer) const =0</td></tr>
-<tr class="memdesc:afd943f08afc066b5d92aa9a5e9edce78"><td class="mdescLeft">&#160;</td><td class="mdescRight">will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes">Size()</a>  <a href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78">More...</a><br /></td></tr>
+<tr class="memdesc:afd943f08afc066b5d92aa9a5e9edce78"><td class="mdescLeft">&#160;</td><td class="mdescRight">will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a>  <a href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78">More...</a><br /></td></tr>
 <tr class="separator:afd943f08afc066b5d92aa9a5e9edce78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa9e43a4f96d2e77153848c67dc8a43f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f">ExtractMessage</a> (<a class="el" href="classConnection.html">Connection</a> &amp;connection)</td></tr>
-<tr class="memdesc:aaa9e43a4f96d2e77153848c67dc8a43f"><td class="mdescLeft">&#160;</td><td class="mdescRight">will extract the packet from the connection, the connection must have enough data to read the packet so you should extract the header first  <a href="classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f">More...</a><br /></td></tr>
+<tr class="memdesc:aaa9e43a4f96d2e77153848c67dc8a43f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the implemented packet from the connection.  <a href="classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f">More...</a><br /></td></tr>
 <tr class="separator:aaa9e43a4f96d2e77153848c67dc8a43f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae77519d0f578a7710a6b5b7b25126ea3"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">Size</a> () const =0</td></tr>
-<tr class="memdesc:ae77519d0f578a7710a6b5b7b25126ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the size of the packet in bytes  <a href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">More...</a><br /></td></tr>
+<tr class="memdesc:ae77519d0f578a7710a6b5b7b25126ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the size of the packet in bytes, usually used to reserve the right amount of memory in the send buffer  <a href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">More...</a><br /></td></tr>
 <tr class="separator:ae77519d0f578a7710a6b5b7b25126ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50acdc0b2287d8afbb66124ec3cb6f21"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21">HasDynamicSize</a> () const =0</td></tr>
 <tr class="memdesc:a50acdc0b2287d8afbb66124ec3cb6f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if the packet has a dynamic size.  <a href="classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21">More...</a><br /></td></tr>
@@ -199,10 +202,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ae3059336c70d9e1c36816a53ecc4f746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new instance of the packet.  <a href="classIPacket.html#ae3059336c70d9e1c36816a53ecc4f746">More...</a><br /></td></tr>
 <tr class="separator:ae3059336c70d9e1c36816a53ecc4f746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4228fd890d4c6bd61aa47d5611d6de67"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">GetConnectionId</a> () const</td></tr>
-<tr class="memdesc:a4228fd890d4c6bd61aa47d5611d6de67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classConnection.html">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">More...</a><br /></td></tr>
+<tr class="memdesc:a4228fd890d4c6bd61aa47d5611d6de67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">More...</a><br /></td></tr>
 <tr class="separator:a4228fd890d4c6bd61aa47d5611d6de67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4dd08718a1813d31b2d2b30eb66ced9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9">SetConnectionId</a> (uint64_t connection_id)</td></tr>
-<tr class="memdesc:af4dd08718a1813d31b2d2b30eb66ced9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classConnection.html">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9">More...</a><br /></td></tr>
+<tr class="memdesc:af4dd08718a1813d31b2d2b30eb66ced9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9">More...</a><br /></td></tr>
 <tr class="separator:af4dd08718a1813d31b2d2b30eb66ced9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
@@ -215,8 +218,11 @@ Static Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a768ac28e49ac98205b3319109dff697c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a768ac28e49ac98205b3319109dff697c">Deserialize</a> (const uint8_t *buffer)=0</td></tr>
-<tr class="memdesc:a768ac28e49ac98205b3319109dff697c"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the packet from the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes">Size()</a>  <a href="classIPacket.html#a768ac28e49ac98205b3319109dff697c">More...</a><br /></td></tr>
+<tr class="memdesc:a768ac28e49ac98205b3319109dff697c"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the packet from the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a>  <a href="classIPacket.html#a768ac28e49ac98205b3319109dff697c">More...</a><br /></td></tr>
 <tr class="separator:a768ac28e49ac98205b3319109dff697c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8e1f9d04665b1dc9d63703492ecec45"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#ae8e1f9d04665b1dc9d63703492ecec45">SerializeHeader</a> (uint8_t *buffer) const</td></tr>
+<tr class="memdesc:ae8e1f9d04665b1dc9d63703492ecec45"><td class="mdescLeft">&#160;</td><td class="mdescRight">util function to serialize the header of the packet will serialize the type and the size of the packet if it has a dynamic size  <a href="classIPacket.html#ae8e1f9d04665b1dc9d63703492ecec45">More...</a><br /></td></tr>
+<tr class="separator:ae8e1f9d04665b1dc9d63703492ecec45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a970e033333775279b4a962551be32708"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a970e033333775279b4a962551be32708">IPacket</a> ()</td></tr>
 <tr class="separator:a970e033333775279b4a962551be32708"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -225,7 +231,22 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ae667321d40f435d76873821e52745436"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#ae667321d40f435d76873821e52745436">m_connection_id</a> = 0</td></tr>
 <tr class="separator:ae667321d40f435d76873821e52745436"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >an abstract class that servers as a base for all network packets </p>
+<p >This class is used to define the interface of a packet, It has an enum for packet types, pure virtual methods to serialize and deserialize the packet, pure virtual methods to return the size of the packet and if that packet has a dynamic size</p>
+<p >#Packet header A typical packet header in memory would look like this</p>
+<p >[Type][Size ( if dynamic size)]</p>
+<p >a whole packet in memory would look like this</p>
+<p >[Header][Data]</p>
+<p >The size returned by the <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a> method is the size of the whole packet including the header</p>
+<p >Some packet have dynamic size, for example a packet that contains a list of players, the size of the packet will depend on the number of players connected this add some obligations to the implementation and manipulation of the packet</p>
+<ol type="1">
+<li>The <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a> Method is no longer valid to call on an empty instance of the packet, it will only be called by a sender that wants to know the size he has to reserve in his send buffer</li>
+<li>The <a class="el" href="classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21" title="Tell if the packet has a dynamic size.">HasDynamicSize()</a> method will return true</li>
+<li>The <a class="el" href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78" title="will write the packet in the buffer, the buffer must at least be of size Size()">Serialize()</a> method will have to write the size of the packet in the buffer</li>
+<li>The <a class="el" href="classIPacket.html#a768ac28e49ac98205b3319109dff697c" title="read the packet from the buffer, the buffer must at least be of size Size()">Deserialize()</a> method will have to read the size of the packet from the buffer </li>
+</ol>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a45e74ba6b0b68c66035a48c641a6a569" name="a45e74ba6b0b68c66035a48c641a6a569"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45e74ba6b0b68c66035a48c641a6a569">&#9670;&#160;</a></span>Type</h2>
 
@@ -405,7 +426,8 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>read the packet from the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes">Size()</a> </p>
+<p>read the packet from the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a> </p>
+<dl class="section note"><dt>Note</dt><dd>this is protected because the method the user should call is ExtractMessage </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td></td></tr>
@@ -433,8 +455,9 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>will extract the packet from the connection, the connection must have enough data to read the packet so you should extract the header first </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Extracts the implemented packet from the connection. </p>
+<dl class="section warning"><dt>Warning</dt><dd>the connection MUST have the complete packet in its read buffer this method should only be called by the <a class="el" href="classPacketFactory.html">PacketFactory</a></dd></dl>
+<p>moreover, the connection's read Mutex MUST be locked by the caller </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">connection</td><td></td></tr>
   </table>
@@ -466,7 +489,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get the <a class="el" href="classConnection.html">Connection</a> Id ( eg source of the packet or destination if it's a response) </p>
+<p>Get the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> Id ( eg source of the packet or destination if it's a response) </p>
 <dl class="section return"><dt>Returns</dt><dd>uint64_t </dd></dl>
 
 </div>
@@ -593,7 +616,7 @@ false </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes">Size()</a> </p>
+<p>will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td></td></tr>
@@ -602,6 +625,41 @@ false </dd></dl>
 </dl>
 
 <p>Implemented in <a class="el" href="classBlockActionPacket.html#a321e453c1238fa49df4159c928126f6a">BlockActionPacket</a>, <a class="el" href="classChunkPacket.html#a613320e34214ba8f5a00c74b793d15e0">ChunkPacket</a>, <a class="el" href="classChunkRequestPacket.html#aa66cf8861e5ff90d6e68d723649b6394">ChunkRequestPacket</a>, <a class="el" href="classChunkUnloadPacket.html#a8752ca6c4d2c629cf5fbf9c73d47d137">ChunkUnloadPacket</a>, <a class="el" href="classConnectionPacket.html#ac93d7d0907ae5c73b53ce57da0fed1f7">ConnectionPacket</a>, <a class="el" href="classDisconnectPacket.html#a02c09d43072dce1d045a87e5d54ea506">DisconnectPacket</a>, <a class="el" href="classLoadDistancePacket.html#af996c6a5797a1d8abede86290c8520de">LoadDistancePacket</a>, <a class="el" href="classPingPacket.html#a691cea170732c3b7988d5881c854b870">PingPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#aa48ab90647bbeea44dec0a07771a78c5">PlayerConnectedPacket</a>, <a class="el" href="classPlayerListPacket.html#a5ea39919579b10874cc0b88bbf24a334">PlayerListPacket</a>, and <a class="el" href="classPlayerMovePacket.html#ad6bff2b41dcdc29fbe789b2c0728adea">PlayerMovePacket</a>.</p>
+
+</div>
+</div>
+<a id="ae8e1f9d04665b1dc9d63703492ecec45" name="ae8e1f9d04665b1dc9d63703492ecec45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8e1f9d04665b1dc9d63703492ecec45">&#9670;&#160;</a></span>SerializeHeader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t IPacket::SerializeHeader </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>util function to serialize the header of the packet will serialize the type and the size of the packet if it has a dynamic size </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>size_t the number of bytes written </dd></dl>
 
 </div>
 </div>
@@ -629,7 +687,7 @@ false </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Set the <a class="el" href="classConnection.html">Connection</a> Id ( eg source of the packet or destination if it's a response) </p>
+<p>Set the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> Id ( eg source of the packet or destination if it's a response) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">connection_id</td><td></td></tr>
@@ -662,8 +720,10 @@ false </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>return the size of the packet in bytes </p>
-<dl class="section warning"><dt>Warning</dt><dd>if the packet has a dynamic size, you cannot use this function on an empty instance of a packet to estimate the size of a buffer you MUST read the header of the packet, but for any other case, you can use this function</dd></dl>
+<p>return the size of the packet in bytes, usually used to reserve the right amount of memory in the send buffer </p>
+<p >or to check if a connection contains a complete packet</p>
+<dl class="section warning"><dt>Warning</dt><dd>if the packet has a dynamic size YOU CANNOT call this method to check if the packet is complete, you MUST read the size from the packet header.</dd></dl>
+<p>However you can still use it on an instance of a packet that has some data in it to estimate the size of the packet</p>
 <dl class="section return"><dt>Returns</dt><dd>uint32_t </dd></dl>
 
 <p>Implemented in <a class="el" href="classBlockActionPacket.html#ae8fe1333d1c242660f9bb8ec34f6e492">BlockActionPacket</a>, <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664">ChunkPacket</a>, <a class="el" href="classChunkRequestPacket.html#abbf4296b52bb71c7e9df4beef4b28582">ChunkRequestPacket</a>, <a class="el" href="classChunkUnloadPacket.html#adcb68623645b784e3794c6e00998cf3d">ChunkUnloadPacket</a>, <a class="el" href="classConnectionPacket.html#a029517aae3f38a53392c1111637a993b">ConnectionPacket</a>, <a class="el" href="classDisconnectPacket.html#a0a2bfeb980d50e0c4b16e72c0f2b5b04">DisconnectPacket</a>, <a class="el" href="classLoadDistancePacket.html#aa0ef8cd11ffac29edc0517f72b15b90f">LoadDistancePacket</a>, <a class="el" href="classPingPacket.html#a072672d4fafd4763a3513a63a473aa1d">PingPacket</a>, <a class="el" href="classPlayerConnectedPacket.html#acafe9882606b8e7498c6fc82b5777c7a">PlayerConnectedPacket</a>, <a class="el" href="classPlayerListPacket.html#af91646b9404fdefd6b6db3eb664c7b5f">PlayerListPacket</a>, and <a class="el" href="classPlayerMovePacket.html#aa68b459e03702ff467096ef3ccf7f4c8">PlayerMovePacket</a>.</p>

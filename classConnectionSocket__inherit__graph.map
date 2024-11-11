@@ -1,4 +1,4 @@
 <map id="ConnectionSocket" name="ConnectionSocket">
 <area shape="rect" id="node1" title=" " alt="" coords="5,255,160,427"/>
-<area shape="rect" id="node2" href="$classSocket.html" title=" " alt="" coords="31,5,135,207"/>
+<area shape="rect" id="node2" href="$classSocket.html" title="a RAII wrapper for a socket." alt="" coords="31,5,135,207"/>
 </map>

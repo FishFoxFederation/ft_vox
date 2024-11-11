@@ -132,6 +132,7 @@ var hierarchy =
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],
     [ "RenderThread", "classRenderThread.html", null ],
     [ "Sound::RIFFChunk", "structSound_1_1RIFFChunk.html", null ],
+    [ "Client::sendInfo", "structClient_1_1sendInfo.html", null ],
     [ "Server::sendInfo", "structServer_1_1sendInfo.html", null ],
     [ "Server", "classServer.html", null ],
     [ "ServerBlockUpdateThread", "classServerBlockUpdateThread.html", null ],

@@ -119,8 +119,8 @@ Inheritance diagram for ChunkPacket:</div>
 <div class="dyncontent">
 <div class="center"><img src="classChunkPacket__inherit__graph.png" border="0" usemap="#aChunkPacket_inherit__map" alt="Inheritance graph"/></div>
 <map name="aChunkPacket_inherit__map" id="aChunkPacket_inherit__map">
-<area shape="rect" title=" " alt="" coords="31,357,171,617"/>
-<area shape="rect" href="classIPacket.html" title=" " alt="" coords="5,5,196,309"/>
+<area shape="rect" title=" " alt="" coords="31,372,171,632"/>
+<area shape="rect" href="classIPacket.html" title="an abstract class that servers as a base for all network packets" alt="" coords="5,5,196,324"/>
 </map>
 </div>
 <div class="dynheader">
@@ -128,8 +128,8 @@ Collaboration diagram for ChunkPacket:</div>
 <div class="dyncontent">
 <div class="center"><img src="classChunkPacket__coll__graph.png" border="0" usemap="#aChunkPacket_coll__map" alt="Collaboration graph"/></div>
 <map name="aChunkPacket_coll__map" id="aChunkPacket_coll__map">
-<area shape="rect" title=" " alt="" coords="31,357,171,617"/>
-<area shape="rect" href="classIPacket.html" title=" " alt="" coords="5,5,196,309"/>
+<area shape="rect" title=" " alt="" coords="31,372,171,632"/>
+<area shape="rect" href="classIPacket.html" title="an abstract class that servers as a base for all network packets" alt="" coords="5,5,196,324"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -155,13 +155,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae71acc57c0e68214521071521c1aa6de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classChunkPacket.html">ChunkPacket</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunkPacket.html#ae71acc57c0e68214521071521c1aa6de">operator=</a> (<a class="el" href="classChunkPacket.html">ChunkPacket</a> &amp;&amp;other)</td></tr>
 <tr class="separator:ae71acc57c0e68214521071521c1aa6de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a613320e34214ba8f5a00c74b793d15e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunkPacket.html#a613320e34214ba8f5a00c74b793d15e0">Serialize</a> (uint8_t *buffer) const override</td></tr>
-<tr class="memdesc:a613320e34214ba8f5a00c74b793d15e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes">Size()</a>  <a href="classChunkPacket.html#a613320e34214ba8f5a00c74b793d15e0">More...</a><br /></td></tr>
+<tr class="memdesc:a613320e34214ba8f5a00c74b793d15e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a>  <a href="classChunkPacket.html#a613320e34214ba8f5a00c74b793d15e0">More...</a><br /></td></tr>
 <tr class="separator:a613320e34214ba8f5a00c74b793d15e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca67f4c2e88ae2a0ff8102ba12b37dcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunkPacket.html#aca67f4c2e88ae2a0ff8102ba12b37dcc">Deserialize</a> (const uint8_t *buffer) override</td></tr>
-<tr class="memdesc:aca67f4c2e88ae2a0ff8102ba12b37dcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the packet from the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes">Size()</a>  <a href="classChunkPacket.html#aca67f4c2e88ae2a0ff8102ba12b37dcc">More...</a><br /></td></tr>
+<tr class="memdesc:aca67f4c2e88ae2a0ff8102ba12b37dcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the packet from the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a>  <a href="classChunkPacket.html#aca67f4c2e88ae2a0ff8102ba12b37dcc">More...</a><br /></td></tr>
 <tr class="separator:aca67f4c2e88ae2a0ff8102ba12b37dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac901cffc1af0d59ef38789a46799a664"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664">Size</a> () const override</td></tr>
-<tr class="memdesc:ac901cffc1af0d59ef38789a46799a664"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the size of the packet in bytes  <a href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664">More...</a><br /></td></tr>
+<tr class="memdesc:ac901cffc1af0d59ef38789a46799a664"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the size of the packet in bytes, usually used to reserve the right amount of memory in the send buffer  <a href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664">More...</a><br /></td></tr>
 <tr class="separator:ac901cffc1af0d59ef38789a46799a664"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25ce7717f41e1187b6fb15a0cdd56f0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChunkPacket.html#a25ce7717f41e1187b6fb15a0cdd56f0c">HasDynamicSize</a> () const override</td></tr>
 <tr class="memdesc:a25ce7717f41e1187b6fb15a0cdd56f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if the packet has a dynamic size.  <a href="classChunkPacket.html#a25ce7717f41e1187b6fb15a0cdd56f0c">More...</a><br /></td></tr>
@@ -188,13 +188,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4369f658f6d1ac11ba4a6101931df110 inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIPacket.html">IPacket</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a4369f658f6d1ac11ba4a6101931df110">operator=</a> (<a class="el" href="classIPacket.html">IPacket</a> &amp;&amp;)</td></tr>
 <tr class="separator:a4369f658f6d1ac11ba4a6101931df110 inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd943f08afc066b5d92aa9a5e9edce78 inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78">Serialize</a> (uint8_t *buffer) const =0</td></tr>
-<tr class="memdesc:afd943f08afc066b5d92aa9a5e9edce78 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes">Size()</a>  <a href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78">More...</a><br /></td></tr>
+<tr class="memdesc:afd943f08afc066b5d92aa9a5e9edce78 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a>  <a href="classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78">More...</a><br /></td></tr>
 <tr class="separator:afd943f08afc066b5d92aa9a5e9edce78 inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa9e43a4f96d2e77153848c67dc8a43f inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f">ExtractMessage</a> (<a class="el" href="classConnection.html">Connection</a> &amp;connection)</td></tr>
-<tr class="memdesc:aaa9e43a4f96d2e77153848c67dc8a43f inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">will extract the packet from the connection, the connection must have enough data to read the packet so you should extract the header first  <a href="classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f">More...</a><br /></td></tr>
+<tr class="memdesc:aaa9e43a4f96d2e77153848c67dc8a43f inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the implemented packet from the connection.  <a href="classIPacket.html#aaa9e43a4f96d2e77153848c67dc8a43f">More...</a><br /></td></tr>
 <tr class="separator:aaa9e43a4f96d2e77153848c67dc8a43f inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae77519d0f578a7710a6b5b7b25126ea3 inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">Size</a> () const =0</td></tr>
-<tr class="memdesc:ae77519d0f578a7710a6b5b7b25126ea3 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the size of the packet in bytes  <a href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">More...</a><br /></td></tr>
+<tr class="memdesc:ae77519d0f578a7710a6b5b7b25126ea3 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the size of the packet in bytes, usually used to reserve the right amount of memory in the send buffer  <a href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">More...</a><br /></td></tr>
 <tr class="separator:ae77519d0f578a7710a6b5b7b25126ea3 inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50acdc0b2287d8afbb66124ec3cb6f21 inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21">HasDynamicSize</a> () const =0</td></tr>
 <tr class="memdesc:a50acdc0b2287d8afbb66124ec3cb6f21 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if the packet has a dynamic size.  <a href="classIPacket.html#a50acdc0b2287d8afbb66124ec3cb6f21">More...</a><br /></td></tr>
@@ -206,10 +206,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ae3059336c70d9e1c36816a53ecc4f746 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new instance of the packet.  <a href="classIPacket.html#ae3059336c70d9e1c36816a53ecc4f746">More...</a><br /></td></tr>
 <tr class="separator:ae3059336c70d9e1c36816a53ecc4f746 inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4228fd890d4c6bd61aa47d5611d6de67 inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">GetConnectionId</a> () const</td></tr>
-<tr class="memdesc:a4228fd890d4c6bd61aa47d5611d6de67 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classConnection.html">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">More...</a><br /></td></tr>
+<tr class="memdesc:a4228fd890d4c6bd61aa47d5611d6de67 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#a4228fd890d4c6bd61aa47d5611d6de67">More...</a><br /></td></tr>
 <tr class="separator:a4228fd890d4c6bd61aa47d5611d6de67 inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4dd08718a1813d31b2d2b30eb66ced9 inherit pub_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9">SetConnectionId</a> (uint64_t connection_id)</td></tr>
-<tr class="memdesc:af4dd08718a1813d31b2d2b30eb66ced9 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classConnection.html">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9">More...</a><br /></td></tr>
+<tr class="memdesc:af4dd08718a1813d31b2d2b30eb66ced9 inherit pub_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> Id ( eg source of the packet or destination if it's a response)  <a href="classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9">More...</a><br /></td></tr>
 <tr class="separator:af4dd08718a1813d31b2d2b30eb66ced9 inherit pub_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
@@ -242,8 +242,11 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:aa1fbb981153d0de919c84d235613a65c inherit pub_static_attribs_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classIPacket"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classIPacket')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classIPacket.html">IPacket</a></td></tr>
 <tr class="memitem:a768ac28e49ac98205b3319109dff697c inherit pro_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a768ac28e49ac98205b3319109dff697c">Deserialize</a> (const uint8_t *buffer)=0</td></tr>
-<tr class="memdesc:a768ac28e49ac98205b3319109dff697c inherit pro_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the packet from the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes">Size()</a>  <a href="classIPacket.html#a768ac28e49ac98205b3319109dff697c">More...</a><br /></td></tr>
+<tr class="memdesc:a768ac28e49ac98205b3319109dff697c inherit pro_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the packet from the buffer, the buffer must at least be of size <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a>  <a href="classIPacket.html#a768ac28e49ac98205b3319109dff697c">More...</a><br /></td></tr>
 <tr class="separator:a768ac28e49ac98205b3319109dff697c inherit pro_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8e1f9d04665b1dc9d63703492ecec45 inherit pro_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#ae8e1f9d04665b1dc9d63703492ecec45">SerializeHeader</a> (uint8_t *buffer) const</td></tr>
+<tr class="memdesc:ae8e1f9d04665b1dc9d63703492ecec45 inherit pro_methods_classIPacket"><td class="mdescLeft">&#160;</td><td class="mdescRight">util function to serialize the header of the packet will serialize the type and the size of the packet if it has a dynamic size  <a href="classIPacket.html#ae8e1f9d04665b1dc9d63703492ecec45">More...</a><br /></td></tr>
+<tr class="separator:ae8e1f9d04665b1dc9d63703492ecec45 inherit pro_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a970e033333775279b4a962551be32708 inherit pro_methods_classIPacket"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIPacket.html#a970e033333775279b4a962551be32708">IPacket</a> ()</td></tr>
 <tr class="separator:a970e033333775279b4a962551be32708 inherit pro_methods_classIPacket"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classIPacket"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classIPacket')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classIPacket.html">IPacket</a></td></tr>
@@ -394,7 +397,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>read the packet from the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes">Size()</a> </p>
+<p>read the packet from the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a> </p>
+<dl class="section note"><dt>Note</dt><dd>this is protected because the method the user should call is ExtractMessage </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td></td></tr>
@@ -545,7 +549,7 @@ false </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes">Size()</a> </p>
+<p>will write the packet in the buffer, the buffer must at least be of size <a class="el" href="classChunkPacket.html#ac901cffc1af0d59ef38789a46799a664" title="return the size of the packet in bytes, usually used to reserve the right amount of memory in the sen...">Size()</a> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td></td></tr>
@@ -598,8 +602,10 @@ false </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>return the size of the packet in bytes </p>
-<dl class="section warning"><dt>Warning</dt><dd>if the packet has a dynamic size, you cannot use this function on an empty instance of a packet to estimate the size of a buffer you MUST read the header of the packet, but for any other case, you can use this function</dd></dl>
+<p>return the size of the packet in bytes, usually used to reserve the right amount of memory in the send buffer </p>
+<p >or to check if a connection contains a complete packet</p>
+<dl class="section warning"><dt>Warning</dt><dd>if the packet has a dynamic size YOU CANNOT call this method to check if the packet is complete, you MUST read the size from the packet header.</dd></dl>
+<p>However you can still use it on an instance of a packet that has some data in it to estimate the size of the packet</p>
 <dl class="section return"><dt>Returns</dt><dd>uint32_t </dd></dl>
 
 <p>Implements <a class="el" href="classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3">IPacket</a>.</p>

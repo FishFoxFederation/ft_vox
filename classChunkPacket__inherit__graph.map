@@ -1,4 +1,4 @@
 <map id="ChunkPacket" name="ChunkPacket">
-<area shape="rect" id="node1" title=" " alt="" coords="31,357,171,617"/>
-<area shape="rect" id="node2" href="$classIPacket.html" title=" " alt="" coords="5,5,196,309"/>
+<area shape="rect" id="node1" title=" " alt="" coords="31,372,171,632"/>
+<area shape="rect" id="node2" href="$classIPacket.html" title="an abstract class that servers as a base for all network packets" alt="" coords="5,5,196,324"/>
 </map>

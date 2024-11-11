@@ -110,9 +110,7 @@ $(document).ready(function(){initNavTree('md_docs_pages_network.html',''); initR
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#autotoc_md15">Intro</a></li>
-<li class="level1"><a href="#autotoc_md16">Layers</a><ul><li class="level2"><a href="#autotoc_md17">Sockets, Connections and Poller</a></li>
-<li class="level2"><a href="#autotoc_md18">Commands</a><ul><li class="level3"><a href="#autotoc_md19">Command Factory</a></li>
-<li class="level3"><a href="#autotoc_md20">autotoc_md20</a></li>
+<li class="level1"><a href="#autotoc_md16">Layers</a><ul><li class="level2"><a href="#autotoc_md17">Sockets, Connections and Poller</a><ul><li class="level3"><a href="#autotoc_md18">Packets and the Packet Factory</a></li>
 </ul>
 </li>
 </ul>
@@ -125,21 +123,21 @@ Intro</h1>
 Layers</h1>
 <p >There are a few layers to our network stack <br  />
 </p><ul>
-<li>the basic socket and queueing of message / polling is abstracted in differents classes</li>
-<li>A ( to be determined ) class handles higher level things, reading queues, detecting disconnections and instanciate commands classes when a packet has been fully received</li>
-<li>The command factory deserializes the complete packets and returns instances of Commands using polymorphism</li>
-<li>The commands are then executed/dispatched on the update thread</li>
+<li>the basic socket and queueing of message / polling is abstracted in differents classes, <br  />
+ This is implemented by the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> class</li>
+<li>An abstract classes representing a packet that is sometimes serialized to a connection or deserialized from a connection</li>
+<li>A <a class="el" href="classPacketFactory.html">PacketFactory</a> class that can check if a packet is complete in a <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> and instanciate the correct packet and read extract that packet from the connection buffer</li>
+<li>A Higher level class that composes a poller as well as some connections to send and receive packets The server and the client both have a different one because of different needs ( a client has only one connection )</li>
+<li>A PacketHandler class that queries the queue of incoming packets in the <a class="el" href="classServer.html" title="The server side interface with the network module.">Server</a> or <a class="el" href="classClient.html" title="The Client side interface with the network module.">Client</a> class to execute logic</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md17"></a>
 Sockets, Connections and Poller</h2>
-<p >Not much to say here just some classes to RAII and abstract away the not so fun stuff of unix and tcp sockets</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
-Commands</h2>
-<h3><a class="anchor" id="autotoc_md19"></a>
-Command Factory</h3>
-<p >It is used when data has been received to detect complete packets and instanciate the correct command from it</p>
-<h3><a class="anchor" id="autotoc_md20"></a>
-autotoc_md20</h3>
+<p ><a class="el" href="classSocket.html" title="a RAII wrapper for a socket.">Socket</a> are wrapped in the <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> class to make them RAII compliant. <br  />
+ The <a class="el" href="classConnection.html" title="a bufferised and thread safe RAII wrapper for a socket representing a connection.">Connection</a> class has 2 exposed mutexes, it is the responsibility of the user to lock the read mutex when doing operation on the read buffer and to lock the write mutex when doing operations on the write buffer.</p>
+<p >The poller class wrapps around epoll to be able to poll through all the Connections</p>
+<h3><a class="anchor" id="autotoc_md18"></a>
+Packets and the Packet Factory</h3>
+<p >TODO create uml graph of a packet's life </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

@@ -7,5 +7,6 @@ var dir_e2d4946961cb2f7a598bb8a45601bca0 =
     [ "task_manager", "dir_1b354531801d9b9737ada4dc927e50fd.html", "dir_1b354531801d9b9737ada4dc927e50fd" ],
     [ "update", "dir_3b10795b623567d589c03ab0747682b0.html", "dir_3b10795b623567d589c03ab0747682b0" ],
     [ "Status.cpp", "Status_8cpp.html", null ],
-    [ "Status.hpp", "Status_8hpp.html", "Status_8hpp" ]
+    [ "Status.hpp", "Status_8hpp.html", "Status_8hpp" ],
+    [ "ThreadSafeQueue.hpp", "ThreadSafeQueue_8hpp.html", "ThreadSafeQueue_8hpp" ]
 ];

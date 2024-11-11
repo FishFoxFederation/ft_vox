@@ -143,6 +143,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:afa072497d682c55cd567e6be204194c3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classPacketFactory.html">PacketFactory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPacketFactory.html#afa072497d682c55cd567e6be204194c3">GetInstance</a> ()</td></tr>
+<tr class="memdesc:afa072497d682c55cd567e6be204194c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a ref to the singleton instance of the <a class="el" href="classPacketFactory.html">PacketFactory</a>.  <a href="classPacketFactory.html#afa072497d682c55cd567e6be204194c3">More...</a><br /></td></tr>
 <tr class="separator:afa072497d682c55cd567e6be204194c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -239,7 +240,8 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>a pair containing a bool indicating if the extraction was sucessful and a shared pointer to the packet </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair containing a bool indicating if the extraction was sucessful and a shared pointer to the packet</dd></dl>
+<p>calls getPacketInfo to get information about a potential packet in the connection's buffer if the packet is complete, instanciates a new packet of the correct type and extracts the message from the connection all buffer manipulation is done in connection and <a class="el" href="classIPacket.html" title="an abstract class that servers as a base for all network packets">IPacket</a> classes </p>
 
 </div>
 </div>
@@ -265,6 +267,8 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Get a ref to the singleton instance of the <a class="el" href="classPacketFactory.html">PacketFactory</a>. </p>
 
 </div>
 </div>

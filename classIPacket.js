@@ -28,6 +28,7 @@ var classIPacket =
     [ "operator=", "classIPacket.html#aafed1fd2c2d33e71402e66385e77e21f", null ],
     [ "operator=", "classIPacket.html#a4369f658f6d1ac11ba4a6101931df110", null ],
     [ "Serialize", "classIPacket.html#afd943f08afc066b5d92aa9a5e9edce78", null ],
+    [ "SerializeHeader", "classIPacket.html#ae8e1f9d04665b1dc9d63703492ecec45", null ],
     [ "SetConnectionId", "classIPacket.html#af4dd08718a1813d31b2d2b30eb66ced9", null ],
     [ "Size", "classIPacket.html#ae77519d0f578a7710a6b5b7b25126ea3", null ],
     [ "m_connection_id", "classIPacket.html#ae667321d40f435d76873821e52745436", null ]

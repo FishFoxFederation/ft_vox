@@ -113,13 +113,16 @@ $(document).ready(function(){initNavTree('classConnection.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 
+<p>a bufferised and thread safe RAII wrapper for a socket representing a connection.  
+ <a href="classConnection.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="Connection_8hpp_source.html">Connection.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Connection:</div>
 <div class="dyncontent">
 <div class="center"><img src="classConnection__coll__graph.png" border="0" usemap="#aConnection_coll__map" alt="Collaboration graph"/></div>
 <map name="aConnection_coll__map" id="aConnection_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,208,221"/>
+<area shape="rect" title="a bufferised and thread safe RAII wrapper for a socket representing a connection." alt="" coords="5,5,208,221"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -138,28 +141,40 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae5ead9e849f40522afef135788286dc9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classConnection.html">Connection</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ae5ead9e849f40522afef135788286dc9">operator=</a> (<a class="el" href="classConnection.html">Connection</a> &amp;&amp;other)</td></tr>
 <tr class="separator:ae5ead9e849f40522afef135788286dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea680ae8edb22fcfbeccff145fc593f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aea680ae8edb22fcfbeccff145fc593f5">queueAndSendMessage</a> (const std::vector&lt; uint8_t &gt; &amp;msg)</td></tr>
+<tr class="memdesc:aea680ae8edb22fcfbeccff145fc593f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">add the message to the write buffer and try to send it.  <a href="classConnection.html#aea680ae8edb22fcfbeccff145fc593f5">More...</a><br /></td></tr>
 <tr class="separator:aea680ae8edb22fcfbeccff145fc593f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2dffcef44550fc1039c4cb3e457360"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a3d2dffcef44550fc1039c4cb3e457360">queueMessage</a> (const std::vector&lt; uint8_t &gt; &amp;msg)</td></tr>
+<tr class="memdesc:a3d2dffcef44550fc1039c4cb3e457360"><td class="mdescLeft">&#160;</td><td class="mdescRight">add the message to the write buffer without sending it.  <a href="classConnection.html#a3d2dffcef44550fc1039c4cb3e457360">More...</a><br /></td></tr>
 <tr class="separator:a3d2dffcef44550fc1039c4cb3e457360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0907cb8fe5e51d3b19c38bfc1c52c099"><td class="memItemLeft" align="right" valign="top">const uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a0907cb8fe5e51d3b19c38bfc1c52c099">getReadBufferPtr</a> () const</td></tr>
+<tr class="memdesc:a0907cb8fe5e51d3b19c38bfc1c52c099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the read buffer, offset by the internal read offset.  <a href="classConnection.html#a0907cb8fe5e51d3b19c38bfc1c52c099">More...</a><br /></td></tr>
 <tr class="separator:a0907cb8fe5e51d3b19c38bfc1c52c099"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f3fdc850f73cfa9f6b931743dc6f89a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a7f3fdc850f73cfa9f6b931743dc6f89a">getReadBufferSize</a> () const</td></tr>
+<tr class="memdesc:a7f3fdc850f73cfa9f6b931743dc6f89a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of bytes that can be read from the read buffer.  <a href="classConnection.html#a7f3fdc850f73cfa9f6b931743dc6f89a">More...</a><br /></td></tr>
 <tr class="separator:a7f3fdc850f73cfa9f6b931743dc6f89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a879b3872793ee5810b73ee09cde15309"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a879b3872793ee5810b73ee09cde15309">reduceReadBuffer</a> (size_t size)</td></tr>
+<tr class="memdesc:a879b3872793ee5810b73ee09cde15309"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify the connection that size bytes have been read from the read buffer.  <a href="classConnection.html#a879b3872793ee5810b73ee09cde15309">More...</a><br /></td></tr>
 <tr class="separator:a879b3872793ee5810b73ee09cde15309"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac20fcb6958a56591c9b3d06ef82e7ca8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ac20fcb6958a56591c9b3d06ef82e7ca8">clearReadBuffer</a> ()</td></tr>
+<tr class="memdesc:ac20fcb6958a56591c9b3d06ef82e7ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the read buffer and reset the read offset.  <a href="classConnection.html#ac20fcb6958a56591c9b3d06ef82e7ca8">More...</a><br /></td></tr>
 <tr class="separator:ac20fcb6958a56591c9b3d06ef82e7ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa43ad289d39da6243a80b1559b02aa29"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#aa43ad289d39da6243a80b1559b02aa29">getWriteBufferRef</a> () const</td></tr>
+<tr class="memdesc:aa43ad289d39da6243a80b1559b02aa29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a ref to the write buffer.  <a href="classConnection.html#aa43ad289d39da6243a80b1559b02aa29">More...</a><br /></td></tr>
 <tr class="separator:aa43ad289d39da6243a80b1559b02aa29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49b7e93b716bb833e2aee6d0b083f595"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a49b7e93b716bb833e2aee6d0b083f595">LockableBase</a> (std::mutex) &amp;ReadLock() const</td></tr>
+<tr class="memdesc:a49b7e93b716bb833e2aee6d0b083f595"><td class="mdescLeft">&#160;</td><td class="mdescRight">get a ref to the read mutex  <a href="classConnection.html#a49b7e93b716bb833e2aee6d0b083f595">More...</a><br /></td></tr>
 <tr class="separator:a49b7e93b716bb833e2aee6d0b083f595"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab64ffb4ea12100a9683ad89f9858e1de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ab64ffb4ea12100a9683ad89f9858e1de">LockableBase</a> (std::mutex) &amp;WriteLock() const</td></tr>
+<tr class="memdesc:ab64ffb4ea12100a9683ad89f9858e1de"><td class="mdescLeft">&#160;</td><td class="mdescRight">get a ref to the write mutex  <a href="classConnection.html#ab64ffb4ea12100a9683ad89f9858e1de">More...</a><br /></td></tr>
 <tr class="separator:ab64ffb4ea12100a9683ad89f9858e1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a426e5dbbc9c94e010c53fdc84564251f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a426e5dbbc9c94e010c53fdc84564251f">dataToSend</a> () const</td></tr>
+<tr class="memdesc:a426e5dbbc9c94e010c53fdc84564251f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there is data in the write buffer.  <a href="classConnection.html#a426e5dbbc9c94e010c53fdc84564251f">More...</a><br /></td></tr>
 <tr class="separator:a426e5dbbc9c94e010c53fdc84564251f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd2aa3673cb4a57a2746e1b96571f69"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a8bd2aa3673cb4a57a2746e1b96571f69">recv</a> ()</td></tr>
+<tr class="memdesc:a8bd2aa3673cb4a57a2746e1b96571f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">will call recv on the socket on a non blocking way. Filling the read buffer.  <a href="classConnection.html#a8bd2aa3673cb4a57a2746e1b96571f69">More...</a><br /></td></tr>
 <tr class="separator:a8bd2aa3673cb4a57a2746e1b96571f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1248eb9b5f13b100d8ac2c6317d0d0b"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#af1248eb9b5f13b100d8ac2c6317d0d0b">sendQueue</a> ()</td></tr>
+<tr class="memdesc:af1248eb9b5f13b100d8ac2c6317d0d0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">will send as much data as possible from the write buffer.  <a href="classConnection.html#af1248eb9b5f13b100d8ac2c6317d0d0b">More...</a><br /></td></tr>
 <tr class="separator:af1248eb9b5f13b100d8ac2c6317d0d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92489024a0261f7d97cc0d1d0a58f414"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classSocket.html">Socket</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#a92489024a0261f7d97cc0d1d0a58f414">getSocket</a> () const</td></tr>
 <tr class="separator:a92489024a0261f7d97cc0d1d0a58f414"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,9 +186,15 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ae56a6fecbec2b330d7fd1e78019252b7"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConnection.html#ae56a6fecbec2b330d7fd1e78019252b7">READ_BUFFER_SIZE_MAX</a> = 1024 * 1024 * 4</td></tr>
+<tr class="memdesc:ae56a6fecbec2b330d7fd1e78019252b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">a constant representing the maximum size of the read buffer. when reading the connection will stop when this size is reached.  <a href="classConnection.html#ae56a6fecbec2b330d7fd1e78019252b7">More...</a><br /></td></tr>
 <tr class="separator:ae56a6fecbec2b330d7fd1e78019252b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >a bufferised and thread safe RAII wrapper for a socket representing a connection. </p>
+<p >There are two internal buffers, one for reading and one for writing</p>
+<p >Before doing any operation on the buffers, the appropriate mutex MUST be locked. The mutexes are exposed so multiple operations of the same type can be done in a row.</p>
+<p >About the read buffer and the read offset: to minimize the number of memory allocations the read buffer is not cleared/erased after each read operation. Instead the user will call readuceReadBuffer to indicate the number of bytes read. This will increase the read offset. When the user calls getReadBufferPtr, it will return a pointer offset by the read offset. The user can call clearReadBuffer once he has finished all his read operations to clear the buffer and reset the read offset. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acd6914f5b43271d312ad32a23bb52f66" name="acd6914f5b43271d312ad32a23bb52f66"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd6914f5b43271d312ad32a23bb52f66">&#9670;&#160;</a></span>Connection() <span class="overload">[1/3]</span></h2>
 
@@ -269,6 +290,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Clear the read buffer and reset the read offset. </p>
+<p >this can cause some reallocations but will most importantly be pretty slow. prefer calling reduceReadBuffer when doing all your operations and call this once you finished. </p>
+
 </div>
 </div>
 <a id="a426e5dbbc9c94e010c53fdc84564251f" name="a426e5dbbc9c94e010c53fdc84564251f"></a>
@@ -285,6 +309,11 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Check if there is data in the write buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
 
 </div>
 </div>
@@ -320,6 +349,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Get a pointer to the read buffer, offset by the internal read offset. </p>
+<dl class="section return"><dt>Returns</dt><dd>const uint8_t* </dd></dl>
+
 </div>
 </div>
 <a id="a7f3fdc850f73cfa9f6b931743dc6f89a" name="a7f3fdc850f73cfa9f6b931743dc6f89a"></a>
@@ -336,6 +368,10 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Get the number of bytes that can be read from the read buffer. </p>
+<dl class="section note"><dt>Note</dt><dd>this is not the true size of the internal read buffer, because some bytes that have been read can still be in the read buffer if it hasnt been cleared</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>size_t </dd></dl>
 
 </div>
 </div>
@@ -371,6 +407,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Get a ref to the write buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>const std::vector&lt;uint8_t&gt;&amp; </dd></dl>
+
 </div>
 </div>
 <a id="a49b7e93b716bb833e2aee6d0b083f595" name="a49b7e93b716bb833e2aee6d0b083f595"></a>
@@ -389,6 +428,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>get a ref to the read mutex </p>
+<dl class="section return"><dt>Returns</dt><dd>std::mutex </dd></dl>
+
 </div>
 </div>
 <a id="ab64ffb4ea12100a9683ad89f9858e1de" name="ab64ffb4ea12100a9683ad89f9858e1de"></a>
@@ -406,6 +448,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>get a ref to the write mutex </p>
+<dl class="section return"><dt>Returns</dt><dd>std::mutex </dd></dl>
 
 </div>
 </div>
@@ -469,6 +514,14 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>add the message to the write buffer and try to send it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a3d2dffcef44550fc1039c4cb3e457360" name="a3d2dffcef44550fc1039c4cb3e457360"></a>
@@ -487,6 +540,14 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>add the message to the write buffer without sending it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a8bd2aa3673cb4a57a2746e1b96571f69" name="a8bd2aa3673cb4a57a2746e1b96571f69"></a>
@@ -503,6 +564,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>will call recv on the socket on a non blocking way. Filling the read buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>ssize_t </dd></dl>
 
 </div>
 </div>
@@ -522,6 +586,14 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Notify the connection that size bytes have been read from the read buffer. </p>
+<p >this will not cause any reallocation or any data to be moved. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="af1248eb9b5f13b100d8ac2c6317d0d0b" name="af1248eb9b5f13b100d8ac2c6317d0d0b"></a>
@@ -538,6 +610,9 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>will send as much data as possible from the write buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>ssize_t </dd></dl>
 
 </div>
 </div>
@@ -579,6 +654,8 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>a constant representing the maximum size of the read buffer. when reading the connection will stop when this size is reached. </p>
 
 </div>
 </div>

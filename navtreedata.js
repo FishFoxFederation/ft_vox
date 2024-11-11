@@ -53,10 +53,8 @@ var NAVTREE =
     [ "Network", "md_docs_pages_network.html", [
       [ "Intro", "md_docs_pages_network.html#autotoc_md15", null ],
       [ "Layers", "md_docs_pages_network.html#autotoc_md16", [
-        [ "Sockets, Connections and Poller", "md_docs_pages_network.html#autotoc_md17", null ],
-        [ "Commands", "md_docs_pages_network.html#autotoc_md18", [
-          [ "Command Factory", "md_docs_pages_network.html#autotoc_md19", null ],
-          [ "autotoc_md20", "md_docs_pages_network.html#autotoc_md20", null ]
+        [ "Sockets, Connections and Poller", "md_docs_pages_network.html#autotoc_md17", [
+          [ "Packets and the Packet Factory", "md_docs_pages_network.html#autotoc_md18", null ]
         ] ]
       ] ]
     ] ],
@@ -70,11 +68,11 @@ var NAVTREE =
     [ "Style guide", "styleguide.html", null ],
     [ "Task Dependency ( WIP )", "taskDep.html", null ],
     [ "Threads Architecture", "threads.html", [
-      [ "Main thread", "threads.html#autotoc_md22", null ],
-      [ "Update Thread", "threads.html#autotoc_md23", null ],
-      [ "Render Thread", "threads.html#autotoc_md24", null ],
-      [ "Block Update Thread", "threads.html#autotoc_md25", null ],
-      [ "Thread pool", "threads.html#autotoc_md26", null ]
+      [ "Main thread", "threads.html#autotoc_md20", null ],
+      [ "Update Thread", "threads.html#autotoc_md21", null ],
+      [ "Render Thread", "threads.html#autotoc_md22", null ],
+      [ "Block Update Thread", "threads.html#autotoc_md23", null ],
+      [ "Thread pool", "threads.html#autotoc_md24", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -115,15 +113,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AbstractEvent_8cpp.html",
-"SoundEngine_8hpp.html#a322712fb645499cfb59e010757a6ee96",
-"classChunkRequestPacket.html#a120caabc738afbe61991e1946c3cdee8",
-"classEvent_1_1Manager.html#a185c0a077e8e08d120f9fd78e0f47c4a",
-"classPingPacket.html#a67be10cd6c39bb90e40752c3e1b6e39f",
-"classSettings.html#a3235cc319f2ca06193bc5f709a3387c3",
-"classVulkanAPI.html#a887ed6c1ccefd7ec65a67f8f7f117d11",
-"classtask_1_1TaskNode.html#a5cccb1f88436d5d0ffd9506c24230aa6",
-"server__main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4",
-"structSound_1_1Instance.html#a17d2fb73f664f4c7c940b0499a260083"
+"SoundList_8hpp.html#aa20b534785857c1eee21622419d48262a587d43d7890c0f6d9a0d9754d37498af",
+"classChunkRequestPacket.html#a3fc1ee90c8feab074a587dd718d75290",
+"classEvent_1_1Manager.html#a40f2d0487c1d69f6a94870486ab29533",
+"classPingPacket.html#a691cea170732c3b7988d5881c854b870",
+"classSettings.html#ab7169a6eefce79566dd07db3b1e5e967",
+"classVulkanAPI.html#a8ba9123ec127e5b6314df01374b0135b",
+"classtask_1_1TaskNode.html#a80e1cb2bc4e6c059e9c7341a7f4e06e4",
+"structAtmosphereParams.html#a5651e641393aa5b448c9b33489f9df9d",
+"structSound_1_1Instance.html#a3061aea8b34cb0bfdcc5064007995418"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

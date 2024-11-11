@@ -10,7 +10,7 @@ var classDisconnectPacket =
     [ "GetPlayerId", "classDisconnectPacket.html#a62a35702451b644a608cc475f2054a7a", null ],
     [ "GetType", "classDisconnectPacket.html#a008bbcca630d9d0cdfa6be851ad68047", null ],
     [ "HasDynamicSize", "classDisconnectPacket.html#a80f268e74bb11f14075e21fa58323516", null ],
-    [ "operator=", "classDisconnectPacket.html#a7aad91ea5c62dbcea286380de54f384f", null ],
+    [ "operator=", "classDisconnectPacket.html#ab8d664c6b94ae8a9fe4601a752d90f79", null ],
     [ "operator=", "classDisconnectPacket.html#aeffd6117d9567a15e8fb212885c01f55", null ],
     [ "Serialize", "classDisconnectPacket.html#a02c09d43072dce1d045a87e5d54ea506", null ],
     [ "SetPlayerId", "classDisconnectPacket.html#a19084e35bbdcb93101540583a3167771", null ],

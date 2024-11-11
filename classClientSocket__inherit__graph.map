@@ -1,4 +1,4 @@
 <map id="ClientSocket" name="ClientSocket">
-<area shape="rect" id="node1" title=" " alt="" coords="5,255,128,383"/>
-<area shape="rect" id="node2" href="$classSocket.html" title=" " alt="" coords="15,5,119,207"/>
+<area shape="rect" id="node1" title="A class that represents a client socket. Connects to a server." alt="" coords="5,255,128,383"/>
+<area shape="rect" id="node2" href="$classSocket.html" title="a RAII wrapper for a socket." alt="" coords="15,5,119,207"/>
 </map>

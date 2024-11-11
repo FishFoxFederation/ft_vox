@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['sendinfo_0',['sendInfo',['../structServer_1_1sendInfo.html',1,'Server']]],
+  ['sendinfo_0',['sendInfo',['../structClient_1_1sendInfo.html',1,'Client::sendInfo'],['../structServer_1_1sendInfo.html',1,'Server::sendInfo']]],
   ['server_1',['Server',['../classServer.html',1,'']]],
   ['serverblockupdatethread_2',['ServerBlockUpdateThread',['../classServerBlockUpdateThread.html',1,'']]],
   ['serverdisconnected_3',['ServerDisconnected',['../classClient_1_1ServerDisconnected.html',1,'Client']]],

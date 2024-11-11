@@ -1,3 +1,3 @@
 <map id="Connection" name="Connection">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,208,221"/>
+<area shape="rect" id="node1" title="a bufferised and thread safe RAII wrapper for a socket representing a connection." alt="" coords="5,5,208,221"/>
 </map>

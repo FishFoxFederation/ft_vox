@@ -9,7 +9,7 @@ var searchData=
   ['neg_6',['NEG',['../classCreateMeshData.html#a5f075a1c439c7a4316214c1e1ad759a0a0d7537a73d1445406d9ca3a7b36121d7',1,'CreateMeshData']]],
   ['network_7',['Network',['../md_docs_pages_network.html',1,'']]],
   ['network_2emd_8',['network.md',['../network_8md.html',1,'']]],
-  ['networkthread_9',['NetworkThread',['../classNetworkThread.html',1,'NetworkThread'],['../classNetworkThread.html#a0a750cc412026ed9dd19371c840a4a5b',1,'NetworkThread::NetworkThread(Client &amp;client)'],['../classNetworkThread.html#af888a6f0149d3f804a6ab015f1d8feb8',1,'NetworkThread::NetworkThread(NetworkThread &amp;other)=delete'],['../classNetworkThread.html#af2213fc4d24376799c2a039f97b33882',1,'NetworkThread::NetworkThread(NetworkThread &amp;&amp;other)=delete']]],
+  ['networkthread_9',['NetworkThread',['../classNetworkThread.html#a0a750cc412026ed9dd19371c840a4a5b',1,'NetworkThread::NetworkThread(Client &amp;client)'],['../classNetworkThread.html#af888a6f0149d3f804a6ab015f1d8feb8',1,'NetworkThread::NetworkThread(NetworkThread &amp;other)=delete'],['../classNetworkThread.html#af2213fc4d24376799c2a039f97b33882',1,'NetworkThread::NetworkThread(NetworkThread &amp;&amp;other)=delete'],['../classNetworkThread.html',1,'NetworkThread']]],
   ['networkthread_2ecpp_10',['NetworkThread.cpp',['../NetworkThread_8cpp.html',1,'']]],
   ['networkthread_2ehpp_11',['NetworkThread.hpp',['../NetworkThread_8hpp.html',1,'']]],
   ['neut_12',['NEUT',['../classCreateMeshData.html#a5f075a1c439c7a4316214c1e1ad759a0af464f33765f31f59f6f7886ae4f85926',1,'CreateMeshData']]],
@@ -27,9 +27,8 @@ var searchData=
   ['none_24',['NONE',['../classChunk.html#abe2d3dbcc9b48d61e1aafdd5100425eeab50339a10e1de285ac99d4c3990b8693',1,'Chunk::NONE()'],['../classInput.html#a0be44bf062481fd4b60c21607a2ee50aab50339a10e1de285ac99d4c3990b8693',1,'Input::NONE()']]],
   ['normal_25',['normal',['../structPlayerModel_1_1Vertex.html#a028cacefdf8dd9ea4c852797966cb747',1,'PlayerModel::Vertex::normal()'],['../structObjVertex.html#a8738d2fd21588dbe1cf1c644192c6c36',1,'ObjVertex::normal()'],['../structEntityVertex.html#ae751b23c5f929c9407723ace1263644a',1,'EntityVertex::normal()'],['../structItemVertex.html#a1080d9d4c63eb2a3f0ce08a2d9800efa',1,'ItemVertex::normal()'],['../structRayCastOnBlockResult.html#afa3d886e9c79eca27405f9fc62b728f1',1,'RayCastOnBlockResult::normal()']]],
   ['normalindex_26',['normalIndex',['../structFace.html#a00626d19b7221a5a9abe11f35833e1b9',1,'Face']]],
-  ['nowait_27',['NOWAIT',['../classServer.html#a57c92587c3b65e90f775b4c69af83b1da78ff0a8f5a8698f33b897e089c0d6a85',1,'Server']]],
-  ['ntl_28',['ntl',['../classViewFrustum.html#afd88c0f94ae5fc640b58bbe6f51eebb8',1,'ViewFrustum']]],
-  ['ntr_29',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]],
-  ['num_5fchannels_30',['num_channels',['../structSound_1_1FMTChunk.html#a3c7582ff04823929f1158bfc0dd4eef8',1,'Sound::FMTChunk::num_channels()'],['../classSound_1_1Data.html#a2f10a6704fdb642d6c9b82f88c8e4331',1,'Sound::Data::num_channels()']]],
-  ['num_5fsamples_31',['num_samples',['../classSound_1_1Data.html#af774ce5cd6690b807abd6f7467f08ad9',1,'Sound::Data']]]
+  ['ntl_27',['ntl',['../classViewFrustum.html#afd88c0f94ae5fc640b58bbe6f51eebb8',1,'ViewFrustum']]],
+  ['ntr_28',['ntr',['../classViewFrustum.html#a70f1dd6fcf92d5e0b3a730fe38263a66',1,'ViewFrustum']]],
+  ['num_5fchannels_29',['num_channels',['../structSound_1_1FMTChunk.html#a3c7582ff04823929f1158bfc0dd4eef8',1,'Sound::FMTChunk::num_channels()'],['../classSound_1_1Data.html#a2f10a6704fdb642d6c9b82f88c8e4331',1,'Sound::Data::num_channels()']]],
+  ['num_5fsamples_30',['num_samples',['../classSound_1_1Data.html#af774ce5cd6690b807abd6f7467f08ad9',1,'Sound::Data']]]
 ];
