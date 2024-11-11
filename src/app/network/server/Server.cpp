@@ -11,13 +11,13 @@ Server::~Server()
 {
 }
 
-void Server::runOnce(int timeout)
+void Server::runOnce(int timeout_ms)
 {
 	ZoneScoped;
 
 	emptyOutgoingPackets();
 	emptyOldPings();
-	auto [events_size, events] = m_poller.wait(timeout);
+	auto [events_size, events] = m_poller.wait(timeout_ms);
 	if (errno == EINTR)
 	{
 		errno = 0;
@@ -169,7 +169,8 @@ void Server::emptyOutgoingPackets()
 	while(m_outgoing_packets.size() != 0)
 	{
 		auto info = m_outgoing_packets.pop();
-		info.flag &= ~NOWAIT;
+		//remove async flag since we are now sending it
+		info.flag &= ~ASYNC;
 		send(info);
 	}
 }
@@ -183,7 +184,7 @@ void Server::ping(uint64_t id)
 
 void Server::send(const Server::sendInfo & info)
 {
-	if (info.flag & NOWAIT)
+	if (info.flag & ASYNC)
 	{
 		m_outgoing_packets.push(info);
 		return;
