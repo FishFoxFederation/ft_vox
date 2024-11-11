@@ -76,7 +76,7 @@ private:
 	 * @details This map is used in 2 ways:  
 	 * 1. To get the size of a packet, the Size() function a virtual method of IPacket is called,
 	 *  some packets have a dynamic size ( eg the playerListPacket ) so there is a method named HasDynamicSize() that returns true in that case
-	 * 	if there is a dynamic size then the packet's size is encoded in the next btyes on the buffer
+	 * 	if there is a dynamic size then the packet's size is encoded in the next bytes on the buffer
 	 * 2. To get a new instance of a packet, the IPacket() Clone method is called
 	 * 
 	 *  The packets are inserted in the packetFactory constructor,

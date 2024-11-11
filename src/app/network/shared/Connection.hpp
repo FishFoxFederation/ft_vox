@@ -12,7 +12,7 @@
 /**
  * @brief a bufferised and thread safe RAII wrapper for a socket representing a connection.
  * 
- * @details There are two internal buffers, one for reading and one for writing.accept4
+ * @details There are two internal buffers, one for reading and one for writing
  * 
  * Before doing any operation on the buffers, the appropriate mutex MUST be locked.
  * The mutexes are exposed so multiple operations of the same type can be done in a row.
