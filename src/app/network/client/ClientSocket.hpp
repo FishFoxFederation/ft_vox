@@ -8,6 +8,10 @@
 
 #include "logger.hpp"
 
+/**
+ * @brief A class that represents a client socket. Connects to a server.
+ * 
+ */
 class ClientSocket : public Socket
 {
 public:
