@@ -8,6 +8,10 @@
 
 #include "ConnectionSocket.hpp"
 
+/**
+ * @brief a class that represents a server socket. you can accept connections from clients.
+ * 
+ */
 class ServerSocket : public Socket
 {
 public:
