@@ -39,6 +39,11 @@ struct HandleArgs;
 class IPacket
 {
 public:
+
+	//ENUM_MAX SHOULD always be last element of the enum
+	//it is used for iteration
+	//you MUST NOT put custom values in the enum
+	// eg (CONNECTION = 1) that is forbidden
 	enum class Type : uint32_t
 	{
 		CONNECTION,
