@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"SoundList_8hpp.html#afd18042242c0b8b9b238efe0829ea52f":[12,0,1,0,4,4,2],
 "SoundList_8hpp_source.html":[12,0,1,0,4,4],
 "Status_8cpp.html":[12,0,1,0,5,6],
 "Status_8hpp.html":[12,0,1,0,5,7],
@@ -11,15 +12,15 @@ var NAVTREEINDEX1 =
 "Structures_8hpp.html#a7433091805f166e77d7ad9b6e1b7b9af":[12,0,1,0,8,1,1,3],
 "Structures_8hpp.html#adf0198d15c1dc59c0809acee856b920f":[12,0,1,0,8,1,1,2],
 "Structures_8hpp_source.html":[12,0,1,0,8,1,1],
-"SubGraph_8hpp.html":[12,0,1,0,5,4,8],
-"SubGraph_8hpp_source.html":[12,0,1,0,5,4,8],
+"SubGraph_8hpp.html":[12,0,1,0,5,4,9],
+"SubGraph_8hpp_source.html":[12,0,1,0,5,4,9],
 "Swapchain_8cpp.html":[12,0,1,0,6,13],
 "Swapchain_8hpp.html":[12,0,1,0,6,14],
 "Swapchain_8hpp_source.html":[12,0,1,0,6,14],
-"TaskGraph_8hpp.html":[12,0,1,0,5,4,11],
-"TaskGraph_8hpp_source.html":[12,0,1,0,5,4,11],
-"Task_8hpp.html":[12,0,1,0,5,4,9],
-"Task_8hpp_source.html":[12,0,1,0,5,4,9],
+"TaskGraph_8hpp.html":[12,0,1,0,5,4,12],
+"TaskGraph_8hpp_source.html":[12,0,1,0,5,4,12],
+"Task_8hpp.html":[12,0,1,0,5,4,10],
+"Task_8hpp_source.html":[12,0,1,0,5,4,10],
 "TextRenderer_8cpp.html":[12,0,1,0,6,15],
 "TextRenderer_8hpp.html":[12,0,1,0,6,16],
 "TextRenderer_8hpp.html#a3ab7cf82226d7b4f31da0763e6e6d026":[12,0,1,0,6,16,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classChunkRequestPacket.html#a3fc1ee90c8feab074a587dd718d75290":[11,0,17,3],
 "classChunkRequestPacket.html#a6f910e9e6ff2154d16d4d7780d611ef1":[11,0,17,2],
 "classChunkRequestPacket.html#a71b493c33e34ca0eb1b031487b59cf33":[11,0,17,4],
-"classChunkRequestPacket.html#a834b9ef6731c0310c60ccb901c27fd85":[11,0,17,10],
-"classChunkRequestPacket.html#a9f2bc12e14b242adb4b3dfa8a04b5b7f":[11,0,17,6]
+"classChunkRequestPacket.html#a834b9ef6731c0310c60ccb901c27fd85":[11,0,17,10]
 };

@@ -18,9 +18,9 @@ var classWorld =
     [ "updateBlockLight", "classWorld.html#a9892b1ed768e9414d4e03ebe13ca3bb0", null ],
     [ "updateSkyLight", "classWorld.html#a5bf0e5a75ff7b9537f4b6235ca5435e3", null ],
     [ "m_chunks", "classWorld.html#afe23d5e9f0c87a03212fad1b73249926", null ],
+    [ "m_executor", "classWorld.html#a25fd520184067b0f2f518742825e87cf", null ],
     [ "m_mob_id", "classWorld.html#a68f2a105f272c329cf2c6ba4d2b38e05", null ],
     [ "m_mobs", "classWorld.html#a9befd190fce3a87e810b479bbfad356f", null ],
     [ "m_players", "classWorld.html#a9b6166c32096dff1f9e29a78743945f1", null ],
-    [ "m_threadPool", "classWorld.html#ae465315b182161c0902e98055d03395f", null ],
     [ "m_world_generator", "classWorld.html#a47cc090d4ed08b81df6748abb8daea0e", null ]
 ];

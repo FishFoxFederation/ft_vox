@@ -133,7 +133,7 @@ Collaboration diagram for World:</div>
 <div class="center"><img src="classWorld__coll__graph.png" border="0" usemap="#aWorld_coll__map" alt="Collaboration graph"/></div>
 <map name="aWorld_coll__map" id="aWorld_coll__map">
 <area shape="rect" title=" " alt="" coords="95,269,271,632"/>
-<area shape="rect" href="classThreadPoolAccessor.html" title=" " alt="" coords="5,5,175,207"/>
+<area shape="rect" href="classExecutorAccessor.html" title=" " alt="" coords="5,5,175,207"/>
 <area shape="rect" href="classWorld_1_1WorldGenerator.html" title=" " alt="" coords="199,57,357,155"/>
 </map>
 </div>
@@ -204,8 +204,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a68f2a105f272c329cf2c6ba4d2b38e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe23d5e9f0c87a03212fad1b73249926"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; glm::ivec3, std::shared_ptr&lt; <a class="el" href="classChunk.html">Chunk</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afe23d5e9f0c87a03212fad1b73249926">m_chunks</a></td></tr>
 <tr class="separator:afe23d5e9f0c87a03212fad1b73249926"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae465315b182161c0902e98055d03395f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classThreadPoolAccessor.html">ThreadPoolAccessor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#ae465315b182161c0902e98055d03395f">m_threadPool</a></td></tr>
-<tr class="separator:ae465315b182161c0902e98055d03395f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25fd520184067b0f2f518742825e87cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classExecutorAccessor.html">ExecutorAccessor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a25fd520184067b0f2f518742825e87cf">m_executor</a></td></tr>
+<tr class="separator:a25fd520184067b0f2f518742825e87cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47cc090d4ed08b81df6748abb8daea0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classWorld_1_1WorldGenerator.html">WorldGenerator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#a47cc090d4ed08b81df6748abb8daea0e">m_world_generator</a></td></tr>
 <tr class="separator:a47cc090d4ed08b81df6748abb8daea0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -794,6 +794,28 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a25fd520184067b0f2f518742825e87cf" name="a25fd520184067b0f2f518742825e87cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25fd520184067b0f2f518742825e87cf">&#9670;&#160;</a></span>m_executor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classExecutorAccessor.html">ExecutorAccessor</a> World::m_executor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a68f2a105f272c329cf2c6ba4d2b38e05" name="a68f2a105f272c329cf2c6ba4d2b38e05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a68f2a105f272c329cf2c6ba4d2b38e05">&#9670;&#160;</a></span>m_mob_id</h2>
 
@@ -849,28 +871,6 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::unordered_map&lt;uint64_t, std::shared_ptr&lt;<a class="el" href="classPlayer.html">Player</a>&gt; &gt; World::m_players</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae465315b182161c0902e98055d03395f" name="ae465315b182161c0902e98055d03395f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae465315b182161c0902e98055d03395f">&#9670;&#160;</a></span>m_threadPool</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classThreadPoolAccessor.html">ThreadPoolAccessor</a> World::m_threadPool</td>
         </tr>
       </table>
   </td>

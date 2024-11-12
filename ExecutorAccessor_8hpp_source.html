@@ -108,7 +108,102 @@ $(document).ready(function(){initNavTree('ExecutorAccessor_8hpp_source.html','')
   <div class="headertitle"><div class="title">ExecutorAccessor.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="ExecutorAccessor_8hpp.html">Go to the documentation of this file.</a><div class="fragment"></div><!-- fragment --></div><!-- contents -->
+<a href="ExecutorAccessor_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="logger_8hpp.html">logger.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="Executor_8hpp.html">Executor.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="classExecutorAccessor.html">    9</a></span><span class="keyword">class </span><a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <a class="code hl_function" href="classExecutorAccessor.html#a4b1f56dd5d85842735ea32b0c0ab6d66">ExecutorAccessor</a>();</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_function" href="classExecutorAccessor.html#ac5b867fc4254d121122bd5e562328c21">~ExecutorAccessor</a>();</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classExecutorAccessor.html#aa278913e6bd5e03c20efcf5f6dd945ab">   15</a></span>    <a class="code hl_function" href="classExecutorAccessor.html#aa278913e6bd5e03c20efcf5f6dd945ab">ExecutorAccessor</a>(<span class="keyword">const</span> <a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a> &amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classExecutorAccessor.html#a5a3ee72e78f92923e34f282ba84c7e2f">   16</a></span>    <a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a> &amp; <a class="code hl_function" href="classExecutorAccessor.html#a5a3ee72e78f92923e34f282ba84c7e2f">operator=</a>(<span class="keyword">const</span> <a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a> &amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classExecutorAccessor.html#a1fa60cad6130f93abb3117b86ed1435d">   17</a></span>    <a class="code hl_function" href="classExecutorAccessor.html#a1fa60cad6130f93abb3117b86ed1435d">ExecutorAccessor</a>(<a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a> &amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classExecutorAccessor.html#a538910452072d213630f756c95bd9291">   18</a></span>    <a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a> &amp; <a class="code hl_function" href="classExecutorAccessor.html#a538910452072d213630f756c95bd9291">operator=</a>(<a class="code hl_class" href="classExecutorAccessor.html">ExecutorAccessor</a> &amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classExecutorAccessor.html#a0c9e5a85dbdaec79d8fdeb4f3936b65b">   28</a></span>    uint64_t <a class="code hl_function" href="classExecutorAccessor.html#a0c9e5a85dbdaec79d8fdeb4f3936b65b">submit</a>(F &amp;&amp; f)</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        std::lock_guard&lt;std::mutex&gt; lock(m_futures_mutex);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="keyword">typedef</span> <span class="keyword">typename</span> std::invoke_result&lt;F&gt;::type result_type;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="comment">//create a packaged task with the function</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        std::shared_ptr&lt;std::packaged_task&lt;result_type()&gt;&gt; task_ptr = std::make_shared&lt;std::packaged_task&lt;result_type()&gt;&gt;(std::move(f));</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="comment">//encapsulate inside another void function with error handling + id tracking</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        uint64_t <span class="keywordtype">id</span> = m_counter++;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        std::function&lt;void()&gt; wrapper_func = [task_ptr = std::move(task_ptr), <span class="keyword">this</span>, id] () <span class="keyword">mutable</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        {</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            std::exception_ptr eptr = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="keyword">auto</span> future = task_ptr-&gt;get_future();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            (*task_ptr)();</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="keywordflow">try</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                future.get();</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            }</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="keywordflow">catch</span> (...)</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                eptr = std::current_exception();</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                std::lock_guard&lt;std::mutex&gt; lock(m_finished_tasks_mutex);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                m_finished_tasks.insert(<span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            <span class="keywordflow">if</span> (eptr != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                std::rethrow_exception(eptr);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        };</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="comment">//submit the task to the thread pool</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        std::future&lt;void&gt; future_v = m_executor.<a class="code hl_function" href="classtask_1_1Executor.html#addad5449f081fa12a941169e15495c81">run</a>(wrapper_func);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        m_futures.insert(std::make_pair(<span class="keywordtype">id</span>, std::move(future_v)));</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordflow">return</span> id;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    }</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classExecutorAccessor.html#ab1b5fbac4028df1797b25cc8787662da">waitForAll</a>();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classExecutorAccessor.html#a9dcb8435b23053da0691109766b24b61">waitForFinishedTasks</a>();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classExecutorAccessor.html#ab4ebe9da4f564102a9fe7bf73a392a05">waitForTask</a>(uint64_t <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classExecutorAccessor.html#af4300e2724af3d3dbd3111d18998fe36">waitForTasks</a>(<span class="keyword">const</span> std::vector&lt;uint64_t&gt; &amp; ids);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <a class="code hl_class" href="classtask_1_1Executor.html">task::Executor</a> &amp;                                    m_executor;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    uint64_t                                            m_counter = 0;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    std::unordered_set&lt;uint64_t&gt;                        m_finished_tasks;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    std::mutex                                          m_finished_tasks_mutex;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    std::unordered_map&lt;uint64_t, std::future&lt;void&gt;&gt;     m_futures;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    std::mutex                                          m_futures_mutex;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordtype">void</span> waitTask(uint64_t <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
+<div class="ttc" id="aExecutor_8hpp_html"><div class="ttname"><a href="Executor_8hpp.html">Executor.hpp</a></div></div>
+<div class="ttc" id="aclassExecutorAccessor_html"><div class="ttname"><a href="classExecutorAccessor.html">ExecutorAccessor</a></div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.hpp:10</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_a0c9e5a85dbdaec79d8fdeb4f3936b65b"><div class="ttname"><a href="classExecutorAccessor.html#a0c9e5a85dbdaec79d8fdeb4f3936b65b">ExecutorAccessor::submit</a></div><div class="ttdeci">uint64_t submit(F &amp;&amp;f)</div><div class="ttdoc">Submit a task to the threadpool, the task will be executed asynchronously.</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.hpp:28</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_a1fa60cad6130f93abb3117b86ed1435d"><div class="ttname"><a href="classExecutorAccessor.html#a1fa60cad6130f93abb3117b86ed1435d">ExecutorAccessor::ExecutorAccessor</a></div><div class="ttdeci">ExecutorAccessor(ExecutorAccessor &amp;&amp;)=delete</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_a4b1f56dd5d85842735ea32b0c0ab6d66"><div class="ttname"><a href="classExecutorAccessor.html#a4b1f56dd5d85842735ea32b0c0ab6d66">ExecutorAccessor::ExecutorAccessor</a></div><div class="ttdeci">ExecutorAccessor()</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.cpp:3</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_a538910452072d213630f756c95bd9291"><div class="ttname"><a href="classExecutorAccessor.html#a538910452072d213630f756c95bd9291">ExecutorAccessor::operator=</a></div><div class="ttdeci">ExecutorAccessor &amp; operator=(ExecutorAccessor &amp;&amp;)=delete</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_a5a3ee72e78f92923e34f282ba84c7e2f"><div class="ttname"><a href="classExecutorAccessor.html#a5a3ee72e78f92923e34f282ba84c7e2f">ExecutorAccessor::operator=</a></div><div class="ttdeci">ExecutorAccessor &amp; operator=(const ExecutorAccessor &amp;)=delete</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_a9dcb8435b23053da0691109766b24b61"><div class="ttname"><a href="classExecutorAccessor.html#a9dcb8435b23053da0691109766b24b61">ExecutorAccessor::waitForFinishedTasks</a></div><div class="ttdeci">void waitForFinishedTasks()</div><div class="ttdoc">wait for all finished task</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.cpp:22</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_aa278913e6bd5e03c20efcf5f6dd945ab"><div class="ttname"><a href="classExecutorAccessor.html#aa278913e6bd5e03c20efcf5f6dd945ab">ExecutorAccessor::ExecutorAccessor</a></div><div class="ttdeci">ExecutorAccessor(const ExecutorAccessor &amp;)=delete</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_ab1b5fbac4028df1797b25cc8787662da"><div class="ttname"><a href="classExecutorAccessor.html#ab1b5fbac4028df1797b25cc8787662da">ExecutorAccessor::waitForAll</a></div><div class="ttdeci">void waitForAll()</div><div class="ttdoc">wait for all tasks to finish</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.cpp:13</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_ab4ebe9da4f564102a9fe7bf73a392a05"><div class="ttname"><a href="classExecutorAccessor.html#ab4ebe9da4f564102a9fe7bf73a392a05">ExecutorAccessor::waitForTask</a></div><div class="ttdeci">void waitForTask(uint64_t id)</div><div class="ttdoc">wait for a specific task to finish</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.cpp:37</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_ac5b867fc4254d121122bd5e562328c21"><div class="ttname"><a href="classExecutorAccessor.html#ac5b867fc4254d121122bd5e562328c21">ExecutorAccessor::~ExecutorAccessor</a></div><div class="ttdeci">~ExecutorAccessor()</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.cpp:8</div></div>
+<div class="ttc" id="aclassExecutorAccessor_html_af4300e2724af3d3dbd3111d18998fe36"><div class="ttname"><a href="classExecutorAccessor.html#af4300e2724af3d3dbd3111d18998fe36">ExecutorAccessor::waitForTasks</a></div><div class="ttdeci">void waitForTasks(const std::vector&lt; uint64_t &gt; &amp;ids)</div><div class="ttdoc">wait for a list of tasks to finish</div><div class="ttdef"><b>Definition:</b> ExecutorAccessor.cpp:43</div></div>
+<div class="ttc" id="aclasstask_1_1Executor_html"><div class="ttname"><a href="classtask_1_1Executor.html">task::Executor</a></div><div class="ttdef"><b>Definition:</b> Executor.hpp:21</div></div>
+<div class="ttc" id="aclasstask_1_1Executor_html_addad5449f081fa12a941169e15495c81"><div class="ttname"><a href="classtask_1_1Executor.html#addad5449f081fa12a941169e15495c81">task::Executor::run</a></div><div class="ttdeci">std::future&lt; void &gt; run(std::shared_ptr&lt; TaskGraph &gt; graph)</div><div class="ttdef"><b>Definition:</b> Executor.cpp:33</div></div>
+<div class="ttc" id="alogger_8hpp_html"><div class="ttname"><a href="logger_8hpp.html">logger.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

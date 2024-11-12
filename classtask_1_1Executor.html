@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('classtask_1_1Executor.html',''); initR
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classtask_1_1Executor-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">task::Executor Class Reference</div></div>
@@ -120,14 +121,12 @@ Collaboration diagram for task::Executor:</div>
 <div class="dyncontent">
 <div class="center"><img src="classtask_1_1Executor__coll__graph.png" border="0" usemap="#atask_1_1Executor_coll__map" alt="Collaboration graph"/></div>
 <map name="atask_1_1Executor_coll__map" id="atask_1_1Executor_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,112,177"/>
+<area shape="rect" title=" " alt="" coords="5,5,115,177"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7819617575560c57553495955e7a3ad3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtask_1_1Executor.html#a7819617575560c57553495955e7a3ad3">Executor</a> (unsigned const thread_count=std::thread::hardware_concurrency() - 2)</td></tr>
-<tr class="separator:a7819617575560c57553495955e7a3ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a304eb22bf94cf143ee675c6f74a2c490"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtask_1_1Executor.html#a304eb22bf94cf143ee675c6f74a2c490">~Executor</a> ()</td></tr>
 <tr class="separator:a304eb22bf94cf143ee675c6f74a2c490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7370768656ba2689213b2a8a62a0b5fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtask_1_1Executor.html#a7370768656ba2689213b2a8a62a0b5fb">Executor</a> (const <a class="el" href="classtask_1_1Executor.html">Executor</a> &amp;)=delete</td></tr>
@@ -146,6 +145,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a18fb44224416db2d01579b6aaf3b5cac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtask_1_1Executor.html#a18fb44224416db2d01579b6aaf3b5cac">waitForAll</a> ()</td></tr>
 <tr class="separator:a18fb44224416db2d01579b6aaf3b5cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a2ade2eeb036946d5d24707471fb298ce"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classtask_1_1Executor.html">Executor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtask_1_1Executor.html#a2ade2eeb036946d5d24707471fb298ce">getInstance</a> ()</td></tr>
+<tr class="separator:a2ade2eeb036946d5d24707471fb298ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a824d06144dba1864607539d9945bc4ea"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtask_1_1Executor.html#a824d06144dba1864607539d9945bc4ea">TaskNode</a></td></tr>
@@ -154,24 +158,6 @@ Friends</h2></td></tr>
 <tr class="separator:a77eb4e04900b9ae67d00ef7a589cb623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7819617575560c57553495955e7a3ad3" name="a7819617575560c57553495955e7a3ad3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7819617575560c57553495955e7a3ad3">&#9670;&#160;</a></span>Executor() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">task::Executor::Executor </td>
-          <td>(</td>
-          <td class="paramtype">unsigned const&#160;</td>
-          <td class="paramname"><em>thread_count</em> = <code>std::thread::hardware_concurrency()&#160;-&#160;2</code></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a304eb22bf94cf143ee675c6f74a2c490" name="a304eb22bf94cf143ee675c6f74a2c490"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a304eb22bf94cf143ee675c6f74a2c490">&#9670;&#160;</a></span>~Executor()</h2>
 
@@ -190,7 +176,7 @@ Friends</h2></td></tr>
 </div>
 </div>
 <a id="a7370768656ba2689213b2a8a62a0b5fb" name="a7370768656ba2689213b2a8a62a0b5fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7370768656ba2689213b2a8a62a0b5fb">&#9670;&#160;</a></span>Executor() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7370768656ba2689213b2a8a62a0b5fb">&#9670;&#160;</a></span>Executor() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +202,7 @@ Friends</h2></td></tr>
 </div>
 </div>
 <a id="a8f69841aa3e88b5857a3255f2782f2af" name="a8f69841aa3e88b5857a3255f2782f2af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f69841aa3e88b5857a3255f2782f2af">&#9670;&#160;</a></span>Executor() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f69841aa3e88b5857a3255f2782f2af">&#9670;&#160;</a></span>Executor() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -242,6 +228,31 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2ade2eeb036946d5d24707471fb298ce" name="a2ade2eeb036946d5d24707471fb298ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ade2eeb036946d5d24707471fb298ce">&#9670;&#160;</a></span>getInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classtask_1_1Executor.html">Executor</a> &amp; task::Executor::getInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a57bc3d5f0398dd3a1a7667f1a5f759ac" name="a57bc3d5f0398dd3a1a7667f1a5f759ac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57bc3d5f0398dd3a1a7667f1a5f759ac">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 

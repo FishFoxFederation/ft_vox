@@ -50,6 +50,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "task::Executor", "classtask_1_1Executor.html", null ],
+    [ "ExecutorAccessor", "classExecutorAccessor.html", null ],
     [ "Face", "structFace.html", null ],
     [ "Sound::FMTChunk", "structSound_1_1FMTChunk.html", null ],
     [ "FrustumPoints", "structFrustumPoints.html", null ],

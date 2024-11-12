@@ -51,12 +51,13 @@ var searchData=
   ['blockupdatethread_2ehpp_48',['BlockUpdateThread.hpp',['../BlockUpdateThread_8hpp.html',1,'']]],
   ['blockvertex_49',['BlockVertex',['../structBlockVertex.html#a22c3b017a1af9079d59d5db602e50b83',1,'BlockVertex::BlockVertex()'],['../structBlockVertex.html',1,'BlockVertex']]],
   ['bt_50',['BT',['../Structures_8cpp.html#ab7b8e747bcfcb9d29b764da5d243f9af',1,'Structures.cpp']]],
-  ['buffer_51',['Buffer',['../classBuffer.html',1,'Buffer'],['../classBuffer.html#a85882d8163e05cc9a5e478d65adcadbd',1,'Buffer::Buffer(Buffer &amp;&amp;other) noexcept'],['../classBuffer.html#a49283faf9d0ea3dc996dc65a7aeeee72',1,'Buffer::Buffer(const Buffer &amp;)=delete'],['../classBuffer.html#a93dcd6ab1654490fe67aca3e3f96f9ec',1,'Buffer::Buffer(VkDevice device, VkPhysicalDevice physical_device, const CreateInfo &amp;create_info)'],['../classBuffer.html#ae7ef2cd201190fde551dcb902627112b',1,'Buffer::Buffer()']]],
+  ['buffer_51',['Buffer',['../classBuffer.html',1,'']]],
   ['buffer_52',['buffer',['../structMesh.html#af7ba0fbc3662290e12fc45a7bc200eac',1,'Mesh::buffer()'],['../classBuffer.html#a015e29c64a6e92f0bac28584cd4f4418',1,'Buffer::buffer()']]],
-  ['buffer_2ecpp_53',['Buffer.cpp',['../Buffer_8cpp.html',1,'']]],
-  ['buffer_2ehpp_54',['Buffer.hpp',['../Buffer_8hpp.html',1,'']]],
-  ['buffer_5finfo_55',['buffer_info',['../structGlobalDescriptorWrite.html#ae53d0db311f37aeda282e9761edfeb4d',1,'GlobalDescriptorWrite']]],
-  ['buffer_5fmemory_56',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]],
-  ['buffers_57',['buffers',['../structUBO.html#a2f85577121899349bac6b1dc660ec6f1',1,'UBO']]],
-  ['byte_5frate_58',['byte_rate',['../classSound_1_1Data.html#a33e909534b7c044a86cf870a9196727a',1,'Sound::Data::byte_rate()'],['../structSound_1_1FMTChunk.html#af09685a94fb2f6175cce7a0e967975b1',1,'Sound::FMTChunk::byte_rate()']]]
+  ['buffer_53',['Buffer',['../classBuffer.html#a85882d8163e05cc9a5e478d65adcadbd',1,'Buffer::Buffer(Buffer &amp;&amp;other) noexcept'],['../classBuffer.html#a49283faf9d0ea3dc996dc65a7aeeee72',1,'Buffer::Buffer(const Buffer &amp;)=delete'],['../classBuffer.html#a93dcd6ab1654490fe67aca3e3f96f9ec',1,'Buffer::Buffer(VkDevice device, VkPhysicalDevice physical_device, const CreateInfo &amp;create_info)'],['../classBuffer.html#ae7ef2cd201190fde551dcb902627112b',1,'Buffer::Buffer()']]],
+  ['buffer_2ecpp_54',['Buffer.cpp',['../Buffer_8cpp.html',1,'']]],
+  ['buffer_2ehpp_55',['Buffer.hpp',['../Buffer_8hpp.html',1,'']]],
+  ['buffer_5finfo_56',['buffer_info',['../structGlobalDescriptorWrite.html#ae53d0db311f37aeda282e9761edfeb4d',1,'GlobalDescriptorWrite']]],
+  ['buffer_5fmemory_57',['buffer_memory',['../structMesh.html#abbaee7735e3b93306b4be082d6eafffd',1,'Mesh']]],
+  ['buffers_58',['buffers',['../structUBO.html#a2f85577121899349bac6b1dc660ec6f1',1,'UBO']]],
+  ['byte_5frate_59',['byte_rate',['../classSound_1_1Data.html#a33e909534b7c044a86cf870a9196727a',1,'Sound::Data::byte_rate()'],['../structSound_1_1FMTChunk.html#af09685a94fb2f6175cce7a0e967975b1',1,'Sound::FMTChunk::byte_rate()']]]
 ];

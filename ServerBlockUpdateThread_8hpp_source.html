@@ -114,41 +114,39 @@ $(document).ready(function(){initNavTree('ServerBlockUpdateThread_8hpp_source.ht
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;Tracy.hpp&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="tracy__globals_8hpp.html">tracy_globals.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="ServerWorld_8hpp.html">ServerWorld.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="ThreadPool_8hpp.html">ThreadPool.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html">   19</a></span><span class="keyword">class </span><a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>{</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>(</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_class" href="classServerWorld.html">ServerWorld</a> &amp; world</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    );</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <a class="code hl_function" href="classServerBlockUpdateThread.html#ae93e081c806df240f7e38053c8cd49ec">~ServerBlockUpdateThread</a>();</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html#a67dad756f1fbe43771d204de8e5762b4">   28</a></span>    <a class="code hl_function" href="classServerBlockUpdateThread.html#a67dad756f1fbe43771d204de8e5762b4">ServerBlockUpdateThread</a>(<a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html#aa729c7e72daf8e1408e460ec375f194d">   29</a></span>    <a class="code hl_function" href="classServerBlockUpdateThread.html#aa729c7e72daf8e1408e460ec375f194d">ServerBlockUpdateThread</a>(<a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp;&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html#a1cdcc24f14cd3ec12ef2ea3f4384188d">   30</a></span>    <a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp; <a class="code hl_function" href="classServerBlockUpdateThread.html#a1cdcc24f14cd3ec12ef2ea3f4384188d">operator=</a>(<a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">private</span>: </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <a class="code hl_class" href="classServerWorld.html">ServerWorld</a>     &amp;   m_world;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    std::jthread m_thread;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> launch();</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">void</span> init();</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> loop();</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>};</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html">   18</a></span><span class="keyword">class </span><a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>{</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>(</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <a class="code hl_class" href="classServerWorld.html">ServerWorld</a> &amp; world</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    );</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <a class="code hl_function" href="classServerBlockUpdateThread.html#ae93e081c806df240f7e38053c8cd49ec">~ServerBlockUpdateThread</a>();</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html#a67dad756f1fbe43771d204de8e5762b4">   27</a></span>    <a class="code hl_function" href="classServerBlockUpdateThread.html#a67dad756f1fbe43771d204de8e5762b4">ServerBlockUpdateThread</a>(<a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html#aa729c7e72daf8e1408e460ec375f194d">   28</a></span>    <a class="code hl_function" href="classServerBlockUpdateThread.html#aa729c7e72daf8e1408e460ec375f194d">ServerBlockUpdateThread</a>(<a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp;&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classServerBlockUpdateThread.html#a1cdcc24f14cd3ec12ef2ea3f4384188d">   29</a></span>    <a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp; <a class="code hl_function" href="classServerBlockUpdateThread.html#a1cdcc24f14cd3ec12ef2ea3f4384188d">operator=</a>(<a class="code hl_class" href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">private</span>: </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_class" href="classServerWorld.html">ServerWorld</a>     &amp;   m_world;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    std::jthread m_thread;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">void</span> launch();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> init();</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> loop();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>};</div>
 <div class="ttc" id="aServerWorld_8hpp_html"><div class="ttname"><a href="ServerWorld_8hpp.html">ServerWorld.hpp</a></div></div>
-<div class="ttc" id="aThreadPool_8hpp_html"><div class="ttname"><a href="ThreadPool_8hpp.html">ThreadPool.hpp</a></div></div>
-<div class="ttc" id="aclassServerBlockUpdateThread_html"><div class="ttname"><a href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a></div><div class="ttdoc">An implementation of the thread wrapper for the thread that handles block updates.</div><div class="ttdef"><b>Definition:</b> ServerBlockUpdateThread.hpp:20</div></div>
+<div class="ttc" id="aclassServerBlockUpdateThread_html"><div class="ttname"><a href="classServerBlockUpdateThread.html">ServerBlockUpdateThread</a></div><div class="ttdoc">An implementation of the thread wrapper for the thread that handles block updates.</div><div class="ttdef"><b>Definition:</b> ServerBlockUpdateThread.hpp:19</div></div>
 <div class="ttc" id="aclassServerBlockUpdateThread_html_a1cdcc24f14cd3ec12ef2ea3f4384188d"><div class="ttname"><a href="classServerBlockUpdateThread.html#a1cdcc24f14cd3ec12ef2ea3f4384188d">ServerBlockUpdateThread::operator=</a></div><div class="ttdeci">ServerBlockUpdateThread &amp; operator=(ServerBlockUpdateThread &amp;other)=delete</div></div>
 <div class="ttc" id="aclassServerBlockUpdateThread_html_a67dad756f1fbe43771d204de8e5762b4"><div class="ttname"><a href="classServerBlockUpdateThread.html#a67dad756f1fbe43771d204de8e5762b4">ServerBlockUpdateThread::ServerBlockUpdateThread</a></div><div class="ttdeci">ServerBlockUpdateThread(ServerBlockUpdateThread &amp;other)=delete</div></div>
 <div class="ttc" id="aclassServerBlockUpdateThread_html_aa729c7e72daf8e1408e460ec375f194d"><div class="ttname"><a href="classServerBlockUpdateThread.html#aa729c7e72daf8e1408e460ec375f194d">ServerBlockUpdateThread::ServerBlockUpdateThread</a></div><div class="ttdeci">ServerBlockUpdateThread(ServerBlockUpdateThread &amp;&amp;other)=delete</div></div>
 <div class="ttc" id="aclassServerBlockUpdateThread_html_ae93e081c806df240f7e38053c8cd49ec"><div class="ttname"><a href="classServerBlockUpdateThread.html#ae93e081c806df240f7e38053c8cd49ec">ServerBlockUpdateThread::~ServerBlockUpdateThread</a></div><div class="ttdeci">~ServerBlockUpdateThread()</div><div class="ttdef"><b>Definition:</b> ServerBlockUpdateThread.cpp:9</div></div>
-<div class="ttc" id="aclassServerWorld_html"><div class="ttname"><a href="classServerWorld.html">ServerWorld</a></div><div class="ttdef"><b>Definition:</b> ServerWorld.hpp:17</div></div>
+<div class="ttc" id="aclassServerWorld_html"><div class="ttname"><a href="classServerWorld.html">ServerWorld</a></div><div class="ttdef"><b>Definition:</b> ServerWorld.hpp:16</div></div>
 <div class="ttc" id="adefine_8hpp_html"><div class="ttname"><a href="define_8hpp.html">define.hpp</a></div></div>
 <div class="ttc" id="atracy__globals_8hpp_html"><div class="ttname"><a href="tracy__globals_8hpp.html">tracy_globals.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
