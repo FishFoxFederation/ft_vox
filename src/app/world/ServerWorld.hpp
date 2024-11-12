@@ -4,7 +4,6 @@
 #include "Server.hpp"
 #include "Packets.hpp"
 #include "World.hpp"
-#include "ThreadPool.hpp"
 #include "server_define.hpp"
 #include "logger.hpp"
 #include <unordered_set>
@@ -161,7 +160,7 @@ private:
 	 * NETWORK
 	\*********************************/
 	Server & m_server;
-	task::Executor m_executor;
+	task::Executor & m_executor;
 	std::unordered_map<uint64_t, uint64_t> m_player_to_connection_id;
 	std::unordered_map<uint64_t, uint64_t> m_connection_to_player_id;
 	TracyLockableN(std::mutex, m_players_info_mutex, "PlayerInfoMutex");

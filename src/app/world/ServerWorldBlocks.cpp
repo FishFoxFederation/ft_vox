@@ -272,24 +272,6 @@ ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
 	return chunks;
 }
 
-// uint64_t ServerWorld::asyncGenChunk(const glm::ivec3 & chunkPos3D, Chunk::genLevel gen_level , Chunk::genLevel current_gen_level = Chunk::genLevel::EMPTY)
-// {
-// 	ChunkMap chunksToGen;
-// 	WorldGenerator::genInfo info = m_world_generator.getGenInfo(gen_level, current_gen_level, chunkPos3D);
-
-// 	chunksToGen = getChunkZone(info.zoneStart, info.zoneSize);
-
-// 	return m_threadPool.submit([this, info, chunksToGen] () mutable
-// 	{
-// 		ZoneScopedN("Generate Chunk");
-// 		// m_world_generator.generateChunkColumn(chunkPos3D.x, chunkPos3D.z, chunk);
-// 		m_world_generator.generate(info, chunksToGen);
-
-// 		for (auto & [chunk_position, chunk] : chunksToGen)
-// 			chunk->status.unlock();
-// 	});
-// }
-
 void ServerWorld::doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen)
 {
 	ZoneScoped;
