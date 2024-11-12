@@ -22,8 +22,14 @@ class Executor
 	friend class TaskNode;
 	friend class TaskGraph;
 public:
-	Executor(unsigned const thread_count = std::thread::hardware_concurrency() - 2);
 	~Executor();
+	
+	static Executor & getInstance()
+	{
+		static Executor instance;
+		return instance;
+	}
+
 	Executor(const Executor &) = delete;
 	Executor & operator=(const Executor &) = delete;
 	Executor(Executor &&) = delete;
@@ -34,7 +40,21 @@ public:
 	template <typename F>
 	std::future<void> run(F && f)
 	{
-		std::packaged_task<void()> task(std::forward<F>(f));
+		auto packed_f = [func = std::move(f), this]() mutable {
+			m_running_graphs += 1;
+			try {
+				func();
+			}
+			catch (const std::exception & e) {
+				m_running_graphs -= 1;
+				m_running_graphs_cond.notify_all();
+
+				throw;
+			}
+			m_running_graphs -= 1;
+			m_running_graphs_cond.notify_all();
+		};
+		std::packaged_task<void()> task(std::move(packed_f));
 		auto future = task.get_future();
 		{
 			std::lock_guard<std::mutex> lock(m_queue_mutex);
@@ -46,6 +66,7 @@ public:
 
 	void waitForAll();
 private:
+	Executor(unsigned const thread_count = std::thread::hardware_concurrency() - 2);
 	struct runningGraph;
 	// struct Module;
 	struct Module
