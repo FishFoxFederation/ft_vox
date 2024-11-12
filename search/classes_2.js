@@ -10,13 +10,12 @@ var searchData=
   ['chunkunloadpacket_7',['ChunkUnloadPacket',['../classChunkUnloadPacket.html',1,'']]],
   ['client_8',['Client',['../classClient.html',1,'']]],
   ['clientdisconnected_9',['ClientDisconnected',['../classServer_1_1ClientDisconnected.html',1,'Server']]],
-  ['clientpackethandler_10',['ClientPacketHandler',['../classClientPacketHandler.html',1,'']]],
-  ['clientsocket_11',['ClientSocket',['../classClientSocket.html',1,'']]],
-  ['clientworld_12',['ClientWorld',['../classClientWorld.html',1,'']]],
-  ['connection_13',['Connection',['../classConnection.html',1,'']]],
-  ['connectionpacket_14',['ConnectionPacket',['../classConnectionPacket.html',1,'']]],
-  ['connectionsocket_15',['ConnectionSocket',['../classConnectionSocket.html',1,'']]],
-  ['createinfo_16',['CreateInfo',['../structBuffer_1_1CreateInfo.html',1,'Buffer::CreateInfo'],['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
-  ['createmeshdata_17',['CreateMeshData',['../classCreateMeshData.html',1,'']]],
-  ['cycleerror_18',['CycleError',['../classtask_1_1CycleError.html',1,'task']]]
+  ['clientsocket_10',['ClientSocket',['../classClientSocket.html',1,'']]],
+  ['clientworld_11',['ClientWorld',['../classClientWorld.html',1,'']]],
+  ['connection_12',['Connection',['../classConnection.html',1,'']]],
+  ['connectionpacket_13',['ConnectionPacket',['../classConnectionPacket.html',1,'']]],
+  ['connectionsocket_14',['ConnectionSocket',['../classConnectionSocket.html',1,'']]],
+  ['createinfo_15',['CreateInfo',['../structBuffer_1_1CreateInfo.html',1,'Buffer::CreateInfo'],['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
+  ['createmeshdata_16',['CreateMeshData',['../classCreateMeshData.html',1,'']]],
+  ['cycleerror_17',['CycleError',['../classtask_1_1CycleError.html',1,'task']]]
 ];

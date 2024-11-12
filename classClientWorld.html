@@ -143,8 +143,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a62ffa1a4466b341f0cb8898075f8bf21"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a62ffa1a4466b341f0cb8898075f8bf21">ClientWorld</a> (<a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkan_api, <a class="el" href="classSound_1_1Engine.html">Sound::Engine</a> &amp;sound_engine, <a class="el" href="classEvent_1_1Manager.html">Event::Manager</a> &amp;event_manager, uint64_t my_player_id=0)</td></tr>
-<tr class="separator:a62ffa1a4466b341f0cb8898075f8bf21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c151adf8ceb0ec7579896426f0aa14f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a3c151adf8ceb0ec7579896426f0aa14f">ClientWorld</a> (<a class="el" href="classVulkanAPI.html">VulkanAPI</a> &amp;vulkan_api, <a class="el" href="classSound_1_1Engine.html">Sound::Engine</a> &amp;sound_engine, <a class="el" href="classEvent_1_1Manager.html">Event::Manager</a> &amp;event_manager, <a class="el" href="classClient.html">Client</a> &amp;client, uint64_t my_player_id=0)</td></tr>
+<tr class="separator:a3c151adf8ceb0ec7579896426f0aa14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a906723ee7a94d67937f57f1fc3d320c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2">~ClientWorld</a> ()</td></tr>
 <tr class="separator:a906723ee7a94d67937f57f1fc3d320c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c76d0cf45ce665a46c5f0c28b33e0cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf">ClientWorld</a> (<a class="el" href="classClientWorld.html">ClientWorld</a> &amp;other)=delete</td></tr>
@@ -213,6 +213,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0795485822cc9d84e6061ca726e0ecc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b4ee2813100580cd0fc967e4d9806fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a1b4ee2813100580cd0fc967e4d9806fd">otherUpdate</a> ()</td></tr>
 <tr class="separator:a1b4ee2813100580cd0fc967e4d9806fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a290183e91e461cea6a3380fcf471e95b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a290183e91e461cea6a3380fcf471e95b">handlePacket</a> (std::shared_ptr&lt; <a class="el" href="classIPacket.html">IPacket</a> &gt; packet)</td></tr>
+<tr class="separator:a290183e91e461cea6a3380fcf471e95b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
 <tr class="memitem:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a> ()</td></tr>
 <tr class="separator:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -281,8 +283,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a47cc090d4ed08b81df6748abb8daea0e inherit pro_attribs_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a62ffa1a4466b341f0cb8898075f8bf21" name="a62ffa1a4466b341f0cb8898075f8bf21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62ffa1a4466b341f0cb8898075f8bf21">&#9670;&#160;</a></span>ClientWorld() <span class="overload">[1/3]</span></h2>
+<a id="a3c151adf8ceb0ec7579896426f0aa14f" name="a3c151adf8ceb0ec7579896426f0aa14f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c151adf8ceb0ec7579896426f0aa14f">&#9670;&#160;</a></span>ClientWorld() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -304,6 +306,12 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="classEvent_1_1Manager.html">Event::Manager</a> &amp;&#160;</td>
           <td class="paramname"><em>event_manager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classClient.html">Client</a> &amp;&#160;</td>
+          <td class="paramname"><em>client</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -664,6 +672,24 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a290183e91e461cea6a3380fcf471e95b" name="a290183e91e461cea6a3380fcf471e95b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a290183e91e461cea6a3380fcf471e95b">&#9670;&#160;</a></span>handlePacket()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::handlePacket </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classIPacket.html">IPacket</a> &gt;&#160;</td>
+          <td class="paramname"><em>packet</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1120,6 +1146,7 @@ Additional Inherited Members</h2></td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/app/world/<a class="el" href="ClientWorld_8hpp_source.html">ClientWorld.hpp</a></li>
 <li>src/app/world/<a class="el" href="ClientWorld_8cpp.html">ClientWorld.cpp</a></li>
+<li>src/app/world/<a class="el" href="ClientWorldNetwork_8cpp.html">ClientWorldNetwork.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

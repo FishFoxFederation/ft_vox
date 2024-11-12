@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['data_0',['data',['../classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed',1,'History']]],
-  ['data_1',['Data',['../classSound_1_1Data.html#a04550314ef545708eb668a2497f962bb',1,'Sound::Data']]],
+  ['data_0',['Data',['../classSound_1_1Data.html#a04550314ef545708eb668a2497f962bb',1,'Sound::Data']]],
+  ['data_1',['data',['../classHistory.html#a157dd81dbf380fd3fbe71a8c05ab79ed',1,'History']]],
   ['datatosend_2',['dataToSend',['../classConnection.html#a426e5dbbc9c94e010c53fdc84564251f',1,'Connection']]],
   ['debuggui_3',['DebugGui',['../classDebugGui.html#aba92e1f2e05a94aa41db61b072d5dffc',1,'DebugGui']]],
   ['descriptor_4',['Descriptor',['../classDescriptor.html#a67969fc893331c2e6d554ddf6d6c55f0',1,'Descriptor::Descriptor()'],['../classDescriptor.html#a0ff5ec7cfa1dca9d39e656e906b464a1',1,'Descriptor::Descriptor(VkDevice device, const CreateInfo &amp;info)'],['../classDescriptor.html#a92551db1cf5b2dacf3e5a3c039bdec0b',1,'Descriptor::Descriptor(const Descriptor &amp;)=delete'],['../classDescriptor.html#a329c6eb69cd7c155e6d6777fbafbeb0f',1,'Descriptor::Descriptor(Descriptor &amp;&amp;other) noexcept']]],

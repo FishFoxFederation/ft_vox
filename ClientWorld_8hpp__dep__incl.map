@@ -1,14 +1,13 @@
 <map id="src/app/world/ClientWorld.hpp" name="src/app/world/ClientWorld.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="421,5,616,31"/>
-<area shape="rect" id="node2" href="$application_8hpp.html" title=" " alt="" coords="192,262,347,287"/>
-<area shape="rect" id="node6" href="$ClientPacketHandler_8hpp.html" title=" " alt="" coords="542,79,711,119"/>
-<area shape="rect" id="node10" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="307,79,517,119"/>
-<area shape="rect" id="node12" href="$ClientWorld_8cpp.html" title=" " alt="" coords="736,86,931,111"/>
-<area shape="rect" id="node3" href="$alternative__main_8cpp.html" title=" " alt="" coords="5,343,168,368"/>
-<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="192,343,347,368"/>
-<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="371,343,467,368"/>
-<area shape="rect" id="node7" href="$ClientPacketHandler_8cpp.html" title=" " alt="" coords="542,167,711,207"/>
-<area shape="rect" id="node8" href="$UpdateThread_8hpp.html" title=" " alt="" coords="736,167,891,207"/>
-<area shape="rect" id="node9" href="$UpdateThread_8cpp.html" title=" " alt="" coords="736,255,891,295"/>
-<area shape="rect" id="node11" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="307,167,517,207"/>
+<area shape="rect" id="node1" title=" " alt="" coords="335,5,529,31"/>
+<area shape="rect" id="node2" href="$application_8hpp.html" title=" " alt="" coords="240,174,395,199"/>
+<area shape="rect" id="node6" href="$BlockUpdateThread_8hpp.html" title=" " alt="" coords="69,79,280,119"/>
+<area shape="rect" id="node8" href="$UpdateThread_8hpp.html" title=" " alt="" coords="355,79,509,119"/>
+<area shape="rect" id="node10" href="$ClientWorld_8cpp.html" title=" " alt="" coords="533,86,728,111"/>
+<area shape="rect" id="node11" href="$ClientWorldNetwork_8cpp.html" title=" " alt="" coords="752,79,923,119"/>
+<area shape="rect" id="node3" href="$alternative__main_8cpp.html" title=" " alt="" coords="53,255,216,280"/>
+<area shape="rect" id="node4" href="$application_8cpp.html" title=" " alt="" coords="240,255,395,280"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="419,255,515,280"/>
+<area shape="rect" id="node7" href="$BlockUpdateThread_8cpp.html" title=" " alt="" coords="5,167,216,207"/>
+<area shape="rect" id="node9" href="$UpdateThread_8cpp.html" title=" " alt="" coords="419,167,573,207"/>
 </map>

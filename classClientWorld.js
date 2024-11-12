@@ -1,7 +1,7 @@
 var classClientWorld =
 [
     [ "PlayerUseResult", "structClientWorld_1_1PlayerUseResult.html", "structClientWorld_1_1PlayerUseResult" ],
-    [ "ClientWorld", "classClientWorld.html#a62ffa1a4466b341f0cb8898075f8bf21", null ],
+    [ "ClientWorld", "classClientWorld.html#a3c151adf8ceb0ec7579896426f0aa14f", null ],
     [ "~ClientWorld", "classClientWorld.html#a906723ee7a94d67937f57f1fc3d320c2", null ],
     [ "ClientWorld", "classClientWorld.html#a3c76d0cf45ce665a46c5f0c28b33e0cf", null ],
     [ "ClientWorld", "classClientWorld.html#ae2509dff67daeeeb0ee9286ec46aad71", null ],
@@ -17,6 +17,7 @@ var classClientWorld =
     [ "getPlayerPosition", "classClientWorld.html#a99ff03b7be1e020be0d27863f221cb50", null ],
     [ "getRenderDistance", "classClientWorld.html#acdb5146055c2fd61c42d50b8c8de842f", null ],
     [ "getServerLoadDistance", "classClientWorld.html#a694d468c814f15436ef73cbb1e98812d", null ],
+    [ "handlePacket", "classClientWorld.html#a290183e91e461cea6a3380fcf471e95b", null ],
     [ "localGetChunk", "classClientWorld.html#a0795485822cc9d84e6061ca726e0ecc8", null ],
     [ "manageScroll", "classClientWorld.html#a50e2ffd8f1ee39429a1135c3a17bbd42", null ],
     [ "modifyBlock", "classClientWorld.html#a46b60cf51949d3e24641a942cfd5582d", null ],

@@ -198,18 +198,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aeb795975e6d2fa4ee76a05ecdadf4615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47301946b8c5bc0957ee6cc853cb2cc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a47301946b8c5bc0957ee6cc853cb2cc7">handlePacket</a> (std::shared_ptr&lt; <a class="el" href="classIPacket.html">IPacket</a> &gt; packet)</td></tr>
 <tr class="separator:a47301946b8c5bc0957ee6cc853cb2cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f3bc5012e66eaf51c7601c2cc2b0de3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a9f3bc5012e66eaf51c7601c2cc2b0de3">handleBlockActionPacket</a> (std::shared_ptr&lt; <a class="el" href="classBlockActionPacket.html">BlockActionPacket</a> &gt; packet)</td></tr>
-<tr class="separator:a9f3bc5012e66eaf51c7601c2cc2b0de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4765ff7c1e674ab67b51e9b24b7b1afd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a4765ff7c1e674ab67b51e9b24b7b1afd">handleConnectionPacket</a> (std::shared_ptr&lt; <a class="el" href="classConnectionPacket.html">ConnectionPacket</a> &gt; packet)</td></tr>
-<tr class="separator:a4765ff7c1e674ab67b51e9b24b7b1afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d3a4eb759fe90206dfadfe74d875da8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a1d3a4eb759fe90206dfadfe74d875da8">handlePlayerMovePacket</a> (std::shared_ptr&lt; <a class="el" href="classPlayerMovePacket.html">PlayerMovePacket</a> &gt; packet)</td></tr>
-<tr class="separator:a1d3a4eb759fe90206dfadfe74d875da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36083fb7cf6cbe067f746e3b0bdb6f59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a36083fb7cf6cbe067f746e3b0bdb6f59">handleDisconnectPacket</a> (std::shared_ptr&lt; <a class="el" href="classDisconnectPacket.html">DisconnectPacket</a> &gt; packet)</td></tr>
-<tr class="separator:a36083fb7cf6cbe067f746e3b0bdb6f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c14c1c9ed9597b94583bad20f53f32f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a8c14c1c9ed9597b94583bad20f53f32f">handleLoadDistancePacket</a> (std::shared_ptr&lt; <a class="el" href="classLoadDistancePacket.html">LoadDistancePacket</a> &gt; packet)</td></tr>
-<tr class="separator:a8c14c1c9ed9597b94583bad20f53f32f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53e41cd4cc868b9c4fef6eb7600d10e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServerWorld.html#a53e41cd4cc868b9c4fef6eb7600d10e7">sendChunkLoadUnloadData</a> (const <a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ChunkLoadUnloadData</a> &amp;data, uint64_t player_id)</td></tr>
-<tr class="separator:a53e41cd4cc868b9c4fef6eb7600d10e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWorld"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWorld')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWorld.html">World</a></td></tr>
 <tr class="memitem:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWorld.html#afa39d4e6f714a7a3691ac0c656f5e8a8">World</a> ()</td></tr>
 <tr class="separator:afa39d4e6f714a7a3691ac0c656f5e8a8 inherit pub_methods_classWorld"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -540,78 +528,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a9f3bc5012e66eaf51c7601c2cc2b0de3" name="a9f3bc5012e66eaf51c7601c2cc2b0de3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f3bc5012e66eaf51c7601c2cc2b0de3">&#9670;&#160;</a></span>handleBlockActionPacket()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ServerWorld::handleBlockActionPacket </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classBlockActionPacket.html">BlockActionPacket</a> &gt;&#160;</td>
-          <td class="paramname"><em>packet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4765ff7c1e674ab67b51e9b24b7b1afd" name="a4765ff7c1e674ab67b51e9b24b7b1afd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4765ff7c1e674ab67b51e9b24b7b1afd">&#9670;&#160;</a></span>handleConnectionPacket()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ServerWorld::handleConnectionPacket </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classConnectionPacket.html">ConnectionPacket</a> &gt;&#160;</td>
-          <td class="paramname"><em>packet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a36083fb7cf6cbe067f746e3b0bdb6f59" name="a36083fb7cf6cbe067f746e3b0bdb6f59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36083fb7cf6cbe067f746e3b0bdb6f59">&#9670;&#160;</a></span>handleDisconnectPacket()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ServerWorld::handleDisconnectPacket </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classDisconnectPacket.html">DisconnectPacket</a> &gt;&#160;</td>
-          <td class="paramname"><em>packet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8c14c1c9ed9597b94583bad20f53f32f" name="a8c14c1c9ed9597b94583bad20f53f32f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c14c1c9ed9597b94583bad20f53f32f">&#9670;&#160;</a></span>handleLoadDistancePacket()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ServerWorld::handleLoadDistancePacket </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classLoadDistancePacket.html">LoadDistancePacket</a> &gt;&#160;</td>
-          <td class="paramname"><em>packet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a47301946b8c5bc0957ee6cc853cb2cc7" name="a47301946b8c5bc0957ee6cc853cb2cc7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47301946b8c5bc0957ee6cc853cb2cc7">&#9670;&#160;</a></span>handlePacket()</h2>
 
@@ -622,24 +538,6 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void ServerWorld::handlePacket </td>
           <td>(</td>
           <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classIPacket.html">IPacket</a> &gt;&#160;</td>
-          <td class="paramname"><em>packet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1d3a4eb759fe90206dfadfe74d875da8" name="a1d3a4eb759fe90206dfadfe74d875da8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d3a4eb759fe90206dfadfe74d875da8">&#9670;&#160;</a></span>handlePlayerMovePacket()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ServerWorld::handlePlayerMovePacket </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classPlayerMovePacket.html">PlayerMovePacket</a> &gt;&#160;</td>
           <td class="paramname"><em>packet</em></td><td>)</td>
           <td></td>
         </tr>
@@ -751,34 +649,6 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a53e41cd4cc868b9c4fef6eb7600d10e7" name="a53e41cd4cc868b9c4fef6eb7600d10e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53e41cd4cc868b9c4fef6eb7600d10e7">&#9670;&#160;</a></span>sendChunkLoadUnloadData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ServerWorld::sendChunkLoadUnloadData </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structServerWorld_1_1ChunkLoadUnloadData.html">ChunkLoadUnloadData</a> &amp;&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>player_id</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
