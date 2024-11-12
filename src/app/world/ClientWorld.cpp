@@ -28,7 +28,7 @@ void ClientWorld::updateBlock(glm::dvec3 position)
 	ZoneScoped;
 	updateChunks(position);
 	// waitForFinishedFutures();
-	m_threadPool.waitForFinishedTasks();
+	m_executor.waitForFinishedTasks();
 }
 
 // void ClientWorld::update(glm::dvec3 nextPlayerPosition)
@@ -89,7 +89,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 	if (chunk == nullptr)
 		return;
-	m_threadPool.submit([this, chunk]()
+	m_executor.submit([this, chunk]()
 	{
 		ZoneScopedN("Chunk Unloading");
 		/**************************************************************
@@ -188,7 +188,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 	/********
 	* PUSHING TASK TO THREAD POOL
 	********/
-	m_threadPool.submit([this, chunkPos3D, mesh_data = std::move(mesh_data)]() mutable
+	m_executor.submit([this, chunkPos3D, mesh_data = std::move(mesh_data)]() mutable
 	{
 		ZoneScopedN("Chunk Meshing");
 		/**************************************************************
@@ -295,9 +295,6 @@ void ClientWorld::doBlockSets()
 		if (m_blocks_to_set.empty())
 			return;
 	}
-	// uint64_t current_id = m_future_id++;
-	// std::future<void> future = m_threadPool.submit([this, current_id]()
-	// {
 		while(1)
 		{
 			glm::vec3 position;

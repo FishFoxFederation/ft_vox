@@ -4,7 +4,7 @@
 #include "Player.hpp"
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
-#include "ThreadPoolAccessor.hpp"
+#include "ExecutorAccessor.hpp"
 #include "tasks.hpp"
 #include "Mob.hpp"
 #include "hashes.hpp"
@@ -252,7 +252,7 @@ protected:
 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>>	m_chunks;
 	mutable TracyLockableN									(std::mutex,	m_chunks_mutex, "Chunks");
 
-	ThreadPoolAccessor 									m_threadPool;
+	ExecutorAccessor 									m_executor;
 
 
 	WorldGenerator										m_world_generator;

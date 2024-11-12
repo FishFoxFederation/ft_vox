@@ -63,8 +63,9 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/render/CascadedShadowMapping.cpp
 		src/app/threads/update/UpdateThread.cpp
-		src/app/threads/pool/ThreadPool.cpp
-		src/app/threads/pool/ThreadPoolAccessor.cpp
+		src/app/threads/task_manager/ExecutorWorker.cpp
+		src/app/threads/task_manager/Executor.cpp
+		src/app/threads/task_manager/ExecutorAccessor.cpp
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
 		src/app/vulkan/VulkanAPI.cpp
@@ -216,11 +217,10 @@ target_sources(server
 		src/app/threads/render/RenderThread.cpp
 		src/app/threads/render/CascadedShadowMapping.cpp
 		src/app/threads/update/UpdateThread.cpp
-		src/app/threads/pool/ThreadPool.cpp
-		src/app/threads/pool/ThreadPoolAccessor.cpp
 		src/app/threads/block_update/ServerBlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
 		src/app/threads/task_manager/ExecutorWorker.cpp
+		src/app/threads/task_manager/ExecutorAccessor.cpp
 		src/app/threads/task_manager/Executor.cpp
 		src/app/vulkan/VulkanAPI.cpp
 		src/app/vulkan/VulkanMemoryAllocator.cpp
@@ -345,8 +345,6 @@ target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy:
 # 		src/app/threads/Status.cpp
 # 		src/app/threads/render/RenderThread.cpp
 # 		src/app/threads/render/CascadedShadowMapping.cpp
-# 		src/app/threads/pool/ThreadPool.cpp
-# 		src/app/threads/pool/ThreadPoolAccessor.cpp
 # 		src/app/vulkan/VulkanAPI.cpp
 # 		src/app/vulkan/VulkanMemoryAllocator.cpp
 # 		src/app/vulkan/chunk_mesh.cpp

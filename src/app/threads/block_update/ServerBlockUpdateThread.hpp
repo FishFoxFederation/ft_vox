@@ -4,7 +4,6 @@
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
 #include "ServerWorld.hpp"
-#include "ThreadPool.hpp"
 
 /**
  * @brief An implementation of the thread wrapper for the thread that handles block updates

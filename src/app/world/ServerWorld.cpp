@@ -2,7 +2,8 @@
 
 ServerWorld::ServerWorld(Server & server)
 :	World(),
-	m_server(server)
+	m_server(server),
+	m_executor(task::Executor::getInstance())
 {
 	addTicket({Ticket::Type::OTHER, SPAWN_TICKET_LEVEL, glm::ivec3(0, 0, 0)});
 	// std::shared_ptr<Chunk> chunk;
@@ -106,8 +107,6 @@ void ServerWorld::waitForChunkFutures()
 
 	std::lock_guard lock(m_chunk_gen_data.m_chunk_gen_data_mutex);
 	m_chunk_gen_data.future.get();
-	// m_threadPool.waitForTasks(m_chunk_futures_ids);
-	// m_chunk_futures_ids.clear();
 }
 
 void ServerWorld::updateTickedValues()

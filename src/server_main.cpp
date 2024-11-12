@@ -20,7 +20,6 @@ int main()
 {
 	logger.configure("log_server");
 	LOG_INFO("Server started");
-	// ThreadPool threadPool;
 	signal(SIGINT, [](int signum) {
 		running = false;
 	});

@@ -9,7 +9,6 @@
 #include "VulkanAPI.hpp"
 #include "BlockUpdateThread.hpp"
 #include "NetworkThread.hpp"
-#include "ThreadPool.hpp"
 #include "Client.hpp"
 #include "SoundEngine.hpp"
 #include "EventManager.hpp"
@@ -43,4 +42,5 @@ private:
 	UpdateThread		m_update_thread;
 	BlockUpdateThread	m_block_update_thread;
 	NetworkThread		m_network_thread;
+
 };
