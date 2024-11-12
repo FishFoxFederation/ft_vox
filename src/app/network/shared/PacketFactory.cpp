@@ -16,6 +16,9 @@ PacketFactory::PacketFactory()
 
 
 	IPacket::Type type = IPacket::Type::ENUM_MIN;
+	// If an exception brought you here you most likely are trying to implement a new packet
+	//you should check that all packet type that are present in the IPacket::Type enum are present inside the
+	// paket factory
 	while (type != IPacket::Type::ENUM_MAX)
 	{
 		if (!m_packets.contains(type))
