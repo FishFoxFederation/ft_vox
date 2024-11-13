@@ -50,7 +50,7 @@ private:
 
 
 		static size_t			getOffsetIndex(const glm::ivec2 & position);
-		std::shared_ptr<Chunk>	getChunk(const glm::ivec2 & relative_position);
+		std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & chunkPos3D);
 		bool					containsChunk(const glm::ivec2 & relative_position) const;
 
 		void save();
@@ -58,6 +58,7 @@ private:
 	private:
 		std::fstream file;
 		glm::ivec2 m_position;
+		bool m_has_read = false;
 		std::unordered_map<glm::ivec3, const std::shared_ptr<Chunk>> m_chunks;
 		struct ChunkOffset
 		{
@@ -69,6 +70,8 @@ private:
 
 		void writeOffsets();
 		void writeChunks();
+		void readChunks();
+		void readChunk(const glm::ivec2 & relative_position);
 	};
 	//first key if the region position
 	// if we have a region entry
