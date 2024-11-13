@@ -103,13 +103,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 		mesh_scene_id = chunk->getMeshID();
 
-		if (m_vulkan_api.chunk_mesh_list.contains(mesh_scene_id))
-		{
-			ChunkMeshRenderData old_mesh_data = m_vulkan_api.chunk_mesh_list.get(mesh_scene_id);
-			m_vulkan_api.chunk_mesh_list.erase(mesh_scene_id);
-			m_vulkan_api.destroyMesh(old_mesh_data.id);
-			m_vulkan_api.destroyMesh(old_mesh_data.water_id);
-		}
+		m_vulkan_api.removeChunkFromScene(mesh_scene_id);
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 		DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
@@ -208,7 +202,7 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 		mesh_data.create(); //CPU intensive task to create the mesh
 		//storing mesh in the GPU
-		uint64_t mesh_id = m_vulkan_api.storeMesh(
+		uint64_t block_mesh_id = m_vulkan_api.storeMesh(
 			mesh_data.vertices.data(),
 			mesh_data.vertices.size(),
 			sizeof(BlockVertex),
@@ -225,26 +219,18 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 
 		//adding mesh id to the scene so it is rendered
-		// if (mesh_id != IdList<uint64_t, Mesh>::invalid_id)
+		// if (block_mesh_id != IdList<uint64_t, Mesh>::invalid_id)
 		{
-			uint64_t mesh_scene_id = m_vulkan_api.chunk_mesh_list.insert({
-				mesh_id,
+			uint64_t mesh_scene_id = m_vulkan_api.addChunkToScene(
+				block_mesh_id,
 				water_mesh_id,
 				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
-			});
+			);
 
 			chunk->setMeshID(mesh_scene_id);
 		}
 
-
-		//destroy old mesh if it exists
-		if (m_vulkan_api.chunk_mesh_list.contains(old_mesh_scene_id))
-		{
-			ChunkMeshRenderData old_mesh_data = m_vulkan_api.chunk_mesh_list.get(old_mesh_scene_id);
-			m_vulkan_api.chunk_mesh_list.erase(old_mesh_scene_id);
-			m_vulkan_api.destroyMesh(old_mesh_data.id);
-			m_vulkan_api.destroyMesh(old_mesh_data.water_id);
-		}
+		m_vulkan_api.removeChunkFromScene(old_mesh_scene_id);
 
 		mesh_data.unlock();
 
