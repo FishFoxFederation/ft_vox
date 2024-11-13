@@ -75,5 +75,5 @@ std::shared_ptr<Chunk> Save::getChunk(const glm::ivec3 & position)
 	if (it == m_regions.end())
 		return nullptr;
 
-	return it->second.getChunk(Region::toRelativePos(position, region_pos));
+	return it->second.getChunk(position);
 }

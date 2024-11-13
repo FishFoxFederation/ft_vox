@@ -199,22 +199,47 @@ void Save::Region::writeChunks()
 	}
 }
 
-std::shared_ptr <Chunk> Save::Region::getChunk(const glm::ivec2 & relative_position)
+std::shared_ptr <Chunk> Save::Region::getChunk(const glm::ivec3 & chunkPos3D)
 {
-	std::array<char, Chunk::DATA_SIZE> buffer;
+	if (!m_has_read)
+		readChunks();
+	auto it = m_chunks.find(chunkPos3D);
+	if (it == m_chunks.end())
+		return nullptr;
+	return it->second;
+}
+
+void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
+{
+	LOG_INFO("Adding chunk to region: " << m_position.x << " " << m_position.y);
+	m_chunks.insert({chunk->getPosition(), chunk});
+}
+
+
+void Save::Region::readChunks()
+{
+	for(auto & [pos, offset] : m_offsets)
+		readChunk(pos);
+	m_has_read = true;
+}
+
+void Save::Region::readChunk(const glm::ivec2 & relative_position)
+{
 	auto it = m_offsets.find(relative_position);
 	if (it == m_offsets.end())
 	{
 		LOG_INFO("Chunk not found: " << relative_position.x << " " << relative_position.y);
-		return nullptr;
+		return;
 	}
+	std::vector<char> buffer(it->second.size * 4096);
+
 	Chunk::BlockArray blocks;
 	Chunk::LightArray light;
 	Chunk::BiomeArray biome;
 	Chunk::genLevel genLevel;
 
 	file.seekg(it->second.offset * 4096);
-	file.read(buffer.data(), Chunk::DATA_SIZE);
+	file.read(buffer.data(), buffer.size());
 
 	size_t index = 0;
 	std::memcpy(blocks.data(), buffer.data(), sizeof(Chunk::BlockArray));
@@ -230,11 +255,4 @@ std::shared_ptr <Chunk> Save::Region::getChunk(const glm::ivec2 & relative_posit
 	auto chunk = std::make_shared<Chunk>(pos3D, blocks, light, biome);
 	chunk->setGenLevel(genLevel);
 	m_chunks.insert({pos3D, chunk});
-	return chunk;
-}
-
-void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
-{
-	LOG_INFO("Adding chunk to region: " << m_position.x << " " << m_position.y);
-	m_chunks.insert({chunk->getPosition(), chunk});
 }
