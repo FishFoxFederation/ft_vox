@@ -288,9 +288,7 @@ std::vector<const char *> VulkanAPI::getRequiredExtensions()
 void VulkanAPI::loadVulkanFunctions()
 {
 #define VK_LOAD_FUNCTION(name) name = reinterpret_cast<PFN_##name>(vkGetInstanceProcAddr(instance, #name)); \
-	if (name == nullptr) { \
-		throw std::runtime_error("Failed to load Vulkan function: " #name); \
-	}
+	if (name == nullptr) throw std::runtime_error("Failed to load Vulkan function: " #name);
 
 	#ifndef NDEBUG
 		VK_LOAD_FUNCTION(vkCreateDebugUtilsMessengerEXT)
@@ -299,6 +297,8 @@ void VulkanAPI::loadVulkanFunctions()
 
 	VK_LOAD_FUNCTION(vkGetPhysicalDeviceCalibrateableTimeDomainsEXT)
 	VK_LOAD_FUNCTION(vkGetCalibratedTimestampsEXT)
+
+	VK_LOAD_FUNCTION(vkGetBufferDeviceAddress)
 
 #undef VK_LOAD_FUNCTION
 }

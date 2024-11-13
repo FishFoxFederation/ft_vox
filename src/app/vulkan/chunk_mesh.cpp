@@ -71,6 +71,13 @@ uint64_t VulkanAPI::storeMesh(
 	mesh.index_count = index_count;
 	mesh.memory_size = buffer_size;
 
+	VkBufferDeviceAddressInfoKHR address_info = {
+		.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO,
+		.pNext = nullptr,
+		.buffer = mesh.buffer
+	};
+	mesh.buffer_address = vkGetBufferDeviceAddress(device, &address_info);
+
 	uint64_t mesh_id;
 	{
 		std::lock_guard lock(mesh_map_mutex);
