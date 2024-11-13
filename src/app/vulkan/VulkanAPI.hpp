@@ -171,6 +171,8 @@ struct Mesh
 
 	uint32_t memory_size;
 
+	VkDeviceAddress buffer_address;
+
 	union
 	{
 		uint64_t is_used = 0;
@@ -490,6 +492,8 @@ public:
 	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
 	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
 
+	PFN_vkGetBufferDeviceAddress vkGetBufferDeviceAddress;
+
 
 	// Draw data
 	Camera camera;
@@ -562,7 +566,6 @@ private:
 	std::map<ChunkId, ChunkRenderData> m_chunks_in_scene;
 	ChunkId m_next_chunk_id = 1;
 	mutable TracyLockableN(std::mutex, m_chunks_in_scene_mutex, "Chunk Render Data");
-
 
 
 
