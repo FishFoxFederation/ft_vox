@@ -68,6 +68,7 @@ private:
 		std::unordered_map<glm::ivec2, ChunkOffset> m_offsets;
 		void parseOffsets();
 
+		void clearOffsets();
 		void writeOffsets();
 		void writeChunks();
 		void readChunks();

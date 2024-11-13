@@ -1,4 +1,5 @@
 #include "Save.hpp"
+#include "RLE_TEST.hpp"
 
 glm::ivec2 Save::Region::toRegionPos( glm::ivec3 chunkPos3D)
 {
@@ -99,31 +100,32 @@ Save::Region::~Region()
 void Save::Region::save()
 {
 	LOG_INFO("Saving region: " << m_position.x << " " << m_position.y);
-	writeOffsets();
+	clearOffsets();
 	writeChunks();
+	writeOffsets();
 }
 
+void Save::Region::clearOffsets()
+{
+	file.seekp(0);
+	file.write(std::string(8192, '\0').c_str(), 8192);
+}
 
 void Save::Region::writeOffsets()
 {
-	uint32_t offset = 2; // we start writing chunks after the offset table
-	uint32_t size = Chunk::DATA_SIZE / 4096 + (Chunk::DATA_SIZE % 4096 != 0);
 	std::array<char, 8192> table_buffer = {};
 	char buffer[8];
 
 	//write offset table
-	for (auto & [pos, chunk] : m_chunks)
+	for (auto & [pos, info] : m_offsets)
 	{
-		LOG_INFO("Offset of CHUNK " << pos.x << " " << pos.z << " is " << offset);
-		glm::ivec2 relative_pos = glm::ivec2(pos.x, pos.z) - m_position;
-
-		m_offsets.insert({relative_pos, {offset, size}});
+		uint32_t offset = info.offset;
+		uint32_t size = info.size;
 		std::memcpy(buffer, &offset, 4);
 		std::memcpy(buffer + 4, &size, 4);
-		offset += size;
-
-		size_t index = getOffsetIndex(relative_pos) * 8;
-		memcpy(table_buffer.data() + index, buffer, 8);
+		size_t index = getOffsetIndex(pos) * 8;
+		std::memcpy(table_buffer.data() + index, buffer, 8);
+		LOG_INFO("Offset: " << pos.x << " " << pos.y << " " << offset << " " << size);
 	}
 	if (!file.is_open())
 		throw std::runtime_error("Save: Region: WriteOffsets: file not open");
@@ -141,6 +143,7 @@ void Save::Region::writeOffsets()
 
 void Save::Region::parseOffsets()
 {
+	LOG_INFO("Parsing offsets " << m_position.x << " " << m_position.y);
 	// read all 1024 offsets ( 32 * 32 )
 	char buffer[8];
 	for (size_t i = 0; i < 1024; i++)
@@ -161,38 +164,66 @@ void Save::Region::parseOffsets()
 	}	
 
 	for (auto & [pos, offset] : m_offsets)
-		LOG_INFO("Offset: " << pos.x << " " << pos.y);
+		LOG_INFO("Offset: " << pos.x << " " << pos.y << " " << offset.offset << " " << offset.size);
 }
 
 void Save::Region::writeChunks()
 {
-	std::array<char, Chunk::DATA_SIZE + (4096 - (Chunk::DATA_SIZE % 4096))> buffer = {};
+	std::vector<char> buffer;
 	file.seekp(2 * 4096); // skip the offset table
+
+	uint32_t offset = 2;
 	if (!file.good())
 		throw std::runtime_error("Save: Region: WriteChunks: error moving cursor");
 	for (auto & [pos, chunk] : m_chunks)
 	{
 		LOG_INFO("Writing CHUNK " << pos.x << " " << pos.z);
 		std::lock_guard<Status> lock(chunk->status);
-		glm::ivec2 relative_pos = glm::ivec2(pos.x, pos.z) - m_position;
+		glm::ivec2 relative_pos = toRelativePos(pos, m_position);
 
-		uint32_t offset = m_offsets.at(relative_pos).offset;
+		RLE_TEST blocks(chunk->getBlocks());
+		RLE_TEST light(chunk->getLight());
+		RLE_TEST biome(chunk->getBiomes());
 
-		Chunk::BlockArray & blocks = chunk->getBlocks();
-		Chunk::LightArray & light = chunk->getLight();
-		Chunk::BiomeArray & biome = chunk->getBiomes();
 		Chunk::genLevel genLevel = chunk->getGenLevel();
 
+		size_t total_size = blocks.getRawSize() + light.getRawSize() + biome.getRawSize() + sizeof(Chunk::genLevel) + 3 * sizeof(size_t);
 		size_t index = 0;
-		std::memcpy(buffer.data() + index, blocks.data(), sizeof(Chunk::BlockArray));
-		index += sizeof(Chunk::BlockArray);
-		std::memcpy(buffer.data() + index, light.data(), sizeof(Chunk::LightArray));
-		index += sizeof(Chunk::LightArray);
-		std::memcpy(buffer.data() + index, biome.data(), sizeof(Chunk::BiomeArray));
-		index += sizeof(Chunk::BiomeArray);
-		std::memcpy(buffer.data() + index, &genLevel, sizeof(Chunk::genLevel));
+
+		buffer.resize(total_size);
+
+		size_t size = blocks.getRawSize();
+		std::memcpy(buffer.data() + index, &size, sizeof(size_t));
+		index += sizeof(size_t);
+		std::memcpy(buffer.data() + index, blocks.getRaw().data(), size);
+		index += size;
+
+		size = light.getRawSize();
+		std::memcpy(buffer.data() + index, &size, sizeof(size_t));
+		index += sizeof(size_t);
+		std::memcpy(buffer.data() + index, light.getRaw().data(), size);
+		index += size;
+
+		size = biome.getRawSize();
+		std::memcpy(buffer.data() + index, &size, sizeof(size_t));
+		index += sizeof(size_t);
+		std::memcpy(buffer.data() + index, biome.getRaw().data(), size);
+		index += size;
+
+		size = sizeof(Chunk::genLevel);
+		std::memcpy(buffer.data() + index, &genLevel, size);
+		index += size;
+
+		//calculate padding
+		size_t padding = 4096 - total_size % 4096;
+		if (padding != 4096)
+			buffer.insert(buffer.end(), padding, '\0');
 
 		file.write(buffer.data(), buffer.size());
+
+		uint32_t zone_size = buffer.size() / 4096 + (buffer.size() % 4096 != 0);
+		m_offsets[relative_pos] = {offset, zone_size};
+		offset += zone_size;
 		if (!file.good())
 			throw std::runtime_error("Save: Region: WriteChunks: error writing");
 		auto cursor_pos = file.tellp();
@@ -233,26 +264,41 @@ void Save::Region::readChunk(const glm::ivec2 & relative_position)
 	}
 	std::vector<char> buffer(it->second.size * 4096);
 
-	Chunk::BlockArray blocks;
-	Chunk::LightArray light;
-	Chunk::BiomeArray biome;
+	RLE_TEST blocks = Chunk::BlockArray();
+	RLE_TEST light = Chunk::LightArray();
+	RLE_TEST biome  = Chunk::BiomeArray();
 	Chunk::genLevel genLevel;
 
 	file.seekg(it->second.offset * 4096);
 	file.read(buffer.data(), buffer.size());
 
 	size_t index = 0;
-	std::memcpy(blocks.data(), buffer.data(), sizeof(Chunk::BlockArray));
-	index += sizeof(Chunk::BlockArray);
-	std::memcpy(light.data(), buffer.data() + index, sizeof(Chunk::LightArray));
-	index += sizeof(Chunk::LightArray);
-	std::memcpy(biome.data(), buffer.data() + index, sizeof(Chunk::BiomeArray));
-	index += sizeof(Chunk::BiomeArray);
+	size_t size = 0;
+
+
+	std::memcpy(&size, buffer.data(), sizeof(size_t));
+	index += sizeof(size_t);
+	blocks.resize(size);
+	std::memcpy(blocks.getRaw().data(), buffer.data() + index, size);
+	index += size;
+
+	std::memcpy(&size, buffer.data(), sizeof(size_t));
+	index += sizeof(size_t);
+	light.resize(size);
+	std::memcpy(light.getRaw().data(), buffer.data() + index, size);
+	index += size;
+
+	std::memcpy(&size, buffer.data(), sizeof(size_t));
+	index += sizeof(size_t);
+	biome.resize(size);
+	std::memcpy(biome.getRaw().data(), buffer.data() + index, size);
+	index += size;
+
 	std::memcpy(&genLevel, buffer.data() + index, sizeof(Chunk::genLevel));
 
 	glm::ivec2 pos = relative_position + m_position;
 	glm::ivec3 pos3D = {pos.x, 0, pos.y};
-	auto chunk = std::make_shared<Chunk>(pos3D, blocks, light, biome);
+	auto chunk = std::make_shared<Chunk>(pos3D, blocks.getData(), light.getData(), biome.getData());
 	chunk->setGenLevel(genLevel);
 	m_chunks.insert({pos3D, chunk});
 }
