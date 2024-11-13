@@ -42,6 +42,7 @@
 #include <map>
 #include <queue>
 #include <memory>
+#include <list>
 
 struct QueueFamilyIndices
 {
@@ -275,6 +276,8 @@ class VulkanAPI
 
 public:
 
+	typedef uint32_t InstanceId;
+
 	VulkanAPI(GLFWwindow * window);
 	~VulkanAPI();
 
@@ -431,6 +434,50 @@ public:
 	UBO light_mat_ubo;
 	UBO atmosphere_ubo;
 
+	//###########################################################################################################
+	//																											#
+	//											Global push constants											#
+	//																											#
+	//###########################################################################################################
+
+public:
+
+private:
+
+	uint32_t instance_data_size;
+	uint32_t instance_data_max_count;
+
+	std::vector<VkDeviceSize> instance_id_to_instance_data_offset;
+	std::vector<Buffer> instance_id_to_instance_data_offset_buffers;
+	std::vector<Buffer> instance_data_buffers;
+	struct BufferRange
+	{
+		VkDeviceSize offset;
+		VkDeviceSize size;
+	};
+	std::list<BufferRange> free_instance_data_ranges;
+	std::map<VkDeviceSize, VkDeviceSize> used_instance_data_ranges;
+
+	void _createInstanceData();
+	void _destroyInstanceData();
+
+	VkDeviceSize _reserveInstanceDataRange(const VkDeviceSize size);
+	void _releaseInstanceDataRange(const VkDeviceSize address);
+
+	void _writeInstanceData(
+		const VkDeviceSize offset,
+		const void * data,
+		const VkDeviceSize size
+	);
+
+	//###########################################################################################################
+	//																											#
+	//													Descriptors												#
+	//																											#
+	//###########################################################################################################
+
+public:
+
 	Descriptor crosshair_image_descriptor;
 	Descriptor toolbar_image_descriptor;
 	Descriptor toolbar_cursor_image_descriptor;
@@ -480,7 +527,7 @@ public:
 	uint64_t player_left_arm_mesh_id;
 
 
-	TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
+	mutable TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
 
 
 	TracyVkCtx draw_ctx;
@@ -499,8 +546,6 @@ public:
 	Camera camera;
 
 	std::atomic<bool> show_debug_text = false;
-
-	typedef uint64_t ChunkId;
 
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
@@ -522,7 +567,7 @@ public:
 	 *
 	 * @return The id of the chunk in the scene.
 	 */
-	ChunkId addChunkToScene(
+	InstanceId addChunkToScene(
 		const uint64_t block_mesh_id,
 		const uint64_t water_mesh_id,
 		const glm::dmat4 & model
@@ -563,9 +608,11 @@ private:
 	};
 
 
-	std::map<ChunkId, ChunkRenderData> m_chunks_in_scene;
-	ChunkId m_next_chunk_id = 1;
+	std::map<InstanceId, ChunkRenderData> m_chunks_in_scene;
+	std::list<InstanceId> m_free_chunk_ids;
 	mutable TracyLockableN(std::mutex, m_chunks_in_scene_mutex, "Chunk Render Data");
+
+	void _createChunksInstance();
 
 
 
@@ -636,6 +683,7 @@ private:
 	void createMeshes();
 	void createItemMeshes();
 	void destroyMeshes();
+	void _destroyMesh(const uint64_t & mesh_id);
 
 
 	void setupTextRenderer();
