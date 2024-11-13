@@ -23,7 +23,6 @@
 		"cwchar": "cpp",
 		"cwctype": "cpp",
 		"deque": "cpp",
-		"list": "cpp",
 		"map": "cpp",
 		"unordered_map": "cpp",
 		"unordered_set": "cpp",
@@ -46,13 +45,13 @@
 		"type_traits": "cpp",
 		"utility": "cpp",
 		"fstream": "cpp",
-		"future": "cpp",
 		"initializer_list": "cpp",
 		"iomanip": "cpp",
 		"iosfwd": "cpp",
 		"iostream": "cpp",
 		"istream": "cpp",
 		"limits": "cpp",
+		"list": "cpp",
 		"mutex": "cpp",
 		"new": "cpp",
 		"numbers": "cpp",
@@ -66,9 +65,8 @@
 		"streambuf": "cpp",
 		"thread": "cpp",
 		"cinttypes": "cpp",
-		"typeindex": "cpp",
 		"typeinfo": "cpp",
-		"semaphore": "cpp",
-		"variant": "cpp"
+		"variant": "cpp",
+		"semaphore": "cpp"
 	}
 }
