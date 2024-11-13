@@ -11,6 +11,7 @@
 #include "Tracy.hpp"
 #include "Structures.hpp"
 #include "VulkanAPI.hpp"
+#include "Save.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -204,7 +205,7 @@ public:
 		*/
 	};
 
-	World();
+	World(bool save = false);
 	~World();
 
 	World(World & other) = delete;
@@ -235,11 +236,11 @@ public:
 	 * @retval std::shared_ptr<Chunk> if the chunk exists
 	 * @retval nullptr if the chunk does not exist
 	 */
-	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position) const;
+	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position);
 	void 					insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
 
 	WorldGenerator &		getWorldGenerator();
-
+	Save				&	getSave();
 protected:
 
 	std::unordered_map<uint64_t, std::shared_ptr<Player>>	m_players;
@@ -257,6 +258,8 @@ protected:
 
 	WorldGenerator										m_world_generator;
 
+	std::unique_ptr<Save>								m_save;
+
 	/**
 	 * @brief Get a chunk ptr without locking the chunks mutex
 	 *
@@ -265,7 +268,7 @@ protected:
 	 * @retval std::shared_ptr<Chunk> if the chunk exists
 	 * @retval nullptr if the chunk does not exist
 	 */
-	std::shared_ptr<Chunk>	getChunkNoLock(const glm::ivec3 & position) const;
+	std::shared_ptr<Chunk>	getChunkNoLock(const glm::ivec3 & position);
 
 
 	void					insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);

@@ -290,7 +290,7 @@ private:
 
 
 
-	ChunkMap getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize);
+	// ChunkMap getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize);
 
 
 

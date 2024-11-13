@@ -93,6 +93,8 @@ target_sources(${PROJECT_NAME}
 		src/app/world/structures/Structures.cpp
 		src/app/world/Item.cpp
 		src/app/world/CreateMeshData.cpp
+		src/app/world/Save/Save.cpp
+		src/app/world/Save/SaveRegion.cpp
 		src/app/network/client/Client.cpp
 		src/app/network/client/ClientSocket.cpp
 		# src/app/network/client/ClientPacketHandler.cpp
@@ -150,6 +152,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/Save
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/entity
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/structures
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network
@@ -251,6 +254,8 @@ target_sources(server
 		src/app/world/structures/Structures.cpp
 		src/app/world/Item.cpp
 		src/app/world/CreateMeshData.cpp
+		src/app/world/Save/Save.cpp
+		src/app/world/Save/SaveRegion.cpp
 		src/app/network/client/Client.cpp
 		src/app/network/client/ClientSocket.cpp
 		# src/app/network/client/ClientPacketHandler.cpp
@@ -309,6 +314,7 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/entity
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/structures
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/Save
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/client
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/server

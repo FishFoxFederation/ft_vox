@@ -1,7 +1,18 @@
 #include "Save.hpp"
 
+const std::filesystem::path Save::DEFAULT_NAME{ "myWorld" };
+const std::filesystem::path Save::SAVE_DIR{ "saves" };
+
 Save::Save()
+: m_save_dir(SAVE_DIR / DEFAULT_NAME)
 {
+	bool ret = true;
+	if (std::filesystem::exists(m_save_dir))
+		initRegions();
+	else
+		ret = std::filesystem::create_directories(m_save_dir);
+	if (ret == false)
+		throw std::runtime_error("Save: Save: error creating save directory: " + m_save_dir.string());
 }
 
 Save::Save(const std::filesystem::path & path)
@@ -36,12 +47,11 @@ void Save::initRegions()
 void Save::saveChunk(std::shared_ptr<Chunk> chunk)
 {
 	glm::ivec2 region_pos = Region::toRegionPos(chunk->getPosition());
-	glm::ivec2 relative_pos = glm::ivec2(chunk->x(), chunk->z()) - region_pos;
 
 	auto it = m_regions.find(region_pos);
 	if (it == m_regions.end())
 	{
-		Region region(region_pos);
+		Region region(m_save_dir, region_pos);
 		it = m_regions.emplace(region_pos, std::move(region)).first;
 	}
 
@@ -55,4 +65,15 @@ void Save::saveRegion(const glm::ivec2 & position)
 		return;
 
 	it->second.save();
+}
+
+std::shared_ptr<Chunk> Save::getChunk(const glm::ivec3 & position)
+{
+	glm::ivec2 region_pos = Region::toRegionPos(position);
+
+	auto it = m_regions.find(region_pos);
+	if (it == m_regions.end())
+		return nullptr;
+
+	return it->second.getChunk(Region::toRelativePos(position, region_pos));
 }
