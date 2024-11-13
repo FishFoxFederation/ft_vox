@@ -79,6 +79,7 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/TextRenderer.cpp
 		src/app/vulkan/Buffer.cpp
 		src/app/vulkan/item_mesh.cpp
+		src/app/vulkan/instance_data.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -237,6 +238,7 @@ target_sources(server
 		src/app/vulkan/TextRenderer.cpp
 		src/app/vulkan/Buffer.cpp
 		src/app/vulkan/item_mesh.cpp
+		src/app/vulkan/instance_data.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp

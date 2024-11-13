@@ -91,6 +91,11 @@ uint64_t VulkanAPI::storeMesh(
 void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
 {
 	std::lock_guard lock(global_mutex);
+	_destroyMesh(mesh_id);
+}
+
+void VulkanAPI::_destroyMesh(const uint64_t & mesh_id)
+{
 	mesh_ids_to_destroy.push_back(mesh_id);
 	destroyMeshes();
 }

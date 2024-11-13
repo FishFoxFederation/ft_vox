@@ -45,6 +45,8 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 		"assets/textures/skybox/back.jpg"
 	}, 512);
 	createTextureImage();
+	_createInstanceData();
+	_createChunksInstance();
 
 	createDescriptors();
 	createGlobalDescriptor();
@@ -83,6 +85,8 @@ VulkanAPI::~VulkanAPI()
 	ImGui::DestroyContext();
 
 	destroyTextRenderer();
+
+	_destroyInstanceData();
 
 	{
 		std::lock_guard lock(mesh_map_mutex);
@@ -1201,6 +1205,14 @@ void VulkanAPI::createGlobalDescriptor()
 		.descriptorCount = 1,
 		.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
 	};
+
+	// Instance id to data buffer binding
+	// const VkDescriptorSetLayoutBinding instance_id_to_data_binding = {
+	// 	.binding = INSTANCE_ID_TO_DATA_BINDING,
+	// 	.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+	// 	.descriptorCount = 1,
+	// 	.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+	// };
 
 	Descriptor::CreateInfo descriptor_info = {};
 	descriptor_info.bindings = {
@@ -2507,28 +2519,43 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 
 
 
-VulkanAPI::ChunkId VulkanAPI::addChunkToScene(
+VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	const uint64_t block_mesh_id,
 	const uint64_t water_mesh_id,
 	const glm::dmat4 & model
 )
 {
+	std::lock_guard global_lock(global_mutex);
+
 	const ChunkRenderData chunk = {
 		.block_mesh_id = block_mesh_id,
 		.water_mesh_id = water_mesh_id,
 		.model = model
 	};
 
-	std::lock_guard lock(m_chunks_in_scene_mutex);
-	const uint64_t chunk_id = m_next_chunk_id++;
-	m_chunks_in_scene[chunk_id] = chunk;
+	const InstanceId chunk_id = m_free_chunk_ids.front();
+	m_free_chunk_ids.pop_front();
+
+	{
+		// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
+		m_chunks_in_scene[chunk_id] = chunk;
+	}
+
+	const VkDeviceSize offset = _reserveInstanceDataRange(sizeof(GlobalPushConstant));
+	const GlobalPushConstant instance_data = {
+		.matrice = model,
+		.color = { 0.0f, 0.0f, 0.0f, 0.0f },
+		.layer = 0
+	};
+	_writeInstanceData(offset, &instance_data, sizeof(GlobalPushConstant));
 
 	return chunk_id;
 }
 
 void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 {
-	std::lock_guard lock(m_chunks_in_scene_mutex);
+	std::lock_guard global_lock(global_mutex);
+	// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
 
 	if (!m_chunks_in_scene.contains(chunk_id))
 	{
@@ -2536,15 +2563,18 @@ void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 	}
 
 	const ChunkRenderData & chunk = m_chunks_in_scene[chunk_id];
-	destroyMesh(chunk.block_mesh_id);
-	destroyMesh(chunk.water_mesh_id);
+	_destroyMesh(chunk.block_mesh_id);
+	_destroyMesh(chunk.water_mesh_id);
 
 	m_chunks_in_scene.erase(chunk_id);
+	m_free_chunk_ids.push_back(chunk_id);
 }
 
 std::vector<ChunkRenderData> VulkanAPI::getChunksInScene() const
 {
-	std::lock_guard lock(m_chunks_in_scene_mutex);
+	std::lock_guard global_lock(global_mutex);
+	// std::lock_guard lock(m_chunks_in_scene_mutex);
+
 	std::vector<ChunkRenderData> chunks;
 	std::transform(
 		m_chunks_in_scene.begin(),
@@ -2555,7 +2585,16 @@ std::vector<ChunkRenderData> VulkanAPI::getChunksInScene() const
 			return chunk.second;
 		}
 	);
+
 	return chunks;
+}
+
+void VulkanAPI::_createChunksInstance()
+{
+	for (uint32_t i = 0; i < instance_data_max_count; i++)
+	{
+		m_free_chunk_ids.push_back(i);
+	}
 }
 
 void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
