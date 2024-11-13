@@ -90,4 +90,5 @@ int main()
 	{
 		LOG_ERROR("Unknown exception");
 	}
+	LOG_INFO("Server stopped");
 }

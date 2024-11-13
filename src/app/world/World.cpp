@@ -1,8 +1,10 @@
 #include "World.hpp"
 
-World::World()
+World::World(bool save)
 : m_world_generator(*this)
 {
+	if (save)
+		m_save = std::make_unique<Save>();
 }
 
 World::~World()
@@ -35,39 +37,40 @@ glm::vec3 World::getChunkPosition(const glm::vec3 & position)
 	return ::getChunkPos(glm::ivec3(position));
 }
 
-std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position) const
+std::shared_ptr<Chunk> World::getChunk(const glm::ivec3 & position)
 {
 	std::lock_guard lock(m_chunks_mutex);
 	LockMark(m_chunks_mutex);
 	return getChunkNoLock(position);
 }
 
-std::shared_ptr<Chunk> World::getChunkNoLock(const glm::ivec3 & position) const
+std::shared_ptr<Chunk> World::getChunkNoLock(const glm::ivec3 & position)
 {
 	auto it = m_chunks.find(position);
 	if (it != m_chunks.end())
 		return it->second;
+	//if chunk not found try to load it from file
+	if (m_save != nullptr)
+	{
+		std::shared_ptr<Chunk> chunk = m_save->getChunk(position);
+		if (chunk != nullptr)
+			m_chunks.insert(std::make_pair(position, chunk));
+		return chunk;
+	}
 	return nullptr;
 }
 
 void World::insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk)
 {
 	std::lock_guard lock(m_chunks_mutex);
-	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
-	if (!ret.second)
-	{
-		LOG_ERROR("Failed to insert chunk");
-	}
-
-	if (!m_chunks.contains(position))
-	{
-		LOG_CRITICAL("IDK WTF");
-	}
+	insertChunkNoLock(position, chunk);
 }
 
 void World::insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk)
 {
 	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
+	if (m_save != nullptr)
+		m_save->saveChunk(chunk);
 	if (!ret.second)
 	{
 		LOG_ERROR("Failed to insert chunk");

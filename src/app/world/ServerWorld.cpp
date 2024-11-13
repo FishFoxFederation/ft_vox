@@ -1,7 +1,7 @@
 #include "ServerWorld.hpp"
 
 ServerWorld::ServerWorld(Server & server)
-:	World(),
+:	World(true),
 	m_server(server),
 	m_executor(task::Executor::getInstance())
 {
