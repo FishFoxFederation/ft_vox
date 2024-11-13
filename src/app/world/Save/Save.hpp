@@ -34,7 +34,7 @@ private:
 	class Region
 	{
 	public:
-		static glm::ivec2 toRegionPos(const glm::ivec3 & chunkPos3D);
+		static glm::ivec2 toRegionPos(glm::ivec3 chunkPos3D);
 		static glm::ivec2 toRelativePos(const glm::ivec3 & chunkPos3D, const glm::ivec2 & region_pos);
 		Region(
 			const std::filesystem::path & region_dir,

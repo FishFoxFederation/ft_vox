@@ -184,6 +184,8 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 			for(int z = -old_load_distance; z <= old_load_distance; z++)
 			{
 				glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
+				// if (chunk_position.z < 0 || chunk_position.x < 0 || chunk_position.y < 0)
+				// 	continue;
 				old_chunks_in_range.insert(chunk_position);
 			}
 		}
@@ -195,6 +197,8 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 		{
 			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
+				// if (chunk_position.z < 0 || chunk_position.x < 0 || chunk_position.y < 0)
+				// 	continue;
 			new_chunks_in_range.insert(chunk_position);
 		}
 	}
@@ -275,6 +279,10 @@ void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
 void ServerWorld::doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen)
 {
 	ZoneScoped;
+	for(auto & chunk : chunks_to_gen)
+	{
+		LOG_INFO("Generating chunk " << chunk.x << " " << chunk.z);	
+	}
 	m_chunk_gen_data.graph = m_world_generator.getGenerationGraph(chunks_to_gen);
 	LOG_INFO("Starting chunk gen");
 	m_chunk_gen_data.future = m_executor.run(m_chunk_gen_data.graph);

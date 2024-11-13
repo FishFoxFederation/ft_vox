@@ -119,5 +119,5 @@ void ServerWorld::updateTickedValues()
 
 int ServerWorld::getLoadDistance() const
 {
-	return TICKET_LEVEL_INACTIVE - m_player_ticket_level;
+	return std::max(TICKET_LEVEL_INACTIVE - m_player_ticket_level, 0);
 }

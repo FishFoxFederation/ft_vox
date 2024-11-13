@@ -54,7 +54,10 @@ std::shared_ptr<Chunk> World::getChunkNoLock(const glm::ivec3 & position)
 	{
 		std::shared_ptr<Chunk> chunk = m_save->getChunk(position);
 		if (chunk != nullptr)
+		{
+			LOG_INFO("Loaded chunk from file " << position.x << " " << position.z);
 			m_chunks.insert(std::make_pair(position, chunk));
+		}
 		return chunk;
 	}
 	return nullptr;
