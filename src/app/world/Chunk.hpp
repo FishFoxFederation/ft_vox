@@ -50,6 +50,8 @@ public:
 		biomeInfo(biomeInfo && other) = default;
 		biomeInfo & operator=(const biomeInfo & other) = default;
 		biomeInfo & operator=(biomeInfo && other) = default;
+
+		bool operator==(const biomeInfo & other)const = default;
 		bool isLand = false;
 		bool isOcean = false;
 		bool isCoast = false;
