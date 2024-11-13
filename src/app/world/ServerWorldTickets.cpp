@@ -152,7 +152,8 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets, WorldGenerator::Chun
 				if (x == 0 && z == 0)
 					continue;
 				glm::ivec3 new_position = current.position + glm::ivec3(x, 0, z);
-
+				// if (new_position.y < 0 || new_position.x < 0 || new_position.z < 0)
+				// 	continue;
 				queue.push(Ticket{Ticket::Type::OTHER, current.level + 1, new_position});
 			}
 		}
