@@ -294,7 +294,7 @@ void RenderThread::prepareFrame()
 	camera_matrices_fc.proj = camera.projection;
 
 
-	chunk_meshes = vk.chunk_mesh_list.values();
+	chunk_meshes = vk.getChunksInScene();
 	entity_meshes = vk.entity_mesh_list.values();
 	players = vk.getPlayers();
 
@@ -538,7 +538,7 @@ void RenderThread::shadowPass()
 					vk.drawMesh(
 						vk.draw_shadow_pass_command_buffers[vk.current_frame],
 						vk.shadow_pipeline,
-						chunk_mesh.id,
+						chunk_mesh.block_mesh_id,
 						&model_matrice,
 						sizeof(GlobalPushConstant::matrice),
 						VK_SHADER_STAGE_ALL
@@ -627,7 +627,7 @@ void RenderThread::lightingPass()
 					vk.drawMesh(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.chunk_pipeline,
-						chunk_mesh.id,
+						chunk_mesh.block_mesh_id,
 						&model_matrice,
 						sizeof(GlobalPushConstant),
 						VK_SHADER_STAGE_ALL
@@ -912,7 +912,7 @@ void RenderThread::lightingPass()
 
 				for (auto & chunk_mesh: chunk_meshes)
 				{
-					if (chunk_mesh.water_id == 0)
+					if (chunk_mesh.water_mesh_id == 0)
 					{
 						continue;
 					}
@@ -923,7 +923,7 @@ void RenderThread::lightingPass()
 					vk.drawMesh(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.water_pipeline,
-						chunk_mesh.water_id,
+						chunk_mesh.water_mesh_id,
 						&model_matrice,
 						sizeof(GlobalPushConstant),
 						VK_SHADER_STAGE_ALL

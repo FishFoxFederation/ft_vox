@@ -2506,6 +2506,58 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 }
 
 
+
+VulkanAPI::ChunkId VulkanAPI::addChunkToScene(
+	const uint64_t block_mesh_id,
+	const uint64_t water_mesh_id,
+	const glm::dmat4 & model
+)
+{
+	const ChunkRenderData chunk = {
+		.block_mesh_id = block_mesh_id,
+		.water_mesh_id = water_mesh_id,
+		.model = model
+	};
+
+	std::lock_guard lock(m_chunks_in_scene_mutex);
+	const uint64_t chunk_id = m_next_chunk_id++;
+	m_chunks_in_scene[chunk_id] = chunk;
+
+	return chunk_id;
+}
+
+void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
+{
+	std::lock_guard lock(m_chunks_in_scene_mutex);
+
+	if (!m_chunks_in_scene.contains(chunk_id))
+	{
+		return;
+	}
+
+	const ChunkRenderData & chunk = m_chunks_in_scene[chunk_id];
+	destroyMesh(chunk.block_mesh_id);
+	destroyMesh(chunk.water_mesh_id);
+
+	m_chunks_in_scene.erase(chunk_id);
+}
+
+std::vector<ChunkRenderData> VulkanAPI::getChunksInScene() const
+{
+	std::lock_guard lock(m_chunks_in_scene_mutex);
+	std::vector<ChunkRenderData> chunks;
+	std::transform(
+		m_chunks_in_scene.begin(),
+		m_chunks_in_scene.end(),
+		std::back_inserter(chunks),
+		[](const auto & chunk)
+		{
+			return chunk.second;
+		}
+	);
+	return chunks;
+}
+
 void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
 {
 	std::lock_guard lock(m_target_block_mutex);

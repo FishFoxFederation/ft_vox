@@ -87,12 +87,12 @@ private:
 	ViewProjMatrices camera_matrices = {};
 	ViewProjMatrices camera_matrices_fc = {};
 
-	std::vector<ChunkMeshRenderData> chunk_meshes;
+	std::vector<ChunkRenderData> chunk_meshes;
 	std::vector<MeshRenderData> entity_meshes;
 	std::vector<PlayerRenderData> players;
 
-	std::vector<ChunkMeshRenderData> visible_chunks;
-	std::vector<std::vector<ChunkMeshRenderData>> shadow_visible_chunks;
+	std::vector<ChunkRenderData> visible_chunks;
+	std::vector<std::vector<ChunkRenderData>> shadow_visible_chunks;
 
 	ViewProjMatrices sun = {};
 	glm::dvec3 sun_position;

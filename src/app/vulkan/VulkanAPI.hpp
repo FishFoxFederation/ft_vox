@@ -243,10 +243,10 @@ struct GlobalDescriptorWrite
 	VkDescriptorBufferInfo buffer_info = {};
 };
 
-struct ChunkMeshRenderData
+struct ChunkRenderData
 {
-	uint64_t id;
-	uint64_t water_id;
+	uint64_t block_mesh_id;
+	uint64_t water_mesh_id;
 	glm::dmat4 model;
 };
 
@@ -496,8 +496,8 @@ public:
 
 	std::atomic<bool> show_debug_text = false;
 
-	// MeshList chunk_mesh_list;
-	IdList<uint64_t, ChunkMeshRenderData> chunk_mesh_list;
+	typedef uint64_t ChunkId;
+
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
 	std::map<uint64_t, PlayerRenderData> m_players;
@@ -511,6 +511,30 @@ public:
 	// position of the block the camera is looking at
 	std::optional<glm::vec3> m_target_block;
 	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
+
+
+	/**
+	 * @brief Add a chunk to the scene with the given mesh id and model matrix.
+	 *
+	 * @return The id of the chunk in the scene.
+	 */
+	ChunkId addChunkToScene(
+		const uint64_t block_mesh_id,
+		const uint64_t water_mesh_id,
+		const glm::dmat4 & model
+	);
+
+	/**
+	 * @brief Remove a chunk from the scene. Aslo destroy the associated meshes.
+	 *
+	 */
+	void removeChunkFromScene(const uint64_t chunk_id);
+
+	/**
+	 * @brief Get the chunks in the scene.
+	 *
+	 */
+	std::vector<ChunkRenderData> getChunksInScene() const;
 
 	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 	std::optional<glm::vec3> targetBlock() const;
@@ -533,6 +557,12 @@ private:
 		VK_KHR_8BIT_STORAGE_EXTENSION_NAME,
 		VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME
 	};
+
+
+	std::map<ChunkId, ChunkRenderData> m_chunks_in_scene;
+	ChunkId m_next_chunk_id = 1;
+	mutable TracyLockableN(std::mutex, m_chunks_in_scene_mutex, "Chunk Render Data");
+
 
 
 
