@@ -69,6 +69,7 @@ public:
 	// one biome info per 4 blocks
 	typedef std::array<biomeInfo, CHUNK_X_SIZE * CHUNK_Z_SIZE> BiomeArray;
 
+	constexpr static size_t ARRAYS_SIZE = sizeof(BlockArray) + sizeof(LightArray) + sizeof(BiomeArray) + sizeof(HeightArray);
 
 	Chunk(glm::ivec3 position);
 	// Chunk(const glm::ivec3 & position, const BlockArray & blocks);
