@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <cstring>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -20,21 +21,49 @@ public:
 
 
 	void save(const std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> & chunks);
+	void saveChunk(std::shared_ptr<Chunk> chunk);
+	void saveRegion(const glm::ivec2 & position);
 
 	bool					containsChunk(const glm::ivec3 & position) const;
 	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position);
-	// void saveChunk(std::shared_ptr<Chunk> chunk);
 private:
-	std::filesystem::path  m_path;
+	std::filesystem::path m_save_dir;
 
-	struct Region
+	class Region
 	{
-		Region(std::filesystem::path save_dir, glm::ivec2 region_pos);
+	public:
+		static constexpr glm::ivec2 toRegionPos(const glm::ivec3 & chunkPos3D);
+		Region(const glm::ivec2 & position);
+		Region(std::filesystem::path file_path);
 		~Region();
-		std::vector<std::shared_ptr<Chunk>> getChunks();
+		Region(const Region & other) = delete;
+		Region(Region && other);
+		Region & operator=(const Region & other) = delete;
+		Region & operator=(Region && other);
 
-		std::ifstream file;
-		std::unordered_set<glm::ivec3> chunks;
+		glm::ivec2 getPosition() const { return position; }
+
+
+		static size_t			getOffsetIndex(const glm::ivec2 & position);
+		std::shared_ptr<Chunk>	getChunk(const glm::ivec2 & relative_position);
+		bool					containsChunk(const glm::ivec2 & relative_position) const;
+
+		void save();
+		void addChunk(const std::shared_ptr<Chunk> & chunk);
+	private:
+		std::basic_fstream<uint8_t> file;
+		glm::ivec2 position;
+		std::unordered_map<glm::ivec3, const std::shared_ptr<Chunk>> m_chunks;
+		struct ChunkOffset
+		{
+			uint32_t offset;
+			uint32_t size;
+		};
+		std::unordered_map<glm::ivec2, ChunkOffset> m_offsets;
+		void parseOffsets();
+
+		void writeOffsets();
+		void writeChunks();
 	};
 	//first key if the region position
 	// if we have a region entry
@@ -51,4 +80,5 @@ private:
 	\****************/
 	//	open save directory
 	//	open a region file
+	void initRegions();
 };
