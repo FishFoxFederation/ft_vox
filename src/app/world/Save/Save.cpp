@@ -39,8 +39,13 @@ void Save::initRegions()
 			throw std::runtime_error(str);
 		}
 
-		Region region(entry.path());
-		m_regions.emplace(region.getPosition(), std::move(region));
+		try {
+			Region region(entry.path());
+			m_regions.emplace(region.getPosition(), std::move(region));
+		} catch (Region::CorruptedFileException & e) {
+			LOG_ERROR("Save: initRegions: " << e.what());
+			std::filesystem::remove(entry.path());
+		}
 	}
 }
 
@@ -76,6 +81,15 @@ std::shared_ptr<Chunk> Save::getChunk(const glm::ivec3 & position)
 	auto it = m_regions.find(region_pos);
 	if (it == m_regions.end())
 		return nullptr;
+	std::shared_ptr<Chunk> ret;
+
+	try {
+		ret = it->second.getChunk(position);
+	} catch (Region::CorruptedFileException & e) {
+		LOG_ERROR("Save: getChunk: " << e.what());
+		std::filesystem::remove(m_save_dir / ("r." + std::to_string(region_pos.x) + "." + std::to_string(region_pos.y) + ".ftmc"));
+		m_regions.erase(it);
+	}
 
 	return it->second.getChunk(position);
 }
