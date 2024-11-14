@@ -186,7 +186,7 @@ private:
 	constexpr static int TICKET_LEVEL_INACTIVE = 34;
 
 	constexpr static int SPAWN_TICKET_LEVEL = 34;
-	constexpr static int DEFAULT_PLAYER_TICKET_LEVEL = 32;
+	constexpr static int DEFAULT_PLAYER_TICKET_LEVEL = 31;
 	int m_player_ticket_level = DEFAULT_PLAYER_TICKET_LEVEL;
 
 
@@ -198,6 +198,7 @@ private:
 	std::unordered_set<glm::ivec3> m_block_update_chunks;
 	std::unordered_set<glm::ivec3> m_entity_update_chunks;
 	std::unordered_set<glm::ivec3> m_border_chunks;
+	std::unordered_set<glm::ivec2> m_regions_to_unload;
 
 	mutable TracyLockableN(std::mutex, m_tickets_mutex, "TicketManager");
 
@@ -252,6 +253,8 @@ private:
 
 	void 					doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen);
 
+	void					unloadEmptyRegions();
+
 	/**
 	 * @brief generate a chunk or a region of chunks asynchronously
 	 *
@@ -271,7 +274,8 @@ private:
 
 
 	ChunkLoadUnloadData		updateChunkObservations(uint64_t player_id, const int & old_load_distance);
-	void 					removeChunkObservations(std::shared_ptr<Player> player);
+	void 					removeAllPlayerObservations(std::shared_ptr<Player> player);
+	void					removePlayerObservation(uint64_t player_id, std::shared_ptr<Chunk> chunk);
 
 	/*********************************\
 	 * MISCELLANEOUS

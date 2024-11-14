@@ -239,6 +239,14 @@ public:
 	std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & position);
 	void 					insertChunk(const glm::ivec3 & position, std::shared_ptr<Chunk> chunk);
 
+	/**
+	 * @brief Unloads all chunk inside a region,
+	 * if save is enabled, will save the region in a region file
+	 * 
+	 * @param region_pos calculated with Save::Region::toRegionPos
+	 */
+	void 					unloadRegion(const glm::ivec2 region_pos);
+
 	WorldGenerator &		getWorldGenerator();
 	Save				&	getSave();
 protected:

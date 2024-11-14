@@ -22,6 +22,7 @@
 glm::ivec3 getChunkPos(const glm::ivec3 & block_pos);
 glm::ivec3 getBlockChunkPos(const glm::ivec3 & block_pos);
 
+class ChunkData;
 class Chunk
 {
 public:
@@ -76,6 +77,7 @@ public:
 	Chunk(glm::ivec3 position);
 	// Chunk(const glm::ivec3 & position, const BlockArray & blocks);
 	Chunk(const glm::ivec3 & position, const BlockArray & blocks, const LightArray & light, const BiomeArray & biome);
+	Chunk(const ChunkData & data);
 
 	Chunk(const Chunk & other) = delete;
 	Chunk(Chunk && other) = delete;
@@ -194,3 +196,25 @@ namespace std
 		}
 	};
 }
+
+struct ChunkData
+{
+	ChunkData() = default;
+	ChunkData(const Chunk & chunk);
+
+	ChunkData(ChunkData && other) = default;
+	ChunkData & operator=(ChunkData && other) = default;
+	ChunkData(const ChunkData & other) = default;
+	ChunkData & operator=(const ChunkData & other) = default;
+
+	std::vector<char>	serialize() const;
+	void				deserialize(const char * data, const size_t & size);
+
+	Chunk::BlockArray blocks;
+	Chunk::LightArray light;
+	Chunk::BiomeArray biome;
+	Chunk::HeightArray height;
+	Chunk::genLevel gen_level;	
+	glm::ivec3 position;
+	static constexpr size_t DATA_SIZE = sizeof(blocks) + sizeof(light) + sizeof(biome) + sizeof(height) + sizeof(gen_level) + sizeof(position);
+};

@@ -44,10 +44,11 @@ void Save::initRegions()
 	}
 }
 
-void Save::saveChunk(std::shared_ptr<Chunk> chunk)
+void Save::trackChunk(std::shared_ptr<Chunk> chunk)
 {
-	glm::ivec2 region_pos = Region::toRegionPos(chunk->getPosition());
+	glm::ivec2 region_pos = toRegionPos(chunk->getPosition());
 
+	//find corresponding region if not found create it
 	auto it = m_regions.find(region_pos);
 	if (it == m_regions.end())
 	{
@@ -55,6 +56,7 @@ void Save::saveChunk(std::shared_ptr<Chunk> chunk)
 		it = m_regions.emplace(region_pos, std::move(region)).first;
 	}
 
+	//add chunk to the region's tracked chunks
 	it->second.addChunk(chunk);
 }
 
@@ -69,7 +71,7 @@ void Save::saveRegion(const glm::ivec2 & position)
 
 std::shared_ptr<Chunk> Save::getChunk(const glm::ivec3 & position)
 {
-	glm::ivec2 region_pos = Region::toRegionPos(position);
+	glm::ivec2 region_pos = toRegionPos(position);
 
 	auto it = m_regions.find(region_pos);
 	if (it == m_regions.end())

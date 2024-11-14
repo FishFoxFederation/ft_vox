@@ -51,8 +51,12 @@ void ServerWorld::update()
 	// do all chunk updates
 	updateTickets();
 
+	//
 	// if player changed chunk send new chunks and update observations
 	updatePlayerPositions();
+
+
+	unloadEmptyRegions();
 }
 
 void ServerWorld::savePlayerPositions()
