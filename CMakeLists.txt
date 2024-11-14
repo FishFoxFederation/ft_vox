@@ -82,6 +82,7 @@ target_sources(${PROJECT_NAME}
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
+		src/app/world/ChunkData.cpp
 		src/app/world/entity/Player.cpp
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
@@ -239,6 +240,7 @@ target_sources(server
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
+		src/app/world/ChunkData.cpp
 		src/app/world/entity/Player.cpp
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp

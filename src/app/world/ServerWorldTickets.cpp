@@ -115,7 +115,12 @@ void ServerWorld::updateTickets()
 void ServerWorld::clearChunksLoadLevel()
 {
 	for (auto & [position, chunk] : m_chunks)
+	{
 		chunk->setLoadLevel(TICKET_LEVEL_INACTIVE + 1);
+
+		glm::ivec2 region_pos = Save::toRegionPos(position);
+		m_regions_to_unload.insert(region_pos);
+	}
 	m_block_update_chunks.clear();
 	m_entity_update_chunks.clear();
 	m_border_chunks.clear();
@@ -152,8 +157,6 @@ void ServerWorld::floodFill(const TicketMultiMap & tickets, WorldGenerator::Chun
 				if (x == 0 && z == 0)
 					continue;
 				glm::ivec3 new_position = current.position + glm::ivec3(x, 0, z);
-				// if (new_position.y < 0 || new_position.x < 0 || new_position.z < 0)
-				// 	continue;
 				queue.push(Ticket{Ticket::Type::OTHER, current.level + 1, new_position});
 			}
 		}
@@ -188,6 +191,16 @@ bool ServerWorld::applyTicketToChunk(const ServerWorld::Ticket & ticket, WorldGe
 	if (ticket.level <= TICKET_LEVEL_BORDER)
 		m_border_chunks.insert(ticket.position);
 
+	//mark the region as not to be unloaded
+	m_regions_to_unload.erase(Save::toRegionPos(ticket.position));
+
 	chunk->setLoadLevel(ticket.level);
 	return true;
+}
+
+void ServerWorld::unloadEmptyRegions()
+{
+	for (auto & region_pos : m_regions_to_unload)
+		unloadRegion(region_pos);
+	m_regions_to_unload.clear();
 }

@@ -73,7 +73,7 @@ void World::insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk
 {
 	auto ret =	m_chunks.insert(std::make_pair(position, chunk));
 	if (m_save != nullptr)
-		m_save->saveChunk(chunk);
+		m_save->trackChunk(chunk);
 	if (!ret.second)
 	{
 		LOG_ERROR("Failed to insert chunk");
@@ -85,28 +85,23 @@ void World::insertChunkNoLock(const glm::ivec3 & position, std::shared_ptr<Chunk
 	}
 }
 
-// void World::waitForFinishedFutures()
-// {
-// 	ZoneScoped;
-// 	std::lock_guard lock(m_finished_futures_mutex);
-// 	while(!m_finished_futures.empty())
-// 	{
-// 		uint64_t id = m_finished_futures.front();
-// 		m_finished_futures.pop();
-// 		auto & future = m_futures.at(id);
-// 		future.get();
-// 		m_futures.erase(id);
-// 	}
-// }
-
-// void World::waitForFutures()
-// {
-// 	while(!m_futures.empty())
-// 	{
-// 		m_futures.begin()->second.get();
-// 		m_futures.erase(m_futures.begin());
-// 	}
-// }
+void World::unloadRegion(const glm::ivec2 region_pos)
+{
+	LOG_INFO("Unloading region " << region_pos.x << " " << region_pos.y);
+	std::lock_guard lock(m_chunks_mutex);
+	for (int x = 0; x < Save::REGION_SIZE; x++)
+	{
+		for (int z = 0; z < Save::REGION_SIZE; z++)
+		{
+			glm::ivec3 chunk_position = glm::ivec3(region_pos.x + x, 0, region_pos.y + z);
+			auto it = m_chunks.find(chunk_position);
+			if (it != m_chunks.end())
+				m_chunks.erase(it);
+		}
+	}
+	if(m_save != nullptr)
+		m_save->saveRegion(region_pos);
+}
 
 static bool insideSkyLightInfluenceZone(const glm::ivec3 & origin, const glm::ivec3 & position)
 {
@@ -508,3 +503,5 @@ std::unordered_set<glm::ivec3> World::updateBlockLight(const glm::ivec3 & start_
 	}
 	return modified_chunks;
 }
+
+

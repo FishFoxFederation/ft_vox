@@ -33,6 +33,16 @@ Chunk::Chunk(const glm::ivec3 & position,
 {
 }
 
+Chunk::Chunk(const ChunkData & data)
+:	position(data.position),
+	m_blocks(data.blocks),
+	m_light(data.light),
+	m_biomes(data.biome),
+	m_heights(data.height),
+	m_gen_level(data.gen_level)
+{
+}
+
 // Chunk::Chunk(const Chunk & other)
 // :	position(other.position),
 // 	m_mesh_id(other.m_mesh_id),

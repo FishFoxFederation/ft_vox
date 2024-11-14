@@ -17,13 +17,16 @@ public:
 	constexpr static int REGION_SIZE = 32;
 	static const std::filesystem::path SAVE_DIR;
 	static const std::filesystem::path DEFAULT_NAME;
+	static glm::ivec2 toRegionPos(glm::ivec3 chunkPos3D);
 	Save();
 	Save(const std::filesystem::path & path);
 	~Save();
 
 
 	void save(const std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> & chunks);
-	void saveChunk(std::shared_ptr<Chunk> chunk);
+
+	void trackChunk(std::shared_ptr<Chunk> chunk);
+	
 	void saveRegion(const glm::ivec2 & position);
 
 	bool					containsChunk(const glm::ivec3 & position) const;
@@ -34,7 +37,6 @@ private:
 	class Region
 	{
 	public:
-		static glm::ivec2 toRegionPos(glm::ivec3 chunkPos3D);
 		static glm::ivec2 toRelativePos(const glm::ivec3 & chunkPos3D, const glm::ivec2 & region_pos);
 		Region(
 			const std::filesystem::path & region_dir,
@@ -53,12 +55,12 @@ private:
 		std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & chunkPos3D);
 		bool					containsChunk(const glm::ivec2 & relative_position) const;
 
-		void save();
 		void addChunk(const std::shared_ptr<Chunk> & chunk);
+		void save();
 	private:
 		std::fstream file;
 		glm::ivec2 m_position;
-		bool m_has_read = false;
+		bool m_loaded = false;
 		std::unordered_map<glm::ivec3, const std::shared_ptr<Chunk>> m_chunks;
 		struct ChunkOffset
 		{
@@ -66,8 +68,8 @@ private:
 			uint32_t size;
 		};
 		std::unordered_map<glm::ivec2, ChunkOffset> m_offsets;
-		void parseOffsets();
 
+		void parseOffsets();
 		void clearOffsets();
 		void writeOffsets();
 		void writeChunks();

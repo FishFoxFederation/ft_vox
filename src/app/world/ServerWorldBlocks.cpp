@@ -184,8 +184,6 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 			for(int z = -old_load_distance; z <= old_load_distance; z++)
 			{
 				glm::ivec3 chunk_position = old_player_chunk_position + glm::ivec3(x, 0, z);
-				// if (chunk_position.z < 0 || chunk_position.x < 0 || chunk_position.y < 0)
-				// 	continue;
 				old_chunks_in_range.insert(chunk_position);
 			}
 		}
@@ -197,8 +195,6 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 		for(int z = -getLoadDistance(); z <= getLoadDistance(); z++)
 		{
 			glm::ivec3 chunk_position = new_player_chunk_position + glm::ivec3(x, 0, z);
-				// if (chunk_position.z < 0 || chunk_position.x < 0 || chunk_position.y < 0)
-				// 	continue;
 			new_chunks_in_range.insert(chunk_position);
 		}
 	}
@@ -209,9 +205,7 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 		if (!new_chunks_in_range.contains(chunk_position))
 		{
 			std::shared_ptr<Chunk> chunk = getChunk(chunk_position);
-			chunk->status.lock();
-			chunk->observing_player_ids.erase(player_id);
-			chunk->status.unlock();
+			removePlayerObservation(player_id, chunk);
 			data.chunks_to_unload.push_back(chunk_position);
 		}
 	}
@@ -234,7 +228,7 @@ ServerWorld::ChunkLoadUnloadData ServerWorld::updateChunkObservations(uint64_t p
 	return data;
 }
 
-void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
+void ServerWorld::removeAllPlayerObservations(std::shared_ptr<Player> player)
 {
 	uint64_t player_id = player->player_id;
 	glm::ivec3 player_chunk_position = getChunkPosition(player->transform.position);
@@ -247,42 +241,20 @@ void ServerWorld::removeChunkObservations(std::shared_ptr<Player> player)
 			glm::ivec3 chunk_position = player_chunk_position + glm::ivec3(x, 0, z);
 			chunk = getChunk(chunk_position);
 			if (chunk == nullptr) continue;
-			std::lock_guard(chunk->status);
-			chunk->observing_player_ids.erase(player_id);
+			removePlayerObservation(player_id, chunk);
 		}
 	}
 }
 
-// ChunkMap ServerWorld::getChunkZone(glm::ivec3 zoneStart, glm::ivec3 zoneSize)
-// {
-// 	std::unordered_map<glm::ivec3, std::shared_ptr<Chunk>> chunks;
-// 	for(int x = 0; x < zoneSize.x; x++)
-// 	{
-// 		for(int y = 0; y < zoneSize.z; y++)
-// 		{
-// 			glm::ivec3 chunk_position = zoneStart + glm::ivec3(x, 0, y);
-// 			std::shared_ptr<Chunk> chunk = getChunkNoLock(chunk_position);
-// 			if (chunk == nullptr)
-// 			{
-// 				chunk = std::make_shared<Chunk>(chunk_position);
-// 				m_chunks.insert({chunk_position, chunk});
-// 				chunk->status.lock();
-// 			}
-// 			else
-// 				chunk->status.lock();
-// 			chunks.insert({chunk_position, chunk});
-// 		}
-// 	}
-// 	return chunks;
-// }
+void ServerWorld::removePlayerObservation(uint64_t player_id, std::shared_ptr<Chunk> chunk)
+{
+	std::lock_guard lock(chunk->status);
+	chunk->observing_player_ids.erase(player_id);
+}
 
 void ServerWorld::doChunkGens(WorldGenerator::ChunkGenList & chunks_to_gen)
 {
 	ZoneScoped;
-	for(auto & chunk : chunks_to_gen)
-	{
-		LOG_INFO("Generating chunk " << chunk.x << " " << chunk.z);	
-	}
 	m_chunk_gen_data.graph = m_world_generator.getGenerationGraph(chunks_to_gen);
 	LOG_INFO("Starting chunk gen");
 	m_chunk_gen_data.future = m_executor.run(m_chunk_gen_data.graph);

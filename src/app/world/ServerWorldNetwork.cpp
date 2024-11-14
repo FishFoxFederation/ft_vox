@@ -143,7 +143,7 @@ void ServerWorld::handleDisconnectPacket(std::shared_ptr<DisconnectPacket> packe
 		removeTicket(player->player_ticket_id);
 
 		//remove player observations
-		removeChunkObservations(player);
+		removeAllPlayerObservations(player);
 	}
 }
 
