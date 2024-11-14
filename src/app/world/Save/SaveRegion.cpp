@@ -1,6 +1,28 @@
 #include "Save.hpp"
 #include "RLE_TEST.hpp"
 
+static inline size_t paddingSize(size_t size)
+{
+	if (size % 4096 == 0)
+		return 0;
+	return 4096 - size % 4096;
+}
+
+static inline size_t paddedSize(size_t size)
+{
+	return size + paddingSize(size);
+}
+
+static inline size_t blockSize(size_t size)
+{
+	return paddedSize(size) / 4096;
+}
+
+static inline size_t byteSize(size_t size)
+{
+	return size * 4096;
+}
+
 glm::ivec2 Save::toRegionPos( glm::ivec3 chunkPos3D)
 {
 	glm::ivec2 ret;
@@ -41,6 +63,9 @@ Save::Region::Region(
 	file.open(m_path, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 	if (!file.is_open())
 		throw std::runtime_error("Save: Region: error creating file");
+	
+	//write empty offset table
+	file.write(std::string(8192, '\0').c_str(), 8192);
 	file.close();
 };
 
@@ -60,6 +85,8 @@ Save::Region::Region(std::filesystem::path file_path)
 
 	m_position = glm::ivec2(std::stoi(x), std::stoi(z));
 
+	if (std::filesystem::file_size(m_path) < 8192)
+		throw CorruptedFileException("Save: Region: file too small");
 	openFile();
 	parseOffsets();
 	file.close();
@@ -137,7 +164,9 @@ void Save::Region::parseOffsets()
 	// read all 1024 offsets ( 32 * 32 )
 	char buffer[8];
 	file.seekg(0);
+	size_t total_size = 2; // the offset table is 2 * 4kB long
 
+	m_offsets.clear();
 	for (size_t i = 0; i < 1024; i++)
 	{
 		glm::ivec2 pos(i / 32, i % 32);
@@ -153,6 +182,16 @@ void Save::Region::parseOffsets()
 		std::memcpy(&size, buffer + 4, 4);
 		if (offset != 0)
 			m_offsets.insert({pos, { offset, size }});
+		total_size += size;
+	}
+
+	//corruption checks
+	size_t file_size = std::filesystem::file_size(m_path);
+
+	if (blockSize(file_size) != total_size)
+	{
+		LOG_ERROR("Save: Region: ParseOffsets: error parsing offsets: file size: " << file_size << " total size: " << total_size);
+		throw CorruptedFileException("corrupted file");
 	}
 }
 
@@ -167,6 +206,8 @@ void Save::Region::writeChunks()
 	for (auto & [pos, chunk] : m_chunks)
 	{
 		std::lock_guard<Status> lock(chunk->status);
+		if (chunk->getGenLevel() != Chunk::genLevel::LIGHT)
+			continue;
 		glm::ivec2 relative_pos = toRelativePos(pos, m_position);
 
 		ChunkData data(*chunk);
@@ -178,15 +219,15 @@ void Save::Region::writeChunks()
 		write_size += sizeof(size_t);
 
 		//calculate padding
-		size_t padding = 4096 - write_size % 4096;
-		// if (padding != 4096)
-		buffer.insert(buffer.end(), padding, '\0');
+		size_t padding = paddingSize(write_size);
+		if (padding != 0)
+			buffer.insert(buffer.end(), padding, '\0');
 
 		file.write(buffer.data(), buffer.size());
-		if ((write_size + padding) % 4096 != 0)
+		if (paddedSize(write_size) % 4096 != 0)
 			throw std::runtime_error("Save: Region: WriteChunks: error padding");
 		// LOG_INFO("Save: Region: WriteChunks: " << pos.x << " " << pos.z << " " << write_size);
-		uint32_t zone_size = (write_size + padding) / 4096;
+		uint32_t zone_size = blockSize(write_size);
 		m_offsets[relative_pos] = {offset, zone_size};
 		offset += zone_size;
 		if (!file.good())
@@ -213,6 +254,7 @@ void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
 void Save::Region::load()
 {
 	openFile();
+	parseOffsets();
 	for(auto & [pos, offset] : m_offsets)
 		readChunk(pos);
 	m_loaded = true;
@@ -226,18 +268,23 @@ void Save::Region::readChunk(const glm::ivec2 & relative_position)
 		return;
 
 	glm::ivec3 expected_pos = {relative_position.x + m_position.x, 0, relative_position.y + m_position.y};
-	std::vector<char> buffer(it->second.size * 4096);
+	std::vector<char> buffer(byteSize(it->second.size), '\0');
 	ChunkData data;
 	size_t size = 0;
 
 	//read all data from file
-	file.seekg(it->second.offset * 4096);
+	file.seekg(byteSize(it->second.offset));
 	file.read(buffer.data(), buffer.size());
 	if (!file.good())
 		throw std::runtime_error("Save: Region: ReadChunk: error reading");
 
 	//extract size then deserialize data
 	std::memcpy(&size, buffer.data(), sizeof(size_t));
+
+	//corruption checks
+	if (blockSize(size) != it->second.size)
+		throw CorruptedFileException("Save: Region: ReadChunk: error reading chunk: corrupted file, size mismatch");
+
 	// LOG_INFO("Save: Region: ReadChunk: " << expected_pos.x << " " << expected_pos.z << " " << size);
 	data.deserialize(buffer.data() + sizeof(size_t), size);
 

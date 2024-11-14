@@ -76,7 +76,16 @@ private:
 		std::unordered_map<glm::ivec3, const std::shared_ptr<Chunk>> m_chunks;
 		struct ChunkOffset
 		{
+			/**
+			 * @brief offset of chunk data in the file, in 4096 bytes blocks
+			 * 
+			 */
 			uint32_t offset;
+
+			/**
+			 * @brief size of the chunk data in 4096 bytes blocks
+			 * 
+			 */
 			uint32_t size;
 		};
 		std::unordered_map<glm::ivec2, ChunkOffset> m_offsets;

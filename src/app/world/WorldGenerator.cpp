@@ -307,8 +307,6 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 	{
 	case LIGHT:
 	{
-		if (chunk->getGenLevel() <= LIGHT)
-			return;
 		//to do lights we need to garantee that the current chunk has full formed relief chunks around it
 		for(int x = -1; x <= 1; x++)
 		{
@@ -319,6 +317,8 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 			}
 		}
 
+		if (chunk->getGenLevel() <= LIGHT)
+			return;
 		genData.light_graph->emplace([this, chunk_pos]{
 			lightPass(chunk_pos);
 		});
@@ -326,9 +326,6 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 	}
 	case DECORATE:
 	{
-		if (chunk->getGenLevel() <= DECORATE)
-			return;
-		
 		//to do decorations we need to garantee that the current chunk has full formed relief/cave chunks around it		
 		for(int x = -1; x <= 1; x++)
 		{
@@ -339,6 +336,8 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 			}
 		}
 		
+		if (chunk->getGenLevel() <= DECORATE)
+			return;
 		genData.decorate_graph->emplace([this, chunk_pos]{
 			decoratePass(chunk_pos);
 		});
@@ -657,7 +656,7 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 			if (chunk == nullptr)
 				continue;
 			std::lock_guard lock(chunk->status);
-			if (chunk->getGenLevel() != CAVE && chunk->getGenLevel() != DECORATE)
+			if (chunk->getGenLevel() > CAVE)
 				throw std::runtime_error("chunk not generated :" + std::to_string(chunk_pos.x) + " " + std::to_string(chunk_pos.z));
 			chunkGrid.insert({chunk_pos, chunk});
 		}

@@ -23,7 +23,6 @@ Save::Save(const std::filesystem::path & path)
 	initRegions();
 }
 
-
 Save::~Save()
 {
 }
@@ -89,6 +88,10 @@ std::shared_ptr<Chunk> Save::getChunk(const glm::ivec3 & position)
 		LOG_ERROR("Save: getChunk: " << e.what());
 		std::filesystem::remove(m_save_dir / ("r." + std::to_string(region_pos.x) + "." + std::to_string(region_pos.y) + ".ftmc"));
 		m_regions.erase(it);
+
+		Region region(m_save_dir, region_pos);
+		m_regions.insert({region_pos, std::move(region)});
+		return nullptr;
 	}
 
 	return it->second.getChunk(position);
