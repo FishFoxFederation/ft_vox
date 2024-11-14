@@ -37,7 +37,19 @@ private:
 	class Region
 	{
 	public:
-		static glm::ivec2 toRelativePos(const glm::ivec3 & chunkPos3D, const glm::ivec2 & region_pos);
+		class CorruptedFileException : public std::exception
+		{
+		public:
+			CorruptedFileException(const std::string & message)
+				: m_message(message) {}
+			const char * what() const noexcept override { return m_message.c_str(); }
+		private:
+			std::string m_message;
+		};
+
+		static glm::ivec2	toRelativePos(const glm::ivec3 & chunkPos3D, const glm::ivec2 & region_pos);
+		static size_t		getOffsetIndex(const glm::ivec2 & position);
+
 		Region(
 			const std::filesystem::path & region_dir,
 			const glm::ivec2 & position);
@@ -49,15 +61,15 @@ private:
 		Region & operator=(Region && other);
 
 		glm::ivec2 getPosition() const { return m_position; }
+		std::filesystem::path getPath() const { return m_path; }
 
 
-		static size_t			getOffsetIndex(const glm::ivec2 & position);
 		std::shared_ptr<Chunk>	getChunk(const glm::ivec3 & chunkPos3D);
-		bool					containsChunk(const glm::ivec2 & relative_position) const;
+		void					addChunk(const std::shared_ptr<Chunk> & chunk);
+		void					save();
 
-		void addChunk(const std::shared_ptr<Chunk> & chunk);
-		void save();
 	private:
+		std::filesystem::path m_path;
 		std::fstream file;
 		glm::ivec2 m_position;
 		bool m_loaded = false;
@@ -73,8 +85,10 @@ private:
 		void clearOffsets();
 		void writeOffsets();
 		void writeChunks();
-		void readChunks();
+		void load();
 		void readChunk(const glm::ivec2 & relative_position);
+
+		void openFile();
 	};
 	//first key if the region position
 	// if we have a region entry

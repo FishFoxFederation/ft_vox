@@ -30,23 +30,22 @@ Save::Region::Region(
 :m_position(position)
 {
 
-	//create file
+	//create filename
 	std::string filename = "r."
 		+ std::to_string(m_position.x) + "."
 		+ std::to_string(m_position.y) + ".ftmc";
 
-	std::filesystem::path file_path = region_dir / filename;
+	m_path = region_dir / filename;
 
-	file.open(file_path, std::ios::out | std::ios::in | std::ios::binary | std::ios::trunc);
-	if (!file.good())
-	{
-		LOG_ERROR("Save: Region: error opening file: " << file_path.string());
-		throw std::runtime_error("Save: Region: error opening file: " + file_path.string());
-	}
-	LOG_INFO("Save: Region: created file: " << file_path.string());
+	//create file
+	file.open(m_path, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
+	if (!file.is_open())
+		throw std::runtime_error("Save: Region: error creating file");
+	file.close();
 };
 
 Save::Region::Region(std::filesystem::path file_path)
+: m_path(file_path)
 {
 	//parse position
 	std::string name = file_path.filename().string();
@@ -61,20 +60,15 @@ Save::Region::Region(std::filesystem::path file_path)
 
 	m_position = glm::ivec2(std::stoi(x), std::stoi(z));
 
-	file.open(file_path, std::ios::in | std::ios::out | std::ios::binary);
-
-	if (!file.is_open())
-	{
-		std::string str = "Save: Region: error opening file: " + file_path.string();
-		throw std::runtime_error(str);
-	}
-
+	openFile();
 	parseOffsets();
+	file.close();
 }
 
 Save::Region::Region(Region && other)
 {
 	file = std::move(other.file);
+	m_path = std::move(other.m_path);
 	m_position = other.m_position;
 	m_chunks = std::move(other.m_chunks);
 	m_offsets = std::move(other.m_offsets);
@@ -84,6 +78,7 @@ Save::Region::Region(Region && other)
 Save::Region & Save::Region::operator=(Region && other)
 {
 	file = std::move(other.file);
+	m_path = std::move(other.m_path);
 	m_position = other.m_position;
 	m_chunks = std::move(other.m_chunks);
 	m_offsets = std::move(other.m_offsets);
@@ -99,12 +94,14 @@ Save::Region::~Region()
 
 void Save::Region::save()
 {
+	openFile();
 	clearOffsets();
 	writeChunks();
 	writeOffsets();
 	
 	m_chunks.clear();
 	m_loaded = false;
+	file.close();
 }
 
 void Save::Region::clearOffsets()
@@ -129,15 +126,7 @@ void Save::Region::writeOffsets()
 		std::memcpy(table_buffer.data() + index, buffer, 8);
 		// LOG_INFO("Offset: " << pos.x << " " << pos.y << " " << offset << " " << size);
 	}
-	if (!file.is_open())
-		throw std::runtime_error("Save: Region: WriteOffsets: file not open");
 	file.seekp(0);
-	// file.write(table_buffer.data(), 1);
-	// if (!file.good())
-		// throw std::runtime_error("Save: Region: WriteOffsets: error writing 1");
-	// file.seekp(0);
-	// if (!file.good())
-		// throw std::runtime_error("Save: Region: WriteOffsets: error moving cursor");
 	file.write(table_buffer.data(), sizeof(table_buffer));
 	if (!file.good())
 		throw std::runtime_error("Save: Region: WriteOffsets: error writing");
@@ -147,6 +136,8 @@ void Save::Region::parseOffsets()
 {
 	// read all 1024 offsets ( 32 * 32 )
 	char buffer[8];
+	file.seekg(0);
+
 	for (size_t i = 0; i < 1024; i++)
 	{
 		glm::ivec2 pos(i / 32, i % 32);
@@ -162,14 +153,14 @@ void Save::Region::parseOffsets()
 		std::memcpy(&size, buffer + 4, 4);
 		if (offset != 0)
 			m_offsets.insert({pos, { offset, size }});
-	}	
+	}
 }
 
 void Save::Region::writeChunks()
 {
 	std::vector<char> buffer;
 	file.seekp(2 * 4096); // skip the offset table
-	LOG_INFO("Save: Region: WriteChunks: " << m_position.x << " " << m_position.y);
+	// LOG_INFO("Save: Region: WriteChunks: " << m_position.x << " " << m_position.y);
 	uint32_t offset = 2;
 	if (!file.good())
 		throw std::runtime_error("Save: Region: WriteChunks: error moving cursor");
@@ -194,7 +185,7 @@ void Save::Region::writeChunks()
 		file.write(buffer.data(), buffer.size());
 		if ((write_size + padding) % 4096 != 0)
 			throw std::runtime_error("Save: Region: WriteChunks: error padding");
-		LOG_INFO("Save: Region: WriteChunks: " << pos.x << " " << pos.z << " " << write_size);
+		// LOG_INFO("Save: Region: WriteChunks: " << pos.x << " " << pos.z << " " << write_size);
 		uint32_t zone_size = (write_size + padding) / 4096;
 		m_offsets[relative_pos] = {offset, zone_size};
 		offset += zone_size;
@@ -207,7 +198,7 @@ void Save::Region::writeChunks()
 std::shared_ptr <Chunk> Save::Region::getChunk(const glm::ivec3 & chunkPos3D)
 {
 	if (!m_loaded)
-		readChunks();
+		load();
 	auto it = m_chunks.find(chunkPos3D);
 	if (it == m_chunks.end())
 		return nullptr;
@@ -219,11 +210,13 @@ void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
 	m_chunks.insert({chunk->getPosition(), chunk});
 }
 
-void Save::Region::readChunks()
+void Save::Region::load()
 {
+	openFile();
 	for(auto & [pos, offset] : m_offsets)
 		readChunk(pos);
 	m_loaded = true;
+	file.close();
 }
 
 void Save::Region::readChunk(const glm::ivec2 & relative_position)
@@ -245,7 +238,7 @@ void Save::Region::readChunk(const glm::ivec2 & relative_position)
 
 	//extract size then deserialize data
 	std::memcpy(&size, buffer.data(), sizeof(size_t));
-	LOG_INFO("Save: Region: ReadChunk: " << expected_pos.x << " " << expected_pos.z << " " << size);
+	// LOG_INFO("Save: Region: ReadChunk: " << expected_pos.x << " " << expected_pos.z << " " << size);
 	data.deserialize(buffer.data() + sizeof(size_t), size);
 
 	auto chunk = std::make_shared<Chunk>(data);
@@ -257,4 +250,17 @@ void Save::Region::readChunk(const glm::ivec2 & relative_position)
 	}
 	//store chunk to keep track of it
 	m_chunks.insert({chunk->getPosition(), chunk});
+}
+
+void Save::Region::openFile()
+{
+	if (file.is_open())
+		return;
+	file.open(m_path, std::ios::in | std::ios::out | std::ios::binary);
+
+	if (!file.is_open())
+	{
+		std::string str = "Save: Region: error opening file: " + m_path.string();
+		throw std::runtime_error(str);
+	}
 }
