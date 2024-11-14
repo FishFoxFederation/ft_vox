@@ -1,4 +1,4 @@
-#version 450
+#version 460
 
 #include "common.glsl"
 
@@ -6,10 +6,11 @@ layout(set = 0, binding = CAMERA_MATRICES_BINDING) uniform CameraMatrices
 {
 	ViewProjMatrices cm;
 };
-layout(push_constant) uniform PushConstants
+layout(set = 0, binding = INSTANCE_DATA_BINDING, std140) readonly buffer InstanceDataBinding
 {
-	GlobalPushConstant pc;
-};
+	InstanceData instanceData[];
+} instanceDataBinding;
+
 
 layout(location = 0) in u64vec2 vertexData;
 
@@ -25,13 +26,14 @@ void main()
 	vec3 positions; vec3 normal; vec2 texCoords; uint texLayer; uint ao; uint light;
 	extractBlockVertexData(vertexData, positions, normal, texCoords, texLayer, ao, light);
 
+	const InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
 
-	gl_Position = cm.proj * cm.view * pc.matrice * vec4(positions, 1.0);
+	gl_Position = cm.proj * cm.view * instance_data.matrice * vec4(positions, 1.0);
 
 	fragNormal = normal;
 	fragTexCoords = vec3(texCoords, texLayer);
 
-	fragPosWorldSpace = pc.matrice * vec4(positions, 1.0);
+	fragPosWorldSpace = instance_data.matrice * vec4(positions, 1.0);
 
 	fragAO = float(ao);
 	fragSkyLight = float(light & 0x0F);

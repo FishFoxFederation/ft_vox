@@ -286,6 +286,9 @@ public:
 	VulkanAPI & operator=(const VulkanAPI &) = delete;
 	VulkanAPI & operator=(VulkanAPI &&) = delete;
 
+	void startFrame();
+	void endFrame();
+
 	void transitionImageLayout(
 		VkImage image,
 		VkImageLayout oldLayout,
@@ -328,7 +331,8 @@ public:
 		const uint64_t mesh_id,
 		const void * push_constants,
 		const uint32_t push_constants_size,
-		const VkShaderStageFlags push_constants_stage
+		const VkShaderStageFlags push_constants_stage,
+		const uint32_t instance_id = 0
 	);
 
 	void writeTextToDebugImage(
@@ -436,7 +440,7 @@ public:
 
 	//###########################################################################################################
 	//																											#
-	//											Global push constants											#
+	//												Instance data												#
 	//																											#
 	//###########################################################################################################
 
@@ -446,29 +450,12 @@ private:
 
 	uint32_t instance_data_size;
 	uint32_t instance_data_max_count;
-
-	std::vector<VkDeviceSize> instance_id_to_instance_data_offset;
-	std::vector<Buffer> instance_id_to_instance_data_offset_buffers;
 	std::vector<Buffer> instance_data_buffers;
-	struct BufferRange
-	{
-		VkDeviceSize offset;
-		VkDeviceSize size;
-	};
-	std::list<BufferRange> free_instance_data_ranges;
-	std::map<VkDeviceSize, VkDeviceSize> used_instance_data_ranges;
 
 	void _createInstanceData();
 	void _destroyInstanceData();
 
-	VkDeviceSize _reserveInstanceDataRange(const VkDeviceSize size);
-	void _releaseInstanceDataRange(const VkDeviceSize address);
-
-	void _writeInstanceData(
-		const VkDeviceSize offset,
-		const void * data,
-		const VkDeviceSize size
-	);
+	void _updateInstancesData();
 
 	//###########################################################################################################
 	//																											#
@@ -583,7 +570,7 @@ public:
 	 * @brief Get the chunks in the scene.
 	 *
 	 */
-	std::vector<ChunkRenderData> getChunksInScene() const;
+	std::map<InstanceId, ChunkRenderData> getChunksInScene() const;
 
 	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 	std::optional<glm::vec3> targetBlock() const;

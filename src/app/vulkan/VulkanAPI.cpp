@@ -567,9 +567,14 @@ void VulkanAPI::createLogicalDevice()
 	device_features.shaderInt64 = VK_TRUE;
 	device_features.geometryShader = VK_TRUE;
 
+	VkPhysicalDeviceShaderDrawParametersFeatures shader_draw_parameters_features = {};
+	shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
+	shader_draw_parameters_features.shaderDrawParameters = VK_TRUE;
+
 	VkPhysicalDeviceDynamicRenderingFeaturesKHR dynamic_rendering_features = {};
 	dynamic_rendering_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
 	dynamic_rendering_features.dynamicRendering = VK_TRUE;
+	dynamic_rendering_features.pNext = &shader_draw_parameters_features;
 
 	VkPhysicalDeviceVulkan12Features vulkan_12_features = {};
 	vulkan_12_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
@@ -1119,7 +1124,7 @@ void VulkanAPI::createDescriptors()
 void VulkanAPI::createGlobalDescriptor()
 {
 	// Camera binding
-	VkDescriptorSetLayoutBinding camera_ubo_binding = {
+	const VkDescriptorSetLayoutBinding camera_ubo_binding = {
 		.binding = CAMERA_MATRICES_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 		.descriptorCount = 1,
@@ -1127,7 +1132,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Block textures binding
-	VkDescriptorSetLayoutBinding block_texture_binding = {
+	const VkDescriptorSetLayoutBinding block_texture_binding = {
 		.binding = BLOCK_TEXTURES_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1,
@@ -1135,7 +1140,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Skybox binding
-	VkDescriptorSetLayoutBinding skybox_binding = {
+	const VkDescriptorSetLayoutBinding skybox_binding = {
 		.binding = SKYBOX_CUBE_MAP_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1,
@@ -1143,7 +1148,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Shadow map binding
-	VkDescriptorSetLayoutBinding shadow_map_binding = {
+	const VkDescriptorSetLayoutBinding shadow_map_binding = {
 		.binding = SHADOW_MAP_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1,
@@ -1151,7 +1156,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Water subpass color input attachement
-	VkDescriptorSetLayoutBinding color_attachement_binding = {
+	const VkDescriptorSetLayoutBinding color_attachement_binding = {
 		.binding = WATER_RENDERPASS_INPUT_COLOR_ATTACH_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
 		.descriptorCount = 1,
@@ -1159,7 +1164,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Water subpass depth input attachement
-	VkDescriptorSetLayoutBinding depth_attachement_binding = {
+	const VkDescriptorSetLayoutBinding depth_attachement_binding = {
 		.binding = WATER_RENDERPASS_INPUT_DEPTH_ATTACH_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
 		.descriptorCount = 1,
@@ -1167,7 +1172,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Test image binding
-	VkDescriptorSetLayoutBinding test_image_binding = {
+	const VkDescriptorSetLayoutBinding test_image_binding = {
 		.binding = TEST_IMAGE_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1,
@@ -1175,7 +1180,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Player skin image binding
-	VkDescriptorSetLayoutBinding player_skin_binding = {
+	const VkDescriptorSetLayoutBinding player_skin_binding = {
 		.binding = PLAYER_SKIN_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1,
@@ -1183,7 +1188,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Sun matrices binding
-	VkDescriptorSetLayoutBinding light_mat_binding = {
+	const VkDescriptorSetLayoutBinding light_mat_binding = {
 		.binding = SUN_MATRICES_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 		.descriptorCount = 1,
@@ -1191,7 +1196,7 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Atmosphere binding
-	VkDescriptorSetLayoutBinding atmosphere_binding = {
+	const VkDescriptorSetLayoutBinding atmosphere_binding = {
 		.binding = ATMOSPHERE_PARAM_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 		.descriptorCount = 1,
@@ -1199,37 +1204,39 @@ void VulkanAPI::createGlobalDescriptor()
 	};
 
 	// Item icon binding
-	VkDescriptorSetLayoutBinding item_icon_binding = {
+	const VkDescriptorSetLayoutBinding item_icon_binding = {
 		.binding = ITEM_ICON_TEXTURE_BINDING,
 		.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 		.descriptorCount = 1,
 		.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
 	};
 
-	// Instance id to data buffer binding
-	// const VkDescriptorSetLayoutBinding instance_id_to_data_binding = {
-	// 	.binding = INSTANCE_ID_TO_DATA_BINDING,
-	// 	.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-	// 	.descriptorCount = 1,
-	// 	.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-	// };
-
-	Descriptor::CreateInfo descriptor_info = {};
-	descriptor_info.bindings = {
-		camera_ubo_binding,
-		block_texture_binding,
-		skybox_binding,
-		shadow_map_binding,
-		color_attachement_binding,
-		depth_attachement_binding,
-		test_image_binding,
-		player_skin_binding,
-		light_mat_binding,
-		atmosphere_binding,
-		item_icon_binding
+	// Instance data buffer binding
+	const VkDescriptorSetLayoutBinding instance_data_binding = {
+		.binding = INSTANCE_DATA_BINDING,
+		.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+		.descriptorCount = 1,
+		.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 	};
-	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
-	descriptor_info.set_count = static_cast<uint32_t>(max_frames_in_flight);
+
+	const Descriptor::CreateInfo descriptor_info = {
+		.bindings = {
+			camera_ubo_binding,
+			block_texture_binding,
+			skybox_binding,
+			shadow_map_binding,
+			color_attachement_binding,
+			depth_attachement_binding,
+			test_image_binding,
+			player_skin_binding,
+			light_mat_binding,
+			atmosphere_binding,
+			item_icon_binding,
+			instance_data_binding
+		},
+		.descriptor_count = static_cast<uint32_t>(max_frames_in_flight),
+		.set_count = static_cast<uint32_t>(max_frames_in_flight)
+	};
 
 	global_descriptor = Descriptor(device, descriptor_info);
 
@@ -1317,6 +1324,13 @@ void VulkanAPI::updateGlobalDescriptor()
 			.image_info = { item_icon_images.sampler, item_icon_images.view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
 		};
 
+		// Instance data buffer
+		const GlobalDescriptorWrite instance_data_write = {
+			.dst_binding = INSTANCE_DATA_BINDING,
+			.descriptor_type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+			.buffer_info = { instance_data_buffers[i].buffer, 0, VK_WHOLE_SIZE }
+		};
+
 
 		std::vector<VkWriteDescriptorSet> descriptor_writes;
 		const std::vector<GlobalDescriptorWrite> writes = {
@@ -1330,7 +1344,8 @@ void VulkanAPI::updateGlobalDescriptor()
 			player_skin_write,
 			light_mat_write,
 			atmosphere_write,
-			item_icon_write
+			item_icon_write,
+			instance_data_write
 		};
 
 		for (const auto & write : writes)
@@ -2518,6 +2533,43 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 }
 
 
+void VulkanAPI::startFrame()
+{
+	std::lock_guard lock(global_mutex);
+
+	DebugGui::chunk_mesh_count = mesh_map.size();
+
+	{
+		ZoneScopedN("Wait for gpu");
+
+		const std::chrono::nanoseconds start_cpu_wait_time = std::chrono::steady_clock::now().time_since_epoch();
+
+		VK_CHECK(
+			vkWaitForFences(device, 1, &in_flight_fences[current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
+			"Failed to wait for in flight fence"
+		);
+
+		const std::chrono::nanoseconds end_cpu_wait_time = std::chrono::steady_clock::now().time_since_epoch();
+		DebugGui::cpu_wait_time_history.push((end_cpu_wait_time - start_cpu_wait_time).count() / 1e6);
+	}
+	vkResetFences(device, 1, &in_flight_fences[current_frame]);
+
+	{ // reset mesh usage by frame info
+		std::lock_guard lock(mesh_map_mutex);
+		for (auto & [id, mesh] : mesh_map)
+		{
+			mesh.used_by_frame[current_frame] = false;
+		}
+	}
+
+	_updateInstancesData();
+}
+
+void VulkanAPI::endFrame()
+{
+	current_frame = (current_frame + 1) % max_frames_in_flight;
+}
+
 
 VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	const uint64_t block_mesh_id,
@@ -2533,23 +2585,15 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 		.model = model
 	};
 
-	const InstanceId chunk_id = m_free_chunk_ids.front();
+	const InstanceId instance_id = m_free_chunk_ids.front();
 	m_free_chunk_ids.pop_front();
 
 	{
 		// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
-		m_chunks_in_scene[chunk_id] = chunk;
+		m_chunks_in_scene[instance_id] = chunk;
 	}
 
-	const VkDeviceSize offset = _reserveInstanceDataRange(sizeof(GlobalPushConstant));
-	const GlobalPushConstant instance_data = {
-		.matrice = model,
-		.color = { 0.0f, 0.0f, 0.0f, 0.0f },
-		.layer = 0
-	};
-	_writeInstanceData(offset, &instance_data, sizeof(GlobalPushConstant));
-
-	return chunk_id;
+	return instance_id;
 }
 
 void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
@@ -2567,31 +2611,20 @@ void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 	_destroyMesh(chunk.water_mesh_id);
 
 	m_chunks_in_scene.erase(chunk_id);
-	m_free_chunk_ids.push_back(chunk_id);
+	m_free_chunk_ids.push_front(chunk_id);
 }
 
-std::vector<ChunkRenderData> VulkanAPI::getChunksInScene() const
+std::map<VulkanAPI::InstanceId, ChunkRenderData> VulkanAPI::getChunksInScene() const
 {
 	std::lock_guard global_lock(global_mutex);
 	// std::lock_guard lock(m_chunks_in_scene_mutex);
 
-	std::vector<ChunkRenderData> chunks;
-	std::transform(
-		m_chunks_in_scene.begin(),
-		m_chunks_in_scene.end(),
-		std::back_inserter(chunks),
-		[](const auto & chunk)
-		{
-			return chunk.second;
-		}
-	);
-
-	return chunks;
+	return m_chunks_in_scene;
 }
 
 void VulkanAPI::_createChunksInstance()
 {
-	for (uint32_t i = 0; i < instance_data_max_count; i++)
+	for (uint32_t i = 1; i < instance_data_max_count; i++)
 	{
 		m_free_chunk_ids.push_back(i);
 	}
@@ -2633,7 +2666,8 @@ void VulkanAPI::drawMesh(
 	const uint64_t mesh_id,
 	const void * push_constants,
 	const uint32_t push_constants_size,
-	VkShaderStageFlags push_constants_stage
+	VkShaderStageFlags push_constants_stage,
+	const uint32_t instance_id
 )
 {
 	Mesh mesh;
@@ -2687,7 +2721,8 @@ void VulkanAPI::drawMesh(
 	vkCmdDrawIndexed(
 		command_buffer,
 		static_cast<uint32_t>(mesh.index_count),
-		1, 0, 0, 0
+		1, 0, 0,
+		instance_id
 	);
 }
 

@@ -87,12 +87,12 @@ private:
 	ViewProjMatrices camera_matrices = {};
 	ViewProjMatrices camera_matrices_fc = {};
 
-	std::vector<ChunkRenderData> chunk_meshes;
+	std::map<VulkanAPI::InstanceId, ChunkRenderData> chunk_meshes;
 	std::vector<MeshRenderData> entity_meshes;
 	std::vector<PlayerRenderData> players;
 
-	std::vector<ChunkRenderData> visible_chunks;
-	std::vector<std::vector<ChunkRenderData>> shadow_visible_chunks;
+	std::map<VulkanAPI::InstanceId, ChunkRenderData> visible_chunks;
+	std::vector<std::map<VulkanAPI::InstanceId, ChunkRenderData>> shadow_visible_chunks;
 
 	ViewProjMatrices sun = {};
 	glm::dvec3 sun_position;

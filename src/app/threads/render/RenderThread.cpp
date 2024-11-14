@@ -88,34 +88,9 @@ void RenderThread::loop()
 	//																											#
 	//###########################################################################################################
 
-	std::lock_guard lock(vk.global_mutex);
-
-	DebugGui::chunk_mesh_count = vk.mesh_map.size();
-
-	{
-		ZoneScopedN("Wait for gpu");
-
-		const std::chrono::nanoseconds start_cpu_wait_time = std::chrono::steady_clock::now().time_since_epoch();
-
-		VK_CHECK(
-			vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
-			"Failed to wait for in flight fence"
-		);
-
-		const std::chrono::nanoseconds end_cpu_wait_time = std::chrono::steady_clock::now().time_since_epoch();
-		DebugGui::cpu_wait_time_history.push((end_cpu_wait_time - start_cpu_wait_time).count() / 1e6);
-	}
-	vkResetFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame]);
+	vk.startFrame();
 
 	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
-
-	{ // reset mesh usage by frame info
-		std::lock_guard lock(vk.mesh_map_mutex);
-		for (auto & [id, mesh] : vk.mesh_map)
-		{
-			mesh.used_by_frame[vk.current_frame] = false;
-		}
-	}
 
 	memcpy(vk.camera_ubo.mapped_memory[vk.current_frame], &camera_matrices, sizeof(camera_matrices));
 	memcpy(vk.light_mat_ubo.mapped_memory[vk.current_frame], &shadow_map_light, sizeof(shadow_map_light));
@@ -261,8 +236,7 @@ void RenderThread::loop()
 
 	FrameMark;
 
-	// Increment the current frame
-	vk.current_frame = (vk.current_frame + 1) % vk.max_frames_in_flight;
+	vk.endFrame();
 
 	const std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
@@ -433,27 +407,27 @@ void RenderThread::updateVisibleChunks()
 	ZoneScoped;
 
 	visible_chunks.clear();
-	for (auto & chunk_mesh: chunk_meshes)
+	for (auto & [id, chunk_data]: chunk_meshes)
 	{
-		if (!isInsideFrustum_planes(camera.projection * camera.view, chunk_mesh.model, CHUNK_SIZE_VEC3))
+		if (!isInsideFrustum_planes(camera.projection * camera.view, chunk_data.model, CHUNK_SIZE_VEC3))
 		{
 			continue;
 		}
 
-		visible_chunks.push_back(chunk_mesh);
+		visible_chunks[id] = chunk_data;
 	}
 
 	for (size_t i = 0; i < vk.shadow_maps_count; i++)
 	{
 		shadow_visible_chunks[i].clear();
-		for (auto & chunk_mesh: chunk_meshes)
+		for (auto & [id, chunk_data]: chunk_meshes)
 		{
-			if (!isInsideFrustum_planes(light_view_proj_matrices[i], chunk_mesh.model, CHUNK_SIZE_VEC3))
+			if (!isInsideFrustum_planes(light_view_proj_matrices[i], chunk_data.model, CHUNK_SIZE_VEC3))
 			{
 				continue;
 			}
 
-			shadow_visible_chunks[i].push_back(chunk_mesh);
+			shadow_visible_chunks[i][id] = chunk_data;
 		}
 	}
 }
@@ -530,18 +504,16 @@ void RenderThread::shadowPass()
 				ZoneScopedN("Draw chunks");
 				TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Draw chunks");
 
-				for (auto & chunk_mesh : shadow_visible_chunks[shadow_map_index])
+				for (auto & [id, chunk_data] : shadow_visible_chunks[shadow_map_index])
 				{
-					GlobalPushConstant model_matrice = {};
-					model_matrice.matrice = chunk_mesh.model;
-
 					vk.drawMesh(
 						vk.draw_shadow_pass_command_buffers[vk.current_frame],
 						vk.shadow_pipeline,
-						chunk_mesh.block_mesh_id,
-						&model_matrice,
-						sizeof(GlobalPushConstant::matrice),
-						VK_SHADER_STAGE_ALL
+						chunk_data.block_mesh_id,
+						nullptr,
+						0,
+						VK_SHADER_STAGE_ALL,
+						id
 					);
 				}
 			}
@@ -619,18 +591,16 @@ void RenderThread::lightingPass()
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
-				for (auto & chunk_mesh: visible_chunks)
+				for (auto & [id, chunk_data]: visible_chunks)
 				{
-					GlobalPushConstant model_matrice = {};
-					model_matrice.matrice = chunk_mesh.model;
-
 					vk.drawMesh(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.chunk_pipeline,
-						chunk_mesh.block_mesh_id,
-						&model_matrice,
-						sizeof(GlobalPushConstant),
-						VK_SHADER_STAGE_ALL
+						chunk_data.block_mesh_id,
+						nullptr,
+						0,
+						VK_SHADER_STAGE_ALL,
+						id
 					);
 				}
 			}
@@ -910,23 +880,21 @@ void RenderThread::lightingPass()
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
-				for (auto & chunk_mesh: chunk_meshes)
+				for (auto & [id, chunk_data]: chunk_meshes)
 				{
-					if (chunk_mesh.water_mesh_id == 0)
+					if (chunk_data.water_mesh_id == 0)
 					{
 						continue;
 					}
 
-					GlobalPushConstant model_matrice = {};
-					model_matrice.matrice = chunk_mesh.model;
-
 					vk.drawMesh(
 						vk.draw_command_buffers[vk.current_frame],
 						vk.water_pipeline,
-						chunk_mesh.water_mesh_id,
-						&model_matrice,
-						sizeof(GlobalPushConstant),
-						VK_SHADER_STAGE_ALL
+						chunk_data.water_mesh_id,
+						nullptr,
+						0,
+						VK_SHADER_STAGE_ALL,
+						id
 					);
 				}
 			}
