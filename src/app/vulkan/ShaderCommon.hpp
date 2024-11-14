@@ -30,12 +30,20 @@
 #define SUN_MATRICES_BINDING 8
 #define ATMOSPHERE_PARAM_BINDING 9
 #define ITEM_ICON_TEXTURE_BINDING 10
+#define INSTANCE_DATA_BINDING 11
 
 struct GlobalPushConstant
 {
 	mat4 matrice;
 	vec4 color;
 	int layer;
+};
+
+struct InstanceData
+{
+	mat4 matrice;
+	vec4 color;
+	// int layer;
 };
 
 struct ViewProjMatrices

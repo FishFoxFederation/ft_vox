@@ -16,12 +16,6 @@ layout(set = 0, binding = SUN_MATRICES_BINDING) uniform LightSpaceMatrices
 	ShadowMapLight shadow_map_light;
 };
 
-// layout(set = 1, binding = 0, scalar) uniform LightSpaceMatrices
-// {
-// 	ShadowMapLight shadow_map_light;
-// };
-// layout(set = 2, binding = 0) uniform sampler2DArray shadow_map;
-
 layout(location = 0) in vec3 frag_normal;
 layout(location = 1) in vec3 frag_tex_coord;
 layout(location = 2) in vec4 frag_pos_world_space;
