@@ -248,6 +248,11 @@ std::shared_ptr <Chunk> Save::Region::getChunk(const glm::ivec3 & chunkPos3D)
 
 void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
 {
+	if (toRegionPos(chunk->getPosition()) != m_position)
+	{
+		LOG_ERROR("Save: Region: AddChunk: error adding chunk: wrong region");
+		return;
+	}
 	m_chunks.insert({chunk->getPosition(), chunk});
 }
 
