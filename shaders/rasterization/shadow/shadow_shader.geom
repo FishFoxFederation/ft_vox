@@ -1,4 +1,4 @@
-#version 450 core
+#version 460 core
 
 #extension GL_EXT_debug_printf : enable
 
