@@ -10,15 +10,15 @@ Save::Save()
 	if (std::filesystem::exists(m_save_dir))
 		initRegions();
 	else
-		ret = std::filesystem::create_directories(m_save_dir);
-	if (ret == false)
-		throw std::runtime_error("Save: Save: error creating save directory: " + m_save_dir.string());
+	{
+		if(!std::filesystem::create_directories(m_save_dir))
+			throw std::runtime_error("Save: Save: error creating save directory: " + m_save_dir.string());
+	}
 }
 
 Save::Save(const std::filesystem::path & path)
 :m_save_dir(path)
 {
-	bool ret = false;
 
 	initRegions();
 }

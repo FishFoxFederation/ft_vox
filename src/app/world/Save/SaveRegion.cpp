@@ -23,6 +23,26 @@ static inline size_t byteSize(size_t size)
 	return size * 4096;
 }
 
+std::string Save::Region::toFilename(const glm::ivec2 & position)
+{
+	return "r." + std::to_string(position.x) + "." + std::to_string(position.y) + ".ftmc";
+}
+
+glm::ivec2 Save::Region::nameToRegionPos(const std::filesystem::path & path)
+{
+	std::string name = path.filename().string();
+	//name format is r.x.z.ftmc
+	//todo check format
+	name = name.substr(2); //remove r
+	name = name.substr(0, name.find_last_of('.')); //remove extension
+
+	//now we have x.z
+	std::string x = name.substr(0, name.find('.'));
+	std::string z = name.substr(name.find('.') + 1);
+
+	return {std::stoi(x), std::stoi(z)};
+}
+
 glm::ivec2 Save::toRegionPos( glm::ivec3 chunkPos3D)
 {
 	glm::ivec2 ret;
@@ -53,9 +73,7 @@ Save::Region::Region(
 {
 
 	//create filename
-	std::string filename = "r."
-		+ std::to_string(m_position.x) + "."
-		+ std::to_string(m_position.y) + ".ftmc";
+	std::string filename = toFilename(position);
 
 	m_path = region_dir / filename;
 
@@ -73,22 +91,12 @@ Save::Region::Region(std::filesystem::path file_path)
 : m_path(file_path)
 {
 	//parse position
-	std::string name = file_path.filename().string();
-	//name format is r.x.z.ftmc
-	//todo check format
-	name = name.substr(2); //remove r
-	name = name.substr(0, name.find_last_of('.')); //remove extension
-	
-	//now we have x.z
-	std::string x = name.substr(0, name.find('.'));
-	std::string z = name.substr(name.find('.') + 1);
-
-	m_position = glm::ivec2(std::stoi(x), std::stoi(z));
+	m_position = nameToRegionPos(m_path);
 
 	if (std::filesystem::file_size(m_path) < 8192)
 		throw CorruptedFileException("Save: Region: file too small");
 	openFile();
-	parseOffsets();
+	parseOffsetsTable();
 	file.close();
 }
 
@@ -122,22 +130,22 @@ Save::Region::~Region()
 void Save::Region::save()
 {
 	openFile();
-	clearOffsets();
+	clearOffsetsTable();
 	writeChunks();
-	writeOffsets();
+	writeOffsetsTable();
 	
 	m_chunks.clear();
 	m_loaded = false;
 	file.close();
 }
 
-void Save::Region::clearOffsets()
+void Save::Region::clearOffsetsTable()
 {
 	file.seekp(0);
 	file.write(std::string(8192, '\0').c_str(), 8192);
 }
 
-void Save::Region::writeOffsets()
+void Save::Region::writeOffsetsTable()
 {
 	std::array<char, 8192> table_buffer = {};
 	char buffer[8];
@@ -159,7 +167,7 @@ void Save::Region::writeOffsets()
 		throw std::runtime_error("Save: Region: WriteOffsets: error writing");
 }
 
-void Save::Region::parseOffsets()
+void Save::Region::parseOffsetsTable()
 {
 	// read all 1024 offsets ( 32 * 32 )
 	char buffer[8];
@@ -259,7 +267,7 @@ void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
 void Save::Region::load()
 {
 	openFile();
-	parseOffsets();
+	parseOffsetsTable();
 	for(auto & [pos, offset] : m_offsets)
 		readChunk(pos);
 	m_loaded = true;

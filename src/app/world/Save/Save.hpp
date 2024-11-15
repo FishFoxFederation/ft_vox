@@ -93,6 +93,22 @@ private:
 		 */
 		static size_t		getOffsetIndex(const glm::ivec2 & position);
 
+		/**
+		 * @brief converts a region pos to a filname with the format r.x.z.ftmc
+		 * 
+		 * @param position 
+		 * @return std::string 
+		 */
+		static std::string  toFilename(const glm::ivec2 & position);
+
+		/**
+		 * @brief extracts the region position from a filename
+		 * 
+		 * @param path 
+		 * @return glm::ivec2 
+		 */
+		static glm::ivec2   nameToRegionPos(const std::filesystem::path & path);
+
 		Region(
 			const std::filesystem::path & region_dir,
 			const glm::ivec2 & position);
@@ -163,9 +179,9 @@ private:
 		};
 		std::unordered_map<glm::ivec2, ChunkOffset> m_offsets;
 
-		void parseOffsets();
-		void clearOffsets();
-		void writeOffsets();
+		void parseOffsetsTable();
+		void clearOffsetsTable();
+		void writeOffsetsTable();
 		void writeChunks();
 		void load();
 		void readChunk(const glm::ivec2 & relative_position);
