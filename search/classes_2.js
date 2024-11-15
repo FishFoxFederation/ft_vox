@@ -2,7 +2,7 @@ var searchData=
 [
   ['camera_0',['Camera',['../classCamera.html',1,'']]],
   ['chunk_1',['Chunk',['../classChunk.html',1,'']]],
-  ['chunkdata_2',['ChunkData',['../structChunkPacket_1_1ChunkData.html',1,'ChunkPacket']]],
+  ['chunkdata_2',['ChunkData',['../structChunkData.html',1,'ChunkData'],['../structChunkPacket_1_1ChunkData.html',1,'ChunkPacket::ChunkData']]],
   ['chunkloadunloaddata_3',['ChunkLoadUnloadData',['../structServerWorld_1_1ChunkLoadUnloadData.html',1,'ServerWorld']]],
   ['chunkmeshrenderdata_4',['ChunkMeshRenderData',['../structChunkMeshRenderData.html',1,'']]],
   ['chunkpacket_5',['ChunkPacket',['../classChunkPacket.html',1,'']]],
@@ -15,7 +15,8 @@ var searchData=
   ['connection_12',['Connection',['../classConnection.html',1,'']]],
   ['connectionpacket_13',['ConnectionPacket',['../classConnectionPacket.html',1,'']]],
   ['connectionsocket_14',['ConnectionSocket',['../classConnectionSocket.html',1,'']]],
-  ['createinfo_15',['CreateInfo',['../structBuffer_1_1CreateInfo.html',1,'Buffer::CreateInfo'],['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
-  ['createmeshdata_16',['CreateMeshData',['../classCreateMeshData.html',1,'']]],
-  ['cycleerror_17',['CycleError',['../classtask_1_1CycleError.html',1,'task']]]
+  ['corruptedfileexception_15',['CorruptedFileException',['../classSave_1_1Region_1_1CorruptedFileException.html',1,'Save::Region']]],
+  ['createinfo_16',['CreateInfo',['../structBuffer_1_1CreateInfo.html',1,'Buffer::CreateInfo'],['../structDescriptor_1_1CreateInfo.html',1,'Descriptor::CreateInfo'],['../structImage_1_1CreateInfo.html',1,'Image::CreateInfo'],['../structPipeline_1_1CreateInfo.html',1,'Pipeline::CreateInfo'],['../structSwapchain_1_1CreateInfo.html',1,'Swapchain::CreateInfo']]],
+  ['createmeshdata_17',['CreateMeshData',['../classCreateMeshData.html',1,'']]],
+  ['cycleerror_18',['CycleError',['../classtask_1_1CycleError.html',1,'task']]]
 ];

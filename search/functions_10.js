@@ -12,10 +12,12 @@ var searchData=
   ['removesucessor_9',['removeSucessor',['../classtask_1_1TaskNode.html#aafa238bb649b5a3a88b13125e599cd40',1,'task::TaskNode']]],
   ['removeticket_10',['removeTicket',['../classServerWorld.html#a011796df74c5e6f16bfa7e4d78b93e95',1,'ServerWorld']]],
   ['rendertext_11',['renderText',['../classTextRenderer.html#aa5a3c6768f76827cdb8cc151cb560dda',1,'TextRenderer']]],
-  ['renderthread_12',['RenderThread',['../classRenderThread.html#ab10cf7a69745e49aa13fe2dd526d28a9',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, std::chrono::nanoseconds start_time)'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete'],['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread(RenderThread &amp;&amp;renderer)=delete']]],
+  ['renderthread_12',['RenderThread',['../classRenderThread.html#ab10cf7a69745e49aa13fe2dd526d28a9',1,'RenderThread::RenderThread(const Settings &amp;settings, VulkanAPI &amp;vulkanAPI, std::chrono::nanoseconds start_time)'],['../classRenderThread.html#a53eb51bf51003e9aae33a74102d1e6e7',1,'RenderThread::RenderThread(RenderThread &amp;&amp;renderer)=delete'],['../classRenderThread.html#a9b8dfb3f2d80db4e6c4d9009367e8cb1',1,'RenderThread::RenderThread(RenderThread &amp;renderer)=delete']]],
   ['reset_13',['reset',['../classtask_1_1Task.html#aaba6a2dd4e25c26a6533404b052cfc62',1,'task::Task']]],
   ['resettask_14',['resetTask',['../classtask_1_1Task.html#a5e75edeba4eb26a7ccf0d6333aa172fa',1,'task::Task']]],
-  ['rotate_15',['rotate',['../classMat4.html#a3ef488276ad5977343c5a6d7a2202c71',1,'Mat4']]],
-  ['run_16',['run',['../classApplication.html#a68965449404743bf1add056784d6cf81',1,'Application::run()'],['../classtask_1_1Executor.html#addad5449f081fa12a941169e15495c81',1,'task::Executor::run(std::shared_ptr&lt; TaskGraph &gt; graph)'],['../classtask_1_1Executor.html#a9e4b9e68a97cd1d77e0270827fa3e977',1,'task::Executor::run(F &amp;&amp;f)']]],
-  ['runonce_17',['runOnce',['../classClient.html#a79a6bb87e136b1a6647af625648afefa',1,'Client::runOnce()'],['../classServer.html#ada8fbd5cf5ba8aca9acc32138558ccaf',1,'Server::runOnce()']]]
+  ['resize_15',['resize',['../classRLE__TEST.html#a08561a5c3141f732953e587279b993d2',1,'RLE_TEST']]],
+  ['rle_5ftest_16',['RLE_TEST',['../classRLE__TEST.html#a6a30a49344e688fad2061fcf3a53280e',1,'RLE_TEST']]],
+  ['rotate_17',['rotate',['../classMat4.html#a3ef488276ad5977343c5a6d7a2202c71',1,'Mat4']]],
+  ['run_18',['run',['../classApplication.html#a68965449404743bf1add056784d6cf81',1,'Application::run()'],['../classtask_1_1Executor.html#addad5449f081fa12a941169e15495c81',1,'task::Executor::run(std::shared_ptr&lt; TaskGraph &gt; graph)'],['../classtask_1_1Executor.html#a9e4b9e68a97cd1d77e0270827fa3e977',1,'task::Executor::run(F &amp;&amp;f)']]],
+  ['runonce_19',['runOnce',['../classClient.html#a79a6bb87e136b1a6647af625648afefa',1,'Client::runOnce()'],['../classServer.html#ada8fbd5cf5ba8aca9acc32138558ccaf',1,'Server::runOnce()']]]
 ];

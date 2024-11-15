@@ -18,6 +18,7 @@ var hierarchy =
     [ "Buffer", "classBuffer.html", null ],
     [ "Camera", "classCamera.html", null ],
     [ "Chunk", "classChunk.html", null ],
+    [ "ChunkData", "structChunkData.html", null ],
     [ "ChunkPacket::ChunkData", "structChunkPacket_1_1ChunkData.html", null ],
     [ "ServerWorld::ChunkLoadUnloadData", "structServerWorld_1_1ChunkLoadUnloadData.html", null ],
     [ "ChunkMeshRenderData", "structChunkMeshRenderData.html", null ],
@@ -41,6 +42,7 @@ var hierarchy =
     [ "EntityVertex", "structEntityVertex.html", null ],
     [ "std::exception", null, [
       [ "Client::ServerDisconnected", "classClient_1_1ServerDisconnected.html", null ],
+      [ "Save::Region::CorruptedFileException", "classSave_1_1Region_1_1CorruptedFileException.html", null ],
       [ "Server::ClientDisconnected", "classServer_1_1ClientDisconnected.html", null ],
       [ "task::BaseError", "classtask_1_1BaseError.html", [
         [ "task::CycleError", "classtask_1_1CycleError.html", null ],
@@ -132,6 +134,8 @@ var hierarchy =
     [ "Camera::RenderInfo", "structCamera_1_1RenderInfo.html", null ],
     [ "RenderThread", "classRenderThread.html", null ],
     [ "Sound::RIFFChunk", "structSound_1_1RIFFChunk.html", null ],
+    [ "RLE_TEST< T >", "classRLE__TEST.html", null ],
+    [ "Save", "classSave.html", null ],
     [ "Client::sendInfo", "structClient_1_1sendInfo.html", null ],
     [ "Server::sendInfo", "structServer_1_1sendInfo.html", null ],
     [ "Server", "classServer.html", null ],

@@ -65,14 +65,15 @@ var NAVTREE =
       [ "Present", "render_loop.html#present", null ],
       [ "Conclusion", "render_loop.html#conclusion", null ]
     ] ],
+    [ "About the save system", "md_docs_pages_save_system.html", null ],
     [ "Style guide", "styleguide.html", null ],
     [ "Task Dependency ( WIP )", "taskDep.html", null ],
     [ "Threads Architecture", "threads.html", [
-      [ "Main thread", "threads.html#autotoc_md20", null ],
-      [ "Update Thread", "threads.html#autotoc_md21", null ],
-      [ "Render Thread", "threads.html#autotoc_md22", null ],
-      [ "Block Update Thread", "threads.html#autotoc_md23", null ],
-      [ "Thread pool", "threads.html#autotoc_md24", null ]
+      [ "Main thread", "threads.html#autotoc_md21", null ],
+      [ "Update Thread", "threads.html#autotoc_md22", null ],
+      [ "Render Thread", "threads.html#autotoc_md23", null ],
+      [ "Block Update Thread", "threads.html#autotoc_md24", null ],
+      [ "Thread pool", "threads.html#autotoc_md25", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -113,15 +114,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AbstractEvent_8cpp.html",
-"SoundList_8hpp.html#afd18042242c0b8b9b238efe0829ea52f",
-"classChunkRequestPacket.html#a9f2bc12e14b242adb4b3dfa8a04b5b7f",
-"classEvent_1_1PlayerMoving.html#a25cd5c0ffaa4a0d7fe1979f1c4b4b3c3",
-"classPingPacket.html#a67be10cd6c39bb90e40752c3e1b6e39f",
-"classSocket.html",
-"classVulkanAPI.html#abfdeff59a16b48925efc3ddcfe4530a0",
-"classtask_1_1TaskNode.html#ac2243a0b0e1b7317deebda3953223325",
-"structBuffer_1_1CreateInfo.html#aad2b342293cedfb68e3f4e92d0de2614",
-"structSwapchain_1_1CreateInfo.html#a47ee25910eae6d24edb56da521303b69"
+"SoundEngine_8hpp_source.html",
+"classChunkPacket.html#aeb21b114b692ed1aa3fb6ee13c309d64",
+"classEvent_1_1Manager.html#a4fcaf775ed87ffd95d21b29121b33cd9",
+"classPingPacket.html#a14af60f82feb375962a50222dcdbc868",
+"classServerWorld.html#ace35309adfbf4f853462b841e5696349",
+"classVulkanAPI.html#a760a68bd1116cac8ed2756832cea2020",
+"classtask_1_1TaskNode.html#a2ab75aa1bb8986d10eed0264447e3e96",
+"pages.html",
+"structShadowMapLight.html#a03f271b17639d8b15b28050787f4dbc0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

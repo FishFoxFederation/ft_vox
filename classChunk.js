@@ -23,6 +23,7 @@ var classChunk =
     ] ],
     [ "Chunk", "classChunk.html#a76523171d0b51437c6d1d24c5001fa6e", null ],
     [ "Chunk", "classChunk.html#a401462dcbb75bf138880747dd406eb59", null ],
+    [ "Chunk", "classChunk.html#aa7593f3721998cd6ce3c437b2f4941b8", null ],
     [ "Chunk", "classChunk.html#a1bdeedf9cffec565e91294437efdf7b1", null ],
     [ "Chunk", "classChunk.html#aa2ae208cfa7b7dd4924b62f2c5088c02", null ],
     [ "~Chunk", "classChunk.html#ad21b515f41c9a1d21740b9e7e3f8eede", null ],

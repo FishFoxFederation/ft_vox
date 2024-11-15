@@ -5,6 +5,7 @@ var structChunk_1_1biomeInfo =
     [ "biomeInfo", "structChunk_1_1biomeInfo.html#abae58c6a7163a3f63bb8493ddea46ee0", null ],
     [ "operator=", "structChunk_1_1biomeInfo.html#ac790c2dae94705c895e98083ba3e2d8d", null ],
     [ "operator=", "structChunk_1_1biomeInfo.html#a86bbccfd7827dc43eba6530cdea7dc44", null ],
+    [ "operator==", "structChunk_1_1biomeInfo.html#a18aca19f4843624cc252ef8113898586", null ],
     [ "biome", "structChunk_1_1biomeInfo.html#a68746afc958c20ca1bcde48cfd3a5271", null ],
     [ "continentalness", "structChunk_1_1biomeInfo.html#a5303b9be913c05fd2879580e2b8ab9d2", null ],
     [ "erosion", "structChunk_1_1biomeInfo.html#aae8c12b8a170cbb9971ed4bfc8145a5f", null ],
