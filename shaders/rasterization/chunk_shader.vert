@@ -23,10 +23,14 @@ layout(location = 5) out float fragBlockLight;
 
 void main()
 {
-	vec3 positions; vec3 normal; vec2 texCoords; uint texLayer; uint ao; uint light;
-	extractBlockVertexData(vertexData, positions, normal, texCoords, texLayer, ao, light);
+	InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
 
-	const InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
+	ChunkBlockVertex vertex_data = instance_data.block_vextex_buffer.vertices[gl_VertexIndex];
+
+	vec3 positions; vec3 normal; vec2 texCoords; uint texLayer; uint ao; uint light;
+	// extractBlockVertexData(vertexData, positions, normal, texCoords, texLayer, ao, light);
+	extractBlockVertexData2(vertex_data, positions, normal, texCoords, texLayer, ao, light);
+
 
 	gl_Position = cm.proj * cm.view * instance_data.matrice * vec4(positions, 1.0);
 

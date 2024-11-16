@@ -16,7 +16,7 @@ void main()
 	vec3 positions; vec3 normal; vec2 tex_coords; uint tex_layer; uint ao; uint light;
 	extractBlockVertexData(vertexData, positions, normal, tex_coords, tex_layer, ao, light);
 
-	const InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
+	InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
 
 	gl_Position = instance_data.matrice * vec4(positions, 1.0);
 	frag_tex_coords = vec3(tex_coords, tex_layer);

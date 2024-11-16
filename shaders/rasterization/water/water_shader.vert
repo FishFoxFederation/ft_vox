@@ -22,7 +22,7 @@ void main()
 	vec3 positions; vec3 normal; vec2 texCoords; uint texLayer; uint ao; uint light;
 	extractBlockVertexData(vertexData, positions, normal, texCoords, texLayer, ao, light);
 
-	const InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
+	InstanceData instance_data = instanceDataBinding.instanceData[gl_BaseInstance];
 
 	gl_Position = cm.proj * cm.view * instance_data.matrice * vec4(positions, 1.0);
 

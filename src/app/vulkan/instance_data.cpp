@@ -33,8 +33,12 @@ void VulkanAPI::_updateInstancesData()
 
 		for (auto & [id, chunk_data]: m_chunks_in_scene)
 		{
+			const VkDeviceAddress block_vertex_buffer = chunk_data.block_mesh_id != 0 ? mesh_map[chunk_data.block_mesh_id].buffer_address : 0;
+			const VkDeviceAddress water_vertex_buffer = chunk_data.water_mesh_id != 0 ? mesh_map[chunk_data.water_mesh_id].buffer_address : 0;
 			const InstanceData instance_data = {
-				.matrice = chunk_data.model
+				.matrice = chunk_data.model,
+				.block_vertex_buffer = block_vertex_buffer,
+				.water_vertex_buffer = water_vertex_buffer
 			};
 			data[id] = instance_data;
 		}
