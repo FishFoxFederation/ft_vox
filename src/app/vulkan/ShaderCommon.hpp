@@ -39,13 +39,6 @@ struct GlobalPushConstant
 	int layer;
 };
 
-struct InstanceData
-{
-	mat4 matrice;
-	vec4 color;
-	// int layer;
-};
-
 struct ViewProjMatrices
 {
 	mat4 view;

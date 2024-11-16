@@ -271,6 +271,13 @@ struct PlayerRenderData
 	bool visible = true;
 };
 
+struct InstanceData
+{
+	alignas(16) mat4 matrice;
+	VkDeviceAddress block_vertex_buffer;
+	VkDeviceAddress water_vertex_buffer;
+};
+
 class VulkanAPI
 {
 
