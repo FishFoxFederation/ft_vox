@@ -18,6 +18,7 @@
 #include "Camera.hpp"
 #include "Model.hpp"
 #include "Item.hpp"
+#include "MemoryRange.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -560,7 +561,7 @@ public:
 	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
 
 
-	struct ChunkMeshInfo
+	struct ChunkMeshCreateInfo
 	{
 		std::vector<BlockVertex> & block_vertex;
 		std::vector<uint32_t> & block_index;
@@ -575,7 +576,7 @@ public:
 	 * @return The id of the chunk in the scene.
 	 */
 	InstanceId addChunkToScene(
-		const ChunkMeshInfo & mesh_info,
+		const ChunkMeshCreateInfo & mesh_info,
 		const glm::dmat4 & model
 	);
 
@@ -613,6 +614,23 @@ private:
 		VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME
 	};
 
+
+	struct ChunkMeshesInfo
+	{
+		Buffer vertex_buffer;
+
+		VkDeviceSize index_offset;
+		uint32_t index_count;
+
+		union
+		{
+			uint64_t is_used = 0;
+			uint8_t used_by_frame[8];
+		};
+	};
+
+	Buffer m_chunks_indices_buffer;
+	MemoryRange m_chunks_indices_buffer_memory_range;
 
 	std::map<InstanceId, ChunkRenderData> m_chunks_in_scene;
 	std::list<InstanceId> m_free_chunk_ids;

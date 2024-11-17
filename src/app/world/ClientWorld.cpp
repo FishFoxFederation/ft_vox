@@ -201,9 +201,9 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 
 		mesh_data.create(); //CPU intensive task to create the mesh
-		
+
 		//storing mesh in the GPU
-		VulkanAPI::ChunkMeshInfo chunk_mesh_info = {
+		VulkanAPI::ChunkMeshCreateInfo chunk_mesh_info = {
 			.block_vertex = mesh_data.vertices,
 			.block_index = mesh_data.indices,
 			.water_vertex = mesh_data.water_vertices,
