@@ -278,6 +278,9 @@ struct InstanceData
 	VkDeviceAddress water_vertex_buffer;
 };
 
+// forward declaration
+struct BlockVertex;
+
 class VulkanAPI
 {
 
@@ -557,14 +560,22 @@ public:
 	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
 
 
+	struct ChunkMeshInfo
+	{
+		std::vector<BlockVertex> & block_vertex;
+		std::vector<uint32_t> & block_index;
+
+		std::vector<BlockVertex> & water_vertex;
+		std::vector<uint32_t> & water_index;
+	};
+
 	/**
-	 * @brief Add a chunk to the scene with the given mesh id and model matrix.
+	 * @brief Add a chunk to the scene with the given mesh info and model matrix.
 	 *
 	 * @return The id of the chunk in the scene.
 	 */
 	InstanceId addChunkToScene(
-		const uint64_t block_mesh_id,
-		const uint64_t water_mesh_id,
+		const ChunkMeshInfo & mesh_info,
 		const glm::dmat4 & model
 	);
 
@@ -605,6 +616,7 @@ private:
 
 	std::map<InstanceId, ChunkRenderData> m_chunks_in_scene;
 	std::list<InstanceId> m_free_chunk_ids;
+	const InstanceId m_null_instance_id = 0;
 	mutable TracyLockableN(std::mutex, m_chunks_in_scene_mutex, "Chunk Render Data");
 
 	void _createChunksInstance();
