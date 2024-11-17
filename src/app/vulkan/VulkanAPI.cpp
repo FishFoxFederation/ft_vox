@@ -1682,8 +1682,6 @@ void VulkanAPI::createPipelines()
 		pipeline_info.extent = output_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/rasterization/water/water_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/rasterization/water/water_shader.frag.spv";
-		pipeline_info.binding_description = BlockVertex::getBindingDescription();
-		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { output_attachement.format };
 		// pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.enable_alpha_blending = true;
@@ -1770,8 +1768,6 @@ void VulkanAPI::createPipelines()
 		pipeline_info.vert_path = "shaders/rasterization/shadow/shadow_shader.vert.spv";
 		pipeline_info.geom_path = "shaders/rasterization/shadow/shadow_shader.geom.spv";
 		pipeline_info.frag_path = "shaders/rasterization/shadow/shadow_shader.frag.spv";
-		pipeline_info.binding_description = BlockVertex::getBindingDescription();
-		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.cull_mode = VK_CULL_MODE_NONE;
 		pipeline_info.depth_format = shadow_map_depth_attachement.format;
 		pipeline_info.depth_bias_enable = VK_TRUE;
@@ -2658,6 +2654,28 @@ std::vector<PlayerRenderData> VulkanAPI::getPlayers() const
 
 
 
+std::pair<bool, Mesh> VulkanAPI::getMesh(const uint64_t id)
+{
+	std::lock_guard lock(mesh_map_mutex);
+	if (!mesh_map.contains(id))
+	{
+		LOG_WARNING("Mesh " << id << " not found in the mesh map.");
+		return std::make_pair(false, Mesh());
+	}
+
+	Mesh mesh = mesh_map.at(id);
+
+	if (mesh.buffer == VK_NULL_HANDLE)
+	{
+		LOG_WARNING("Mesh " << id << " has a null buffer.");
+		return std::make_pair(false, Mesh());
+	}
+
+	mesh_map.at(id).used_by_frame[current_frame] = true;
+
+	return std::make_pair(true, mesh);
+}
+
 void VulkanAPI::drawMesh(
 	VkCommandBuffer command_buffer,
 	const Pipeline & pipeline,
@@ -2668,25 +2686,12 @@ void VulkanAPI::drawMesh(
 	const uint32_t instance_id
 )
 {
-	Mesh mesh;
+	const std::pair<bool, Mesh> ret = getMesh(mesh_id);
+	if (ret.first == false)
 	{
-		std::lock_guard lock(mesh_map_mutex);
-		if (!mesh_map.contains(mesh_id))
-		{
-			LOG_WARNING("Mesh " << mesh_id << " not found in the mesh map.");
-			return;
-		}
-
-		mesh = mesh_map.at(mesh_id);
-
-		if (mesh.buffer == VK_NULL_HANDLE)
-		{
-			LOG_WARNING("Mesh " << mesh_id << " has a null buffer.");
-			return;
-		}
-
-		mesh_map.at(mesh_id).used_by_frame[current_frame] = true;
+		return;
 	}
+	const Mesh & mesh = ret.second;
 
 	const VkBuffer vertex_buffers[] = { mesh.buffer };
 	const VkDeviceSize offsets[] = { 0 };

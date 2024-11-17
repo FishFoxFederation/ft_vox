@@ -332,6 +332,7 @@ public:
 	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
 
+	std::pair<bool, Mesh> getMesh(const uint64_t id);
 	void drawMesh(
 		VkCommandBuffer command_buffer,
 		const Pipeline & pipeline,

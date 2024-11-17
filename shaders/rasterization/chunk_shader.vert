@@ -25,14 +25,14 @@ void main()
 
 	ChunkBlockVertex vertex_data = instance_data.block_vextex_buffer.vertices[gl_VertexIndex];
 
-	vec3 positions; vec3 normal; vec2 texCoords; uint texLayer; uint ao; uint light;
-	extractBlockVertexData2(vertex_data, positions, normal, texCoords, texLayer, ao, light);
+	vec3 positions; vec3 normal; vec2 tex_coords; uint tex_layer; uint ao; uint light;
+	extractBlockVertexData(vertex_data, positions, normal, tex_coords, tex_layer, ao, light);
 
 
 	gl_Position = cm.proj * cm.view * instance_data.matrice * vec4(positions, 1.0);
 
 	fragNormal = normal;
-	fragTexCoords = vec3(texCoords, texLayer);
+	fragTexCoords = vec3(tex_coords, tex_layer);
 
 	fragPosWorldSpace = instance_data.matrice * vec4(positions, 1.0);
 
