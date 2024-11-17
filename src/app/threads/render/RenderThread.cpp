@@ -602,6 +602,40 @@ void RenderThread::lightingPass()
 						VK_SHADER_STAGE_ALL,
 						id
 					);
+
+					Mesh mesh;
+					{
+						std::lock_guard lock(vk.mesh_map_mutex);
+						if (!vk.mesh_map.contains(chunk_data.block_mesh_id))
+						{
+							LOG_WARNING("Mesh " << chunk_data.block_mesh_id << " not found in the mesh map.");
+							return;
+						}
+
+						mesh = vk.mesh_map.at(chunk_data.block_mesh_id);
+
+						if (mesh.buffer == VK_NULL_HANDLE)
+						{
+							LOG_WARNING("Mesh " << chunk_data.block_mesh_id << " has a null buffer.");
+							return;
+						}
+
+						vk.mesh_map.at(chunk_data.block_mesh_id).used_by_frame[vk.current_frame] = true;
+					}
+
+					vkCmdBindIndexBuffer(
+						vk.draw_command_buffers[vk.current_frame],
+						mesh.buffer,
+						mesh.index_offset,
+						VK_INDEX_TYPE_UINT32
+					);
+
+					vkCmdDrawIndexed(
+						vk.draw_command_buffers[vk.current_frame],
+						static_cast<uint32_t>(mesh.index_count),
+						1, 0, 0,
+						id
+					);
 				}
 			}
 

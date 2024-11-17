@@ -1664,8 +1664,6 @@ void VulkanAPI::createPipelines()
 		pipeline_info.extent = color_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/rasterization/chunk_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/rasterization/chunk_shader.frag.spv";
-		pipeline_info.binding_description = BlockVertex::getBindingDescription();
-		pipeline_info.attribute_descriptions = BlockVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
