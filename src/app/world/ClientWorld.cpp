@@ -201,34 +201,19 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 
 		mesh_data.create(); //CPU intensive task to create the mesh
+		
 		//storing mesh in the GPU
-		uint64_t block_mesh_id = m_vulkan_api.storeMesh(
-			mesh_data.vertices.data(),
-			mesh_data.vertices.size(),
-			sizeof(BlockVertex),
-			mesh_data.indices.data(),
-			mesh_data.indices.size()
+		VulkanAPI::ChunkMeshInfo chunk_mesh_info = {
+			.block_vertex = mesh_data.vertices,
+			.block_index = mesh_data.indices,
+			.water_vertex = mesh_data.water_vertices,
+			.water_index = mesh_data.water_indices
+		};
+		VulkanAPI::InstanceId chunk_scene_id = m_vulkan_api.addChunkToScene(
+			chunk_mesh_info,
+			Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 		);
-		uint64_t water_mesh_id = m_vulkan_api.storeMesh(
-			mesh_data.water_vertices.data(),
-			mesh_data.water_vertices.size(),
-			sizeof(BlockVertex),
-			mesh_data.water_indices.data(),
-			mesh_data.water_indices.size()
-		);
-
-
-		//adding mesh id to the scene so it is rendered
-		// if (block_mesh_id != IdList<uint64_t, Mesh>::invalid_id)
-		{
-			uint64_t mesh_scene_id = m_vulkan_api.addChunkToScene(
-				block_mesh_id,
-				water_mesh_id,
-				Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
-			);
-
-			chunk->setMeshID(mesh_scene_id);
-		}
+		chunk->setMeshID(chunk_scene_id);
 
 		m_vulkan_api.removeChunkFromScene(old_mesh_scene_id);
 

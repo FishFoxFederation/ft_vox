@@ -2566,11 +2566,30 @@ void VulkanAPI::endFrame()
 
 
 VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
-	const uint64_t block_mesh_id,
-	const uint64_t water_mesh_id,
+	const ChunkMeshInfo & mesh_info,
 	const glm::dmat4 & model
 )
 {
+	const uint64_t block_mesh_id = storeMesh(
+		mesh_info.block_vertex.data(),
+		mesh_info.block_vertex.size(),
+		sizeof(BlockVertex),
+		mesh_info.block_index.data(),
+		mesh_info.block_index.size()
+	);
+	const uint64_t water_mesh_id = storeMesh(
+		mesh_info.water_vertex.data(),
+		mesh_info.water_vertex.size(),
+		sizeof(BlockVertex),
+		mesh_info.water_index.data(),
+		mesh_info.water_index.size()
+	);
+
+	if (block_mesh_id == invalid_mesh_id && water_mesh_id == invalid_mesh_id)
+	{
+		return m_null_instance_id;
+	}
+
 	std::lock_guard global_lock(global_mutex);
 
 	const ChunkRenderData chunk = {
