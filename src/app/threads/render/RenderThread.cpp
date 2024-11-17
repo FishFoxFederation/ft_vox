@@ -506,13 +506,24 @@ void RenderThread::shadowPass()
 
 				for (auto & [id, chunk_data] : shadow_visible_chunks[shadow_map_index])
 				{
-					vk.drawMesh(
+					const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
+					if (ret.first == false)
+					{
+						continue;
+					}
+					const Mesh & mesh = ret.second;
+
+					vkCmdBindIndexBuffer(
 						vk.draw_shadow_pass_command_buffers[vk.current_frame],
-						vk.shadow_pipeline,
-						chunk_data.block_mesh_id,
-						nullptr,
-						0,
-						VK_SHADER_STAGE_ALL,
+						mesh.buffer,
+						mesh.index_offset,
+						VK_INDEX_TYPE_UINT32
+					);
+
+					vkCmdDrawIndexed(
+						vk.draw_shadow_pass_command_buffers[vk.current_frame],
+						static_cast<uint32_t>(mesh.index_count),
+						1, 0, 0,
 						id
 					);
 				}
@@ -593,35 +604,12 @@ void RenderThread::lightingPass()
 
 				for (auto & [id, chunk_data]: visible_chunks)
 				{
-					vk.drawMesh(
-						vk.draw_command_buffers[vk.current_frame],
-						vk.chunk_pipeline,
-						chunk_data.block_mesh_id,
-						nullptr,
-						0,
-						VK_SHADER_STAGE_ALL,
-						id
-					);
-
-					Mesh mesh;
+					const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
+					if (ret.first == false)
 					{
-						std::lock_guard lock(vk.mesh_map_mutex);
-						if (!vk.mesh_map.contains(chunk_data.block_mesh_id))
-						{
-							LOG_WARNING("Mesh " << chunk_data.block_mesh_id << " not found in the mesh map.");
-							return;
-						}
-
-						mesh = vk.mesh_map.at(chunk_data.block_mesh_id);
-
-						if (mesh.buffer == VK_NULL_HANDLE)
-						{
-							LOG_WARNING("Mesh " << chunk_data.block_mesh_id << " has a null buffer.");
-							return;
-						}
-
-						vk.mesh_map.at(chunk_data.block_mesh_id).used_by_frame[vk.current_frame] = true;
+						continue;
 					}
+					const Mesh & mesh = ret.second;
 
 					vkCmdBindIndexBuffer(
 						vk.draw_command_buffers[vk.current_frame],
@@ -921,13 +909,24 @@ void RenderThread::lightingPass()
 						continue;
 					}
 
-					vk.drawMesh(
+					const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.water_mesh_id);
+					if (ret.first == false)
+					{
+						continue;
+					}
+					const Mesh & mesh = ret.second;
+
+					vkCmdBindIndexBuffer(
 						vk.draw_command_buffers[vk.current_frame],
-						vk.water_pipeline,
-						chunk_data.water_mesh_id,
-						nullptr,
-						0,
-						VK_SHADER_STAGE_ALL,
+						mesh.buffer,
+						mesh.index_offset,
+						VK_INDEX_TYPE_UINT32
+					);
+
+					vkCmdDrawIndexed(
+						vk.draw_command_buffers[vk.current_frame],
+						static_cast<uint32_t>(mesh.index_count),
+						1, 0, 0,
 						id
 					);
 				}
