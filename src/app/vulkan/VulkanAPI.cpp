@@ -2566,7 +2566,7 @@ void VulkanAPI::endFrame()
 
 
 VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
-	const ChunkMeshInfo & mesh_info,
+	const ChunkMeshCreateInfo & mesh_info,
 	const glm::dmat4 & model
 )
 {
