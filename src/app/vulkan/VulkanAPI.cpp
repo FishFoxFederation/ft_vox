@@ -98,6 +98,7 @@ VulkanAPI::~VulkanAPI()
 	}
 
 	m_chunks_in_scene.clear();
+	m_chunks_indices_buffer.clear();
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -992,9 +993,9 @@ void VulkanAPI::createCubeMap(const std::array<std::string, 6> & file_paths, uin
 	};
 	_image_info.is_cube_map = true;
 
-	SingleTimeCommand command_buffer_2(device, command_pool, graphics_queue);
+	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
-	skybox_cube_map = Image(device, physical_device, command_buffer_2, _image_info);
+	skybox_cube_map = Image(device, physical_device, command_buffer, _image_info);
 }
 
 void VulkanAPI::createHudImages(
@@ -2531,7 +2532,8 @@ void VulkanAPI::endSingleTimeCommands(VkCommandBuffer command_buffer)
 
 void VulkanAPI::startFrame()
 {
-	std::lock_guard lock(global_mutex);
+	// unlock in endFrame()
+	global_mutex.lock();
 
 	DebugGui::chunk_mesh_count = mesh_map.size();
 
@@ -2569,6 +2571,7 @@ void VulkanAPI::startFrame()
 void VulkanAPI::endFrame()
 {
 	current_frame = (current_frame + 1) % max_frames_in_flight;
+	global_mutex.unlock();
 }
 
 
@@ -2651,7 +2654,8 @@ std::pair<bool, Mesh> VulkanAPI::getMesh(const uint64_t id)
 	std::lock_guard lock(mesh_map_mutex);
 	if (!mesh_map.contains(id))
 	{
-		LOG_WARNING("Mesh " << id << " not found in the mesh map.");
+		if (id != 0)
+			LOG_WARNING("Mesh " << id << " not found in the mesh map.");
 		return std::make_pair(false, Mesh());
 	}
 
@@ -2721,7 +2725,17 @@ void VulkanAPI::drawMesh(
 	);
 }
 
-void VulkanAPI::drawChunkBlock(const InstanceId & id)
+void VulkanAPI::bindChunkIndexBuffer(VkCommandBuffer command_buffer)
+{
+	vkCmdBindIndexBuffer(
+		command_buffer,
+		m_chunks_indices_buffer.buffer,
+		0,
+		VK_INDEX_TYPE_UINT32
+	);
+}
+
+void VulkanAPI::drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id)
 {
 	if (id == m_null_instance_id)
 		return;
@@ -2730,22 +2744,17 @@ void VulkanAPI::drawChunkBlock(const InstanceId & id)
 
 	chunk_info.used_by_frame[current_frame] = true;
 
-	vkCmdBindIndexBuffer(
-		draw_command_buffers[current_frame],
-		m_chunks_indices_buffer.buffer,
-		chunk_info.block_index_offset,
-		VK_INDEX_TYPE_UINT32
-	);
-
 	vkCmdDrawIndexed(
-		draw_command_buffers[current_frame],
-		static_cast<uint32_t>(chunk_info.block_index_count),
-		1, 0, 0,
+		command_buffer,
+		chunk_info.block_index_count,
+		1,
+		chunk_info.block_index_offset,
+		0,
 		id
 	);
 }
 
-void VulkanAPI::drawChunkWater(const InstanceId & id)
+void VulkanAPI::drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id)
 {
 	if (id == m_null_instance_id)
 		return;
@@ -2754,17 +2763,12 @@ void VulkanAPI::drawChunkWater(const InstanceId & id)
 
 	chunk_info.used_by_frame[current_frame] = true;
 
-	vkCmdBindIndexBuffer(
-		draw_command_buffers[current_frame],
-		m_chunks_indices_buffer.buffer,
-		chunk_info.water_index_offset,
-		VK_INDEX_TYPE_UINT32
-	);
-
 	vkCmdDrawIndexed(
-		draw_command_buffers[current_frame],
-		static_cast<uint32_t>(chunk_info.water_index_count),
-		1, 0, 0,
+		command_buffer,
+		chunk_info.water_index_count,
+		1,
+		chunk_info.water_index_offset,
+		0,
 		id
 	);
 }

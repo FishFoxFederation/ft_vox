@@ -504,29 +504,11 @@ void RenderThread::shadowPass()
 				ZoneScopedN("Draw chunks");
 				TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Draw chunks");
 
-				for (auto & [id, chunk_data] : shadow_visible_chunks[shadow_map_index])
+				vk.bindChunkIndexBuffer(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
+
+				for (auto & [id, model] : shadow_visible_chunks[shadow_map_index])
 				{
-					// const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
-					// if (ret.first == false)
-					// {
-					// 	continue;
-					// }
-					// const Mesh & mesh = ret.second;
-
-					// vkCmdBindIndexBuffer(
-					// 	vk.draw_shadow_pass_command_buffers[vk.current_frame],
-					// 	mesh.buffer,
-					// 	mesh.index_offset,
-					// 	VK_INDEX_TYPE_UINT32
-					// );
-
-					// vkCmdDrawIndexed(
-					// 	vk.draw_shadow_pass_command_buffers[vk.current_frame],
-					// 	static_cast<uint32_t>(mesh.index_count),
-					// 	1, 0, 0,
-					// 	id
-					// );
-					vk.drawChunkBlock(id);
+					vk.drawChunkBlock(vk.draw_shadow_pass_command_buffers[vk.current_frame], id);
 				}
 			}
 
@@ -603,29 +585,11 @@ void RenderThread::lightingPass()
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
-				for (auto & [id, chunk_data]: visible_chunks)
+				vk.bindChunkIndexBuffer(vk.draw_command_buffers[vk.current_frame]);
+
+				for (auto & [id, model]: visible_chunks)
 				{
-					// const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
-					// if (ret.first == false)
-					// {
-					// 	continue;
-					// }
-					// const Mesh & mesh = ret.second;
-
-					// vkCmdBindIndexBuffer(
-					// 	vk.draw_command_buffers[vk.current_frame],
-					// 	mesh.buffer,
-					// 	mesh.index_offset,
-					// 	VK_INDEX_TYPE_UINT32
-					// );
-
-					// vkCmdDrawIndexed(
-					// 	vk.draw_command_buffers[vk.current_frame],
-					// 	static_cast<uint32_t>(mesh.index_count),
-					// 	1, 0, 0,
-					// 	id
-					// );
-					vk.drawChunkBlock(id);
+					vk.drawChunkBlock(vk.draw_command_buffers[vk.current_frame], id);
 				}
 			}
 
@@ -904,34 +868,11 @@ void RenderThread::lightingPass()
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
-				for (auto & [id, chunk_data]: chunk_meshes)
+				vk.bindChunkIndexBuffer(vk.draw_command_buffers[vk.current_frame]);
+				
+				for (auto & [id, model]: chunk_meshes)
 				{
-					// if (chunk_data.water_mesh_id == 0)
-					// {
-					// 	continue;
-					// }
-
-					// const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.water_mesh_id);
-					// if (ret.first == false)
-					// {
-					// 	continue;
-					// }
-					// const Mesh & mesh = ret.second;
-
-					// vkCmdBindIndexBuffer(
-					// 	vk.draw_command_buffers[vk.current_frame],
-					// 	mesh.buffer,
-					// 	mesh.index_offset,
-					// 	VK_INDEX_TYPE_UINT32
-					// );
-
-					// vkCmdDrawIndexed(
-					// 	vk.draw_command_buffers[vk.current_frame],
-					// 	static_cast<uint32_t>(mesh.index_count),
-					// 	1, 0, 0,
-					// 	id
-					// );
-					vk.drawChunkWater(id);
+					vk.drawChunkWater(vk.draw_command_buffers[vk.current_frame], id);
 				}
 			}
 		}

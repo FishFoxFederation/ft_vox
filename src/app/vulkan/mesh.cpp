@@ -20,7 +20,6 @@ uint64_t VulkanAPI::storeMesh(
 		return invalid_mesh_id;
 	}
 
-
 	Mesh mesh;
 	VkDeviceSize vertex_buffer_size = vertex_count * vertex_size;
 	VkDeviceSize index_buffer_size = index_count * sizeof(uint32_t);
@@ -53,15 +52,13 @@ uint64_t VulkanAPI::storeMesh(
 		| VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 		| VK_BUFFER_USAGE_INDEX_BUFFER_BIT
 		| VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
-		// | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 		mesh.buffer,
 		mesh.buffer_memory
 	);
 
-	const VkBufferCopy buffer_copy = {
-		.size = buffer_size
-	};
+	VkBufferCopy buffer_copy = {};
+	buffer_copy.size = buffer_size;
 
 	copyBuffer(staging_buffer, mesh.buffer, buffer_copy);
 

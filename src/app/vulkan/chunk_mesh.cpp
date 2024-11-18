@@ -3,7 +3,6 @@
 
 #include "Tracy.hpp"
 
-
 VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	const ChunkMeshCreateInfo & mesh_info,
 	const glm::dmat4 & model
@@ -31,7 +30,8 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	VkDeviceSize index_offset = m_chunks_indices_buffer_memory_range.alloc(index_size);
 	if (index_offset == m_chunks_indices_buffer_memory_range.capacity())
 	{
-		_resizeChunksIndicesBuffer(10000);
+		const VkDeviceSize added_size = std::max(index_size, 100000 * sizeof(uint32_t));
+		_resizeChunksIndicesBuffer(added_size);
 		index_offset = m_chunks_indices_buffer_memory_range.alloc(index_size);
 	}
 
@@ -68,13 +68,13 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	);
 
 
-
 	const VkDeviceSize block_vertex_size = mesh_info.block_vertex.size() * sizeof(BlockVertex);
 	const VkDeviceSize water_vertex_size = mesh_info.water_vertex.size() * sizeof(BlockVertex);
+	const VkDeviceSize vertex_size = block_vertex_size + water_vertex_size;
 
 	// create vertex staging buffer
 	const Buffer::CreateInfo staging_vertex_buffer_info = {
-		.size = block_vertex_size + water_vertex_size,
+		.size = vertex_size,
 		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 		.memory_properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
 	};
@@ -94,42 +94,42 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 
 	// create vertex buffer
 	const Buffer::CreateInfo vertex_buffer_info = {
-		.size = staging_vertex_buffer_info.size,
+		.size = vertex_size,
 		.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				| VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
 		.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 	};
-	ChunkMeshesInfo chunk_meshes_info = {
-		.vertex_buffer = Buffer(device, physical_device, vertex_buffer_info),
-
-		.block_vertex_address = 0,
-		.block_index_offset = index_offset,
-		.block_index_count = static_cast<uint32_t>(mesh_info.block_index.size()),
-
-		.water_vertex_address = 0,
-		.water_index_offset = index_offset + block_index_size,
-		.water_index_count = static_cast<uint32_t>(mesh_info.water_index.size())
-	};
+	Buffer vertex_buffer = Buffer(device, physical_device, vertex_buffer_info);
 
 	VkBufferDeviceAddressInfoKHR address_info = {
 		.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO,
 		.pNext = nullptr,
-		.buffer = chunk_meshes_info.vertex_buffer.buffer
+		.buffer = vertex_buffer.buffer
 	};
-	chunk_meshes_info.block_vertex_address = vkGetBufferDeviceAddress(device, &address_info);
-	chunk_meshes_info.water_vertex_address = chunk_meshes_info.block_vertex_address + block_vertex_size;
+	const VkDeviceAddress vertex_buffer_address = vkGetBufferDeviceAddress(device, &address_info);
 
 	// copy staging vertex buffer to the vertex buffer
-	const VkBufferCopy vertex_buffer_copy = {
-		.size = chunk_meshes_info.vertex_buffer.size()
-	};
 	copyBuffer(
 		staging_vertex_buffer.buffer,
-		chunk_meshes_info.vertex_buffer.buffer,
-		vertex_buffer_copy
+		vertex_buffer.buffer,
+		{ 0, 0, vertex_size }
 	);
 
+	// finish creating chunk meshes info
+	ChunkMeshesInfo chunk_meshes_info = {
+		.vertex_buffer = std::move(vertex_buffer),
+
+		.block_vertex_address = vertex_buffer_address,
+		.block_index_offset = static_cast<uint32_t>(index_offset / sizeof(uint32_t)),
+		.block_index_count = static_cast<uint32_t>(mesh_info.block_index.size()),
+
+		.water_vertex_address = vertex_buffer_address + block_vertex_size,
+		.water_index_offset = static_cast<uint32_t>((index_offset + block_index_size) / sizeof(uint32_t)),
+		.water_index_count = static_cast<uint32_t>(mesh_info.water_index.size()),
+
+		.model = model
+	};
 
 	const InstanceId instance_id = m_free_chunk_ids.front();
 	m_free_chunk_ids.pop_front();
@@ -137,7 +137,7 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	{
 		// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
 		m_chunks_in_scene[instance_id] = std::move(chunk_meshes_info);
-		m_chunks_in_scene_copy[instance_id] = model;
+		m_chunks_in_scene_rendered[instance_id] = model;
 	}
 
 	return instance_id;
@@ -153,6 +153,7 @@ void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 		return;
 	}
 
+	m_chunks_in_scene_rendered.erase(chunk_id);
 	m_chunk_instance_to_destroy.push_back(chunk_id);
 
 	_deleteUnusedChunks();
@@ -163,7 +164,7 @@ std::map<VulkanAPI::InstanceId, glm::dmat4> VulkanAPI::getChunksInScene() const
 	std::lock_guard global_lock(global_mutex);
 	// std::lock_guard lock(m_chunks_in_scene_mutex);
 
-	return m_chunks_in_scene_copy;
+	return m_chunks_in_scene_rendered;
 }
 
 void VulkanAPI::_setupChunksRessources()
@@ -173,14 +174,18 @@ void VulkanAPI::_setupChunksRessources()
 		m_free_chunk_ids.push_back(i);
 	}
 
-	_resizeChunksIndicesBuffer(10000);
+	_resizeChunksIndicesBuffer(100000 * sizeof(uint32_t));
 }
 
-void VulkanAPI::_resizeChunksIndicesBuffer(uint32_t count)
+void VulkanAPI::_resizeChunksIndicesBuffer(const VkDeviceSize & size)
 {
+	// need to wait because m_chunks_indices_buffer is used by in flight frame
+	vkDeviceWaitIdle(device);
+	
 	Buffer::CreateInfo buffer_info = {
-		.size = m_chunks_indices_buffer.size() + count * sizeof(uint32_t),
-		.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT
+		.size = m_chunks_indices_buffer.size() + size,
+		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+				| VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_INDEX_BUFFER_BIT
 				| VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
 		.memory_properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -200,8 +205,7 @@ void VulkanAPI::_resizeChunksIndicesBuffer(uint32_t count)
 	}
 
 	m_chunks_indices_buffer = std::move(new_buffer);
-
-	m_chunks_indices_buffer_memory_range.add(count * sizeof(uint32_t));
+	m_chunks_indices_buffer_memory_range.add(size);
 }
 
 void VulkanAPI::_deleteUnusedChunks()
