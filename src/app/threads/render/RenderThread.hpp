@@ -91,8 +91,8 @@ private:
 	std::vector<MeshRenderData> entity_meshes;
 	std::vector<PlayerRenderData> players;
 
-	std::map<VulkanAPI::InstanceId, glm::dmat4> visible_chunks;
-	std::vector<std::map<VulkanAPI::InstanceId, glm::dmat4>> shadow_visible_chunks;
+	std::vector<VulkanAPI::InstanceId> visible_chunks;
+	std::vector<std::vector<VulkanAPI::InstanceId>> shadow_visible_chunks;
 
 	ViewProjMatrices sun = {};
 	glm::dvec3 sun_position;

@@ -414,7 +414,7 @@ void RenderThread::updateVisibleChunks()
 			continue;
 		}
 
-		visible_chunks[id] = model;
+		visible_chunks.push_back(id);
 	}
 
 	for (size_t i = 0; i < vk.shadow_maps_count; i++)
@@ -427,7 +427,7 @@ void RenderThread::updateVisibleChunks()
 				continue;
 			}
 
-			shadow_visible_chunks[i][id] = model;
+			shadow_visible_chunks[i].push_back(id);
 		}
 	}
 }
@@ -506,7 +506,7 @@ void RenderThread::shadowPass()
 
 				vk.bindChunkIndexBuffer(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
 
-				for (auto & [id, model] : shadow_visible_chunks[shadow_map_index])
+				for (auto & id : shadow_visible_chunks[shadow_map_index])
 				{
 					vk.drawChunkBlock(vk.draw_shadow_pass_command_buffers[vk.current_frame], id);
 				}
@@ -587,10 +587,15 @@ void RenderThread::lightingPass()
 
 				vk.bindChunkIndexBuffer(vk.draw_command_buffers[vk.current_frame]);
 
-				for (auto & [id, model]: visible_chunks)
-				{
-					vk.drawChunkBlock(vk.draw_command_buffers[vk.current_frame], id);
-				}
+				// for (auto & id: visible_chunks)
+				// {
+				// 	vk.drawChunkBlock(vk.draw_command_buffers[vk.current_frame], id);
+				// }
+				vk.drawChunksBlock(
+					vk.draw_command_buffers[vk.current_frame],
+					vk.m_draw_chunk_block_light_pass_buffer[vk.current_frame],
+					visible_chunks
+				);
 			}
 
 			{ // Draw the entities
@@ -869,8 +874,8 @@ void RenderThread::lightingPass()
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.water_pipeline.pipeline);
 
 				vk.bindChunkIndexBuffer(vk.draw_command_buffers[vk.current_frame]);
-				
-				for (auto & [id, model]: chunk_meshes)
+
+				for (auto & id: visible_chunks)
 				{
 					vk.drawChunkWater(vk.draw_command_buffers[vk.current_frame], id);
 				}
