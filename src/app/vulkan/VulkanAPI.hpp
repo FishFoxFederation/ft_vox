@@ -615,6 +615,11 @@ public:
 
 	void bindChunkIndexBuffer(VkCommandBuffer command_buffer);
 	void drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id);
+	void drawChunksBlock(
+		VkCommandBuffer command_buffer,
+		Buffer & indirect_buffer,
+		const std::vector<InstanceId> & ids
+	);
 	void drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
 
 	void setTargetBlock(const std::optional<glm::vec3> & target_block);
@@ -653,6 +658,16 @@ private:
 	void _setupChunksRessources();
 	void _resizeChunksIndicesBuffer(const VkDeviceSize & size);
 	void _deleteUnusedChunks();
+
+
+
+public:
+	std::vector<Buffer> m_draw_chunk_block_light_pass_buffer;
+private:
+	uint32_t m_max_draw_count;
+
+	void _createDrawBuffer();
+	void _destroyDrawBuffer();
 
 
 

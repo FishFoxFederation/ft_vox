@@ -47,6 +47,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createTextureImage();
 	_createInstanceData();
 	_setupChunksRessources();
+	_createDrawBuffer();
 
 	createDescriptors();
 	createGlobalDescriptor();
@@ -87,6 +88,7 @@ VulkanAPI::~VulkanAPI()
 	destroyTextRenderer();
 
 	_destroyInstanceData();
+	_destroyDrawBuffer();
 
 	{
 		std::lock_guard lock(mesh_map_mutex);
@@ -569,6 +571,7 @@ void VulkanAPI::createLogicalDevice()
 	device_features.wideLines = VK_TRUE;
 	device_features.shaderInt64 = VK_TRUE;
 	device_features.geometryShader = VK_TRUE;
+	device_features.multiDrawIndirect = VK_TRUE;
 
 	VkPhysicalDeviceShaderDrawParametersFeatures shader_draw_parameters_features = {};
 	shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
@@ -2575,49 +2578,6 @@ void VulkanAPI::endFrame()
 }
 
 
-// VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
-// 	const ChunkMeshCreateInfo & mesh_info,
-// 	const glm::dmat4 & model
-// )
-// {
-// 	const uint64_t block_mesh_id = storeMesh(
-// 		mesh_info.block_vertex.data(),
-// 		mesh_info.block_vertex.size(),
-// 		sizeof(BlockVertex),
-// 		mesh_info.block_index.data(),
-// 		mesh_info.block_index.size()
-// 	);
-// 	const uint64_t water_mesh_id = storeMesh(
-// 		mesh_info.water_vertex.data(),
-// 		mesh_info.water_vertex.size(),
-// 		sizeof(BlockVertex),
-// 		mesh_info.water_index.data(),
-// 		mesh_info.water_index.size()
-// 	);
-
-// 	if (block_mesh_id == invalid_mesh_id && water_mesh_id == invalid_mesh_id)
-// 	{
-// 		return m_null_instance_id;
-// 	}
-
-// 	std::lock_guard global_lock(global_mutex);
-
-// 	const ChunkRenderData chunk = {
-// 		.block_mesh_id = block_mesh_id,
-// 		.water_mesh_id = water_mesh_id,
-// 		.model = model
-// 	};
-
-// 	const InstanceId instance_id = m_free_chunk_ids.front();
-// 	m_free_chunk_ids.pop_front();
-
-// 	{
-// 		// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
-// 		m_chunks_in_scene[instance_id] = chunk;
-// 	}
-
-// 	return instance_id;
-// }
 
 void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
 {
@@ -2751,6 +2711,43 @@ void VulkanAPI::drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId 
 		chunk_info.block_index_offset,
 		0,
 		id
+	);
+}
+
+void VulkanAPI::drawChunksBlock(
+	VkCommandBuffer command_buffer,
+	Buffer & indirect_buffer,
+	const std::vector<InstanceId> & ids
+)
+{
+	VkDrawIndexedIndirectCommand * draw_commands = static_cast<VkDrawIndexedIndirectCommand *>(indirect_buffer.mappedMemory());
+	uint32_t draw_count = 0;
+
+	for (const InstanceId & id : ids)
+	{
+		if (id == m_null_instance_id)
+			return;
+			
+		ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
+
+		chunk_info.used_by_frame[current_frame] = true;
+
+		draw_commands[draw_count] = {
+			.indexCount = chunk_info.block_index_count,
+			.instanceCount = 1,
+			.firstIndex = chunk_info.block_index_offset,
+			.vertexOffset = 0,
+			.firstInstance = id
+		};
+		draw_count++;
+	}
+
+	vkCmdDrawIndexedIndirect(
+		command_buffer,
+		indirect_buffer.buffer,
+		0,
+		draw_count,
+		sizeof(VkDrawIndexedIndirectCommand)
 	);
 }
 
