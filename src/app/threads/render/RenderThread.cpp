@@ -407,27 +407,27 @@ void RenderThread::updateVisibleChunks()
 	ZoneScoped;
 
 	visible_chunks.clear();
-	for (auto & [id, chunk_data]: chunk_meshes)
+	for (auto & [id, model]: chunk_meshes)
 	{
-		if (!isInsideFrustum_planes(camera.projection * camera.view, chunk_data.model, CHUNK_SIZE_VEC3))
+		if (!isInsideFrustum_planes(camera.projection * camera.view, model, CHUNK_SIZE_VEC3))
 		{
 			continue;
 		}
 
-		visible_chunks[id] = chunk_data;
+		visible_chunks[id] = model;
 	}
 
 	for (size_t i = 0; i < vk.shadow_maps_count; i++)
 	{
 		shadow_visible_chunks[i].clear();
-		for (auto & [id, chunk_data]: chunk_meshes)
+		for (auto & [id, model]: chunk_meshes)
 		{
-			if (!isInsideFrustum_planes(light_view_proj_matrices[i], chunk_data.model, CHUNK_SIZE_VEC3))
+			if (!isInsideFrustum_planes(light_view_proj_matrices[i], model, CHUNK_SIZE_VEC3))
 			{
 				continue;
 			}
 
-			shadow_visible_chunks[i][id] = chunk_data;
+			shadow_visible_chunks[i][id] = model;
 		}
 	}
 }
@@ -506,26 +506,27 @@ void RenderThread::shadowPass()
 
 				for (auto & [id, chunk_data] : shadow_visible_chunks[shadow_map_index])
 				{
-					const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
-					if (ret.first == false)
-					{
-						continue;
-					}
-					const Mesh & mesh = ret.second;
+					// const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
+					// if (ret.first == false)
+					// {
+					// 	continue;
+					// }
+					// const Mesh & mesh = ret.second;
 
-					vkCmdBindIndexBuffer(
-						vk.draw_shadow_pass_command_buffers[vk.current_frame],
-						mesh.buffer,
-						mesh.index_offset,
-						VK_INDEX_TYPE_UINT32
-					);
+					// vkCmdBindIndexBuffer(
+					// 	vk.draw_shadow_pass_command_buffers[vk.current_frame],
+					// 	mesh.buffer,
+					// 	mesh.index_offset,
+					// 	VK_INDEX_TYPE_UINT32
+					// );
 
-					vkCmdDrawIndexed(
-						vk.draw_shadow_pass_command_buffers[vk.current_frame],
-						static_cast<uint32_t>(mesh.index_count),
-						1, 0, 0,
-						id
-					);
+					// vkCmdDrawIndexed(
+					// 	vk.draw_shadow_pass_command_buffers[vk.current_frame],
+					// 	static_cast<uint32_t>(mesh.index_count),
+					// 	1, 0, 0,
+					// 	id
+					// );
+					vk.drawChunkBlock(id);
 				}
 			}
 
@@ -604,26 +605,27 @@ void RenderThread::lightingPass()
 
 				for (auto & [id, chunk_data]: visible_chunks)
 				{
-					const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
-					if (ret.first == false)
-					{
-						continue;
-					}
-					const Mesh & mesh = ret.second;
+					// const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.block_mesh_id);
+					// if (ret.first == false)
+					// {
+					// 	continue;
+					// }
+					// const Mesh & mesh = ret.second;
 
-					vkCmdBindIndexBuffer(
-						vk.draw_command_buffers[vk.current_frame],
-						mesh.buffer,
-						mesh.index_offset,
-						VK_INDEX_TYPE_UINT32
-					);
+					// vkCmdBindIndexBuffer(
+					// 	vk.draw_command_buffers[vk.current_frame],
+					// 	mesh.buffer,
+					// 	mesh.index_offset,
+					// 	VK_INDEX_TYPE_UINT32
+					// );
 
-					vkCmdDrawIndexed(
-						vk.draw_command_buffers[vk.current_frame],
-						static_cast<uint32_t>(mesh.index_count),
-						1, 0, 0,
-						id
-					);
+					// vkCmdDrawIndexed(
+					// 	vk.draw_command_buffers[vk.current_frame],
+					// 	static_cast<uint32_t>(mesh.index_count),
+					// 	1, 0, 0,
+					// 	id
+					// );
+					vk.drawChunkBlock(id);
 				}
 			}
 
@@ -904,31 +906,32 @@ void RenderThread::lightingPass()
 
 				for (auto & [id, chunk_data]: chunk_meshes)
 				{
-					if (chunk_data.water_mesh_id == 0)
-					{
-						continue;
-					}
+					// if (chunk_data.water_mesh_id == 0)
+					// {
+					// 	continue;
+					// }
 
-					const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.water_mesh_id);
-					if (ret.first == false)
-					{
-						continue;
-					}
-					const Mesh & mesh = ret.second;
+					// const std::pair<bool, Mesh> ret = vk.getMesh(chunk_data.water_mesh_id);
+					// if (ret.first == false)
+					// {
+					// 	continue;
+					// }
+					// const Mesh & mesh = ret.second;
 
-					vkCmdBindIndexBuffer(
-						vk.draw_command_buffers[vk.current_frame],
-						mesh.buffer,
-						mesh.index_offset,
-						VK_INDEX_TYPE_UINT32
-					);
+					// vkCmdBindIndexBuffer(
+					// 	vk.draw_command_buffers[vk.current_frame],
+					// 	mesh.buffer,
+					// 	mesh.index_offset,
+					// 	VK_INDEX_TYPE_UINT32
+					// );
 
-					vkCmdDrawIndexed(
-						vk.draw_command_buffers[vk.current_frame],
-						static_cast<uint32_t>(mesh.index_count),
-						1, 0, 0,
-						id
-					);
+					// vkCmdDrawIndexed(
+					// 	vk.draw_command_buffers[vk.current_frame],
+					// 	static_cast<uint32_t>(mesh.index_count),
+					// 	1, 0, 0,
+					// 	id
+					// );
+					vk.drawChunkWater(id);
 				}
 			}
 		}

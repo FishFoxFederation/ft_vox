@@ -46,7 +46,7 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	}, 512);
 	createTextureImage();
 	_createInstanceData();
-	_createChunksInstance();
+	_setupChunksRessources();
 
 	createDescriptors();
 	createGlobalDescriptor();
@@ -96,6 +96,8 @@ VulkanAPI::~VulkanAPI()
 			vma.freeMemory(device, mesh.buffer_memory, nullptr);
 		}
 	}
+
+	m_chunks_in_scene.clear();
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
@@ -2556,6 +2558,11 @@ void VulkanAPI::startFrame()
 		}
 	}
 
+	for (auto & [id, chunk] : m_chunks_in_scene)
+	{
+		chunk.used_by_frame[current_frame] = false;
+	}
+
 	_updateInstancesData();
 }
 
@@ -2565,83 +2572,49 @@ void VulkanAPI::endFrame()
 }
 
 
-VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
-	const ChunkMeshCreateInfo & mesh_info,
-	const glm::dmat4 & model
-)
-{
-	const uint64_t block_mesh_id = storeMesh(
-		mesh_info.block_vertex.data(),
-		mesh_info.block_vertex.size(),
-		sizeof(BlockVertex),
-		mesh_info.block_index.data(),
-		mesh_info.block_index.size()
-	);
-	const uint64_t water_mesh_id = storeMesh(
-		mesh_info.water_vertex.data(),
-		mesh_info.water_vertex.size(),
-		sizeof(BlockVertex),
-		mesh_info.water_index.data(),
-		mesh_info.water_index.size()
-	);
+// VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
+// 	const ChunkMeshCreateInfo & mesh_info,
+// 	const glm::dmat4 & model
+// )
+// {
+// 	const uint64_t block_mesh_id = storeMesh(
+// 		mesh_info.block_vertex.data(),
+// 		mesh_info.block_vertex.size(),
+// 		sizeof(BlockVertex),
+// 		mesh_info.block_index.data(),
+// 		mesh_info.block_index.size()
+// 	);
+// 	const uint64_t water_mesh_id = storeMesh(
+// 		mesh_info.water_vertex.data(),
+// 		mesh_info.water_vertex.size(),
+// 		sizeof(BlockVertex),
+// 		mesh_info.water_index.data(),
+// 		mesh_info.water_index.size()
+// 	);
 
-	if (block_mesh_id == invalid_mesh_id && water_mesh_id == invalid_mesh_id)
-	{
-		return m_null_instance_id;
-	}
+// 	if (block_mesh_id == invalid_mesh_id && water_mesh_id == invalid_mesh_id)
+// 	{
+// 		return m_null_instance_id;
+// 	}
 
-	std::lock_guard global_lock(global_mutex);
+// 	std::lock_guard global_lock(global_mutex);
 
-	const ChunkRenderData chunk = {
-		.block_mesh_id = block_mesh_id,
-		.water_mesh_id = water_mesh_id,
-		.model = model
-	};
+// 	const ChunkRenderData chunk = {
+// 		.block_mesh_id = block_mesh_id,
+// 		.water_mesh_id = water_mesh_id,
+// 		.model = model
+// 	};
 
-	const InstanceId instance_id = m_free_chunk_ids.front();
-	m_free_chunk_ids.pop_front();
+// 	const InstanceId instance_id = m_free_chunk_ids.front();
+// 	m_free_chunk_ids.pop_front();
 
-	{
-		// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
-		m_chunks_in_scene[instance_id] = chunk;
-	}
+// 	{
+// 		// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
+// 		m_chunks_in_scene[instance_id] = chunk;
+// 	}
 
-	return instance_id;
-}
-
-void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
-{
-	std::lock_guard global_lock(global_mutex);
-	// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
-
-	if (!m_chunks_in_scene.contains(chunk_id))
-	{
-		return;
-	}
-
-	const ChunkRenderData & chunk = m_chunks_in_scene[chunk_id];
-	_destroyMesh(chunk.block_mesh_id);
-	_destroyMesh(chunk.water_mesh_id);
-
-	m_chunks_in_scene.erase(chunk_id);
-	m_free_chunk_ids.push_front(chunk_id);
-}
-
-std::map<VulkanAPI::InstanceId, ChunkRenderData> VulkanAPI::getChunksInScene() const
-{
-	std::lock_guard global_lock(global_mutex);
-	// std::lock_guard lock(m_chunks_in_scene_mutex);
-
-	return m_chunks_in_scene;
-}
-
-void VulkanAPI::_createChunksInstance()
-{
-	for (uint32_t i = 1; i < instance_data_max_count; i++)
-	{
-		m_free_chunk_ids.push_back(i);
-	}
-}
+// 	return instance_id;
+// }
 
 void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
 {
@@ -2745,6 +2718,54 @@ void VulkanAPI::drawMesh(
 		static_cast<uint32_t>(mesh.index_count),
 		1, 0, 0,
 		instance_id
+	);
+}
+
+void VulkanAPI::drawChunkBlock(const InstanceId & id)
+{
+	if (id == m_null_instance_id)
+		return;
+		
+	ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
+
+	chunk_info.used_by_frame[current_frame] = true;
+
+	vkCmdBindIndexBuffer(
+		draw_command_buffers[current_frame],
+		m_chunks_indices_buffer.buffer,
+		chunk_info.block_index_offset,
+		VK_INDEX_TYPE_UINT32
+	);
+
+	vkCmdDrawIndexed(
+		draw_command_buffers[current_frame],
+		static_cast<uint32_t>(chunk_info.block_index_count),
+		1, 0, 0,
+		id
+	);
+}
+
+void VulkanAPI::drawChunkWater(const InstanceId & id)
+{
+	if (id == m_null_instance_id)
+		return;
+
+	ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
+
+	chunk_info.used_by_frame[current_frame] = true;
+
+	vkCmdBindIndexBuffer(
+		draw_command_buffers[current_frame],
+		m_chunks_indices_buffer.buffer,
+		chunk_info.water_index_offset,
+		VK_INDEX_TYPE_UINT32
+	);
+
+	vkCmdDrawIndexed(
+		draw_command_buffers[current_frame],
+		static_cast<uint32_t>(chunk_info.water_index_count),
+		1, 0, 0,
+		id
 	);
 }
 
@@ -3074,21 +3095,9 @@ void VulkanAPI::createBuffer(
 void VulkanAPI::copyBuffer(
 	VkBuffer src_buffer,
 	VkBuffer dst_buffer,
-	VkDeviceSize size
+	const VkBufferCopy & copy_region
 )
 {
-	// VkCommandBufferAllocateInfo alloc_info = {};
-	// alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	// alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	// alloc_info.commandPool = command_pool;
-	// alloc_info.commandBufferCount = 1;
-
-	// VkCommandBuffer command_buffer;
-	// VK_CHECK(
-	// 	vkAllocateCommandBuffers(device, &alloc_info, &command_buffer),
-	// 	"Failed to allocate command buffers"
-	// );
-
 	std::unique_lock lock(transfer_operation_mutex);
 
 	vkResetCommandBuffer(transfer_command_buffers, 0);
@@ -3101,9 +3110,6 @@ void VulkanAPI::copyBuffer(
 		vkBeginCommandBuffer(transfer_command_buffers, &begin_info),
 		"Failed to begin recording command buffer"
 	);
-
-	VkBufferCopy copy_region = {};
-	copy_region.size = size;
 
 	vkCmdCopyBuffer(transfer_command_buffers, src_buffer, dst_buffer, 1, &copy_region);
 
@@ -3126,8 +3132,6 @@ void VulkanAPI::copyBuffer(
 		vkQueueWaitIdle(transfer_queue),
 		"Failed to wait for queue"
 	);
-
-	// vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
 }
 
 void VulkanAPI::copyBufferToImage(

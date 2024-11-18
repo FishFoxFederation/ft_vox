@@ -570,6 +570,27 @@ public:
 		std::vector<uint32_t> & water_index;
 	};
 
+	struct ChunkMeshesInfo
+	{
+		Buffer vertex_buffer;
+
+		VkDeviceAddress block_vertex_address;
+		VkDeviceSize block_index_offset;
+		uint32_t block_index_count;
+
+		VkDeviceAddress water_vertex_address;
+		VkDeviceSize water_index_offset;
+		uint32_t water_index_count;
+
+		glm::dmat4 model;
+
+		union
+		{
+			uint64_t is_used = 0;
+			uint8_t used_by_frame[8];
+		};
+	};
+
 	/**
 	 * @brief Add a chunk to the scene with the given mesh info and model matrix.
 	 *
@@ -590,7 +611,10 @@ public:
 	 * @brief Get the chunks in the scene.
 	 *
 	 */
-	std::map<InstanceId, ChunkRenderData> getChunksInScene() const;
+	std::map<InstanceId, glm::dmat4> getChunksInScene() const;
+
+	void drawChunkBlock(const InstanceId & id);
+	void drawChunkWater(const InstanceId & id);
 
 	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 	std::optional<glm::vec3> targetBlock() const;
@@ -615,29 +639,19 @@ private:
 	};
 
 
-	struct ChunkMeshesInfo
-	{
-		Buffer vertex_buffer;
-
-		VkDeviceSize index_offset;
-		uint32_t index_count;
-
-		union
-		{
-			uint64_t is_used = 0;
-			uint8_t used_by_frame[8];
-		};
-	};
-
 	Buffer m_chunks_indices_buffer;
 	MemoryRange m_chunks_indices_buffer_memory_range;
 
-	std::map<InstanceId, ChunkRenderData> m_chunks_in_scene;
+	std::map<InstanceId, ChunkMeshesInfo> m_chunks_in_scene;
+	std::map<InstanceId, glm::dmat4> m_chunks_in_scene_copy;
 	std::list<InstanceId> m_free_chunk_ids;
 	const InstanceId m_null_instance_id = 0;
+	std::vector<InstanceId> m_chunk_instance_to_destroy;
 	mutable TracyLockableN(std::mutex, m_chunks_in_scene_mutex, "Chunk Render Data");
 
-	void _createChunksInstance();
+	void _setupChunksRessources();
+	void _resizeChunksIndicesBuffer(uint32_t count);
+	void _deleteUnusedChunks();
 
 
 
@@ -759,7 +773,7 @@ private:
 	void copyBuffer(
 		VkBuffer src_buffer,
 		VkBuffer dst_buffer,
-		VkDeviceSize size
+		const VkBufferCopy & copy_region
 	);
 	void copyBufferToImage(
 		VkBuffer buffer,
