@@ -6,14 +6,14 @@
 namespace ecs
 {
 
-	template <typename ComponentType>
+	template <typename ComponentType, std::size_t size>
 	class SparseSet
 	{
 	public:
 		SparseSet() = default;
 		~SparseSet() = default;
-		typedef std::array<ComponentType, MAX_ENTITIES>::iterator iterator;
-		typedef std::array<ComponentType, MAX_ENTITIES>::const_iterator const_iterator;
+		typedef std::array<ComponentType, size>::iterator iterator;
+		typedef std::array<ComponentType, size>::const_iterator const_iterator;
 
 		SparseSet(SparseSet & other) = default;
 		SparseSet(SparseSet && other) = default;
@@ -34,8 +34,8 @@ namespace ecs
 		iterator		end();
 		const_iterator	end() const;
 	private:
-		std::array<T, MAX_ENTITIES> m_dense;
-		std::array<entityType, MAX_ENTITIES> m_sparse;
+		std::array<T, size> m_dense;
+		std::array<entityType, size> m_sparse;
 
 		size_t m_dense_size = 0;
 	};
