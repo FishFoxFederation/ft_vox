@@ -5,6 +5,7 @@
 #include <memory>
 #include <exception>
 #include <string>
+#include <functional>
 
 #include "ECS_CONSTANTS.hpp"
 
@@ -26,9 +27,20 @@ namespace ecs
 		ECS & operator=(ECS & other) = delete;
 		ECS & operator=(ECS && other) = delete;
 
-		entityType		createEntity();
-		void			removeEntity(entityType entity);
-		bool 			isAlive(entityType entity) const;
+		entityType		createEntity()
+		{
+
+		}
+
+		void			removeEntity(entityType entity)
+		{
+
+		}
+
+		bool 			isAlive(entityType entity) const
+		{
+			
+		}
 
 		//add component
 		template <typename ComponentType>
@@ -65,15 +77,10 @@ namespace ecs
 		}
 
 		//get component from entity
-
-
-		//add system
-
-		//remove system
-
-		//update systems
-
-
+		template <typename ComponentType>
+		ComponentType & getComponentFromEntity(entityType entity)
+		{
+		}
 
 		/*********************************\
 		 * 	EXCEPTIONS
@@ -137,5 +144,7 @@ namespace ecs
 		std::array<entityType, MAX_ENTITIES> m_entities;
 
 		std::unordered_map<std::type_index, std::shared_ptr<void>> m_components;
+
+
 	};
 }
