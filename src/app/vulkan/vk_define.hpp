@@ -13,6 +13,9 @@
 		VkResult result = function; \
 		if (result != VK_SUCCESS) \
 		{ \
-			throw std::runtime_error(std::string(message) + " (" + std::string(string_VkResult(result)) + ")"); \
+			throw std::runtime_error( \
+				__PRETTY_FUNCTION__ + std::string(": ") \
+				+ std::string(message) + " (" + std::string(string_VkResult(result)) + ")" \
+			); \
 		} \
 	}

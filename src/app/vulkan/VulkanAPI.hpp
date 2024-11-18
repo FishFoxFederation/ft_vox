@@ -575,11 +575,11 @@ public:
 		Buffer vertex_buffer;
 
 		VkDeviceAddress block_vertex_address;
-		VkDeviceSize block_index_offset;
+		uint32_t block_index_offset;
 		uint32_t block_index_count;
 
 		VkDeviceAddress water_vertex_address;
-		VkDeviceSize water_index_offset;
+		uint32_t water_index_offset;
 		uint32_t water_index_count;
 
 		glm::dmat4 model;
@@ -613,8 +613,9 @@ public:
 	 */
 	std::map<InstanceId, glm::dmat4> getChunksInScene() const;
 
-	void drawChunkBlock(const InstanceId & id);
-	void drawChunkWater(const InstanceId & id);
+	void bindChunkIndexBuffer(VkCommandBuffer command_buffer);
+	void drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id);
+	void drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
 
 	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 	std::optional<glm::vec3> targetBlock() const;
@@ -643,14 +644,14 @@ private:
 	MemoryRange m_chunks_indices_buffer_memory_range;
 
 	std::map<InstanceId, ChunkMeshesInfo> m_chunks_in_scene;
-	std::map<InstanceId, glm::dmat4> m_chunks_in_scene_copy;
+	std::map<InstanceId, glm::dmat4> m_chunks_in_scene_rendered;
 	std::list<InstanceId> m_free_chunk_ids;
 	const InstanceId m_null_instance_id = 0;
 	std::vector<InstanceId> m_chunk_instance_to_destroy;
 	mutable TracyLockableN(std::mutex, m_chunks_in_scene_mutex, "Chunk Render Data");
 
 	void _setupChunksRessources();
-	void _resizeChunksIndicesBuffer(uint32_t count);
+	void _resizeChunksIndicesBuffer(const VkDeviceSize & size);
 	void _deleteUnusedChunks();
 
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "logger.hpp"
+
 #include <cstdint>
 #include <map>
 
@@ -13,7 +15,6 @@ public:
 	MemoryRange(const uint64_t & capacity = 0):
 		m_capacity(capacity)
 	{
-		add(capacity);
 	}
 
 	uint64_t capacity() { return m_capacity; }
@@ -27,6 +28,12 @@ public:
 	{
 		uint64_t address = 0;
 
+		if (m_used_ranges.empty() && m_capacity >= alloc_size)
+		{
+			m_used_ranges[0] = alloc_size;
+			return 0;
+		}
+
 		for (auto it = m_used_ranges.begin(); it != m_used_ranges.end(); ++it)
 		{
 			if (it->first - address >= alloc_size)
@@ -37,10 +44,10 @@ public:
 			address = it->first + it->second;
 		}
 
-		if (m_used_ranges.empty() && m_capacity >= alloc_size)
+		if (m_capacity - address >= alloc_size)
 		{
-			m_used_ranges[0] = alloc_size;
-			return 0;
+			m_used_ranges[address] = alloc_size;
+			return address;
 		}
 
 		return capacity();
