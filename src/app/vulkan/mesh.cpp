@@ -59,7 +59,11 @@ uint64_t VulkanAPI::storeMesh(
 		mesh.buffer_memory
 	);
 
-	copyBuffer(staging_buffer, mesh.buffer, buffer_size);
+	const VkBufferCopy buffer_copy = {
+		.size = buffer_size
+	};
+
+	copyBuffer(staging_buffer, mesh.buffer, buffer_copy);
 
 	vkDestroyBuffer(device, staging_buffer, nullptr);
 	VulkanMemoryAllocator & vma = VulkanMemoryAllocator::getInstance();
