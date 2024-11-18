@@ -67,6 +67,12 @@
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
 		"variant": "cpp",
-		"semaphore": "cpp"
+		"semaphore": "cpp",
+		"any": "cpp",
+		"charconv": "cpp",
+		"forward_list": "cpp",
+		"set": "cpp",
+		"valarray": "cpp",
+		"format": "cpp"
 	}
 }

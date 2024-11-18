@@ -662,6 +662,7 @@ private:
 
 
 public:
+	std::vector<std::vector<Buffer>> m_draw_chunk_block_shadow_pass_buffer;
 	std::vector<Buffer> m_draw_chunk_block_light_pass_buffer;
 private:
 	uint32_t m_max_draw_count;

@@ -504,12 +504,11 @@ void RenderThread::shadowPass()
 				ZoneScopedN("Draw chunks");
 				TracyVkZone(vk.draw_ctx, vk.draw_shadow_pass_command_buffers[vk.current_frame], "Draw chunks");
 
-				vk.bindChunkIndexBuffer(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
-
-				for (auto & id : shadow_visible_chunks[shadow_map_index])
-				{
-					vk.drawChunkBlock(vk.draw_shadow_pass_command_buffers[vk.current_frame], id);
-				}
+				vk.drawChunksBlock(
+					vk.draw_shadow_pass_command_buffers[vk.current_frame],
+					vk.m_draw_chunk_block_shadow_pass_buffer[vk.current_frame][shadow_map_index],
+					shadow_visible_chunks[shadow_map_index]
+				);
 			}
 
 			vkCmdEndRenderPass(vk.draw_shadow_pass_command_buffers[vk.current_frame]);
@@ -585,12 +584,6 @@ void RenderThread::lightingPass()
 
 				vkCmdBindPipeline(vk.draw_command_buffers[vk.current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, vk.chunk_pipeline.pipeline);
 
-				vk.bindChunkIndexBuffer(vk.draw_command_buffers[vk.current_frame]);
-
-				// for (auto & id: visible_chunks)
-				// {
-				// 	vk.drawChunkBlock(vk.draw_command_buffers[vk.current_frame], id);
-				// }
 				vk.drawChunksBlock(
 					vk.draw_command_buffers[vk.current_frame],
 					vk.m_draw_chunk_block_light_pass_buffer[vk.current_frame],

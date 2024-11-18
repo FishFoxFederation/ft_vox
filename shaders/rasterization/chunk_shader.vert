@@ -37,6 +37,7 @@ void main()
 	fragPosWorldSpace = instance_data.matrice * vec4(positions, 1.0);
 
 	fragAO = float(ao);
-	fragSkyLight = float(light & 0x0F);
+	// fragSkyLight = float(light & 0x0F);
+	fragSkyLight = 15;
 	fragBlockLight = float(light >> 4 & 0x0F);
 }
