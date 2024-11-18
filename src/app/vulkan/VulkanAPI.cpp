@@ -2720,6 +2720,13 @@ void VulkanAPI::drawChunksBlock(
 	const std::vector<InstanceId> & ids
 )
 {
+	vkCmdBindIndexBuffer(
+		command_buffer,
+		m_chunks_indices_buffer.buffer,
+		0,
+		VK_INDEX_TYPE_UINT32
+	);
+	
 	VkDrawIndexedIndirectCommand * draw_commands = static_cast<VkDrawIndexedIndirectCommand *>(indirect_buffer.mappedMemory());
 	uint32_t draw_count = 0;
 

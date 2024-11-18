@@ -4,6 +4,7 @@ void VulkanAPI::_createDrawBuffer()
 {
 	m_max_draw_count = 10000;
 
+	m_draw_chunk_block_shadow_pass_buffer.resize(max_frames_in_flight);
 	m_draw_chunk_block_light_pass_buffer.resize(max_frames_in_flight);
 
 	const Buffer::CreateInfo buffer_info = {
@@ -16,6 +17,12 @@ void VulkanAPI::_createDrawBuffer()
 	};
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
+		m_draw_chunk_block_shadow_pass_buffer[i].resize(shadow_maps_count);
+		for (uint32_t j = 0; j < shadow_maps_count; j++)
+		{
+			m_draw_chunk_block_shadow_pass_buffer[i][j] = Buffer(device, physical_device, buffer_info);
+		}
+
 		m_draw_chunk_block_light_pass_buffer[i] = Buffer(device, physical_device, buffer_info);
 	}
 }
@@ -24,6 +31,10 @@ void VulkanAPI::_destroyDrawBuffer()
 {
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
+		for (uint32_t j = 0; j < shadow_maps_count; j++)
+		{
+			m_draw_chunk_block_shadow_pass_buffer[i][j].clear();
+		}
 		m_draw_chunk_block_light_pass_buffer[i].clear();
 	}
 }
