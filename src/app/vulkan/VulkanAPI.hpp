@@ -19,6 +19,8 @@
 #include "Model.hpp"
 #include "Item.hpp"
 #include "MemoryRange.hpp"
+#include "Settings.hpp"
+#include "DebugGui.hpp"
 
 #include "Tracy.hpp"
 #include "tracy_globals.hpp"
@@ -297,34 +299,54 @@ public:
 	VulkanAPI & operator=(const VulkanAPI &) = delete;
 	VulkanAPI & operator=(VulkanAPI &&) = delete;
 
-	void startFrame();
-	void endFrame();
+	void renderFrame();
 
-	void transitionImageLayout(
-		VkImage image,
-		VkImageLayout oldLayout,
-		VkImageLayout newLayout,
-		VkImageAspectFlags aspectMask,
-		uint32_t mipLevels,
-		VkAccessFlags srcAccessMask,
-		VkAccessFlags dstAccessMask,
-		VkPipelineStageFlags srcStageMask,
-		VkPipelineStageFlags dstStageMask
+
+	Camera camera;
+
+	std::atomic<bool> show_debug_text = false;
+
+	IdList<uint64_t, MeshRenderData> entity_mesh_list;
+
+	std::map<uint64_t, PlayerRenderData> m_players;
+	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
+
+	// hud
+	std::array<ItemInfo::Type, 9> toolbar_items;
+	mutable std::mutex toolbar_items_mutex;
+	std::atomic<int> toolbar_cursor_index = 0;
+
+	// position of the block the camera is looking at
+	std::optional<glm::vec3> m_target_block;
+	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
+
+
+	struct ChunkMeshCreateInfo
+	{
+		std::vector<BlockVertex> & block_vertex;
+		std::vector<uint32_t> & block_index;
+
+		std::vector<BlockVertex> & water_vertex;
+		std::vector<uint32_t> & water_index;
+	};
+
+	/**
+	 * @brief Add a chunk to the scene with the given mesh info and model matrix.
+	 *
+	 * @return The id of the chunk in the scene.
+	 */
+	InstanceId addChunkToScene(
+		const ChunkMeshCreateInfo & mesh_info,
+		const glm::dmat4 & model
 	);
 
-	void setImageLayout(
-		VkCommandBuffer command_buffer,
-		VkImage image,
-		VkImageLayout old_layout,
-		VkImageLayout new_layout,
-		VkImageSubresourceRange subresource_range,
-		VkAccessFlags srcAccessMask,
-		VkAccessFlags dstAccessMask,
-		VkPipelineStageFlags srcStageMask,
-		VkPipelineStageFlags dstStageMask
-	);
+	/**
+	 * @brief Remove a chunk from the scene. Aslo destroy the associated meshes.
+	 *
+	 */
+	void removeChunkFromScene(const uint64_t chunk_id);
 
-	void recreateSwapChain(GLFWwindow * window);
+	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 
 	uint64_t storeMesh(
 		const void * vertices,
@@ -336,33 +358,6 @@ public:
 	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
 
-	std::pair<bool, Mesh> getMesh(const uint64_t id);
-	void drawMesh(
-		VkCommandBuffer command_buffer,
-		const Pipeline & pipeline,
-		const uint64_t mesh_id,
-		const void * push_constants,
-		const uint32_t push_constants_size,
-		const VkShaderStageFlags push_constants_stage,
-		const uint32_t instance_id = 0
-	);
-
-	void writeTextToDebugImage(
-		VkCommandBuffer command_buffer,
-		const std::string & text,
-		const uint32_t x,
-		const uint32_t y,
-		const uint32_t font_size
-	);
-
-	void drawHudImage(
-		const Descriptor & descriptor,
-		const VkViewport & viewport
-	);
-	void drawItemIcon(
-		const VkViewport & viewport,
-		const uint32_t layer
-	);
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
 	void ImGuiTexturePutPixel(
@@ -377,6 +372,23 @@ public:
 	void ImGuiTextureClear(const uint64_t texture_id);
 	void ImGuiTextureDraw(const uint64_t texture_id);
 
+	uint64_t getCubeMeshId() const { return cube_mesh_id; }
+
+private:
+
+	const std::vector<const char *> validation_layers = {
+		"VK_LAYER_KHRONOS_validation"
+	};
+
+	const std::vector<const char *> device_extensions = {
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
+		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
+		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
+		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
+		VK_KHR_8BIT_STORAGE_EXTENSION_NAME,
+		VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME
+	};
 
 	GLFWwindow * window;
 
@@ -456,10 +468,6 @@ public:
 	//																											#
 	//###########################################################################################################
 
-public:
-
-private:
-
 	uint32_t instance_data_size;
 	uint32_t instance_data_max_count;
 	std::vector<Buffer> instance_data_buffers;
@@ -474,8 +482,6 @@ private:
 	//													Descriptors												#
 	//																											#
 	//###########################################################################################################
-
-public:
 
 	Descriptor crosshair_image_descriptor;
 	Descriptor toolbar_image_descriptor;
@@ -539,36 +545,28 @@ public:
 	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
 
 	PFN_vkGetBufferDeviceAddress vkGetBufferDeviceAddress;
+	
+
+	/**
+	 * @brief Get the chunks in the scene.
+	 *
+	 */
+	std::map<InstanceId, glm::dmat4> getChunksInScene() const;
+
+	void bindChunkIndexBuffer(VkCommandBuffer command_buffer);
+	void drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id);
+	void drawChunksBlock(
+		VkCommandBuffer command_buffer,
+		Buffer & indirect_buffer,
+		const std::vector<InstanceId> & ids
+	);
+	void drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
+
+	std::optional<glm::vec3> targetBlock() const;
+
+	std::vector<PlayerRenderData> getPlayers() const;
 
 
-	// Draw data
-	Camera camera;
-
-	std::atomic<bool> show_debug_text = false;
-
-	IdList<uint64_t, MeshRenderData> entity_mesh_list;
-
-	std::map<uint64_t, PlayerRenderData> m_players;
-	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
-
-	// hud
-	std::array<ItemInfo::Type, 9> toolbar_items;
-	mutable std::mutex toolbar_items_mutex;
-	std::atomic<int> toolbar_cursor_index = 0;
-
-	// position of the block the camera is looking at
-	std::optional<glm::vec3> m_target_block;
-	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
-
-
-	struct ChunkMeshCreateInfo
-	{
-		std::vector<BlockVertex> & block_vertex;
-		std::vector<uint32_t> & block_index;
-
-		std::vector<BlockVertex> & water_vertex;
-		std::vector<uint32_t> & water_index;
-	};
 
 	struct ChunkMeshesInfo
 	{
@@ -591,60 +589,6 @@ public:
 		};
 	};
 
-	/**
-	 * @brief Add a chunk to the scene with the given mesh info and model matrix.
-	 *
-	 * @return The id of the chunk in the scene.
-	 */
-	InstanceId addChunkToScene(
-		const ChunkMeshCreateInfo & mesh_info,
-		const glm::dmat4 & model
-	);
-
-	/**
-	 * @brief Remove a chunk from the scene. Aslo destroy the associated meshes.
-	 *
-	 */
-	void removeChunkFromScene(const uint64_t chunk_id);
-
-	/**
-	 * @brief Get the chunks in the scene.
-	 *
-	 */
-	std::map<InstanceId, glm::dmat4> getChunksInScene() const;
-
-	void bindChunkIndexBuffer(VkCommandBuffer command_buffer);
-	void drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id);
-	void drawChunksBlock(
-		VkCommandBuffer command_buffer,
-		Buffer & indirect_buffer,
-		const std::vector<InstanceId> & ids
-	);
-	void drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
-
-	void setTargetBlock(const std::optional<glm::vec3> & target_block);
-	std::optional<glm::vec3> targetBlock() const;
-
-	std::vector<PlayerRenderData> getPlayers() const;
-
-
-private:
-
-	const std::vector<const char *> validation_layers = {
-		"VK_LAYER_KHRONOS_validation"
-	};
-
-	std::vector<const char *> device_extensions = {
-		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-		VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
-		VK_EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME,
-		VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
-		VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME,
-		VK_KHR_8BIT_STORAGE_EXTENSION_NAME,
-		VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME
-	};
-
-
 	Buffer m_chunks_indices_buffer;
 	MemoryRange m_chunks_indices_buffer_memory_range;
 
@@ -661,11 +605,9 @@ private:
 
 
 
-public:
+	uint32_t m_max_draw_count;
 	std::vector<std::vector<Buffer>> m_draw_chunk_block_shadow_pass_buffer;
 	std::vector<Buffer> m_draw_chunk_block_light_pass_buffer;
-private:
-	uint32_t m_max_draw_count;
 
 	void _createDrawBuffer();
 	void _destroyDrawBuffer();
@@ -698,6 +640,7 @@ private:
 	void createLogicalDevice();
 
 	void createSwapChain(GLFWwindow * window);
+	void recreateSwapChain(GLFWwindow * window);
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window);
@@ -758,6 +701,29 @@ private:
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);
 
+
+	void transitionImageLayout(
+		VkImage image,
+		VkImageLayout oldLayout,
+		VkImageLayout newLayout,
+		VkImageAspectFlags aspectMask,
+		uint32_t mipLevels,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask,
+		VkPipelineStageFlags srcStageMask,
+		VkPipelineStageFlags dstStageMask
+	);
+	void setImageLayout(
+		VkCommandBuffer command_buffer,
+		VkImage image,
+		VkImageLayout old_layout,
+		VkImageLayout new_layout,
+		VkImageSubresourceRange subresource_range,
+		VkAccessFlags srcAccessMask,
+		VkAccessFlags dstAccessMask,
+		VkPipelineStageFlags srcStageMask,
+		VkPipelineStageFlags dstStageMask
+	);
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat> & candidates,
 		VkImageTiling tiling,
@@ -797,6 +763,128 @@ private:
 		VkImage image,
 		uint32_t width,
 		uint32_t height
+	);
+
+
+	//###########################################################################################################
+	//																											#
+	//												Render loop													#
+	//																											#
+	//###########################################################################################################
+
+	std::chrono::nanoseconds m_start_time;
+	std::chrono::nanoseconds m_current_time;
+	std::chrono::nanoseconds m_last_frame_time;
+	std::chrono::nanoseconds m_delta_time;
+
+	// For DebugGui
+	int m_frame_count;
+	std::chrono::nanoseconds m_start_time_counting_fps;
+
+	// Scene data
+	int window_width, window_height;
+	double aspect_ratio;
+
+	const glm::mat4 clip = glm::mat4(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f,-1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.0f, 0.0f, 0.5f, 1.0f
+	);
+	Camera::RenderInfo camera_render_info;
+	ViewProjMatrices camera_matrices = {};
+	ViewProjMatrices camera_matrices_fc = {};
+
+	std::map<VulkanAPI::InstanceId, glm::dmat4> chunk_meshes;
+	std::vector<MeshRenderData> entity_meshes;
+	std::vector<PlayerRenderData> players;
+
+	std::vector<VulkanAPI::InstanceId> visible_chunks;
+	std::vector<std::vector<VulkanAPI::InstanceId>> shadow_visible_chunks;
+
+	ViewProjMatrices sun = {};
+	glm::dvec3 sun_position;
+
+	std::optional<glm::vec3> target_block;
+
+	AtmosphereParams atmosphere_params = {};
+
+	std::vector<glm::mat4> light_view_proj_matrices;
+	ShadowMapLight shadow_map_light = {};
+
+	std::string debug_text;
+
+	std::array<ItemInfo::Type, 9> m_toolbar_items;
+	int m_toolbar_cursor_index = 0;
+
+	void _createRenderFrameRessources();
+
+	void prepareFrame();
+	void updateTime();
+	void updateDebugText();
+	void updateVisibleChunks();
+
+	void startFrame();
+	void endFrame();
+
+	void shadowPass();
+	void lightingPass();
+
+	void drawPlayerBodyPart(
+		const uint64_t mesh_id,
+		const glm::mat4 & model
+	);
+
+	void copyToSwapchain();
+
+	void drawDebugGui();
+	void updateImGui();
+
+	std::vector<glm::mat4> getCSMLightViewProjMatrices(
+		const glm::vec3 & light_dir,
+		const std::vector<float> & split,
+		const float blend_distance,
+		const glm::mat4 & camera_view,
+		const float cam_fov,
+		const float cam_ratio,
+		const float cam_near_plane,
+		const float cam_far_plane,
+		std::vector<float> & far_plane_distances
+	);
+
+	bool isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const;
+	bool isInsideFrustum_planes(
+		const glm::mat4 & view_proj,
+		const glm::mat4 & model,
+		const glm::vec3 & size
+	) const;
+
+	std::pair<bool, Mesh> getMesh(const uint64_t id);
+	void drawMesh(
+		VkCommandBuffer command_buffer,
+		const Pipeline & pipeline,
+		const uint64_t mesh_id,
+		const void * push_constants,
+		const uint32_t push_constants_size,
+		const VkShaderStageFlags push_constants_stage,
+		const uint32_t instance_id = 0
+	);
+
+	void writeTextToDebugImage(
+		VkCommandBuffer command_buffer,
+		const std::string & text,
+		const uint32_t x,
+		const uint32_t y,
+		const uint32_t font_size
+	);
+
+	void drawHudImage(
+		const Descriptor & descriptor,
+		const VkViewport & viewport
+	);
+	void drawItemIcon(
+		const VkViewport & viewport,
+		const uint32_t layer
 	);
 
 };

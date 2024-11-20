@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Camera.hpp"
-#include "VulkanAPI.hpp"
 
 #include "imgui.h"
 
@@ -96,23 +95,13 @@ private:
 
 };
 
-class VulkanAPI;
-
 class DebugGui
 {
 
 public:
-static constexpr int NOISE_SIZE = 256;
 
-	DebugGui(
-		VulkanAPI & vk
-	);
+	static constexpr int NOISE_SIZE = 256;
 
-	~DebugGui();
-
-	void updateImGui();
-
-	VulkanAPI & vk;
 
 	static inline std::atomic<uint32_t> fps = 0;
 	static inline std::atomic<uint32_t> ups = 0;

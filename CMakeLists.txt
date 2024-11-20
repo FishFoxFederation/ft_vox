@@ -56,12 +56,10 @@ target_sources(${PROJECT_NAME}
 		src/app/perlin/Perlin.cpp
 
 		src/app/application.cpp
-		src/app/DebugGui.cpp
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
-		src/app/threads/render/CascadedShadowMapping.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/task_manager/ExecutorWorker.cpp
 		src/app/threads/task_manager/Executor.cpp
@@ -82,6 +80,7 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/instance_data.cpp
 		src/app/vulkan/mesh.cpp
 		src/app/vulkan/draw_buffer.cpp
+		src/app/vulkan/render_loop.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -217,12 +216,10 @@ target_sources(server
 
 		src/app/perlin/Perlin.cpp
 
-		src/app/DebugGui.cpp
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
 		src/app/threads/Status.cpp
 		src/app/threads/render/RenderThread.cpp
-		src/app/threads/render/CascadedShadowMapping.cpp
 		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/block_update/ServerBlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
@@ -243,6 +240,7 @@ target_sources(server
 		src/app/vulkan/instance_data.cpp
 		src/app/vulkan/mesh.cpp
 		src/app/vulkan/draw_buffer.cpp
+		src/app/vulkan/render_loop.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -353,12 +351,10 @@ target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy:
 
 # 		src/app/perlin/Perlin.cpp
 
-# 		src/app/DebugGui.cpp
 # 		src/app/Settings.cpp
 # 		src/app/scenes/Camera.cpp
 # 		src/app/threads/Status.cpp
 # 		src/app/threads/render/RenderThread.cpp
-# 		src/app/threads/render/CascadedShadowMapping.cpp
 # 		src/app/vulkan/VulkanAPI.cpp
 # 		src/app/vulkan/VulkanMemoryAllocator.cpp
 # 		src/app/vulkan/chunk_mesh.cpp

@@ -828,7 +828,7 @@ void ClientWorld::createMob()
 		m_vulkan_api.entity_mesh_list.insert(
 			mob_id,
 			{
-				m_vulkan_api.cube_mesh_id,
+				m_vulkan_api.getCubeMeshId(),
 				Transform(
 					mob->transform.position + mob->hitbox.position,
 					glm::vec3(0.0f),

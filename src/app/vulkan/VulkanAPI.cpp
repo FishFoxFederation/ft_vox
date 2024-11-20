@@ -63,8 +63,9 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	prerenderItemIconImages();
 
 	setupImgui();
-
 	setupTracy();
+
+	_createRenderFrameRessources();
 
 	LOG_INFO("VulkanAPI initialized");
 }
