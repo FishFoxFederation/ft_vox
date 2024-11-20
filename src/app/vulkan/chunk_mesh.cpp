@@ -61,7 +61,7 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 		.dstOffset = index_offset,
 		.size = index_size
 	};
-	copyBuffer(
+	_copyBuffer(
 		staging_index_buffer.buffer,
 		m_chunks_indices_buffer.buffer,
 		index_buffer_copy
@@ -110,7 +110,7 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	const VkDeviceAddress vertex_buffer_address = vkGetBufferDeviceAddress(device, &address_info);
 
 	// copy staging vertex buffer to the vertex buffer
-	copyBuffer(
+	_copyBuffer(
 		staging_vertex_buffer.buffer,
 		vertex_buffer.buffer,
 		{ 0, 0, vertex_size }
@@ -197,7 +197,7 @@ void VulkanAPI::_resizeChunksIndicesBuffer(const VkDeviceSize & size)
 		const VkBufferCopy buffer_copy = {
 			.size = m_chunks_indices_buffer.size()
 		};
-		copyBuffer(
+		_copyBuffer(
 			m_chunks_indices_buffer.buffer,
 			new_buffer.buffer,
 			buffer_copy

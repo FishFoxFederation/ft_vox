@@ -308,18 +308,13 @@ public:
 
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
-	std::map<uint64_t, PlayerRenderData> m_players;
+	std::map<uint64_t, PlayerRenderData> players;
 	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
 
 	// hud
 	std::array<ItemInfo::Type, 9> toolbar_items;
 	mutable std::mutex toolbar_items_mutex;
 	std::atomic<int> toolbar_cursor_index = 0;
-
-	// position of the block the camera is looking at
-	std::optional<glm::vec3> m_target_block;
-	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
-
 
 	struct ChunkMeshCreateInfo
 	{
@@ -355,7 +350,6 @@ public:
 		const void * indices,
 		const uint32_t index_count
 	);
-	void destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void destroyMesh(const uint64_t & mesh_id);
 
 
@@ -614,16 +608,16 @@ private:
 
 
 
-	void createInstance();
-	bool checkValidationLayerSupport();
-	std::vector<const char *> getRequiredExtensions();
+	void _createInstance();
+	bool _checkValidationLayerSupport();
+	std::vector<const char *> _getRequiredExtensions();
 
-	void loadVulkanFunctions();
+	void _loadVulkanFunctions();
 
-	void createSurface(GLFWwindow * window);
+	void _createSurface(GLFWwindow * window);
 
-	void setupDebugMessenger();
-	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info);
+	void _setupDebugMessenger();
+	void _populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info);
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
 		VkDebugUtilsMessageTypeFlagsEXT message_type,
@@ -631,78 +625,78 @@ private:
 		void * user_data
 	);
 
-	void pickPhysicalDevice();
-	bool isDeviceSuitable(VkPhysicalDevice device);
-	int ratePhysicalDevice(VkPhysicalDevice device);
-	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
-	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+	void _pickPhysicalDevice();
+	bool _isDeviceSuitable(VkPhysicalDevice device);
+	int _ratePhysicalDevice(VkPhysicalDevice device);
+	QueueFamilyIndices _findQueueFamilies(VkPhysicalDevice device);
+	bool _checkDeviceExtensionSupport(VkPhysicalDevice device);
 
-	void createLogicalDevice();
+	void _createLogicalDevice();
 
-	void createSwapChain(GLFWwindow * window);
-	void recreateSwapChain(GLFWwindow * window);
-	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats);
-	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes);
-	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window);
+	void _createSwapChain(GLFWwindow * window);
+	void _recreateSwapChain(GLFWwindow * window);
+	VkSurfaceFormatKHR _chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats);
+	VkPresentModeKHR _chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes);
+	VkExtent2D _chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window);
 
-	void createCommandPool();
-	void createCommandBuffer();
+	void _createCommandPool();
+	void _createCommandBuffer();
 
-	void createSyncObjects();
+	void _createSyncObjects();
 
-	void createColorAttachement();
-	void createDepthAttachement();
+	void _createColorAttachement();
+	void _createDepthAttachement();
 
-	void createShadowMapRessources();
-	void destroyShadowMapRessources();
+	void _createShadowMapRessources();
+	void _destroyShadowMapRessources();
 
-	void createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count);
-	void createUniformBuffers();
-	void createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
-	void createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
-	void createHudImages(
+	void _createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count);
+	void _createUniformBuffers();
+	void _createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
+	void _createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
+	void _createHudImages(
 		const std::string & file_path,
 		Image & image
 	);
-	void createTextureImage();
+	void _createTextureImage();
 
-	void createHudDescriptors(
+	void _createHudDescriptors(
 		const Image & image,
 		Descriptor & descriptor
 	);
-	void createDescriptors();
-	void createGlobalDescriptor();
-	void updateGlobalDescriptor();
+	void _createDescriptors();
+	void _createGlobalDescriptor();
+	void _updateGlobalDescriptor();
 
-	void createRenderPass();
-	void createPipelines();
-	void createFramebuffers();
-	void destroyFramebuffers();
+	void _createRenderPass();
+	void _createPipelines();
+	void _createFramebuffers();
+	void _destroyFramebuffers();
 
-	void createMeshes();
-	void createItemMeshes();
-	void destroyMeshes();
+	void _createMeshes();
+	void _createItemMeshes();
+	void _destroyMeshes();
 	void _destroyMesh(const uint64_t & mesh_id);
 
 
-	void setupTextRenderer();
-	void destroyTextRenderer();
+	void _setupTextRenderer();
+	void _destroyTextRenderer();
 
-	void setupImgui();
-	void destroyImGuiTextures();
+	void _setupImgui();
+	void _destroyImGuiTextures();
 
-	void setupTracy();
-	void destroyTracy();
-
-
-	void prerenderItemIconImages();
+	void _setupTracy();
+	void _destroyTracy();
 
 
-	VkCommandBuffer beginSingleTimeCommands();
-	void endSingleTimeCommands(VkCommandBuffer command_buffer);
+	void _prerenderItemIconImages();
 
 
-	void transitionImageLayout(
+	VkCommandBuffer _beginSingleTimeCommands();
+	void _endSingleTimeCommands(VkCommandBuffer command_buffer);
+
+
+	void _transitionImageLayout(
 		VkImage image,
 		VkImageLayout oldLayout,
 		VkImageLayout newLayout,
@@ -713,7 +707,7 @@ private:
 		VkPipelineStageFlags srcStageMask,
 		VkPipelineStageFlags dstStageMask
 	);
-	void setImageLayout(
+	void _setImageLayout(
 		VkCommandBuffer command_buffer,
 		VkImage image,
 		VkImageLayout old_layout,
@@ -724,12 +718,12 @@ private:
 		VkPipelineStageFlags srcStageMask,
 		VkPipelineStageFlags dstStageMask
 	);
-	VkFormat findSupportedFormat(
+	VkFormat _findSupportedFormat(
 		const std::vector<VkFormat> & candidates,
 		VkImageTiling tiling,
 		VkFormatFeatureFlags features
 	);
-	void createImage(
+	void _createImage(
 		uint32_t width,
 		uint32_t height,
 		uint32_t mip_levels,
@@ -740,25 +734,25 @@ private:
 		VkImage & image,
 		VkDeviceMemory & image_memory
 	);
-	void createImageView(
+	void _createImageView(
 		VkImage image,
 		VkFormat format,
 		VkImageAspectFlags aspect_flags,
 		VkImageView & image_view
 	);
-	void createBuffer(
+	void _createBuffer(
 		VkDeviceSize size,
 		VkBufferUsageFlags usage,
 		VkMemoryPropertyFlags properties,
 		VkBuffer & buffer,
 		VkDeviceMemory & buffer_memory
 	);
-	void copyBuffer(
+	void _copyBuffer(
 		VkBuffer src_buffer,
 		VkBuffer dst_buffer,
 		const VkBufferCopy & copy_region
 	);
-	void copyBufferToImage(
+	void _copyBufferToImage(
 		VkBuffer buffer,
 		VkImage image,
 		uint32_t width,
@@ -782,65 +776,68 @@ private:
 	std::chrono::nanoseconds m_start_time_counting_fps;
 
 	// Scene data
-	int window_width, window_height;
-	double aspect_ratio;
+	int m_window_width, m_window_height;
+	double m_aspect_ratio;
 
-	const glm::mat4 clip = glm::mat4(
+	const glm::mat4 m_clip = glm::mat4(
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f,-1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.5f, 0.0f,
 		0.0f, 0.0f, 0.5f, 1.0f
 	);
-	Camera::RenderInfo camera_render_info;
-	ViewProjMatrices camera_matrices = {};
-	ViewProjMatrices camera_matrices_fc = {};
+	Camera::RenderInfo m_camera_render_info;
+	ViewProjMatrices m_camera_matrices = {};
+	ViewProjMatrices m_camera_matrices_fc = {};
 
-	std::map<VulkanAPI::InstanceId, glm::dmat4> chunk_meshes;
-	std::vector<MeshRenderData> entity_meshes;
-	std::vector<PlayerRenderData> players;
+	std::map<VulkanAPI::InstanceId, glm::dmat4> m_chunk_meshes;
+	std::vector<MeshRenderData> m_entity_meshes;
+	std::vector<PlayerRenderData> m_players;
 
-	std::vector<VulkanAPI::InstanceId> visible_chunks;
-	std::vector<std::vector<VulkanAPI::InstanceId>> shadow_visible_chunks;
+	std::vector<VulkanAPI::InstanceId> m_visible_chunks;
+	std::vector<std::vector<VulkanAPI::InstanceId>> m_shadow_visible_chunks;
 
-	ViewProjMatrices sun = {};
-	glm::dvec3 sun_position;
+	ViewProjMatrices m_sun_matrices = {};
+	glm::dvec3 m_sun_position;
 
-	std::optional<glm::vec3> target_block;
+	// position of the block the camera is looking at
+	std::optional<glm::vec3> m_target_block;
+	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
 
-	AtmosphereParams atmosphere_params = {};
 
-	std::vector<glm::mat4> light_view_proj_matrices;
-	ShadowMapLight shadow_map_light = {};
+	AtmosphereParams m_atmosphere_params = {};
 
-	std::string debug_text;
+	std::vector<glm::mat4> m_light_view_proj_matrices;
+	ShadowMapLight m_shadow_map_light = {};
+
+	std::string m_debug_text;
 
 	std::array<ItemInfo::Type, 9> m_toolbar_items;
 	int m_toolbar_cursor_index = 0;
 
 	void _createRenderFrameRessources();
 
-	void prepareFrame();
-	void updateTime();
-	void updateDebugText();
-	void updateVisibleChunks();
+	void _prepareFrame();
+	void _updateTime();
+	void _updateDebugText();
+	void _updateVisibleChunks();
 
-	void startFrame();
-	void endFrame();
+	void _startFrame();
+	void _endFrame();
 
-	void shadowPass();
-	void lightingPass();
+	void _shadowPass();
+	void _lightingPass();
 
-	void drawPlayerBodyPart(
+	void _drawPlayerBodyPart(
 		const uint64_t mesh_id,
 		const glm::mat4 & model
 	);
 
-	void copyToSwapchain();
+	void _copyToSwapchain();
 
-	void drawDebugGui();
-	void updateImGui();
+	void _drawDebugGui();
+	void _updateImGui();
 
-	std::vector<glm::mat4> getCSMLightViewProjMatrices(
+	std::vector<glm::mat4> _getCSMLightViewProjMatrices(
 		const glm::vec3 & light_dir,
 		const std::vector<float> & split,
 		const float blend_distance,
@@ -852,15 +849,15 @@ private:
 		std::vector<float> & far_plane_distances
 	);
 
-	bool isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const;
-	bool isInsideFrustum_planes(
+	bool _isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const;
+	bool _isInsideFrustum_planes(
 		const glm::mat4 & view_proj,
 		const glm::mat4 & model,
 		const glm::vec3 & size
 	) const;
 
-	std::pair<bool, Mesh> getMesh(const uint64_t id);
-	void drawMesh(
+	std::pair<bool, Mesh> _getMesh(const uint64_t id);
+	void _drawMesh(
 		VkCommandBuffer command_buffer,
 		const Pipeline & pipeline,
 		const uint64_t mesh_id,
@@ -870,7 +867,7 @@ private:
 		const uint32_t instance_id = 0
 	);
 
-	void writeTextToDebugImage(
+	void _writeTextToDebugImage(
 		VkCommandBuffer command_buffer,
 		const std::string & text,
 		const uint32_t x,
@@ -878,11 +875,11 @@ private:
 		const uint32_t font_size
 	);
 
-	void drawHudImage(
+	void _drawHudImage(
 		const Descriptor & descriptor,
 		const VkViewport & viewport
 	);
-	void drawItemIcon(
+	void _drawItemIcon(
 		const VkViewport & viewport,
 		const uint32_t layer
 	);

@@ -382,7 +382,7 @@ void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dve
 
 	{
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		PlayerRenderData & data = m_vulkan_api.m_players.at(player_id);
+		PlayerRenderData & data = m_vulkan_api.players.at(player_id);
 		data.position = player->transform.position;
 	}
 }
@@ -399,7 +399,7 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 
 	{
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		PlayerRenderData & data = m_vulkan_api.m_players.at(player_id);
+		PlayerRenderData & data = m_vulkan_api.players.at(player_id);
 		data.position = player->transform.position;
 	}
 
@@ -608,7 +608,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 
 	{ // update player walking animation
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		PlayerRenderData & data = m_vulkan_api.m_players.at(player_id);
+		PlayerRenderData & data = m_vulkan_api.players.at(player_id);
 		if (glm::length(move) > 0.0)
 		{
 			if (data.walk_animation.isActive() == false)
@@ -684,7 +684,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 
 	{ // update player attack animation
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		PlayerRenderData & data = m_vulkan_api.m_players.at(player_id);
+		PlayerRenderData & data = m_vulkan_api.players.at(player_id);
 		if (data.attack_animation.isActive() == false)
 		{
 			data.attack_animation.start();
@@ -726,7 +726,7 @@ ClientWorld::PlayerUseResult ClientWorld::playerUse(
 
 	{ // update player attack animation
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		PlayerRenderData & data = m_vulkan_api.m_players.at(player_id);
+		PlayerRenderData & data = m_vulkan_api.players.at(player_id);
 		if (data.attack_animation.isActive() == false)
 		{
 			data.attack_animation.start();
@@ -766,7 +766,7 @@ void ClientWorld::updatePlayerCamera(
 
 	{
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		PlayerRenderData & data = m_vulkan_api.m_players.at(player_id);
+		PlayerRenderData & data = m_vulkan_api.players.at(player_id);
 		data.pitch = player->pitch;
 		data.yaw = player->yaw;
 	}
@@ -784,11 +784,11 @@ void ClientWorld::changePlayerViewMode(
 	{
 	case Player::ViewMode::FIRST_PERSON:
 		player->view_mode = Player::ViewMode::THIRD_PERSON_BACK;
-		m_vulkan_api.m_players.at(player_id).visible = true;
+		m_vulkan_api.players.at(player_id).visible = true;
 		break;
 	case Player::ViewMode::THIRD_PERSON_BACK:
 		player->view_mode = Player::ViewMode::FIRST_PERSON;
-		m_vulkan_api.m_players.at(player_id).visible = false;
+		m_vulkan_api.players.at(player_id).visible = false;
 		break;
 	}
 }
@@ -1134,11 +1134,11 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 
 	{
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		m_vulkan_api.m_players.insert(std::make_pair(player_id, PlayerRenderData{position}));
+		m_vulkan_api.players.insert(std::make_pair(player_id, PlayerRenderData{position}));
 		LOG_INFO("Adding player mesh: " << player_id);
 		if (player_id == m_my_player_id) // default player view mode is first person
 		{
-			m_vulkan_api.m_players.at(player_id).visible = false;
+			m_vulkan_api.players.at(player_id).visible = false;
 		}
 	}
 }
@@ -1152,7 +1152,7 @@ void ClientWorld::removePlayer(const uint64_t player_id)
 	{
 		LOG_INFO("Removing player mesh: " << player_id);
 		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		m_vulkan_api.m_players.erase(player_id);
+		m_vulkan_api.players.erase(player_id);
 	}
 }
 

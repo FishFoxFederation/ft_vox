@@ -122,7 +122,7 @@ static void setTextureIndices(
 	}
 }
 
-void VulkanAPI::createItemMeshes()
+void VulkanAPI::_createItemMeshes()
 {
 	for (size_t i = 0; i < g_items_info.count(); i++)
 	{

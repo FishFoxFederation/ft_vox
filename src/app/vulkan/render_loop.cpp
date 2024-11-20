@@ -12,7 +12,7 @@
 
 void VulkanAPI::_createRenderFrameRessources()
 {
-	shadow_visible_chunks.resize(shadow_maps_count);
+	m_shadow_visible_chunks.resize(shadow_maps_count);
 
 	// Tuto pour Augustus:
 
@@ -64,7 +64,7 @@ void VulkanAPI::renderFrame()
 	//																											#
 	//###########################################################################################################
 
-	prepareFrame();
+	_prepareFrame();
 
 	//###########################################################################################################
 	//																											#
@@ -72,13 +72,13 @@ void VulkanAPI::renderFrame()
 	//																											#
 	//###########################################################################################################
 
-	startFrame();
+	_startFrame();
 
 	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
-	memcpy(camera_ubo.mapped_memory[current_frame], &camera_matrices, sizeof(camera_matrices));
-	memcpy(light_mat_ubo.mapped_memory[current_frame], &shadow_map_light, sizeof(shadow_map_light));
-	memcpy(atmosphere_ubo.mapped_memory[current_frame], &atmosphere_params, sizeof(atmosphere_params));
+	memcpy(camera_ubo.mapped_memory[current_frame], &m_camera_matrices, sizeof(m_camera_matrices));
+	memcpy(light_mat_ubo.mapped_memory[current_frame], &m_shadow_map_light, sizeof(m_shadow_map_light));
+	memcpy(atmosphere_ubo.mapped_memory[current_frame], &m_atmosphere_params, sizeof(m_atmosphere_params));
 
 	//###########################################################################################################
 	//																											#
@@ -86,7 +86,7 @@ void VulkanAPI::renderFrame()
 	//																											#
 	//###########################################################################################################
 
-	shadowPass();
+	_shadowPass();
 
 	VkSubmitInfo shadow_pass_submit_info = {};
 	shadow_pass_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -101,7 +101,7 @@ void VulkanAPI::renderFrame()
 	//																											#
 	//###########################################################################################################
 
-	lightingPass();
+	_lightingPass();
 
 	VkSubmitInfo render_submit_info = {};
 	render_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -120,7 +120,7 @@ void VulkanAPI::renderFrame()
 	//																											#
 	//###########################################################################################################
 
-	copyToSwapchain();
+	_copyToSwapchain();
 
 	VkSubmitInfo copy_submit_info = {};
 	copy_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -148,7 +148,7 @@ void VulkanAPI::renderFrame()
 	//					 																						#
 	//###########################################################################################################
 
-	drawDebugGui();
+	_drawDebugGui();
 
 	VkSubmitInfo imgui_submit_info = {};
 	imgui_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -210,7 +210,7 @@ void VulkanAPI::renderFrame()
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
 		{
-			recreateSwapChain(window);
+			_recreateSwapChain(window);
 		}
 		else if (result != VK_SUCCESS)
 		{
@@ -220,17 +220,17 @@ void VulkanAPI::renderFrame()
 
 	FrameMark;
 
-	endFrame();
+	_endFrame();
 
 	const std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
 }
 
-void VulkanAPI::prepareFrame()
+void VulkanAPI::_prepareFrame()
 {
 	ZoneScoped;
 
-	updateTime();
+	_updateTime();
 	m_frame_count++;
 	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
 	{
@@ -239,22 +239,22 @@ void VulkanAPI::prepareFrame()
 		m_start_time_counting_fps = m_current_time;
 	}
 
-	glfwGetFramebufferSize(window, &window_width, &window_height);
+	glfwGetFramebufferSize(window, &m_window_width, &m_window_height);
 
-	aspect_ratio = static_cast<double>(window_width) / static_cast<double>(window_height);
+	m_aspect_ratio = static_cast<double>(m_window_width) / static_cast<double>(m_window_height);
 
-	camera_render_info = camera.getRenderInfo(aspect_ratio);
+	m_camera_render_info = camera.getRenderInfo(m_aspect_ratio);
 
-	camera_matrices.view = camera_render_info.view;
-	camera_matrices.proj = clip * camera_render_info.projection;
+	m_camera_matrices.view = m_camera_render_info.view;
+	m_camera_matrices.proj = m_clip * m_camera_render_info.projection;
 
-	camera_matrices_fc.view = camera_render_info.view;
-	camera_matrices_fc.proj = camera_render_info.projection;
+	m_camera_matrices_fc.view = m_camera_render_info.view;
+	m_camera_matrices_fc.proj = m_camera_render_info.projection;
 
 
-	chunk_meshes = getChunksInScene();
-	entity_meshes = entity_mesh_list.values();
-	players = getPlayers();
+	m_chunk_meshes = getChunksInScene();
+	m_entity_meshes = entity_mesh_list.values();
+	m_players = getPlayers();
 
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
@@ -269,36 +269,34 @@ void VulkanAPI::prepareFrame()
 		100.0 * glm::cos(glm::radians(DebugGui::sun_theta.load())),
 		100.0 * glm::sin(glm::radians(DebugGui::sun_theta.load()))
 	);
-	sun_position = camera_render_info.position + sun_offset;
+	m_sun_position = m_camera_render_info.position + sun_offset;
 	const float sun_size = 50.0f;
 	const float sun_near = 10.0f;
 	const float sun_far = 1000.0f;
 
-	sun = camera_matrices;
-	sun.view = glm::lookAt(
-		sun_position,
-		camera_render_info.position,
+	m_sun_matrices = m_camera_matrices;
+	m_sun_matrices.view = glm::lookAt(
+		m_sun_position,
+		m_camera_render_info.position,
 		glm::dvec3(0.0f, 1.0f, 0.0f)
 	);
-	sun.proj = clip * glm::ortho(
+	m_sun_matrices.proj = m_clip * glm::ortho(
 		-sun_size, sun_size,
 		-sun_size, sun_size,
 		sun_near, sun_far
 	);
 
-	target_block = targetBlock();
-
-	atmosphere_params.sun_direction = glm::normalize(sun_position - camera_render_info.position);
-	atmosphere_params.earth_radius = DebugGui::earth_radius;
-	atmosphere_params.atmosphere_radius = DebugGui::atmosphere_radius;
-	atmosphere_params.beta_rayleigh = DebugGui::beta_rayleigh;
-	atmosphere_params.beta_mie = DebugGui::beta_mie;
-	atmosphere_params.sun_intensity = DebugGui::sun_intensity;
-	atmosphere_params.h_rayleigh = DebugGui::h_rayleigh;
-	atmosphere_params.h_mie = DebugGui::h_mie;
-	atmosphere_params.g = DebugGui::g;
-	atmosphere_params.n_samples = DebugGui::n_samples;
-	atmosphere_params.n_light_samples = DebugGui::n_light_samples;
+	m_atmosphere_params.sun_direction = glm::normalize(m_sun_position - m_camera_render_info.position);
+	m_atmosphere_params.earth_radius = DebugGui::earth_radius;
+	m_atmosphere_params.atmosphere_radius = DebugGui::atmosphere_radius;
+	m_atmosphere_params.beta_rayleigh = DebugGui::beta_rayleigh;
+	m_atmosphere_params.beta_mie = DebugGui::beta_mie;
+	m_atmosphere_params.sun_intensity = DebugGui::sun_intensity;
+	m_atmosphere_params.h_rayleigh = DebugGui::h_rayleigh;
+	m_atmosphere_params.h_mie = DebugGui::h_mie;
+	m_atmosphere_params.g = DebugGui::g;
+	m_atmosphere_params.n_samples = DebugGui::n_samples;
+	m_atmosphere_params.n_light_samples = DebugGui::n_light_samples;
 
 
 	std::vector<float> frustum_split = { 0.0f, 0.01f, 0.05f, 0.1f, 0.2f, 0.4f, 0.6f, 0.8f, 1.0f };
@@ -308,23 +306,23 @@ void VulkanAPI::prepareFrame()
 	{
 		LOG_ERROR("frustum_split.size() != shadow_maps_count + 1");
 	}
-	shadow_map_light.light_dir = glm::normalize(sun_position - camera_render_info.position);
-	shadow_map_light.blend_distance = 5.0f;
-	light_view_proj_matrices = getCSMLightViewProjMatrices(
-		shadow_map_light.light_dir,
+	m_shadow_map_light.light_dir = glm::normalize(m_sun_position - m_camera_render_info.position);
+	m_shadow_map_light.blend_distance = 5.0f;
+	m_light_view_proj_matrices = _getCSMLightViewProjMatrices(
+		m_shadow_map_light.light_dir,
 		frustum_split,
-		shadow_map_light.blend_distance,
-		camera_render_info.view,
-		camera_render_info.fov,
-		aspect_ratio,
-		camera_render_info.near_plane,
-		camera_render_info.far_plane,
+		m_shadow_map_light.blend_distance,
+		m_camera_render_info.view,
+		m_camera_render_info.fov,
+		m_aspect_ratio,
+		m_camera_render_info.near_plane,
+		m_camera_render_info.far_plane,
 		far_plane_distances
 	);
 	for (size_t i = 0; i < shadow_maps_count; i++)
 	{
-		shadow_map_light.view_proj[i] = clip * light_view_proj_matrices[i];
-		shadow_map_light.plane_distances[i].x = far_plane_distances[i];
+		m_shadow_map_light.view_proj[i] = m_clip * m_light_view_proj_matrices[i];
+		m_shadow_map_light.plane_distances[i].x = far_plane_distances[i];
 	}
 
 	m_toolbar_cursor_index = toolbar_cursor_index.load();
@@ -333,11 +331,11 @@ void VulkanAPI::prepareFrame()
 		m_toolbar_items = toolbar_items;
 	}
 
-	updateVisibleChunks();
-	updateDebugText();
+	_updateVisibleChunks();
+	_updateDebugText();
 }
 
-void VulkanAPI::updateTime()
+void VulkanAPI::_updateTime()
 {
 	ZoneScoped;
 
@@ -346,25 +344,25 @@ void VulkanAPI::updateTime()
 	m_last_frame_time = m_current_time;
 }
 
-void VulkanAPI::updateDebugText()
+void VulkanAPI::_updateDebugText()
 {
-	debug_text = ft_format(
+	m_debug_text = ft_format(
 		"fps: %d\n"
 		"xyz: %.2f %.2f %.2f\n"
 		"Chunk count: %d\n",
 		DebugGui::fps.load(),
 		DebugGui::player_position.get().x, DebugGui::player_position.get().y, DebugGui::player_position.get().z,
-		visible_chunks.size()
+		m_visible_chunks.size()
 	);
 
-	debug_text += "Shadow chunk count:";
-	for (size_t i = 0; i < shadow_visible_chunks.size(); i++)
+	m_debug_text += "Shadow chunk count:";
+	for (size_t i = 0; i < m_shadow_visible_chunks.size(); i++)
 	{
-		debug_text += ft_format(" %d", shadow_visible_chunks[i].size());
+		m_debug_text += ft_format(" %d", m_shadow_visible_chunks[i].size());
 	}
-	debug_text += "\n";
+	m_debug_text += "\n";
 
-	debug_text += ft_format(
+	m_debug_text += ft_format(
 		"C: %.2f; E: %.2f; H: %.2f; T: %.2f; PV %.2f; W %.2f\n ",
 		DebugGui::continentalness.load(),
 		DebugGui::erosion.load(),
@@ -376,47 +374,47 @@ void VulkanAPI::updateDebugText()
 
 	switch(DebugGui::biome.load())
 	{
-		case 0: debug_text += "Forest\n"; break;
-		case 1: debug_text += "Plain\n"; break;
-		case 2: debug_text += "Mountain\n"; break;
-		case 3: debug_text += "Ocean\n"; break;
-		case 4: debug_text += "Coast\n"; break;
-		case 5: debug_text += "Desert\n"; break;
-		case 6: debug_text += "River\n"; break;
+		case 0: m_debug_text += "Forest\n"; break;
+		case 1: m_debug_text += "Plain\n"; break;
+		case 2: m_debug_text += "Mountain\n"; break;
+		case 3: m_debug_text += "Ocean\n"; break;
+		case 4: m_debug_text += "Coast\n"; break;
+		case 5: m_debug_text += "Desert\n"; break;
+		case 6: m_debug_text += "River\n"; break;
 	};
 }
 
-void VulkanAPI::updateVisibleChunks()
+void VulkanAPI::_updateVisibleChunks()
 {
 	ZoneScoped;
 
-	visible_chunks.clear();
-	for (auto & [id, model]: chunk_meshes)
+	m_visible_chunks.clear();
+	for (auto & [id, model]: m_chunk_meshes)
 	{
-		if (!isInsideFrustum_planes(camera_render_info.projection * camera_render_info.view, model, CHUNK_SIZE_VEC3))
+		if (!_isInsideFrustum_planes(m_camera_render_info.projection * m_camera_render_info.view, model, CHUNK_SIZE_VEC3))
 		{
 			continue;
 		}
 
-		visible_chunks.push_back(id);
+		m_visible_chunks.push_back(id);
 	}
 
 	for (size_t i = 0; i < shadow_maps_count; i++)
 	{
-		shadow_visible_chunks[i].clear();
-		for (auto & [id, model]: chunk_meshes)
+		m_shadow_visible_chunks[i].clear();
+		for (auto & [id, model]: m_chunk_meshes)
 		{
-			if (!isInsideFrustum_planes(light_view_proj_matrices[i], model, CHUNK_SIZE_VEC3))
+			if (!_isInsideFrustum_planes(m_light_view_proj_matrices[i], model, CHUNK_SIZE_VEC3))
 			{
 				continue;
 			}
 
-			shadow_visible_chunks[i].push_back(id);
+			m_shadow_visible_chunks[i].push_back(id);
 		}
 	}
 }
 
-void VulkanAPI::shadowPass()
+void VulkanAPI::_shadowPass()
 {
 	ZoneScoped;
 
@@ -491,7 +489,7 @@ void VulkanAPI::shadowPass()
 				drawChunksBlock(
 					draw_shadow_pass_command_buffers[current_frame],
 					m_draw_chunk_block_shadow_pass_buffer[current_frame][shadow_map_index],
-					shadow_visible_chunks[shadow_map_index]
+					m_shadow_visible_chunks[shadow_map_index]
 				);
 			}
 
@@ -505,7 +503,7 @@ void VulkanAPI::shadowPass()
 	);
 }
 
-void VulkanAPI::lightingPass()
+void VulkanAPI::_lightingPass()
 {
 	ZoneScoped;
 
@@ -571,7 +569,7 @@ void VulkanAPI::lightingPass()
 				drawChunksBlock(
 					draw_command_buffers[current_frame],
 					m_draw_chunk_block_light_pass_buffer[current_frame],
-					visible_chunks
+					m_visible_chunks
 				);
 			}
 
@@ -581,13 +579,13 @@ void VulkanAPI::lightingPass()
 
 				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, entity_pipeline.pipeline);
 
-				for (const auto & entity_mesh : entity_meshes)
+				for (const auto & entity_mesh : m_entity_meshes)
 				{
 					GlobalPushConstant entity_matrice = {};
 					entity_matrice.matrice = entity_mesh.model;
 					entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
-					drawMesh(
+					_drawMesh(
 						draw_command_buffers[current_frame],
 						entity_pipeline,
 						entity_mesh.id,
@@ -604,7 +602,7 @@ void VulkanAPI::lightingPass()
 
 				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, player_pipeline.pipeline);
 
-				for (const auto & player : players)
+				for (const auto & player : m_players)
 				{
 					if (!player.visible)
 					{
@@ -621,7 +619,7 @@ void VulkanAPI::lightingPass()
 					const glm::mat4 chest_model = Mat4()
 						.translate(PlayerModel::chest_pos)
 						.mat();
-					drawPlayerBodyPart(
+					_drawPlayerBodyPart(
 						player_chest_mesh_id,
 						body_model * chest_model
 					);
@@ -631,7 +629,7 @@ void VulkanAPI::lightingPass()
 						.translate(PlayerModel::head_pos)
 						.rotate(glm::radians(player.pitch), glm::dvec3(1.0f, 0.0f, 0.0f))
 						.mat();
-					drawPlayerBodyPart(
+					_drawPlayerBodyPart(
 						player_head_mesh_id,
 						body_model * chest_model * head_model
 					);
@@ -648,7 +646,7 @@ void VulkanAPI::lightingPass()
 						.rotate(legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
 						.translate(PlayerModel::left_leg_pos)
 						.mat();
-					drawPlayerBodyPart(
+					_drawPlayerBodyPart(
 						player_left_leg_mesh_id,
 						body_model * chest_model * left_leg_model
 					);
@@ -658,7 +656,7 @@ void VulkanAPI::lightingPass()
 						.rotate(-legs_angle, glm::dvec3(1.0f, 0.0f, 0.0f))
 						.translate(PlayerModel::right_leg_pos)
 						.mat();
-					drawPlayerBodyPart(
+					_drawPlayerBodyPart(
 						player_right_leg_mesh_id,
 						body_model * chest_model * right_leg_model
 					);
@@ -679,7 +677,7 @@ void VulkanAPI::lightingPass()
 						.rotate(-arms_angle_x, glm::dvec3(1.0f, 0.0f, 0.0f))
 						.rotate(-glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
 						.mat();
-					drawPlayerBodyPart(
+					_drawPlayerBodyPart(
 						player_right_arm_mesh_id,
 						body_model * chest_model * left_arm_model
 					);
@@ -700,7 +698,7 @@ void VulkanAPI::lightingPass()
 						.rotate(glm::radians(2.0), glm::dvec3(0.0f, 0.0f, 1.0f))
 						.rotate(arms_angle_y, glm::dvec3(0.0f, 1.0f, 0.0f))
 						.mat();
-					drawPlayerBodyPart(
+					_drawPlayerBodyPart(
 						player_right_arm_mesh_id,
 						body_model * chest_model * right_arm_model
 					);
@@ -708,6 +706,7 @@ void VulkanAPI::lightingPass()
 			}
 
 			// Draw the targeted block
+			std::optional<glm::vec3> target_block = targetBlock();
 			if (target_block.has_value())
 			{
 				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, line_pipeline.pipeline);
@@ -789,9 +788,9 @@ void VulkanAPI::lightingPass()
 				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, sun_pipeline.pipeline);
 
 				GlobalPushConstant sky_shader_data = {};
-				sky_shader_data.matrice = glm::translate(glm::dmat4(1.0f), camera_render_info.position);
+				sky_shader_data.matrice = glm::translate(glm::dmat4(1.0f), m_camera_render_info.position);
 
-				drawMesh(
+				_drawMesh(
 					draw_command_buffers[current_frame],
 					sun_pipeline,
 					icosphere_mesh_id,
@@ -852,7 +851,7 @@ void VulkanAPI::lightingPass()
 
 				bindChunkIndexBuffer(draw_command_buffers[current_frame]);
 
-				for (auto & id: visible_chunks)
+				for (auto & id: m_visible_chunks)
 				{
 					drawChunkWater(draw_command_buffers[current_frame], id);
 				}
@@ -867,7 +866,7 @@ void VulkanAPI::lightingPass()
 			ZoneScopedN("Write debug text");
 			TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Write debug text");
 
-			writeTextToDebugImage(draw_command_buffers[current_frame], debug_text, 10, 10, 32);
+			_writeTextToDebugImage(draw_command_buffers[current_frame], m_debug_text, 10, 10, 32);
 		}
 
 
@@ -905,7 +904,7 @@ void VulkanAPI::lightingPass()
 					viewport.minDepth = 0.0f;
 					viewport.maxDepth = 1.0f;
 
-					drawHudImage(crosshair_image_descriptor, viewport);
+					_drawHudImage(crosshair_image_descriptor, viewport);
 				}
 
 				const glm::vec2 toolbar_pos = {
@@ -923,7 +922,7 @@ void VulkanAPI::lightingPass()
 					viewport.minDepth = 0.0f;
 					viewport.maxDepth = 1.0f;
 
-					drawHudImage(toolbar_image_descriptor, viewport);
+					_drawHudImage(toolbar_image_descriptor, viewport);
 				}
 
 
@@ -950,7 +949,7 @@ void VulkanAPI::lightingPass()
 						viewport.minDepth = 0.0f;
 						viewport.maxDepth = 1.0f;
 
-						drawItemIcon(viewport, static_cast<uint32_t>(m_toolbar_items[i]));
+						_drawItemIcon(viewport, static_cast<uint32_t>(m_toolbar_items[i]));
 					}
 				}
 
@@ -971,7 +970,7 @@ void VulkanAPI::lightingPass()
 					viewport.minDepth = 0.0f;
 					viewport.maxDepth = 1.0f;
 
-					drawHudImage(toolbar_cursor_image_descriptor, viewport);
+					_drawHudImage(toolbar_cursor_image_descriptor, viewport);
 				}
 
 				if (show_debug_text) // Debug info
@@ -987,7 +986,7 @@ void VulkanAPI::lightingPass()
 					viewport.minDepth = 0.0f;
 					viewport.maxDepth = 1.0f;
 
-					drawHudImage(debug_info_image_descriptor, viewport);
+					_drawHudImage(debug_info_image_descriptor, viewport);
 				}
 			}
 
@@ -1013,7 +1012,7 @@ void VulkanAPI::lightingPass()
 	);
 }
 
-void VulkanAPI::drawPlayerBodyPart(
+void VulkanAPI::_drawPlayerBodyPart(
 	const uint64_t mesh_id,
 	const glm::mat4 & model
 )
@@ -1021,7 +1020,7 @@ void VulkanAPI::drawPlayerBodyPart(
 	GlobalPushConstant player_matrice = {};
 	player_matrice.matrice = model;
 
-	drawMesh(
+	_drawMesh(
 		draw_command_buffers[current_frame],
 		player_pipeline,
 		mesh_id,
@@ -1031,7 +1030,7 @@ void VulkanAPI::drawPlayerBodyPart(
 	);
 }
 
-void VulkanAPI::copyToSwapchain()
+void VulkanAPI::_copyToSwapchain()
 {
 	ZoneScoped;
 
@@ -1047,7 +1046,7 @@ void VulkanAPI::copyToSwapchain()
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR)
 	{
-		recreateSwapChain(window);
+		_recreateSwapChain(window);
 		return;
 	}
 	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
@@ -1073,7 +1072,7 @@ void VulkanAPI::copyToSwapchain()
 	{ // Scope for Tracy
 		TracyVkZone(draw_ctx, copy_command_buffers[current_frame], "Copy to swapchain");
 
-		setImageLayout(
+		_setImageLayout(
 			copy_command_buffers[current_frame],
 			swapchain.images[current_image_index],
 			VK_IMAGE_LAYOUT_UNDEFINED,
@@ -1125,7 +1124,7 @@ void VulkanAPI::copyToSwapchain()
 	);
 }
 
-void VulkanAPI::drawDebugGui()
+void VulkanAPI::_drawDebugGui()
 {
 	ZoneScoped;
 
@@ -1146,7 +1145,7 @@ void VulkanAPI::drawDebugGui()
 			std::lock_guard lock(imgui_textures_mutex);
 			for (auto & [id, texture]: imgui_textures)
 			{
-				setImageLayout(
+				_setImageLayout(
 					imgui_command_buffers[current_frame],
 					texture.image,
 					VK_IMAGE_LAYOUT_GENERAL,
@@ -1159,7 +1158,7 @@ void VulkanAPI::drawDebugGui()
 				);
 			}
 		}
-		setImageLayout(
+		_setImageLayout(
 			imgui_command_buffers[current_frame],
 			swapchain.images[current_image_index],
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -1192,7 +1191,7 @@ void VulkanAPI::drawDebugGui()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		updateImGui();
+		_updateImGui();
 
 		ImGui::Render();
 
@@ -1201,7 +1200,7 @@ void VulkanAPI::drawDebugGui()
 
 		vkCmdEndRendering(imgui_command_buffers[current_frame]);
 
-		setImageLayout(
+		_setImageLayout(
 			imgui_command_buffers[current_frame],
 			swapchain.images[current_image_index],
 			VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
@@ -1217,7 +1216,7 @@ void VulkanAPI::drawDebugGui()
 			std::lock_guard lock(imgui_textures_mutex);
 			for (auto & [id, texture]: imgui_textures)
 			{
-				setImageLayout(
+				_setImageLayout(
 					imgui_command_buffers[current_frame],
 					texture.image,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -1238,7 +1237,7 @@ void VulkanAPI::drawDebugGui()
 	);
 }
 
-void VulkanAPI::updateImGui()
+void VulkanAPI::_updateImGui()
 {
 	
 #define FLOAT_SLIDER(name, min, max) float name ## _f = name; ImGui::SliderFloat(#name, &name ## _f, min, max); name = name ## _f;
@@ -1388,7 +1387,7 @@ void VulkanAPI::updateImGui()
 	ImGui::End();
 }
 
-bool VulkanAPI::isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const
+bool VulkanAPI::_isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const
 {
 	const std::vector<glm::vec4> corners = {
 		glm::vec4(0,      0,      0,      1),
@@ -1401,7 +1400,7 @@ bool VulkanAPI::isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec
 		glm::vec4(size.x, size.y, size.z, 1)
 	};
 
-	const glm::mat4 MVP = camera_matrices_fc.proj * camera_matrices_fc.view * model;
+	const glm::mat4 MVP = m_camera_matrices_fc.proj * m_camera_matrices_fc.view * model;
 
 	glm::vec3 min = glm::vec3(std::numeric_limits<float>::max());
 	glm::vec3 max = glm::vec3(std::numeric_limits<float>::min());
@@ -1498,7 +1497,7 @@ static std::array<glm::vec4, 6> getFrustumPlnes(const glm::mat4 & VP)
 	return planes;
 }
 
-bool VulkanAPI::isInsideFrustum_planes(
+bool VulkanAPI::_isInsideFrustum_planes(
 	const glm::mat4 & view_proj,
 	const glm::mat4 & model,
 	const glm::vec3 & size
@@ -1586,7 +1585,7 @@ static std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4 proj, 
     return frustum_corners;
 }
 
-std::vector<glm::mat4> VulkanAPI::getCSMLightViewProjMatrices(
+std::vector<glm::mat4> VulkanAPI::_getCSMLightViewProjMatrices(
 	const glm::vec3 & light_dir,
 	const std::vector<float> & split,
 	const float blend_distance,
