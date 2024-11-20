@@ -29,7 +29,7 @@ uint64_t VulkanAPI::storeMesh(
 
 	VkBuffer staging_buffer;
 	VkDeviceMemory staging_buffer_memory;
-	createBuffer(
+	_createBuffer(
 		buffer_size,
 		VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
@@ -46,7 +46,7 @@ uint64_t VulkanAPI::storeMesh(
 	std::memcpy(static_cast<char *>(data) + vertex_buffer_size, indices, static_cast<size_t>(index_buffer_size));
 	vkUnmapMemory(device, staging_buffer_memory);
 
-	createBuffer(
+	_createBuffer(
 		buffer_size,
 		VK_BUFFER_USAGE_TRANSFER_DST_BIT
 		| VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
@@ -60,7 +60,7 @@ uint64_t VulkanAPI::storeMesh(
 	VkBufferCopy buffer_copy = {};
 	buffer_copy.size = buffer_size;
 
-	copyBuffer(staging_buffer, mesh.buffer, buffer_copy);
+	_copyBuffer(staging_buffer, mesh.buffer, buffer_copy);
 
 	vkDestroyBuffer(device, staging_buffer, nullptr);
 	VulkanMemoryAllocator & vma = VulkanMemoryAllocator::getInstance();
@@ -98,17 +98,10 @@ void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
 void VulkanAPI::_destroyMesh(const uint64_t & mesh_id)
 {
 	mesh_ids_to_destroy.push_back(mesh_id);
-	destroyMeshes();
+	_destroyMeshes();
 }
 
-void VulkanAPI::destroyMeshes(const std::vector<uint64_t> & mesh_ids)
-{
-	std::lock_guard lock(global_mutex);
-	mesh_ids_to_destroy.insert(mesh_ids_to_destroy.end(), mesh_ids.begin(), mesh_ids.end());
-	destroyMeshes();
-}
-
-void VulkanAPI::destroyMeshes()
+void VulkanAPI::_destroyMeshes()
 {
 	ZoneScoped;
 	std::lock_guard lock(mesh_map_mutex);
