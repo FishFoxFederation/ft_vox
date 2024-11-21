@@ -4,8 +4,8 @@ void VulkanAPI::_createDrawBuffer()
 {
 	m_max_draw_count = 10000;
 
-	m_draw_chunk_block_shadow_pass_buffer.resize(max_frames_in_flight);
-	m_draw_chunk_block_light_pass_buffer.resize(max_frames_in_flight);
+	m_draw_chunk_block_shadow_pass_buffer.resize(m_max_frames_in_flight);
+	m_draw_chunk_block_light_pass_buffer.resize(m_max_frames_in_flight);
 
 	const Buffer::CreateInfo buffer_info = {
 		.size = m_max_draw_count * sizeof(VkDrawIndexedIndirectCommand),
@@ -15,7 +15,7 @@ void VulkanAPI::_createDrawBuffer()
 		.memory_properties = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
 							| VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 	};
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		m_draw_chunk_block_shadow_pass_buffer[i].resize(shadow_maps_count);
 		for (uint32_t j = 0; j < shadow_maps_count; j++)
@@ -29,7 +29,7 @@ void VulkanAPI::_createDrawBuffer()
 
 void VulkanAPI::_destroyDrawBuffer()
 {
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		for (uint32_t j = 0; j < shadow_maps_count; j++)
 		{

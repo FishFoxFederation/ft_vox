@@ -159,7 +159,7 @@ void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 	_deleteUnusedChunks();
 }
 
-std::map<VulkanAPI::InstanceId, glm::dmat4> VulkanAPI::getChunksInScene() const
+std::map<VulkanAPI::InstanceId, glm::dmat4> VulkanAPI::_getChunksInScene() const
 {
 	std::lock_guard global_lock(global_mutex);
 	// std::lock_guard lock(m_chunks_in_scene_mutex);
