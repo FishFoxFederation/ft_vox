@@ -1,5 +1,4 @@
-#include "SparseSet.hpp"
-#include "ECS.hpp"
+#include "ecs.hpp"
 #include <cassert>
 #include <iostream>
 
@@ -13,11 +12,11 @@ const size_t entities_size = 100;
 
 void test_sparse_set()
 {
-	ecs::SparseSet<Position> set;
+	ecs::SparseSet<ecs::entity, Position> set;
 
 	Position pos = { 1.0f, 2.0f };
 
-	ecs::entityType entity = 0;
+	ecs::entity entity = 0;
 
 	set.insert(entity, pos);
 
@@ -47,9 +46,9 @@ void test_sparse_set()
 		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << std::endl;
 }
 
-void test_ecs()
+void test_ecs_entity()
 {
-	ecs::ECS<100> ecs;
+	ecs::Storage<ecs::entity> ecs;
 
 	auto [success, entity] = ecs.createEntity();
 
@@ -68,7 +67,7 @@ void test_ecs()
 	if (entity2 == entity)
 		throw std::logic_error("Entity is not unique");
 	
-	std::vector<ecs::entityType> entities;
+	std::vector<ecs::entity> entities;
 
 	for(int i = 0; i < 50; i++)
 	{
@@ -94,16 +93,37 @@ void test_ecs()
 			throw std::logic_error("Entity creation failed");
 		entities.push_back(entity);
 	}
+}
 
-	ecs.addComponent<Position>();
-	ecs.removeComponent<Position>();
+void test_ecs_component()
+{
+	ecs::Storage<> ecs;
+
+	auto [success, entity ] = ecs.createEntity();
+
+	ecs.addComponentToEntity<Position>(entity, { 1.0f, 2.0f });
+
+	auto component = ecs.getComponentFromEntity<Position>(entity);
+
+	if (component.x != 1.0f || component.y != 2.0f)
+		throw std::logic_error("Component values are not correct");
+	
+	ecs.removeComponentFromEntity<Position>(entity);
+
+	try {
+		auto component = ecs.getComponentFromEntity<Position>(entity);
+		component.x += 2.0f;
+	} catch (ecs::Storage<>::ComponentDoesNotExist & e) {
+		std::cout << e.what() << std::endl;
+	}
 }
 
 int main()
 {
 	try {
 	test_sparse_set();
-	test_ecs();
+	test_ecs_entity();
+	test_ecs_component();
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}

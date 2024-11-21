@@ -4,11 +4,12 @@
 #include <typeinfo>
 #include <iterator>
 #include <vector>
-#include "ECS_CONSTANTS.hpp"
+#include "ecs_utils.hpp"
+#include "ecs_CONSTANTS.hpp"
 
 namespace ecs
 {	
-	template <typename ComponentType>
+	template <ValidEntity entityType, typename ComponentType>
 	struct SparseSetNode
 	{
 		entityType entity;
@@ -16,11 +17,11 @@ namespace ecs
 	};
 
 	
-	template <typename ComponentType>
+	template <ValidEntity entityType, typename ComponentType>
 	class SparseSet
 	{
 	public:
-		typedef SparseSetNode<ComponentType> node_type;
+		typedef SparseSetNode<entityType, ComponentType> node_type;
 		typedef std::vector<node_type> dense_type;
 		typedef std::vector<size_t> sparse_type;
 
@@ -42,7 +43,7 @@ namespace ecs
 		void insert(entityType entity, ComponentType component)
 		{
 			if (contains(entity))
-				throw std::logic_error("Entity already has component");
+				return;
 
 			m_dense.push_back({ entity, component });
 
@@ -54,10 +55,8 @@ namespace ecs
 
 		void remove(entityType entity)
 		{
-			if (!contains(entity))
-				throw std::logic_error("Entity does not have component");
-			if (m_dense.size() == 0)
-				throw std::logic_error("No components to remove");
+			if (!contains(entity) || m_dense.size() == 0)
+				return;
 			
 			size_t dense_index = m_sparse[entity];
 
@@ -90,6 +89,24 @@ namespace ecs
 
 			size_t dense_index = m_sparse[entity];
 			return m_dense[dense_index].component;
+		}
+
+		ComponentType *			tryGet(entityType entity)
+		{
+			if (!contains(entity))
+				return nullptr;
+
+			size_t dense_index = m_sparse[entity];
+			return &m_dense[dense_index].component;
+		}
+
+		const ComponentType *	tryGet(entityType entity) const
+		{
+			if (!contains(entity))
+				return nullptr;
+
+			size_t dense_index = m_sparse[entity];
+			return &m_dense[dense_index].component;
 		}
 
 		bool	contains(entityType entity) const
@@ -128,4 +145,5 @@ namespace ecs
 		 */
 		sparse_type	m_sparse = {};
 	};
+
 }
