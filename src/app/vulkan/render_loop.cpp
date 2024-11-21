@@ -55,7 +55,7 @@ void VulkanAPI::_createRenderFrameRessources()
 void VulkanAPI::renderFrame()
 {
 	ZoneScoped;
-	std::string current_frame_str = "Frame " + std::to_string(current_frame);
+	std::string current_frame_str = "Frame " + std::to_string(m_current_frame);
 	ZoneText(current_frame_str.c_str(), current_frame_str.size());
 
 	//###########################################################################################################
@@ -76,9 +76,9 @@ void VulkanAPI::renderFrame()
 
 	const std::chrono::nanoseconds start_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
 
-	memcpy(camera_ubo.mapped_memory[current_frame], &m_camera_matrices, sizeof(m_camera_matrices));
-	memcpy(light_mat_ubo.mapped_memory[current_frame], &m_shadow_map_light, sizeof(m_shadow_map_light));
-	memcpy(atmosphere_ubo.mapped_memory[current_frame], &m_atmosphere_params, sizeof(m_atmosphere_params));
+	memcpy(camera_ubo.mapped_memory[m_current_frame], &m_camera_matrices, sizeof(m_camera_matrices));
+	memcpy(light_mat_ubo.mapped_memory[m_current_frame], &m_shadow_map_light, sizeof(m_shadow_map_light));
+	memcpy(atmosphere_ubo.mapped_memory[m_current_frame], &m_atmosphere_params, sizeof(m_atmosphere_params));
 
 	//###########################################################################################################
 	//																											#
@@ -91,9 +91,9 @@ void VulkanAPI::renderFrame()
 	VkSubmitInfo shadow_pass_submit_info = {};
 	shadow_pass_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	shadow_pass_submit_info.commandBufferCount = 1;
-	shadow_pass_submit_info.pCommandBuffers = &draw_shadow_pass_command_buffers[current_frame];
+	shadow_pass_submit_info.pCommandBuffers = &draw_shadow_pass_command_buffers[m_current_frame];
 	shadow_pass_submit_info.signalSemaphoreCount = 1;
-	shadow_pass_submit_info.pSignalSemaphores = &shadow_pass_finished_semaphores[current_frame];
+	shadow_pass_submit_info.pSignalSemaphores = &shadow_pass_finished_semaphores[m_current_frame];
 
 	//###########################################################################################################
 	//																											#
@@ -106,11 +106,11 @@ void VulkanAPI::renderFrame()
 	VkSubmitInfo render_submit_info = {};
 	render_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	render_submit_info.commandBufferCount = 1;
-	render_submit_info.pCommandBuffers = &draw_command_buffers[current_frame];
+	render_submit_info.pCommandBuffers = &draw_command_buffers[m_current_frame];
 	render_submit_info.signalSemaphoreCount = 1;
-	render_submit_info.pSignalSemaphores = &main_render_finished_semaphores[current_frame];
+	render_submit_info.pSignalSemaphores = &main_render_finished_semaphores[m_current_frame];
 	render_submit_info.waitSemaphoreCount = 1;
-	render_submit_info.pWaitSemaphores = &shadow_pass_finished_semaphores[current_frame];
+	render_submit_info.pWaitSemaphores = &shadow_pass_finished_semaphores[m_current_frame];
 	const VkPipelineStageFlags render_submit_wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	render_submit_info.pWaitDstStageMask = &render_submit_wait_stage;
 
@@ -125,11 +125,11 @@ void VulkanAPI::renderFrame()
 	VkSubmitInfo copy_submit_info = {};
 	copy_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	copy_submit_info.commandBufferCount = 1;
-	copy_submit_info.pCommandBuffers = &copy_command_buffers[current_frame];
+	copy_submit_info.pCommandBuffers = &copy_command_buffers[m_current_frame];
 
 	const std::array<VkSemaphore, 2> copy_wait_semaphores = {
-		image_available_semaphores[current_frame],
-		main_render_finished_semaphores[current_frame]
+		image_available_semaphores[m_current_frame],
+		main_render_finished_semaphores[m_current_frame]
 	};
 	const std::array<VkPipelineStageFlags, 2> copy_wait_stages = {
 		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
@@ -140,7 +140,7 @@ void VulkanAPI::renderFrame()
 	copy_submit_info.pWaitDstStageMask = copy_wait_stages.data();
 
 	copy_submit_info.signalSemaphoreCount = 1;
-	copy_submit_info.pSignalSemaphores = &copy_finished_semaphores[current_frame];
+	copy_submit_info.pSignalSemaphores = &copy_finished_semaphores[m_current_frame];
 
 	//###########################################################################################################
 	//					 																						#
@@ -153,13 +153,13 @@ void VulkanAPI::renderFrame()
 	VkSubmitInfo imgui_submit_info = {};
 	imgui_submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	imgui_submit_info.commandBufferCount = 1;
-	imgui_submit_info.pCommandBuffers = &imgui_command_buffers[current_frame];
+	imgui_submit_info.pCommandBuffers = &imgui_command_buffers[m_current_frame];
 	imgui_submit_info.waitSemaphoreCount = 1;
-	imgui_submit_info.pWaitSemaphores = &copy_finished_semaphores[current_frame];
+	imgui_submit_info.pWaitSemaphores = &copy_finished_semaphores[m_current_frame];
 	const VkPipelineStageFlags vk_pipeline_stage_flags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	imgui_submit_info.pWaitDstStageMask = &vk_pipeline_stage_flags;
 	imgui_submit_info.signalSemaphoreCount = 1;
-	imgui_submit_info.pSignalSemaphores = &imgui_render_finished_semaphores[current_frame];
+	imgui_submit_info.pSignalSemaphores = &imgui_render_finished_semaphores[m_current_frame];
 
 
 	//###########################################################################################################
@@ -183,7 +183,7 @@ void VulkanAPI::renderFrame()
 				graphics_queue,
 				static_cast<uint32_t>(submit_infos.size()),
 				submit_infos.data(),
-				in_flight_fences[current_frame]
+				in_flight_fences[m_current_frame]
 			),
 			"Failed to submit all command buffers"
 		);
@@ -201,10 +201,10 @@ void VulkanAPI::renderFrame()
 		VkPresentInfoKHR present_info = {};
 		present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 		present_info.waitSemaphoreCount = 1;
-		present_info.pWaitSemaphores = &imgui_render_finished_semaphores[current_frame];
+		present_info.pWaitSemaphores = &imgui_render_finished_semaphores[m_current_frame];
 		present_info.swapchainCount = 1;
 		present_info.pSwapchains = &swapchain.swapchain;
-		present_info.pImageIndices = &current_image_index;
+		present_info.pImageIndices = &m_current_image_index;
 
 		VkResult result = vkQueuePresentKHR(present_queue, &present_info);
 
@@ -252,9 +252,9 @@ void VulkanAPI::_prepareFrame()
 	m_camera_matrices_fc.proj = m_camera_render_info.projection;
 
 
-	m_chunk_meshes = getChunksInScene();
+	m_chunk_meshes = _getChunksInScene();
 	m_entity_meshes = entity_mesh_list.values();
-	m_players = getPlayers();
+	m_players = _getPlayers();
 
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
@@ -419,7 +419,7 @@ void VulkanAPI::_shadowPass()
 	ZoneScoped;
 
 	VK_CHECK(
-		vkResetCommandBuffer(draw_shadow_pass_command_buffers[current_frame], 0),
+		vkResetCommandBuffer(draw_shadow_pass_command_buffers[m_current_frame], 0),
 		"Failed to reset shadow pass command buffer"
 	);
 
@@ -427,21 +427,21 @@ void VulkanAPI::_shadowPass()
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	VK_CHECK(
-		vkBeginCommandBuffer(draw_shadow_pass_command_buffers[current_frame], &begin_info),
+		vkBeginCommandBuffer(draw_shadow_pass_command_buffers[m_current_frame], &begin_info),
 		"Failed to begin recording command buffer"
 	);
 
 	{
-		TracyVkZone(draw_ctx, draw_shadow_pass_command_buffers[current_frame], "Shadow pass");
+		TracyVkZone(draw_ctx, draw_shadow_pass_command_buffers[m_current_frame], "Shadow pass");
 
-		vkCmdBindPipeline(draw_shadow_pass_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, shadow_pipeline.pipeline);
+		vkCmdBindPipeline(draw_shadow_pass_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, shadow_pipeline.pipeline);
 
 		const std::vector<VkDescriptorSet> shadow_descriptor_sets = {
-			global_descriptor.sets[current_frame]
+			global_descriptor.sets[m_current_frame]
 		};
 
 		vkCmdBindDescriptorSets(
-			draw_shadow_pass_command_buffers[current_frame],
+			draw_shadow_pass_command_buffers[m_current_frame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
 			shadow_pipeline.layout,
 			0,
@@ -453,12 +453,12 @@ void VulkanAPI::_shadowPass()
 
 		for (size_t shadow_map_index = 0; shadow_map_index < shadow_maps_count; shadow_map_index++)
 		{
-			TracyVkZone(draw_ctx, draw_shadow_pass_command_buffers[current_frame], "Shadow sub pass");
+			TracyVkZone(draw_ctx, draw_shadow_pass_command_buffers[m_current_frame], "Shadow sub pass");
 
 			VkRenderPassBeginInfo shadow_render_pass_begin_info = {};
 			shadow_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 			shadow_render_pass_begin_info.renderPass = shadow_render_pass;
-			shadow_render_pass_begin_info.framebuffer = shadow_framebuffers[current_frame * shadow_maps_count + shadow_map_index];
+			shadow_render_pass_begin_info.framebuffer = shadow_framebuffers[m_current_frame * shadow_maps_count + shadow_map_index];
 			shadow_render_pass_begin_info.renderArea.offset = { 0, 0 };
 			shadow_render_pass_begin_info.renderArea.extent = shadow_map_depth_attachement.extent2D;
 			std::vector<VkClearValue> shadow_clear_values = {
@@ -468,13 +468,13 @@ void VulkanAPI::_shadowPass()
 			shadow_render_pass_begin_info.pClearValues = shadow_clear_values.data();
 
 			vkCmdBeginRenderPass(
-				draw_shadow_pass_command_buffers[current_frame],
+				draw_shadow_pass_command_buffers[m_current_frame],
 				&shadow_render_pass_begin_info,
 				VK_SUBPASS_CONTENTS_INLINE
 			);
 
 			vkCmdPushConstants(
-				draw_shadow_pass_command_buffers[current_frame],
+				draw_shadow_pass_command_buffers[m_current_frame],
 				shadow_pipeline.layout,
 				VK_SHADER_STAGE_ALL,
 				offsetof(GlobalPushConstant, layer),
@@ -484,21 +484,21 @@ void VulkanAPI::_shadowPass()
 
 			{ // Draw the chunks
 				ZoneScopedN("Draw chunks");
-				TracyVkZone(draw_ctx, draw_shadow_pass_command_buffers[current_frame], "Draw chunks");
+				TracyVkZone(draw_ctx, draw_shadow_pass_command_buffers[m_current_frame], "Draw chunks");
 
-				drawChunksBlock(
-					draw_shadow_pass_command_buffers[current_frame],
-					m_draw_chunk_block_shadow_pass_buffer[current_frame][shadow_map_index],
+				_drawChunksBlock(
+					draw_shadow_pass_command_buffers[m_current_frame],
+					m_draw_chunk_block_shadow_pass_buffer[m_current_frame][shadow_map_index],
 					m_shadow_visible_chunks[shadow_map_index]
 				);
 			}
 
-			vkCmdEndRenderPass(draw_shadow_pass_command_buffers[current_frame]);
+			vkCmdEndRenderPass(draw_shadow_pass_command_buffers[m_current_frame]);
 		}
 	}
 
 	VK_CHECK(
-		vkEndCommandBuffer(draw_shadow_pass_command_buffers[current_frame]),
+		vkEndCommandBuffer(draw_shadow_pass_command_buffers[m_current_frame]),
 		"Failed to record command buffer"
 	);
 }
@@ -508,7 +508,7 @@ void VulkanAPI::_lightingPass()
 	ZoneScoped;
 
 	VK_CHECK(
-		vkResetCommandBuffer(draw_command_buffers[current_frame], 0),
+		vkResetCommandBuffer(draw_command_buffers[m_current_frame], 0),
 		"Failed to reset draw command buffer"
 	);
 
@@ -516,16 +516,16 @@ void VulkanAPI::_lightingPass()
 	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	VK_CHECK(
-		vkBeginCommandBuffer(draw_command_buffers[current_frame], &begin_info),
+		vkBeginCommandBuffer(draw_command_buffers[m_current_frame], &begin_info),
 		"Failed to begin recording command buffer"
 	);
 
 	const std::vector<VkDescriptorSet> descriptor_sets = {
-		global_descriptor.sets[current_frame]
+		global_descriptor.sets[m_current_frame]
 	};
 
 	vkCmdBindDescriptorSets(
-		draw_command_buffers[current_frame],
+		draw_command_buffers[m_current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		chunk_pipeline.layout,
 		0,
@@ -536,12 +536,12 @@ void VulkanAPI::_lightingPass()
 	);
 
 	{
-		TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Lighting pass");
+		TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Lighting pass");
 
 		VkRenderPassBeginInfo lighting_render_pass_begin_info = {};
 		lighting_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		lighting_render_pass_begin_info.renderPass = lighting_render_pass;
-		lighting_render_pass_begin_info.framebuffer = lighting_framebuffers[current_frame];
+		lighting_render_pass_begin_info.framebuffer = lighting_framebuffers[m_current_frame];
 		lighting_render_pass_begin_info.renderArea.offset = { 0, 0 };
 		lighting_render_pass_begin_info.renderArea.extent = output_attachement.extent2D;
 		std::vector<VkClearValue> lighting_clear_values = {
@@ -553,31 +553,31 @@ void VulkanAPI::_lightingPass()
 		lighting_render_pass_begin_info.pClearValues = lighting_clear_values.data();
 
 		vkCmdBeginRenderPass(
-			draw_command_buffers[current_frame],
+			draw_command_buffers[m_current_frame],
 			&lighting_render_pass_begin_info,
 			VK_SUBPASS_CONTENTS_INLINE
 		);
 		{
-			TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Opaque render pass");
+			TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Opaque render pass");
 
 			{ // Draw the chunks
 				ZoneScopedN("Draw chunks");
-				TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Draw chunks");
+				TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Draw chunks");
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, chunk_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, chunk_pipeline.pipeline);
 
-				drawChunksBlock(
-					draw_command_buffers[current_frame],
-					m_draw_chunk_block_light_pass_buffer[current_frame],
+				_drawChunksBlock(
+					draw_command_buffers[m_current_frame],
+					m_draw_chunk_block_light_pass_buffer[m_current_frame],
 					m_visible_chunks
 				);
 			}
 
 			{ // Draw the entities
 				ZoneScopedN("Draw entities");
-				TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Draw entities");
+				TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Draw entities");
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, entity_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, entity_pipeline.pipeline);
 
 				for (const auto & entity_mesh : m_entity_meshes)
 				{
@@ -586,7 +586,7 @@ void VulkanAPI::_lightingPass()
 					entity_matrice.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 					_drawMesh(
-						draw_command_buffers[current_frame],
+						draw_command_buffers[m_current_frame],
 						entity_pipeline,
 						entity_mesh.id,
 						&entity_matrice,
@@ -598,9 +598,9 @@ void VulkanAPI::_lightingPass()
 
 			{ // Draw the players
 				ZoneScopedN("Draw players");
-				TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Draw players");
+				TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Draw players");
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, player_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, player_pipeline.pipeline);
 
 				for (const auto & player : m_players)
 				{
@@ -706,10 +706,10 @@ void VulkanAPI::_lightingPass()
 			}
 
 			// Draw the targeted block
-			std::optional<glm::vec3> target_block = targetBlock();
+			std::optional<glm::vec3> target_block = _targetBlock();
 			if (target_block.has_value())
 			{
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, line_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, line_pipeline.pipeline);
 
 				Mesh mesh;
 				{
@@ -720,14 +720,14 @@ void VulkanAPI::_lightingPass()
 				const VkBuffer vertex_buffers[] = { mesh.buffer };
 				const VkDeviceSize offsets[] = { 0 };
 				vkCmdBindVertexBuffers(
-					draw_command_buffers[current_frame],
+					draw_command_buffers[m_current_frame],
 					0, 1,
 					vertex_buffers,
 					offsets
 				);
 
 				vkCmdBindIndexBuffer(
-					draw_command_buffers[current_frame],
+					draw_command_buffers[m_current_frame],
 					mesh.buffer,
 					mesh.index_offset,
 					VK_INDEX_TYPE_UINT32
@@ -741,7 +741,7 @@ void VulkanAPI::_lightingPass()
 					glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 				};
 				vkCmdPushConstants(
-					draw_command_buffers[current_frame],
+					draw_command_buffers[m_current_frame],
 					line_pipeline.layout,
 					VK_SHADER_STAGE_ALL,
 					0,
@@ -749,10 +749,10 @@ void VulkanAPI::_lightingPass()
 					&target_block_push_constant
 				);
 
-				vkCmdSetLineWidth(draw_command_buffers[current_frame], 2.0f);
+				vkCmdSetLineWidth(draw_command_buffers[m_current_frame], 2.0f);
 
 				vkCmdDrawIndexed(
-					draw_command_buffers[current_frame],
+					draw_command_buffers[m_current_frame],
 					static_cast<uint32_t>(mesh.index_count),
 					1, 0, 0, 0
 				);
@@ -783,15 +783,15 @@ void VulkanAPI::_lightingPass()
 
 			{ // Draw the sun
 				ZoneScopedN("Draw sun");
-				TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Draw sun");
+				TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Draw sun");
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, sun_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, sun_pipeline.pipeline);
 
 				GlobalPushConstant sky_shader_data = {};
 				sky_shader_data.matrice = glm::translate(glm::dmat4(1.0f), m_camera_render_info.position);
 
 				_drawMesh(
-					draw_command_buffers[current_frame],
+					draw_command_buffers[m_current_frame],
 					sun_pipeline,
 					icosphere_mesh_id,
 					&sky_shader_data,
@@ -800,7 +800,7 @@ void VulkanAPI::_lightingPass()
 				);
 			}
 		}
-		vkCmdEndRenderPass(draw_command_buffers[current_frame]);
+		vkCmdEndRenderPass(draw_command_buffers[m_current_frame]);
 
 
 		// copy the color attachment to the output attachement
@@ -813,10 +813,10 @@ void VulkanAPI::_lightingPass()
 
 		{
 			ZoneScopedN("Copy image");
-			TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Copy image");
+			TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Copy image");
 
 			vkCmdCopyImage(
-				draw_command_buffers[current_frame],
+				draw_command_buffers[m_current_frame],
 				color_attachement.image,
 				VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 				output_attachement.image,
@@ -829,68 +829,68 @@ void VulkanAPI::_lightingPass()
 		VkRenderPassBeginInfo water_render_pass_begin_info = {};
 		water_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		water_render_pass_begin_info.renderPass = water_render_pass;
-		water_render_pass_begin_info.framebuffer = water_framebuffers[current_frame];
+		water_render_pass_begin_info.framebuffer = water_framebuffers[m_current_frame];
 		water_render_pass_begin_info.renderArea.offset = { 0, 0 };
 		water_render_pass_begin_info.renderArea.extent = output_attachement.extent2D;
 		water_render_pass_begin_info.clearValueCount = 0;
 		water_render_pass_begin_info.pClearValues = nullptr;
 
 		vkCmdBeginRenderPass(
-			draw_command_buffers[current_frame],
+			draw_command_buffers[m_current_frame],
 			&water_render_pass_begin_info,
 			VK_SUBPASS_CONTENTS_INLINE
 		);
 		{
-			TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Water render pass");
+			TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Water render pass");
 
 			{ // Draw water
 				ZoneScopedN("Draw water");
-				TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Draw water");
+				TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Draw water");
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, water_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, water_pipeline.pipeline);
 
-				bindChunkIndexBuffer(draw_command_buffers[current_frame]);
+				_bindChunkIndexBuffer(draw_command_buffers[m_current_frame]);
 
 				for (auto & id: m_visible_chunks)
 				{
-					drawChunkWater(draw_command_buffers[current_frame], id);
+					_drawChunkWater(draw_command_buffers[m_current_frame], id);
 				}
 			}
 		}
-		vkCmdEndRenderPass(draw_command_buffers[current_frame]);
+		vkCmdEndRenderPass(draw_command_buffers[m_current_frame]);
 
 
 		// write the debug text on the texture only if the debug text is enabled
 		if (show_debug_text)
 		{
 			ZoneScopedN("Write debug text");
-			TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Write debug text");
+			TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Write debug text");
 
-			_writeTextToDebugImage(draw_command_buffers[current_frame], m_debug_text, 10, 10, 32);
+			_writeTextToDebugImage(draw_command_buffers[m_current_frame], m_debug_text, 10, 10, 32);
 		}
 
 
 		VkRenderPassBeginInfo hud_render_pass_begin_info = {};
 		hud_render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		hud_render_pass_begin_info.renderPass = hud_render_pass;
-		hud_render_pass_begin_info.framebuffer = hud_framebuffers[current_frame];
+		hud_render_pass_begin_info.framebuffer = hud_framebuffers[m_current_frame];
 		hud_render_pass_begin_info.renderArea.offset = { 0, 0 };
 		hud_render_pass_begin_info.renderArea.extent = output_attachement.extent2D;
 		hud_render_pass_begin_info.clearValueCount = 0;
 		hud_render_pass_begin_info.pClearValues = nullptr;
 
 		vkCmdBeginRenderPass(
-			draw_command_buffers[current_frame],
+			draw_command_buffers[m_current_frame],
 			&hud_render_pass_begin_info,
 			VK_SUBPASS_CONTENTS_INLINE
 		);
 		{
-			TracyVkZone(draw_ctx, draw_command_buffers[current_frame], "Hud render pass");
+			TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Hud render pass");
 
 			{ // Draw hud
 				ZoneScopedN("Draw hud");
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, hud_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, hud_pipeline.pipeline);
 
 				{ // Crosshair
 					float min_size = std::min(output_attachement.extent2D.width, output_attachement.extent2D.height);
@@ -926,7 +926,7 @@ void VulkanAPI::_lightingPass()
 				}
 
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, item_icon_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, item_icon_pipeline.pipeline);
 
 				{ // Toolbar items
 					for (size_t i = 0; i < 9; i++)
@@ -953,7 +953,7 @@ void VulkanAPI::_lightingPass()
 					}
 				}
 
-				vkCmdBindPipeline(draw_command_buffers[current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, hud_pipeline.pipeline);
+				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, hud_pipeline.pipeline);
 
 				const glm::vec2 toolbar_cursor_pos = {
 					toolbar_pos.x + (m_toolbar_cursor_index * toolbar_cursor_image.extent2D.width),
@@ -1001,13 +1001,13 @@ void VulkanAPI::_lightingPass()
 			// 	);
 			// }
 		}
-		vkCmdEndRenderPass(draw_command_buffers[current_frame]);
+		vkCmdEndRenderPass(draw_command_buffers[m_current_frame]);
 	}
 
-	TracyVkCollect(draw_ctx, draw_command_buffers[current_frame]);
+	TracyVkCollect(draw_ctx, draw_command_buffers[m_current_frame]);
 
 	VK_CHECK(
-		vkEndCommandBuffer(draw_command_buffers[current_frame]),
+		vkEndCommandBuffer(draw_command_buffers[m_current_frame]),
 		"Failed to record command buffer"
 	);
 }
@@ -1021,7 +1021,7 @@ void VulkanAPI::_drawPlayerBodyPart(
 	player_matrice.matrice = model;
 
 	_drawMesh(
-		draw_command_buffers[current_frame],
+		draw_command_buffers[m_current_frame],
 		player_pipeline,
 		mesh_id,
 		&player_matrice,
@@ -1039,9 +1039,9 @@ void VulkanAPI::_copyToSwapchain()
 		device,
 		swapchain.swapchain,
 		std::numeric_limits<uint64_t>::max(),
-		image_available_semaphores[current_frame],
+		image_available_semaphores[m_current_frame],
 		VK_NULL_HANDLE,
-		&current_image_index
+		&m_current_image_index
 	);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR)
@@ -1057,7 +1057,7 @@ void VulkanAPI::_copyToSwapchain()
 
 	// Copy the color image to the swap chain image with blit
 	VK_CHECK(
-		vkResetCommandBuffer(copy_command_buffers[current_frame], 0),
+		vkResetCommandBuffer(copy_command_buffers[m_current_frame], 0),
 		"Failed to reset copy command buffer"
 	);
 
@@ -1065,16 +1065,16 @@ void VulkanAPI::_copyToSwapchain()
 	copy_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	VK_CHECK(
-		vkBeginCommandBuffer(copy_command_buffers[current_frame], &copy_begin_info),
+		vkBeginCommandBuffer(copy_command_buffers[m_current_frame], &copy_begin_info),
 		"Failed to begin recording copy command buffer"
 	);
 
 	{ // Scope for Tracy
-		TracyVkZone(draw_ctx, copy_command_buffers[current_frame], "Copy to swapchain");
+		TracyVkZone(draw_ctx, copy_command_buffers[m_current_frame], "Copy to swapchain");
 
 		_setImageLayout(
-			copy_command_buffers[current_frame],
-			swapchain.images[current_image_index],
+			copy_command_buffers[m_current_frame],
+			swapchain.images[m_current_image_index],
 			VK_IMAGE_LAYOUT_UNDEFINED,
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -1107,10 +1107,10 @@ void VulkanAPI::_copyToSwapchain()
 		blit.dstSubresource.layerCount = 1;
 
 		vkCmdBlitImage(
-			copy_command_buffers[current_frame],
+			copy_command_buffers[m_current_frame],
 			output_attachement.image,
 			VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-			swapchain.images[current_image_index],
+			swapchain.images[m_current_image_index],
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			1,
 			&blit,
@@ -1119,7 +1119,7 @@ void VulkanAPI::_copyToSwapchain()
 	}
 
 	VK_CHECK(
-		vkEndCommandBuffer(copy_command_buffers[current_frame]),
+		vkEndCommandBuffer(copy_command_buffers[m_current_frame]),
 		"Failed to record copy command buffer"
 	);
 }
@@ -1128,25 +1128,25 @@ void VulkanAPI::_drawDebugGui()
 {
 	ZoneScoped;
 
-	vkResetCommandBuffer(imgui_command_buffers[current_frame], 0);
+	vkResetCommandBuffer(imgui_command_buffers[m_current_frame], 0);
 
 	VkCommandBufferBeginInfo imgui_begin_info = {};
 	imgui_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
 	VK_CHECK(
-		vkBeginCommandBuffer(imgui_command_buffers[current_frame], &imgui_begin_info),
+		vkBeginCommandBuffer(imgui_command_buffers[m_current_frame], &imgui_begin_info),
 		"Failed to begin recording command buffer"
 	);
 
 	{ // Scope for Tracy
-		TracyVkZone(draw_ctx, imgui_command_buffers[current_frame], "Draw debug gui");
+		TracyVkZone(draw_ctx, imgui_command_buffers[m_current_frame], "Draw debug gui");
 
 		{
 			std::lock_guard lock(imgui_textures_mutex);
 			for (auto & [id, texture]: imgui_textures)
 			{
 				_setImageLayout(
-					imgui_command_buffers[current_frame],
+					imgui_command_buffers[m_current_frame],
 					texture.image,
 					VK_IMAGE_LAYOUT_GENERAL,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
@@ -1159,8 +1159,8 @@ void VulkanAPI::_drawDebugGui()
 			}
 		}
 		_setImageLayout(
-			imgui_command_buffers[current_frame],
-			swapchain.images[current_image_index],
+			imgui_command_buffers[m_current_frame],
+			swapchain.images[m_current_image_index],
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 			{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -1172,7 +1172,7 @@ void VulkanAPI::_drawDebugGui()
 
 		VkRenderingAttachmentInfo imgui_color_attachment = {};
 		imgui_color_attachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-		imgui_color_attachment.imageView = swapchain.image_views[current_image_index];
+		imgui_color_attachment.imageView = swapchain.image_views[m_current_image_index];
 		imgui_color_attachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 		imgui_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 		imgui_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -1184,7 +1184,7 @@ void VulkanAPI::_drawDebugGui()
 		imgui_render_info.colorAttachmentCount = 1;
 		imgui_render_info.pColorAttachments = &imgui_color_attachment;
 
-		vkCmdBeginRendering(imgui_command_buffers[current_frame], &imgui_render_info);
+		vkCmdBeginRendering(imgui_command_buffers[m_current_frame], &imgui_render_info);
 
 
 		ImGui_ImplVulkan_NewFrame();
@@ -1195,14 +1195,14 @@ void VulkanAPI::_drawDebugGui()
 
 		ImGui::Render();
 
-		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), imgui_command_buffers[current_frame]);
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), imgui_command_buffers[m_current_frame]);
 
 
-		vkCmdEndRendering(imgui_command_buffers[current_frame]);
+		vkCmdEndRendering(imgui_command_buffers[m_current_frame]);
 
 		_setImageLayout(
-			imgui_command_buffers[current_frame],
-			swapchain.images[current_image_index],
+			imgui_command_buffers[m_current_frame],
+			swapchain.images[m_current_image_index],
 			VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 			VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
 			{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 },
@@ -1217,7 +1217,7 @@ void VulkanAPI::_drawDebugGui()
 			for (auto & [id, texture]: imgui_textures)
 			{
 				_setImageLayout(
-					imgui_command_buffers[current_frame],
+					imgui_command_buffers[m_current_frame],
 					texture.image,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 					VK_IMAGE_LAYOUT_GENERAL,
@@ -1232,7 +1232,7 @@ void VulkanAPI::_drawDebugGui()
 	}
 
 	VK_CHECK(
-		vkEndCommandBuffer(imgui_command_buffers[current_frame]),
+		vkEndCommandBuffer(imgui_command_buffers[m_current_frame]),
 		"Failed to record imgui command buffer"
 	);
 }

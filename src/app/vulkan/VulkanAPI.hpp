@@ -316,6 +316,8 @@ public:
 	mutable std::mutex toolbar_items_mutex;
 	std::atomic<int> toolbar_cursor_index = 0;
 
+	void setTargetBlock(const std::optional<glm::vec3> & target_block);
+
 	struct ChunkMeshCreateInfo
 	{
 		std::vector<BlockVertex> & block_vertex;
@@ -324,24 +326,11 @@ public:
 		std::vector<BlockVertex> & water_vertex;
 		std::vector<uint32_t> & water_index;
 	};
-
-	/**
-	 * @brief Add a chunk to the scene with the given mesh info and model matrix.
-	 *
-	 * @return The id of the chunk in the scene.
-	 */
 	InstanceId addChunkToScene(
 		const ChunkMeshCreateInfo & mesh_info,
 		const glm::dmat4 & model
 	);
-
-	/**
-	 * @brief Remove a chunk from the scene. Aslo destroy the associated meshes.
-	 *
-	 */
 	void removeChunkFromScene(const uint64_t chunk_id);
-
-	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 
 	uint64_t storeMesh(
 		const void * vertices,
@@ -351,6 +340,7 @@ public:
 		const uint32_t index_count
 	);
 	void destroyMesh(const uint64_t & mesh_id);
+	uint64_t getCubeMeshId() const { return cube_mesh_id; }
 
 
 	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
@@ -366,9 +356,13 @@ public:
 	void ImGuiTextureClear(const uint64_t texture_id);
 	void ImGuiTextureDraw(const uint64_t texture_id);
 
-	uint64_t getCubeMeshId() const { return cube_mesh_id; }
-
 private:
+
+	//###########################################################################################################
+	//																											#
+	//													Generics												#
+	//																											#
+	//###########################################################################################################
 
 	const std::vector<const char *> validation_layers = {
 		"VK_LAYER_KHRONOS_validation"
@@ -386,8 +380,6 @@ private:
 
 	GLFWwindow * window;
 
-	TextRenderer text_renderer;
-
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debug_messenger;
 	VkPhysicalDevice physical_device = VK_NULL_HANDLE;
@@ -400,12 +392,71 @@ private:
 	VkQueue transfer_queue;
 	QueueFamilyIndices queue_family_indices;
 
+	mutable TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
+
+	// function pointers
+	PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;
+	PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
+
+	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
+	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
+
+	PFN_vkGetBufferDeviceAddress vkGetBufferDeviceAddress;
+
+
+	void _createInstance();
+	bool _checkValidationLayerSupport();
+	std::vector<const char *> _getRequiredExtensions();
+
+	void _loadVulkanFunctions();
+
+	void _createSurface(GLFWwindow * window);
+
+	void _setupDebugMessenger();
+	void _populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info);
+	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
+		VkDebugUtilsMessageTypeFlagsEXT message_type,
+		const VkDebugUtilsMessengerCallbackDataEXT * callback_data,
+		void * user_data
+	);
+
+	void _pickPhysicalDevice();
+	bool _isDeviceSuitable(VkPhysicalDevice device);
+	int _ratePhysicalDevice(VkPhysicalDevice device);
+	QueueFamilyIndices _findQueueFamilies(VkPhysicalDevice device);
+	bool _checkDeviceExtensionSupport(VkPhysicalDevice device);
+
+	void _createLogicalDevice();
+
+	//###########################################################################################################
+	//																											#
+	//											Swapchain and framebuffers										#
+	//																											#
+	//###########################################################################################################
+
 	Swapchain swapchain;
+
 	std::vector<VkFramebuffer> lighting_framebuffers;
 	std::vector<VkFramebuffer> shadow_framebuffers;
 	std::vector<VkFramebuffer> water_framebuffers;
 	std::vector<VkFramebuffer> hud_framebuffers;
 	VkFramebuffer prerender_item_icon_framebuffer;
+
+	void _createSwapChain(GLFWwindow * window);
+	void _recreateSwapChain(GLFWwindow * window);
+	VkSurfaceFormatKHR _chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats);
+	VkPresentModeKHR _chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes);
+	VkExtent2D _chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window);
+
+	void _createFramebuffers();
+	void _destroyFramebuffers();
+
+	//###########################################################################################################
+	//																											#
+	//												Command buffer												#
+	//																											#
+	//###########################################################################################################
 
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_shadow_pass_command_buffers;
@@ -418,6 +469,15 @@ private:
 	VkCommandBuffer transfer_command_buffers;
 	TracyLockableN (std::mutex, transfer_operation_mutex, "Vulkan Transfer Operation");
 
+	void _createCommandPool();
+	void _createCommandBuffer();
+
+	//###########################################################################################################
+	//																											#
+	//												Synchronisation												#
+	//																											#
+	//###########################################################################################################
+
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> shadow_pass_finished_semaphores;
 	std::vector<VkSemaphore> main_render_finished_semaphores;
@@ -427,19 +487,35 @@ private:
 	std::vector<VkFence> in_flight_fences;
 	VkFence single_time_command_fence;
 
-	const int max_frames_in_flight = 2;
-	int current_frame = 0;
-	uint32_t current_image_index = 0;
+	void _createSyncObjects();
+
+	//###########################################################################################################
+	//																											#
+	//													Shadow maps												#
+	//																											#
+	//###########################################################################################################
 
 	const uint shadow_maps_count = SHADOW_MAP_MAX_COUNT;
 	const uint shadow_map_size;
+
+	Image shadow_map_depth_attachement;
+
+	std::vector<VkImageView> shadow_map_views;
+
+	void _createShadowMapRessources();
+	void _destroyShadowMapRessources();
+
+	//###########################################################################################################
+	//																											#
+	//											Images and buffers												#
+	//																											#
+	//###########################################################################################################
 
 	Image output_attachement;
 	Image color_attachement;
 	Image depth_attachement;
 	Image block_textures;
 	Image skybox_cube_map;
-	Image shadow_map_depth_attachement;
 
 	Image crosshair_image;
 	Image toolbar_image;
@@ -450,11 +526,22 @@ private:
 	Image debug_info_image;
 	std::vector<Buffer> debug_info_buffers;
 
-	std::vector<VkImageView> shadow_map_views;
-
 	UBO camera_ubo;
 	UBO light_mat_ubo;
 	UBO atmosphere_ubo;
+
+	void _createColorAttachement();
+	void _createDepthAttachement();
+
+	void _createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count);
+	void _createUniformBuffers();
+	void _createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
+	void _createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
+	void _createHudImages(
+		const std::string & file_path,
+		Image & image
+	);
+	void _createTextureImage();
 
 	//###########################################################################################################
 	//																											#
@@ -483,11 +570,33 @@ private:
 	Descriptor debug_info_image_descriptor;
 	Descriptor global_descriptor;
 
+	void _createHudDescriptors(
+		const Image & image,
+		Descriptor & descriptor
+	);
+	void _createDescriptors();
+	void _createGlobalDescriptor();
+	void _updateGlobalDescriptor();
+
+	//###########################################################################################################
+	//																											#
+	//													Render pass												#
+	//																											#
+	//###########################################################################################################
+
 	VkRenderPass lighting_render_pass;
 	VkRenderPass shadow_render_pass;
 	VkRenderPass water_render_pass;
 	VkRenderPass hud_render_pass;
 	VkRenderPass prerender_item_icon_render_pass;
+
+	void _createRenderPass();
+
+	//###########################################################################################################
+	//																											#
+	//													Pipelines												#
+	//																											#
+	//###########################################################################################################
 
 	Pipeline chunk_pipeline;
 	Pipeline water_pipeline;
@@ -502,13 +611,33 @@ private:
 	Pipeline prerender_item_icon_pipeline;
 	Pipeline item_icon_pipeline;
 
-	// Dear ImGui resources
+	void _createPipelines();
+
+	//###########################################################################################################
+	//																											#
+	//												ImGui and Tracy												#
+	//																											#
+	//###########################################################################################################
+
 	VkDescriptorPool imgui_descriptor_pool;
 	std::unordered_map<uint64_t, ImGuiTexture> imgui_textures;
 	uint64_t next_imgui_texture_id = 1;
 	TracyLockableN (std::mutex, imgui_textures_mutex, "Vulkan Imgui Texture Mutex");
 
-	// Meshes
+	TracyVkCtx draw_ctx;
+
+	void _setupImgui();
+	void _destroyImGuiTextures();
+
+	void _setupTracy();
+	void _destroyTracy();
+
+	//###########################################################################################################
+	//																											#
+	//													Meshes													#
+	//																											#
+	//###########################################################################################################
+
 	std::unordered_map<uint64_t, Mesh> mesh_map;
 	uint64_t next_mesh_id = 1;
 	const uint64_t invalid_mesh_id = 0;
@@ -525,42 +654,16 @@ private:
 	uint64_t player_right_arm_mesh_id;
 	uint64_t player_left_arm_mesh_id;
 
+	void _createMeshes();
+	void _createItemMeshes();
+	void _destroyMesh(const uint64_t & mesh_id);
+	void _destroyMeshes();
 
-	mutable TracyLockableN (std::mutex, global_mutex, "Vulkan Global Mutex");
-
-
-	TracyVkCtx draw_ctx;
-
-	// function pointers
-	PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;
-	PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
-
-	PFN_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT vkGetPhysicalDeviceCalibrateableTimeDomainsEXT;
-	PFN_vkGetCalibratedTimestampsEXT vkGetCalibratedTimestampsEXT;
-
-	PFN_vkGetBufferDeviceAddress vkGetBufferDeviceAddress;
-	
-
-	/**
-	 * @brief Get the chunks in the scene.
-	 *
-	 */
-	std::map<InstanceId, glm::dmat4> getChunksInScene() const;
-
-	void bindChunkIndexBuffer(VkCommandBuffer command_buffer);
-	void drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id);
-	void drawChunksBlock(
-		VkCommandBuffer command_buffer,
-		Buffer & indirect_buffer,
-		const std::vector<InstanceId> & ids
-	);
-	void drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
-
-	std::optional<glm::vec3> targetBlock() const;
-
-	std::vector<PlayerRenderData> getPlayers() const;
-
-
+	//###########################################################################################################
+	//																											#
+	//													Chunks													#
+	//																											#
+	//###########################################################################################################
 
 	struct ChunkMeshesInfo
 	{
@@ -597,7 +700,26 @@ private:
 	void _resizeChunksIndicesBuffer(const VkDeviceSize & size);
 	void _deleteUnusedChunks();
 
+	std::map<InstanceId, glm::dmat4> _getChunksInScene() const;
 
+	void _bindChunkIndexBuffer(VkCommandBuffer command_buffer);
+	void _drawChunksBlock(
+		VkCommandBuffer command_buffer,
+		Buffer & indirect_buffer,
+		const std::vector<InstanceId> & ids
+	);
+	void _drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
+
+	std::optional<glm::vec3> _targetBlock() const;
+
+	std::vector<PlayerRenderData> _getPlayers() const;
+
+
+	//###########################################################################################################
+	//																											#
+	//												Indirect Draw												#
+	//																											#
+	//###########################################################################################################
 
 	uint32_t m_max_draw_count;
 	std::vector<std::vector<Buffer>> m_draw_chunk_block_shadow_pass_buffer;
@@ -606,95 +728,32 @@ private:
 	void _createDrawBuffer();
 	void _destroyDrawBuffer();
 
+	void _drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id);
 
+	//###########################################################################################################
+	//																											#
+	//													Text													#
+	//																											#
+	//###########################################################################################################
 
-	void _createInstance();
-	bool _checkValidationLayerSupport();
-	std::vector<const char *> _getRequiredExtensions();
-
-	void _loadVulkanFunctions();
-
-	void _createSurface(GLFWwindow * window);
-
-	void _setupDebugMessenger();
-	void _populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info);
-	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
-		VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
-		VkDebugUtilsMessageTypeFlagsEXT message_type,
-		const VkDebugUtilsMessengerCallbackDataEXT * callback_data,
-		void * user_data
-	);
-
-	void _pickPhysicalDevice();
-	bool _isDeviceSuitable(VkPhysicalDevice device);
-	int _ratePhysicalDevice(VkPhysicalDevice device);
-	QueueFamilyIndices _findQueueFamilies(VkPhysicalDevice device);
-	bool _checkDeviceExtensionSupport(VkPhysicalDevice device);
-
-	void _createLogicalDevice();
-
-	void _createSwapChain(GLFWwindow * window);
-	void _recreateSwapChain(GLFWwindow * window);
-	VkSurfaceFormatKHR _chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats);
-	VkPresentModeKHR _chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes);
-	VkExtent2D _chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window);
-
-	void _createCommandPool();
-	void _createCommandBuffer();
-
-	void _createSyncObjects();
-
-	void _createColorAttachement();
-	void _createDepthAttachement();
-
-	void _createShadowMapRessources();
-	void _destroyShadowMapRessources();
-
-	void _createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count);
-	void _createUniformBuffers();
-	void _createTextureArray(const std::vector<std::string> & file_paths, uint32_t size);
-	void _createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size);
-	void _createHudImages(
-		const std::string & file_path,
-		Image & image
-	);
-	void _createTextureImage();
-
-	void _createHudDescriptors(
-		const Image & image,
-		Descriptor & descriptor
-	);
-	void _createDescriptors();
-	void _createGlobalDescriptor();
-	void _updateGlobalDescriptor();
-
-	void _createRenderPass();
-	void _createPipelines();
-	void _createFramebuffers();
-	void _destroyFramebuffers();
-
-	void _createMeshes();
-	void _createItemMeshes();
-	void _destroyMeshes();
-	void _destroyMesh(const uint64_t & mesh_id);
-
+	TextRenderer text_renderer;
 
 	void _setupTextRenderer();
 	void _destroyTextRenderer();
 
-	void _setupImgui();
-	void _destroyImGuiTextures();
-
-	void _setupTracy();
-	void _destroyTracy();
-
+	//###########################################################################################################
+	//																											#
+	//												Prerender													#
+	//																											#
+	//###########################################################################################################
 
 	void _prerenderItemIconImages();
 
-
-	VkCommandBuffer _beginSingleTimeCommands();
-	void _endSingleTimeCommands(VkCommandBuffer command_buffer);
-
+	//###########################################################################################################
+	//																											#
+	//													Helper													#
+	//																											#
+	//###########################################################################################################
 
 	void _transitionImageLayout(
 		VkImage image,
@@ -759,12 +818,15 @@ private:
 		uint32_t height
 	);
 
-
 	//###########################################################################################################
 	//																											#
 	//												Render loop													#
 	//																											#
 	//###########################################################################################################
+
+	const int m_max_frames_in_flight = 2;
+	int m_current_frame = 0;
+	uint32_t m_current_image_index = 0;
 
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;

@@ -103,7 +103,7 @@ VulkanAPI::~VulkanAPI()
 	m_chunks_in_scene.clear();
 	m_chunks_indices_buffer.clear();
 
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		vkUnmapMemory(device, camera_ubo.memory[i]);
 		vma.freeMemory(device, camera_ubo.memory[i], nullptr);
@@ -128,7 +128,7 @@ VulkanAPI::~VulkanAPI()
 
 	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		vkDestroySemaphore(device, image_available_semaphores[i], nullptr);
 		vkDestroySemaphore(device, shadow_pass_finished_semaphores[i], nullptr);
@@ -736,17 +736,17 @@ void VulkanAPI::_createCommandPool()
 
 void VulkanAPI::_createCommandBuffer()
 {
-	draw_shadow_pass_command_buffers.resize(max_frames_in_flight);
-	draw_command_buffers.resize(max_frames_in_flight);
-	copy_command_buffers.resize(max_frames_in_flight);
-	compute_command_buffers.resize(max_frames_in_flight);
-	imgui_command_buffers.resize(max_frames_in_flight);
+	draw_shadow_pass_command_buffers.resize(m_max_frames_in_flight);
+	draw_command_buffers.resize(m_max_frames_in_flight);
+	copy_command_buffers.resize(m_max_frames_in_flight);
+	compute_command_buffers.resize(m_max_frames_in_flight);
+	imgui_command_buffers.resize(m_max_frames_in_flight);
 
 	VkCommandBufferAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	alloc_info.commandPool = command_pool;
 	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	alloc_info.commandBufferCount = static_cast<uint32_t>(max_frames_in_flight);
+	alloc_info.commandBufferCount = static_cast<uint32_t>(m_max_frames_in_flight);
 
 	VK_CHECK(
 		vkAllocateCommandBuffers(device, &alloc_info, draw_shadow_pass_command_buffers.data()),
@@ -780,13 +780,13 @@ void VulkanAPI::_createCommandBuffer()
 
 void VulkanAPI::_createSyncObjects()
 {
-	image_available_semaphores.resize(max_frames_in_flight);
-	shadow_pass_finished_semaphores.resize(max_frames_in_flight);
-	main_render_finished_semaphores.resize(max_frames_in_flight);
-	compute_finished_semaphores.resize(max_frames_in_flight);
-	copy_finished_semaphores.resize(max_frames_in_flight);
-	imgui_render_finished_semaphores.resize(max_frames_in_flight);
-	in_flight_fences.resize(max_frames_in_flight);
+	image_available_semaphores.resize(m_max_frames_in_flight);
+	shadow_pass_finished_semaphores.resize(m_max_frames_in_flight);
+	main_render_finished_semaphores.resize(m_max_frames_in_flight);
+	compute_finished_semaphores.resize(m_max_frames_in_flight);
+	copy_finished_semaphores.resize(m_max_frames_in_flight);
+	imgui_render_finished_semaphores.resize(m_max_frames_in_flight);
+	in_flight_fences.resize(m_max_frames_in_flight);
 
 	VkSemaphoreCreateInfo semaphore_info = {};
 	semaphore_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -795,7 +795,7 @@ void VulkanAPI::_createSyncObjects()
 	fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 	fence_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-	for (size_t i = 0; i < static_cast<size_t>(max_frames_in_flight); i++)
+	for (size_t i = 0; i < static_cast<size_t>(m_max_frames_in_flight); i++)
 	{
 		VK_CHECK(
 			vkCreateSemaphore(device, &semaphore_info, nullptr, &image_available_semaphores[i]),
@@ -958,9 +958,9 @@ void VulkanAPI::_createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t co
 
 void VulkanAPI::_createUniformBuffers()
 {
-	_createUBO(camera_ubo, sizeof(ViewProjMatrices), max_frames_in_flight);
-	_createUBO(atmosphere_ubo, sizeof(AtmosphereParams), max_frames_in_flight);
-	_createUBO(light_mat_ubo, sizeof(ShadowMapLight) * shadow_maps_count, max_frames_in_flight);
+	_createUBO(camera_ubo, sizeof(ViewProjMatrices), m_max_frames_in_flight);
+	_createUBO(atmosphere_ubo, sizeof(AtmosphereParams), m_max_frames_in_flight);
+	_createUBO(light_mat_ubo, sizeof(ShadowMapLight) * shadow_maps_count, m_max_frames_in_flight);
 }
 
 void VulkanAPI::_createTextureArray(const std::vector<std::string> & file_paths, uint32_t size)
@@ -1061,8 +1061,8 @@ void VulkanAPI::_createTextureImage()
 		debug_info_image = Image(device, physical_device, command_buffer, image_info);
 
 		// create debug info buffer
-		debug_info_buffers.resize(max_frames_in_flight);
-		for (int i = 0; i < max_frames_in_flight; i++)
+		debug_info_buffers.resize(m_max_frames_in_flight);
+		for (int i = 0; i < m_max_frames_in_flight; i++)
 		{
 			Buffer::CreateInfo buffer_info = {};
 			buffer_info.size = debug_info_image.extent2D.width * debug_info_image.extent2D.height * 4;
@@ -1106,7 +1106,7 @@ void VulkanAPI::_createHudDescriptors(
 
 	Descriptor::CreateInfo descriptor_info = {};
 	descriptor_info.bindings = { sampler_layout_binding };
-	descriptor_info.descriptor_count = static_cast<uint32_t>(max_frames_in_flight);
+	descriptor_info.descriptor_count = static_cast<uint32_t>(m_max_frames_in_flight);
 
 	descriptor = Descriptor(device, descriptor_info);
 
@@ -1241,8 +1241,8 @@ void VulkanAPI::_createGlobalDescriptor()
 			item_icon_binding,
 			instance_data_binding
 		},
-		.descriptor_count = static_cast<uint32_t>(max_frames_in_flight),
-		.set_count = static_cast<uint32_t>(max_frames_in_flight)
+		.descriptor_count = static_cast<uint32_t>(m_max_frames_in_flight),
+		.set_count = static_cast<uint32_t>(m_max_frames_in_flight)
 	};
 
 	global_descriptor = Descriptor(device, descriptor_info);
@@ -1252,7 +1252,7 @@ void VulkanAPI::_createGlobalDescriptor()
 
 void VulkanAPI::_updateGlobalDescriptor()
 {
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		// Camera UBO
 		const GlobalDescriptorWrite camera_ubo_write = {
@@ -1913,12 +1913,12 @@ void VulkanAPI::_createPipelines()
 
 void VulkanAPI::_createFramebuffers()
 {
-	lighting_framebuffers.resize(max_frames_in_flight);
-	shadow_framebuffers.resize(max_frames_in_flight * shadow_maps_count);
-	water_framebuffers.resize(max_frames_in_flight);
-	hud_framebuffers.resize(max_frames_in_flight);
+	lighting_framebuffers.resize(m_max_frames_in_flight);
+	shadow_framebuffers.resize(m_max_frames_in_flight * shadow_maps_count);
+	water_framebuffers.resize(m_max_frames_in_flight);
+	hud_framebuffers.resize(m_max_frames_in_flight);
 
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		std::vector<VkImageView> attachments = {
 			color_attachement.view,
@@ -1941,7 +1941,7 @@ void VulkanAPI::_createFramebuffers()
 		);
 	}
 
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		for (size_t j = 0; j < shadow_maps_count; j++)
 		{
@@ -1965,7 +1965,7 @@ void VulkanAPI::_createFramebuffers()
 		}
 	}
 
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		std::vector<VkImageView> attachments = {
 			color_attachement.view,
@@ -1988,7 +1988,7 @@ void VulkanAPI::_createFramebuffers()
 		);
 	}
 
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		std::vector<VkImageView> attachments = {
 			output_attachement.view
@@ -2032,7 +2032,7 @@ void VulkanAPI::_createFramebuffers()
 
 void VulkanAPI::_destroyFramebuffers()
 {
-	for (int i = 0; i < max_frames_in_flight; i++)
+	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
 		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
 		vkDestroyFramebuffer(device, water_framebuffers[i], nullptr);
@@ -2148,7 +2148,7 @@ void VulkanAPI::_writeTextToDebugImage(
 {
 	const VkDeviceSize image_size = debug_info_image.extent2D.width * debug_info_image.extent2D.height * 4;
 
-	Buffer & staging_buffer = debug_info_buffers[current_frame];
+	Buffer & staging_buffer = debug_info_buffers[m_current_frame];
 
 	memset(staging_buffer.mappedMemory(), 0, image_size);
 
@@ -2422,7 +2422,7 @@ void VulkanAPI::_prerenderItemIconImages()
 	vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, prerender_item_icon_pipeline.pipeline);
 
 	std::vector<VkDescriptorSet> descriptor_sets = {
-		global_descriptor.sets[current_frame]
+		global_descriptor.sets[m_current_frame]
 	};
 	vkCmdBindDescriptorSets(
 		command_buffer,
@@ -2477,62 +2477,6 @@ void VulkanAPI::_prerenderItemIconImages()
 }
 
 
-VkCommandBuffer VulkanAPI::_beginSingleTimeCommands()
-{
-	VK_CHECK(
-		vkResetFences(device, 1, &single_time_command_fence),
-		"Failed to reset single time command buffer fence"
-	);
-
-	VkCommandBufferAllocateInfo alloc_info = {};
-	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	alloc_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	alloc_info.commandPool = command_pool;
-	alloc_info.commandBufferCount = 1;
-
-	VkCommandBuffer command_buffer;
-	VK_CHECK(
-		vkAllocateCommandBuffers(device, &alloc_info, &command_buffer),
-		"Failed to allocate single time command buffer"
-	);
-
-	VkCommandBufferBeginInfo begin_info = {};
-	begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-	VK_CHECK(
-		vkBeginCommandBuffer(command_buffer, &begin_info),
-		"Failed to begin single time command buffer"
-	);
-
-	return command_buffer;
-}
-
-void VulkanAPI::_endSingleTimeCommands(VkCommandBuffer command_buffer)
-{
-	VK_CHECK(
-		vkEndCommandBuffer(command_buffer),
-		"Failed to end single time command buffer"
-	);
-
-
-	VkSubmitInfo submit_info = {};
-	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	submit_info.commandBufferCount = 1;
-	submit_info.pCommandBuffers = &command_buffer;
-
-	VK_CHECK(
-		vkQueueSubmit(graphics_queue, 1, &submit_info, single_time_command_fence),
-		"Failed to submit single time command buffer"
-	);
-	VK_CHECK(
-		vkWaitForFences(device, 1, &single_time_command_fence, VK_TRUE, UINT64_MAX),
-		"Failed to wait for single time command buffer"
-	);
-
-	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
-}
-
 
 void VulkanAPI::_startFrame()
 {
@@ -2547,26 +2491,26 @@ void VulkanAPI::_startFrame()
 		const std::chrono::nanoseconds start_cpu_wait_time = std::chrono::steady_clock::now().time_since_epoch();
 
 		VK_CHECK(
-			vkWaitForFences(device, 1, &in_flight_fences[current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
+			vkWaitForFences(device, 1, &in_flight_fences[m_current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
 			"Failed to wait for in flight fence"
 		);
 
 		const std::chrono::nanoseconds end_cpu_wait_time = std::chrono::steady_clock::now().time_since_epoch();
 		DebugGui::cpu_wait_time_history.push((end_cpu_wait_time - start_cpu_wait_time).count() / 1e6);
 	}
-	vkResetFences(device, 1, &in_flight_fences[current_frame]);
+	vkResetFences(device, 1, &in_flight_fences[m_current_frame]);
 
 	{ // reset mesh usage by frame info
 		std::lock_guard lock(mesh_map_mutex);
 		for (auto & [id, mesh] : mesh_map)
 		{
-			mesh.used_by_frame[current_frame] = false;
+			mesh.used_by_frame[m_current_frame] = false;
 		}
 	}
 
 	for (auto & [id, chunk] : m_chunks_in_scene)
 	{
-		chunk.used_by_frame[current_frame] = false;
+		chunk.used_by_frame[m_current_frame] = false;
 	}
 
 	_updateInstancesData();
@@ -2574,7 +2518,7 @@ void VulkanAPI::_startFrame()
 
 void VulkanAPI::_endFrame()
 {
-	current_frame = (current_frame + 1) % max_frames_in_flight;
+	m_current_frame = (m_current_frame + 1) % m_max_frames_in_flight;
 	global_mutex.unlock();
 }
 
@@ -2586,13 +2530,13 @@ void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
 	m_target_block = target_block;
 }
 
-std::optional<glm::vec3> VulkanAPI::targetBlock() const
+std::optional<glm::vec3> VulkanAPI::_targetBlock() const
 {
 	std::lock_guard lock(m_target_block_mutex);
 	return m_target_block;
 }
 
-std::vector<PlayerRenderData> VulkanAPI::getPlayers() const
+std::vector<PlayerRenderData> VulkanAPI::_getPlayers() const
 {
 	std::lock_guard lock(m_player_mutex);
 	std::vector<PlayerRenderData> tmp_players;
@@ -2628,7 +2572,7 @@ std::pair<bool, Mesh> VulkanAPI::_getMesh(const uint64_t id)
 		return std::make_pair(false, Mesh());
 	}
 
-	mesh_map.at(id).used_by_frame[current_frame] = true;
+	mesh_map.at(id).used_by_frame[m_current_frame] = true;
 
 	return std::make_pair(true, mesh);
 }
@@ -2686,7 +2630,7 @@ void VulkanAPI::_drawMesh(
 	);
 }
 
-void VulkanAPI::bindChunkIndexBuffer(VkCommandBuffer command_buffer)
+void VulkanAPI::_bindChunkIndexBuffer(VkCommandBuffer command_buffer)
 {
 	vkCmdBindIndexBuffer(
 		command_buffer,
@@ -2696,14 +2640,14 @@ void VulkanAPI::bindChunkIndexBuffer(VkCommandBuffer command_buffer)
 	);
 }
 
-void VulkanAPI::drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id)
+void VulkanAPI::_drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id)
 {
 	if (id == m_null_instance_id)
 		return;
 		
 	ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
 
-	chunk_info.used_by_frame[current_frame] = true;
+	chunk_info.used_by_frame[m_current_frame] = true;
 
 	vkCmdDrawIndexed(
 		command_buffer,
@@ -2715,7 +2659,7 @@ void VulkanAPI::drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId 
 	);
 }
 
-void VulkanAPI::drawChunksBlock(
+void VulkanAPI::_drawChunksBlock(
 	VkCommandBuffer command_buffer,
 	Buffer & indirect_buffer,
 	const std::vector<InstanceId> & ids
@@ -2738,7 +2682,7 @@ void VulkanAPI::drawChunksBlock(
 			
 		ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
 
-		chunk_info.used_by_frame[current_frame] = true;
+		chunk_info.used_by_frame[m_current_frame] = true;
 
 		draw_commands[draw_count] = {
 			.indexCount = chunk_info.block_index_count,
@@ -2759,14 +2703,14 @@ void VulkanAPI::drawChunksBlock(
 	);
 }
 
-void VulkanAPI::drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id)
+void VulkanAPI::_drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id)
 {
 	if (id == m_null_instance_id)
 		return;
 
 	ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
 
-	chunk_info.used_by_frame[current_frame] = true;
+	chunk_info.used_by_frame[m_current_frame] = true;
 
 	vkCmdDrawIndexed(
 		command_buffer,
@@ -2788,7 +2732,7 @@ void VulkanAPI::_drawHudImage(
 	};
 
 	vkCmdBindDescriptorSets(
-		draw_command_buffers[current_frame],
+		draw_command_buffers[m_current_frame],
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		hud_pipeline.layout,
 		1,
@@ -2798,10 +2742,10 @@ void VulkanAPI::_drawHudImage(
 		nullptr
 	);
 
-	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);
+	vkCmdSetViewport(draw_command_buffers[m_current_frame], 0, 1, &viewport);
 
 	vkCmdDraw(
-		draw_command_buffers[current_frame],
+		draw_command_buffers[m_current_frame],
 		6,
 		1,
 		0,
@@ -2818,7 +2762,7 @@ void VulkanAPI::_drawItemIcon(
 	push_constants.layer = layer;
 
 	vkCmdPushConstants(
-		draw_command_buffers[current_frame],
+		draw_command_buffers[m_current_frame],
 		item_icon_pipeline.layout,
 		VK_SHADER_STAGE_ALL,
 		0,
@@ -2826,10 +2770,10 @@ void VulkanAPI::_drawItemIcon(
 		&push_constants
 	);
 
-	vkCmdSetViewport(draw_command_buffers[current_frame], 0, 1, &viewport);
+	vkCmdSetViewport(draw_command_buffers[m_current_frame], 0, 1, &viewport);
 
 	vkCmdDraw(
-		draw_command_buffers[current_frame],
+		draw_command_buffers[m_current_frame],
 		6,
 		1,
 		0,
