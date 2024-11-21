@@ -28,8 +28,10 @@ namespace ecs
 	template <ValidEntity entityType = ecs::entity, size_t max = 5000>
 	class Storage
 	{
+	// friend class View;
 	public:
-
+		template <typename... ComponentTypes>
+		friend class View;
 		Storage(){};
 		~Storage(){};
 
@@ -99,7 +101,7 @@ namespace ecs
 		void addComponentToEntity(entityType entity, ComponentType component = ComponentType())
 		{
 			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & storage = getStorage<ComponentType>();
+			SparseSetType & storage = getSet<ComponentType>();
 
 			storage.insert(entity, component);
 		}
@@ -109,7 +111,7 @@ namespace ecs
 		void removeComponentFromEntity(entityType entity)
 		{
 			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & component = getStorage<ComponentType>();
+			SparseSetType & component = getSet<ComponentType>();
 
 			component.remove(entity);
 		}
@@ -119,7 +121,7 @@ namespace ecs
 		ComponentType & getComponentFromEntity(entityType entity)
 		{
 			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & component = getStorage<ComponentType>();
+			SparseSetType & component = getSet<ComponentType>();
 
 			return component.get(entity);
 		}
@@ -128,7 +130,7 @@ namespace ecs
 		ComponentType & tryGetComponentFromEntity(entityType entity)
 		{
 			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & component = getStorage<ComponentType>();
+			SparseSetType & component = getSet<ComponentType>();
 
 			return component.tryGet(entity);
 		}
@@ -231,12 +233,17 @@ namespace ecs
 			return m_entities.size() << 3 | 1;
 		}
 
-
 		/*************************************************\
 		 * 	COMPONENT UTILS
 		\*************************************************/
 		template <typename ComponentType>
-		SparseSet<entityType, ComponentType> & getStorage()
+		SparseSet<entityType, ComponentType> & getSet()
+		{
+			return *getSetPtr<ComponentType>();
+		}
+
+		template <typename ComponentType>
+		std::shared_ptr<SparseSet<entityType, ComponentType>> getSetPtr()
 		{
 			using SparseSetType = SparseSet<entityType, ComponentType>;
 			const std::type_index type = std::type_index(typeid(ComponentType));
@@ -247,7 +254,7 @@ namespace ecs
 				auto ret_pair = m_components.insert({type, std::make_shared<SparseSetType>()});
 				it = ret_pair.first;
 			}
-			return *std::static_pointer_cast<SparseSetType>(it->second);
+			return std::static_pointer_cast<SparseSetType>(it->second);
 		}
 	};
 }

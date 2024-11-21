@@ -1,10 +1,18 @@
 #include "ecs.hpp"
 #include <cassert>
 #include <iostream>
+#include "test.hpp"
 
 struct Position
 {
 	float x;
+	float y;
+};
+
+struct Velocity
+{
+	float x;
+	int speed;
 	float y;
 };
 
@@ -127,4 +135,12 @@ int main()
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}
+
+	using test_type = Test<ecs::entity, Position, Velocity>;
+	using test_tuple = test_type::test_tuple;
+	using bar_type = bar<ecs::entity, Position>;
+	test_tuple tuple;
+	test_type test;
+
+	std::cout << std::get<bar_type>(tuple).component.x << std::endl;
 }
