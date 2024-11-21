@@ -1,8 +1,6 @@
 #pragma once
 
-#include "ECS.hpp"
-
-
+#include "Storage.hpp"
 
 namespace ecs
 {
@@ -29,7 +27,7 @@ namespace ecs
 	{
 	public:
 		View();
-		// View(ECS & ecs) {};
+		// View(Storage & ecs) {};
 
 		viewIterator<ComponentTypes...>	begin();
 		viewIterator<ComponentTypes...>	end();

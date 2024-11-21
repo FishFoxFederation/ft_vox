@@ -10,8 +10,9 @@
 #include <utility>
 #include <iostream>
 
-#include "ECS_CONSTANTS.hpp"
-#include "ECS_FWD.hpp"
+#include "ecs_CONSTANTS.hpp"
+#include "ecs_FWD.hpp"
+#include "ecs_utils.hpp"
 
 #include "SparseSet.hpp"
 #include "View.hpp"
@@ -20,29 +21,29 @@ namespace ecs
 {
 
 	/**
-	 * @brief 
+	 * @brief A simple ECS 
 	 * 
-	 * @tparam size 
+	 * @tparam entityType 
 	 */
-	template <size_t size = MAX_ENTITIES>
-	class ECS
+	template <ValidEntity entityType = ecs::entity, size_t max = 5000>
+	class Storage
 	{
 	public:
-		ECS()
-		{};
-		~ECS(){};
 
-		ECS(ECS & other) = delete;
-		ECS(ECS && other) = delete;
-		ECS & operator=(ECS & other) = delete;
-		ECS & operator=(ECS && other) = delete;
+		Storage(){};
+		~Storage(){};
+
+		Storage(Storage & other) = delete;
+		Storage(Storage && other) = delete;
+		Storage & operator=(Storage & other) = delete;
+		Storage & operator=(Storage && other) = delete;
 
 		/*************************************************************\
 		 * 	ENTITY
 		\*************************************************************/
 		std::pair<bool, entityType>		createEntity()
 		{
-			if (m_entities.size() == MAX_ENTITIES)
+			if (m_entities.size() == max)
 				return {false, 0};
 			//check if there are any dead entities to reuse
 			if (m_dead_entity_head != 0)
@@ -91,50 +92,45 @@ namespace ecs
 		}
 
 		/*************************************************************\
-		 * 	COMPONENTS
-		\*************************************************************/
-		//add component
-		template <typename ComponentType>
-		void addComponent()
-		{
-			const std::type_index type = std::type_index(typeid(ComponentType));
-			if (m_components.contains(type))
-				throw ComponentAlreadyExists<ComponentType>();
-
-			m_components[type] = std::make_shared<SparseSet<ComponentType>>();
-		}
-
-		//remove component
-		template <typename ComponentType>
-		void removeComponent()
-		{
-			const std::type_index type = std::type_index(typeid(ComponentType));
-			if (!m_components.contains(type))
-				throw ComponentDoesNotExist<ComponentType>();
-
-			m_components.erase(type);
-		}
-
-		
-		/*************************************************************\
 		 * 	COMPONENT-ENTITY RELATION
 		\*************************************************************/
 		//add component to entity
 		template <typename ComponentType>
-		void addComponentToEntity(entityType entity)
+		void addComponentToEntity(entityType entity, ComponentType component = ComponentType())
 		{
+			using SparseSetType = SparseSet<entityType, ComponentType>;
+			SparseSetType & storage = getStorage<ComponentType>();
+
+			storage.insert(entity, component);
 		}
 
 		//remove component from entity
 		template <typename ComponentType>
 		void removeComponentFromEntity(entityType entity)
 		{
+			using SparseSetType = SparseSet<entityType, ComponentType>;
+			SparseSetType & component = getStorage<ComponentType>();
+
+			component.remove(entity);
 		}
 
 		//get component from entity
 		template <typename ComponentType>
 		ComponentType & getComponentFromEntity(entityType entity)
 		{
+			using SparseSetType = SparseSet<entityType, ComponentType>;
+			SparseSetType & component = getStorage<ComponentType>();
+
+			return component.get(entity);
+		}
+
+		template <typename ComponentType>
+		ComponentType & tryGetComponentFromEntity(entityType entity)
+		{
+			using SparseSetType = SparseSet<entityType, ComponentType>;
+			SparseSetType & component = getStorage<ComponentType>();
+
+			return component.tryGet(entity);
 		}
 
 		/*************************************************************\
@@ -171,10 +167,10 @@ namespace ecs
 
 		};
 
-		template <typename ComponentType>
 		class ComponentDoesNotExist : public std::exception
 		{
 		public:
+			template <typename ComponentType>
 			ComponentDoesNotExist()
 				: m_type(typeid(ComponentType)) {}
 			const char * what() const noexcept override
@@ -188,10 +184,10 @@ namespace ecs
 			std::type_index m_type;
 		};
 
-		template <typename ComponentType>
 		class ComponentAlreadyExists : public std::exception
 		{
 		public:
+			template <typename ComponentType>
 			ComponentAlreadyExists()
 				: m_type(typeid(ComponentType)) {}
 			const char * what() const noexcept override
@@ -212,6 +208,9 @@ namespace ecs
 
 		std::unordered_map<std::type_index, std::shared_ptr<void>> m_components;
 
+		/*************************************************\
+		 * 	ENTITY UTILS
+		\*************************************************/
 		uint32_t getEntityVersion(entityType entity) const
 		{
 			return entity & 0xFFF;
@@ -230,6 +229,25 @@ namespace ecs
 		entityType createNewEntity()
 		{
 			return m_entities.size() << 3 | 1;
+		}
+
+
+		/*************************************************\
+		 * 	COMPONENT UTILS
+		\*************************************************/
+		template <typename ComponentType>
+		SparseSet<entityType, ComponentType> & getStorage()
+		{
+			using SparseSetType = SparseSet<entityType, ComponentType>;
+			const std::type_index type = std::type_index(typeid(ComponentType));
+
+			auto it = m_components.find(type);
+			if (it == m_components.end())
+			{
+				auto ret_pair = m_components.insert({type, std::make_shared<SparseSetType>()});
+				it = ret_pair.first;
+			}
+			return *std::static_pointer_cast<SparseSetType>(it->second);
 		}
 	};
 }

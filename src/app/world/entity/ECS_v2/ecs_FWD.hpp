@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ECS_CONSTANTS.hpp"
+#include "ecs_CONSTANTS.hpp"
 
 namespace ecs
 {
