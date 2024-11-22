@@ -3,6 +3,6 @@
 #include "ecs_CONSTANTS.hpp"
 #include "ecs_FWD.hpp"
 
-#include "Storage.hpp"
+#include "Manager.hpp"
 #include "SparseSet.hpp"
 

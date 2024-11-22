@@ -13,15 +13,13 @@ namespace ecs
 	struct SparseSetNode
 	{
 		entityType entity;
-		ComponentType component;
 	};
-
 	
-	template <ValidEntity entityType, typename ComponentType>
+	template <ValidEntity entityType>
 	class SparseSet
 	{
 	public:
-		typedef SparseSetNode<entityType, ComponentType> node_type;
+		typedef entityType node_type;
 		typedef std::vector<node_type> dense_type;
 		typedef std::vector<size_t> sparse_type;
 
@@ -40,30 +38,31 @@ namespace ecs
 		SparseSet & operator=(SparseSet & other) = default;
 		SparseSet & operator=(SparseSet && other) = default;
 
-		void insert(entityType entity, ComponentType component)
+		size_t insert(entityType entity)
 		{
 			if (contains(entity))
-				return;
+				return 0;
 
-			m_dense.push_back({ entity, component });
+			m_dense.push_back({entity});
 
 			if (m_sparse.size() <= entity)
 				m_sparse.resize(entity + 1);
-
-			m_sparse[entity] = m_dense.size() - 1;
+			auto index = m_dense.size() - 1;
+			m_sparse[entity] = index;
+			return index;
 		}
 
-		void remove(entityType entity)
+		size_t remove(entityType entity)
 		{
 			if (!contains(entity) || m_dense.size() == 0)
-				return;
+				return 0;
 			
 			size_t dense_index = m_sparse[entity];
 
 			if (m_dense.size() > 1)
 			{
 				//swap with last element and then destroy
-				entityType last_entity = m_dense.back().entity;
+				entityType last_entity = m_dense.back();
 
 				//update sparse array before swapping
 				m_sparse[last_entity] = dense_index;
@@ -71,42 +70,48 @@ namespace ecs
 				std::swap(m_dense[dense_index], m_dense.back());
 			}
 			m_dense.pop_back();
+			return dense_index;
 		}
 
-		ComponentType &			get(entityType entity)
+		// ComponentType &			get(entityType entity)
+		// {
+		// 	if (!contains(entity))
+		// 		throw std::logic_error("Entity does not have component");
+
+		// 	size_t dense_index = m_sparse[entity];
+		// 	return m_dense[dense_index].component;
+		// }
+
+		// const ComponentType &	get(entityType entity) const
+		// {
+		// 	if (!contains(entity))
+		// 		throw std::logic_error("Entity does not have component");
+
+		// 	size_t dense_index = m_sparse[entity];
+		// 	return m_dense[dense_index].component;
+		// }
+
+		// ComponentType *			tryGet(entityType entity)
+		// {
+		// 	if (!contains(entity))
+		// 		return nullptr;
+
+		// 	size_t dense_index = m_sparse[entity];
+		// 	return &m_dense[dense_index].component;
+		// }
+
+		// const ComponentType *	tryGet(entityType entity) const
+		// {
+		// 	if (!contains(entity))
+		// 		return nullptr;
+
+		// 	size_t dense_index = m_sparse[entity];
+		// 	return &m_dense[dense_index].component;
+		// }
+
+		size_t index(entityType entity) const
 		{
-			if (!contains(entity))
-				throw std::logic_error("Entity does not have component");
-
-			size_t dense_index = m_sparse[entity];
-			return m_dense[dense_index].component;
-		}
-
-		const ComponentType &	get(entityType entity) const
-		{
-			if (!contains(entity))
-				throw std::logic_error("Entity does not have component");
-
-			size_t dense_index = m_sparse[entity];
-			return m_dense[dense_index].component;
-		}
-
-		ComponentType *			tryGet(entityType entity)
-		{
-			if (!contains(entity))
-				return nullptr;
-
-			size_t dense_index = m_sparse[entity];
-			return &m_dense[dense_index].component;
-		}
-
-		const ComponentType *	tryGet(entityType entity) const
-		{
-			if (!contains(entity))
-				return nullptr;
-
-			size_t dense_index = m_sparse[entity];
-			return &m_dense[dense_index].component;
+			return m_sparse[entity];
 		}
 
 		bool	contains(entityType entity) const
@@ -114,7 +119,7 @@ namespace ecs
 			return (
 				m_sparse.size() > entity
 				&& m_sparse[entity] < m_dense.size()
-				&& m_dense[m_sparse[entity]].entity == entity);
+				&& m_dense[m_sparse[entity]] == entity);
 		}
 
 		size_t	size() const
