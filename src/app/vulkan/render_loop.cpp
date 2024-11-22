@@ -239,17 +239,7 @@ void VulkanAPI::_prepareFrame()
 		m_start_time_counting_fps = m_current_time;
 	}
 
-	glfwGetFramebufferSize(window, &m_window_width, &m_window_height);
-
-	m_aspect_ratio = static_cast<double>(m_window_width) / static_cast<double>(m_window_height);
-
-	m_camera_render_info = camera.getRenderInfo(m_aspect_ratio);
-
-	m_camera_matrices.view = m_camera_render_info.view;
-	m_camera_matrices.proj = m_clip * m_camera_render_info.projection;
-
-	m_camera_matrices_fc.view = m_camera_render_info.view;
-	m_camera_matrices_fc.proj = m_camera_render_info.projection;
+	_updateRenderData();
 
 
 	m_chunk_meshes = _getChunksInScene();
@@ -259,11 +249,6 @@ void VulkanAPI::_prepareFrame()
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
-	// const glm::dvec3 sun_offset = glm::dvec3(
-	// 	0.0f,
-	// 	100.0 * glm::cos(glm::radians(20.0) * m_current_time.count() / 1e9),
-	// 	100.0 * glm::sin(glm::radians(20.0) * m_current_time.count() / 1e9)
-	// );
 	const glm::dvec3 sun_offset = glm::dvec3(
 		10.0f,
 		100.0 * glm::cos(glm::radians(DebugGui::sun_theta.load())),
@@ -706,8 +691,7 @@ void VulkanAPI::_lightingPass()
 			}
 
 			// Draw the targeted block
-			std::optional<glm::vec3> target_block = _targetBlock();
-			if (target_block.has_value())
+			if (m_target_block.has_value())
 			{
 				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, line_pipeline.pipeline);
 
@@ -734,7 +718,7 @@ void VulkanAPI::_lightingPass()
 				);
 
 				const float scale_factor = 1.001f;
-				const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), target_block.value() - glm::vec3((scale_factor - 1.0f) / 2.0f));
+				const glm::mat4 target_block_model = glm::translate(glm::mat4(1.0f), m_target_block.value() - glm::vec3((scale_factor - 1.0f) / 2.0f));
 				const glm::mat4 target_block_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale_factor));
 				const GlobalPushConstant target_block_push_constant = {
 					target_block_model * target_block_scale,
@@ -861,7 +845,7 @@ void VulkanAPI::_lightingPass()
 
 
 		// write the debug text on the texture only if the debug text is enabled
-		if (show_debug_text)
+		if (m_show_debug_text)
 		{
 			ZoneScopedN("Write debug text");
 			TracyVkZone(draw_ctx, draw_command_buffers[m_current_frame], "Write debug text");
@@ -973,7 +957,7 @@ void VulkanAPI::_lightingPass()
 					_drawHudImage(toolbar_cursor_image_descriptor, viewport);
 				}
 
-				if (show_debug_text) // Debug info
+				if (m_show_debug_text) // Debug info
 				{
 					float width = 2048.0f;
 					float height = 512.0f;

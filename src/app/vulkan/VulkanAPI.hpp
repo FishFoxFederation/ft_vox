@@ -302,9 +302,9 @@ public:
 	void renderFrame();
 
 
-	Camera camera;
-
-	std::atomic<bool> show_debug_text = false;
+	void setCamera(const Camera & camera);
+	void toggleDebugText();
+	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
@@ -316,19 +316,19 @@ public:
 	mutable std::mutex toolbar_items_mutex;
 	std::atomic<int> toolbar_cursor_index = 0;
 
-	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 
 	struct ChunkMeshCreateInfo
 	{
-		std::vector<BlockVertex> & block_vertex;
-		std::vector<uint32_t> & block_index;
+		std::vector<BlockVertex> block_vertex;
+		std::vector<uint32_t> block_index;
 
-		std::vector<BlockVertex> & water_vertex;
-		std::vector<uint32_t> & water_index;
+		std::vector<BlockVertex> water_vertex;
+		std::vector<uint32_t> water_index;
+
+		glm::dmat4 model;
 	};
 	InstanceId addChunkToScene(
-		const ChunkMeshCreateInfo & mesh_info,
-		const glm::dmat4 & model
+		const ChunkMeshCreateInfo & mesh_info
 	);
 	void removeChunkFromScene(const uint64_t chunk_id);
 
@@ -710,8 +710,6 @@ private:
 	);
 	void _drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
 
-	std::optional<glm::vec3> _targetBlock() const;
-
 	std::vector<PlayerRenderData> _getPlayers() const;
 
 
@@ -820,6 +818,36 @@ private:
 
 	//###########################################################################################################
 	//																											#
+	//												Render update												#
+	//																											#
+	//###########################################################################################################
+
+	Camera m_camera_update;
+
+	bool m_show_debug_text_update = false;
+
+	std::optional<glm::vec3> m_target_block_update;
+
+	std::map<InstanceId, ChunkMeshCreateInfo> m_chunk_to_create;
+
+	// IdList<uint64_t, MeshRenderData> entity_mesh_list;
+
+	// std::map<uint64_t, PlayerRenderData> players;
+	// mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
+
+	// // hud
+	// std::array<ItemInfo::Type, 9> toolbar_items;
+	// mutable std::mutex toolbar_items_mutex;
+	// std::atomic<int> toolbar_cursor_index = 0;
+
+	mutable TracyLockableN(std::mutex, m_render_data_update_mutex, "Render Data Update");
+
+	void _updateRenderData();
+
+	void _updateChunksData();
+
+	//###########################################################################################################
+	//																											#
 	//												Render loop													#
 	//																											#
 	//###########################################################################################################
@@ -861,7 +889,6 @@ private:
 	ViewProjMatrices m_sun_matrices = {};
 	glm::dvec3 m_sun_position;
 
-	// position of the block the camera is looking at
 	std::optional<glm::vec3> m_target_block;
 	mutable TracyLockableN(std::mutex, m_target_block_mutex, "Target Block");
 
@@ -871,6 +898,7 @@ private:
 	std::vector<glm::mat4> m_light_view_proj_matrices;
 	ShadowMapLight m_shadow_map_light = {};
 
+	bool m_show_debug_text = false;
 	std::string m_debug_text;
 
 	std::array<ItemInfo::Type, 9> m_toolbar_items;

@@ -81,6 +81,7 @@ target_sources(${PROJECT_NAME}
 		src/app/vulkan/mesh.cpp
 		src/app/vulkan/draw_buffer.cpp
 		src/app/vulkan/render_loop.cpp
+		src/app/vulkan/render_update.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -241,6 +242,7 @@ target_sources(server
 		src/app/vulkan/mesh.cpp
 		src/app/vulkan/draw_buffer.cpp
 		src/app/vulkan/render_loop.cpp
+		src/app/vulkan/render_update.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
