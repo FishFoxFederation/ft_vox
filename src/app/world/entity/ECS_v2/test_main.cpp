@@ -18,9 +18,9 @@ struct Velocity
 
 const size_t entities_size = 100;
 
-void test_sparse_set()
+void test_component_set()
 {
-	ecs::SparseSet<ecs::entity, Position> set;
+	ecs::ComponentStorage<ecs::entity, Position> set;
 
 	Position pos = { 1.0f, 2.0f };
 
@@ -44,19 +44,19 @@ void test_sparse_set()
 	if (set.size() != 4)
 		throw std::logic_error("SparseSet size is not 4");
 
-	for (auto & [entity, pos] : set)
-		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << std::endl;
+	for (auto & pos : set)
+		std::cout << " Position: " << pos.x << ", " << pos.y << std::endl;
 
 	set.remove(entity);
 	std::cout << "after remove" << std::endl;
 
-	for (auto & [entity, pos] : set)
-		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << std::endl;
+	for (auto & pos : set)
+		std::cout << " Position: " << pos.x << ", " << pos.y << std::endl;
 }
 
 void test_ecs_entity()
 {
-	ecs::Storage<ecs::entity> ecs;
+	ecs::Manager<ecs::entity> ecs;
 
 	auto [success, entity] = ecs.createEntity();
 
@@ -105,13 +105,13 @@ void test_ecs_entity()
 
 void test_ecs_component()
 {
-	ecs::Storage<> ecs;
+	ecs::Manager<> ecs;
 
 	auto [success, entity ] = ecs.createEntity();
 
 	ecs.addComponentToEntity<Position>(entity, { 1.0f, 2.0f });
 
-	auto component = ecs.getComponentFromEntity<Position>(entity);
+	auto component = ecs.get<Position>(entity);
 
 	if (component.x != 1.0f || component.y != 2.0f)
 		throw std::logic_error("Component values are not correct");
@@ -119,28 +119,26 @@ void test_ecs_component()
 	ecs.removeComponentFromEntity<Position>(entity);
 
 	try {
-		auto component = ecs.getComponentFromEntity<Position>(entity);
+		auto component = ecs.get<Position>(entity);
 		component.x += 2.0f;
-	} catch (ecs::Storage<>::ComponentDoesNotExist & e) {
+	} catch (ecs::Manager<>::ComponentDoesNotExist & e) {
 		std::cout << e.what() << std::endl;
 	}
+}
+
+void test_ecs_view()
+{
+
 }
 
 int main()
 {
 	try {
-	test_sparse_set();
+	test_component_set();
 	test_ecs_entity();
 	test_ecs_component();
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}
 
-	using test_type = Test<ecs::entity, Position, Velocity>;
-	using test_tuple = test_type::test_tuple;
-	using bar_type = bar<ecs::entity, Position>;
-	test_tuple tuple;
-	test_type test;
-
-	std::cout << std::get<bar_type>(tuple).component.x << std::endl;
 }

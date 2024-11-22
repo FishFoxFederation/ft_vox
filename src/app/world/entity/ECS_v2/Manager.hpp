@@ -13,7 +13,9 @@
 #include "ecs_CONSTANTS.hpp"
 #include "ecs_FWD.hpp"
 #include "ecs_utils.hpp"
+#include "ecs_Exceptions.hpp"
 
+#include "ComponentStorage.hpp"
 #include "SparseSet.hpp"
 #include "View.hpp"
 
@@ -26,19 +28,24 @@ namespace ecs
 	 * @tparam entityType 
 	 */
 	template <ValidEntity entityType = ecs::entity, size_t max = 5000>
-	class Storage
+	class Manager
 	{
 	// friend class View;
 	public:
-		template <typename... ComponentTypes>
+		template <ValidEntity entity, typename... ComponentTypes>
 		friend class View;
-		Storage(){};
-		~Storage(){};
 
-		Storage(Storage & other) = delete;
-		Storage(Storage && other) = delete;
-		Storage & operator=(Storage & other) = delete;
-		Storage & operator=(Storage && other) = delete;
+		typedef SparseSet<entityType> entitySet;
+		template <typename ComponentType>
+		using componentSet = ComponentStorage<entityType, ComponentType>;
+
+		Manager(){};
+		~Manager(){};
+
+		Manager(Manager & other) = delete;
+		Manager(Manager && other) = delete;
+		Manager & operator=(Manager & other) = delete;
+		Manager & operator=(Manager && other) = delete;
 
 		/*************************************************************\
 		 * 	ENTITY
@@ -100,39 +107,51 @@ namespace ecs
 		template <typename ComponentType>
 		void addComponentToEntity(entityType entity, ComponentType component = ComponentType())
 		{
-			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & storage = getSet<ComponentType>();
+			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
+			ComponentSetType & set = getSet<ComponentType>();
 
-			storage.insert(entity, component);
+			set.insert(entity, component);
 		}
 
 		//remove component from entity
 		template <typename ComponentType>
 		void removeComponentFromEntity(entityType entity)
 		{
-			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & component = getSet<ComponentType>();
+			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
+			ComponentSetType & set = getSet<ComponentType>();
 
-			component.remove(entity);
+			set.remove(entity);
 		}
 
 		//get component from entity
 		template <typename ComponentType>
-		ComponentType & getComponentFromEntity(entityType entity)
+		ComponentType & get(entityType entity)
 		{
-			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & component = getSet<ComponentType>();
+			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
+			ComponentSetType & set = getSet<ComponentType>();
 
-			return component.get(entity);
+			return set.get(entity);
+		}
+
+		template <typename... ComponentTypes>
+		std::tuple<ComponentTypes &...> getTuple(entityType entity)
+		{
+			return std::make_tuple(get<ComponentTypes>(entity)...);
 		}
 
 		template <typename ComponentType>
-		ComponentType & tryGetComponentFromEntity(entityType entity)
+		ComponentType & tryGet(entityType entity)
 		{
-			using SparseSetType = SparseSet<entityType, ComponentType>;
-			SparseSetType & component = getSet<ComponentType>();
+			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
+			ComponentSetType & set = getSet<ComponentType>();
 
-			return component.tryGet(entity);
+			return set.tryGet(entity);
+		}
+
+		template <typename... ComponentTypes>
+		std::tuple<ComponentTypes &...> tryGetTuple(entityType entity)
+		{
+			return std::make_tuple(tryGet<ComponentTypes>(entity)...);
 		}
 
 		/*************************************************************\
@@ -143,9 +162,10 @@ namespace ecs
 		{
 		}
 
-		/*********************************\
+		/*************************************************************\
 		 * 	EXCEPTIONS
-		\*********************************/
+		\*************************************************************/
+
 		class EntityDoesNotExist : public std::exception
 		{
 		public:
@@ -208,7 +228,7 @@ namespace ecs
 
 		entityType m_dead_entity_head = 0;
 
-		std::unordered_map<std::type_index, std::shared_ptr<void>> m_components;
+		std::unordered_map<std::type_index, std::shared_ptr<entitySet>> m_components;
 
 		/*************************************************\
 		 * 	ENTITY UTILS
@@ -237,24 +257,24 @@ namespace ecs
 		 * 	COMPONENT UTILS
 		\*************************************************/
 		template <typename ComponentType>
-		SparseSet<entityType, ComponentType> & getSet()
+		componentSet<ComponentType> & getSet()
 		{
 			return *getSetPtr<ComponentType>();
 		}
 
 		template <typename ComponentType>
-		std::shared_ptr<SparseSet<entityType, ComponentType>> getSetPtr()
+		std::shared_ptr<componentSet<ComponentType>> getSetPtr()
 		{
-			using SparseSetType = SparseSet<entityType, ComponentType>;
+			using componentSetType = componentSet<ComponentType>;
 			const std::type_index type = std::type_index(typeid(ComponentType));
 
 			auto it = m_components.find(type);
 			if (it == m_components.end())
 			{
-				auto ret_pair = m_components.insert({type, std::make_shared<SparseSetType>()});
+				auto ret_pair = m_components.insert({type, std::make_shared<componentSetType>()});
 				it = ret_pair.first;
 			}
-			return std::static_pointer_cast<SparseSetType>(it->second);
+			return std::static_pointer_cast<componentSetType>(it->second);
 		}
 	};
 }
