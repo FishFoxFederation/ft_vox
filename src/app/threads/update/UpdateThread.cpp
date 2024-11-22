@@ -178,7 +178,7 @@ void UpdateThread::readInput()
 	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
 	if (f3_key_status == Input::KeyState::PRESSED)
 	{
-		m_vulkan_api.show_debug_text = !m_vulkan_api.show_debug_text;
+		m_vulkan_api.toggleDebugText();
 	}
 
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
@@ -299,7 +299,7 @@ void UpdateThread::movePlayer()
 		look.y
 	);
 
-	m_vulkan_api.camera = m_world.getCamera(m_world.m_my_player_id);
+	m_vulkan_api.setCamera(m_world.getCamera(m_world.m_my_player_id));
 	last_time = now;
 }
 

@@ -2524,18 +2524,6 @@ void VulkanAPI::_endFrame()
 
 
 
-void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
-{
-	std::lock_guard lock(m_target_block_mutex);
-	m_target_block = target_block;
-}
-
-std::optional<glm::vec3> VulkanAPI::_targetBlock() const
-{
-	std::lock_guard lock(m_target_block_mutex);
-	return m_target_block;
-}
-
 std::vector<PlayerRenderData> VulkanAPI::_getPlayers() const
 {
 	std::lock_guard lock(m_player_mutex);

@@ -204,15 +204,13 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 
 		//storing mesh in the GPU
 		VulkanAPI::ChunkMeshCreateInfo chunk_mesh_info = {
-			.block_vertex = mesh_data.vertices,
-			.block_index = mesh_data.indices,
-			.water_vertex = mesh_data.water_vertices,
-			.water_index = mesh_data.water_indices
+			.block_vertex = std::move(mesh_data.vertices),
+			.block_index = std::move(mesh_data.indices),
+			.water_vertex = std::move(mesh_data.water_vertices),
+			.water_index = std::move(mesh_data.water_indices),
+			.model = Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 		};
-		VulkanAPI::InstanceId chunk_scene_id = m_vulkan_api.addChunkToScene(
-			chunk_mesh_info,
-			Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
-		);
+		VulkanAPI::InstanceId chunk_scene_id = m_vulkan_api.addChunkToScene(chunk_mesh_info);
 		chunk->setMeshID(chunk_scene_id);
 
 		m_vulkan_api.removeChunkFromScene(old_mesh_scene_id);
@@ -408,7 +406,7 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 		DebugGui::player_position = player->transform.position;
 
 		// update camera
-		m_vulkan_api.camera = player->camera();
+		m_vulkan_api.setCamera(player->camera());
 	}
 
 	// play footstep sound

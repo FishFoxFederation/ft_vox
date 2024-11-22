@@ -77,8 +77,30 @@ public:
 	{
 	}
 
-	Camera(const Camera & camera) = delete;
-	Camera & operator=(Camera & camera) = delete;
+	Camera(const Camera & camera):
+		position(camera.position),
+		pitch(camera.pitch),
+		yaw(camera.yaw),
+		up(camera.up),
+		fov(camera.fov),
+		near_plane(camera.near_plane),
+		far_plane(camera.far_plane)
+	{
+	}
+
+	Camera & operator=(const Camera & camera)
+	{
+		std::lock_guard lock(m_mutex);
+		position = camera.position;
+		pitch = camera.pitch;
+		yaw = camera.yaw;
+		up = camera.up;
+		fov = camera.fov;
+		near_plane = camera.near_plane;
+		far_plane = camera.far_plane;
+
+		return *this;
+	}
 
 	Camera(Camera && camera):
 		position(camera.position),
