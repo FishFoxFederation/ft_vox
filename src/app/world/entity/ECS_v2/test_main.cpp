@@ -12,7 +12,17 @@ struct Position
 struct Velocity
 {
 	float x;
-	int speed;
+	float y;
+};
+
+struct mesh
+{
+	int id;
+};
+
+struct transform
+{
+	float x;
 	float y;
 };
 
@@ -109,14 +119,14 @@ void test_ecs_component()
 
 	auto [success, entity ] = ecs.createEntity();
 
-	ecs.addComponentToEntity<Position>(entity, { 1.0f, 2.0f });
+	ecs.add<Position>(entity, { 1.0f, 2.0f });
 
 	auto component = ecs.get<Position>(entity);
 
 	if (component.x != 1.0f || component.y != 2.0f)
 		throw std::logic_error("Component values are not correct");
 	
-	ecs.removeComponentFromEntity<Position>(entity);
+	ecs.remove<Position>(entity);
 
 	try {
 		auto component = ecs.get<Position>(entity);
@@ -128,7 +138,38 @@ void test_ecs_component()
 
 void test_ecs_view()
 {
+	std::cout << "ECS VIEW" << std::endl;
+	ecs::Manager<> ecs;
+	Position pos = { 1.0f, 2.0f };
+	Velocity vel = { 3.0f, 4.0f };
+	mesh m = { 5 };
+	transform t = { 6.0f, 7.0f };
+	auto [success, entity1 ] = ecs.createEntity();
+	auto [success2, entity2 ] = ecs.createEntity();
+	auto [success3, entity3 ] = ecs.createEntity();
+	auto [success4, entity4 ] = ecs.createEntity();
+	ecs.add<Position, Velocity, mesh, transform>(entity1, pos, vel, m, t);
+	std::cout << "Entity1: " << entity1 << std::endl;
+	ecs.add<Position, Velocity, mesh, transform>(entity2, pos, vel, m, t);
+	std::cout << "Entity2: " << entity2 << std::endl;
+	ecs.add<Position, Velocity>(entity3, pos, vel);
+	std::cout << "Entity3: " << entity3 << std::endl;
+	ecs.add<Position, Velocity>(entity4, pos, vel);
+	std::cout << "Entity4: " << entity4 << std::endl;
 
+	auto view = ecs.view<mesh, transform>();
+	for(auto entity : view)
+	{
+		auto [m , t] = ecs.getTuple<mesh, transform>(entity);
+		std::cout << "Entity: " << entity << " Mesh: " << m.id << " Transform: " << t.x << ", " << t.y << std::endl;
+	}
+
+	auto view2 = ecs.view<Position, Velocity>();
+	for(auto entity : view2)
+	{
+		auto [pos, vel] = ecs.getTuple<Position, Velocity>(entity);
+		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << " Velocity: " << vel.x << ", " << vel.y << std::endl;
+	}
 }
 
 int main()
@@ -137,6 +178,7 @@ int main()
 	test_component_set();
 	test_ecs_entity();
 	test_ecs_component();
+	test_ecs_view();
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}

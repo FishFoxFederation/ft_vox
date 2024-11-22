@@ -27,7 +27,7 @@ namespace ecs
 	 * 
 	 * @tparam entityType 
 	 */
-	template <ValidEntity entityType = ecs::entity, size_t max = 5000>
+	template <ValidEntity entityType, size_t max>
 	class Manager
 	{
 	// friend class View;
@@ -105,7 +105,7 @@ namespace ecs
 		\*************************************************************/
 		//add component to entity
 		template <typename ComponentType>
-		void addComponentToEntity(entityType entity, ComponentType component = ComponentType())
+		void add(entityType entity, ComponentType component)
 		{
 			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
 			ComponentSetType & set = getSet<ComponentType>();
@@ -113,14 +113,19 @@ namespace ecs
 			set.insert(entity, component);
 		}
 
-		//remove component from entity
-		template <typename ComponentType>
-		void removeComponentFromEntity(entityType entity)
+		template <typename... ComponentTypes>
+		void add(entityType entity, ComponentTypes... components)
 		{
-			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
-			ComponentSetType & set = getSet<ComponentType>();
+			(add<ComponentTypes>(entity, components), ...);
+		}
 
-			set.remove(entity);
+		//remove component from entity
+		
+
+		template <typename... ComponentTypes>
+		void remove(entityType entity)
+		{
+			(_remove<ComponentTypes>(entity), ...);
 		}
 
 		//get component from entity
@@ -136,7 +141,7 @@ namespace ecs
 		template <typename... ComponentTypes>
 		std::tuple<ComponentTypes &...> getTuple(entityType entity)
 		{
-			return std::make_tuple(get<ComponentTypes>(entity)...);
+			return {get<ComponentTypes>(entity)...};
 		}
 
 		template <typename ComponentType>
@@ -158,8 +163,9 @@ namespace ecs
 		 * 	VIEWS
 		\*************************************************************/
 		template <typename... ComponentTypes>
-		View<ComponentTypes...> view()
+		View<entityType, ComponentTypes...> view()
 		{
+			return View<entityType, ComponentTypes...>(*this);
 		}
 
 		/*************************************************************\
@@ -275,6 +281,15 @@ namespace ecs
 				it = ret_pair.first;
 			}
 			return std::static_pointer_cast<componentSetType>(it->second);
+		}
+
+		template <typename ComponentType>
+		void _remove(entityType entity)
+		{
+			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
+			ComponentSetType & set = getSet<ComponentType>();
+
+			set.remove(entity);
 		}
 	};
 }
