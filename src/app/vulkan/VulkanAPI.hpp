@@ -306,15 +306,14 @@ public:
 	void toggleDebugText();
 	void setTargetBlock(const std::optional<glm::vec3> & target_block);
 
+	void addPlayer(const uint64_t id, const PlayerRenderData & player_data);
+	void removePlayer(const uint64_t id);
+	void updatePlayer(const uint64_t id, std::function<void(PlayerRenderData &)> fct);
+
+	void setToolbarItem(const int index, const ItemInfo::Type type);
+	void setToolbarCursor(const int index);
+
 	IdList<uint64_t, MeshRenderData> entity_mesh_list;
-
-	std::map<uint64_t, PlayerRenderData> players;
-	mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
-
-	// hud
-	std::array<ItemInfo::Type, 9> toolbar_items;
-	mutable std::mutex toolbar_items_mutex;
-	std::atomic<int> toolbar_cursor_index = 0;
 
 
 	struct ChunkMeshCreateInfo
@@ -700,8 +699,6 @@ private:
 	void _resizeChunksIndicesBuffer(const VkDeviceSize & size);
 	void _deleteUnusedChunks();
 
-	std::map<InstanceId, glm::dmat4> _getChunksInScene() const;
-
 	void _bindChunkIndexBuffer(VkCommandBuffer command_buffer);
 	void _drawChunksBlock(
 		VkCommandBuffer command_buffer,
@@ -709,9 +706,6 @@ private:
 		const std::vector<InstanceId> & ids
 	);
 	void _drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id);
-
-	std::vector<PlayerRenderData> _getPlayers() const;
-
 
 	//###########################################################################################################
 	//																											#
@@ -829,6 +823,9 @@ private:
 	std::optional<glm::vec3> m_target_block_update;
 
 	std::map<InstanceId, ChunkMeshCreateInfo> m_chunk_to_create;
+	std::map<InstanceId, ChunkMeshCreateInfo> m_chunk_to_delete;
+
+	std::list<std::function<void(void)>> m_update_functions;
 
 	// IdList<uint64_t, MeshRenderData> entity_mesh_list;
 
@@ -845,6 +842,7 @@ private:
 	void _updateRenderData();
 
 	void _updateChunksData();
+	void _updatePlayersData();
 
 	//###########################################################################################################
 	//																											#
@@ -881,7 +879,8 @@ private:
 
 	std::map<VulkanAPI::InstanceId, glm::dmat4> m_chunk_meshes;
 	std::vector<MeshRenderData> m_entity_meshes;
-	std::vector<PlayerRenderData> m_players;
+
+	std::map<uint64_t, PlayerRenderData> m_players;
 
 	std::vector<VulkanAPI::InstanceId> m_visible_chunks;
 	std::vector<std::vector<VulkanAPI::InstanceId>> m_shadow_visible_chunks;

@@ -18,6 +18,51 @@ void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
 	m_target_block_update = target_block;
 }
 
+void VulkanAPI::addPlayer(const uint64_t id, const PlayerRenderData & player_data)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, id, player_data]()
+	{
+		m_players[id] = player_data;
+	});
+}
+
+void VulkanAPI::removePlayer(const uint64_t id)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, id]()
+	{
+		m_players.erase(id);
+	});
+}
+
+void VulkanAPI::updatePlayer(const uint64_t id, std::function<void(PlayerRenderData &)> fct)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, id, fct]()
+	{
+		fct(m_players[id]);
+	});
+}
+
+void VulkanAPI::setToolbarItem(const int index, const ItemInfo::Type type)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, index, type]()
+	{
+		m_toolbar_items[index] = type;
+	});
+}
+
+void VulkanAPI::setToolbarCursor(const int index)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, index]()
+	{
+		m_toolbar_cursor_index = index;
+	});
+}
+
 
 void VulkanAPI::_updateRenderData()
 {
@@ -38,10 +83,25 @@ void VulkanAPI::_updateRenderData()
 	m_target_block = m_target_block_update;
 
 	_updateChunksData();
+
+	for (auto & fct: m_update_functions)
+	{
+		fct();
+	}
+	m_update_functions.clear();
 }
 
 void VulkanAPI::_updateChunksData()
 {
+	for (auto & [instance_id, _]: m_chunk_to_delete)
+	{
+		m_chunks_in_scene_rendered.erase(instance_id);
+		m_chunk_instance_to_destroy.push_back(instance_id);
+
+		_deleteUnusedChunks();
+	}
+	m_chunk_to_delete.clear();
+
 	for (auto & [instance_id, mesh_info]: m_chunk_to_create)
 	{
 		const VkDeviceSize block_index_size = mesh_info.block_index.size() * sizeof(uint32_t);
@@ -158,4 +218,13 @@ void VulkanAPI::_updateChunksData()
 	}
 
 	m_chunk_to_create.clear();
+}
+
+void VulkanAPI::_updatePlayersData()
+{
+	for (auto & [id, data] : m_players)
+	{
+		data.walk_animation.update();
+		data.attack_animation.update();
+	}
 }
