@@ -83,15 +83,6 @@ void UpdateThread::loop()
 
 	m_world.updateMobs(m_delta_time.count() / 1e9);
 
-	{ // Update walk animation
-		std::lock_guard lock(m_vulkan_api.m_player_mutex);
-		for (auto & [id, player] : m_vulkan_api.players)
-		{
-			player.walk_animation.update();
-			player.attack_animation.update();
-		}
-	}
-
 	m_world.otherUpdate();
 }
 

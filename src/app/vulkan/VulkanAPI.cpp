@@ -2524,24 +2524,6 @@ void VulkanAPI::_endFrame()
 
 
 
-std::vector<PlayerRenderData> VulkanAPI::_getPlayers() const
-{
-	std::lock_guard lock(m_player_mutex);
-	std::vector<PlayerRenderData> tmp_players;
-	std::transform(
-		players.begin(),
-		players.end(),
-		std::back_inserter(tmp_players),
-		[](const auto & player)
-		{
-			return PlayerRenderData{player.second};
-		}
-	);
-	return tmp_players;
-}
-
-
-
 std::pair<bool, Mesh> VulkanAPI::_getMesh(const uint64_t id)
 {
 	std::lock_guard lock(mesh_map_mutex);

@@ -32,8 +32,6 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 
 void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 {
-	// std::lock_guard global_lock(global_mutex);
-	// std::lock_guard chunks_in_scene_lock(m_chunks_in_scene_mutex);
 	std::lock_guard lock(m_render_data_update_mutex);
 
 	if (!m_chunks_in_scene.contains(chunk_id))
@@ -45,14 +43,6 @@ void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 	m_chunk_instance_to_destroy.push_back(chunk_id);
 
 	_deleteUnusedChunks();
-}
-
-std::map<VulkanAPI::InstanceId, glm::dmat4> VulkanAPI::_getChunksInScene() const
-{
-	std::lock_guard global_lock(global_mutex);
-	// std::lock_guard lock(m_chunks_in_scene_mutex);
-
-	return m_chunks_in_scene_rendered;
 }
 
 void VulkanAPI::_setupChunksRessources()

@@ -242,9 +242,8 @@ void VulkanAPI::_prepareFrame()
 	_updateRenderData();
 
 
-	m_chunk_meshes = _getChunksInScene();
+	m_chunk_meshes = m_chunks_in_scene_rendered;
 	m_entity_meshes = entity_mesh_list.values();
-	m_players = _getPlayers();
 
 
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
@@ -308,12 +307,6 @@ void VulkanAPI::_prepareFrame()
 	{
 		m_shadow_map_light.view_proj[i] = m_clip * m_light_view_proj_matrices[i];
 		m_shadow_map_light.plane_distances[i].x = far_plane_distances[i];
-	}
-
-	m_toolbar_cursor_index = toolbar_cursor_index.load();
-	{
-		std::lock_guard lock(toolbar_items_mutex);
-		m_toolbar_items = toolbar_items;
 	}
 
 	_updateVisibleChunks();
@@ -587,7 +580,7 @@ void VulkanAPI::_lightingPass()
 
 				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, player_pipeline.pipeline);
 
-				for (const auto & player : m_players)
+				for (const auto & [id, player] : m_players)
 				{
 					if (!player.visible)
 					{
