@@ -811,19 +811,17 @@ void ClientWorld::createMob()
 	uint64_t mob_id = m_mob_id++;
 	m_mobs.insert(std::make_pair(mob_id, mob));
 
-	{
-		m_vulkan_api.entity_mesh_list.insert(
-			mob_id,
-			{
-				m_vulkan_api.getCubeMeshId(),
-				Transform(
-					mob->transform.position + mob->hitbox.position,
-					glm::vec3(0.0f),
-					mob->hitbox.size
-				).model()
-			}
-		);
-	}
+	m_vulkan_api.addEntity(
+		mob_id,
+		{
+			m_vulkan_api.getCubeMeshId(),
+			Transform(
+				mob->transform.position + mob->hitbox.position,
+				glm::vec3(0.0f),
+				mob->hitbox.size
+			).model()
+		}
+	);
 }
 
 void ClientWorld::updateMobs(
@@ -947,14 +945,14 @@ void ClientWorld::updateMobs(
 
 		mob->transform.position += displacement;
 
-		{ // update mob mesh
-			auto lock = m_vulkan_api.entity_mesh_list.lock();
-			m_vulkan_api.entity_mesh_list.at(id).model = Transform(
-				mob->transform.position + mob->hitbox.position,
-				glm::vec3(0.0f),
-				mob->hitbox.size
-			).model();
-		}
+		const glm::mat4 model = Transform(
+			mob->transform.position + mob->hitbox.position,
+			glm::vec3(0.0f),
+			mob->hitbox.size
+		).model();
+		m_vulkan_api.updateEntity(id, [model](MeshRenderData & data) {
+			data.model = model;
+		});
 	}
 }
 
