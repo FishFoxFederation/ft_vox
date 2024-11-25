@@ -18,6 +18,7 @@ void VulkanAPI::setTargetBlock(const std::optional<glm::vec3> & target_block)
 	m_target_block_update = target_block;
 }
 
+
 void VulkanAPI::addPlayer(const uint64_t id, const PlayerRenderData & player_data)
 {
 	std::lock_guard lock(m_render_data_update_mutex);
@@ -44,6 +45,35 @@ void VulkanAPI::updatePlayer(const uint64_t id, std::function<void(PlayerRenderD
 		fct(m_players[id]);
 	});
 }
+
+
+void VulkanAPI::addEntity(const uint64_t id, const MeshRenderData & player_data)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, id, player_data]()
+	{
+		m_entities[id] = player_data;
+	});
+}
+
+void VulkanAPI::removeEntity(const uint64_t id)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, id]()
+	{
+		m_entities.erase(id);
+	});
+}
+
+void VulkanAPI::updateEntity(const uint64_t id, std::function<void(MeshRenderData &)> fct)
+{
+	std::lock_guard lock(m_render_data_update_mutex);
+	m_update_functions.push_back([this, id, fct]()
+	{
+		fct(m_entities[id]);
+	});
+}
+
 
 void VulkanAPI::setToolbarItem(const int index, const ItemInfo::Type type)
 {

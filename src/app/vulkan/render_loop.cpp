@@ -242,10 +242,6 @@ void VulkanAPI::_prepareFrame()
 	_updateRenderData();
 
 
-	m_chunk_meshes = m_chunks_in_scene_rendered;
-	m_entity_meshes = entity_mesh_list.values();
-
-
 	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
 	const glm::dvec3 sun_offset = glm::dvec3(
@@ -367,7 +363,7 @@ void VulkanAPI::_updateVisibleChunks()
 	ZoneScoped;
 
 	m_visible_chunks.clear();
-	for (auto & [id, model]: m_chunk_meshes)
+	for (auto & [id, model]: m_chunks_in_scene_rendered)
 	{
 		if (!_isInsideFrustum_planes(m_camera_render_info.projection * m_camera_render_info.view, model, CHUNK_SIZE_VEC3))
 		{
@@ -380,7 +376,7 @@ void VulkanAPI::_updateVisibleChunks()
 	for (size_t i = 0; i < shadow_maps_count; i++)
 	{
 		m_shadow_visible_chunks[i].clear();
-		for (auto & [id, model]: m_chunk_meshes)
+		for (auto & [id, model]: m_chunks_in_scene_rendered)
 		{
 			if (!_isInsideFrustum_planes(m_light_view_proj_matrices[i], model, CHUNK_SIZE_VEC3))
 			{
@@ -557,7 +553,7 @@ void VulkanAPI::_lightingPass()
 
 				vkCmdBindPipeline(draw_command_buffers[m_current_frame], VK_PIPELINE_BIND_POINT_GRAPHICS, entity_pipeline.pipeline);
 
-				for (const auto & entity_mesh : m_entity_meshes)
+				for (const auto & [id, entity_mesh] : m_entities)
 				{
 					GlobalPushConstant entity_matrice = {};
 					entity_matrice.matrice = entity_mesh.model;

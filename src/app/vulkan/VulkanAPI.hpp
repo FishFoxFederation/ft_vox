@@ -310,6 +310,10 @@ public:
 	void removePlayer(const uint64_t id);
 	void updatePlayer(const uint64_t id, std::function<void(PlayerRenderData &)> fct);
 
+	void addEntity(const uint64_t id, const MeshRenderData & entity_data);
+	void removeEntity(const uint64_t id);
+	void updateEntity(const uint64_t id, std::function<void(MeshRenderData &)> fct);
+
 	void setToolbarItem(const int index, const ItemInfo::Type type);
 	void setToolbarCursor(const int index);
 
@@ -827,16 +831,6 @@ private:
 
 	std::list<std::function<void(void)>> m_update_functions;
 
-	// IdList<uint64_t, MeshRenderData> entity_mesh_list;
-
-	// std::map<uint64_t, PlayerRenderData> players;
-	// mutable TracyLockableN(std::mutex, m_player_mutex, "Player Render Data");
-
-	// // hud
-	// std::array<ItemInfo::Type, 9> toolbar_items;
-	// mutable std::mutex toolbar_items_mutex;
-	// std::atomic<int> toolbar_cursor_index = 0;
-
 	mutable TracyLockableN(std::mutex, m_render_data_update_mutex, "Render Data Update");
 
 	void _updateRenderData();
@@ -877,13 +871,11 @@ private:
 	ViewProjMatrices m_camera_matrices = {};
 	ViewProjMatrices m_camera_matrices_fc = {};
 
-	std::map<VulkanAPI::InstanceId, glm::dmat4> m_chunk_meshes;
-	std::vector<MeshRenderData> m_entity_meshes;
-
 	std::map<uint64_t, PlayerRenderData> m_players;
+	std::map<uint64_t, MeshRenderData> m_entities;
 
-	std::vector<VulkanAPI::InstanceId> m_visible_chunks;
-	std::vector<std::vector<VulkanAPI::InstanceId>> m_shadow_visible_chunks;
+	std::vector<InstanceId> m_visible_chunks;
+	std::vector<std::vector<InstanceId>> m_shadow_visible_chunks;
 
 	ViewProjMatrices m_sun_matrices = {};
 	glm::dvec3 m_sun_position;
