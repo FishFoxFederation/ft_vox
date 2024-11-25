@@ -13,7 +13,7 @@
 namespace ecs
 {
 	template <ValidEntity EntityType, size_t pool_size>
-	class viewIterator
+	class ViewIterator
 	{
 	public:
 		typedef SparseSet<EntityType> entitySet;
@@ -21,7 +21,7 @@ namespace ecs
 		typedef std::shared_ptr<entitySet> SparseSetPtr;
 		typedef std::array<SparseSetPtr, pool_size> SparseSetArray;
 
-		viewIterator(std::unordered_map<std::type_index, SparseSetPtr> & sparseSets, SparseSetPtr leadSet, entityIterator leadIter = entityIterator())
+		ViewIterator(std::unordered_map<std::type_index, SparseSetPtr> & sparseSets, SparseSetPtr leadSet, entityIterator leadIter = entityIterator())
 			: m_sparseSets{}, m_leadSet(leadSet), m_lead_iterator(leadIter)
 		{
 			size_t i = 0;
@@ -33,42 +33,42 @@ namespace ecs
 			seek_next();
 		}
 
-		~viewIterator(){};
+		~ViewIterator(){};
 
-		viewIterator &	operator++()
+		ViewIterator &	operator++()
 		{
 			m_lead_iterator++;
 			seek_next();
 			return *this;
 		}
 
-		viewIterator	operator++(int)
+		ViewIterator	operator++(int)
 		{
-			viewIterator temp = *this;
+			ViewIterator temp = *this;
 			++(*this);
 			return temp;
 		}
 
-		viewIterator &	operator--()
+		ViewIterator &	operator--()
 		{
 			--m_lead_iterator;
 			seek_prev();
 			return *this;
 		}
 
-		viewIterator	operator--(int)
+		ViewIterator	operator--(int)
 		{
-			viewIterator temp = *this;
+			ViewIterator temp = *this;
 			--(*this);
 			return temp;
 		}
 
-		bool			operator==(const viewIterator & other) const
+		bool			operator==(const ViewIterator & other) const
 		{
 			return (m_lead_iterator == other.m_lead_iterator);
 		}
 
-		bool			operator!=(const viewIterator & other) const
+		bool			operator!=(const ViewIterator & other) const
 		{
 			return (!(*this == other));
 		}
@@ -115,7 +115,7 @@ namespace ecs
 	{
 	public:
 		typedef SparseSet<EntityType> entitySet;
-		typedef viewIterator<EntityType, sizeof... (ComponentTypes)> iterator;
+		typedef ViewIterator<EntityType, sizeof... (ComponentTypes)> iterator;
 
 		template <size_t manager_size>
 		View( Manager<EntityType, manager_size> & storage)
