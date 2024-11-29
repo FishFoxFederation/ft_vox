@@ -21,15 +21,9 @@ namespace ecs
 		typedef std::shared_ptr<entitySet> SparseSetPtr;
 		typedef std::array<SparseSetPtr, pool_size> SparseSetArray;
 
-		ViewIterator(std::unordered_map<std::type_index, SparseSetPtr> & sparseSets, SparseSetPtr leadSet, entityIterator leadIter = entityIterator())
-			: m_sparseSets{}, m_leadSet(leadSet), m_lead_iterator(leadIter)
+		ViewIterator(SparseSetArray & sparseSets, SparseSetPtr leadSet, entityIterator leadIter = entityIterator())
+			: m_sparseSets{sparseSets}, m_leadSet(leadSet), m_lead_iterator(leadIter)
 		{
-			size_t i = 0;
-			for(auto & [type, set] : sparseSets)
-			{
-				m_sparseSets[i] = set;
-				i++;
-			}
 			seek_next();
 		}
 
@@ -115,6 +109,8 @@ namespace ecs
 	{
 	public:
 		typedef SparseSet<EntityType> entitySet;
+		typedef IndexOf<ComponentTypes...> index;
+		typedef std::array<std::shared_ptr<entitySet>, sizeof... (ComponentTypes)> entitySetArray;
 		typedef ViewIterator<EntityType, sizeof... (ComponentTypes)> iterator;
 
 		template <size_t manager_size>
@@ -126,17 +122,18 @@ namespace ecs
 				using ComponentSet = ComponentStorage<EntityType, ComponentType>;
 				std::shared_ptr<ComponentSet> set = storage.template getSetPtr<ComponentType>();
 
-				m_sparseSets.insert({std::type_index(typeid(ComponentType)), set});
+				m_sparseSets[index::template get<ComponentType>()] = set;
 			};
 			(func.template operator()<ComponentTypes>(), ...);
 
 			size_t min = std::numeric_limits<size_t>::max();
-			for(auto & [type, set] : m_sparseSets)
+			for (size_t i = 0; i < m_sparseSets.size(); i++)
 			{
+				auto set = m_sparseSets[i];
 				if (set->size() < min)
 				{
 					min = set->size();
-					m_lead = type;
+					m_lead = i;
 				}
 			}
 		}
@@ -146,22 +143,6 @@ namespace ecs
 		~View()
 		{			
 		}
-
-		// template<typename ComponentType>
-		// ComponentType & get(EntityType entity)
-		// {
-		// 	using ComponentSetType = ComponentStorage<EntityType, ComponentType>;
-		// 	auto it = m_sparseSets.find(std::type_index(typeid(ComponentType)));
-		// 	if (it == m_sparseSets.end())
-		// 		throw std::out_of_range("Component does not exist in view");
-			
-		// 	return it->second->get(entity);
-		// }
-
-		// std::tuple<ComponentType &...> get(EntityType entity)
-		// {
-		// 	return {get<ComponentTypes>(entity)...};
-		// }
 
 		//begin and end
 		iterator begin()
@@ -175,8 +156,8 @@ namespace ecs
 			return iterator(m_sparseSets, m_sparseSets[m_lead], m_sparseSets[m_lead]->end());
 		}
 	private:
-		std::unordered_map<std::type_index, std::shared_ptr<entitySet>> m_sparseSets;
-		std::type_index m_lead = typeid(void);
+		entitySetArray m_sparseSets;
+		size_t m_lead = 0;
 	};
 
 };
