@@ -23,14 +23,14 @@ namespace ecs
 {
 
 	/**
-	 * @brief A simple ECS 
+	 * @brief This class is the main class of the ECS system
+	 * you can use it to create entitites, add component to entities, fetch components from entities and remove them
 	 * 
 	 * @tparam entityType 
 	 */
 	template <ValidEntity entityType, size_t max>
 	class Manager
 	{
-	// friend class View;
 	public:
 		template <ValidEntity entity, typename... ComponentTypes>
 		friend class View;
@@ -50,6 +50,13 @@ namespace ecs
 		/*************************************************************\
 		 * 	ENTITY
 		\*************************************************************/
+
+		/**
+		 * @brief Create a new entity
+		 * 
+		 * @retval std::pair<TRUE, entityType> if the entity was created successfully
+		 * @retval std::pair<FALSE, undefined> if the entity could not be created
+		 */
 		std::pair<bool, entityType>		createEntity()
 		{
 			if (m_entities.size() == max)
@@ -76,6 +83,13 @@ namespace ecs
 			}
 		}
 
+		/**
+		 * @brief Remove an entity from the manager
+		 * 
+		 * @warning Undefined behavior if the entity does not exist
+		 * 
+		 * @param entity 
+		 */
 		void			removeEntity(entityType entity)
 		{
 			if (!isAlive(entity))
@@ -85,7 +99,9 @@ namespace ecs
 			
 			std::swap(m_entities[index], m_dead_entity_head);
 
-			//todo remove entity from all components
+			//temporary would like to find a way to have it in O(1)
+			for (auto & [type, set] : m_components)
+				set->remove(entity);
 		}
 
 		bool 			isAlive(entityType entity) const
@@ -125,7 +141,7 @@ namespace ecs
 		template <typename... ComponentTypes>
 		void remove(entityType entity)
 		{
-			(_remove<ComponentTypes>(entity), ...);
+			(_remove_component<ComponentTypes>(entity), ...);
 		}
 
 		//get component from entity
@@ -284,7 +300,7 @@ namespace ecs
 		}
 
 		template <typename ComponentType>
-		void _remove(entityType entity)
+		void _remove_component(entityType entity)
 		{
 			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
 			ComponentSetType & set = getSet<ComponentType>();

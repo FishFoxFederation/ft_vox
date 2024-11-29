@@ -34,13 +34,14 @@ namespace ecs
 			m_components.push_back(component);
 		}
 
-		void remove(EntityType entity)
+		size_t remove(EntityType entity) override
 		{
 			if (!base_type::contains(entity))
-				return;
+				return 0;
 			auto index = base_type::remove(entity);
 			std::swap(m_components[index], m_components.back());
 			m_components.pop_back();
+			return index;
 		}
 
 		ComponentType & get(EntityType entity)

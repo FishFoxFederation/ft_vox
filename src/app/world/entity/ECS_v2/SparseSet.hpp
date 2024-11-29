@@ -31,7 +31,7 @@ namespace ecs
 		SparseSet()	{};
 		SparseSet(size_t size)
 			: m_dense(size), m_sparse(size) {};
-		~SparseSet() = default;
+		virtual ~SparseSet() = default;
 
 		SparseSet(SparseSet & other) = default;
 		SparseSet(SparseSet && other) = default;
@@ -52,7 +52,7 @@ namespace ecs
 			return index;
 		}
 
-		size_t remove(entityType entity)
+		virtual size_t remove(entityType entity)
 		{
 			if (!contains(entity) || m_dense.size() == 0)
 				return 0;
