@@ -26,6 +26,8 @@ namespace ecs
 	 * @brief This class is the main class of the ECS system
 	 * you can use it to create entitites, add component to entities, fetch components from entities and remove them
 	 * 
+	 * 
+	 * @details Go see the Entity page for more info on how the entities are stored
 	 * @tparam entityType 
 	 */
 	template <ValidEntity entityType, size_t max>
@@ -255,24 +257,47 @@ namespace ecs
 		/*************************************************\
 		 * 	ENTITY UTILS
 		\*************************************************/
+
+		/**
+		 * @brief Get the version of the entity, see the entity doc for more info
+		 * 
+		 * @param entity 
+		 * @return uint32_t 
+		 */
 		uint32_t getEntityVersion(entityType entity) const
 		{
-			return entity & 0xFFF;
+			return entity & 0xF;
 		}
 
+		/**
+		 * @brief Get the index of the entity in the entity array, see the entity doc for more info
+		 * 
+		 * @param entity 
+		 * @return uint32_t 
+		 */
 		uint32_t getEntityIndex(entityType entity) const
 		{
-			return entity >> 3;
+			return entity >> 4;
 		}
 
+		/**
+		 * @brief Increase the version of the entity, see the entity doc for more info
+		 * 
+		 * @param entity 
+		 */
 		void IncreaseEntityVersion(entityType & entity)
 		{
-			entity += (getEntityVersion(entity) + 1) & 0xFFF;
+			entity += (getEntityVersion(entity) + 1) & 0xF;
 		}
-
+		
+		/**
+		 * @brief Create a new entity with a version of 1 and an appropriate index
+		 * 
+		 * @return entityType 
+		 */
 		entityType createNewEntity()
 		{
-			return m_entities.size() << 3 | 1;
+			return m_entities.size() << 4 | 1;
 		}
 
 		/*************************************************\
