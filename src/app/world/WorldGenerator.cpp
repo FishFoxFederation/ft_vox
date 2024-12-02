@@ -1,7 +1,7 @@
 // #define GLM_FORCE_XYZW_ONLY
 #include "WorldGenerator.hpp"
 #include "World.hpp"
-#include "RenderAPI.hpp"
+// #include "RenderAPI.hpp"
 
 #include "math_utils.hpp"
 #include <cmath>
@@ -1087,76 +1087,76 @@ std::array<BlockType, CHUNK_Y_SIZE> World::WorldGenerator::getBlockColumn(int ba
 	return blocks;
 }
 
-void World::WorldGenerator::drawNoises(RenderAPI & vk)
-{
-	for (int x = 0; x < DebugGui::NOISE_SIZE; x++)
-	{
-		for (int z = 0; z < DebugGui::NOISE_SIZE; z++)
-		{
-			glm::vec2 current_world_pos = glm::vec2(x,z) * 5.0f;
-			//generate values
-			float relief = generateReliefValue(current_world_pos);
-			float continentalness = m_continentalness_perlin.noise(current_world_pos);
-			float erosion = m_erosion_perlin.noise(current_world_pos);
-			float weirdness = m_weirdness_perlin.noise(current_world_pos);
-			float temperature = m_temperature_perlin.noise(current_world_pos);
-			float humidity = m_humidity_perlin.noise(current_world_pos);
-			float PV = calculatePeaksAndValleys(weirdness);
+// void World::WorldGenerator::drawNoises(RenderAPI & vk)
+// {
+// 	for (int x = 0; x < DebugGui::NOISE_SIZE; x++)
+// 	{
+// 		for (int z = 0; z < DebugGui::NOISE_SIZE; z++)
+// 		{
+// 			glm::vec2 current_world_pos = glm::vec2(x,z) * 5.0f;
+// 			//generate values
+// 			float relief = generateReliefValue(current_world_pos);
+// 			float continentalness = m_continentalness_perlin.noise(current_world_pos);
+// 			float erosion = m_erosion_perlin.noise(current_world_pos);
+// 			float weirdness = m_weirdness_perlin.noise(current_world_pos);
+// 			float temperature = m_temperature_perlin.noise(current_world_pos);
+// 			float humidity = m_humidity_perlin.noise(current_world_pos);
+// 			float PV = calculatePeaksAndValleys(weirdness);
 
-			int level_continent = continentalnessLevel(continentalness);
-			int level_erosion = erosionLevel(erosion);
-			int level_temperature = temperatureLevel(temperature);
-			int level_humidity = humidityLevel(humidity);
-			int level_weirdness = weirdnessLevel(weirdness);
-			int level_PV = PVLevel(PV);
+// 			int level_continent = continentalnessLevel(continentalness);
+// 			int level_erosion = erosionLevel(erosion);
+// 			int level_temperature = temperatureLevel(temperature);
+// 			int level_humidity = humidityLevel(humidity);
+// 			int level_weirdness = weirdnessLevel(weirdness);
+// 			int level_PV = PVLevel(PV);
 
-			int baseHeight = calculateBaseHeight(relief, continentalness, PV, erosion);
-			BiomeType biome = getBiomeType(level_continent, level_erosion, level_humidity, level_temperature, level_weirdness, level_PV, baseHeight);
+// 			int baseHeight = calculateBaseHeight(relief, continentalness, PV, erosion);
+// 			BiomeType biome = getBiomeType(level_continent, level_erosion, level_humidity, level_temperature, level_weirdness, level_PV, baseHeight);
 
-			uint8_t rgb_continent = mapRange(continentalness, -1.0f, 1.0f, 0.0f, 255.0f);
-			uint8_t rgb_erosion = mapRange(erosion, -1.0f, 1.0f, 0.0f, 255.0f);
-			uint8_t rgb_temperature = mapRange(temperature, -1.0f, 1.0f, 0.0f, 255.0f);
-			uint8_t rgb_humidity = mapRange(humidity, -1.0f, 1.0f, 0.0f, 255.0f);
-			uint8_t rgb_weirdness = mapRange(weirdness, -1.0f, 1.0f, 0.0f, 255.0f);
-			uint8_t rgb_PV = mapRange(PV, -1.0f, 1.0f, 0.0f, 255.0f);
+// 			uint8_t rgb_continent = mapRange(continentalness, -1.0f, 1.0f, 0.0f, 255.0f);
+// 			uint8_t rgb_erosion = mapRange(erosion, -1.0f, 1.0f, 0.0f, 255.0f);
+// 			uint8_t rgb_temperature = mapRange(temperature, -1.0f, 1.0f, 0.0f, 255.0f);
+// 			uint8_t rgb_humidity = mapRange(humidity, -1.0f, 1.0f, 0.0f, 255.0f);
+// 			uint8_t rgb_weirdness = mapRange(weirdness, -1.0f, 1.0f, 0.0f, 255.0f);
+// 			uint8_t rgb_PV = mapRange(PV, -1.0f, 1.0f, 0.0f, 255.0f);
 
-			vk.ImGuiTexturePutPixel(DebugGui::continentalness_texture_id, x, z, rgb_continent, rgb_continent, rgb_continent);
-			vk.ImGuiTexturePutPixel(DebugGui::erosion_texture_id, x, z, rgb_erosion, rgb_erosion, rgb_erosion);
-			vk.ImGuiTexturePutPixel(DebugGui::temperature_texture_id, x, z, rgb_temperature, rgb_temperature, rgb_temperature);
-			vk.ImGuiTexturePutPixel(DebugGui::humidity_texture_id, x, z, rgb_humidity, rgb_humidity, rgb_humidity);
-			vk.ImGuiTexturePutPixel(DebugGui::weirdness_texture_id, x, z, rgb_weirdness, rgb_weirdness, rgb_weirdness);
-			vk.ImGuiTexturePutPixel(DebugGui::PV_texture_id, x, z, rgb_PV, rgb_PV, rgb_PV);
+// 			vk.ImGuiTexturePutPixel(DebugGui::continentalness_texture_id, x, z, rgb_continent, rgb_continent, rgb_continent);
+// 			vk.ImGuiTexturePutPixel(DebugGui::erosion_texture_id, x, z, rgb_erosion, rgb_erosion, rgb_erosion);
+// 			vk.ImGuiTexturePutPixel(DebugGui::temperature_texture_id, x, z, rgb_temperature, rgb_temperature, rgb_temperature);
+// 			vk.ImGuiTexturePutPixel(DebugGui::humidity_texture_id, x, z, rgb_humidity, rgb_humidity, rgb_humidity);
+// 			vk.ImGuiTexturePutPixel(DebugGui::weirdness_texture_id, x, z, rgb_weirdness, rgb_weirdness, rgb_weirdness);
+// 			vk.ImGuiTexturePutPixel(DebugGui::PV_texture_id, x, z, rgb_PV, rgb_PV, rgb_PV);
 
-			glm::ivec3 biome_rgb;
+// 			glm::ivec3 biome_rgb;
 
-			switch (biome)
-			{
-			case BiomeType::OCEAN:
-				biome_rgb = {0, 0, 200};
-				break;
-			case BiomeType::RIVER:
-				biome_rgb = {0, 255, 255};
-				break;
-			case BiomeType::MOUNTAIN:
-				biome_rgb = {200, 200, 200};
-				break;
-			case BiomeType::COAST:
-				biome_rgb = {255, 255, 0};
-				break;
-			case BiomeType::DESERT:
-				biome_rgb = {200, 200, 0};
-				break;
-			case BiomeType::FOREST:
-				biome_rgb = {0, 180, 0};
-				break;
-			case BiomeType::PLAIN:
-				biome_rgb = {0, 255, 0};
-				break;
-			case BiomeType::NONE:
-				biome_rgb = {0, 0, 0};
-				break;
-			};
-			vk.ImGuiTexturePutPixel(DebugGui::biome_texture_id, x, z, biome_rgb.r, biome_rgb.g, biome_rgb.b);
-		}
-	}
-}
+// 			switch (biome)
+// 			{
+// 			case BiomeType::OCEAN:
+// 				biome_rgb = {0, 0, 200};
+// 				break;
+// 			case BiomeType::RIVER:
+// 				biome_rgb = {0, 255, 255};
+// 				break;
+// 			case BiomeType::MOUNTAIN:
+// 				biome_rgb = {200, 200, 200};
+// 				break;
+// 			case BiomeType::COAST:
+// 				biome_rgb = {255, 255, 0};
+// 				break;
+// 			case BiomeType::DESERT:
+// 				biome_rgb = {200, 200, 0};
+// 				break;
+// 			case BiomeType::FOREST:
+// 				biome_rgb = {0, 180, 0};
+// 				break;
+// 			case BiomeType::PLAIN:
+// 				biome_rgb = {0, 255, 0};
+// 				break;
+// 			case BiomeType::NONE:
+// 				biome_rgb = {0, 0, 0};
+// 				break;
+// 			};
+// 			vk.ImGuiTexturePutPixel(DebugGui::biome_texture_id, x, z, biome_rgb.r, biome_rgb.g, biome_rgb.b);
+// 		}
+// 	}
+// }

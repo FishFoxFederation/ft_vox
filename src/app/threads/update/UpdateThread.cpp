@@ -82,6 +82,7 @@ void UpdateThread::loop()
 	m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
 
 	m_world.updateMobs(m_delta_time.count() / 1e9);
+	m_world.updateSystems(m_delta_time.count() / 1e9);
 
 	m_world.otherUpdate();
 }
@@ -164,6 +165,20 @@ void UpdateThread::readInput()
 			}
 			m_world.setRenderDistance(render_distance);
 		}
+	}
+
+	const Input::KeyState m_key_status = m_window.input().getKeyState(GLFW_KEY_M);
+	static bool m_pressed = false;
+	if (m_key_status == Input::KeyState::PRESSED)
+		m_pressed = true;
+	else if (m_key_status == Input::KeyState::RELEASED)
+		m_pressed = false;
+	if (m_pressed)
+	{
+		static size_t i = 0;
+		m_world.createBaseMob(m_world.getPlayerPosition(m_world.m_my_player_id), m_world.m_my_player_id);
+		i++;
+		LOG_INFO("Created mob " << i);
 	}
 
 	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
