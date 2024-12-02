@@ -21,16 +21,15 @@
 
 namespace ecs
 {
-
 	/**
 	 * @brief This class is the main class of the ECS system
 	 * you can use it to create entitites, add component to entities, fetch components from entities and remove them
 	 * 
 	 * 
 	 * @details Go see the Entity page for more info on how the entities are stored
-	 * @tparam entityType 
+	 * @tparam entityType the internal type used for entities id, must be integral and unsigned, default uint32_t
 	 */
-	template <ValidEntity entityType, size_t max>
+	template <ValidEntity entityType>
 	class Manager
 	{
 	public:
@@ -61,7 +60,7 @@ namespace ecs
 		 */
 		std::pair<bool, entityType>		createEntity()
 		{
-			if (m_entities.size() == max)
+			if (m_entities.size() == ecs::MAX_ENTITIES)
 				return {false, 0};
 			//check if there are any dead entities to reuse
 			if (m_dead_entity_head != 0)
@@ -116,6 +115,28 @@ namespace ecs
 			if (m_entities[index] != entity)
 				return false;
 			return true;
+		}
+
+		/**
+		 * @brief Get the version of the entity, see the entity doc for more info
+		 * 
+		 * @param entity 
+		 * @return uint32_t 
+		 */
+		static constexpr uint32_t getEntityVersion(const entityType & entity)
+		{
+			return entity & 0xF;
+		}
+
+		/**
+		 * @brief Get the index of the entity in the entity array, see the entity doc for more info
+		 * 
+		 * @param entity 
+		 * @return uint32_t 
+		 */
+		static constexpr uint32_t getEntityIndex(const entityType & entity)
+		{
+			return entity >> 4;
 		}
 
 		/*************************************************************\
@@ -258,27 +279,7 @@ namespace ecs
 		 * 	ENTITY UTILS
 		\*************************************************/
 
-		/**
-		 * @brief Get the version of the entity, see the entity doc for more info
-		 * 
-		 * @param entity 
-		 * @return uint32_t 
-		 */
-		uint32_t getEntityVersion(entityType entity) const
-		{
-			return entity & 0xF;
-		}
 
-		/**
-		 * @brief Get the index of the entity in the entity array, see the entity doc for more info
-		 * 
-		 * @param entity 
-		 * @return uint32_t 
-		 */
-		uint32_t getEntityIndex(entityType entity) const
-		{
-			return entity >> 4;
-		}
 
 		/**
 		 * @brief Increase the version of the entity, see the entity doc for more info

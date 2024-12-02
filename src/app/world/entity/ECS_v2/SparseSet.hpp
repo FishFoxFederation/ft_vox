@@ -40,32 +40,34 @@ namespace ecs
 
 		size_t insert(entityType entity)
 		{
+			auto entity_index = ecs::Manager<entityType>::getEntityIndex(entity);
 			if (contains(entity))
 				return 0;
 
 			m_dense.push_back({entity});
 
-			if (m_sparse.size() <= entity)
-				m_sparse.resize(entity + 1);
-			auto index = m_dense.size() - 1;
-			m_sparse[entity] = index;
-			return index;
+			if (m_sparse.size() <= entity_index)
+				m_sparse.resize(entity_index + 1);
+
+			auto dense_index = m_dense.size() - 1;
+			m_sparse[entity_index] = dense_index;
+			return dense_index;
 		}
 
 		virtual size_t remove(entityType entity)
 		{
 			if (!contains(entity) || m_dense.size() == 0)
 				return 0;
-			
-			size_t dense_index = m_sparse[entity];
+			size_t entity_index = ecs::Manager<entityType>::getEntityIndex(entity);
+			size_t dense_index = m_sparse[entity_index];
 
 			if (m_dense.size() > 1)
 			{
 				//swap with last element and then destroy
 				entityType last_entity = m_dense.back();
-
+				size_t last_entity_index = ecs::Manager<entityType>::getEntityIndex(last_entity);
 				//update sparse array before swapping
-				m_sparse[last_entity] = dense_index;
+				m_sparse[last_entity_index] = dense_index;
 
 				std::swap(m_dense[dense_index], m_dense.back());
 			}
@@ -111,15 +113,23 @@ namespace ecs
 
 		size_t index(entityType entity) const
 		{
-			return m_sparse[entity];
+			size_t entity_index = ecs::Manager<entityType>::getEntityIndex(entity);
+			return m_sparse[entity_index];
 		}
 
 		bool	contains(entityType entity) const
 		{
+			auto entity_index = ecs::Manager<entityType>::getEntityIndex(entity);
+			//check that entity could be in sparse array
+			//then check that it could be in dense array
+			//then check that the entity is the same
+
+			//we check the whole entity in the dense array and not just the index because
+			//the index could be the same be the entity metadata ( version ) could be different 
 			return (
-				m_sparse.size() > entity
-				&& m_sparse[entity] < m_dense.size()
-				&& m_dense[m_sparse[entity]] == entity);
+				m_sparse.size() > entity_index
+				&& m_sparse[entity_index] < m_dense.size()
+				&& m_dense[m_sparse[entity_index]] == entity);
 		}
 
 		size_t	size() const

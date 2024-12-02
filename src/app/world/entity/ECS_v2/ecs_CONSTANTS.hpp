@@ -5,7 +5,7 @@
 
 namespace ecs
 {
-	// constexpr size_t MAX_ENTITIES = 5000;
+	constexpr size_t MAX_ENTITIES = 5000;
 	// typedef uint32_t entityType;
 	typedef uint32_t entity;
 }
