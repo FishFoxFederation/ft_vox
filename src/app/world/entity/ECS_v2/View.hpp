@@ -113,8 +113,7 @@ namespace ecs
 		typedef std::array<std::shared_ptr<entitySet>, sizeof... (ComponentTypes)> entitySetArray;
 		typedef ViewIterator<EntityType, sizeof... (ComponentTypes)> iterator;
 
-		template <size_t manager_size>
-		View( Manager<EntityType, manager_size> & storage)
+		View( Manager<EntityType> & storage)
 		{
 			//mmmmm spicy
 			auto func = [&]<typename ComponentType>()
@@ -160,4 +159,4 @@ namespace ecs
 		size_t m_lead = 0;
 	};
 
-};
+}
