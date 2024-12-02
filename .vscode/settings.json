@@ -72,6 +72,12 @@
 		"charconv": "cpp",
 		"forward_list": "cpp",
 		"set": "cpp",
+		"csetjmp": "cpp",
+		"csignal": "cpp",
+		"future": "cpp",
+		"scoped_allocator": "cpp",
+		"cfenv": "cpp",
+		"typeindex": "cpp",
 		"valarray": "cpp",
 		"format": "cpp"
 	}

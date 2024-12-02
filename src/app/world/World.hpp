@@ -10,7 +10,6 @@
 #include "hashes.hpp"
 #include "Tracy.hpp"
 #include "Structures.hpp"
-#include "RenderAPI.hpp"
 #include "Save.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -31,7 +30,7 @@ public:
 		typedef std::unordered_set<glm::ivec3> ChunkGenList;
 
 
-		void drawNoises(RenderAPI & vk);
+		// void drawNoises(RenderAPI & vk);
 		// struct genInfo
 		// {
 		// 	struct zone
@@ -308,3 +307,4 @@ protected:
 	 */
 	std::unordered_set<glm::ivec3> updateBlockLight(const glm::ivec3 & block_position);
 };
+

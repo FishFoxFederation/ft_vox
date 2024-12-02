@@ -1815,8 +1815,8 @@ void RenderAPI::_createPipelines()
 		pipeline_info.extent = color_attachement.extent2D;
 		pipeline_info.vert_path = "shaders/rasterization/entity_shader.vert.spv";
 		pipeline_info.frag_path = "shaders/rasterization/entity_shader.frag.spv";
-		pipeline_info.binding_description = EntityVertex::getBindingDescription();
-		pipeline_info.attribute_descriptions = EntityVertex::getAttributeDescriptions();
+		pipeline_info.binding_description = ObjVertex::getBindingDescription();
+		pipeline_info.attribute_descriptions = ObjVertex::getAttributeDescriptions();
 		pipeline_info.color_formats = { color_attachement.format };
 		pipeline_info.depth_format = depth_attachement.format;
 		pipeline_info.descriptor_set_layouts = {
