@@ -29,7 +29,7 @@ namespace ecs
 	 * @details Go see the Entity page for more info on how the entities are stored
 	 * @tparam entityType the internal type used for entities id, must be integral and unsigned, default uint32_t
 	 */
-	template <ValidEntity entityType>
+	template <ValidEntity entityType = ecs::entity>
 	class Manager
 	{
 	public:
