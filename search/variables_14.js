@@ -1,19 +1,12 @@
 var searchData=
 [
-  ['velocity_0',['velocity',['../classPlayer.html#aa467fcbbb25423c22972d0f520e94fd1',1,'Player::velocity()'],['../classMob.html#a8f1d84258c7220a5ccf0180f091ab949',1,'Mob::velocity()']]],
-  ['vert_5fpath_1',['vert_path',['../structPipeline_1_1CreateInfo.html#aa660f137d0ccf59854db69dc936769e5',1,'Pipeline::CreateInfo']]],
-  ['vertex_5fcount_2',['vertex_count',['../structMesh.html#a21d4053e57ef0a7c7022de6301adb92a',1,'Mesh']]],
-  ['vertex_5fsize_3',['vertex_size',['../structMesh.html#aa238e9a98a698723da97e51bdebc31b5',1,'Mesh']]],
-  ['vertexindex_4',['vertexIndex',['../structFace.html#a4114bd932f64838d7ff3e685e19e7620',1,'Face']]],
-  ['vertices_5',['vertices',['../classCreateMeshData.html#ac2a205bdefb6e79d75abcd60c3a249f2',1,'CreateMeshData']]],
-  ['view_6',['view',['../structImGuiTexture.html#a411e55284d8214522f76d218545d4433',1,'ImGuiTexture::view()'],['../structViewProjMatrices.html#aacd4b64181f8bbf0ef4d0deb6091931b',1,'ViewProjMatrices::view()'],['../classImage.html#aebce8e4c25a0b111ba906192fc0390bb',1,'Image::view()'],['../structCamera_1_1RenderInfo.html#a8bec29f57c433c3c0c0aeca64ec38419',1,'Camera::RenderInfo::view()']]],
-  ['view_5ffrustum_7',['view_frustum',['../structCamera_1_1RenderInfo.html#ae916554eb253bd990d63e5b8ea35ce58',1,'Camera::RenderInfo']]],
-  ['view_5fmode_8',['view_mode',['../classPlayer.html#aac46fc99a79a19b208a7057f7814225d',1,'Player']]],
-  ['view_5fproj_9',['view_proj',['../structShadowMapLight.html#a9a99b58f2f8fafb0425e20bd8f910e16',1,'ShadowMapLight']]],
-  ['visible_10',['visible',['../structPlayerRenderData.html#a1564eb09ff213dcaccf47493404c4492',1,'PlayerRenderData']]],
-  ['vk_11',['vk',['../classDebugGui.html#acb17471dbe71302178bf73af556e9684',1,'DebugGui']]],
-  ['vkcreatedebugutilsmessengerext_12',['vkCreateDebugUtilsMessengerEXT',['../classVulkanAPI.html#a10d5fc72a9fcb937cc8b62d57fca2be7',1,'VulkanAPI']]],
-  ['vkdestroydebugutilsmessengerext_13',['vkDestroyDebugUtilsMessengerEXT',['../classVulkanAPI.html#a07f1d7b9dca69d5d33666b605ee66436',1,'VulkanAPI']]],
-  ['vkgetcalibratedtimestampsext_14',['vkGetCalibratedTimestampsEXT',['../classVulkanAPI.html#a6c0515ff6c976c5480e82adf3ccaadb3',1,'VulkanAPI']]],
-  ['vkgetphysicaldevicecalibrateabletimedomainsext_15',['vkGetPhysicalDeviceCalibrateableTimeDomainsEXT',['../classVulkanAPI.html#a761b38015d3f933dd83fc8a47cd89113',1,'VulkanAPI']]]
+  ['walk_5fanimation_0',['walk_animation',['../structPlayerRenderData.html#aa6341a2b30d630a4ca1375649cbaedcd',1,'PlayerRenderData']]],
+  ['water_5findex_1',['water_index',['../structRenderAPI_1_1ChunkMeshCreateInfo.html#a14395beda6bec4fa82fa82a7acf8794c',1,'RenderAPI::ChunkMeshCreateInfo']]],
+  ['water_5findices_2',['water_indices',['../classCreateMeshData.html#a15ba969bd083a60f5d17ad3f3d390386',1,'CreateMeshData']]],
+  ['water_5fmesh_5fid_3',['water_mesh_id',['../structChunkRenderData.html#a481554c0651832b0c1f17aebef1f32c8',1,'ChunkRenderData']]],
+  ['water_5fvertex_4',['water_vertex',['../structRenderAPI_1_1ChunkMeshCreateInfo.html#a89d9d667336bfc5502a30bdb466ce0af',1,'RenderAPI::ChunkMeshCreateInfo']]],
+  ['water_5fvertex_5fbuffer_5',['water_vertex_buffer',['../structInstanceData.html#a6724e0b761337bfeb0207aab3dadf24c',1,'InstanceData']]],
+  ['water_5fvertices_6',['water_vertices',['../classCreateMeshData.html#ab6940d0e0be95eb38ea4849988889cc7',1,'CreateMeshData']]],
+  ['weirdness_7',['weirdness',['../classDebugGui.html#a1394887d4ad01e04d5ecffe8fcc3a4e5',1,'DebugGui::weirdness()'],['../structChunk_1_1biomeInfo.html#a73d8ffefcb98ab73d191badeb4a188cf',1,'Chunk::biomeInfo::weirdness()']]],
+  ['weirdness_5ftexture_5fid_8',['weirdness_texture_id',['../classDebugGui.html#a6c5dae565d8c7e5eb6d01edd6939f0f5',1,'DebugGui']]]
 ];

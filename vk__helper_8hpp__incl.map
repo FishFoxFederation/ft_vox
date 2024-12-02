@@ -1,4 +1,4 @@
-<map id="src/app/vulkan/vk_helper.hpp" name="src/app/vulkan/vk_helper.hpp">
+<map id="src/app/render/vk_helper.hpp" name="src/app/render/vk_helper.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="189,5,379,31"/>
 <area shape="rect" id="node2" href="$vk__define_8hpp.html" title=" " alt="" coords="233,79,335,104"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,159,117,185"/>

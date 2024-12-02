@@ -8,12 +8,8 @@ var searchData=
   ['level_5',['level',['../structServerWorld_1_1Ticket.html#aef4d65e8169df5ef755b7cdc22e1f114',1,'ServerWorld::Ticket']]],
   ['light_6',['light',['../structChunkPacket_1_1ChunkData.html#a18eb2ed49a43e964ad2cb3d76c16668f',1,'ChunkPacket::ChunkData::light()'],['../structChunkData.html#a01601fe0e2771a31904652ebea3cc34d',1,'ChunkData::light()']]],
   ['light_5fdir_7',['light_dir',['../structShadowMapLight.html#a03f271b17639d8b15b28050787f4dbc0',1,'ShadowMapLight']]],
-  ['light_5fmat_5fubo_8',['light_mat_ubo',['../classVulkanAPI.html#acdddd58d6fe5785ac53838b6748ef46c',1,'VulkanAPI']]],
-  ['lighting_5fframebuffers_9',['lighting_framebuffers',['../classVulkanAPI.html#a32b2991a33a67aac18e47097c38c2257',1,'VulkanAPI']]],
-  ['lighting_5frender_5fpass_10',['lighting_render_pass',['../classVulkanAPI.html#a686c7e9f200979296e890de8c2801e25',1,'VulkanAPI']]],
-  ['line_5fpipeline_11',['line_pipeline',['../classVulkanAPI.html#a28868afc63f2210693107cec8cd9e73a',1,'VulkanAPI']]],
-  ['logger_12',['logger',['../logger_8cpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp'],['../logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp']]],
-  ['looked_5fface_5fblock_5flight_13',['looked_face_block_light',['../classDebugGui.html#a45a48109e6d7a93d9eae7244efbcbe5b',1,'DebugGui']]],
-  ['looked_5fface_5fsky_5flight_14',['looked_face_sky_light',['../classDebugGui.html#a8c4f0eb830713e86ad4d101d6979ab01',1,'DebugGui']]],
-  ['loop_15',['loop',['../structSound_1_1Instance.html#a7638e2ba7a8a4e6ef4fc558e99fb26f0',1,'Sound::Instance']]]
+  ['logger_8',['logger',['../logger_8cpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp'],['../logger_8hpp.html#a5b27630dbcf231bfda3a7d79e1eefce5',1,'logger():&#160;logger.cpp']]],
+  ['looked_5fface_5fblock_5flight_9',['looked_face_block_light',['../classDebugGui.html#a45a48109e6d7a93d9eae7244efbcbe5b',1,'DebugGui']]],
+  ['looked_5fface_5fsky_5flight_10',['looked_face_sky_light',['../classDebugGui.html#a8c4f0eb830713e86ad4d101d6979ab01',1,'DebugGui']]],
+  ['loop_11',['loop',['../structSound_1_1Instance.html#a7638e2ba7a8a4e6ef4fc558e99fb26f0',1,'Sound::Instance']]]
 ];
