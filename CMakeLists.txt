@@ -160,6 +160,7 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/Save
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/entity
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/entity/ECS_v2
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world/structures
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/network/client
@@ -222,38 +223,15 @@ target_sources(server
 		src/app/Settings.cpp
 		src/app/scenes/Camera.cpp
 		src/app/threads/Status.cpp
-		src/app/threads/render/RenderThread.cpp
-		src/app/threads/update/UpdateThread.cpp
 		src/app/threads/block_update/ServerBlockUpdateThread.cpp
-		src/app/threads/network/NetworkThread.cpp
 		src/app/threads/task_manager/ExecutorWorker.cpp
 		src/app/threads/task_manager/ExecutorAccessor.cpp
 		src/app/threads/task_manager/Executor.cpp
-		src/app/render/vk_helper.cpp
-		src/app/render/api/RenderAPI.cpp
-		src/app/render/api/chunk_mesh.cpp
-		src/app/render/api/item_mesh.cpp
-		src/app/render/api/instance_data.cpp
-		src/app/render/api/mesh.cpp
-		src/app/render/api/draw_buffer.cpp
-		src/app/render/api/render_loop.cpp
-		src/app/render/api/render_update.cpp
-		src/app/render/helper/VulkanMemoryAllocator.cpp
-		src/app/render/helper/Image.cpp
-		src/app/render/helper/Command.cpp
-		src/app/render/helper/Descriptor.cpp
-		src/app/render/helper/Swapchain.cpp
-		src/app/render/helper/TextRenderer.cpp
-		src/app/render/helper/Buffer.cpp
-		src/app/window/window.cpp
-		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
 		src/app/world/ChunkData.cpp
 		src/app/world/entity/Player.cpp
 		src/app/world/entity/HitBox.cpp
 		src/app/world/entity/Mob.cpp
-		src/app/world/ClientWorld.cpp
-		src/app/world/ClientWorldNetwork.cpp
 		src/app/world/ServerWorldTickets.cpp
 		src/app/world/ServerWorldNetwork.cpp
 		src/app/world/ServerWorldBlocks.cpp
@@ -266,8 +244,6 @@ target_sources(server
 		src/app/world/CreateMeshData.cpp
 		src/app/world/Save/Save.cpp
 		src/app/world/Save/SaveRegion.cpp
-		src/app/network/client/Client.cpp
-		src/app/network/client/ClientSocket.cpp
 		# src/app/network/client/ClientPacketHandler.cpp
 		src/app/network/server/Server.cpp
 		src/app/network/server/ServerSocket.cpp
