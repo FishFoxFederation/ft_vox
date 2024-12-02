@@ -11,7 +11,7 @@ UpdateThread::UpdateThread(
 	const Settings & settings,
 	Window & window,
 	ClientWorld & world,
-	VulkanAPI & vulkan_api,
+	RenderAPI & render_api,
 	Sound::Engine & sound_engine,
 	Event::Manager & event_manager,
 	std::chrono::nanoseconds start_time
@@ -19,7 +19,7 @@ UpdateThread::UpdateThread(
 	m_settings(settings),
 	m_window(window),
 	m_world(world),
-	m_vulkan_api(vulkan_api),
+	m_render_api(render_api),
 	m_client(client),
 	// m_packet_handler(client, world),
 	m_sound_engine(sound_engine),
@@ -169,7 +169,7 @@ void UpdateThread::readInput()
 	const Input::KeyState f3_key_status = m_window.input().getKeyState(GLFW_KEY_F3);
 	if (f3_key_status == Input::KeyState::PRESSED)
 	{
-		m_vulkan_api.toggleDebugText();
+		m_render_api.toggleDebugText();
 	}
 
 	auto ret = m_world.playerAttack(m_world.m_my_player_id, m_attack);
@@ -290,7 +290,7 @@ void UpdateThread::movePlayer()
 		look.y
 	);
 
-	m_vulkan_api.setCamera(m_world.getCamera(m_world.m_my_player_id));
+	m_render_api.setCamera(m_world.getCamera(m_world.m_my_player_id));
 	last_time = now;
 }
 

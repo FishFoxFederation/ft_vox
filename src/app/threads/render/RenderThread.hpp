@@ -2,7 +2,7 @@
 
 #include "define.hpp"
 #include "Settings.hpp"
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "Chunk.hpp"
 #include "WorldGenerator.hpp"
 #include "DebugGui.hpp"
@@ -23,7 +23,7 @@ struct ModelMatrix_push_constant
  * @brief A wrapper for the thread that handles rendering
  *
  * This thread will run at max framerate possible
- * Interacts with the vk::RenderAPI to draw the Scene
+ * Interacts with the RenderAPI to draw the Scene
  * Every function called from this class MUST be thread safe
  */
 class RenderThread
@@ -36,7 +36,7 @@ public:
 	*/
 	RenderThread(
 		const Settings & settings,
-		VulkanAPI & vulkanAPI,
+		RenderAPI & render_api,
 		std::chrono::nanoseconds start_time
 	);
 
@@ -52,7 +52,7 @@ public:
 
 private:
 
-	VulkanAPI & vk;
+	RenderAPI & m_render_api;
 
 	// Should be the last member
 	std::jthread m_thread;

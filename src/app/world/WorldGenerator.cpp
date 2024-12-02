@@ -1,7 +1,7 @@
 // #define GLM_FORCE_XYZW_ONLY
 #include "WorldGenerator.hpp"
 #include "World.hpp"
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 
 #include "math_utils.hpp"
 #include <cmath>
@@ -326,7 +326,8 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 	}
 	case DECORATE:
 	{
-		//to do decorations we need to garantee that the current chunk has full formed relief/cave chunks around it		
+
+		//to do decorations we need to garantee that the current chunk has full formed relief/cave chunks around it
 		for(int x = -1; x <= 1; x++)
 		{
 			for(int z = -1; z <= 1; z++)
@@ -335,7 +336,7 @@ void World::WorldGenerator::setupPass(genStruct & genData, const glm::ivec3 & ch
 				setupPass(genData, current_pos, CAVE);
 			}
 		}
-		
+
 		if (chunk->getGenLevel() <= DECORATE)
 			return;
 		genData.decorate_graph->emplace([this, chunk_pos]{
@@ -591,7 +592,7 @@ void World::WorldGenerator::newReliefPass(const glm::ivec3 & chunkPos3D)
 			float relief = generateReliefValue(glm::ivec2(current_world_pos));
 			// relief = (relief + 1) / 2; // map from [-1, 1] to [0, 1]
 			// relief = pow(2, 10 * relief - 10); // map from [0, 1] to [0, 1] with a slope
-			
+
 			int level_continent = continentalnessLevel(continentalness);
 			int level_erosion = erosionLevel(erosion);
 			int level_temperature = temperatureLevel(temperature);
@@ -726,7 +727,7 @@ void World::WorldGenerator::decoratePass(const glm::ivec3 & chunkPos3D)
 				tree_positions.erase(tree_pos + glm::ivec2(x - 1, z - 1));
 		}
 		//find highest block that isnt air
-		
+
 		//convert tree start to world pos
 
 
@@ -852,7 +853,7 @@ float World::WorldGenerator::calculateBaseHeight(const float & relief, const flo
 		landRelief = std::lerp(landRelief, mountainRelief, smoothTransition);
 	if (pv > MountainTransitionEnd)
 		landRelief = mountainRelief;
-	
+
 		// landRelief = mountainRelief;
 		// landRelief = std::lerp(landRelief, mountainRelief, mapRange(pv, 0.7f, 1.0f, 0.0f, 1.0f));
 	// else
@@ -1086,7 +1087,7 @@ std::array<BlockType, CHUNK_Y_SIZE> World::WorldGenerator::getBlockColumn(int ba
 	return blocks;
 }
 
-void World::WorldGenerator::drawNoises(VulkanAPI & vk)
+void World::WorldGenerator::drawNoises(RenderAPI & vk)
 {
 	for (int x = 0; x < DebugGui::NOISE_SIZE; x++)
 	{
@@ -1101,7 +1102,7 @@ void World::WorldGenerator::drawNoises(VulkanAPI & vk)
 			float temperature = m_temperature_perlin.noise(current_world_pos);
 			float humidity = m_humidity_perlin.noise(current_world_pos);
 			float PV = calculatePeaksAndValleys(weirdness);
-			
+
 			int level_continent = continentalnessLevel(continentalness);
 			int level_erosion = erosionLevel(erosion);
 			int level_temperature = temperatureLevel(temperature);

@@ -6,7 +6,7 @@
 #include "ClientWorld.hpp"
 #include "RenderThread.hpp"
 #include "UpdateThread.hpp"
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "BlockUpdateThread.hpp"
 #include "NetworkThread.hpp"
 #include "Client.hpp"
@@ -34,7 +34,7 @@ private:
 	Client				m_client;
 	Settings			m_settings;
 	Window				m_window;
-	VulkanAPI			m_vulkan_api;
+	RenderAPI			m_render_api;
 	Event::Manager		m_event_manager;
 	Sound::Engine		m_sound_engine;
 	ClientWorld			m_world;

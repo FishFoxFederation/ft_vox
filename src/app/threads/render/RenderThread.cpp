@@ -13,10 +13,10 @@
 
 RenderThread::RenderThread(
 	const Settings & settings,
-	VulkanAPI & vulkan_api,
+	RenderAPI & render_api,
 	std::chrono::nanoseconds start_time
 ):
-	vk(vulkan_api),
+	m_render_api(render_api),
 	m_thread(&RenderThread::launch, this)
 {
 }
@@ -60,5 +60,5 @@ void RenderThread::init()
 
 void RenderThread::loop()
 {
-	vk.renderFrame();
+	m_render_api.renderFrame();
 }

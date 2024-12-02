@@ -10,7 +10,7 @@
 #include "hashes.hpp"
 #include "Tracy.hpp"
 #include "Structures.hpp"
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "Save.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -31,7 +31,7 @@ public:
 		typedef std::unordered_set<glm::ivec3> ChunkGenList;
 
 
-		void drawNoises(VulkanAPI & vk);
+		void drawNoises(RenderAPI & vk);
 		// struct genInfo
 		// {
 		// 	struct zone
@@ -86,9 +86,9 @@ public:
 
 		/**
 		 * @brief creates a task graph that when runned will generate every chunk in the list
-		 * 
-		 * @param chunks_to_gen 
-		 * @return task::TaskGraph&& 
+		 *
+		 * @param chunks_to_gen
+		 * @return task::TaskGraph&&
 		 */
 		std::shared_ptr<task::TaskGraph>	getGenerationGraph(ChunkGenList & chunks_to_gen);
 
@@ -132,7 +132,7 @@ public:
 		Perlin	m_relief_perlin;
 		Perlin	m_cave_perlin;
 
-		
+
 		// BIOMES PERLINS
 		Perlin	m_continentalness_perlin;
 		Perlin  m_erosion_perlin;
@@ -183,7 +183,7 @@ public:
 		\****************************************/
 		void	setupPass(genStruct & genData,const glm::ivec3 & chunk_pos, Chunk::genLevel gen_level);
 		void	addPassToGraph(genStruct & genData, glm::ivec3 chunk_pos, Chunk::genLevel gen_level);
-		
+
 		void	lightPass(const glm::ivec3 & pos);
 
 		void	reliefPass(const glm::ivec3 & pos);
@@ -242,7 +242,7 @@ public:
 	/**
 	 * @brief Unloads all chunk inside a region,
 	 * if save is enabled, will save the region in a region file
-	 * 
+	 *
 	 * @param region_pos calculated with Save::Region::toRegionPos
 	 */
 	void 					unloadRegion(const glm::ivec2 region_pos);
@@ -294,7 +294,7 @@ protected:
 	 * @brief Update the sky light of the chunk containing the block
 	 *
 	 * @param block_position the position of the block in the world
-	 * 
+	 *
 	 * @return a set of chunks that have been modified ( and might need remeshing )
 	 */
 	std::unordered_set<glm::ivec3> updateSkyLight(const glm::ivec3 & block_position);
@@ -303,7 +303,7 @@ protected:
 	 * @brief Update the block light of the chunk containing the block
 	 *
 	 * @param block_position the position of the block in the world
-	 * 
+	 *
 	 * @return a set of chunks that have been modified ( and might need remeshing )
 	 */
 	std::unordered_set<glm::ivec3> updateBlockLight(const glm::ivec3 & block_position);

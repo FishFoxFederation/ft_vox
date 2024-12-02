@@ -13,7 +13,7 @@ int main()
 	WorldScene world_scene;
 	Window window("Vox", 800, 600);
 	Settings settings;
-	VulkanAPI vulkan_api(window.getGLFWwindow());
+	RenderAPI vulkan_api(window.getGLFWwindow());
 	RenderThread render_thread(settings, vulkan_api, world_scene, std::chrono::steady_clock::now().time_since_epoch());
 
 	//fill all perlin

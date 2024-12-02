@@ -66,22 +66,22 @@ target_sources(${PROJECT_NAME}
 		src/app/threads/task_manager/ExecutorAccessor.cpp
 		src/app/threads/block_update/BlockUpdateThread.cpp
 		src/app/threads/network/NetworkThread.cpp
-		src/app/vulkan/VulkanAPI.cpp
-		src/app/vulkan/VulkanMemoryAllocator.cpp
-		src/app/vulkan/chunk_mesh.cpp
-		src/app/vulkan/vk_helper.cpp
-		src/app/vulkan/Image.cpp
-		src/app/vulkan/Command.cpp
-		src/app/vulkan/Descriptor.cpp
-		src/app/vulkan/Swapchain.cpp
-		src/app/vulkan/TextRenderer.cpp
-		src/app/vulkan/Buffer.cpp
-		src/app/vulkan/item_mesh.cpp
-		src/app/vulkan/instance_data.cpp
-		src/app/vulkan/mesh.cpp
-		src/app/vulkan/draw_buffer.cpp
-		src/app/vulkan/render_loop.cpp
-		src/app/vulkan/render_update.cpp
+		src/app/render/vk_helper.cpp
+		src/app/render/api/RenderAPI.cpp
+		src/app/render/api/chunk_mesh.cpp
+		src/app/render/api/item_mesh.cpp
+		src/app/render/api/instance_data.cpp
+		src/app/render/api/mesh.cpp
+		src/app/render/api/draw_buffer.cpp
+		src/app/render/api/render_loop.cpp
+		src/app/render/api/render_update.cpp
+		src/app/render/helper/VulkanMemoryAllocator.cpp
+		src/app/render/helper/Image.cpp
+		src/app/render/helper/Command.cpp
+		src/app/render/helper/Descriptor.cpp
+		src/app/render/helper/Swapchain.cpp
+		src/app/render/helper/TextRenderer.cpp
+		src/app/render/helper/Buffer.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -152,7 +152,9 @@ target_include_directories(${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/task_manager
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render/api
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render/helper
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
@@ -227,22 +229,22 @@ target_sources(server
 		src/app/threads/task_manager/ExecutorWorker.cpp
 		src/app/threads/task_manager/ExecutorAccessor.cpp
 		src/app/threads/task_manager/Executor.cpp
-		src/app/vulkan/VulkanAPI.cpp
-		src/app/vulkan/VulkanMemoryAllocator.cpp
-		src/app/vulkan/chunk_mesh.cpp
-		src/app/vulkan/vk_helper.cpp
-		src/app/vulkan/Image.cpp
-		src/app/vulkan/Command.cpp
-		src/app/vulkan/Descriptor.cpp
-		src/app/vulkan/Swapchain.cpp
-		src/app/vulkan/TextRenderer.cpp
-		src/app/vulkan/Buffer.cpp
-		src/app/vulkan/item_mesh.cpp
-		src/app/vulkan/instance_data.cpp
-		src/app/vulkan/mesh.cpp
-		src/app/vulkan/draw_buffer.cpp
-		src/app/vulkan/render_loop.cpp
-		src/app/vulkan/render_update.cpp
+		src/app/render/vk_helper.cpp
+		src/app/render/api/RenderAPI.cpp
+		src/app/render/api/chunk_mesh.cpp
+		src/app/render/api/item_mesh.cpp
+		src/app/render/api/instance_data.cpp
+		src/app/render/api/mesh.cpp
+		src/app/render/api/draw_buffer.cpp
+		src/app/render/api/render_loop.cpp
+		src/app/render/api/render_update.cpp
+		src/app/render/helper/VulkanMemoryAllocator.cpp
+		src/app/render/helper/Image.cpp
+		src/app/render/helper/Command.cpp
+		src/app/render/helper/Descriptor.cpp
+		src/app/render/helper/Swapchain.cpp
+		src/app/render/helper/TextRenderer.cpp
+		src/app/render/helper/Buffer.cpp
 		src/app/window/window.cpp
 		src/app/window/input.cpp
 		src/app/world/Chunk.cpp
@@ -316,7 +318,9 @@ target_include_directories(server
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/block_update
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/threads/task_manager
-		${CMAKE_CURRENT_SOURCE_DIR}/src/app/vulkan
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render/api
+		${CMAKE_CURRENT_SOURCE_DIR}/src/app/render/helper
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/window
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/perlin
 		${CMAKE_CURRENT_SOURCE_DIR}/src/app/world
@@ -357,17 +361,22 @@ target_link_libraries(server glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi Tracy:
 # 		src/app/scenes/Camera.cpp
 # 		src/app/threads/Status.cpp
 # 		src/app/threads/render/RenderThread.cpp
-# 		src/app/vulkan/VulkanAPI.cpp
-# 		src/app/vulkan/VulkanMemoryAllocator.cpp
-# 		src/app/vulkan/chunk_mesh.cpp
-# 		src/app/vulkan/vk_helper.cpp
-# 		src/app/vulkan/Image.cpp
-# 		src/app/vulkan/Command.cpp
-# 		src/app/vulkan/Descriptor.cpp
-# 		src/app/vulkan/Swapchain.cpp
-# 		src/app/vulkan/TextRenderer.cpp
-# 		src/app/vulkan/Buffer.cpp
-# 		src/app/vulkan/item_mesh.cpp
+# 		src/app/render/vk_helper.cpp
+# 		src/app/render/api/RenderAPI.cpp
+# 		src/app/render/api/VulkanMemoryAllocator.cpp
+# 		src/app/render/api/chunk_mesh.cpp
+# 		src/app/render/api/item_mesh.cpp
+# 		src/app/render/api/instance_data.cpp
+# 		src/app/render/api/mesh.cpp
+# 		src/app/render/api/draw_buffer.cpp
+# 		src/app/render/api/render_loop.cpp
+# 		src/app/render/api/render_update.cpp
+# 		src/app/render/helper/Image.cpp
+# 		src/app/render/helper/Command.cpp
+# 		src/app/render/helper/Descriptor.cpp
+# 		src/app/render/helper/Swapchain.cpp
+# 		src/app/render/helper/TextRenderer.cpp
+# 		src/app/render/helper/Buffer.cpp
 # 		src/app/window/window.cpp
 # 		src/app/window/input.cpp
 # 		src/app/world/Chunk.cpp

@@ -1,9 +1,9 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "DebugGui.hpp"
 
 #include "Tracy.hpp"
 
-VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
+RenderAPI::InstanceId RenderAPI::addChunkToScene(
 	const ChunkMeshCreateInfo & mesh_info
 )
 {
@@ -30,7 +30,7 @@ VulkanAPI::InstanceId VulkanAPI::addChunkToScene(
 	return instance_id;
 }
 
-void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
+void RenderAPI::removeChunkFromScene(const uint64_t chunk_id)
 {
 	std::lock_guard lock(m_render_data_update_mutex);
 
@@ -45,7 +45,7 @@ void VulkanAPI::removeChunkFromScene(const uint64_t chunk_id)
 	_deleteUnusedChunks();
 }
 
-void VulkanAPI::_setupChunksRessources()
+void RenderAPI::_setupChunksRessources()
 {
 	for (uint32_t i = 1; i < instance_data_max_count; i++)
 	{
@@ -55,11 +55,11 @@ void VulkanAPI::_setupChunksRessources()
 	_resizeChunksIndicesBuffer(100000 * sizeof(uint32_t));
 }
 
-void VulkanAPI::_resizeChunksIndicesBuffer(const VkDeviceSize & size)
+void RenderAPI::_resizeChunksIndicesBuffer(const VkDeviceSize & size)
 {
 	// need to wait because m_chunks_indices_buffer is used by in flight frame
 	vkDeviceWaitIdle(device);
-	
+
 	Buffer::CreateInfo buffer_info = {
 		.size = m_chunks_indices_buffer.size() + size,
 		.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT
@@ -86,7 +86,7 @@ void VulkanAPI::_resizeChunksIndicesBuffer(const VkDeviceSize & size)
 	m_chunks_indices_buffer_memory_range.add(size);
 }
 
-void VulkanAPI::_deleteUnusedChunks()
+void RenderAPI::_deleteUnusedChunks()
 {
 	ZoneScoped;
 

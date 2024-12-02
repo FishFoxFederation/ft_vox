@@ -1,4 +1,4 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "logger.hpp"
 #include "ft_format.hpp"
 
@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <unistd.h>
 
-void VulkanAPI::_createRenderFrameRessources()
+void RenderAPI::_createRenderFrameRessources()
 {
 	m_shadow_visible_chunks.resize(shadow_maps_count);
 
@@ -52,7 +52,7 @@ void VulkanAPI::_createRenderFrameRessources()
 	// Fin du tuto pour Augustus
 }
 
-void VulkanAPI::renderFrame()
+void RenderAPI::renderFrame()
 {
 	ZoneScoped;
 	std::string current_frame_str = "Frame " + std::to_string(m_current_frame);
@@ -226,7 +226,7 @@ void VulkanAPI::renderFrame()
 	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
 }
 
-void VulkanAPI::_prepareFrame()
+void RenderAPI::_prepareFrame()
 {
 	ZoneScoped;
 
@@ -309,7 +309,7 @@ void VulkanAPI::_prepareFrame()
 	_updateDebugText();
 }
 
-void VulkanAPI::_updateTime()
+void RenderAPI::_updateTime()
 {
 	ZoneScoped;
 
@@ -318,7 +318,7 @@ void VulkanAPI::_updateTime()
 	m_last_frame_time = m_current_time;
 }
 
-void VulkanAPI::_updateDebugText()
+void RenderAPI::_updateDebugText()
 {
 	m_debug_text = ft_format(
 		"fps: %d\n"
@@ -358,7 +358,7 @@ void VulkanAPI::_updateDebugText()
 	};
 }
 
-void VulkanAPI::_updateVisibleChunks()
+void RenderAPI::_updateVisibleChunks()
 {
 	ZoneScoped;
 
@@ -388,7 +388,7 @@ void VulkanAPI::_updateVisibleChunks()
 	}
 }
 
-void VulkanAPI::_shadowPass()
+void RenderAPI::_shadowPass()
 {
 	ZoneScoped;
 
@@ -477,7 +477,7 @@ void VulkanAPI::_shadowPass()
 	);
 }
 
-void VulkanAPI::_lightingPass()
+void RenderAPI::_lightingPass()
 {
 	ZoneScoped;
 
@@ -985,7 +985,7 @@ void VulkanAPI::_lightingPass()
 	);
 }
 
-void VulkanAPI::_drawPlayerBodyPart(
+void RenderAPI::_drawPlayerBodyPart(
 	const uint64_t mesh_id,
 	const glm::mat4 & model
 )
@@ -1003,7 +1003,7 @@ void VulkanAPI::_drawPlayerBodyPart(
 	);
 }
 
-void VulkanAPI::_copyToSwapchain()
+void RenderAPI::_copyToSwapchain()
 {
 	ZoneScoped;
 
@@ -1097,7 +1097,7 @@ void VulkanAPI::_copyToSwapchain()
 	);
 }
 
-void VulkanAPI::_drawDebugGui()
+void RenderAPI::_drawDebugGui()
 {
 	ZoneScoped;
 
@@ -1210,9 +1210,9 @@ void VulkanAPI::_drawDebugGui()
 	);
 }
 
-void VulkanAPI::_updateImGui()
+void RenderAPI::_updateImGui()
 {
-	
+
 #define FLOAT_SLIDER(name, min, max) float name ## _f = name; ImGui::SliderFloat(#name, &name ## _f, min, max); name = name ## _f;
 #define INT_SLIDER(name, min, max) int name ## _i = name; ImGui::SliderInt(#name, &name ## _i, min, max); name = name ## _i;
 
@@ -1360,7 +1360,7 @@ void VulkanAPI::_updateImGui()
 	ImGui::End();
 }
 
-bool VulkanAPI::_isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const
+bool RenderAPI::_isInsideFrustum_ndcSpace(const glm::mat4 & model, const glm::vec3 & size) const
 {
 	const std::vector<glm::vec4> corners = {
 		glm::vec4(0,      0,      0,      1),
@@ -1470,7 +1470,7 @@ static std::array<glm::vec4, 6> getFrustumPlnes(const glm::mat4 & VP)
 	return planes;
 }
 
-bool VulkanAPI::_isInsideFrustum_planes(
+bool RenderAPI::_isInsideFrustum_planes(
 	const glm::mat4 & view_proj,
 	const glm::mat4 & model,
 	const glm::vec3 & size
@@ -1558,7 +1558,7 @@ static std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4 proj, 
     return frustum_corners;
 }
 
-std::vector<glm::mat4> VulkanAPI::_getCSMLightViewProjMatrices(
+std::vector<glm::mat4> RenderAPI::_getCSMLightViewProjMatrices(
 	const glm::vec3 & light_dir,
 	const std::vector<float> & split,
 	const float blend_distance,

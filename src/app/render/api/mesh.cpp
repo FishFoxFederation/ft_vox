@@ -1,11 +1,11 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "DebugGui.hpp"
 
 #include "Tracy.hpp"
 
 #include <cstring>
 
-uint64_t VulkanAPI::storeMesh(
+uint64_t RenderAPI::storeMesh(
 	const void * vertices,
 	const uint32_t vertex_count,
 	const uint32_t vertex_size,
@@ -89,19 +89,19 @@ uint64_t VulkanAPI::storeMesh(
 	return mesh_id;
 }
 
-void VulkanAPI::destroyMesh(const uint64_t & mesh_id)
+void RenderAPI::destroyMesh(const uint64_t & mesh_id)
 {
 	std::lock_guard lock(global_mutex);
 	_destroyMesh(mesh_id);
 }
 
-void VulkanAPI::_destroyMesh(const uint64_t & mesh_id)
+void RenderAPI::_destroyMesh(const uint64_t & mesh_id)
 {
 	mesh_ids_to_destroy.push_back(mesh_id);
 	_destroyMeshes();
 }
 
-void VulkanAPI::_destroyMeshes()
+void RenderAPI::_destroyMeshes()
 {
 	ZoneScoped;
 	std::lock_guard lock(mesh_map_mutex);

@@ -284,20 +284,20 @@ struct InstanceData
 // forward declaration
 struct BlockVertex;
 
-class VulkanAPI
+class RenderAPI
 {
 
 public:
 
 	typedef uint32_t InstanceId;
 
-	VulkanAPI(GLFWwindow * window);
-	~VulkanAPI();
+	RenderAPI(GLFWwindow * window);
+	~RenderAPI();
 
-	VulkanAPI(const VulkanAPI &) = delete;
-	VulkanAPI(VulkanAPI &&) = delete;
-	VulkanAPI & operator=(const VulkanAPI &) = delete;
-	VulkanAPI & operator=(VulkanAPI &&) = delete;
+	RenderAPI(const RenderAPI &) = delete;
+	RenderAPI(RenderAPI &&) = delete;
+	RenderAPI & operator=(const RenderAPI &) = delete;
+	RenderAPI & operator=(RenderAPI &&) = delete;
 
 	void renderFrame();
 
@@ -317,9 +317,6 @@ public:
 	void setToolbarItem(const int index, const ItemInfo::Type type);
 	void setToolbarCursor(const int index);
 
-	IdList<uint64_t, MeshRenderData> entity_mesh_list;
-
-
 	struct ChunkMeshCreateInfo
 	{
 		std::vector<BlockVertex> block_vertex;
@@ -330,9 +327,7 @@ public:
 
 		glm::dmat4 model;
 	};
-	InstanceId addChunkToScene(
-		const ChunkMeshCreateInfo & mesh_info
-	);
+	InstanceId addChunkToScene(const ChunkMeshCreateInfo & mesh_info);
 	void removeChunkFromScene(const uint64_t chunk_id);
 
 	uint64_t storeMesh(
@@ -494,7 +489,7 @@ private:
 
 	//###########################################################################################################
 	//																											#
-	//													Shadow maps												#
+	//												Shadow maps													#
 	//																											#
 	//###########################################################################################################
 
