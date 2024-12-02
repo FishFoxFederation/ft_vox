@@ -28,6 +28,10 @@ namespace ecs
 		}
 
 		~ViewIterator(){};
+		ViewIterator(const ViewIterator & other) = default;
+		ViewIterator(ViewIterator && other) = default;
+		ViewIterator & operator=(const ViewIterator & other) = default;
+		ViewIterator & operator=(ViewIterator && other) = default;
 
 		ViewIterator &	operator++()
 		{
@@ -74,7 +78,6 @@ namespace ecs
 		
 	private:
 		
-
 		bool all_of(EntityType entity)
 		{
 			for (auto & set : m_sparseSets)
@@ -87,16 +90,14 @@ namespace ecs
 
 		void seek_next()
 		{
-			for(; m_lead_iterator != m_leadSet->end() && !all_of(*m_lead_iterator); ++m_lead_iterator)
-			{
-			}
+			while(m_lead_iterator != m_leadSet->end() && !all_of(*m_lead_iterator))
+				++m_lead_iterator;
 		}
 
 		void seek_prev()
 		{
-			for(; m_lead_iterator != m_leadSet->begin() && !all_of(*m_lead_iterator); --m_lead_iterator)
-			{
-			}
+			while (m_lead_iterator != m_leadSet->begin() && !all_of(*m_lead_iterator))
+			 --m_lead_iterator;
 		}
 
 		SparseSetArray m_sparseSets;
@@ -125,22 +126,34 @@ namespace ecs
 			};
 			(func.template operator()<ComponentTypes>(), ...);
 
-			size_t min = std::numeric_limits<size_t>::max();
-			for (size_t i = 0; i < m_sparseSets.size(); i++)
-			{
-				auto set = m_sparseSets[i];
-				if (set->size() < min)
-				{
-					min = set->size();
-					m_lead = i;
-				}
-			}
+			set_lead();
 		}
 
 		View(){};
-
-		~View()
-		{			
+		~View(){};
+		View(const View & other)
+		{
+			m_sparseSets = other.m_sparseSets;
+			set_lead();
+		}
+		View(View && other)
+		{
+			m_sparseSets = std::move(other.m_sparseSets);
+			other.m_lead = 0;
+			set_lead();
+		}
+		View & operator=(const View & other)
+		{
+			m_sparseSets = other.m_sparseSets;
+			set_lead();
+			return *this;
+		}
+		View & operator=(View && other)
+		{
+			m_sparseSets = std::move(other.m_sparseSets);
+			other.m_lead = 0;
+			set_lead();
+			return *this;
 		}
 
 		//begin and end
@@ -157,6 +170,19 @@ namespace ecs
 	private:
 		entitySetArray m_sparseSets;
 		size_t m_lead = 0;
-	};
 
+		void set_lead()
+		{
+			size_t min = std::numeric_limits<size_t>::max();
+			for (size_t i = 0; i < m_sparseSets.size(); i++)
+			{
+				auto set = m_sparseSets[i];
+				if (set->size() < min)
+				{
+					min = set->size();
+					m_lead = i;
+				}
+			}
+		}
+	};
 }
