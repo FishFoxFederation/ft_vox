@@ -3,7 +3,7 @@
 #include "define.hpp"
 #include "window.hpp"
 #include "Settings.hpp"
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "ClientWorld.hpp"
 #include "Client.hpp"
 // #include "ClientPacketHandler.hpp"
@@ -22,7 +22,7 @@ public:
 		const Settings & settings,
 		Window & window,
 		ClientWorld & world,
-		VulkanAPI & vulkan_api,
+		RenderAPI & render_api,
 		Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
 		std::chrono::nanoseconds start_time
@@ -39,7 +39,7 @@ private:
 	const Settings & m_settings;
 	Window & m_window;
 	ClientWorld & m_world;
-	VulkanAPI & m_vulkan_api;
+	RenderAPI & m_render_api;
 	Client & m_client;
 	// ClientPacketHandler m_packet_handler;
 	Sound::Engine & m_sound_engine;

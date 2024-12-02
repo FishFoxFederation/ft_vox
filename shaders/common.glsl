@@ -1,6 +1,6 @@
 // Commun file for all shaders
 
-#include "../src/app/vulkan/ShaderCommon.hpp"
+#include "../src/app/render/ShaderCommon.hpp"
 
 #extension GL_EXT_buffer_reference2 : require
 #extension GL_ARB_gpu_shader_int64 : enable

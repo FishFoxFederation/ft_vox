@@ -8,7 +8,7 @@
 #include "WorldGenerator.hpp"
 #include "logger.hpp"
 #include "CreateMeshData.hpp"
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
 #include "SoundEngine.hpp"
@@ -34,7 +34,7 @@ public:
 	};
 
 	ClientWorld(
-		VulkanAPI & vulkan_api,
+		RenderAPI & render_api,
 		Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
 		Client & client,
@@ -55,7 +55,7 @@ public:
 	void	setRenderDistance(const int & render_distance);
 	int		getServerLoadDistance() const;
 	void	setServerLoadDistance(const int & server_load_distance);
-	
+
 	std::pair<glm::dvec3, glm::dvec3> calculatePlayerMovement(
 		const uint64_t player_id,
 		const int8_t forward,
@@ -135,7 +135,7 @@ public:
 	uint64_t m_my_player_id;
 private:
 
-	VulkanAPI &								m_vulkan_api;
+	RenderAPI &								m_render_api;
 	Sound::Engine &							m_sound_engine;
 	Event::Manager &						m_event_manager;
 	Client &								m_client;

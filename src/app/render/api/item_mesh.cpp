@@ -1,4 +1,4 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "Item.hpp"
 #include "logger.hpp"
 
@@ -122,7 +122,7 @@ static void setTextureIndices(
 	}
 }
 
-void VulkanAPI::_createItemMeshes()
+void RenderAPI::_createItemMeshes()
 {
 	for (size_t i = 0; i < g_items_info.count(); i++)
 	{

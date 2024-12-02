@@ -2,7 +2,7 @@
 #include "DebugGui.hpp"
 
 ClientWorld::ClientWorld(
-	VulkanAPI & vulkan_api,
+	RenderAPI & render_api,
 	Sound::Engine & sound_engine,
 	Event::Manager & event_manager,
 	Client & client,
@@ -10,7 +10,7 @@ ClientWorld::ClientWorld(
 )
 :
 	World(),
-	m_vulkan_api(vulkan_api),
+	m_render_api(render_api),
 	m_sound_engine(sound_engine),
 	m_event_manager(event_manager),
 	m_client(client)
@@ -103,7 +103,7 @@ void ClientWorld::unloadChunk(const glm::ivec3 & chunkPos3D)
 
 		mesh_scene_id = chunk->getMeshID();
 
-		m_vulkan_api.removeChunkFromScene(mesh_scene_id);
+		m_render_api.removeChunkFromScene(mesh_scene_id);
 
 		std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
 		DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
@@ -203,17 +203,17 @@ void ClientWorld::meshChunk(const glm::ivec2 & chunkPos2D)
 		mesh_data.create(); //CPU intensive task to create the mesh
 
 		//storing mesh in the GPU
-		VulkanAPI::ChunkMeshCreateInfo chunk_mesh_info = {
+		RenderAPI::ChunkMeshCreateInfo chunk_mesh_info = {
 			.block_vertex = std::move(mesh_data.vertices),
 			.block_index = std::move(mesh_data.indices),
 			.water_vertex = std::move(mesh_data.water_vertices),
 			.water_index = std::move(mesh_data.water_indices),
 			.model = Transform(glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3)).model()
 		};
-		VulkanAPI::InstanceId chunk_scene_id = m_vulkan_api.addChunkToScene(chunk_mesh_info);
+		RenderAPI::InstanceId chunk_scene_id = m_render_api.addChunkToScene(chunk_mesh_info);
 		chunk->setMeshID(chunk_scene_id);
 
-		m_vulkan_api.removeChunkFromScene(old_mesh_scene_id);
+		m_render_api.removeChunkFromScene(old_mesh_scene_id);
 
 		mesh_data.unlock();
 
@@ -378,7 +378,7 @@ void ClientWorld::applyPlayerMovement(const uint64_t & player_id, const glm::dve
 
 	DebugGui::player_position = player->transform.position;
 
-	m_vulkan_api.updatePlayer(player_id, [displacement](PlayerRenderData & data)
+	m_render_api.updatePlayer(player_id, [displacement](PlayerRenderData & data)
 	{
 		data.position += displacement;
 	});
@@ -394,7 +394,7 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 	// apply displacement
 	player->transform.position = position;
 
-	m_vulkan_api.updatePlayer(player_id, [position](PlayerRenderData & data)
+	m_render_api.updatePlayer(player_id, [position](PlayerRenderData & data)
 	{
 		data.position = position;
 	});
@@ -404,7 +404,7 @@ void ClientWorld::updatePlayerPosition(const uint64_t & player_id, const glm::dv
 		DebugGui::player_position = player->transform.position;
 
 		// update camera
-		m_vulkan_api.setCamera(player->camera());
+		m_render_api.setCamera(player->camera());
 	}
 
 	// play footstep sound
@@ -595,7 +595,7 @@ std::pair<glm::dvec3, glm::dvec3> ClientWorld::calculatePlayerMovement(
 	DebugGui::player_velocity = glm::length(player->velocity);
 
 	// update player walking animation
-	m_vulkan_api.updatePlayer(player_id, [move](PlayerRenderData & data)
+	m_render_api.updatePlayer(player_id, [move](PlayerRenderData & data)
 	{
 		if (glm::length(move) > 0.0)
 		{
@@ -627,7 +627,7 @@ void ClientWorld::updatePlayerTargetBlock(
 
 	std::optional<glm::vec3> target_block = raycast.hit && !raycast.inside_block ? std::make_optional(raycast.block_position) : std::nullopt;
 
-	m_vulkan_api.setTargetBlock(target_block);
+	m_render_api.setTargetBlock(target_block);
 
 	player->targeted_block = raycast;
 
@@ -670,7 +670,7 @@ std::pair<bool, glm::vec3> ClientWorld::playerAttack(
 		return {false, glm::vec3(0.0)};
 	player->startAttack();
 
-	m_vulkan_api.updatePlayer(player_id, [](PlayerRenderData & data)
+	m_render_api.updatePlayer(player_id, [](PlayerRenderData & data)
 	{
 		if (data.attack_animation.isActive() == false)
 		{
@@ -711,7 +711,7 @@ ClientWorld::PlayerUseResult ClientWorld::playerUse(
 
 	ItemInfo::Type item_type = player->toolbar_items.at(player->toolbar_cursor);
 
-	m_vulkan_api.updatePlayer(player_id, [](PlayerRenderData & data)
+	m_render_api.updatePlayer(player_id, [](PlayerRenderData & data)
 	{
 		if (data.attack_animation.isActive() == false)
 		{
@@ -753,7 +753,7 @@ void ClientWorld::updatePlayerCamera(
 	// copy pitch and yaw because the update is async and we don't want to access player without locking it's mutex
 	double pitch = player->pitch;
 	double yaw = player->yaw;
-	m_vulkan_api.updatePlayer(player_id, [pitch, yaw](PlayerRenderData & data)
+	m_render_api.updatePlayer(player_id, [pitch, yaw](PlayerRenderData & data)
 	{
 		data.pitch = pitch;
 		data.yaw = yaw;
@@ -771,11 +771,11 @@ void ClientWorld::changePlayerViewMode(
 	{
 	case Player::ViewMode::FIRST_PERSON:
 		player->view_mode = Player::ViewMode::THIRD_PERSON_BACK;
-		m_vulkan_api.updatePlayer(player_id, [](PlayerRenderData & data) { data.visible = true; });
+		m_render_api.updatePlayer(player_id, [](PlayerRenderData & data) { data.visible = true; });
 		break;
 	case Player::ViewMode::THIRD_PERSON_BACK:
 		player->view_mode = Player::ViewMode::FIRST_PERSON;
-		m_vulkan_api.updatePlayer(player_id, [](PlayerRenderData & data) { data.visible = false; });
+		m_render_api.updatePlayer(player_id, [](PlayerRenderData & data) { data.visible = false; });
 		break;
 	}
 }
@@ -789,7 +789,7 @@ void ClientWorld::manageScroll(
 	std::lock_guard lock(player->mutex);
 
 	player->toolbar_cursor = (player->toolbar_cursor - static_cast<int>(y_offset) + 9) % 9;
-	m_vulkan_api.setToolbarCursor(player->toolbar_cursor);
+	m_render_api.setToolbarCursor(player->toolbar_cursor);
 }
 
 void ClientWorld::updatePlayer(
@@ -811,10 +811,10 @@ void ClientWorld::createMob()
 	uint64_t mob_id = m_mob_id++;
 	m_mobs.insert(std::make_pair(mob_id, mob));
 
-	m_vulkan_api.addEntity(
+	m_render_api.addEntity(
 		mob_id,
 		{
-			m_vulkan_api.getCubeMeshId(),
+			m_render_api.getCubeMeshId(),
 			Transform(
 				mob->transform.position + mob->hitbox.position,
 				glm::vec3(0.0f),
@@ -950,7 +950,7 @@ void ClientWorld::updateMobs(
 			glm::vec3(0.0f),
 			mob->hitbox.size
 		).model();
-		m_vulkan_api.updateEntity(id, [model](MeshRenderData & data) {
+		m_render_api.updateEntity(id, [model](MeshRenderData & data) {
 			data.model = model;
 		});
 	}
@@ -1120,10 +1120,10 @@ void ClientWorld::addPlayer(const uint64_t player_id, const glm::dvec3 & positio
 		.position = position,
 		.visible = (player_id != m_my_player_id)
 	};
-	m_vulkan_api.addPlayer(player_id, render_data);
+	m_render_api.addPlayer(player_id, render_data);
 	for (int i = 0; i < 9; i++)
 	{
-		m_vulkan_api.setToolbarItem(i, player->toolbar_items[i]);
+		m_render_api.setToolbarItem(i, player->toolbar_items[i]);
 	}
 
 	m_players.insert(std::make_pair(player_id, player));
@@ -1135,7 +1135,7 @@ void ClientWorld::removePlayer(const uint64_t player_id)
 	std::lock_guard lock(player->mutex);
 
 	m_players.erase(player_id);
-	m_vulkan_api.removePlayer(player_id);
+	m_render_api.removePlayer(player_id);
 }
 
 void ClientWorld::modifyBlock(const glm::vec3 & position, const BlockInfo::Type & block_id)

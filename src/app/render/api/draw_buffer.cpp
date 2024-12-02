@@ -1,6 +1,6 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 
-void VulkanAPI::_createDrawBuffer()
+void RenderAPI::_createDrawBuffer()
 {
 	m_max_draw_count = 10000;
 
@@ -27,7 +27,7 @@ void VulkanAPI::_createDrawBuffer()
 	}
 }
 
-void VulkanAPI::_destroyDrawBuffer()
+void RenderAPI::_destroyDrawBuffer()
 {
 	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{

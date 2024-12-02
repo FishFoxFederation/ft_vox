@@ -1,6 +1,6 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 
-void VulkanAPI::_createInstanceData()
+void RenderAPI::_createInstanceData()
 {
 	instance_data_size = sizeof(InstanceData);
 	instance_data_max_count = 10000;
@@ -18,7 +18,7 @@ void VulkanAPI::_createInstanceData()
 	}
 }
 
-void VulkanAPI::_destroyInstanceData()
+void RenderAPI::_destroyInstanceData()
 {
 	for (int i = 0; i < m_max_frames_in_flight; ++i)
 	{
@@ -26,7 +26,7 @@ void VulkanAPI::_destroyInstanceData()
 	}
 }
 
-void VulkanAPI::_updateInstancesData()
+void RenderAPI::_updateInstancesData()
 {
 	{
 		InstanceData * data = static_cast<InstanceData *>(instance_data_buffers[m_current_frame].mappedMemory());

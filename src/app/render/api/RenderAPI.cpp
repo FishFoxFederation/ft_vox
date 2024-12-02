@@ -1,4 +1,4 @@
-#include "VulkanAPI.hpp"
+#include "RenderAPI.hpp"
 #include "logger.hpp"
 #include "Block.hpp"
 #include "Model.hpp"
@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <map>
 
-VulkanAPI::VulkanAPI(GLFWwindow * window):
+RenderAPI::RenderAPI(GLFWwindow * window):
 	window(window),
 	shadow_map_size(4096)
 {
@@ -67,10 +67,10 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 
 	_createRenderFrameRessources();
 
-	LOG_INFO("VulkanAPI initialized");
+	LOG_INFO("RenderAPI initialized");
 }
 
-VulkanAPI::~VulkanAPI()
+RenderAPI::~RenderAPI()
 {
 	ZoneScoped;
 
@@ -201,7 +201,7 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyInstance(instance, nullptr);
 }
 
-void VulkanAPI::_createInstance()
+void RenderAPI::_createInstance()
 {
 	#ifndef NDEBUG
 		if (!_checkValidationLayerSupport())
@@ -251,7 +251,7 @@ void VulkanAPI::_createInstance()
 	);
 }
 
-bool VulkanAPI::_checkValidationLayerSupport()
+bool RenderAPI::_checkValidationLayerSupport()
 {
 	uint32_t layer_count;
 	vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
@@ -280,7 +280,7 @@ bool VulkanAPI::_checkValidationLayerSupport()
 	return true;
 }
 
-std::vector<const char *> VulkanAPI::_getRequiredExtensions()
+std::vector<const char *> RenderAPI::_getRequiredExtensions()
 {
 	uint32_t glfw_extension_count = 0;
 	const char** glfw_extensions;
@@ -295,7 +295,7 @@ std::vector<const char *> VulkanAPI::_getRequiredExtensions()
 	return extensions;
 }
 
-void VulkanAPI::_loadVulkanFunctions()
+void RenderAPI::_loadVulkanFunctions()
 {
 #define VK_LOAD_FUNCTION(name) name = reinterpret_cast<PFN_##name>(vkGetInstanceProcAddr(instance, #name)); \
 	if (name == nullptr) throw std::runtime_error("Failed to load Vulkan function: " #name);
@@ -313,7 +313,7 @@ void VulkanAPI::_loadVulkanFunctions()
 #undef VK_LOAD_FUNCTION
 }
 
-void VulkanAPI::_setupDebugMessenger()
+void RenderAPI::_setupDebugMessenger()
 {
 	#ifndef NDEBUG
 		VkDebugUtilsMessengerCreateInfoEXT create_info;
@@ -326,7 +326,7 @@ void VulkanAPI::_setupDebugMessenger()
 	#endif
 }
 
-void VulkanAPI::_populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info)
+void RenderAPI::_populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT & create_info)
 {
 	create_info = {};
 	create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -340,7 +340,7 @@ void VulkanAPI::_populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInf
 	create_info.pfnUserCallback = debugCallback;
 }
 
-VKAPI_ATTR VkBool32 VKAPI_CALL VulkanAPI::debugCallback(
+VKAPI_ATTR VkBool32 VKAPI_CALL RenderAPI::debugCallback(
 	VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
 	VkDebugUtilsMessageTypeFlagsEXT message_type,
 	const VkDebugUtilsMessengerCallbackDataEXT * callback_data,
@@ -369,7 +369,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL VulkanAPI::debugCallback(
 	return VK_FALSE;
 }
 
-void VulkanAPI::_createSurface(GLFWwindow * window)
+void RenderAPI::_createSurface(GLFWwindow * window)
 {
 	if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
 	{
@@ -377,7 +377,7 @@ void VulkanAPI::_createSurface(GLFWwindow * window)
 	}
 }
 
-void VulkanAPI::_pickPhysicalDevice()
+void RenderAPI::_pickPhysicalDevice()
 {
 	uint32_t device_count = 0;
 	vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -415,7 +415,7 @@ void VulkanAPI::_pickPhysicalDevice()
 	LOG_INFO("device name: " << device_properties.deviceName);
 }
 
-bool VulkanAPI::_isDeviceSuitable(VkPhysicalDevice device)
+bool RenderAPI::_isDeviceSuitable(VkPhysicalDevice device)
 {
 	QueueFamilyIndices indices = _findQueueFamilies(device);
 
@@ -437,7 +437,7 @@ bool VulkanAPI::_isDeviceSuitable(VkPhysicalDevice device)
 		&& supported_features.samplerAnisotropy;
 }
 
-int VulkanAPI::_ratePhysicalDevice(VkPhysicalDevice device)
+int RenderAPI::_ratePhysicalDevice(VkPhysicalDevice device)
 {
 	if (!_isDeviceSuitable(device))
 	{
@@ -459,7 +459,7 @@ int VulkanAPI::_ratePhysicalDevice(VkPhysicalDevice device)
 	return score;
 }
 
-QueueFamilyIndices VulkanAPI::_findQueueFamilies(VkPhysicalDevice device)
+QueueFamilyIndices RenderAPI::_findQueueFamilies(VkPhysicalDevice device)
 {
 	QueueFamilyIndices indices;
 
@@ -507,7 +507,7 @@ QueueFamilyIndices VulkanAPI::_findQueueFamilies(VkPhysicalDevice device)
 	return indices;
 }
 
-bool VulkanAPI::_checkDeviceExtensionSupport(VkPhysicalDevice device)
+bool RenderAPI::_checkDeviceExtensionSupport(VkPhysicalDevice device)
 {
 	uint32_t extension_count;
 	vkEnumerateDeviceExtensionProperties(device, nullptr, &extension_count, nullptr);
@@ -529,7 +529,7 @@ bool VulkanAPI::_checkDeviceExtensionSupport(VkPhysicalDevice device)
 	return required_extensions.empty();
 }
 
-void VulkanAPI::_createLogicalDevice()
+void RenderAPI::_createLogicalDevice()
 {
 	std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
 	std::set<uint32_t> unique_queue_families = {
@@ -626,7 +626,7 @@ void VulkanAPI::_createLogicalDevice()
 	vkGetDeviceQueue(device, queue_family_indices.transfer_family.value(), queues_indices[queue_family_indices.transfer_family.value()]++, &transfer_queue);
 }
 
-void VulkanAPI::_createSwapChain(GLFWwindow * window)
+void RenderAPI::_createSwapChain(GLFWwindow * window)
 {
 	Swapchain::SupportDetails swapchain_support = Swapchain::querySwapChainSupport(physical_device, surface);
 
@@ -639,7 +639,7 @@ void VulkanAPI::_createSwapChain(GLFWwindow * window)
 	swapchain = Swapchain(device, physical_device, surface, create_info);
 }
 
-void VulkanAPI::_recreateSwapChain(GLFWwindow * window)
+void RenderAPI::_recreateSwapChain(GLFWwindow * window)
 {
 	int width = 0, height = 0;
 	glfwGetFramebufferSize(window, &width, &height);
@@ -663,7 +663,7 @@ void VulkanAPI::_recreateSwapChain(GLFWwindow * window)
 	_createFramebuffers();
 }
 
-VkSurfaceFormatKHR VulkanAPI::_chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
+VkSurfaceFormatKHR RenderAPI::_chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> & available_formats)
 {
 	for (const auto & available_format : available_formats)
 	{
@@ -676,7 +676,7 @@ VkSurfaceFormatKHR VulkanAPI::_chooseSwapSurfaceFormat(const std::vector<VkSurfa
 	return available_formats[0];
 }
 
-VkPresentModeKHR VulkanAPI::_chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes)
+VkPresentModeKHR RenderAPI::_chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & available_present_modes)
 {
 	for (const auto & available_present_mode : available_present_modes)
 	{
@@ -689,7 +689,7 @@ VkPresentModeKHR VulkanAPI::_chooseSwapPresentMode(const std::vector<VkPresentMo
 	return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-VkExtent2D VulkanAPI::_chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window)
+VkExtent2D RenderAPI::_chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabilities, GLFWwindow * window)
 {
 	if (capabilities.currentExtent.width != UINT32_MAX)
 	{
@@ -712,7 +712,7 @@ VkExtent2D VulkanAPI::_chooseSwapExtent(const VkSurfaceCapabilitiesKHR & capabil
 	}
 }
 
-void VulkanAPI::_createCommandPool()
+void RenderAPI::_createCommandPool()
 {
 	QueueFamilyIndices queue_family_indices = _findQueueFamilies(physical_device);
 
@@ -734,7 +734,7 @@ void VulkanAPI::_createCommandPool()
 	);
 }
 
-void VulkanAPI::_createCommandBuffer()
+void RenderAPI::_createCommandBuffer()
 {
 	draw_shadow_pass_command_buffers.resize(m_max_frames_in_flight);
 	draw_command_buffers.resize(m_max_frames_in_flight);
@@ -778,7 +778,7 @@ void VulkanAPI::_createCommandBuffer()
 	);
 }
 
-void VulkanAPI::_createSyncObjects()
+void RenderAPI::_createSyncObjects()
 {
 	image_available_semaphores.resize(m_max_frames_in_flight);
 	shadow_pass_finished_semaphores.resize(m_max_frames_in_flight);
@@ -833,7 +833,7 @@ void VulkanAPI::_createSyncObjects()
 	);
 }
 
-void VulkanAPI::_createColorAttachement()
+void RenderAPI::_createColorAttachement()
 {
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
@@ -858,7 +858,7 @@ void VulkanAPI::_createColorAttachement()
 	output_attachement = Image(device, physical_device, command_buffer, color_attachement_info);
 }
 
-void VulkanAPI::_createDepthAttachement()
+void RenderAPI::_createDepthAttachement()
 {
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
@@ -879,7 +879,7 @@ void VulkanAPI::_createDepthAttachement()
 	depth_attachement = Image(device, physical_device, command_buffer, depth_attachement_info);
 }
 
-void VulkanAPI::_createShadowMapRessources()
+void RenderAPI::_createShadowMapRessources()
 {
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
@@ -924,7 +924,7 @@ void VulkanAPI::_createShadowMapRessources()
 	}
 }
 
-void VulkanAPI::_destroyShadowMapRessources()
+void RenderAPI::_destroyShadowMapRessources()
 {
 	for (size_t i = 0; i < shadow_maps_count; i++)
 	{
@@ -933,7 +933,7 @@ void VulkanAPI::_destroyShadowMapRessources()
 	shadow_map_depth_attachement.clear();
 }
 
-void VulkanAPI::_createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count)
+void RenderAPI::_createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t count)
 {
 	ubo.buffers.resize(count);
 	ubo.memory.resize(count);
@@ -956,14 +956,14 @@ void VulkanAPI::_createUBO(UBO & ubo, const VkDeviceSize size, const uint32_t co
 	}
 }
 
-void VulkanAPI::_createUniformBuffers()
+void RenderAPI::_createUniformBuffers()
 {
 	_createUBO(camera_ubo, sizeof(ViewProjMatrices), m_max_frames_in_flight);
 	_createUBO(atmosphere_ubo, sizeof(AtmosphereParams), m_max_frames_in_flight);
 	_createUBO(light_mat_ubo, sizeof(ShadowMapLight) * shadow_maps_count, m_max_frames_in_flight);
 }
 
-void VulkanAPI::_createTextureArray(const std::vector<std::string> & file_paths, uint32_t size)
+void RenderAPI::_createTextureArray(const std::vector<std::string> & file_paths, uint32_t size)
 {
 	Image::CreateInfo image_info = {};
 	image_info.extent = {size, size};
@@ -982,7 +982,7 @@ void VulkanAPI::_createTextureArray(const std::vector<std::string> & file_paths,
 	block_textures = Image(device, physical_device, command_buffer, image_info);
 }
 
-void VulkanAPI::_createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size)
+void RenderAPI::_createCubeMap(const std::array<std::string, 6> & file_paths, uint32_t size)
 {
 	Image::CreateInfo _image_info = {};
 	_image_info.extent = {size, size};
@@ -1002,7 +1002,7 @@ void VulkanAPI::_createCubeMap(const std::array<std::string, 6> & file_paths, ui
 	skybox_cube_map = Image(device, physical_device, command_buffer, _image_info);
 }
 
-void VulkanAPI::_createHudImages(
+void RenderAPI::_createHudImages(
 	const std::string & file_path,
 	Image & image
 )
@@ -1021,7 +1021,7 @@ void VulkanAPI::_createHudImages(
 	image = Image(device, physical_device, command_buffer, image_info);
 }
 
-void VulkanAPI::_createTextureImage()
+void RenderAPI::_createTextureImage()
 {
 	{ // player skin
 		Image::CreateInfo image_info = {};
@@ -1092,7 +1092,7 @@ void VulkanAPI::_createTextureImage()
 }
 
 
-void VulkanAPI::_createHudDescriptors(
+void RenderAPI::_createHudDescriptors(
 	const Image & image,
 	Descriptor & descriptor
 )
@@ -1118,7 +1118,7 @@ void VulkanAPI::_createHudDescriptors(
 	);
 }
 
-void VulkanAPI::_createDescriptors()
+void RenderAPI::_createDescriptors()
 {
 	{ // Hud image descriptor
 		_createHudDescriptors(crosshair_image, crosshair_image_descriptor);
@@ -1128,7 +1128,7 @@ void VulkanAPI::_createDescriptors()
 	}
 }
 
-void VulkanAPI::_createGlobalDescriptor()
+void RenderAPI::_createGlobalDescriptor()
 {
 	// Camera binding
 	const VkDescriptorSetLayoutBinding camera_ubo_binding = {
@@ -1250,7 +1250,7 @@ void VulkanAPI::_createGlobalDescriptor()
 	_updateGlobalDescriptor();
 }
 
-void VulkanAPI::_updateGlobalDescriptor()
+void RenderAPI::_updateGlobalDescriptor()
 {
 	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
@@ -1380,7 +1380,7 @@ void VulkanAPI::_updateGlobalDescriptor()
 }
 
 
-void VulkanAPI::_createRenderPass()
+void RenderAPI::_createRenderPass()
 {
 	{ // lighting render pass
 		VkAttachmentDescription color_attachement_description = {};
@@ -1664,7 +1664,7 @@ void VulkanAPI::_createRenderPass()
 	}
 }
 
-void VulkanAPI::_createPipelines()
+void RenderAPI::_createPipelines()
 {
 	{ // chunk pipeline
 		Pipeline::CreateInfo pipeline_info = {};
@@ -1911,7 +1911,7 @@ void VulkanAPI::_createPipelines()
 	}
 }
 
-void VulkanAPI::_createFramebuffers()
+void RenderAPI::_createFramebuffers()
 {
 	lighting_framebuffers.resize(m_max_frames_in_flight);
 	shadow_framebuffers.resize(m_max_frames_in_flight * shadow_maps_count);
@@ -2030,7 +2030,7 @@ void VulkanAPI::_createFramebuffers()
 	}
 }
 
-void VulkanAPI::_destroyFramebuffers()
+void RenderAPI::_destroyFramebuffers()
 {
 	for (int i = 0; i < m_max_frames_in_flight; i++)
 	{
@@ -2045,7 +2045,7 @@ void VulkanAPI::_destroyFramebuffers()
 	vkDestroyFramebuffer(device, prerender_item_icon_framebuffer, nullptr);
 }
 
-void VulkanAPI::_createMeshes()
+void RenderAPI::_createMeshes()
 {
 	{ // load cube mesh
 		ObjLoader obj_loader("assets/models/cube.obj");
@@ -2128,17 +2128,17 @@ void VulkanAPI::_createMeshes()
 }
 
 
-void VulkanAPI::_setupTextRenderer()
+void RenderAPI::_setupTextRenderer()
 {
 	text_renderer.initialize();
 }
 
-void VulkanAPI::_destroyTextRenderer()
+void RenderAPI::_destroyTextRenderer()
 {
 	text_renderer.destroy();
 }
 
-void VulkanAPI::_writeTextToDebugImage(
+void RenderAPI::_writeTextToDebugImage(
 	VkCommandBuffer command_buffer,
 	const std::string & text,
 	const uint32_t x,
@@ -2195,7 +2195,7 @@ void VulkanAPI::_writeTextToDebugImage(
 }
 
 
-uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
+uint64_t RenderAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
 {
 	ImGuiTexture imgui_texture;
 
@@ -2276,7 +2276,7 @@ uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t heig
 	return id;
 }
 
-void VulkanAPI::_destroyImGuiTextures()
+void RenderAPI::_destroyImGuiTextures()
 {
 	std::lock_guard lock(imgui_textures_mutex);
 	for (auto & [id, texture] : imgui_textures)
@@ -2291,7 +2291,7 @@ void VulkanAPI::_destroyImGuiTextures()
 	}
 }
 
-void VulkanAPI::ImGuiTexturePutPixel(
+void RenderAPI::ImGuiTexturePutPixel(
 	const uint64_t texture_id,
 	const uint32_t x,
 	const uint32_t y,
@@ -2306,14 +2306,14 @@ void VulkanAPI::ImGuiTexturePutPixel(
 	imgui_texture.putPixel(x, y, r, g, b, a);
 }
 
-void VulkanAPI::ImGuiTextureClear(const uint64_t texture_id)
+void RenderAPI::ImGuiTextureClear(const uint64_t texture_id)
 {
 	std::lock_guard lock(imgui_textures_mutex);
 	ImGuiTexture & imgui_texture = imgui_textures.at(texture_id);
 	imgui_texture.clear();
 }
 
-void VulkanAPI::ImGuiTextureDraw(const uint64_t texture_id)
+void RenderAPI::ImGuiTextureDraw(const uint64_t texture_id)
 {
 	std::lock_guard lock(imgui_textures_mutex);
 	ImGuiTexture & imgui_texture = imgui_textures.at(texture_id);
@@ -2324,7 +2324,7 @@ void VulkanAPI::ImGuiTextureDraw(const uint64_t texture_id)
 }
 
 
-void VulkanAPI::_setupImgui()
+void RenderAPI::_setupImgui()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -2380,7 +2380,7 @@ void VulkanAPI::_setupImgui()
 	ImGui_ImplVulkan_Init(&init_info);
 }
 
-void VulkanAPI::_setupTracy()
+void RenderAPI::_setupTracy()
 {
 	{
 		const char * const ctx_name = "Draw context";
@@ -2397,13 +2397,13 @@ void VulkanAPI::_setupTracy()
 	}
 }
 
-void VulkanAPI::_destroyTracy()
+void RenderAPI::_destroyTracy()
 {
 	TracyVkDestroy(draw_ctx);
 }
 
 
-void VulkanAPI::_prerenderItemIconImages()
+void RenderAPI::_prerenderItemIconImages()
 {
 	SingleTimeCommand command_buffer(device, command_pool, graphics_queue);
 
@@ -2478,7 +2478,7 @@ void VulkanAPI::_prerenderItemIconImages()
 
 
 
-void VulkanAPI::_startFrame()
+void RenderAPI::_startFrame()
 {
 	// unlock in endFrame()
 	global_mutex.lock();
@@ -2516,7 +2516,7 @@ void VulkanAPI::_startFrame()
 	_updateInstancesData();
 }
 
-void VulkanAPI::_endFrame()
+void RenderAPI::_endFrame()
 {
 	m_current_frame = (m_current_frame + 1) % m_max_frames_in_flight;
 	global_mutex.unlock();
@@ -2524,7 +2524,7 @@ void VulkanAPI::_endFrame()
 
 
 
-std::pair<bool, Mesh> VulkanAPI::_getMesh(const uint64_t id)
+std::pair<bool, Mesh> RenderAPI::_getMesh(const uint64_t id)
 {
 	std::lock_guard lock(mesh_map_mutex);
 	if (!mesh_map.contains(id))
@@ -2547,7 +2547,7 @@ std::pair<bool, Mesh> VulkanAPI::_getMesh(const uint64_t id)
 	return std::make_pair(true, mesh);
 }
 
-void VulkanAPI::_drawMesh(
+void RenderAPI::_drawMesh(
 	VkCommandBuffer command_buffer,
 	const Pipeline & pipeline,
 	const uint64_t mesh_id,
@@ -2600,7 +2600,7 @@ void VulkanAPI::_drawMesh(
 	);
 }
 
-void VulkanAPI::_bindChunkIndexBuffer(VkCommandBuffer command_buffer)
+void RenderAPI::_bindChunkIndexBuffer(VkCommandBuffer command_buffer)
 {
 	vkCmdBindIndexBuffer(
 		command_buffer,
@@ -2610,11 +2610,11 @@ void VulkanAPI::_bindChunkIndexBuffer(VkCommandBuffer command_buffer)
 	);
 }
 
-void VulkanAPI::_drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id)
+void RenderAPI::_drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId & id)
 {
 	if (id == m_null_instance_id)
 		return;
-		
+
 	ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
 
 	chunk_info.used_by_frame[m_current_frame] = true;
@@ -2629,7 +2629,7 @@ void VulkanAPI::_drawChunkBlock(VkCommandBuffer command_buffer, const InstanceId
 	);
 }
 
-void VulkanAPI::_drawChunksBlock(
+void RenderAPI::_drawChunksBlock(
 	VkCommandBuffer command_buffer,
 	Buffer & indirect_buffer,
 	const std::vector<InstanceId> & ids
@@ -2641,7 +2641,7 @@ void VulkanAPI::_drawChunksBlock(
 		0,
 		VK_INDEX_TYPE_UINT32
 	);
-	
+
 	VkDrawIndexedIndirectCommand * draw_commands = static_cast<VkDrawIndexedIndirectCommand *>(indirect_buffer.mappedMemory());
 	uint32_t draw_count = 0;
 
@@ -2649,7 +2649,7 @@ void VulkanAPI::_drawChunksBlock(
 	{
 		if (id == m_null_instance_id)
 			return;
-			
+
 		ChunkMeshesInfo & chunk_info = m_chunks_in_scene[id];
 
 		chunk_info.used_by_frame[m_current_frame] = true;
@@ -2673,7 +2673,7 @@ void VulkanAPI::_drawChunksBlock(
 	);
 }
 
-void VulkanAPI::_drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id)
+void RenderAPI::_drawChunkWater(VkCommandBuffer command_buffer, const InstanceId & id)
 {
 	if (id == m_null_instance_id)
 		return;
@@ -2692,7 +2692,7 @@ void VulkanAPI::_drawChunkWater(VkCommandBuffer command_buffer, const InstanceId
 	);
 }
 
-void VulkanAPI::_drawHudImage(
+void RenderAPI::_drawHudImage(
 	const Descriptor & descriptor,
 	const VkViewport & viewport
 )
@@ -2723,7 +2723,7 @@ void VulkanAPI::_drawHudImage(
 	);
 }
 
-void VulkanAPI::_drawItemIcon(
+void RenderAPI::_drawItemIcon(
 	const VkViewport & viewport,
 	const uint32_t layer
 )
@@ -2752,7 +2752,7 @@ void VulkanAPI::_drawItemIcon(
 }
 
 
-VkFormat VulkanAPI::_findSupportedFormat(
+VkFormat RenderAPI::_findSupportedFormat(
 	const std::vector<VkFormat> & candidates,
 	VkImageTiling tiling,
 	VkFormatFeatureFlags features
@@ -2776,7 +2776,7 @@ VkFormat VulkanAPI::_findSupportedFormat(
 	throw std::runtime_error("Failed to find supported format");
 }
 
-void VulkanAPI::_createImage(
+void RenderAPI::_createImage(
 	uint32_t width,
 	uint32_t height,
 	uint32_t mip_levels,
@@ -2825,7 +2825,7 @@ void VulkanAPI::_createImage(
 	vkBindImageMemory(device, image, image_memory, 0);
 }
 
-void VulkanAPI::_createImageView(
+void RenderAPI::_createImageView(
 	VkImage image,
 	VkFormat format,
 	VkImageAspectFlags aspect_flags,
@@ -2849,7 +2849,7 @@ void VulkanAPI::_createImageView(
 	);
 }
 
-void VulkanAPI::_transitionImageLayout(
+void RenderAPI::_transitionImageLayout(
 	VkImage image,
 	VkImageLayout old_layout,
 	VkImageLayout new_layout,
@@ -2933,7 +2933,7 @@ void VulkanAPI::_transitionImageLayout(
 	vkFreeCommandBuffers(device, command_pool, 1, &command_buffer);
 }
 
-void VulkanAPI::_setImageLayout(
+void RenderAPI::_setImageLayout(
 	VkCommandBuffer command_buffer,
 	VkImage image,
 	VkImageLayout old_layout,
@@ -2970,7 +2970,7 @@ void VulkanAPI::_setImageLayout(
 	);
 }
 
-void VulkanAPI::_createBuffer(
+void RenderAPI::_createBuffer(
 	VkDeviceSize size,
 	VkBufferUsageFlags usage,
 	VkMemoryPropertyFlags properties,
@@ -3015,7 +3015,7 @@ void VulkanAPI::_createBuffer(
 	vkBindBufferMemory(device, buffer, buffer_memory, 0);
 }
 
-void VulkanAPI::_copyBuffer(
+void RenderAPI::_copyBuffer(
 	VkBuffer src_buffer,
 	VkBuffer dst_buffer,
 	const VkBufferCopy & copy_region
@@ -3057,7 +3057,7 @@ void VulkanAPI::_copyBuffer(
 	);
 }
 
-void VulkanAPI::_copyBufferToImage(
+void RenderAPI::_copyBufferToImage(
 	VkBuffer buffer,
 	VkImage image,
 	uint32_t width,
