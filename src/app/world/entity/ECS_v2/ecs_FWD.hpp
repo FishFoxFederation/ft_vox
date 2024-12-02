@@ -11,6 +11,6 @@ namespace ecs
 	template <ValidEntity EntityType, size_t pool_size>
 	class ViewIterator;
 
-	template <ValidEntity entityType = ecs::entity>
+	template <ValidEntity entityType>
 	class Manager;
 }
