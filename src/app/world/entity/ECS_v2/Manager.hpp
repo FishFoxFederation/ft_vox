@@ -142,7 +142,14 @@ namespace ecs
 		/*************************************************************\
 		 * 	COMPONENT-ENTITY RELATION
 		\*************************************************************/
-		//add component to entity
+		
+		/**
+		 * @brief add a component to an entity
+		 * 
+		 * @tparam ComponentType 
+		 * @param entity 
+		 * @param component 
+		 */
 		template <typename ComponentType>
 		void add(entityType entity, ComponentType component)
 		{
@@ -152,24 +159,43 @@ namespace ecs
 			set.insert(entity, component);
 		}
 
+		/**
+		 * @brief add multiple components to an entity
+		 * 
+		 * @tparam ComponentTypes 
+		 * @param entity 
+		 * @param components 
+		 */
 		template <typename... ComponentTypes>
 		void add(entityType entity, ComponentTypes... components)
 		{
 			(add<ComponentTypes>(entity, components), ...);
 		}
 
-		//remove component from entity
-		
-
+		/**
+		 * @brief remove any components from an entity
+		 * 
+		 * @tparam ComponentTypes 
+		 * @param entity 
+		 */
 		template <typename... ComponentTypes>
 		void remove(entityType entity)
 		{
 			(_remove_component<ComponentTypes>(entity), ...);
 		}
 
-		//get component from entity
+		/**
+		 * @brief get a component attached to an entity
+		 * 
+		 * @warning may throw if the entity does not have the component
+		 *  prefer using tryGetComponent
+		 * 
+		 * @tparam ComponentType 
+		 * @param entity 
+		 * @return ComponentType& 
+		 */
 		template <typename ComponentType>
-		ComponentType & get(entityType entity)
+		ComponentType & getComponent(entityType entity)
 		{
 			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
 			ComponentSetType & set = getSet<ComponentType>();
@@ -177,14 +203,32 @@ namespace ecs
 			return set.get(entity);
 		}
 
+		/**
+		 * @brief Get multiple components attached to an entity as a tuple
+		 * 
+		 * @warning may throw if the entity does not have one of the components, prefer using
+		 * tryGetComponents
+		 * 
+		 * you can use @code auto [comp1, comp2] = getComponents<Comp1, Comp2>(entity); @endcode  
+		 * @tparam ComponentTypes 
+		 * @param entity 
+		 * @return std::tuple<ComponentTypes &...> 
+		 */
 		template <typename... ComponentTypes>
-		std::tuple<ComponentTypes &...> getTuple(entityType entity)
+		std::tuple<ComponentTypes &...> getComponents(entityType entity)
 		{
-			return {get<ComponentTypes>(entity)...};
+			return {getComponent<ComponentTypes>(entity)...};
 		}
 
+		/**
+		 * @brief Try to get a component attached to an entity
+		 * 
+		 * @tparam ComponentType 
+		 * @param entity 
+		 * @return ComponentType *
+		 */
 		template <typename ComponentType>
-		ComponentType & tryGet(entityType entity)
+		ComponentType * tryGetComponent(entityType entity)
 		{
 			using ComponentSetType = ComponentStorage<entityType, ComponentType>;
 			ComponentSetType & set = getSet<ComponentType>();
@@ -192,15 +236,29 @@ namespace ecs
 			return set.tryGet(entity);
 		}
 
+		/**
+		 * @brief try to get multiple components attached to an entity as a tuple
+		 * 
+		 * @tparam ComponentTypes 
+		 * @param entity 
+		 * @return std::tuple<ComponentTypes *...> 
+		 */
 		template <typename... ComponentTypes>
-		std::tuple<ComponentTypes &...> tryGetTuple(entityType entity)
+		std::tuple<ComponentTypes *...> tryGetComponents(entityType entity)
 		{
-			return std::make_tuple(tryGet<ComponentTypes>(entity)...);
+			return std::make_tuple(tryGetComponent<ComponentTypes>(entity)...);
 		}
 
 		/*************************************************************\
 		 * 	VIEWS
 		\*************************************************************/
+		/**
+		 * @brief get an iterable view of entities that have all the components
+		 * listed in the tparams
+		 * 
+		 * @tparam ComponentTypes 
+		 * @return View<entityType, ComponentTypes...> 
+		 */
 		template <typename... ComponentTypes>
 		View<entityType, ComponentTypes...> view()
 		{
@@ -279,8 +337,6 @@ namespace ecs
 		 * 	ENTITY UTILS
 		\*************************************************/
 
-
-
 		/**
 		 * @brief Increase the version of the entity, see the entity doc for more info
 		 * 
@@ -310,6 +366,13 @@ namespace ecs
 			return *getSetPtr<ComponentType>();
 		}
 
+		/**
+		 * @brief Get a ptr to a component set, if it does not exist create it
+		 * used throughout the manager to garanty access to a component set
+		 * 
+		 * @tparam ComponentType 
+		 * @return std::shared_ptr<componentSet<ComponentType>> 
+		 */
 		template <typename ComponentType>
 		std::shared_ptr<componentSet<ComponentType>> getSetPtr()
 		{
@@ -325,6 +388,12 @@ namespace ecs
 			return std::static_pointer_cast<componentSetType>(it->second);
 		}
 
+		/**
+		 * @brief Remove a component from an entity
+		 * 
+		 * @tparam ComponentType 
+		 * @param entity 
+		 */
 		template <typename ComponentType>
 		void _remove_component(entityType entity)
 		{

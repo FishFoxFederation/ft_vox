@@ -121,7 +121,7 @@ void test_ecs_component()
 
 	ecs.add<Position>(entity, { 1.0f, 2.0f });
 
-	auto component = ecs.get<Position>(entity);
+	auto component = ecs.getComponent<Position>(entity);
 
 	if (component.x != 1.0f || component.y != 2.0f)
 		throw std::logic_error("Component values are not correct");
@@ -129,7 +129,7 @@ void test_ecs_component()
 	ecs.remove<Position>(entity);
 
 	try {
-		auto component = ecs.get<Position>(entity);
+		auto component = ecs.getComponent<Position>(entity);
 		component.x += 2.0f;
 	} catch (ecs::Manager<>::ComponentDoesNotExist & e) {
 		std::cout << e.what() << std::endl;
@@ -160,14 +160,14 @@ void test_ecs_view()
 	auto view = ecs.view<mesh, transform>();
 	for(auto entity : view)
 	{
-		auto [m , t] = ecs.getTuple<mesh, transform>(entity);
+		auto [m , t] = ecs.getComponents<mesh, transform>(entity);
 		std::cout << "Entity: " << entity << " Mesh: " << m.id << " Transform: " << t.x << ", " << t.y << std::endl;
 	}
 
 	auto view2 = ecs.view<Position, Velocity>();
 	for(auto entity : view2)
 	{
-		auto [pos, vel] = ecs.getTuple<Position, Velocity>(entity);
+		auto [pos, vel] = ecs.getComponents<Position, Velocity>(entity);
 		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << " Velocity: " << vel.x << ", " << vel.y << std::endl;
 	}
 }
@@ -198,14 +198,14 @@ void test_ecs_remove()
 	auto view = ecs.view<mesh, transform>();
 	for(auto entity : view)
 	{
-		auto [m , t] = ecs.getTuple<mesh, transform>(entity);
+		auto [m , t] = ecs.getComponents<mesh, transform>(entity);
 		std::cout << "Entity: " << entity << " Mesh: " << m.id << " Transform: " << t.x << ", " << t.y << std::endl;
 	}
 
 	auto view2 = ecs.view<Position, Velocity>();
 	for(auto entity : view2)
 	{
-		auto [pos, vel] = ecs.getTuple<Position, Velocity>(entity);
+		auto [pos, vel] = ecs.getComponents<Position, Velocity>(entity);
 		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << " Velocity: " << vel.x << ", " << vel.y << std::endl;
 	}
 
@@ -215,7 +215,7 @@ void test_ecs_remove()
 	view = ecs.view<mesh, transform>();
 	for(auto entity : view)
 	{
-		auto [m , t] = ecs.getTuple<mesh, transform>(entity);
+		auto [m , t] = ecs.getComponents<mesh, transform>(entity);
 		std::cout << "Entity: " << entity << " Mesh: " << m.id << " Transform: " << t.x << ", " << t.y << std::endl;
 	}
 
@@ -223,7 +223,7 @@ void test_ecs_remove()
 	view2 = ecs.view<Position, Velocity>();
 	for(auto entity : view2)
 	{
-		auto [pos, vel] = ecs.getTuple<Position, Velocity>(entity);
+		auto [pos, vel] = ecs.getComponents<Position, Velocity>(entity);
 		std::cout << "Entity: " << entity << " Position: " << pos.x << ", " << pos.y << " Velocity: " << vel.x << ", " << vel.y << std::endl;
 	}
 }
