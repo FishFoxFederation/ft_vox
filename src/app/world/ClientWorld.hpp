@@ -3,6 +3,7 @@
 
 #include "define.hpp"
 
+#include "ecs.hpp"
 #include "List.hpp"
 #include "Player.hpp"
 #include "WorldGenerator.hpp"
@@ -48,8 +49,8 @@ public:
 	ClientWorld & operator=(ClientWorld && other) = delete;
 
 
-	void updateEntities();
 	void updateBlock(glm::dvec3 position);
+	void updateSystems(const double delta_time_second);
 
 	int		getRenderDistance() const;
 	void	setRenderDistance(const int & render_distance);
@@ -98,6 +99,7 @@ public:
 	void updateMobs(
 		const double delta_time_second
 	);
+	void createBaseMob(const glm::dvec3 & position, uint64_t player_id);
 
 	void modifyBlock(
 		const glm::vec3 & position,
@@ -131,6 +133,7 @@ public:
 	 * NETWORK
 	\*****************/
 	void handlePacket(std::shared_ptr<IPacket> packet);
+
 
 	uint64_t m_my_player_id;
 private:
@@ -176,37 +179,6 @@ private:
 	/*************************************
 	 *  CHUNKS AND MAP
 	*************************************/
-
-	// /**
-	//  * @brief will load all chunks around the player
-	//  * @warning you must lock m_chunks_mutex before calling this function
-	//  *
-	//  * @param playerPosition
-	//  */
-	// void 	loadChunks(const glm::vec3 & playerPosition);
-
-	// /**
-	//  * @brief will load all chunks around the players
-	//  * @warning you must lock m_chunks_mutex before calling this function
-	//  *
-	//  * @param playerPositions
-	//  */
-	// void 	loadChunks(const std::vector<glm::vec3> & playerPositions);
-
-	// /**
-	//  * @brief will unload chunk that are too far from the player
-	//  * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
-	//  * @param playerPosition
-	//  */
-	// void	unloadChunks(const glm::vec3 & playerPosition);
-
-	// /**
-	//  * @brief will unload chunk that are too far from the players
-	//  * @warning you must lock m_chunks_mutex and unload_set_mutex before calling this function
-	//  *
-	//  * @param playerPositions
-	//  */
-	// void	unloadChunks(const std::vector<glm::vec3> & playerPositions);
 
 	void 	unloadChunk(const glm::ivec3 & chunkPosition);
 
@@ -271,4 +243,41 @@ private:
 	void handleChunkUnloadPacket(std::shared_ptr<ChunkUnloadPacket> packet);
 	void handleLoadDistancePacket(std::shared_ptr<LoadDistancePacket> packet);
 
+
+	/*************************************
+	 *  MOBS
+	 *************************************/
+	ecs::Manager<> m_ecs_manager;
+
+	void MovementSystem(const double delta_time_second);
+	void AISystem();
+	// void CollisionSystem();
+	void renderSystem();
+
+	/************* 
+	 * COMPONENTS
+	**************/
+	struct Position
+	{
+		glm::dvec3 p;
+	};
+
+	struct Velocity
+	{
+		glm::dvec3 v;
+	};
+
+	struct Acceleration
+	{
+		glm::dvec3 a;
+	};
+	
+	struct AITarget
+	{
+		uint64_t target_id;
+	};
+	struct Mesh
+	{
+		uint64_t id;
+	};
 };
