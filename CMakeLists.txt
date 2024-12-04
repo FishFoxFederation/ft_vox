@@ -91,6 +91,7 @@ target_sources(${PROJECT_NAME}
 		src/app/world/entity/Mob.cpp
 		src/app/world/ClientWorld.cpp
 		src/app/world/ClientWorldNetwork.cpp
+		src/app/world/ClientWorldECS.cpp
 		src/app/world/World.cpp
 		src/app/world/WorldGenerator.cpp
 		src/app/world/Block.cpp
