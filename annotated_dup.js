@@ -1,5 +1,14 @@
 var annotated_dup =
 [
+    [ "ecs", "namespaceecs.html", [
+      [ "ComponentStorage", "classecs_1_1ComponentStorage.html", "classecs_1_1ComponentStorage" ],
+      [ "IndexOf", "structecs_1_1IndexOf.html", null ],
+      [ "Manager", "classecs_1_1Manager.html", "classecs_1_1Manager" ],
+      [ "SparseSet", "classecs_1_1SparseSet.html", "classecs_1_1SparseSet" ],
+      [ "SparseSetNode", "structecs_1_1SparseSetNode.html", "structecs_1_1SparseSetNode" ],
+      [ "View", "classecs_1_1View.html", "classecs_1_1View" ],
+      [ "ViewIterator", "classecs_1_1ViewIterator.html", "classecs_1_1ViewIterator" ]
+    ] ],
     [ "Event", "namespaceEvent.html", [
       [ "AbstractEvent", "classEvent_1_1AbstractEvent.html", "classEvent_1_1AbstractEvent" ],
       [ "HandlerWrapper", "classEvent_1_1HandlerWrapper.html", "classEvent_1_1HandlerWrapper" ],
@@ -39,6 +48,7 @@ var annotated_dup =
     [ "Application", "classApplication.html", "classApplication" ],
     [ "AtmosphereParams", "structAtmosphereParams.html", "structAtmosphereParams" ],
     [ "Atomic", "classAtomic.html", "classAtomic" ],
+    [ "bar", "classbar.html", "classbar" ],
     [ "BlockActionPacket", "classBlockActionPacket.html", "classBlockActionPacket" ],
     [ "BlockInfo", "classBlockInfo.html", "classBlockInfo" ],
     [ "BlocksInfo", "classBlocksInfo.html", "classBlocksInfo" ],
@@ -90,6 +100,7 @@ var annotated_dup =
     [ "Mat4", "classMat4.html", "classMat4" ],
     [ "MemoryRange", "classMemoryRange.html", "classMemoryRange" ],
     [ "Mesh", "structMesh.html", "structMesh" ],
+    [ "mesh", "structmesh.html", "structmesh" ],
     [ "MeshRenderData", "structMeshRenderData.html", "structMeshRenderData" ],
     [ "Mob", "classMob.html", "classMob" ],
     [ "ModelMatrix_push_constant", "structModelMatrix__push__constant.html", "structModelMatrix__push__constant" ],
@@ -107,6 +118,7 @@ var annotated_dup =
     [ "PlayerMovePacket", "classPlayerMovePacket.html", "classPlayerMovePacket" ],
     [ "PlayerRenderData", "structPlayerRenderData.html", "structPlayerRenderData" ],
     [ "Poller", "classPoller.html", "classPoller" ],
+    [ "Position", "structPosition.html", "structPosition" ],
     [ "QueueFamilyIndices", "structQueueFamilyIndices.html", "structQueueFamilyIndices" ],
     [ "RayCastOnBlockResult", "structRayCastOnBlockResult.html", "structRayCastOnBlockResult" ],
     [ "RenderAPI", "classRenderAPI.html", "classRenderAPI" ],
@@ -125,6 +137,7 @@ var annotated_dup =
     [ "StructureInfo", "classStructureInfo.html", "classStructureInfo" ],
     [ "StructuresInfo", "classStructuresInfo.html", "classStructuresInfo" ],
     [ "Swapchain", "classSwapchain.html", "classSwapchain" ],
+    [ "Test", "classTest.html", "classTest" ],
     [ "test", "structtest.html", "structtest" ],
     [ "TextRenderer", "classTextRenderer.html", "classTextRenderer" ],
     [ "ThreadPool", "classThreadPool.html", "classThreadPool" ],
@@ -132,8 +145,10 @@ var annotated_dup =
     [ "ThreadSafeQueue", "classThreadSafeQueue.html", "classThreadSafeQueue" ],
     [ "Timer", "classTimer.html", "classTimer" ],
     [ "Transform", "classTransform.html", "classTransform" ],
+    [ "transform", "structtransform.html", "structtransform" ],
     [ "UBO", "structUBO.html", "structUBO" ],
     [ "UpdateThread", "classUpdateThread.html", "classUpdateThread" ],
+    [ "Velocity", "structVelocity.html", "structVelocity" ],
     [ "ViewFrustum", "classViewFrustum.html", "classViewFrustum" ],
     [ "ViewProjMatrices", "structViewProjMatrices.html", "structViewProjMatrices" ],
     [ "VulkanMemoryAllocator", "classVulkanMemoryAllocator.html", "classVulkanMemoryAllocator" ],

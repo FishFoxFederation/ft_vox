@@ -132,7 +132,7 @@ Collaboration diagram for ClientWorld:</div>
 <area shape="rect" title=" " alt="" coords="108,725,259,941"/>
 <area shape="rect" href="classWorld.html" title=" " alt="" coords="95,269,271,676"/>
 <area shape="rect" href="classExecutorAccessor.html" title=" " alt="" coords="5,5,175,207"/>
-<area shape="rect" href="classWorld_1_1WorldGenerator.html" title=" " alt="" coords="199,57,357,155"/>
+<area shape="rect" href="classWorld_1_1WorldGenerator.html" title=" " alt="" coords="199,64,357,148"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -155,10 +155,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a041fb65a6c3188a57a7d5f1d68660ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef09acc81148b113eed7332cdd7c4fa8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#aef09acc81148b113eed7332cdd7c4fa8">operator=</a> (<a class="el" href="classClientWorld.html">ClientWorld</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:aef09acc81148b113eed7332cdd7c4fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51cba826d6ee2909fd71070af6451c5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a">updateEntities</a> ()</td></tr>
-<tr class="separator:a51cba826d6ee2909fd71070af6451c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33c674a4aad2e0f04a26813940a77d45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45">updateBlock</a> (glm::dvec3 position)</td></tr>
 <tr class="separator:a33c674a4aad2e0f04a26813940a77d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a697dbfc23db77f542d24b7b93b163e45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a697dbfc23db77f542d24b7b93b163e45">updateSystems</a> (const double delta_time_second)</td></tr>
+<tr class="separator:a697dbfc23db77f542d24b7b93b163e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdb5146055c2fd61c42d50b8c8de842f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#acdb5146055c2fd61c42d50b8c8de842f">getRenderDistance</a> () const</td></tr>
 <tr class="separator:acdb5146055c2fd61c42d50b8c8de842f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fb383fddc73e6dfae28fd9ec30a9b88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a2fb383fddc73e6dfae28fd9ec30a9b88">setRenderDistance</a> (const int &amp;render_distance)</td></tr>
@@ -187,6 +187,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adb218b2a8ad54ecef9672a47ce3523d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5266ea08f07e22e6c050114d8936db96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a5266ea08f07e22e6c050114d8936db96">updateMobs</a> (const double delta_time_second)</td></tr>
 <tr class="separator:a5266ea08f07e22e6c050114d8936db96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd9feda5afa1ab3fc0673e0018a5ab21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#acd9feda5afa1ab3fc0673e0018a5ab21">createBaseMob</a> (const glm::dvec3 &amp;position, uint64_t player_id)</td></tr>
+<tr class="separator:acd9feda5afa1ab3fc0673e0018a5ab21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46b60cf51949d3e24641a942cfd5582d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#a46b60cf51949d3e24641a942cfd5582d">modifyBlock</a> (const glm::vec3 &amp;position, const <a class="el" href="classBlockInfo.html#a45820c5fd9afbf3c099019879095db75">BlockInfo::Type</a> &amp;block_id)</td></tr>
 <tr class="separator:a46b60cf51949d3e24641a942cfd5582d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78a9ed84b89171654b282666c51baf9"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClientWorld.html#af78a9ed84b89171654b282666c51baf9">createPlayer</a> (const glm::vec3 &amp;position)</td></tr>
@@ -556,6 +558,34 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acd9feda5afa1ab3fc0673e0018a5ab21" name="acd9feda5afa1ab3fc0673e0018a5ab21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd9feda5afa1ab3fc0673e0018a5ab21">&#9670;&#160;</a></span>createBaseMob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::createBaseMob </td>
+          <td>(</td>
+          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>player_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -992,23 +1022,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a51cba826d6ee2909fd71070af6451c5a" name="a51cba826d6ee2909fd71070af6451c5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51cba826d6ee2909fd71070af6451c5a">&#9670;&#160;</a></span>updateEntities()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ClientWorld::updateEntities </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a5266ea08f07e22e6c050114d8936db96" name="a5266ea08f07e22e6c050114d8936db96"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5266ea08f07e22e6c050114d8936db96">&#9670;&#160;</a></span>updateMobs()</h2>
 
@@ -1128,6 +1141,24 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>player_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a697dbfc23db77f542d24b7b93b163e45" name="a697dbfc23db77f542d24b7b93b163e45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a697dbfc23db77f542d24b7b93b163e45">&#9670;&#160;</a></span>updateSystems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClientWorld::updateSystems </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>delta_time_second</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

@@ -13,5 +13,6 @@ var searchData=
   ['playermoving_10',['PlayerMoving',['../classEvent_1_1PlayerMoving.html',1,'Event']]],
   ['playerrenderdata_11',['PlayerRenderData',['../structPlayerRenderData.html',1,'']]],
   ['playeruseresult_12',['PlayerUseResult',['../structClientWorld_1_1PlayerUseResult.html',1,'ClientWorld']]],
-  ['poller_13',['Poller',['../classPoller.html',1,'']]]
+  ['poller_13',['Poller',['../classPoller.html',1,'']]],
+  ['position_14',['Position',['../structPosition.html',1,'']]]
 ];

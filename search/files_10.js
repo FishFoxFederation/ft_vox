@@ -25,12 +25,13 @@ var searchData=
   ['soundengine_2ecpp_22',['SoundEngine.cpp',['../SoundEngine_8cpp.html',1,'']]],
   ['soundengine_2ehpp_23',['SoundEngine.hpp',['../SoundEngine_8hpp.html',1,'']]],
   ['soundlist_2ehpp_24',['SoundList.hpp',['../SoundList_8hpp.html',1,'']]],
-  ['status_2ecpp_25',['Status.cpp',['../Status_8cpp.html',1,'']]],
-  ['status_2ehpp_26',['Status.hpp',['../Status_8hpp.html',1,'']]],
-  ['structures_2ecpp_27',['Structures.cpp',['../Structures_8cpp.html',1,'']]],
-  ['structures_2ehpp_28',['Structures.hpp',['../Structures_8hpp.html',1,'']]],
-  ['style_5fguide_2emd_29',['style_guide.md',['../style__guide_8md.html',1,'']]],
-  ['subgraph_2ehpp_30',['SubGraph.hpp',['../SubGraph_8hpp.html',1,'']]],
-  ['swapchain_2ecpp_31',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
-  ['swapchain_2ehpp_32',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
+  ['sparseset_2ehpp_25',['SparseSet.hpp',['../SparseSet_8hpp.html',1,'']]],
+  ['status_2ecpp_26',['Status.cpp',['../Status_8cpp.html',1,'']]],
+  ['status_2ehpp_27',['Status.hpp',['../Status_8hpp.html',1,'']]],
+  ['structures_2ecpp_28',['Structures.cpp',['../Structures_8cpp.html',1,'']]],
+  ['structures_2ehpp_29',['Structures.hpp',['../Structures_8hpp.html',1,'']]],
+  ['style_5fguide_2emd_30',['style_guide.md',['../style__guide_8md.html',1,'']]],
+  ['subgraph_2ehpp_31',['SubGraph.hpp',['../SubGraph_8hpp.html',1,'']]],
+  ['swapchain_2ecpp_32',['Swapchain.cpp',['../Swapchain_8cpp.html',1,'']]],
+  ['swapchain_2ehpp_33',['Swapchain.hpp',['../Swapchain_8hpp.html',1,'']]]
 ];

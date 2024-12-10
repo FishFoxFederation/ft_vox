@@ -1,5 +1,6 @@
 var namespaces_dup =
 [
+    [ "ecs", "namespaceecs.html", "namespaceecs" ],
     [ "Event", "namespaceEvent.html", "namespaceEvent" ],
     [ "Sound", "namespaceSound.html", "namespaceSound" ],
     [ "std", "namespacestd.html", "namespacestd" ],

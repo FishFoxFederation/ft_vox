@@ -50,11 +50,12 @@ var NAVTREE =
         [ "Useful links", "docstyleguide.html#autotoc_md13", null ]
       ] ]
     ] ],
+    [ "Entity Component System", "md_docs_pages_entity.html", null ],
     [ "Network", "md_docs_pages_network.html", [
-      [ "Intro", "md_docs_pages_network.html#autotoc_md15", null ],
-      [ "Layers", "md_docs_pages_network.html#autotoc_md16", [
-        [ "Sockets, Connections and Poller", "md_docs_pages_network.html#autotoc_md17", [
-          [ "Packets and the Packet Factory", "md_docs_pages_network.html#autotoc_md18", null ]
+      [ "Intro", "md_docs_pages_network.html#autotoc_md19", null ],
+      [ "Layers", "md_docs_pages_network.html#autotoc_md20", [
+        [ "Sockets, Connections and Poller", "md_docs_pages_network.html#autotoc_md21", [
+          [ "Packets and the Packet Factory", "md_docs_pages_network.html#autotoc_md22", null ]
         ] ]
       ] ]
     ] ],
@@ -69,20 +70,22 @@ var NAVTREE =
     [ "Style guide", "styleguide.html", null ],
     [ "Task Dependency ( WIP )", "taskDep.html", null ],
     [ "Threads Architecture", "threads.html", [
-      [ "Main thread", "threads.html#autotoc_md21", null ],
-      [ "Update Thread", "threads.html#autotoc_md22", null ],
-      [ "Render Thread", "threads.html#autotoc_md23", null ],
-      [ "Block Update Thread", "threads.html#autotoc_md24", null ],
-      [ "Thread pool", "threads.html#autotoc_md25", null ]
+      [ "Main thread", "threads.html#autotoc_md25", null ],
+      [ "Update Thread", "threads.html#autotoc_md26", null ],
+      [ "Render Thread", "threads.html#autotoc_md27", null ],
+      [ "Block Update Thread", "threads.html#autotoc_md28", null ],
+      [ "Thread pool", "threads.html#autotoc_md29", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
+    [ "Concepts", "concepts.html", "concepts" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -114,15 +117,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AbstractEvent_8cpp.html",
-"SoundEngine_8hpp.html",
-"classChunkRequestPacket.html#a120caabc738afbe61991e1946c3cdee8",
-"classEvent_1_1PlayerMoving.html#a098353c7b89dd61acaf4c52e44b9756f",
-"classPingPacket.html#a0771f73d566dc9ec19b1eaf84138868a",
-"classServerBlockUpdateThread.html#a67dad756f1fbe43771d204de8e5762b4",
-"classWorld_1_1WorldGenerator.html#a73337f7c2d3a5ca306bbc640c8d9ccf5",
-"functions.html",
-"structFace.html",
-"structtest.html"
+"Socket_8hpp.html",
+"classChunkPacket.html#a8db9b5d17285d146cdb2455e6ea8f642",
+"classEvent_1_1Manager.html#a40f2d0487c1d69f6a94870486ab29533",
+"classPacketFactory.html#adf5f3d56e11944ee849ee817a8b3509e",
+"classServer.html#a72f16fc38789727d57762556799083eb",
+"classWorld.html#a854245c7d627808493b2ee3b5580eb63",
+"classecs_1_1ViewIterator.html#a9203cd5d2971d53bfaa51ad79fab5d5b",
+"dir_e2d4946961cb2f7a598bb8a45601bca0.html",
+"structChunkPacket_1_1ChunkData.html#a746ed0c00773e50ab4ffe997af875e7a",
+"structSwapchain_1_1CreateInfo.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

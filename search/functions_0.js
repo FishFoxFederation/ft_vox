@@ -2,7 +2,7 @@ var searchData=
 [
   ['abstractevent_0',['AbstractEvent',['../classEvent_1_1AbstractEvent.html#a0d9d7e2b0fb8f428a9b3be78dcc81f79',1,'Event::AbstractEvent']]],
   ['accept_1',['accept',['../classServerSocket.html#ae830be63c7b69888e5fb8298ffcaad94',1,'ServerSocket']]],
-  ['add_2',['add',['../classPoller.html#ac6caea8ed009e1d3a53c6a76caff05c1',1,'Poller::add()'],['../classMemoryRange.html#a7fe61ed68feea0958b34276ebaf69a6a',1,'MemoryRange::add()']]],
+  ['add_2',['add',['../classPoller.html#ac6caea8ed009e1d3a53c6a76caff05c1',1,'Poller::add()'],['../classMemoryRange.html#a7fe61ed68feea0958b34276ebaf69a6a',1,'MemoryRange::add()'],['../classecs_1_1Manager.html#a844f9254a573fd2d7387012d2a24bbf3',1,'ecs::Manager::add(entityType entity, ComponentType component)'],['../classecs_1_1Manager.html#ae4784e9822152b36bc03879dd7cdb1d9',1,'ecs::Manager::add(entityType entity, ComponentTypes... components)']]],
   ['addblockupdate_3',['addBlockUpdate',['../classServerWorld.html#a68ba2457f232b4cd00c59e13ce38e4e4',1,'ServerWorld']]],
   ['addchunk_4',['addChunk',['../classClientWorld.html#a204e9e1edf450416eaa081171c08e6ab',1,'ClientWorld']]],
   ['addchunktoscene_5',['addChunkToScene',['../classRenderAPI.html#a2897319c46ec0ae2872d4f42eb8d3939',1,'RenderAPI']]],

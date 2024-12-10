@@ -10,6 +10,7 @@ var classClientWorld =
     [ "applyPlayerMovement", "classClientWorld.html#a1d5fcfb66258c5fc0cd611c24e8e3d8d", null ],
     [ "calculatePlayerMovement", "classClientWorld.html#a311ae115a5f778d3dbe6ba1ac40a145b", null ],
     [ "changePlayerViewMode", "classClientWorld.html#a8b2f0d47fdee9822ca8bd17f80fde285", null ],
+    [ "createBaseMob", "classClientWorld.html#acd9feda5afa1ab3fc0673e0018a5ab21", null ],
     [ "createMob", "classClientWorld.html#adb218b2a8ad54ecef9672a47ce3523d8", null ],
     [ "createPlayer", "classClientWorld.html#af78a9ed84b89171654b282666c51baf9", null ],
     [ "getCamera", "classClientWorld.html#aaf9929d0310650c8d517efcd7110f05a", null ],
@@ -31,11 +32,11 @@ var classClientWorld =
     [ "setRenderDistance", "classClientWorld.html#a2fb383fddc73e6dfae28fd9ec30a9b88", null ],
     [ "setServerLoadDistance", "classClientWorld.html#a31afbfb7599134bc3ff7b22bc334aa50", null ],
     [ "updateBlock", "classClientWorld.html#a33c674a4aad2e0f04a26813940a77d45", null ],
-    [ "updateEntities", "classClientWorld.html#a51cba826d6ee2909fd71070af6451c5a", null ],
     [ "updateMobs", "classClientWorld.html#a5266ea08f07e22e6c050114d8936db96", null ],
     [ "updatePlayer", "classClientWorld.html#a4f620b1218a121e9da762980863a81bd", null ],
     [ "updatePlayerCamera", "classClientWorld.html#a5fc5217d0b6d449d3ec9f1bb08fead5d", null ],
     [ "updatePlayerPosition", "classClientWorld.html#a3cd752b37c26a7e4cd171ba780809bf2", null ],
     [ "updatePlayerTargetBlock", "classClientWorld.html#a23026d1f22c925ce84a857dfdf5ad1ee", null ],
+    [ "updateSystems", "classClientWorld.html#a697dbfc23db77f542d24b7b93b163e45", null ],
     [ "m_my_player_id", "classClientWorld.html#aef2faefc960964a89102ebbe9c0c037a", null ]
 ];
