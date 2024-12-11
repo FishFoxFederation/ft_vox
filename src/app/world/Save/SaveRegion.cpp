@@ -95,7 +95,7 @@ Save::Region::Region(std::filesystem::path file_path)
 
 	if (std::filesystem::file_size(m_path) < 8192)
 		throw CorruptedFileException("Save: Region: file too small");
-	openFile();
+	openFile(m_path);
 	parseOffsetsTable();
 	file.close();
 }
@@ -129,14 +129,17 @@ Save::Region::~Region()
 
 void Save::Region::save()
 {
-	openFile();
+	std::filesystem::path tmp_path = m_path;
+	tmp_path += ".tmp";
+	openFile(tmp_path);
 	clearOffsetsTable();
 	writeChunks();
 	writeOffsetsTable();
-	
 	m_chunks.clear();
 	m_loaded = false;
 	file.close();
+
+	std::filesystem::rename(tmp_path, m_path);
 }
 
 void Save::Region::clearOffsetsTable()
@@ -266,7 +269,7 @@ void Save::Region::addChunk(const std::shared_ptr<Chunk> & chunk)
 
 void Save::Region::load()
 {
-	openFile();
+	openFile(m_path);
 	parseOffsetsTable();
 	for(auto & [pos, offset] : m_offsets)
 		readChunk(pos);
@@ -312,15 +315,15 @@ void Save::Region::readChunk(const glm::ivec2 & relative_position)
 	m_chunks.insert({chunk->getPosition(), chunk});
 }
 
-void Save::Region::openFile()
+void Save::Region::openFile(const std::filesystem::path & path)
 {
 	if (file.is_open())
 		return;
-	file.open(m_path, std::ios::in | std::ios::out | std::ios::binary);
+	file.open(path, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 
 	if (!file.is_open())
 	{
-		std::string str = "Save: Region: error opening file: " + m_path.string();
+		std::string str = "Save: Region: error opening file: " + path.string();
 		throw std::runtime_error(str);
 	}
 }
