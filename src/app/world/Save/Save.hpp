@@ -187,6 +187,7 @@ private:
 		void readChunk(const glm::ivec2 & relative_position);
 
 		void openFile(const std::filesystem::path & path);
+		void createFile(const std::filesystem::path & path);
 	};
 	//first key if the region position
 	// if we have a region entry
