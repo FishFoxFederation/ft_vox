@@ -204,25 +204,26 @@ $(document).ready(function(){initNavTree('Save_8hpp_source.html',''); initResiza
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="keywordtype">void</span> load();</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <span class="keywordtype">void</span> readChunk(<span class="keyword">const</span> glm::ivec2 &amp; relative_position);</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <span class="keywordtype">void</span> openFile();</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    };</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="comment">//first key if the region position</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="comment">// if we have a region entry</span></div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="comment">//then there is a set to list all the chunks in the save from that region</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="comment">//TODO add a way to know if region is full to avoid a list of chunks</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keyword">typedef</span>     std::unordered_map&lt;glm::ivec2, Region&gt; RegionMap;</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    RegionMap                                       m_regions;</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    std::unordered_set&lt;std::shared_ptr&lt;Chunk&gt;&gt;      m_chunkPool;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <span class="keywordtype">void</span> openFile(<span class="keyword">const</span> std::filesystem::path &amp; path);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <span class="keywordtype">void</span> createFile(<span class="keyword">const</span> std::filesystem::path &amp; path);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    };</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="comment">//first key if the region position</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="comment">// if we have a region entry</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="comment">//then there is a set to list all the chunks in the save from that region</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="comment">//TODO add a way to know if region is full to avoid a list of chunks</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keyword">typedef</span>     std::unordered_map&lt;glm::ivec2, Region&gt; RegionMap;</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    RegionMap                                       m_regions;</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    std::unordered_set&lt;std::shared_ptr&lt;Chunk&gt;&gt;      m_chunkPool;</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">    /****************\</span></div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">     * INIT </span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment">    \****************/</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="comment">//  open save directory</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="comment">//  open a region file</span></div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="keywordtype">void</span> initRegions();</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>};</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">    /****************\</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment">     * INIT </span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment">    \****************/</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="comment">//  open save directory</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="comment">//  open a region file</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="keywordtype">void</span> initRegions();</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>};</div>
 <div class="ttc" id="aChunk_8hpp_html"><div class="ttname"><a href="Chunk_8hpp.html">Chunk.hpp</a></div></div>
 <div class="ttc" id="aclassSave_1_1Region_1_1CorruptedFileException_html"><div class="ttname"><a href="classSave_1_1Region_1_1CorruptedFileException.html">Save::Region::CorruptedFileException</a></div><div class="ttdef"><b>Definition:</b> Save.hpp:70</div></div>
 <div class="ttc" id="aclassSave_1_1Region_1_1CorruptedFileException_html_a054c304867ef2362df40c2d53c328e71"><div class="ttname"><a href="classSave_1_1Region_1_1CorruptedFileException.html#a054c304867ef2362df40c2d53c328e71">Save::Region::CorruptedFileException::CorruptedFileException</a></div><div class="ttdeci">CorruptedFileException(const std::string &amp;message)</div><div class="ttdef"><b>Definition:</b> Save.hpp:72</div></div>
