@@ -104,38 +104,38 @@ void UpdateThread::updateTime()
 
 void UpdateThread::readInput()
 {
-	const Input::KeyState move_forward_key_status = m_window.input().getKeyState(GLFW_KEY_W);
-	const Input::KeyState move_left_key_status = m_window.input().getKeyState(GLFW_KEY_A);
-	const Input::KeyState move_backward_key_status = m_window.input().getKeyState(GLFW_KEY_S);
-	const Input::KeyState move_right_key_status = m_window.input().getKeyState(GLFW_KEY_D);
-	const Input::KeyState jump_key_status = m_window.input().getKeyState(GLFW_KEY_SPACE);
-	const Input::KeyState sneak_key_status = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
-	const Input::KeyState attack_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_LEFT);
-	const Input::KeyState use_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
+	// const Input::KeyState move_forward_key_status = m_window.input().getKeyState(GLFW_KEY_W);
+	// const Input::KeyState move_left_key_status = m_window.input().getKeyState(GLFW_KEY_A);
+	// const Input::KeyState move_backward_key_status = m_window.input().getKeyState(GLFW_KEY_S);
+	// const Input::KeyState move_right_key_status = m_window.input().getKeyState(GLFW_KEY_D);
+	// const Input::KeyState jump_key_status = m_window.input().getKeyState(GLFW_KEY_SPACE);
+	// const Input::KeyState sneak_key_status = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
+	// const Input::KeyState attack_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_LEFT);
+	// const Input::KeyState use_key_status = m_window.input().getMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
 
-	if (move_forward_key_status == Input::KeyState::PRESSED) m_move_forward = 1;
-	else if (move_forward_key_status == Input::KeyState::RELEASED) m_move_forward = 0;
+	// if (move_forward_key_status == Input::KeyState::PRESSED) m_move_forward = 1;
+	// else if (move_forward_key_status == Input::KeyState::RELEASED) m_move_forward = 0;
 
-	if (move_left_key_status == Input::KeyState::PRESSED) m_move_left = 1;
-	else if (move_left_key_status == Input::KeyState::RELEASED) m_move_left = 0;
+	// if (move_left_key_status == Input::KeyState::PRESSED) m_move_left = 1;
+	// else if (move_left_key_status == Input::KeyState::RELEASED) m_move_left = 0;
 
-	if (move_backward_key_status == Input::KeyState::PRESSED) m_move_backward = 1;
-	else if (move_backward_key_status == Input::KeyState::RELEASED) m_move_backward = 0;
+	// if (move_backward_key_status == Input::KeyState::PRESSED) m_move_backward = 1;
+	// else if (move_backward_key_status == Input::KeyState::RELEASED) m_move_backward = 0;
 
-	if (move_right_key_status == Input::KeyState::PRESSED) m_move_right = 1;
-	else if (move_right_key_status == Input::KeyState::RELEASED) m_move_right = 0;
+	// if (move_right_key_status == Input::KeyState::PRESSED) m_move_right = 1;
+	// else if (move_right_key_status == Input::KeyState::RELEASED) m_move_right = 0;
 
-	if (jump_key_status == Input::KeyState::PRESSED) m_jump = 1;
-	else if (jump_key_status == Input::KeyState::RELEASED) m_jump = 0;
+	// if (jump_key_status == Input::KeyState::PRESSED) m_jump = 1;
+	// else if (jump_key_status == Input::KeyState::RELEASED) m_jump = 0;
 
-	if (sneak_key_status == Input::KeyState::PRESSED) m_sneak = 1;
-	else if (sneak_key_status == Input::KeyState::RELEASED) m_sneak = 0;
+	// if (sneak_key_status == Input::KeyState::PRESSED) m_sneak = 1;
+	// else if (sneak_key_status == Input::KeyState::RELEASED) m_sneak = 0;
 
-	if (attack_key_status == Input::KeyState::PRESSED) m_attack = 1;
-	else if (attack_key_status == Input::KeyState::RELEASED) m_attack = 0;
+	// if (attack_key_status == Input::KeyState::PRESSED) m_attack = 1;
+	// else if (attack_key_status == Input::KeyState::RELEASED) m_attack = 0;
 
-	if (use_key_status == Input::KeyState::PRESSED) m_use = 1;
-	else if (use_key_status == Input::KeyState::RELEASED) m_use = 0;
+	// if (use_key_status == Input::KeyState::PRESSED) m_use = 1;
+	// else if (use_key_status == Input::KeyState::RELEASED) m_use = 0;
 
 	const Input::KeyState ping_key_status = m_window.input().getKeyState(GLFW_KEY_P);
 	if (ping_key_status == Input::KeyState::PRESSED)
@@ -290,22 +290,24 @@ void UpdateThread::movePlayer()
 		m_sneak,
 		delta_time_second
 	);
+	(void)position;
+	(void)displacement;
 
 	// m_world.applyPlayerMovement(m_world.m_my_player_id, displacement);
-	if (glm::length(displacement) > 0.01)
-	{
-		// glm::vec3 new_position = position + displacement;
-		auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
-		m_client.send({packet, 0});
-	}
+	// if (glm::length(displacement) > 0.01)
+	// {
+	// 	// glm::vec3 new_position = position + displacement;
+	// 	auto packet = std::make_shared<PlayerMovePacket>(m_world.m_my_player_id, position, displacement);
+	// 	m_client.send({packet, 0});
+	// }
 
-	m_world.updatePlayerCamera(
-		m_world.m_my_player_id,
-		look.x,
-		look.y
-	);
+	// m_world.updatePlayerCamera(
+	// 	m_world.m_my_player_id,
+	// 	look.x,
+	// 	look.y
+	// );
 
-	m_render_api.setCamera(m_world.getCamera(m_world.m_my_player_id));
+	// m_render_api.setCamera(m_world.getCamera(m_world.m_my_player_id));
 	last_time = now;
 }
 

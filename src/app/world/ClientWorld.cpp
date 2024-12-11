@@ -3,6 +3,7 @@
 
 ClientWorld::ClientWorld(
 	RenderAPI & render_api,
+	Window & window,
 	Sound::Engine & sound_engine,
 	Event::Manager & event_manager,
 	Client & client,
@@ -11,6 +12,7 @@ ClientWorld::ClientWorld(
 :
 	World(),
 	m_render_api(render_api),
+	m_window(window),
 	m_sound_engine(sound_engine),
 	m_event_manager(event_manager),
 	m_client(client)

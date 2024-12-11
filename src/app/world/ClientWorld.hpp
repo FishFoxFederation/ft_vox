@@ -10,10 +10,12 @@
 #include "logger.hpp"
 #include "CreateMeshData.hpp"
 #include "RenderAPI.hpp"
+#include "window.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
 #include "SoundEngine.hpp"
 #include "EventManager.hpp"
+#include "input.hpp"
 
 #include "Packets.hpp"
 #include "Client.hpp"
@@ -36,6 +38,7 @@ public:
 
 	ClientWorld(
 		RenderAPI & render_api,
+		Window & window,
 		Sound::Engine & sound_engine,
 		Event::Manager & event_manager,
 		Client & client,
@@ -139,6 +142,7 @@ public:
 private:
 
 	RenderAPI &								m_render_api;
+	Window &								m_window;
 	Sound::Engine &							m_sound_engine;
 	Event::Manager &						m_event_manager;
 	Client &								m_client;
@@ -255,6 +259,7 @@ private:
 	// void CollisionSystem();
 	void renderSystem();
 	void timeSystem();
+	void playerMoveSystem();
 
 	/************* 
 	 * COMPONENTS
@@ -284,10 +289,29 @@ private:
 	};
 
 	struct input {
+		int move_forward = 0;
+		int move_left = 0;
+		int move_backward = 0;
+		int move_right = 0;
+		int jump = 0;
+		int sneak = 0;
+		int attack = 0;
+		int use = 0;
 
+		double mouse_x = 0;
+		double mouse_y = 0;
+		double last_mouse_x = 0;
+		double last_mouse_y = 0;
 	};
 
-	struct DeltaTime {
+	struct Time {
+		std::chrono::nanoseconds now;
 		double delta_time_ms;
+	};
+
+	struct MoveInfo {
+		const std::chrono::milliseconds target_block_update_interval = std::chrono::milliseconds(10);
+		std::chrono::nanoseconds last_target_block_update_time = std::chrono::nanoseconds(0);
+		std::chrono::nanoseconds last_move = std::chrono::nanoseconds(0);
 	};
 };
