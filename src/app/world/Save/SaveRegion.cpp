@@ -77,11 +77,8 @@ Save::Region::Region(
 
 	m_path = region_dir / filename;
 
-	//create file
-	file.open(m_path, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
-	if (!file.is_open())
-		throw std::runtime_error("Save: Region: error creating file");
-	
+	createFile(m_path);
+
 	//write empty offset table
 	file.write(std::string(8192, '\0').c_str(), 8192);
 	file.close();
@@ -131,7 +128,7 @@ void Save::Region::save()
 {
 	std::filesystem::path tmp_path = m_path;
 	tmp_path += ".tmp";
-	openFile(tmp_path);
+	createFile(tmp_path);
 	clearOffsetsTable();
 	writeChunks();
 	writeOffsetsTable();
@@ -227,6 +224,7 @@ void Save::Region::writeChunks()
 		size_t write_size = buffer.size();
 
 		file.write(reinterpret_cast<const char *>(&write_size), sizeof(size_t));
+		// throw std::runtime_error("hehe");
 		write_size += sizeof(size_t);
 
 		//calculate padding
@@ -319,11 +317,23 @@ void Save::Region::openFile(const std::filesystem::path & path)
 {
 	if (file.is_open())
 		return;
-	file.open(path, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
+	file.open(path, std::ios::in | std::ios::out | std::ios::binary);
 
 	if (!file.is_open())
 	{
 		std::string str = "Save: Region: error opening file: " + path.string();
+		throw std::runtime_error(str);
+	}
+}
+
+void Save::Region::createFile(const std::filesystem::path & path) {
+	if (file.is_open())
+		return;
+	file.open(path, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
+
+	if (!file.is_open())
+	{
+		std::string str = "Save: Region: error creating file: " + path.string();
 		throw std::runtime_error(str);
 	}
 }
