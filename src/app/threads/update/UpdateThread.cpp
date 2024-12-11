@@ -82,7 +82,7 @@ void UpdateThread::loop()
 	m_world.updateBlock(m_world.getPlayerPosition(m_world.m_my_player_id));
 
 	m_world.updateMobs(m_delta_time.count() / 1e9);
-	m_world.updateSystems(m_delta_time.count() / 1e9);
+	m_world.updateSystems();
 
 	m_world.otherUpdate();
 }

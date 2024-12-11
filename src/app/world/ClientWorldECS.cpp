@@ -26,9 +26,15 @@ void ClientWorld::createBaseMob(const glm::dvec3 & position, uint64_t player_id)
 	LOG_INFO("Created mob entity: " << entity);
 }
 
-void ClientWorld::MovementSystem(const double delta_time_second)
+void ClientWorld::InputSystem()
+{
+
+}
+
+void ClientWorld::MovementSystem()
 {
 	auto view = m_ecs_manager.view<Position, Velocity>();
+	auto delta_time_second = m_ecs_manager.getSingleton<DeltaTime>().delta_time_ms / 1000.0;
 
 
 	for ( auto entity : view )
@@ -71,10 +77,23 @@ void ClientWorld::AISystem()
 	}
 }
 
-void ClientWorld::updateSystems(const double delta_time_second)
+void ClientWorld::updateSystems()
 {
 	// LOG_INFO("Updating systems");
+	timeSystem();
 	AISystem();
-	MovementSystem(delta_time_second);
+	MovementSystem();
 	renderSystem();
+}
+
+void ClientWorld::timeSystem()
+{
+	static auto last = std::chrono::steady_clock::now();
+
+	auto now = std::chrono::steady_clock::now();
+
+	auto delta = now - last;
+	last = now;
+
+	m_ecs_manager.getSingleton<DeltaTime>().delta_time_ms = delta.count() / 1e6; 
 }

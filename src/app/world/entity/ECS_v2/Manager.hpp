@@ -248,6 +248,29 @@ namespace ecs
 		{
 			return std::make_tuple(tryGetComponent<ComponentTypes>(entity)...);
 		}
+		
+		/*************************************************************\
+		 * 	SINGLETONS
+		\*************************************************************/
+		template <typename T>
+		T & getSingleton()
+		{
+			auto id = std::type_index(typeid(T));
+
+			if (!m_singletons.contains(id))
+				addSingleton<T>(T());
+			return *std::static_pointer_cast<T>(m_singletons.at(id));
+		}
+
+		template <typename T>
+		void addSingleton(const T & singleton)
+		{
+			auto id = std::type_index(typeid(T));
+
+			// if (m_singletons.contains(id))
+				// throw ComponentAlreadyExists<T>();
+			m_singletons.insert({id, std::make_shared<T>(singleton)});
+		}
 
 		/*************************************************************\
 		 * 	VIEWS
@@ -332,6 +355,7 @@ namespace ecs
 		entityType m_dead_entity_head = 0;
 
 		std::unordered_map<std::type_index, std::shared_ptr<entitySet>> m_components;
+		std::unordered_map<std::type_index, std::shared_ptr<void>> m_singletons;
 
 		/*************************************************\
 		 * 	ENTITY UTILS

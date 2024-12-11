@@ -50,7 +50,7 @@ public:
 
 
 	void updateBlock(glm::dvec3 position);
-	void updateSystems(const double delta_time_second);
+	void updateSystems();
 
 	int		getRenderDistance() const;
 	void	setRenderDistance(const int & render_distance);
@@ -249,10 +249,12 @@ private:
 	 *************************************/
 	ecs::Manager<> m_ecs_manager;
 
-	void MovementSystem(const double delta_time_second);
+	void MovementSystem();
+	void InputSystem();
 	void AISystem();
 	// void CollisionSystem();
 	void renderSystem();
+	void timeSystem();
 
 	/************* 
 	 * COMPONENTS
@@ -279,5 +281,13 @@ private:
 	struct Mesh
 	{
 		uint64_t id;
+	};
+
+	struct input {
+
+	};
+
+	struct DeltaTime {
+		double delta_time_ms;
 	};
 };
