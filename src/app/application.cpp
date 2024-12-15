@@ -1,7 +1,9 @@
 #include "application.hpp"
 #include "logger.hpp"
+#include <signal.h>
 
 #include <iostream>
+bool app_running = true;
 
 Application::Application():
 	m_start_time(std::chrono::steady_clock::now().time_since_epoch()),
@@ -12,8 +14,7 @@ Application::Application():
 	m_thread_pool(),
 	m_world(m_world_scene, m_vulkan_api, m_thread_pool),
 	m_render_thread(m_settings, m_vulkan_api, m_world_scene, m_start_time),
-	m_update_thread(m_settings, m_window, m_world_scene, m_world, m_start_time),
-	m_block_update_thread(m_world_scene, m_world)
+	m_update_thread(m_settings, m_window, m_world_scene, m_world, m_start_time)
 {
 	LOG_INFO("Application::Application()");
 }
@@ -26,9 +27,15 @@ Application::~Application()
 void Application::run()
 {
 	LOG_INFO("Application::run()");
+	signal(SIGINT, [](int signum) {
+		(void)signum;
+		app_running = false;
+		});
 
-	while (!m_window.shouldClose())
+	while (app_running && m_thread_pool.is_running())
 	{
-		glfwWaitEvents();
+		if (m_window.shouldClose())
+			break;
+		glfwWaitEventsTimeout(0.2);
 	}
 }

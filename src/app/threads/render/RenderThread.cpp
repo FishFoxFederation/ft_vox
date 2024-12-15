@@ -47,9 +47,9 @@ void RenderThread::launch()
 	}
 	catch (const std::exception & e)
 	{
-		LOG_ERROR("Thread exception: " << e.what());
+		LOG_ERROR("RenderThread exception: " << e.what());
 	}
-	LOG_DEBUG("Thread stopped");
+	LOG_INFO("RenderThread stopped");
 }
 
 void RenderThread::init()

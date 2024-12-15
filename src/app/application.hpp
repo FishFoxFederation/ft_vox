@@ -35,5 +35,4 @@ private:
 	World				m_world;
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
-	BlockUpdateThread	m_block_update_thread;
 };

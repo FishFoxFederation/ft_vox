@@ -41,9 +41,9 @@ void UpdateThread::launch()
 	}
 	catch (const std::exception & e)
 	{
-		LOG_ERROR("Thread exception: " << e.what());
+		LOG_ERROR("UpdateThread exception: " << e.what());
 	}
-	LOG_DEBUG("Thread stopped");
+	LOG_INFO("UpdateThread stopped");
 }
 
 void UpdateThread::init()
@@ -56,6 +56,7 @@ void UpdateThread::loop()
 	updateTime();
 	readInput();
 	movePlayer();
+	m_world.updateBlock(m_world.getPlayerPosition());
 }
 
 
