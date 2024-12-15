@@ -42,7 +42,7 @@ void ThreadPool::worker_thread()
 		try {
 		task();
 		} catch (std::exception & e) {
-			LOG_CRITICAL("Error in worker thread, shutting down: " << e);
+			LOG_CRITICAL("Error in worker thread, shutting down: " << e.what());
 			m_done = true;
 			m_cond.notify_all();
 		}
