@@ -1,4 +1,5 @@
 #include "ThreadPool.hpp"
+#include "logger.hpp"
 
 ThreadPool::ThreadPool()
 : m_done(false), m_joiner(m_threads)
@@ -34,10 +35,16 @@ void ThreadPool::worker_thread()
 		{
 			std::unique_lock<std::mutex> lock(m_queue_mutex);
 			m_cond.wait(lock, [&] {return !m_work_queue.empty() || m_done; });
-			if (m_done) break;
+			if (m_done == true) break;
 			task = std::move(m_work_queue.front());
 			m_work_queue.pop();
 		}
+		try {
 		task();
+		} catch (std::exception & e) {
+			LOG_CRITICAL("Error in worker thread, shutting down: " << e);
+			m_done = true;
+			m_cond.notify_all();
+		}
 	}
 }

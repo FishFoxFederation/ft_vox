@@ -52,6 +52,8 @@ public:
 		}
 	}
 
+	bool is_running() const {return !m_done;}
+
 private:
 	std::atomic_bool					m_done;
 	std::queue<std::packaged_task<void()> >	m_work_queue;
