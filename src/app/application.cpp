@@ -35,7 +35,8 @@ void Application::run()
 
 	while (app_running
 		&& m_thread_pool.running()
-		&& m_update_thread.running())
+		&& m_update_thread.running()
+		&& m_render_thread.running())
 	{
 		if (m_window.shouldClose())
 		{
