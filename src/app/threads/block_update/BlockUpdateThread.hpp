@@ -5,7 +5,6 @@
 #include "WorldScene.hpp"
 #include "VulkanAPI.hpp"
 #include "ThreadPool.hpp"
-#include "DebugGui.hpp"
 
 /**
  * @brief An implementation of the thread wrapper for the thread that handles block updates

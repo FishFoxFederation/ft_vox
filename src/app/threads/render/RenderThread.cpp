@@ -21,11 +21,8 @@ RenderThread::RenderThread(
 	m_settings(settings),
 	vk(vulkanAPI),
 	m_world_scene(worldScene),
-	m_debug_gui(),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
-	m_frame_count(0),
-	m_start_time_counting_fps(start_time),
 	m_thread(&RenderThread::launch, this),
 	m_eptr_ref(eptr_ref)
 {
@@ -94,23 +91,12 @@ void RenderThread::loop()
 
 	const Camera::RenderInfo camera = m_world_scene.camera().getRenderInfo(aspect_ratio);
 
-	// DebugGui::player_position = camera.position;
 
 	ViewProjMatrices camera_matrices = {};
 	camera_matrices.view = camera.view;
 	camera_matrices.proj = clip * camera.projection;
 
 	const std::vector<WorldScene::MeshRenderData> chunk_meshes = m_world_scene.getMeshRenderData();
-
-	m_frame_count++;
-	if (m_current_time - m_start_time_counting_fps >= std::chrono::seconds(1))
-	{
-		DebugGui::fps = static_cast<double>(m_frame_count) / std::chrono::duration_cast<std::chrono::seconds>(m_current_time - m_start_time_counting_fps).count();
-		m_frame_count = 0;
-		m_start_time_counting_fps = m_current_time;
-	}
-
-	DebugGui::frame_time_history.push(m_delta_time.count() / 1e6);
 
 	const glm::dvec3 sun_offset = glm::dvec3(100.0f, 70.0f, 100.0f);
 	const glm::dvec3 sun_pos = camera.position + sun_offset;
@@ -138,11 +124,6 @@ void RenderThread::loop()
 	//############################################################################################################
 
 	std::lock_guard<std::mutex> lock(vk.global_mutex);
-
-	{
-		std::lock_guard<std::mutex> lock(vk.mesh_mutex);
-		DebugGui::chunk_mesh_count = vk.meshes.size();
-	}
 
 	VK_CHECK(
 		vkWaitForFences(vk.device, 1, &vk.in_flight_fences[vk.current_frame], VK_TRUE, std::numeric_limits<uint64_t>::max()),
@@ -381,7 +362,6 @@ void RenderThread::loop()
 
 		triangle_count += (vk.meshes[chunk_mesh.id].index_count) / 3;
 	}
-	DebugGui::rendered_triangles = triangle_count;
 
 
 	// Draw the skybox
@@ -631,7 +611,6 @@ void RenderThread::loop()
 	vk.current_frame = (vk.current_frame + 1) % vk.max_frames_in_flight;
 
 	const std::chrono::nanoseconds end_cpu_rendering_time = std::chrono::steady_clock::now().time_since_epoch();
-	DebugGui::cpu_time_history.push((end_cpu_rendering_time - start_cpu_rendering_time).count() / 1e6);
 }
 
 void RenderThread::updateTime()

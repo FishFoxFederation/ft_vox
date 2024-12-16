@@ -6,7 +6,6 @@
 #include "VulkanAPI.hpp"
 #include "Chunk.hpp"
 #include "WorldGenerator.hpp"
-#include "DebugGui.hpp"
 
 #include <chrono>
 #include <map>
@@ -61,8 +60,6 @@ private:
 	VulkanAPI & vk;
 	const WorldScene & m_world_scene;
 
-	DebugGui m_debug_gui;
-
 	std::atomic<bool> m_running = true;
 
 	struct ChunkData
@@ -76,10 +73,6 @@ private:
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
-
-	// For DebugGui
-	int m_frame_count;
-	std::chrono::nanoseconds m_start_time_counting_fps;
 
 
 	std::jthread m_thread;

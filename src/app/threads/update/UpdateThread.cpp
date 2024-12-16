@@ -1,6 +1,5 @@
 #include "UpdateThread.hpp"
 #include "logger.hpp"
-#include "DebugGui.hpp"
 
 #include <unistd.h>
 

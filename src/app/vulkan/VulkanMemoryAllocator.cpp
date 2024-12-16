@@ -1,6 +1,5 @@
 #include "VulkanMemoryAllocator.hpp"
 #include "logger.hpp"
-#include "DebugGui.hpp"
 
 VulaknMemoryAllocator::VulaknMemoryAllocator()
 {
@@ -26,7 +25,6 @@ VkResult VulaknMemoryAllocator::allocateMemory(
 	}
 	m_allocated_memory_size += pAllocateInfo->allocationSize;
 	m_allocated_memory[*pMemory] = pAllocateInfo->allocationSize;
-	DebugGui::gpu_allocated_memory = m_allocated_memory_size;
 	return result;
 }
 
@@ -44,7 +42,6 @@ void VulaknMemoryAllocator::freeMemory(
 	m_allocated_memory_size -= m_allocated_memory[memory];
 	m_allocated_memory.erase(memory);
 	vkFreeMemory(device, memory, pAllocator);
-	DebugGui::gpu_allocated_memory = m_allocated_memory_size;
 }
 
 VkDeviceSize VulaknMemoryAllocator::allocatedMemorySize() const

@@ -66,7 +66,6 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 					 **************************************************************/
 					std::exception_ptr eptr;
 					try {
-					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 					// LOG_DEBUG("Loading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
 					Chunk chunk = m_worldGenerator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
 					{
@@ -76,8 +75,6 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 						//line under is commented because the new chunk that is being moved in has a blank status
 						// m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.removeWriter();
 					}
-					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 					}
 					catch (...) {
 						eptr = std::current_exception();
@@ -145,7 +142,6 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 				 **************************************************************/
 				std::exception_ptr eptr;
 				try {
-				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 				uint64_t mesh_id;
 				std::unordered_map<glm::ivec3, Chunk>::iterator it;
 
@@ -173,8 +169,6 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 
 				m_worldScene.removeMesh(mesh_id);
 				m_vulkanAPI.destroyMesh(mesh_id);
-				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-				DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 
 				}
 				catch (...) {
@@ -250,7 +244,6 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 				// LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
 				std::exception_ptr eptr;
 				try{
-				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
 				//create all mesh data needed ( pointers to neighbors basically )
 				// CreateMeshData mesh_data(chunkPos3D, {1, 1, 1}, m_chunks);
@@ -264,8 +257,6 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 				//adding mesh id to the scene so it is rendered
 				if(mesh_id != VulkanAPI::no_mesh_id)
 					m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3));
-				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 				}
 				catch (...) {
 					eptr = std::current_exception();
@@ -386,8 +377,6 @@ void World::updatePlayer(
 
 	m_player->movePosition(displacement);
 	m_player->moveDirection(look.x, look.y);
-
-	DebugGui::player_position = m_player->transform.position;
 }
 
 Camera World::getCamera()

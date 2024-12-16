@@ -2,7 +2,6 @@
 
 #include "define.hpp"
 #include "vk_define.hpp"
-#include "DebugGui.hpp"
 #include "Timer.hpp"
 #include "logger.hpp"
 
