@@ -50,6 +50,7 @@ public:
 	const		glm::ivec3 position;
 
 	Status	status;
+	std::mutex	m_mesh_mutex;
 	std::unordered_set<uint64_t>	entity_ids;
 private:
 	uint64_t	m_mesh_id;

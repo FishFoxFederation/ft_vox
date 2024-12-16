@@ -41,9 +41,6 @@ VulkanAPI::VulkanAPI(GLFWwindow * window):
 	createPipelines();
 	createFramebuffers();
 
-	setupImgui();
-	createImGuiTexture(100, 100);
-
 	LOG_INFO("VulkanAPI initialized");
 }
 
@@ -52,12 +49,6 @@ VulkanAPI::~VulkanAPI()
 	vkDeviceWaitIdle(device);
 
 	destroyMeshes();
-
-	destroyImGuiTexture(imgui_texture);
-
-	ImGui_ImplVulkan_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
 
 	{
 		std::lock_guard<std::mutex> lock(mesh_mutex);
@@ -92,21 +83,18 @@ VulkanAPI::~VulkanAPI()
 	vkDestroyRenderPass(device, lighting_render_pass, nullptr);
 	vkDestroyRenderPass(device, shadow_render_pass, nullptr);
 
-	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkDestroySemaphore(device, image_available_semaphores[i], nullptr);
 		vkDestroySemaphore(device, main_render_finished_semaphores[i], nullptr);
 		vkDestroySemaphore(device, copy_finished_semaphores[i], nullptr);
-		vkDestroySemaphore(device, imgui_render_finished_semaphores[i], nullptr);
 		vkDestroyFence(device, in_flight_fences[i], nullptr);
 	}
 	vkDestroyFence(device, single_time_command_fence, nullptr);
 
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(draw_command_buffers.size()), draw_command_buffers.data());
 	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(copy_command_buffers.size()), copy_command_buffers.data());
-	vkFreeCommandBuffers(device, command_pool, static_cast<uint32_t>(imgui_command_buffers.size()), imgui_command_buffers.data());
 	vkDestroyCommandPool(device, command_pool, nullptr);
 	vkFreeCommandBuffers(device, transfer_command_pool, 1, &transfer_command_buffers);
 	vkDestroyCommandPool(device, transfer_command_pool, nullptr);
@@ -575,12 +563,7 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 
 	vkDeviceWaitIdle(device);
 
-	destroyImGuiTexture(imgui_texture);
 
-	ImGui_ImplVulkan_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-	vkDestroyDescriptorPool(device, imgui_descriptor_pool, nullptr);
 	for (int i = 0; i < max_frames_in_flight; i++)
 	{
 		vkDestroyFramebuffer(device, lighting_framebuffers[i], nullptr);
@@ -592,8 +575,6 @@ void VulkanAPI::recreateSwapChain(GLFWwindow * window)
 	createDepthAttachement();
 	createPipelines();
 	createFramebuffers();
-	setupImgui();
-	createImGuiTexture(100, 100);
 
 	shadow_map_descriptor.update(
 		device,
@@ -685,7 +666,6 @@ void VulkanAPI::createCommandBuffer()
 {
 	draw_command_buffers.resize(max_frames_in_flight);
 	copy_command_buffers.resize(max_frames_in_flight);
-	imgui_command_buffers.resize(max_frames_in_flight);
 
 	VkCommandBufferAllocateInfo alloc_info = {};
 	alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -699,10 +679,6 @@ void VulkanAPI::createCommandBuffer()
 	);
 	VK_CHECK(
 		vkAllocateCommandBuffers(device, &alloc_info, copy_command_buffers.data()),
-		"Failed to allocate command buffers"
-	);
-	VK_CHECK(
-		vkAllocateCommandBuffers(device, &alloc_info, imgui_command_buffers.data()),
 		"Failed to allocate command buffers"
 	);
 
@@ -720,7 +696,6 @@ void VulkanAPI::createSyncObjects()
 	image_available_semaphores.resize(max_frames_in_flight);
 	main_render_finished_semaphores.resize(max_frames_in_flight);
 	copy_finished_semaphores.resize(max_frames_in_flight);
-	imgui_render_finished_semaphores.resize(max_frames_in_flight);
 	in_flight_fences.resize(max_frames_in_flight);
 
 	VkSemaphoreCreateInfo semaphore_info = {};
@@ -742,10 +717,6 @@ void VulkanAPI::createSyncObjects()
 		);
 		VK_CHECK(
 			vkCreateSemaphore(device, &semaphore_info, nullptr, &copy_finished_semaphores[i]),
-			"Failed to create semaphores"
-		);
-		VK_CHECK(
-			vkCreateSemaphore(device, &semaphore_info, nullptr, &imgui_render_finished_semaphores[i]),
 			"Failed to create semaphores"
 		);
 		VK_CHECK(
@@ -1350,145 +1321,6 @@ void VulkanAPI::createFramebuffers()
 		);
 	}
 
-}
-
-uint64_t VulkanAPI::createImGuiTexture(const uint32_t width, const uint32_t height)
-{
-	imgui_texture.extent = { width, height };
-	imgui_texture.format = VK_FORMAT_R8G8B8A8_SRGB;
-
-	createImage(
-		imgui_texture.extent.width,
-		imgui_texture.extent.height,
-		1,
-		imgui_texture.format,
-		VK_IMAGE_TILING_LINEAR,
-		VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		imgui_texture.image,
-		imgui_texture.memory
-	);
-
-	createImageView(
-		imgui_texture.image,
-		imgui_texture.format,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		imgui_texture.view
-	);
-
-	VkSamplerCreateInfo sampler_info = {};
-	sampler_info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	sampler_info.magFilter = VK_FILTER_LINEAR;
-	sampler_info.minFilter = VK_FILTER_LINEAR;
-	sampler_info.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	sampler_info.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	sampler_info.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-	sampler_info.anisotropyEnable = VK_FALSE;
-	sampler_info.maxAnisotropy = 1.0f;
-	sampler_info.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-	sampler_info.unnormalizedCoordinates = VK_FALSE;
-	sampler_info.compareEnable = VK_FALSE;
-	sampler_info.compareOp = VK_COMPARE_OP_ALWAYS;
-	sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	sampler_info.mipLodBias = 0.0f;
-	sampler_info.minLod = 0.0f;
-	sampler_info.maxLod = 0.0f;
-
-	VK_CHECK(
-		vkCreateSampler(device, &sampler_info, nullptr, &imgui_texture.sampler),
-		"Failed to create imgui texture sampler"
-	);
-
-	imgui_texture.descriptor_set = ImGui_ImplVulkan_AddTexture(
-		imgui_texture.sampler,
-		imgui_texture.view,
-		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-	);
-
-	transitionImageLayout(
-		imgui_texture.image,
-		VK_IMAGE_LAYOUT_UNDEFINED,
-		VK_IMAGE_LAYOUT_GENERAL,
-		VK_IMAGE_ASPECT_COLOR_BIT,
-		1,
-		0,
-		0,
-		VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-		VK_PIPELINE_STAGE_TRANSFER_BIT
-	);
-
-	VK_CHECK(
-		vkMapMemory(device, imgui_texture.memory, 0, VK_WHOLE_SIZE, 0, &imgui_texture.mapped_memory),
-		"Failed to map memory for ImGui texture."
-	);
-
-	return 0;
-}
-
-void VulkanAPI::destroyImGuiTexture(ImGuiTexture & imgui_texture)
-{
-	vkUnmapMemory(device, imgui_texture.memory);
-	ImGui_ImplVulkan_RemoveTexture(imgui_texture.descriptor_set);
-	vkDestroySampler(device, imgui_texture.sampler, nullptr);
-	vkDestroyImageView(device, imgui_texture.view, nullptr);
-	vma.freeMemory(device, imgui_texture.memory, nullptr);
-	vkDestroyImage(device, imgui_texture.image, nullptr);
-}
-
-void VulkanAPI::setupImgui()
-{
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO & io = ImGui::GetIO();
-	(void)io;
-
-	ImGui::StyleColorsDark();
-
-	std::vector<VkDescriptorPoolSize> pool_sizes =
-	{
-		{VK_DESCRIPTOR_TYPE_SAMPLER, 1000},
-		{VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000},
-		{VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000},
-		{VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000},
-		{VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000},
-		{VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000},
-		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000},
-		{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000},
-		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000},
-		{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000},
-		{VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000}
-	};
-
-	VkDescriptorPoolCreateInfo pool_info = {};
-	pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-	pool_info.poolSizeCount = static_cast<uint32_t>(pool_sizes.size());
-	pool_info.pPoolSizes = pool_sizes.data();
-	pool_info.maxSets = 1000;
-
-	VK_CHECK(
-		vkCreateDescriptorPool(device, &pool_info, nullptr, &imgui_descriptor_pool),
-		"Failed to create imgui descriptor pool"
-	);
-
-	ImGui_ImplGlfw_InitForVulkan(window, true);
-	ImGui_ImplVulkan_InitInfo init_info = {};
-	init_info.Instance = instance;
-	init_info.PhysicalDevice = physical_device;
-	init_info.Device = device;
-	init_info.QueueFamily = queue_family_indices.graphics_family.value();
-	init_info.Queue = graphics_queue;
-	init_info.PipelineCache = VK_NULL_HANDLE;
-	init_info.DescriptorPool = imgui_descriptor_pool;
-	init_info.Allocator = nullptr;
-	init_info.MinImageCount = 2;
-	init_info.ImageCount = static_cast<uint32_t>(swapchain.images.size());
-	init_info.UseDynamicRendering = VK_TRUE;
-	init_info.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-	init_info.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-	init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &swapchain.image_format;
-
-	ImGui_ImplVulkan_Init(&init_info);
 }
 
 

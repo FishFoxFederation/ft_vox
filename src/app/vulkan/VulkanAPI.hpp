@@ -16,10 +16,6 @@
 
 #include <glm/glm.hpp>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_vulkan.h"
-
 #include <stdexcept>
 #include <vector>
 #include <optional>
@@ -110,38 +106,6 @@ struct ShadowMapLight
 	glm::mat4 model;
 };
 
-struct ImGuiTexture
-{
-	VkImage image;
-	VkDeviceMemory memory;
-	VkImageView view;
-	VkSampler sampler;
-
-	void * mapped_memory;
-
-	VkDescriptorSet descriptor_set;
-
-	VkFormat format;
-	VkExtent2D extent;
-
-	uint32_t width() const { return extent.width; }
-	uint32_t height() const { return extent.height; }
-
-	void clear()
-	{
-		memset(mapped_memory, 0, extent.width * extent.height * 4);
-	}
-
-	void putPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
-	{
-		uint8_t * pixel = (uint8_t *)mapped_memory + (y * extent.width + x) * 4;
-		pixel[0] = r;
-		pixel[1] = g;
-		pixel[2] = b;
-		pixel[3] = a;
-	}
-};
-
 class VulkanAPI
 {
 
@@ -185,8 +149,6 @@ public:
 	void	 destroyMeshes(const std::vector<uint64_t> & mesh_ids);
 	void	 destroyMesh(const uint64_t & mesh_id);
 
-	uint64_t createImGuiTexture(const uint32_t width, const uint32_t height);
-
 
 	VulaknMemoryAllocator vma;
 
@@ -211,7 +173,6 @@ public:
 	VkCommandPool command_pool;
 	std::vector<VkCommandBuffer> draw_command_buffers;
 	std::vector<VkCommandBuffer> copy_command_buffers;
-	std::vector<VkCommandBuffer> imgui_command_buffers;
 
 	VkCommandPool transfer_command_pool;
 	VkCommandBuffer transfer_command_buffers;
@@ -220,7 +181,6 @@ public:
 	std::vector<VkSemaphore> image_available_semaphores;
 	std::vector<VkSemaphore> main_render_finished_semaphores;
 	std::vector<VkSemaphore> copy_finished_semaphores;
-	std::vector<VkSemaphore> imgui_render_finished_semaphores;
 	std::vector<VkFence> in_flight_fences;
 	VkFence single_time_command_fence;
 
@@ -269,9 +229,6 @@ public:
 	Pipeline shadow_pipeline;
 	Pipeline test_image_pipeline;
 
-	// Dear ImGui resources
-	VkDescriptorPool imgui_descriptor_pool;
-	ImGuiTexture imgui_texture;
 
 	// Meshes
 	uint64_t next_mesh_id = 1;
@@ -356,8 +313,6 @@ private:
 	void destroyMeshes();
 
 
-	void setupImgui();
-	void destroyImGuiTexture(ImGuiTexture & imgui_texture);
 
 	VkCommandBuffer beginSingleTimeCommands();
 	void endSingleTimeCommands(VkCommandBuffer command_buffer);

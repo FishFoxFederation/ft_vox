@@ -340,7 +340,6 @@ void World::clearTasks()
 	std::swap(m_finished_futures, empty);
 }
 
-
 void World::updatePlayer(
 	const glm::dvec3 & move,
 	const glm::dvec2 & look
@@ -348,42 +347,41 @@ void World::updatePlayer(
 {
 	std::lock_guard<std::mutex> lock(m_player_mutex);
 
-	glm::dvec3 position = m_player->transform.position;
+	// glm::dvec3 position = m_player->transform.position;
 	glm::dvec3 displacement = m_player->getDisplacement(move);
 
-	for (int i = 0; i < 3; i++)
-	{
-		glm::dvec3 new_position = position;
-		new_position[i] += displacement[i];
+	// for (int i = 0; i < 3; i++)
+	// {
+	// 	glm::dvec3 new_position = position;
+	// 	new_position[i] += displacement[i];
 
-		glm::vec3 block_position = glm::floor(new_position);
+	// 	glm::vec3 block_position = glm::floor(new_position);
 
-		glm::vec3 block_chunk_position = glm::ivec3(block_position) % CHUNK_SIZE_IVEC3;
-		if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
-		if (block_chunk_position.y < 0) block_chunk_position.y += CHUNK_Y_SIZE;
-		if (block_chunk_position.z < 0) block_chunk_position.z += CHUNK_Z_SIZE;
+	// 	glm::vec3 block_chunk_position = glm::ivec3(block_position) % CHUNK_SIZE_IVEC3;
+	// 	if (block_chunk_position.x < 0) block_chunk_position.x += CHUNK_X_SIZE;
+	// 	if (block_chunk_position.y < 0) block_chunk_position.y += CHUNK_Y_SIZE;
+	// 	if (block_chunk_position.z < 0) block_chunk_position.z += CHUNK_Z_SIZE;
 
-		glm::vec3 chunk_position = glm::floor(block_position / CHUNK_SIZE_VEC3);
-		glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
+	// 	glm::vec3 chunk_position = glm::floor(block_position / CHUNK_SIZE_VEC3);
+	// 	glm::ivec2 chunk_position2D = glm::ivec2(chunk_position.x, chunk_position.z);
 
-		{
-			std::lock_guard<std::mutex> lock(m_chunks_mutex);
-			if (m_loaded_chunks.contains(chunk_position2D))
-			{
-				Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
-				chunk.status.addReader();
+	// 	{
+	// 		std::lock_guard<std::mutex> lock(m_chunks_mutex);
+	// 		if (m_loaded_chunks.contains(chunk_position2D))
+	// 		{
+	// 			Chunk & chunk = m_chunks.at(glm::ivec3(chunk_position.x, 0, chunk_position.z));
+	// 			chunk.status.addReader();
 
-				BlockID block_id = chunk.getBlock(block_chunk_position.x, block_chunk_position.y, block_chunk_position.z);
-				if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
-				{
-					displacement[i] = 0.0;
-				}
+	// 			BlockID block_id = chunk.getBlock(block_chunk_position.x, block_chunk_position.y, block_chunk_position.z);
+	// 			if (Block::hasProperty(block_id, BLOCK_PROPERTY_SOLID))
+	// 			{
+	// 				displacement[i] = 0.0;
+	// 			}
 
-				chunk.status.removeReader();
-			}
-		}
-	}
-
+	// 			chunk.status.removeReader();
+	// 		}
+	// 	}
+	// }
 
 
 	m_player->movePosition(displacement);

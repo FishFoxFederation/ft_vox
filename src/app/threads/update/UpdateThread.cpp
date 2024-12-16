@@ -87,6 +87,7 @@ void UpdateThread::readInput()
 	m_d_key = m_window.input().getKeyState(GLFW_KEY_D);
 	m_space_key = m_window.input().getKeyState(GLFW_KEY_SPACE);
 	m_left_shift_key = m_window.input().getKeyState(GLFW_KEY_LEFT_SHIFT);
+	m_left_ctrl_key = m_window.input().getKeyState(GLFW_KEY_LEFT_CONTROL);
 
 	m_window.input().getCursorPos(m_mouse_x, m_mouse_y);
 }
@@ -107,6 +108,8 @@ void UpdateThread::movePlayer()
 	}
 
 	move *= m_camera_speed * static_cast<double>(m_delta_time.count()) / 1e9;
+	if (m_left_ctrl_key == GLFW_PRESS)
+		move *= 20.0;
 
 	glm::dvec2 look = glm::dvec2(m_mouse_x - m_last_mouse_x, m_mouse_y - m_last_mouse_y) * m_settings.mouseSensitivity();
 	m_last_mouse_x = m_mouse_x;

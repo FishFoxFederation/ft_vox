@@ -66,13 +66,17 @@ void Chunk::setMeshID(const uint64_t & mesh_id)
 
 int Chunk::toIndex(const int & x, const int & y, const int & z)
 {
-	return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
+	// return x + y * CHUNK_X_SIZE + z * CHUNK_X_SIZE * CHUNK_Y_SIZE;
+	return y + x * CHUNK_Y_SIZE + z * CHUNK_Y_SIZE * CHUNK_X_SIZE;
 }
 
 glm::ivec3	Chunk::toCoord(const int & index)
 {
-	int x = index % CHUNK_X_SIZE;
-	int y = (index - x) % CHUNK_Y_SIZE;
+	int y = index % CHUNK_Y_SIZE;
+	int x = (index - y) % CHUNK_X_SIZE;
 	int z = (index - x - y) % CHUNK_Z_SIZE;
+	// int x = index % CHUNK_X_SIZE;
+	// int y = (index - x) % CHUNK_Y_SIZE;
+	// int z = (index - x - y) % CHUNK_Z_SIZE;
 	return glm::ivec3(x, y, z);
 }
