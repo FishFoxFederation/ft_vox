@@ -45,11 +45,15 @@ void UpdateThread::launch()
 		{
 			loop();
 		}
+	} catch (std::exception & e) {
+		LOG_CRITICAL("UpdateThread exception: " << e.what());
+		m_eptr_ref = std::current_exception();
 	}
 	catch (...)
 	{
+		LOG_CRITICAL("Update unkown exception");
 		m_eptr_ref = std::current_exception();
-		LOG_ERROR("Update Thread terminating on exception");
+		m_eptr_ref = std::current_exception();
 	}
 	m_running = false;
 	LOG_INFO("UpdateThread stopped");

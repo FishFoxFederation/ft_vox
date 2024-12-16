@@ -39,7 +39,8 @@ public:
 		const Settings & settings,
 		VulkanAPI & vulkanAPI,
 		const WorldScene & worldScene,
-		std::chrono::nanoseconds start_time
+		std::chrono::nanoseconds start_time,
+		std::exception_ptr & eptr_ref
 	);
 
 	bool running() const {return m_running;}
@@ -82,6 +83,7 @@ private:
 
 
 	std::jthread m_thread;
+	std::exception_ptr & m_eptr_ref;
 
 	/**
 	 * @brief function used as the entry point for the thread

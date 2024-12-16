@@ -15,7 +15,8 @@ RenderThread::RenderThread(
 	const Settings & settings,
 	VulkanAPI & vulkanAPI,
 	const WorldScene & worldScene,
-	std::chrono::nanoseconds start_time
+	std::chrono::nanoseconds start_time,
+	std::exception_ptr & eptr_ref
 ):
 	m_settings(settings),
 	vk(vulkanAPI),
@@ -25,7 +26,8 @@ RenderThread::RenderThread(
 	m_last_frame_time(start_time),
 	m_frame_count(0),
 	m_start_time_counting_fps(start_time),
-	m_thread(&RenderThread::launch, this)
+	m_thread(&RenderThread::launch, this),
+	m_eptr_ref(eptr_ref)
 {
 	(void)m_settings;
 	(void)m_start_time;
@@ -51,9 +53,13 @@ void RenderThread::launch()
 			loop();
 		}
 	}
-	catch (const std::exception & e)
+	catch (std::exception & e) {
+		LOG_CRITICAL("RenderThread exception: " << e.what());
+		m_eptr_ref = std::current_exception();
+	} catch (...)
 	{
-		LOG_ERROR("RenderThread exception: " << e.what());
+		LOG_CRITICAL("RenderThread unkown exception");
+		m_eptr_ref = std::current_exception();
 	}
 	m_running = false;
 	LOG_INFO("RenderThread stopped");

@@ -294,6 +294,7 @@ void World::waitForFinishedFutures()
 		future.get();
 	}}
 	catch (...) {
+		this->clearTasks();
 		std::rethrow_exception(std::current_exception());
 	}
 }
