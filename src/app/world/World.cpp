@@ -17,7 +17,7 @@ World::World(
 
 World::~World()
 {
-	LOG_INFO("Destroying world");
+	LOG_DEBUG("Destroying world");
 	waitForFutures();
 }
 
@@ -64,6 +64,8 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 					/**************************************************************
 					 * CHUNK LOADING FUNCTION
 					 **************************************************************/
+					std::exception_ptr eptr;
+					try {
 					std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 					// LOG_DEBUG("Loading chunk: " << chunkPos2D.x << " " << chunkPos2D.y);
 					Chunk chunk = m_worldGenerator.generateChunkColumn(chunkPos2D.x, chunkPos2D.y);
@@ -74,14 +76,22 @@ void World::loadChunks(const glm::vec3 & playerPosition)
 						//line under is commented because the new chunk that is being moved in has a blank status
 						// m_chunks.at(glm::ivec3(chunk.x(), chunk.y() , chunk.z())).status.removeWriter();
 					}
-
+					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
+					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
+					}
+					catch (...) {
+						eptr = std::current_exception();
+					}
 					{
 						std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 						m_finished_futures.push(current_id);
-						// LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
+						if (eptr)
+							LOG_DEBUG("Chunk loaded and crashed: " << chunkPos2D.x << " " << chunkPos2D.y);
+						else
+							LOG_DEBUG("Chunk loaded: " << chunkPos2D.x << " " << chunkPos2D.y);
 					}
-					std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-					DebugGui::chunk_gen_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
+					if (eptr)
+						std::rethrow_exception(eptr);
 				});
 				m_futures.insert(std::make_pair(current_id, std::move(future)));
 			}
@@ -135,8 +145,6 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 				 **************************************************************/
 				std::exception_ptr eptr;
 				try {
-				LOG_INFO("Unloading chunk");
-				throw std::runtime_error("woopsie");
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 				uint64_t mesh_id;
 				std::unordered_map<glm::ivec3, Chunk>::iterator it;
@@ -240,6 +248,8 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 				 * CALCULATE MESH FUNCTION
 				 **************************************************************/
 				// LOG_DEBUG("Meshing chunk: " << pos2D.x << " " << pos2D.y);
+				std::exception_ptr eptr;
+				try{
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
 				//create all mesh data needed ( pointers to neighbors basically )
@@ -254,16 +264,23 @@ void World::meshChunks(const glm::vec3 & playerPosition)
 				//adding mesh id to the scene so it is rendered
 				if(mesh_id != VulkanAPI::no_mesh_id)
 					m_worldScene.addMeshData(mesh_id, glm::vec3(chunkPos3D * CHUNK_SIZE_IVEC3));
-
+				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
+				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
+				}
+				catch (...) {
+					eptr = std::current_exception();
+				}
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 					m_finished_futures.push(current_id);
-					LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
-
+					if (eptr)
+						LOG_DEBUG("Chunk meshed and crashed: " << chunkPos3D.x << " " << chunkPos3D.z);
+					else 
+						LOG_DEBUG("Chunk meshed: " << chunkPos3D.x << " " << chunkPos3D.z);
 				}
 
-				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-				DebugGui::chunk_render_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
+				if (eptr)
+					std::rethrow_exception(eptr);
 			});
 			m_futures.insert(std::make_pair(current_id, std::move(future)));
 		}
@@ -283,8 +300,8 @@ void World::updateChunks(const glm::vec3 & playerPosition)
 
 void World::waitForFinishedFutures()
 {
-	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 	try {
+	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 	while(!m_finished_futures.empty())
 	{
 		uint64_t id = m_finished_futures.front();
@@ -292,7 +309,8 @@ void World::waitForFinishedFutures()
 		auto future = std::move(m_futures.at(id));
 		m_futures.erase(id);
 		future.get();
-	}}
+	}
+	}
 	catch (...) {
 		this->clearTasks();
 		std::rethrow_exception(std::current_exception());
@@ -304,7 +322,9 @@ void World::waitForFutures()
 	try {
 	while(!m_futures.empty())
 	{
-		m_futures.begin()->second.get();
+		//here not using get is voluntary since we are shutting down we dont care about exceptions
+		//that could have happened in a task
+		m_futures.begin()->second.wait();
 		m_futures.erase(m_futures.begin());
 	}
 	} catch (...) {

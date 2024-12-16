@@ -15,7 +15,7 @@ target_compile_options(${PROJECT_NAME}
 		# -O3
 		-g3
 		# -fsanitize=thread
-		-fsanitize=address
+		# -fsanitize=address
 		-Wall
 		-Wextra
 		-Werror
@@ -26,7 +26,7 @@ target_compile_options(${PROJECT_NAME}
 target_link_options(${PROJECT_NAME}
 	PRIVATE
 		# -fsanitize=thread
-		-fsanitize=address
+		# -fsanitize=address
 )
 
 target_sources(${PROJECT_NAME}

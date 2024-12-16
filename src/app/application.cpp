@@ -44,6 +44,7 @@ void Application::run()
 		}
 		glfwWaitEventsTimeout(0.2);
 	}
+	LOG_INFO("Application stopped running");
 	//after application has stopped there are two possibilities
 	//either it is a normal user-requested shutdown, in that case we can just call the destructors
 	//of the classes and any running tasks will be completed before shutdown

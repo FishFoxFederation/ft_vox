@@ -53,7 +53,6 @@ void UpdateThread::launch()
 	{
 		LOG_CRITICAL("Update unkown exception");
 		m_eptr_ref = std::current_exception();
-		m_eptr_ref = std::current_exception();
 	}
 	m_running = false;
 	LOG_INFO("UpdateThread stopped");

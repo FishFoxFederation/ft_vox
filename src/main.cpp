@@ -7,7 +7,7 @@
 int main(void)
 {
 	logger.setTimestamp(false);
-	logger.setLevel(Logger::DEBUG);
+	logger.setLevel(Logger::INFO);
 	try
 	{
 		Application app;

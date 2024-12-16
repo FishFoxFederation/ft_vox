@@ -23,7 +23,7 @@ ThreadPool::ThreadPool()
 
 ThreadPool::~ThreadPool()
 {
-	LOG_INFO("Stopping thread Pool");
+	LOG_DEBUG("Thread Pool dtor");
 	this->stop();
 }
 
