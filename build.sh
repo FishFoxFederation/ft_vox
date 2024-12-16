@@ -5,6 +5,7 @@
 # Download dependencies
 ./scripts/download_glm.sh
 ./scripts/download_glslc.sh
+./scripts/download_stb.sh
 
 # Compile shaders
 ./scripts/compile_shaders.sh
