@@ -7,6 +7,7 @@
 #include "World.hpp"
 
 #include <chrono>
+#include <exception>
 
 class UpdateThread
 {
@@ -17,9 +18,13 @@ public:
 		Window & window,
 		WorldScene & world_scene,
 		World & world,
-		std::chrono::nanoseconds start_time
+		std::chrono::nanoseconds start_time,
+		std::exception_ptr & eptr_ref
 	);
 	~UpdateThread();
+
+	bool running() const {return m_running;}
+	void stop();
 
 	UpdateThread(UpdateThread& other) = delete;
 	UpdateThread(UpdateThread&& other) = delete;
@@ -33,11 +38,16 @@ private:
 	WorldScene & m_world_scene;
 	World & m_world;
 
+	std::atomic<bool> m_running = true;
+
 	std::chrono::nanoseconds m_start_time;
 	std::chrono::nanoseconds m_current_time;
 	std::chrono::nanoseconds m_last_frame_time;
 	std::chrono::nanoseconds m_delta_time;
 
+	std::jthread m_thread;
+	std::exception_ptr & m_eptr_ref;
+	
 	int m_w_key;
 	int m_a_key;
 	int m_s_key;
@@ -51,7 +61,6 @@ private:
 	double m_last_mouse_x;
 	double m_last_mouse_y;
 
-	std::jthread m_thread;
 
 	/**
 	 * @brief function used as the entry point for the thread

@@ -42,6 +42,8 @@ public:
 		std::chrono::nanoseconds start_time
 	);
 
+	bool running() const {return m_running;}
+	void stop();
 	/**
 	 * @brief Destroy the RenderThread object
 	*/
@@ -59,6 +61,8 @@ private:
 	const WorldScene & m_world_scene;
 
 	DebugGui m_debug_gui;
+
+	std::atomic<bool> m_running = true;
 
 	struct ChunkData
 	{

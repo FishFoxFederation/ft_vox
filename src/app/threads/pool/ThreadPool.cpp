@@ -4,7 +4,7 @@
 ThreadPool::ThreadPool()
 : m_done(false), m_joiner(m_threads)
 {
-	unsigned const thread_count = std::thread::hardware_concurrency();
+	unsigned const thread_count = 6;
 	// unsigned const thread_count = 4;
 	try
 	{
@@ -24,8 +24,7 @@ ThreadPool::ThreadPool()
 ThreadPool::~ThreadPool()
 {
 	LOG_INFO("Stopping thread Pool");
-	m_done = true;
-	m_cond.notify_all();
+	this->stop();
 }
 
 void ThreadPool::worker_thread()
@@ -35,7 +34,7 @@ void ThreadPool::worker_thread()
 		std::packaged_task<void()> task;
 		{
 			std::unique_lock<std::mutex> lock(m_queue_mutex);
-			m_cond.wait(lock, [&] {return !m_work_queue.empty() || m_done; });
+			m_cond.wait(lock, [&] {return !m_work_queue.empty() || m_done;});
 			if (m_done == true) break;
 			task = std::move(m_work_queue.front());
 			m_work_queue.pop();
@@ -49,4 +48,19 @@ void ThreadPool::worker_thread()
 			m_cond.notify_all();
 		}
 	}
+}
+
+void ThreadPool::stop() 
+{
+	LOG_INFO("Stopping threadpool");
+	// {
+	// 	//idiomatic way of clearing a queue
+	// 	//https://stackoverflow.com/questions/709146/how-do-i-clear-the-stdqueue-efficiently
+	// 	std::unique_lock<std::mutex> lock(m_queue_mutex);
+	// 	std::queue<std::packaged_task<void()>> empty;
+	// 	std::swap(m_work_queue, empty);
+	// }
+	m_done = true;
+	m_cond.notify_all();
+	m_joiner.join();
 }

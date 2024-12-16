@@ -11,6 +11,7 @@
 #include "BlockUpdateThread.hpp"
 #include "ThreadPool.hpp"
 
+#include <exception>
 #include <chrono>
 
 class Application
@@ -35,4 +36,6 @@ private:
 	World				m_world;
 	RenderThread		m_render_thread;
 	UpdateThread		m_update_thread;
+
+	std::exception_ptr	eptr;
 };

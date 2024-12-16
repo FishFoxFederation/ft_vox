@@ -1,6 +1,7 @@
 #pragma once
 
 #include "define.hpp"
+#include "logger.hpp"
 
 #include <thread>
 #include <queue>
@@ -15,9 +16,9 @@ public:
 	explicit JoinThreads(std::vector<std::thread> & threads)
 	: m_threads(threads) {}
 
-
-	~JoinThreads()
+	void join()
 	{
+		joined = true;
 		for (size_t i = 0; i < m_threads.size(); i++)
 		{
 			if (m_threads[i].joinable())
@@ -26,8 +27,15 @@ public:
 			}
 		}
 	}
+
+	~JoinThreads()
+	{
+		if (!joined)
+			join();
+	}
 private:
 	std::vector<std::thread> & m_threads;
+	bool joined = false;
 };
 
 
@@ -52,7 +60,8 @@ public:
 		}
 	}
 
-	bool is_running() const {return !m_done;}
+	bool running() const {return !m_done;}
+	void stop();
 
 private:
 	std::atomic_bool					m_done;

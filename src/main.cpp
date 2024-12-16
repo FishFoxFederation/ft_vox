@@ -14,9 +14,14 @@ int main(void)
 
 		app.run();
 	}
-	catch (const std::exception& e)
+	catch (const std::exception & e)
 	{
 		LOG_CRITICAL(e.what());
+		return 1;
+	}
+	catch (...)
+	{
+		LOG_CRITICAL("Unkown exception throwed");
 		return 1;
 	}
 	return 0;

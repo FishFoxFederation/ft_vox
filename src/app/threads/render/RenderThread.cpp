@@ -1,3 +1,4 @@
+#include "define.hpp"
 #include "RenderThread.hpp"
 #include "logger.hpp"
 #include "Perlin.hpp"
@@ -34,6 +35,11 @@ RenderThread::~RenderThread()
 {
 }
 
+void RenderThread::stop()
+{
+	this->m_thread.request_stop();
+}
+
 void RenderThread::launch()
 {
 	try
@@ -49,6 +55,7 @@ void RenderThread::launch()
 	{
 		LOG_ERROR("RenderThread exception: " << e.what());
 	}
+	m_running = false;
 	LOG_INFO("RenderThread stopped");
 }
 

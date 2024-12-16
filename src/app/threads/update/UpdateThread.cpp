@@ -9,7 +9,8 @@ UpdateThread::UpdateThread(
 	Window & window,
 	WorldScene & world_scene,
 	World & world,
-	std::chrono::nanoseconds start_time
+	std::chrono::nanoseconds start_time,
+	std::exception_ptr & eptr_ref
 ):
 	m_settings(settings),
 	m_window(window),
@@ -17,15 +18,21 @@ UpdateThread::UpdateThread(
 	m_world(world),
 	m_start_time(start_time),
 	m_last_frame_time(start_time),
-	m_thread(&UpdateThread::launch, this)
+	m_thread(&UpdateThread::launch, this),
+	m_eptr_ref(eptr_ref)
 {
 	(void)m_start_time;
 }
 
 UpdateThread::~UpdateThread()
 {
-	this->m_thread.request_stop();
+	this->stop();
 	this->m_thread.join();
+}
+
+void UpdateThread::stop()
+{
+	this->m_thread.request_stop();
 }
 
 void UpdateThread::launch()
@@ -39,10 +46,12 @@ void UpdateThread::launch()
 			loop();
 		}
 	}
-	catch (const std::exception & e)
+	catch (...)
 	{
-		LOG_ERROR("UpdateThread exception: " << e.what());
+		m_eptr_ref = std::current_exception();
+		LOG_ERROR("Update Thread terminating on exception");
 	}
+	m_running = false;
 	LOG_INFO("UpdateThread stopped");
 }
 

@@ -3,7 +3,8 @@
 #include <signal.h>
 
 #include <iostream>
-bool app_running = true;
+
+std::atomic<bool> app_running = true;
 
 Application::Application():
 	m_start_time(std::chrono::steady_clock::now().time_since_epoch()),
@@ -14,14 +15,13 @@ Application::Application():
 	m_thread_pool(),
 	m_world(m_world_scene, m_vulkan_api, m_thread_pool),
 	m_render_thread(m_settings, m_vulkan_api, m_world_scene, m_start_time),
-	m_update_thread(m_settings, m_window, m_world_scene, m_world, m_start_time)
+	m_update_thread(m_settings, m_window, m_world_scene, m_world, m_start_time, eptr)
 {
 	LOG_INFO("Application::Application()");
 }
 
 Application::~Application()
 {
-	LOG_INFO("Application::~Application()");
 }
 
 void Application::run()
@@ -32,10 +32,25 @@ void Application::run()
 		app_running = false;
 		});
 
-	while (app_running && m_thread_pool.is_running())
+	while (app_running
+		&& m_thread_pool.running()
+		&& m_update_thread.running())
 	{
 		if (m_window.shouldClose())
+		{
+			app_running = false;
 			break;
+		}
 		glfwWaitEventsTimeout(0.2);
+	}
+	if (eptr) 
+	{
+		//an error happenned manual shutdown and clearing is mandatory
+		m_update_thread.stop();
+		m_render_thread.stop();
+		m_thread_pool.stop();
+
+		m_world.clearTasks();
+		std::rethrow_exception(eptr);
 	}
 }

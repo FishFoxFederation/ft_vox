@@ -17,6 +17,7 @@ World::World(
 
 World::~World()
 {
+	LOG_INFO("Destroying world");
 	waitForFutures();
 }
 
@@ -132,6 +133,10 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 				/**************************************************************
 				 * CHUNK UNLOADING FUNCTION
 				 **************************************************************/
+				std::exception_ptr eptr;
+				try {
+				LOG_INFO("Unloading chunk");
+				throw std::runtime_error("woopsie");
 				std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 				uint64_t mesh_id;
 				std::unordered_map<glm::ivec3, Chunk>::iterator it;
@@ -160,14 +165,20 @@ void World::unloadChunks(const std::vector<glm::vec3> & playerPositions)
 
 				m_worldScene.removeMesh(mesh_id);
 				m_vulkanAPI.destroyMesh(mesh_id);
+				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
+				DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 
+				}
+				catch (...) {
+					eptr = std::current_exception();
+				}
 				{
 					std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
 					m_finished_futures.push(current_id);
 				}
+				if (eptr)
+					std::rethrow_exception(eptr);
 
-				std::chrono::duration time_elapsed = std::chrono::steady_clock::now() - start;
-				DebugGui::chunk_unload_time_history.push(std::chrono::duration_cast<std::chrono::microseconds>(time_elapsed).count());
 			});
 			m_futures.insert(std::make_pair(current_id, std::move(future)));
 		}
@@ -273,25 +284,40 @@ void World::updateChunks(const glm::vec3 & playerPosition)
 void World::waitForFinishedFutures()
 {
 	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+	try {
 	while(!m_finished_futures.empty())
 	{
 		uint64_t id = m_finished_futures.front();
 		m_finished_futures.pop();
-		auto & future = m_futures.at(id);
-		future.get();
+		auto future = std::move(m_futures.at(id));
 		m_futures.erase(id);
+		future.get();
+	}}
+	catch (...) {
+		std::rethrow_exception(std::current_exception());
 	}
 }
 
 void World::waitForFutures()
 {
+	try {
 	while(!m_futures.empty())
 	{
 		m_futures.begin()->second.get();
 		m_futures.erase(m_futures.begin());
 	}
+	} catch (...) {
+		LOG_CRITICAL("EXCEPTION HAPPENNED WHEN CLEANING FUTURES");
+	}
 }
 
+void World::clearTasks()
+{
+	std::lock_guard<std::mutex> lock(m_finished_futures_mutex);
+	m_futures.clear();
+	std::queue<uint64_t> empty;
+	std::swap(m_finished_futures, empty);
+}
 
 
 void World::updatePlayer(

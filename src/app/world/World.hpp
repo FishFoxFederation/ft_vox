@@ -31,7 +31,7 @@ public:
 	World & operator=(World & other) = delete;
 	World & operator=(World && other) = delete;
 
-
+	void clearTasks();
 
 
 	void updateEntities();
@@ -140,6 +140,14 @@ private:
 	 *  FUTURES
 	 *************************************/
 	void	waitForFinishedFutures();
+
+	/**
+	 * @brief will hang for a long time, but garantees that no tasks are left
+	 * to execute after, all exception are caught and ignored,
+	 * only call in destructor
+	 * 
+	 * @warning ALL EXCEPTIONS ARE IGNORED, ONLY CALL IN DESTRUCTOR
+	 */
 	void	waitForFutures();
 
 };
